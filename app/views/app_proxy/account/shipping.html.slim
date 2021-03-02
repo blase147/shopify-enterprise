@@ -1,0 +1,37 @@
+.Polaris-Frame data-has-navigation="true" data-polaris-layer="true"
+  div
+    #AppFrameNav
+      = render 'app_proxy/shared/more_nav'
+  .Polaris-Frame__ContextualSaveBar.Polaris-Frame-CSSAnimation--startFade
+  main#AppFrameMain.Polaris-Frame__Main data-has-global-ribbon="false"
+    a#AppFrameMainContent tabindex="-1"
+    .Polaris-Frame__Content
+      .Polaris-Page
+        .Polaris-Page-Header.Polaris-Page-Header--isSingleRow.Polaris-Page-Header--noBreadcrumbs.Polaris-Page-Header--mediumTitle
+          .Polaris-Page-Header__MainContent
+            .Polaris-Page-Header__TitleActionMenuWrapper
+              .Polaris-Page-Header__TitleWrapper
+                div
+                  .Polaris-Header-Title__TitleAndSubtitleWrapper
+                    .Polaris-Header-Title
+                      h1.Polaris-DisplayText.Polaris-DisplayText--sizeLarge
+                        span.Polaris-TextStyle--variationStrong Shipping Settings
+        .Polaris-Page__Content
+          .Polaris-Layout
+            .Polaris-Layout__AnnotatedSection
+              .Polaris-Layout__AnnotationWrapper
+                .Polaris-Layout__AnnotationContent
+                  .Polaris-Card
+                    .Polaris-Card__Section
+                      form action="/a/chargezen_production/account/update_info" method='post' data-remote=true
+                        = hidden_field_tag :id, @customer.shopify_id
+                        .Polaris-FormLayout
+                          .Polaris-FormLayout__Item
+                            = p_text_field name: 'address_1', label: 'Primary Shipping Address', value:  @customer.address_1
+                          .Polaris-FormLayout__Item
+                            = p_text_field name: 'address_2', label: 'Second Shipping Address', value:  @customer.address_2
+                          .Polaris-FormLayout__Item
+                            button.Polaris-Button.mr-10[type="button" aria-hidden="true" tabindex="-1" data-action='close']
+                              | Cancel
+
+                            = p_button text: 'Save', type: 'submit'

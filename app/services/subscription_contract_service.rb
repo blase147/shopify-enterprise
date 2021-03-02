@@ -1,0 +1,113 @@
+class SubscriptionContractService < GraphqlService
+  GET_QUERY = <<-GRAPHQL
+    query($id: ID!){
+      subscriptionContract(id: $id) {
+        id
+        createdAt
+        status
+        nextBillingDate
+        appAdminUrl
+        lines(first: 10) {
+          edges {
+            node {
+              title
+              id
+              quantity
+              productId
+              sellingPlanId
+              pricingPolicy
+              sellingPlanName
+            }
+          }
+        }
+        orders(first: 10, reverse: true) {
+          edges {
+            node {
+              id
+              name
+              createdAt
+              netPaymentSet
+              totalReceivedSet {
+                presentmentMoney {
+                  amount
+                }
+              }
+
+              events(first: 10, reverse: true) {
+                pageInfo
+                edges {
+                  node {
+                    id
+                    createdAt
+                    message
+                  }
+                }
+              }
+            }
+          }
+        }
+        customer {
+          id
+          displayName
+          firstName
+          lastName
+          email
+          phone
+          paymentMethods(first: 10) {
+            edges {
+              node {
+                id
+                instrument
+              }
+            }
+          }
+          defaultAddress {
+            id
+            formatted
+            address1
+            address2
+          }
+        }
+        originOrder {
+          id
+          shippingAddress {
+            formatted
+          }
+          lineItems(first:10) {
+            edges {
+              node {
+                id
+                quantity
+                sellingPlan {
+                  name
+                }
+              }
+            }
+          }
+        }
+        customerPaymentMethod {
+          id
+        }
+        deliveryMethod
+        billingPolicy {
+          interval
+          intervalCount
+        }
+      }
+    }
+  GRAPHQL
+
+  def initialize id
+    @id = id
+  end
+  
+  def run
+    id = "gid://shopify/SubscriptionContract/#{@id}"
+
+    result = client.query(client.parse(GET_QUERY), variables: { id: id} )
+    return result.data.subscription_contract
+  rescue Exception => ex
+    p ex.message
+    { error: ex.message }
+  end
+end

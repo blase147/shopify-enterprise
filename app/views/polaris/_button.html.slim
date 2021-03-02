@@ -1,0 +1,9 @@
+button.Polaris-Button type=(options[:type] || "button") data=options[:data] disabled=options[:disabled] class=(options[:disabled].present? ? 'Polaris-Button--disabled' : (options[:class] || 'Polaris-Button--primary'))
+  span.Polaris-Button__Content
+    span.Polaris-Button__Spinner.hide
+      span.Polaris-Spinner.Polaris-Spinner--colorWhite.Polaris-Spinner--sizeSmall
+        svg viewbox=("0 0 20 20") xmlns="http://www.w3.org/2000/svg"
+          path d=("M7.229 1.173a9.25 9.25 0 1011.655 11.412 1.25 1.25 0 10-2.4-.698 6.75 6.75 0 11-8.506-8.329 1.25 1.25 0 10-.75-2.385z")
+      span role="status"
+        span.Polaris-VisuallyHidden Loading
+    span.Polaris-Button__Text= options[:text]

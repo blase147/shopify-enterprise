@@ -1,0 +1,16 @@
+.Polaris-Labelled
+  - if options[:label].present?
+    .Polaris-Labelled__LabelWrapper
+      .Polaris-Label
+        label.Polaris-Label__Text= options[:label]
+  .Polaris-Connected
+    .Polaris-Connected__Item.Polaris-Connected__Item--primary
+      .Polaris-TextField.Polaris-TextField--hasValue
+        input.Polaris-TextField__Input aria-invalid="false" aria-multiline="false" value=options[:value] name=options[:name] class=options[:input_class] type=options[:type]
+        .Polaris-TextField__Backdrop
+
+    - if options[:icon].present?
+      .Polaris-Connected__Item.Polaris-Connected__Item--connection
+        button.Polaris-Button.Polaris-Button--iconOnly.copy-js type="button"
+          span.Polaris-Button__Content
+            = render "polaris/icons/#{options[:icon]}"

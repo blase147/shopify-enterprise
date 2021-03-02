@@ -1,0 +1,23 @@
+.Polaris-Modal#subscriptionEditQuantityModal
+  .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"
+    form action="/a/chargezen_production/subscriptions/#{params[:id]}/update_subscription" method='post' data-remote=true
+      = hidden_field_tag :id, @subscription.id
+      .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1"
+        .Polaris-Modal-Dialog__Modal
+          .Polaris-Modal__BodyWrapper
+            .Polaris-Modal__Body.Polaris-Scrollable.Polaris-Scrollable--vertical data-polaris-scrollable="true"
+              section.Polaris-Modal-Section
+                h2.Polaris-DisplayText.Polaris-DisplayText--sizeMedium Subscription
+                .Polaris-FormLayout--grouped[role="group"]
+                  .Polaris-FormLayout__Items
+                    .Polaris-FormLayout__Item.Polaris-FormLayout__Item--firstOne
+                      = p_select name: 'quantity', label: 'Quantity', options: 1..99, selected: @subscription.lines.edges.first.node.quantity
+
+          .Polaris-Modal-Footer
+            .Polaris-Modal-Footer__FooterContent
+              button.Polaris-Button.mr-10[type="button" aria-hidden="true" tabindex="-1" data-action='close']
+                | Cancel
+
+              = p_button text: 'Save Changes', type: 'submit'
+
+  .Polaris-Backdrop

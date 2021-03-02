@@ -1,0 +1,139 @@
+<script>
+(function(chargezen) {
+  var $ = chargezen.jQuery;
+
+  function initChargeZen() {
+    var containerSels = [
+      '#ProductPrice',
+      '#productPrice-product-template',
+      '#ProductPrice-product-template',
+      '#productPrice > .visually-hidden',
+      '.price .price-item--regular',
+      '.product__price .price-item--regular',
+      '.product__price .product__price--reg',
+      '.product__price .product__current-price',
+      '.product-single__price',
+      '[id^=productPrice-]'
+    ].join(',');
+
+    var planSelector = $('fieldset.chargezen-plan-selector');
+    var product = JSON.parse(planSelector.attr('plans'));
+    var sellingPlanInput = planSelector.find(':input[name="selling_plan"]');
+    var form = planSelector.closest('form')
+
+    function updateDescription(planId) {
+      var planId = planId ? parseInt(planId) : null;
+      var desc = planId ? (product.plans[planId].description || '') : '';
+      planSelector.find('.plan-selector-description').html(desc);
+    }
+
+    function updatePrice(planId) {
+      var variantId = parseInt(form.find(':input[name="id"]').val());
+      var variant = product.variants[variantId];
+      var planId = planId ? parseInt(planId) : null;
+
+      var price = variant.price;
+      if (planId) {
+        price = variant.selling_plan_allocations[planId].price_formatted
+      }
+
+      updatePriceLabel(price);
+    }
+    
+    function updatePriceLabel(price){
+      var $container = $(containerSels);
+      $container.html(price);
+    }
+
+    function filterGroupsForVariant(variantId) {
+      var variant = product.variants[variantId];
+
+      planSelector.find('.plan-selector-group').each(function() {
+        var groupId = $(this).find('[name=plan-selector-group]').val();
+        var isAvailable = groupId
+          ? (variant.available_group_ids[groupId] || false)
+          : (!product.requires_selling_plan);
+        $(this).toggleClass('group-available', isAvailable);
+      });
+
+      selectPlan(getSelectedOrFirstAvailablePlanId());
+    }
+
+    function variantChanged() {
+      var variantId = form.find(':input[name="id"]').val();
+      variantId = variantId ? parseInt(variantId) : null;
+
+      if (!variantChanged.previousId || variantChanged.previousId !== variantId) {
+        filterGroupsForVariant(variantId);
+      }
+
+      variantChanged.previousId = variantId;
+    }
+
+    function getSelectedOrFirstAvailablePlanId() {
+      var group = planSelector.find('.group-available.group-selected').first();
+
+      if (!group.length) {
+        group = planSelector.find('.group-available').first();
+      }
+
+      return group.find('select').val();
+    }
+
+    function selectPlan(planId) {
+      var groupId = planId ? product.plans[parseInt(planId)].selling_plan_group_id : '';
+
+      console.log(groupId)
+      var group = $(':input[name="plan-selector-group"][value="' + groupId + '"]')
+        .closest('.plan-selector-group');
+
+      group
+        .find('.plan-selector-plan select')
+        .val(planId);
+
+      group
+        .addClass('group-selected')
+        .find(':input[name="plan-selector-group"]').prop('checked', true);
+
+      group
+        .siblings()
+        .removeClass('group-selected');
+
+      sellingPlanInput.val(planId);
+
+      updateDescription(planId);
+      updatePrice(planId);
+    }
+
+    function selectSelectedPlan() {
+      var planId = $(':input[name="plan-selector-group"]:checked')
+        .closest('.plan-selector-group')
+        .find('select')
+        .val();
+
+      selectPlan(planId);
+    }
+
+    $('')
+    $(form).change('select, input', function(){
+      selectSelectedPlan();
+    })
+
+    $('body').on('DOMSubtreeModified', '.selector-wrapper', function() { setTimeout(variantChanged, 10); });
+    variantChanged();
+
+    if (product.selected_selling_plan) {
+      selectPlan(product.selected_selling_plan.id.toString());
+    }
+
+    setTimeout(selectSelectedPlan, 30);
+    planSelector.show();
+  }
+
+  $(document).ready(function(){
+    if($('fieldset.chargezen-plan-selector').length) {
+      initChargeZen();
+    }
+  })
+})(window.chargezenForShopify);
+</script>

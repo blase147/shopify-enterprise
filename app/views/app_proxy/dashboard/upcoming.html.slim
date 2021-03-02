@@ -1,0 +1,32 @@
+.Polaris-Frame data-has-navigation="true" data-polaris-layer="true"
+  div
+    #AppFrameNav
+      = render 'app_proxy/shared/dashboard_nav'
+  .Polaris-Frame__ContextualSaveBar.Polaris-Frame-CSSAnimation--startFade
+  main#AppFrameMain.Polaris-Frame__Main data-has-global-ribbon="false"
+    a#AppFrameMainContent tabindex="-1"
+    .Polaris-Frame__Content
+      .Polaris-Page
+        .Polaris-Page-Header.Polaris-Page-Header--isSingleRow.Polaris-Page-Header--noBreadcrumbs.Polaris-Page-Header--mediumTitle
+          .Polaris-Page-Header__MainContent
+            .Polaris-Page-Header__TitleActionMenuWrapper
+              .Polaris-Page-Header__TitleWrapper
+                div
+                  .Polaris-Header-Title__TitleAndSubtitleWrapper
+                    .Polaris-Header-Title
+                      h1.Polaris-DisplayText.Polaris-DisplayText--sizeLarge
+                        span.Polaris-TextStyle--variationStrong Upcomming deliveries
+        .Polaris-Page__Content
+          .Polaris-Layout
+            .Polaris-Layout__AnnotatedSection
+              .Polaris-Layout__AnnotationWrapper
+                .Polaris-Layout__AnnotationContent
+                  .Polaris-Card
+                    .Polaris-Banner.Polaris-Banner--withinContentContainer
+                      .Polaris-Banner__Ribbon
+                        span.Polaris-Icon.Polaris-Icon--colorInkLighter.Polaris-Icon--isColored.Polaris-Icon--hasBackdrop
+                          svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
+                            path d=("M10 20c5.514 0 10-4.486 10-10S15.514 0 10 0 0 4.486 0 10s4.486 10 10 10zm1-6a1 1 0 1 1-2 0v-4a1 1 0 1 1 2 0v4zm-1-9a1 1 0 1 0 0 2 1 1 0 0 0 0-2z") fill-rule="evenodd"
+                      .Polaris-Banner__ContentWrapper
+                        #PolarisBanner8Heading.Polaris-Banner__Heading
+                          p.Polaris-Heading You have no upcoming deliveries

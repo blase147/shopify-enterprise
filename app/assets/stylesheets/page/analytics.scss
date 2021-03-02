@@ -1,0 +1,150 @@
+.module-Analytics {
+  .highcharts-credits {
+    display: none;
+  }
+  .Polaris-Page__Content {
+    .Polaris-Tabs__Wrapper {
+      background: unset;
+      border-radius: unset;
+
+      .Polaris-Tabs__Title {
+        color: unset;
+      }
+
+      .Polaris-Tabs__Tab.Polaris-Tabs__Tab--selected {
+        .Polaris-Tabs__Title {
+          border-bottom: var(--p-override-none, 0.3rem) solid #007eff;
+        }
+      }
+    }
+  }
+  //revenue trends
+  .form-inline {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-around;
+    .form-inline-child {
+      width: 40%;
+      justify-content: space-between;
+      display: flex;
+      align-items: center;
+      .select {
+        width: 30%;
+      }
+      .textfield {
+        width: 15%;
+      }
+    }
+  }
+  .Polaris-TextStyle--variationPositive {
+    display: flex;
+  }
+  .Polaris-TextStyle--variationNegative {
+    display: flex;
+  }
+  .Polaris-Stack {
+    margin-top: unset;
+    .Polaris-Stack--vertical {
+      width: 100%;
+    }
+  }
+  .Polaris-Card {
+    border-radius: 9px;
+  }
+  .Polaris-Icon {
+    margin: unset;
+  }
+  .Polaris-Layout__Section--secondary {
+    margin-top: -0.1rem;
+  }
+  // customer insight
+  .customer-insight {
+    thead {
+      background: #258aff;
+      .Polaris-DataTable__Cell {
+        &.Polaris-DataTable__Cell--verticalAlignTop {
+          &.Polaris-DataTable__Cell--header {
+            color: rgba(255, 255, 255, 0.87);
+          }
+        }
+      }
+    }
+    .container-left {
+      width: 28%;
+    }
+    .container-right {
+      width: 72%;
+    }
+
+    .last {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .card-chart {
+      height: 540px;
+      .Polaris-Card {
+        height: 100%;
+        align-items: center;
+        display: flex;
+      }
+    }
+
+    tbody {
+      .Polaris-DataTable__Cell--verticalAlignTop {
+        border: 1.0624px solid #cecece;
+        box-sizing: border-box;
+      }
+    }
+    .subscription-chart {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-between;
+    }
+    .Polaris-Stack {
+      &.Polaris-Stack--distributionTrailing {
+        .Polaris-DataTable {
+          thead {
+            display: none;
+          }
+        }
+        tbody {
+          th.Polaris-DataTable__Cell {
+            border-top: none;
+            border-left: none;
+          }
+          .Polaris-DataTable__TableRow td:last-child {
+            border-right: none;
+            border-top: none;
+          }
+        }
+        tbody tr:first-child {
+          td {
+            border-top: none;
+          }
+        }
+        tbody tr:last-child {
+          th.Polaris-DataTable__Cell {
+            border-bottom: none;
+          }
+          td {
+            border-bottom: none;
+          }
+        }
+      }
+    }
+  }
+  .product {
+    thead {
+      background: #258aff;
+      .Polaris-DataTable__Cell {
+        &.Polaris-DataTable__Cell--verticalAlignTop {
+          &.Polaris-DataTable__Cell--header {
+            color: rgba(255, 255, 255, 0.87);
+          }
+        }
+      }
+    }
+  }
+}

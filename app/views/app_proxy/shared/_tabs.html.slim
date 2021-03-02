@@ -1,0 +1,14 @@
+.Polaris-Tabs__Wrapper
+  ul.Polaris-Tabs
+    li.Polaris-Tabs__TabContainer
+      a.Polaris-Tabs__Tab class=active_tab('dashboard') href="/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}"
+        span.Polaris-Tabs__Title Profile
+    li.Polaris-Tabs__TabContainer
+      a.Polaris-Tabs__Tab class=active_tab('orders', 'index') href="/a/chargezen_production/orders?customer_id=#{params[:customer_id]}"
+        span.Polaris-Tabs__Title Orders
+    li.Polaris-Tabs__TabContainer
+      a.Polaris-Tabs__Tab class=active_tab('subscriptions') href="/a/chargezen_production/subscriptions?customer_id=#{params[:customer_id]}"
+        span.Polaris-Tabs__Title Subscriptions
+    li.Polaris-Tabs__TabContainer
+      a.Polaris-Tabs__Tab class=active_tab('account') href="/a/chargezen_production/account/personal?customer_id=#{params[:customer_id]}"
+        span.Polaris-Tabs__Title More

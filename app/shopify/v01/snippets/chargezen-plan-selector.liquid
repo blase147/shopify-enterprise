@@ -1,0 +1,89 @@
+{% if product and product.selling_plan_groups.size > 0 %}
+
+  <fieldset class="chargezen-plan-selector product-form__fieldset" style="display: none">
+    <input type="hidden" name="selling_plan" value="{{ product.selected_selling_plan.id }}" />
+    <legend data-i18n="plan-selector-title">Purchase options</legend>
+
+    {% unless product.requires_selling_plan %}
+      <div class="plan-selector-group">
+        <label>
+          <input type="radio" name="plan-selector-group" value="" />
+          <span data-i18n="one-time-purchase-label">One-time purchase</span>
+        </label>
+
+        <div class="plan-selector-plan" style="display: none">
+          <select><option value=""></option></select>
+        </div>
+      </div>
+    {% endunless %}
+
+    {% for selling_plan_group in product.selling_plan_groups %}
+      <div class="plan-selector-group">
+        <label>
+          <input type="radio" name="plan-selector-group" value="{{ selling_plan_group.id }}" />
+          <span>{{ selling_plan_group.name }}</span>
+        </label>
+
+        <div class="plan-selector-plan">
+          <label>{{ selling_plan_group.options[0].name }}</label>
+          <select>
+            {% for plan in selling_plan_group.selling_plans %}
+              <option value="{{ plan.id }}">{{ plan.options[0].value }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    {% endfor %}
+
+    <div class="plan-selector-description"></div>
+  </fieldset>
+
+  <script>
+    (function() {
+      var $ = window.chargezenForShopify.jQuery;
+      var product = {{product | json }};
+      var planProduct = {};
+
+      /* get product information */
+      planProduct.id =  {{ product.id | json }};
+      planProduct.selected_selling_plan = {{ product.selected_selling_plan | json }};
+
+      /* get plans list of product */
+      var plans = {}
+      for (group of product.selling_plan_groups) {
+        for (plan of group.selling_plans) {
+          plans[plan.id] = JSON.parse(JSON.stringify(plan));
+          plans[plan.id].selling_plan_group_id = group.id;
+        }
+      }
+
+      planProduct.plans = plans;
+
+      /* get list of variants */
+      var variants = {};
+      {% for variant in product.variants %}
+        {% assign variant_id = variant.id %}
+
+        variants[{{ variant_id }}] = {};
+
+        variants[{{ variant_id }}].price = {{ variant.price | money | json }};
+
+        variants[{{ variant_id }}].available_group_ids = {};
+        variants[{{ variant_id }}].selling_plan_allocations = {};
+
+        {% for alloc in variant.selling_plan_allocations %}
+          variants[{{ variant_id }}].available_group_ids[{{ alloc.selling_plan_group_id | json }}] = true;
+
+          variants[{{ variant_id }}].selling_plan_allocations[{{ alloc.selling_plan.id }}] = {};
+          variants[{{ variant_id }}].selling_plan_allocations[{{ alloc.selling_plan.id }}].price = {{ alloc.price | json }};
+          variants[{{ variant_id }}].selling_plan_allocations[{{ alloc.selling_plan.id }}].price_formatted = {{ alloc.price | money | json }};
+        {% endfor %}
+      {% endfor %}
+
+      planProduct.variants = variants;
+
+      var selector = $('fieldset.chargezen-plan-selector');
+      selector.attr('plans', JSON.stringify(planProduct))
+    })();
+  </script>
+{% endif %}

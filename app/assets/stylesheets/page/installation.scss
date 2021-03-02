@@ -1,0 +1,23 @@
+.module-Installation {
+  .Polaris-Stack {
+    .Polaris-Card__Section {
+      background: linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
+      box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06),
+        0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+      border-radius: 20px;
+      //   .Polaris-Heading {
+      //     margin-bottom: 20px;
+      //   }
+      .Polaris-Banner {
+        box-shadow: unset;
+      }
+      .Polaris-Button--primary {
+        background: #007eff;
+        border-color: unset;
+      }
+    }
+  }
+  .Polaris-TextField__Suffix {
+    margin: unset;
+  }
+}

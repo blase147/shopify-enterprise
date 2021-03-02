@@ -1,0 +1,140 @@
+.module-newUpsell {
+  .Polaris-TextStyle--variationStrong {
+    font-size: 26px;
+  }
+  .Polaris-Card__Header {
+    background: #007eff;
+    border-radius: 5px 5px 0px 0px;
+    padding: 0;
+    .Polaris-Heading {
+      color: #ffffff;
+      padding: 21px 0 15px 23px;
+    }
+    .Polaris-Stack {
+      .Polaris-Stack__Item--fill {
+        margin-top: 0px;
+      }
+    }
+  }
+  .btn-group {
+    .Polaris-ButtonGroup {
+      justify-content: flex-end;
+      margin-top: 1.6rem;
+      .Polaris-Button {
+        &.Polaris-Button--primary {
+          border: none;
+          background: #007eff;
+          border-radius: 3px;
+        }
+      }
+    }
+  }
+  .when-cart {
+    display: flex;
+    justify-content: space-between;
+    .Polaris-Stack {
+      align-items: center;
+    }
+    .Polaris-Select {
+      min-width: 173px;
+    }
+    .Polaris-Choice__Label {
+      margin-left: 2rem;
+    }
+    .search {
+      width: 40%;
+    }
+  }
+
+  .when-order {
+    display: flex;
+    .Polaris-Choice__Label {
+      margin-left: 2rem;
+      min-width: 140px;
+      margin-right: 2rem;
+    }
+    .Polaris-Select {
+      min-width: 173px;
+      margin-right: 2rem;
+    }
+    .amount {
+      width: 140px;
+      .Polaris-Select {
+        width: 100%;
+        min-width: unset;
+      }
+    }
+  }
+  p.card-offer {
+    background: #e2e2e2;
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 1.4rem;
+  }
+
+  .offer-left {
+    display: flex;
+    > div {
+      width: 33%;
+      margin-right: 1.6rem;
+    }
+    .Polaris-Choice {
+      padding: 0;
+      display: flex;
+    }
+  }
+  .offer-right {
+    display: flex;
+    .offer-right-select {
+      width: 45%;
+      margin-right: 1.6rem;
+    }
+    .offer-right-textfield {
+      width: 100%;
+    }
+  }
+  .decline {
+    > div {
+      width: 50%;
+    }
+  }
+  .offer-description {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  img.offer-img {
+    width: 400px;
+    height: 400px;
+    background-size: cover;
+    background-image: asset-url('upsell/offerImage.svg');
+  }
+  p.countdown {
+    text-align: center;
+    background: #a9d3ff;
+    border-radius: 5px;
+    padding: 1.6rem 0;
+  }
+  p.offer-title {
+    width: 60%;
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 2.4rem;
+    margin: 0;
+  }
+
+  .itemUpsellCampaign {
+    margin-top: 46px;
+  }
+  .addUpsellCampaigns {
+    span {
+      color: #007eff;
+    }
+  }
+  .product-search {
+    margin-top: 2.4rem;
+  }
+  .Polaris-Button--plain {
+    background: none;
+  }
+}

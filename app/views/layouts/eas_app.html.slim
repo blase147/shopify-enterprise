@@ -1,0 +1,35 @@
+doctype html
+html[lang="en"]
+  head
+    meta[charset="utf-8"]
+    - application_name = ShopifyApp.configuration.application_name
+    title
+      = application_name
+    = stylesheet_link_tag 'embedded_app'
+    - if content_for?(:javascript_head)
+      #ContentForJavascript[data-turbolinks-temporary]
+        = yield :javascript_head
+    - if ShopifyApp.use_webpacker?
+      = javascript_pack_tag 'eas_app', 'data-turbolinks-track': 'reload'
+    - else
+      = javascript_include_tag 'eas_app', "data-turbolinks-track" => true
+    = csrf_meta_tags
+    meta[name="viewport" content="width=device-width, initial-scale=1"]
+    link[rel="stylesheet" href="https://unpkg.com/@shopify/polaris@5.8.4/dist/styles.css"]
+  body.chargezen class=page_class
+    = render 'layouts/shared/nav'
+    = render 'layouts/shared/flash_messages'
+    = yield
+
+    script[src="https://unpkg.com/@shopify/app-bridge"]
+    = content_tag(:div, nil, id: 'shopify-app-init', data: { api_key: ShopifyApp.configuration.api_key, shop_origin: @shop_origin || (@current_shopify_session.domain if @current_shopify_session), debug: Rails.env.development? } )
+
+    - if content_for?(:javascript)
+      #ContentForJavascript[data-turbolinks-temporary]
+        = yield :javascript
+
+    script src="https://cdn.shopify.com/s/assets/external/app.js"
+    script src="https://code.highcharts.com/highcharts.js"
+    script src="https://code.highcharts.com/modules/exporting.js"
+    script src="https://code.highcharts.com/modules/export-data.js"
+    script src="https://code.highcharts.com/modules/accessibility.js"

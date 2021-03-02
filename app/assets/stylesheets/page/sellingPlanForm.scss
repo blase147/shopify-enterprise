@@ -1,0 +1,78 @@
+.module-sellingPlanForm {
+  .Polaris-TextStyle--variationStrong {
+    font-size: 26px;
+  }
+  .Polaris-Card__Header {
+    background: #007eff;
+    border-radius: 5px 5px 0px 0px;
+    padding: 0;
+    .Polaris-Heading {
+      color: #ffffff;
+      padding: 21px 0 15px 23px;
+    }
+  }
+
+  .itemPlan {
+    margin-top: 46px;
+    .create-subscription-plan {
+      margin-top: unset;
+      margin-left: unset;
+    }
+    .Polaris-Stack > .Polaris-Stack__Item {
+      margin-top: 0px;
+    }
+  }
+  .addSellingPlans {
+    span {
+      color: #007eff;
+    }
+  }
+
+  .btn-group {
+    .Polaris-ButtonGroup {
+      justify-content: flex-end;
+      margin-top: 1.6rem;
+      .Polaris-Button {
+        &.Polaris-Button--primary {
+          border: none;
+          background: #007eff;
+          border-radius: 3px;
+        }
+      }
+    }
+  }
+
+  .product-stack {
+    .building-box-product {
+      display: flex;
+      position: relative;
+      img.product {
+        width: 65px;
+        height: 65px;
+        background-color: #c4c4c4;
+        background-size: cover;
+      }
+      img.removeIcon {
+        right: -6px;
+        top: -6px;
+        position: absolute;
+      }
+    }
+    .Polaris-Stack > .Polaris-Stack__Item {
+      margin-top: 1.6rem;
+    }
+  }
+  label.add-product-label {
+    color: #007eff;
+    font-weight: var(--p-button-font-weight, 400);
+    line-height: 1.6rem;
+    text-transform: none;
+    letter-spacing: normal;
+  }
+  .add-product {
+    display: none;
+  }
+  .Polaris-Button--plain {
+    background: none;
+  }
+}

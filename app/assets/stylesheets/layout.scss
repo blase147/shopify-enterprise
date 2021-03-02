@@ -1,0 +1,170 @@
+.chargezen {
+  .Polaris-CalloutCard__Image {
+    min-width: 200px;
+  }
+
+  .Polaris-Button--primary {
+    background: linear-gradient(180deg, #007eff, #007eff);
+    border-color: #007eff;
+    box-shadow: inset 0 1px 0 0 #007eff, 0 1px 0 0 rgba(22, 29, 37, 0.05),
+      0 0 0 0 transparent;
+
+    .Polaris-Button__Text {
+      color: #fff;
+    }
+
+    &:hover {
+      background: linear-gradient(180deg, #007eff, #18528e);
+      border-color: #007eff;
+      box-shadow: inset 0 1px 0 0 #007eff, 0 1px 0 0 rgba(22, 29, 37, 0.05),
+        0 0 0 0 transparent;
+    }
+  }
+
+  .Polaris-Page__Content {
+    .Polaris-Tabs__Wrapper {
+      background: #007eff;
+      border-radius: 9px 9px 0px 0px;
+
+      .Polaris-Tabs__Title {
+        color: white;
+      }
+
+      .Polaris-Tabs__Tab.Polaris-Tabs__Tab--selected {
+        .Polaris-Tabs__Title {
+          border-bottom: var(--p-override-none, 0.3rem) solid white;
+        }
+      }
+    }
+
+    .Polaris-Tabs__Wrapper {
+      background: #007eff;
+      border-bottom: unset;
+
+      .Polaris-Tabs__Title {
+        color: white;
+        margin-top: 13px;
+        height: 31px;
+        line-height: 0px;
+        padding: 15px 12px;
+        display: inline-block;
+      }
+      .Polaris-Tabs__Tab.Polaris-Tabs__Tab--selected .Polaris-Tabs__Title {
+        background: white;
+        color: #000000;
+        border-bottom: unset;
+        border-radius: 5px 5px 0px 0px;
+      }
+    }
+  }
+
+  .Polaris-Modal__Body {
+    overflow: hidden;
+    .Polaris-Thumbnail--sizeSmall {
+      display: flex;
+    }
+  }
+  .Polaris-Modal-CloseButton--withoutTitle {
+    z-index: 1;
+  }
+  .subscription-plan-customSlick {
+    ul.slick-dots {
+      margin-bottom: 1.6rem;
+      li {
+        &.slick-active {
+          button:before {
+            color: #007eff;
+            opacity: unset;
+          }
+        }
+        button:before {
+          font-size: 10px;
+          color: #007eff;
+          opacity: 0.5;
+        }
+      }
+    }
+
+    .header {
+      margin-right: 4.063rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      height: 100%;
+      .top-img {
+        width: 110px;
+        height: 87px;
+      }
+      .bot-img {
+        width: 160px;
+        height: 130px;
+        background: #c4c4c4;
+      }
+    }
+
+    .Polaris-TextContainer {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+  }
+
+  .Polaris-Button {
+    border-radius: 4px;
+    background: white;
+    &.Polaris-Button--primary {
+      border: none;
+      background: #007eff;
+      border-radius: 0.188rem;
+    }
+    &.Polaris-Button--destructive {
+      background: linear-gradient(180deg, #e6391a, #d53417);
+    }
+  }
+
+  .Polaris-Card__Header .Polaris-Button {
+    background: none;
+    color: white;
+    border: none;
+    margin-right: 10px;
+  }
+
+  .hidden {
+    display: none;
+  }
+  .d-flex {
+    display: flex;
+  }
+  .child-full-width {
+    > div {
+      width: 100%;
+    }
+  }
+  .mr-16 {
+    margin-right: 1.6rem;
+  }
+  .Polaris-Spinner {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.building-box-product {
+  display: flex;
+  position: relative;
+  img.product {
+    width: 65px;
+    height: 65px;
+    background-color: #c4c4c4;
+    background-size: cover;
+  }
+  img.removeIcon {
+    right: -6px;
+    top: -6px;
+    position: absolute;
+  }
+}
+.Polaris-Stack > .Polaris-Stack__Item {
+  margin-top: 1.6rem;
+}

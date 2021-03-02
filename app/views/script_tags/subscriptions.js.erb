@@ -1,0 +1,6 @@
+<% if @shop.setting.show_after_checkout? %>
+  Shopify.Checkout.OrderStatus.addContentBox(
+    '<h2>Subscriptions</h2>',
+    '<p>Make changes or cancel your subscriptions <br/><br/><a class="ui-button btn btn--subdued btn--size-small" href="/account?cz-page=/subscriptions/">Manage your subscription</a></p>'
+  )
+<% end %>

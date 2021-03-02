@@ -1,0 +1,46 @@
+.product-card{
+  width: 40%;
+}
+.hide{
+  display: none;
+}
+
+/* custom polaris css */
+body.chargezen-proxy {
+  background: none;
+
+  .Polaris-Page {
+    padding: 0 !important;
+  }
+
+  .mr-10 {
+    margin-right: 10px;
+  }
+
+  .Polaris-Modal {
+    display: none;
+
+    &.shown {
+      display: flex;
+    }
+
+
+    .Polaris-FormLayout__Item--firstOne {
+      margin-left: 0;
+    }
+  }
+  .Polaris-Frame__Main{
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  .avatar{
+    width: 160px;
+    height: 180px;
+  }
+  .datepicker{
+    z-index: 999;
+  }
+  .Polaris-Frame, .Polaris-Navigation, .Polaris-Banner--withinContentContainer{
+    background-color: transparent;
+  }
+}

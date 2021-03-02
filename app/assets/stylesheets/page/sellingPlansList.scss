@@ -1,0 +1,49 @@
+.module-sellingPlansList {
+  .Polaris-DataTable__Cell a {
+    color: #232b35;
+  }
+
+  .Polaris-TextField__Prefix {
+    display: flex;
+    align-self: center;
+  }
+  .search {
+    padding-top: 19px;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    .head-search {
+      font-style: normal;
+      font-weight: 600;
+      font-size: 15px;
+      line-height: 15px;
+      margin: 0px 12px;
+    }
+    .Polaris-Connected {
+      width: 421px;
+      height: 36px;
+    }
+  }
+  .plans {
+    display: flex;
+    align-items: center;
+    .Polaris-Badge {
+      margin-right: 0.5rem;
+      min-width: 5.463rem;
+      display: flex;
+      justify-content: center;
+    }
+    .active {
+      .Polaris-Badge {
+        background-color: #e0fdd6;
+        color: #63ab48;
+      }
+    }
+    .draft {
+      .Polaris-Badge {
+        background-color: #fdff88;
+        color: #545602;
+      }
+    }
+  }
+}

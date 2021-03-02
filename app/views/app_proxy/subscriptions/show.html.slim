@@ -1,0 +1,126 @@
+- order = @subscription.origin_order
+- billing_policy = @subscription.billing_policy
+- api_order = ShopifyAPI::Order.find(@subscription.origin_order.id[/\d+/])
+- card = api_order.payment_details
+- billing_address = api_order.billing_address
+
+.Polaris-Page
+  .Polaris-Page-Header.Polaris-Page-Header--isSingleRow.Polaris-Page-Header--noBreadcrumbs.Polaris-Page-Header--mediumTitle
+    .Polaris-Page-Header__MainContent
+      .Polaris-Page-Header__TitleActionMenuWrapper
+        .Polaris-Page-Header__TitleWrapper
+          div
+            .Polaris-Header-Title__TitleAndSubtitleWrapper
+              .Polaris-Header-Title
+                h1.Polaris-DisplayText.Polaris-DisplayText--sizeLarge
+                  span.Polaris-TextStyle--variationStrong Subscription
+  .Polaris-Page__Content
+    .Polaris-Card.product-card
+      .Polaris-MediaCard
+        .Polaris-MediaCard__MediaContainer
+          img alt="" height="100%" src=@product.images.first.src style=("object-fit: cover; object-position: center center;") width="100%" /
+        .Polaris-MediaCard__InfoContainer
+          .Polaris-Card__Section
+            .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
+              .Polaris-Stack__Item
+                .Polaris-MediaCard__Heading
+                  h2.Polaris-Heading= @product.title
+              .Polaris-Stack__Item
+                .Polaris-Stack
+                  .Polaris-Stack__Item.Polaris-Stack__Item--fill
+                    p Subscription
+                  .Polaris-Stack__Item
+                    p X#{@subscription.lines.edges.first.node.quantity}
+                br/
+                p= @subscription.lines.edges.first.node.selling_plan_name
+
+    - if @subscription.status == 'PAUSED'
+      .Polaris-Card
+        .Polaris-Banner.Polaris-Banner--statusWarning.Polaris-Banner--withinContentContainer
+          .Polaris-Banner__Ribbon
+            span.Polaris-Icon.Polaris-Icon--colorYellowDark.Polaris-Icon--isColored.Polaris-Icon--hasBackdrop
+              svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
+                path d=("M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0zM9 6a1 1 0 1 1 2 0v4a1 1 0 1 1-2 0V6zm1 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z") fill-rule="evenodd"
+          .Polaris-Banner__ContentWrapper
+            #PolarisBanner20Content.Polaris-Banner__Content
+              p Your Subscription has been paused
+
+    - elsif @subscription.status != 'ACTIVE'
+      .Polaris-Card
+        .Polaris-Banner.Polaris-Banner--statusCritical.Polaris-Banner--withinContentContainer
+          .Polaris-Banner__Ribbon
+            span.Polaris-Icon.Polaris-Icon--colorRedDark.Polaris-Icon--isColored.Polaris-Icon--hasBackdrop
+              svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
+                path d=("M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0zM9 6a1 1 0 1 1 2 0v4a1 1 0 1 1-2 0V6zm1 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z") fill-rule="evenodd"
+          .Polaris-Banner__ContentWrapper
+            #PolarisBanner20Content.Polaris-Banner__Content
+              p Your Subscription has been #{@subscription.status.downcase}
+    #notification.Polaris-Card.hide
+      .Polaris-Banner.Polaris-Banner--statusSuccess.Polaris-Banner--hasDismiss.Polaris-Banner--withinPage
+        .Polaris-Banner__Ribbon
+          span.Polaris-Icon.Polaris-Icon--colorGreenDark.Polaris-Icon--isColored.Polaris-Icon--hasBackdrop
+            svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
+              path d=("M0 10a10 10 0 1 0 20 0 10 10 0 0 0-20 0zm15.2-1.8a1 1 0 0 0-1.4-1.4L9 11.6 6.7 9.3a1 1 0 0 0-1.4 1.4l3 3c.4.4 1 .4 1.4 0l5.5-5.5z") fill-rule="evenodd"
+        .Polaris-Banner__ContentWrapper
+          #PolarisBanner22Heading.Polaris-Banner__Heading
+            p.Polaris-Heading An email has been sent with a secure link to update your payment details.
+
+    .Polaris-Card
+      div
+        .Polaris-DataTable
+          .Polaris-DataTable__ScrollContainer
+            table.Polaris-DataTable__Table
+              tbody
+                tr.Polaris-DataTable__TableRow
+                  th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"
+                    | Upcoming Shipment
+                  td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= DateTime.parse(@subscription.next_billing_date).strftime("%d %b %Y")
+                  td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
+                    = p_button text: 'Change Date', data: { toggle: 'modal', target: '#subscriptionEditDateModal', purl: action_subscription_path(:change_date) }
+                tr.Polaris-DataTable__TableRow
+                  th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"
+                    | Quantity
+                  td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= @subscription.lines.edges.first.node.quantity
+                  td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
+                    = p_button text: 'Change Quantity', data: { toggle: 'modal', target: '#subscriptionEditQuantityModal', purl: action_subscription_path(:change_quantity) }
+                tr.Polaris-DataTable__TableRow
+                  th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"
+                    | Replenish Every
+                  td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
+                    - billing_policy = @subscription.billing_policy
+                    = "#{billing_policy.interval_count} #{billing_policy.interval}".titleize
+                  td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
+                    /= p_button text: 'Change Frequency', data: { toggle: 'modal', target: '#subscriptionEditModal', purl: action_subscription_path(:change_frequency) }
+                    = p_button text: 'Change Frequency'
+
+                tr.Polaris-DataTable__TableRow
+                  th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"
+                    | Billing Method
+                    br/
+                    p #{card.credit_card_company} ending in #{card.credit_card_number}
+                  td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
+                    = billing_address.name
+                    br/
+                    = billing_address.address1
+                    br/
+                    | #{billing_address.city} #{billing_address.province} #{billing_address.zip} #{billing_address.country}
+                    br/
+                    | #{billing_address.phone}
+                  td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
+                    = p_button text: 'Change', data: { url: action_subscription_path(:change_bill) }
+              tfoot
+                  tr
+                    - if current_setting.cancel_enabled? && @subscription.status != 'CANCELLED'
+                      th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
+                        = p_button text: 'Cancel Subscription', data: { url: action_subscription_path(:cancel) }, class: 'Polaris-Button--destructive'
+
+                    - if current_setting.pause_resume?
+                      - if @subscription.status == 'ACTIVE'
+                        td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
+                          = p_button text: 'Pause Subscription', data: { url:  action_subscription_path(:pause) }
+                      - else
+                        td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
+                          = p_button text: 'Resume Subscription', data: { url:  action_subscription_path(:resume) }
+
+= render 'edit_date_modal'
+= render 'edit_quantity_modal'

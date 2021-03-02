@@ -1,0 +1,91 @@
+.module-upsell {
+  font-style: normal;
+  color: #232b35;
+
+  .header {
+    .left {
+      display: flex;
+      align-items: center;
+      float: left;
+      background: #ffffff;
+
+      .Polaris-Select__InlineLabel {
+        margin-right: 8px;
+        text-align: center;
+        padding: 0 6px;
+
+        background: #d8d8d8;
+        border-radius: 3px;
+      }
+    }
+
+    .right {
+      float: right;
+      .Polaris-Button {
+        &.Polaris-Button--primary {
+          padding: 0.7rem 0.9rem;
+          color: white;
+        }
+      }
+    }
+  }
+  .header::after {
+    display: block;
+    clear: both;
+    content: '';
+  }
+
+  .Polaris-TextField__Prefix {
+    display: flex;
+    align-self: center;
+  }
+  .search {
+    padding-top: 19px;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    .head-search {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 15px;
+      line-height: 15px;
+      margin: 0px 12px;
+    }
+    .Polaris-Connected {
+      width: 421px;
+      height: 36px;
+    }
+  }
+  .Polaris-DataTable__Cell--numeric {
+    text-align: unset;
+  }
+  .Polaris-DataTable__Cell--verticalAlignTop {
+    vertical-align: middle;
+  }
+  .campaigns {
+    display: flex;
+    align-items: center;
+    .active {
+      .Polaris-Badge {
+        background: #e0fdd6;
+        color: #63ab48;
+      }
+    }
+    .draft {
+      .Polaris-Badge {
+        background: #fdff88;
+        color: #545602;
+      }
+    }
+    span.scale {
+      font-size: 13px;
+      color: #777777;
+    }
+  }
+  p.money {
+    color: #969ca3;
+    span {
+      color: #232b35;
+    }
+  }
+}

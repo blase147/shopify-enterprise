@@ -1,0 +1,44 @@
+.module-integrations {
+  h2 {
+    padding-bottom: 10px; 
+  }
+
+  .Polaris-Button {
+    margin: 20px 30px 0;
+    color: #007EFF;
+    font-weight: bold;
+    border-radius: 10px;
+
+    .Polaris-Button__Text{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      span {
+        margin-left: 10px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .Polaris-Card {
+    border-radius: 20px;
+  }
+
+  .roundedCard {
+    text-decoration: none;
+    color: #212B36;
+
+    .Polaris-DisplayText--sizeSmall {
+      font-size: 18px;
+    }
+
+    .Polaris-Card{
+      border-radius: 20px;
+    }
+
+    .Polaris-Stack>.Polaris-Stack__Item {
+      width: 100px;
+    }
+  }
+}

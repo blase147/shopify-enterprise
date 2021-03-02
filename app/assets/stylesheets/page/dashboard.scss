@@ -1,0 +1,59 @@
+.module-Dashboard {
+  .Polaris-Button {
+    font-weight: bold;
+    border-radius: 10px;
+
+    .Polaris-Button__Text{
+      color: #007EFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      span {
+        margin-left: 10px;
+        font-weight: bold;
+      }
+    }
+
+    &.Polaris-Button--primary {
+      .Polaris-Button__Text {
+        color: white;
+      }
+    }
+  }
+
+}
+
+
+.Polaris-Modal-Dialog__Container {
+  .Polaris-Button__Text a {
+    color: white;
+    text-decoration: none;
+  }
+
+  .Polaris-Modal-CloseButton--withoutTitle {
+    z-index: 100;
+  }
+  
+  .Polaris-Modal-Dialog__Modal.Polaris-Modal-Dialog--sizeLarge {
+    max-width: 80rem;
+  }
+  .Polaris-Scrollable--verticalHasScrolling {
+    // overflow: hidden;
+
+    .slick-dots {
+      position: unset;
+    }
+  }
+  .Polaris-Modal-Section {
+    flex: 0 0 auto;
+    padding: 10px 7rem;
+  }
+  .Polaris-Button--primary {
+    background: #007eff;
+  }
+  .slick-track {
+    align-items: center;
+    display: flex;
+  }
+}

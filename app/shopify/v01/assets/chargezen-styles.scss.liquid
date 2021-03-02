@@ -1,0 +1,44 @@
+.chargezen-plan-selector {
+  margin-bottom: 1em;
+
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+
+  & > legend {
+    padding: 0em 8px 0px 6px;
+    font-weight: bold;
+  }
+
+  .plan-selector-group {
+    margin: 0 1rem 1rem 0;
+
+    &:not(.group-available) {
+      display: none;
+    }
+
+    &:not(.group-selected) > .plan-selector-plan {
+      display: none;
+    }
+
+    input {
+      min-height: 10px;
+    }
+  }
+
+  .plan-selector-plan {
+    padding-left: 20px;
+
+    select {
+      width: 100%;
+      margin-bottom: 5px;
+    }
+  }
+}
+
+.chargezen-cart-selling-plan {
+  display: block;
+}
+#chargezen-customer-portal-frame{
+  min-height: 125vh;
+}

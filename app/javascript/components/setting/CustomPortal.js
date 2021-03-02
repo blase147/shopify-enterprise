@@ -1,0 +1,571 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import AppLayout from '../layout/Layout';
+// import RoundCheckbox from 'rn-round-checkbox';
+import {
+  Card,
+  Select,
+  Page,
+  DisplayText,
+  ChoiceList,
+  Checkbox,
+  Badge,
+  TextField,
+  Button,
+  TextStyle,
+  Stack,
+  FormLayout,
+  Layout,
+  Heading,
+} from '@shopify/polaris';
+
+import Trash from '../../../assets/images/settings/trash.svg';
+
+const CustomPortal = (props) => {
+  const [checkedProTheme, setCheckedProTheme] = useState(false);
+  const handleChangeProTheme = useCallback(
+    (newChecked) => setCheckedProTheme(newChecked),
+    []
+  );
+  const [selectedTheme, setSelectedTheme] = useState(); //['lotus']
+
+  const handleChangeTheme = useCallback((value) => setSelectedTheme(value), []);
+
+  const [valueHeaderHTML_CSS, setValueHeaderHTML_CSS] = useState();
+  const handleChangeHeaderHTML_CSS = useCallback(
+    (newValue) => setValueHeaderHTML_CSS(newValue),
+    []
+  );
+
+  const [valueFooterHTML_CSS, setValueFooterHTML_CSS] = useState();
+  const handleChangeFooterHTML_CSS = useCallback(
+    (newValue) => setValueFooterHTML_CSS(newValue),
+    []
+  );
+
+  const [valueCreditCard, setValueCreditCard] = useState();
+  const handleChangeCCreditCard = useCallback(
+    (newValue) => setValueCreditCard(newValue),
+    []
+  );
+  const [selectedDelivery, setSelectedDelivery] = useState(
+    'Storeowner and Customer'
+  );
+  const handleSelectChangeDelivery = useCallback(
+    (value) => setSelectedDelivery(value),
+    []
+  );
+  const options = [
+    { label: 'Storeowner and Customer', value: 'storeownerAndCustomer' },
+    { label: 'Yesterday', value: 'yesterday' },
+    { label: 'Last 7 days', value: 'lastWeek' },
+  ];
+
+  const [selectedFrequency, setSelectedFrequency] = useState(['hidden']);
+  const handleChangeFrequency = useCallback(
+    (value) => setSelectedFrequency(value),
+    []
+  );
+  const [selectedDiscount, setSelectedDiscount] = useState(['hidden']);
+  const handleChangeDiscount = useCallback(
+    (value) => setSelectedDiscount(value),
+    []
+  );
+
+  const [delive, setDelive] = useState({
+    deliverySchdule: 'Storeowner and Customer',
+    edit: 'tomorrow',
+  });
+
+  const handleSetState = (value, name) => {
+    setDelive({ ...delive, [name]: value });
+  };
+
+  const [valueEmailContact, setValueEmailContact] = useState();
+  const handleChangeEmailContact = useCallback(
+    (newValue) => setValueEmailContact(newValue),
+    []
+  );
+
+  const [valueCancelAfter, setValueCancelAfter] = useState();
+  const handleChangeCancelAfter = useCallback(
+    (newValue) => setValueCancelAfter(newValue),
+    []
+  );
+  const [reasonsForCancellationList, setReasonsForCancellationList] = useState([
+    {
+      name: 'This is too expensive',
+      description: 'Returns cancel option and comment field',
+    },
+    {
+      name: 'This was created by accident',
+      description: 'Returns cancel option and comment field',
+    },
+    {
+      name: 'I already have more than I need',
+      description: 'Returns cancel and skip or pause options',
+    },
+    {
+      name: 'I need it sooner',
+      description: 'Returns cancel option and comment field',
+    },
+    {
+      name: 'I no longer use this product',
+      description: 'Returns cancel option and comment field',
+    },
+    {
+      name: 'I want a different product or variety',
+      description: 'Returns cancel and swap link',
+    },
+    {
+      name: 'Other Reason',
+      description: 'Returns cancel option and comment field',
+    },
+  ]);
+  const {
+    values,
+    touched,
+    errors,
+    setFieldValue,
+    handleSubmit,
+    isSubmitting,
+  } = props;
+
+  const handleRemoveReasons = useCallback((values, i) => {
+    let reasonCancels = [...(values.reasonsCancels || [])];
+    reasonCancels[i]._destroy = true;
+    return reasonCancels;
+  });
+  // const [selectedSave, setSelectedSave] = useState(false);
+
+  return (
+    <Layout>
+      <Card.Section>
+        <Stack vertical>
+          <Stack.Item>
+            <DisplayText size="small" element="h6">
+              <TextStyle variation="subdued">
+                Control actions available to your customers after purchase
+              </TextStyle>
+            </DisplayText>
+          </Stack.Item>
+          <Stack.Item>
+            {/* <div className="select-pro-themes"> */}
+            <Stack alignment="center">
+              <Stack.Item>
+                <div className="protheme">
+                  <Checkbox
+                    label="PRO Theme Engine"
+                    onChange={handleChangeProTheme}
+                    checked="indeterminate"
+                    // disabled={false}
+                  />
+                  <Badge status="success">PRO</Badge>
+                </div>
+              </Stack.Item>
+              <Stack.Item>
+                <span>Themes</span>
+              </Stack.Item>
+              <Stack.Item>
+                <div className="choise-themes">
+                  <ChoiceList
+                    choices={[
+                      { label: 'Lotus ', value: 'lotus' },
+                      { label: 'Enso', value: 'enso' },
+                    ]}
+                    selected={values.themes ? values.themes : 'lotus'}
+                    onChange={(e) => {
+                      setFieldValue('themes', e[0]);
+                      console.log('dfdfdfd: ', e[0]);
+                    }}
+                  />
+                </div>
+              </Stack.Item>
+            </Stack>
+            {/* </div> */}
+          </Stack.Item>
+          <Stack.Item>
+            <Heading>Customize Styles</Heading>
+          </Stack.Item>
+          <Stack.Item>
+            <FormLayout>
+              <TextField
+                label={
+                  <TextStyle variation="subdued">Header HTML/CSS/JS</TextStyle>
+                }
+                placeholder="Add Code Here..."
+                multiline={10}
+                value={values.styleHeader ? values.styleHeader : ''}
+                error={touched.styleHeader && errors.styleHeader}
+                onChange={(e) => setFieldValue('styleHeader', e)}
+              />
+
+              <TextField
+                label={
+                  <TextStyle variation="subdued">Footer HTML/CSS/JS</TextStyle>
+                }
+                placeholder="Add Code Here..."
+                multiline={10}
+                value={values.styleFooter ? values.styleFooter : ''}
+                error={touched.styleFooter && errors.styleFooter}
+                onChange={(e) => setFieldValue('styleFooter', e)}
+              />
+
+              <TextField
+                label={
+                  <TextStyle variation="subdued">
+                    Credit Card Page CSS
+                  </TextStyle>
+                }
+                placeholder="Add Code Here..."
+                multiline={10}
+                value={values.styleCreditCard ? values.styleCreditCard : ''}
+                error={touched.styleCreditCard && errors.styleCreditCard}
+                onChange={(e) => setFieldValue('styleCreditCard', e)}
+              />
+            </FormLayout>
+          </Stack.Item>
+        </Stack>
+      </Card.Section>
+      <Card.Section>
+        <Stack vertical>
+          <Stack.Item>
+            <Heading>Customer Portal Controls</Heading>
+          </Stack.Item>
+          <Stack.Item>
+            <TextStyle variation="strong">Navigation</TextStyle>
+            <FormLayout>
+              <FormLayout.Group>
+                <p>Delivery Schedule</p>
+                <Select
+                  options={options}
+                  value={values.navigationDelivery}
+                  error={
+                    touched.navigationDelivery && errors.navigationDelivery
+                  }
+                  onChange={(e) => setFieldValue('navigationDelivery', e)}
+                />
+                <p>&nbsp;</p>
+              </FormLayout.Group>
+            </FormLayout>
+          </Stack.Item>
+          <Stack.Item>
+            <TextStyle variation="strong">Customer Details</TextStyle>
+            <FormLayout>
+              <FormLayout.Group>
+                <p>Edit Shipping Address</p>
+                <Select
+                  options={options}
+                  value={values.shipingAddress}
+                  error={touched.shipingAddress && errors.shipingAddress}
+                  onChange={(e) => setFieldValue('shipingAddress', e)}
+                />
+                <p>&nbsp;</p>
+              </FormLayout.Group>
+            </FormLayout>
+          </Stack.Item>
+          <Stack.Item>
+            <Stack vertical>
+              <TextStyle variation="strong">Subscription Details</TextStyle>
+              <FormLayout>
+                <FormLayout.Group>
+                  <p>Edit Upcoming Order Date</p>
+                  <Select
+                    options={options}
+                    value={values.upcomingOderDate}
+                    error={touched.upcomingOderDate && errors.upcomingOderDate}
+                    onChange={(e) => setFieldValue('upcomingOderDate', e)}
+                  />
+                  <p>&nbsp;</p>
+                </FormLayout.Group>
+                <FormLayout.Group>
+                  <p>Edit Upcoming Quantity</p>
+                  <Select
+                    options={options}
+                    value={values.upcomingQuantity}
+                    error={touched.upcomingQuantity && errors.upcomingQuantity}
+                    onChange={(e) => setFieldValue('upcomingQuantity', e)}
+                  />
+                  <p>&nbsp;</p>
+                </FormLayout.Group>
+                <FormLayout.Group>
+                  <p>Add Products to Subscription</p>
+                  <Select
+                    options={options}
+                    value={values.productToSubscription}
+                    error={
+                      touched.productToSubscription &&
+                      errors.productToSubscription
+                    }
+                    onChange={(e) => setFieldValue('productToSubscription', e)}
+                  />
+                  <p>&nbsp;</p>
+                </FormLayout.Group>
+                <FormLayout.Group>
+                  <p>Change Variants</p>
+                  <Select
+                    options={options}
+                    value={values.changeVariant}
+                    error={touched.changeVariant && errors.changeVariant}
+                    onChange={(e) => setFieldValue('changeVariant', e)}
+                  />
+                  <p>&nbsp;</p>
+                </FormLayout.Group>
+                <FormLayout.Group>
+                  <p>Swap Product</p>
+                  <Select
+                    options={options}
+                    value={values.swapProduct}
+                    error={touched.swapProduct && errors.swapProduct}
+                    onChange={(e) => setFieldValue('swapProduct', e)}
+                  />
+                  <p>&nbsp;</p>
+                </FormLayout.Group>
+              </FormLayout>
+            </Stack>
+          </Stack.Item>
+          <Stack.Item>
+            <Stack vertical>
+              <TextStyle variation="strong">Shipment Frequency</TextStyle>
+              <FormLayout>
+                <FormLayout.Group>
+                  <p>Skip Shipment</p>
+                  <Select
+                    options={options}
+                    value={values.shipment}
+                    error={touched.shipment && errors.shipment}
+                    onChange={(e) => setFieldValue('shipment', e)}
+                  />
+                  <p>&nbsp;</p>
+                </FormLayout.Group>
+                <FormLayout.Group>
+                  <p>Edit Frequency</p>
+                  <Select
+                    options={options}
+                    value={values.frequency}
+                    error={touched.frequency && errors.frequency}
+                    onChange={(e) => setFieldValue('frequency', e)}
+                  />
+                  <p>&nbsp;</p>
+                </FormLayout.Group>
+              </FormLayout>
+            </Stack>
+          </Stack.Item>
+        </Stack>
+      </Card.Section>
+      <Card.Section>
+        <Stack vertical>
+          <Stack.Item>
+            <TextStyle variation="strong">
+              Customer facing frequency options
+            </TextStyle>
+          </Stack.Item>
+          <Stack.Item>
+            <ChoiceList
+              allowMultiple
+              choices={[
+                {
+                  label: 'Customer can choose any frequency',
+                  value: 'can_choose_any_frequency',
+                },
+                {
+                  label:
+                    'Limit to frequency options preselected for the subscription ruleset',
+                  value: 'limit',
+                },
+              ]}
+              selected={
+                values.facingFrequencyOption
+                  ? values.facingFrequencyOption
+                  : ['can_choose_any_frequency']
+              }
+              error={
+                touched.facingFrequencyOption && errors.facingFrequencyOption
+              }
+              onChange={(e) => setFieldValue('facingFrequencyOption', e)}
+            />
+          </Stack.Item>
+          <Stack.Item>
+            <p>
+              Delivery schedule number of days in future shows 90 days (Max.
+              180)
+            </p>
+          </Stack.Item>
+          <Stack.Item>
+            <Stack vertical>
+              <TextStyle variation="strong">
+                {' '}
+                Products available for purchase on the customer protal
+              </TextStyle>
+
+              <FormLayout.Group>
+                <p>One-time purchases</p>
+                <Select
+                  options={options}
+                  value={values.oneTimePurchase}
+                  error={touched.oneTimePurchase && errors.oneTimePurchase}
+                  onChange={(e) => setFieldValue('oneTimePurchase', e)}
+                />
+                <p>&nbsp;</p>
+              </FormLayout.Group>
+
+              <FormLayout.Group>
+                <p>Products available for purchase</p>
+                <Select
+                  options={options}
+                  value={values.availablePurchase}
+                  error={touched.availablePurchase && errors.availablePurchase}
+                  onChange={(e) => setFieldValue('availablePurchase', e)}
+                />
+                <p>&nbsp;</p>
+              </FormLayout.Group>
+            </Stack>
+          </Stack.Item>
+          <Stack.Item>
+            <Stack vertical>
+              <TextStyle variation="strong">Discounts</TextStyle>
+
+              <ChoiceList
+                allowMultiple
+                choices={[
+                  {
+                    label:
+                      'Allow customers to input discount code on customer portal',
+                    value: 'allow',
+                  },
+                  {
+                    label:
+                      'Remove discounts from customer addresses after discount limit has been reached',
+                    value: 'discount',
+                  },
+                ]}
+                selected={values.discount ? values.discount : ['allow']}
+                error={touched.discount && errors.discount}
+                onChange={(e) => setFieldValue('discount', e)}
+              />
+            </Stack>
+          </Stack.Item>
+          <Stack.Item>
+            <Stack vertical>
+              <TextStyle variation="strong">
+                {' '}
+                Subscription Cancellation
+              </TextStyle>
+              <FormLayout>
+                <FormLayout.Group>
+                  <p>Cancel Subscription</p>
+                  <Select
+                    options={options}
+                    value={values.subscriptionCancellation}
+                    error={
+                      touched.subscriptionCancellation &&
+                      errors.subscriptionCancellation
+                    }
+                    onChange={(e) =>
+                      setFieldValue('subscriptionCancellation', e)
+                    }
+                  />
+                  <p>&nbsp;</p>
+                </FormLayout.Group>
+              </FormLayout>
+            </Stack>
+          </Stack.Item>
+        </Stack>
+      </Card.Section>
+      <Card.Section>
+        <Stack vertical>
+          <Stack.Item>
+            <FormLayout>
+              <Heading>Customer Cancellation Email Contact</Heading>
+              <TextField
+                placeholder="hello@xyz.com"
+                value={values.cancellationEmailContact}
+                error={
+                  touched.cancellationEmailContact &&
+                  errors.cancellationEmailContact
+                }
+                onChange={(e) => setFieldValue('cancellationEmailContact', e)}
+              />
+              <Heading>Allow Customer to Cancel After</Heading>
+              <FormLayout.Group>
+                <TextField
+                  placeholder="No Restriction"
+                  value={
+                    values.allowCancelAfter
+                      ? values.allowCancelAfter
+                      : 'No Restriction'
+                  }
+                  error={touched.allowCancelAfter && errors.allowCancelAfter}
+                  onChange={(e) => setFieldValue('allowCancelAfter', e)}
+                />
+                <p>Charge(s)</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+              </FormLayout.Group>
+            </FormLayout>
+          </Stack.Item>
+          <Stack.Item>
+            <FormLayout>
+              <FormLayout.Group>
+                <p>Reactivate Subscription</p>
+                <Select
+                  options={options}
+                  value={values.reactiveSubscription}
+                  error={
+                    touched.reactiveSubscription && errors.reactiveSubscription
+                  }
+                  onChange={(e) => setFieldValue('reactiveSubscription', e)}
+                />
+                <p>&nbsp;</p>
+              </FormLayout.Group>
+            </FormLayout>
+          </Stack.Item>
+        </Stack>
+      </Card.Section>
+      <Card.Section>
+        <Stack vertical>
+          <Stack.Item>
+            <Heading>Reasons for Cancellation</Heading>
+          </Stack.Item>
+          {/* {reasonsForCancellationList?.map((item, i) => ( */}
+          {values.reasonsCancels?.map((item, i) => (
+            <div className={item._destroy ? 'hidden' : ''} key={i}>
+              <Stack.Item>
+                <Stack distribution="equalSpacing">
+                  <Stack.Item>
+                    <TextStyle variation="strong">
+                      <a>{item.title}</a>
+                    </TextStyle>
+                    <br />
+                    <TextStyle variation="subdued">
+                      {item.returnContent}
+                    </TextStyle>
+                  </Stack.Item>
+                  isSubmitting
+                  <Stack.Item>
+                    <div className="trash">
+                      <Button
+                        onClick={() =>
+                          // handleRemoveReasons(i)}
+                          setFieldValue(
+                            'reasonsCancels',
+                            handleRemoveReasons(values, i)
+                          )
+                        }
+                      >
+                        <img src={Trash}></img>
+                      </Button>
+                    </div>
+                  </Stack.Item>
+                </Stack>
+              </Stack.Item>
+            </div>
+          ))}
+          <Button loading={isSubmitting} primary onClick={() => handleSubmit()}>
+            Save
+          </Button>
+        </Stack>
+      </Card.Section>
+    </Layout>
+  );
+};
+export default CustomPortal;

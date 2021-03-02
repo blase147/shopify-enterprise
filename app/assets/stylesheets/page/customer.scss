@@ -1,0 +1,124 @@
+.module-customers {
+  font-size: 14px;
+
+  .Polaris-Button {
+    background: #ffffff;
+    border: 1px solid #d2d5d8;
+    box-sizing: border-box;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    &.Polaris-Button--primary {
+      background: #007eff;
+    }
+  }
+
+  .tabs {
+    .Polaris-Select__Backdrop {
+      background: #ffffff;
+      border: 1px solid #d2d5d8;
+      box-sizing: border-box;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .Polaris-Tabs__Wrapper {
+      background: #007eff;
+      border-bottom: unset;
+      .Polaris-Tabs__Title {
+        color: white;
+        margin-top: 17px;
+        height: 33px;
+        line-height: 0px;
+      }
+      .Polaris-Tabs__Tab.Polaris-Tabs__Tab--selected .Polaris-Tabs__Title {
+        background: white;
+        color: #000000;
+        border-bottom: unset;
+        border-radius: 5px 5px 0px 0px;
+      }
+    }
+  }
+  .filter {
+    position: relative;
+    display: flex;
+    .Polaris-Filters {
+      width: 60%;
+      display: inline-block;
+    }
+    .btn-sort {
+      position: absolute;
+      width: 31%;
+      right: 0;
+      display: inline;
+      .Polaris-Button {
+        span.Polaris-Button__Text {
+          display: flex;
+          line-height: 20px;
+          img {
+            margin-right: 7px;
+          }
+        }
+      }
+    }
+  }
+  .filter::after {
+    display: block;
+    clear: both;
+    content: '';
+  }
+  a {
+    color: black;
+    // text-decoration: unset;
+  }
+  .table {
+    .number {
+      display: flex;
+      align-items: center;
+      span {
+        margin-left: 11px;
+      }
+    }
+    .Polaris-DataTable__Cell--numeric {
+      text-align: unset;
+    }
+
+    .Polaris-Badge {
+      height: 25px;
+      width: 84px;
+      color: #232b35;
+      text-align: center;
+      display: block;
+    }
+    .more .Polaris-Badge {
+      height: 17px;
+      font-size: 8px;
+      width: 47px;
+      display: unset;
+    }
+    .processing .Polaris-Badge {
+      background: #b6edff;
+    }
+    .cancelled .Polaris-Badge {
+      background: #f9e9e6;
+      color: #c92b34;
+    }
+    .shipped .Polaris-Badge {
+      background: #fdff88;
+      color: #232b35;
+    }
+    .active .Polaris-Badge {
+      background: #66ff4e;
+      color: #0a610d;
+    }
+    .delivered .Polaris-Badge {
+      background: #78ffc8;
+    }
+    .inTrial .Polaris-Badge {
+      background: #81ffe1;
+    }
+    .future .Polaris-Badge {
+      background: #bfd1ff;
+      color: #0c3db9;
+    }
+    span.price {
+      color: #777777;
+    }
+  }
+}

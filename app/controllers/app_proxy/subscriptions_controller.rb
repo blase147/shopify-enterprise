@@ -1,0 +1,77 @@
+class AppProxy::SubscriptionsController < AppProxyController
+  before_action :init_session
+
+  def index
+    customer_id = "gid://shopify/Customer/#{params[:customer_id]}"
+    @data = CustomerSubscriptionContractsService.new(customer_id).run params[:cursor]
+    @subscription_contracts = @data[:subscriptions] || []
+  end
+
+  def show
+    @subscription = SubscriptionContractService.new(params[:id]).run
+
+    product_id = @subscription.lines.edges.first.node.product_id[/\d+/]
+    @product = ShopifyAPI::Product.find(product_id)
+
+    unless params[:customer_id] == @subscription.customer.id[/\d+/]
+      redirect_to "/a/chargezen_production/subscriptions/?customer_id=#{params[:customer_id]}"
+    end
+  end
+
+  def pause
+    id = params[:id]
+    result = SubscriptionContractDeleteService.new(id).run 'PAUSED'
+
+    if result.is_a?(Hash)
+      render :json => { error: result[:error] }
+    else
+      render :json => { status: :ok, message: "Success" }
+    end
+  end
+
+  def resume
+    id = params[:id]
+    result = SubscriptionContractDeleteService.new(id).run 'ACTIVE'
+
+    if result.is_a?(Hash)
+      render :json => { error: result[:error] }
+    else
+      render :json => { status: :ok, message: "Success" }
+    end
+  end
+
+  def cancel
+    id = params[:id]
+    result = SubscriptionContractDeleteService.new(id).run
+
+    if result.is_a?(Hash)
+      render :json => { error: result[:error] }
+    else
+      render :json => { status: :ok, message: "Success" }
+    end
+  end
+
+  def change_bill
+    id = params[:id]
+    result = CardUpdateService.new(id).run
+
+    if result.is_a?(Hash)
+      render :json => { error: result[:error] }
+    else
+      render :json => { status: :ok, message: "Success", show_notification: true }
+    end
+  end
+
+  def update_subscription
+    id = params[:id]
+    id = "gid://shopify/SubscriptionContract/#{id}"
+    result = SubscriptionContractUpdateService.new(id).run params
+
+    if result.is_a?(Hash)
+      flash[:error] = result[:error]
+      render js: "alert('#{result[:error]}'); hideLoading()"
+    else
+      render js: "hideModal(true);"
+    end
+  end
+end

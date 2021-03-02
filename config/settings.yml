@@ -1,0 +1,8 @@
+snippets:
+  main: "{% render 'chargezen-main' %}"
+  plan_selector: "{% render 'chargezen-plan-selector', product: product %}"
+  subscriptions_cart_selling_plans: "{% render 'chargezen-subscriptions-cart-selling-plans', item: item %}"
+  customer_portal_frame: "{% render 'chargezen-customer-portal-frame' %}"
+  customer_portal_link: "{% render 'chargezen-customer-portal-link' %}"
+  version: 'v0.1'
+  proxy_path: 'a/chargezen_production'

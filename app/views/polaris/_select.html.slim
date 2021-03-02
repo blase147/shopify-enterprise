@@ -1,0 +1,13 @@
+.Polaris-Labelled__LabelWrapper
+  .Polaris-Label
+    label.Polaris-Label__Text= options[:label]
+
+.Polaris-Select
+  = select_tag options[:name], options_for_select(options[:options], options[:selected]), class: 'Polaris-Select__Input', disabled: options[:disabled].present?
+  .Polaris-Select__Content aria-hidden="true" classs=(options[:disabled].present? ? 'Polaris-Select--disabled' : '')
+    span.Polaris-Select__SelectedOption
+    span.Polaris-Select__Icon
+      span.Polaris-Icon
+        svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
+          path d=("M10 16l-4-4h8l-4 4zm0-12l4 4H6l4-4z")
+  .Polaris-Select__Backdrop
