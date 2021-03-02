@@ -10,8 +10,10 @@ import {
   render,
   useData,
   useContainer,
+  ExtensionPoint,
   useSessionToken,
   useLocale,
+  Select
 } from '@shopify/argo-admin-react';
 
 const translations = {
@@ -25,6 +27,7 @@ const translations = {
     hello: 'Bonjour',
   },
 };
+const HOST = process.env.HOST || 'https://hotelscents.ecomtarget.com/graphql_extension';
 
 function Actions({onPrimary, onClose, title}) {
   return (
@@ -66,6 +69,34 @@ function Add() {
     {name: 'Subscription Plan C', id: 'c'},
   ];
 
+  const [plans, setPlans] = useState([{label: 'Loading...', value: ''}]);
+  const [selected, setSelected] = useState('');
+  
+  const handleSelectChange = useCallback((value) => setSelected(value), []);
+
+  useEffect(() => {
+    (async () => {
+      const token = await getSessionToken();
+
+      let res = await fetch(HOST, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+        method: 'POST',
+        body: JSON.stringify({type: "plans"})
+      });
+      let response = await res.json();
+      setPlans(response.data);
+    })();
+  }, []);
+
+  const options = [
+    {label: 'Red', value: 'red', disabled: false},
+    {label: 'Green', value: 'green', disabled: false},
+    {label: 'Blue', value: 'blue', disabled: false},
+  ];
+
   // Configure the extension container UI
   useEffect(() => {
     setPrimaryAction({
@@ -74,11 +105,34 @@ function Add() {
         // Get a fresh session token before every call to your app server.
         const token = await getSessionToken();
 
-        // Here, send the form data to your app server to add the product to an existing plan.
+        // The product and variant ID's collected from the modal form
+        let payload = {
+          type: "add",
+          body: {
+            productId: data.productId,
+            id: selected
+          }
+        };
 
-        // Upon completion, call done() to trigger a reload of the resource page
-        // and terminate the extension.
-        done();
+        // Here, send the form data to your app server to add the product to an existing plan.
+        const response = await fetch(HOST, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+
+        // If the server responds with an OK status, then refresh the UI and close the modal
+        if (response.ok) {
+          done();
+        } else {
+          console.log('Handle error.');
+        }
+
+        close();
+        
       },
     });
 
@@ -86,17 +140,28 @@ function Add() {
       content: 'Cancel',
       onAction: () => close(),
     });
-  }, [getSessionToken, close, done, setPrimaryAction, setSecondaryAction]);
+  }, [getSessionToken, selected, close, done, setPrimaryAction, setSecondaryAction]);
 
   return (
     <>
-      <Text size="titleLarge">{localizedStrings.hello}!</Text>
+      {/* <Text size="titleLarge">{localizedStrings.hello}!</Text> */}
       <Text>
-        Add Product id {data.productId} to an existing plan or existing plans
+        Add subscription plan to all variants of the product
       </Text>
 
+      <Select
+        label=""
+        options={plans}
+        labelInline
+        onChange={(value) => setSelected(value)}
+        value={selected}
+      />
+
       <Stack>
-        {mockPlans.map((plan) => (
+        <Text>
+          Want to add a plan to a specific set of variants? You can add them from the variant details page in Shopify
+        </Text>
+        {/*{mockPlans.map((plan) => (
           <Checkbox
             key={plan.id}
             label={plan.name}
@@ -108,7 +173,7 @@ function Add() {
             }}
             checked={selectedPlans.includes(plan.id)}
           />
-        ))}
+          ))} */}
       </Stack>
     </>
   );
@@ -211,8 +276,33 @@ function Remove() {
         const token = await getSessionToken();
 
         // Here, send the form data to your app server to remove the product from the plan.
+        let payload = {
+          type: "remove",
+          body: {
+            sellingPlanGroupId: data.sellingPlanGroupId,
+            productId: data.productId,
+            variantIds: data.variantIds
+          }
+        };
 
-        done();
+        // Here, send the form data to your app server to add the product to an existing plan.
+        const response = await fetch(HOST, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+
+        // If the server responds with an OK status, then refresh the UI and close the modal
+        if (response.ok) {
+          done();
+        } else {
+          console.log('Handle error.');
+        }
+
+        close();        
       },
     });
 
@@ -305,6 +395,16 @@ function Edit() {
     </>
   );
 }
+
+function App() {
+  return <Card>This is the best extension.</Card>;
+}
+
+extend(
+  'Playground',
+  render(() => <App />)
+);
+
 
 // Your extension must render all four modes
 extend(
