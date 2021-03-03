@@ -22,7 +22,11 @@ module Types
 
 
     def created_at
-      object.shopify_at&.strftime('%b %Y, %I:%M %p')
+      object.shopify_at&.strftime('%b %d %Y, %I:%M %p')
+    end
+
+    def subscription
+      object.subscription.truncate(30)
     end
     
     # def status

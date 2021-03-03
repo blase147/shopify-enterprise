@@ -324,7 +324,7 @@ const Customers = () => {
       >
         <Badge>{capitalize(row.status)}</Badge>
       </div>,
-      <div>{row.subscription}</div>,
+      <div class='subscription'>{row.subscription}</div>,
       <div>
         <p className="more">
           {row.communication}
