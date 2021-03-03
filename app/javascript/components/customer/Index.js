@@ -308,10 +308,10 @@ const Customers = () => {
           handleChangeCheckedCustomers(newChecked, row.id)
         }
       />,
-      <Link
-        to={`/customers/${row.id}/edit`}
+      <a
+        href={`/subscriptions/${row.id}`}
         key={row.id}
-      >{`${row.firstName} ${row.lastName}`}</Link>,
+      >{`${row.firstName} ${row.lastName}`}</a>,
       row.createdAt,
       <div
         className={
@@ -324,7 +324,7 @@ const Customers = () => {
       >
         <Badge>{capitalize(row.status)}</Badge>
       </div>,
-      <div class='subscription'>{row.subscription}</div>,
+      <div className='subscription'>{row.subscription}</div>,
       <div>
         <p className="more">
           {row.communication}

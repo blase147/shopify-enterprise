@@ -17,4 +17,13 @@ environment.plugins.insert(
   new webpack.EnvironmentPlugin(process.env)
 )
 
+environment.plugins.append("Provide", new webpack.ProvidePlugin({
+  $: 'jquery',
+  jQuery: 'jquery',
+  Popper: ['popper.js', 'default']
+}));
+
+environment.config.set('resolve.alias', {jquery: 'jquery/src/jquery'});
+
+
 module.exports = environment

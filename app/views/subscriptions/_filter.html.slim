@@ -1,0 +1,40 @@
+th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn.Polaris-DataTable__Cell--total scope="row" colspan='9'
+  form.Polaris-FormLayout#filter-form
+    .Polaris-FormLayout--grouped role="group" 
+      .Polaris-FormLayout__Items
+        .Polaris-FormLayout__Item
+          div
+            .Polaris-Connected
+              .Polaris-Connected__Item.Polaris-Connected__Item--primary
+                .Polaris-TextField.Polaris-TextField--disabled
+                  #PolarisTextField10Prefix.Polaris-TextField__Prefix
+                    span.Polaris-Icon
+                      svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20") 
+                        path d=("M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm9.707 4.293l-4.82-4.82A5.968 5.968 0 0 0 14 8 6 6 0 0 0 2 8a6 6 0 0 0 6 6 5.968 5.968 0 0 0 3.473-1.113l4.82 4.82a.997.997 0 0 0 1.414 0 .999.999 0 0 0 0-1.414z") 
+
+                  input.Polaris-TextField__Input aria-invalid="false" aria-multiline="false" type="text" placeholder='Filter products' value=params[:q] name='q'
+
+                  .Polaris-TextField__Backdrop
+        
+        .Polaris-FormLayout__Item
+          .Polaris-ButtonGroup.Polaris-ButtonGroup--segmented.Polaris-ButtonGroup--fullWidth data-buttongroup-segmented="true" data-buttongroup-full-width="true"
+            .Polaris-ButtonGroup__Item
+              button.Polaris-Button.Polaris-Button--disabled type="button" disabled='true'
+                span.Polaris-Button__Content
+                  span.Polaris-Button__Text Taggle with
+            .Polaris-ButtonGroup__Item
+              button.Polaris-Button.Polaris-Button--disabled type="button" disabled='true'
+                span.Polaris-Button__Content
+                  span.Polaris-Button__Text More Filters
+            .Polaris-ButtonGroup__Item
+              button.Polaris-Button.Polaris-Button--disabled type="button" disabled='true'
+                span.Polaris-Button__Content
+                  span.Polaris-Button__Text Export
+
+            .Polaris-ButtonGroup__Item
+              button.Polaris-Button.Polaris-Button--disabled disabled='true' type="submit" name='sort' value=(params[:sort] == 'asc' ? 'desc' : 'asc')
+                span.Polaris-Button__Content
+                  span.Polaris-Icon
+                    svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20") 
+                      path d=("M5.293 2.293a.997.997 0 0 1 1.414 0l3 3a1 1 0 0 1-1.414 1.414L7 5.414V13a1 1 0 1 1-2 0V5.414L3.707 6.707a1 1 0 0 1-1.414-1.414l3-3zM13 7a1 1 0 0 1 2 0v7.585l1.293-1.292a.999.999 0 1 1 1.414 1.414l-3 3a.997.997 0 0 1-1.414 0l-3-3a.997.997 0 0 1 0-1.414.999.999 0 0 1 1.414 0L13 14.585V7z") 
+                  span.Polaris-Button__Text Sort

@@ -1,0 +1,69 @@
+- order = @subscription.origin_order
+- api_order = ShopifyAPI::Order.find(order.id[/\d+/]) rescue nil
+- card = api_order&.payment_details
+- billing_date = @subscription.next_billing_date
+
+.Polaris-Modal#subscriptionEditModal 
+  .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true" 
+    form action='update_subscription' method='post' data-remote=true
+      = hidden_field_tag :id, @subscription.id
+      .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1" 
+        .Polaris-Modal-Dialog__Modal
+          .Polaris-Modal__BodyWrapper
+            .Polaris-Modal__Body.Polaris-Scrollable.Polaris-Scrollable--vertical data-polaris-scrollable="true" 
+              section.Polaris-Modal-Section
+                h2.Polaris-DisplayText.Polaris-DisplayText--sizeMedium ChargeZen - Subscription
+                .Polaris-FormLayout--grouped[role="group"]
+                  .Polaris-FormLayout__Items
+                    .Polaris-FormLayout__Item.Polaris-FormLayout__Item--firstOne
+                      = p_text_field name: 'next_billing_date', label: 'Next charge', icon: 'calendar', value:  DateTime.parse(@subscription.next_billing_date).strftime("%B %d, %Y")
+
+                    .Polaris-FormLayout__Item
+                      = p_select name: 'quantity', label: 'Quantity', options: 1..99, selected: @subscription.lines.edges.first.node.quantity
+
+                / .Polaris-FormLayout--grouped[role="group"]
+                /   .Polaris-FormLayout__Items
+                /     .Polaris-FormLayout__Item.Polaris-FormLayout__Item--firstOne
+                /       = p_select name: 'interval', label: 'Delivery schedule ', options: 1..99, selected: @subscription.billing_policy.interval_count, disabled: true
+
+                /     .Polaris-FormLayout__Item
+                /       = p_select name: 'next_charge', label: 'Current Price', options: 1..99, disabled: true
+
+                .Polaris-FormLayout--grouped[role="group"]
+                  .Polaris-FormLayout__Items
+                    .Polaris-FormLayout__Item.Polaris-FormLayout__Item--firstOne
+                      .Polaris-Stack
+                        .Polaris-Stack__Item.Polaris-Stack__Item--fill
+                          = p_select name: 'payment_method', label: 'Payment Method', options: ["#{card&.credit_card_company} ending in #{card&.credit_card_number}"]
+
+                        .Polaris-Stack__Item
+                          .Polaris-Labelled__LabelWrapper
+                            .Polaris-Label
+                              label.Polaris-Label__Text &nbsp;
+                          = p_button text: 'Edit', disabled: true
+
+                .Polaris-FormLayout--grouped[role="group"]
+                  .Polaris-FormLayout__Items
+                    .Polaris-FormLayout__Item.Polaris-FormLayout__Item--firstOne
+                      .Polaris-Stack
+                        .Polaris-Stack__Item.Polaris-Stack__Item--fill
+                          = p_text_area name: 'shipping_address', label: 'Shipping', value: order.shipping_address.formatted.join(', ').titleize, rows: 6, disabled: true
+
+                        .Polaris-Stack__Item
+                          .Polaris-Labelled__LabelWrapper
+                            .Polaris-Label
+                              label.Polaris-Label__Text &nbsp;
+                          = p_button text: 'Edit', disabled: true
+
+          .Polaris-Modal-Footer
+            .Polaris-Modal-Footer__FooterContent
+              button.Polaris-Button.mr-10[type="button" aria-hidden="true" tabindex="-1" data-action='close']
+                | Cancel
+
+              = p_button text: 'Save Changes', type: 'submit'
+
+              / button.Polaris-Button.Polaris-Button--destructive[type="submit" aria-hidden="true" tabindex="-1" data-action='close' name='']
+              /   | Swap
+
+  .Polaris-Backdrop
+  

@@ -53,6 +53,19 @@ Rails.application.routes.draw do
   end
 
   post "/graphql_extension", to: "extension#execute"
+  
+  resources :subscriptions do
+    collection do
+      post :update_subscription
+      post :update_customer
+    end
+
+    member do
+      get :send_update_card
+      get :remove_card
+      get :skip_schedule
+    end
+  end
 
   get '*path' => 'home#index'
 end

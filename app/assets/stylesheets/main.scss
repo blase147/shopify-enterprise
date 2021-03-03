@@ -1,0 +1,156 @@
+.chargezen{
+  .CardPagination_wrap__2g8zo {
+    margin: auto;
+    padding: 2.4rem 1.6rem;
+    border-top: .1rem solid #dfe3e8;
+    border-top: .1rem solid var(--p-border-subdued,#dfe3e8);
+    text-align: center;
+  }
+
+  a.Polaris-ResourceItem{
+    color: var(--p-text, #212b36);
+    text-decoration: blink;
+  }
+
+  .Polaris-Tabs__Tab:focus {
+    box-shadow: none !important;
+  }
+
+  .Polaris-FooterHelp {
+    p {
+      color: var(--p-text-subdued, #637381);
+      margin-top: -1rem;
+      margin-bottom: 2rem;
+      font-size: 0.9em;
+    }
+  }
+
+  .Polaris-Copyright {
+    a {
+      color: var(--p-text-subdued, #637381);
+    }
+  }
+
+  .Polaris-CalloutCard__Image {
+    width: 20rem;
+  }
+
+  /* subscription plans */
+  // .nested-fields :first-child a.remove_fields.dynamic {
+  //   display: none;
+  // }
+
+  .addMoreSellingPlan {
+    margin-bottom: 10px;
+    margin-top: 0px;
+  }
+  .hide{
+    display: none;
+  }
+  .Polaris-Layout__Section--oneFour {
+    flex: 1 1 20rem;
+    min-width: 0;
+  }
+
+  .Polaris-Layout__Section--oneSix {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .Polaris-Button--plain:hover{
+    text-decoration: unset;
+  }
+  .Polaris-Button--plain--colorGreen{
+    color: #50b83c;
+    svg{
+      fill: #50b83c;
+    }
+  }
+  .Polaris-Button--plain--colorRed{
+    color: #de3618;
+    svg{
+      fill: #de3618;
+    }
+  }
+  .Polaris-Button--plain--colorBlack{
+    color: black;
+    svg{
+      fill: black;
+    }
+  }
+  .Polaris-Card__Header--textAlignCenter{
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+
+  table.table-without-border {
+    margin: 0 auto;
+    border-collapse: collapse;
+    border-style: hidden;
+    width: 100%;
+    th, td{
+      padding: 1rem;
+      border: 1px solid #dbdbdb;
+    }
+    th{
+      padding-left: 0px;
+      font-weight: normal;
+      text-align: left;
+    }
+  }
+
+  .form-inline {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-between;
+    label {
+      margin: 5px 10px 5px 0;
+    }
+
+    .form-grouped{
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+    }
+
+    .Polaris-Select, .Polaris-TextField {
+      margin: 5px 10px 5px 0;
+    }
+    .Polaris-Select{
+      width: 120px;
+    }
+    .Polaris-TextField{
+      width: 50px;
+    }
+  }
+
+  .Polaris-TextField__Prefix.hide {
+    visibility: hidden;
+    width: 0px;
+    margin-left: 0;
+    display: block;
+  }
+
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 5px;
+  }
+
+  .icon {
+    margin-right: 5px;
+  }
+
+  .Polaris-Modal {
+    & > div {
+      display: none;
+    }
+
+    &.shown > div {
+      display: flex;
+    }
+  }
+}

@@ -20,6 +20,9 @@ module Types
     field :updated_at, String, null: true
     field :__typename , String, null: true
 
+    def id
+      object.shopify_id
+    end
 
     def created_at
       object.shopify_at&.strftime('%b %d %Y, %I:%M %p')

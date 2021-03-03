@@ -1,0 +1,43 @@
+.chargezen.page-subscriptions {
+  .Polaris-Page {
+    max-width: unset;
+  }
+
+  &.show {
+    .Polaris-TextField.Polaris-TextField--hasValue input {
+      width: 50px;
+    }
+
+    .Polaris-Icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      margin-right: 5px;
+    }
+
+    .Polaris-Layout__Section--oneSix .Polaris-Card {
+      min-height: 120px;
+    }
+
+    .Polaris-TextContainer.Polaris-TextContainer--spacingTight {
+      margin-bottom: 5px;
+    }
+
+    .Polaris-Button--plain {
+      .Polaris-Icon, .Polaris-Button__Text {
+        color: black;
+      }
+    }
+
+    .Polaris-FormLayout__Item--firstOne {
+      margin-left: 0;
+    }
+
+    .mr-10 {
+      margin-right: 10px;
+    }
+  }
+
+  &.index {
+    //
+  }
+}
