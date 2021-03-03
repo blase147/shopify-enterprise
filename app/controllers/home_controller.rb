@@ -6,5 +6,9 @@ class HomeController < ApplicationController
 
   def index
     @shop_origin = current_shopify_domain
+    
+    session[:hmac] = params[:hmac]
+    session[:shop] = params[:shop]
+    session[:session] = params[:session]
   end
 end

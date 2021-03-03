@@ -22,4 +22,8 @@ module ApplicationHelper
   def action_subscription_path action
     "/a/chargezen_production/subscriptions/#{params[:id]}/#{action}?customer_id=#{params[:customer_id]}"
   end
+
+  def app_path path
+    "#{path}?hmac=#{session[:hmac]}&shop=#{session[:shop]}"
+  end
 end
