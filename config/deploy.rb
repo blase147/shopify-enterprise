@@ -11,7 +11,7 @@ require 'mina/rvm'    # for rvm support. (https://rvm.io)
 
 set :application_name, 'chargezen'
 set :domain, '13.52.227.76'
-set :deploy_to, '/var/www/hotel_collection'
+set :deploy_to, '/var/www/hotel_scents'
 set :repository, 'git@github.com:miclabs/chargezen.git'
 set :branch, 'hotel_collection'
 
