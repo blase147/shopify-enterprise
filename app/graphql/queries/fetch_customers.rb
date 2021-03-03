@@ -4,7 +4,7 @@ module Queries
     type [Types::CustomerSubscriptionType], null: false
 
     def resolve
-      current_shop.customers.order(created_at: :desc)
+      current_shop.contracts
     end
   end
 end

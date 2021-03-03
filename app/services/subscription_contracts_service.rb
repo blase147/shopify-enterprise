@@ -19,11 +19,15 @@ class SubscriptionContractsService < GraphqlService
             customer {
               firstName
               lastName
+              email
             }
             lines(first: 10) {
               edges {
                 node {
                   title
+                  currentPrice {
+                    amount
+                  }
                 }
               }
             }
@@ -53,6 +57,9 @@ class SubscriptionContractsService < GraphqlService
     query = LIST_QUERY
     query = query.gsub("first: #{PAGE}", "first: #{PAGE} after: \"#{cursor}\"") if cursor.present?
     result = client.query(client.parse(query))
+
+    puts '###'
+    p result
 
     data = result.data.subscription_contracts
     subscriptions = data.edges.map do |edge|

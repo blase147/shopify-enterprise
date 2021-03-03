@@ -315,32 +315,22 @@ const Customers = () => {
       row.createdAt,
       <div
         className={
-          row.status === 'processing'
-            ? 'processing'
-            : row.status === 'shipped'
-            ? 'shipped'
-            : 'intrial'
-        }
-      >
-        <Badge>{capitalize(row.status)}</Badge>
-      </div>,
-      <div
-        className={
-          row.subscription === 'cancelled'
+          row.status === 'PAUSED'
             ? 'cancelled'
-            : row.subscription === 'active'
+            : row.status === 'ACTIVE'
             ? 'active'
             : 'future'
         }
       >
-        <Badge>{capitalize(row.subscription)}</Badge>
+        <Badge>{capitalize(row.status)}</Badge>
       </div>,
+      <div>{row.subscription}</div>,
       <div>
         <p className="more">
-          3 Week Pack<Badge>+1 more</Badge>
+          {row.communication}
         </p>
         <p>
-          <span className="price">$30 USD / Weeks</span>
+          <span className="price">{row.language}</span>
         </p>
       </div>,
     ]);
@@ -692,14 +682,14 @@ const Customers = () => {
                     'numeric',
                     'numeric',
                     'numeric',
-                    'numeric',
+                    'text',
                   ]}
                   headings={[
-                    'Number',
+                    'Id',
                     'Name',
                     'Date Created',
                     'Status',
-                    'Subscription',
+                    'Product',
                     '',
                   ]}
                   rows={formatRows(filterCustomers)}

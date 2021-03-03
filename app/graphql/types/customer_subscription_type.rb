@@ -13,6 +13,9 @@ module Types
     field :phone, String, null: true
     field :additional_contacts, [Types::AdditionalContactType], null: true
     field :billing_address, Types::BillingAddressType, null: true
+    field :pack, String, null: true
+    field :frequency, String, null: true
+    
     field :created_at, String, null: true
     field :updated_at, String, null: true
     field :__typename , String, null: true
