@@ -22,7 +22,7 @@ module Types
 
 
     def created_at
-      object.created_at&.strftime('%b %Y, %I:%M %p')
+      object.shopify_at&.strftime('%b %Y, %I:%M %p')
     end
     
     # def status

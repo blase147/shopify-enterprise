@@ -26,21 +26,21 @@ class Shop < ActiveRecord::Base
     ShopifyAPI::Base.activate_session(session)
   end
 
-  def contracts
+  def sync_contracts
     self.connect
     items = SubscriptionContractsService.new.run
-    items[:subscriptions].map do |item|
+    items[:subscriptions].each do |item|
       billing_policy = item.node.billing_policy
 
-      Customer.new(
+      customer = self.customers.find_or_create_by(shopify_id: item.node.id[/\d+/])
+      customer.update_columns(
         first_name: item.node.customer.first_name,
         last_name: item.node.customer.last_name,
         email: item.node.customer.email,
-        id: item.node.id[/\d+/].to_i,
-        created_at: item.node.created_at.to_date,
+        shopify_at: item.node.created_at.to_date,
         status: item.node.status,
         subscription: item.node.lines.edges.first.node.title,
-        language: "$#{item.node.lines.edges.first.node.current_price.amount} / #{billing_policy.interval}",
+        language: "$#{item.node.lines.edges.first.node.current_price.amount} / #{billing_policy.interval.pluralize}",
         communication: "#{billing_policy.interval_count} #{billing_policy.interval} Pack".titleize
       )
     end
