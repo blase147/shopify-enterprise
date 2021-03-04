@@ -26,6 +26,8 @@
 
 /* custom polaris css */
 body.chargezen-proxy {
+  padding: 30px 0;
+
   overflow: auto;
   background: none;
   // font-family: 'AvenirLTStd';
@@ -48,6 +50,7 @@ body.chargezen-proxy {
   }
 
   .Polaris-Page {
+    margin: 30px 0;
     padding: 0 !important;
     max-width: none;
     background: #E5E5E5;

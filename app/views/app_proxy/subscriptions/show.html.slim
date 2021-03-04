@@ -1,8 +1,9 @@
 - order = @subscription.origin_order
 - billing_policy = @subscription.billing_policy
-- api_order = ShopifyAPI::Order.find(@subscription.origin_order.id[/\d+/])
-- card = api_order.payment_details
-- billing_address = api_order.billing_address
+
+- api_order = ShopifyAPI::Order.find(@subscription.origin_order.id[/\d+/]) rescue nil
+- card = api_order&.payment_details
+- billing_address = api_order&.billing_address
 
 .Polaris-Page
   .Polaris-Page-Header.Polaris-Page-Header--isSingleRow.Polaris-Page-Header--noBreadcrumbs.Polaris-Page-Header--mediumTitle
@@ -94,18 +95,21 @@
                     = p_button text: 'Change Frequency'
 
                 tr.Polaris-DataTable__TableRow
-                  th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"
-                    | Billing Method
-                    br/
-                    p #{card.credit_card_company} ending in #{card.credit_card_number}
-                  td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
-                    = billing_address.name
-                    br/
-                    = billing_address.address1
-                    br/
-                    | #{billing_address.city} #{billing_address.province} #{billing_address.zip} #{billing_address.country}
-                    br/
-                    | #{billing_address.phone}
+                  - if card.present?
+                    th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"
+                      | Billing Method
+                      br/
+                      p #{card.credit_card_company} ending in #{card.credit_card_number}
+                  
+                  - if billing_address.present?
+                    td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
+                      = billing_address.name
+                      br/
+                      = billing_address.address1
+                      br/
+                      | #{billing_address.city} #{billing_address.province} #{billing_address.zip} #{billing_address.country}
+                      br/
+                      | #{billing_address.phone}
                   td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
                     = p_button text: 'Change', data: { url: action_subscription_path(:change_bill) }
               tfoot
