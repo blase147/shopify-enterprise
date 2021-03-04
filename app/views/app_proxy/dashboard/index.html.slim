@@ -125,7 +125,8 @@
 
                                 .Polaris-MediaCard
                                   .Polaris-MediaCard__MediaContainer
-                                    img alt="" height="100%" src=product.images.first.src style=("object-fit: cover; object-position: center center;") width="100%" /
+                                    - if product.images.first.present?
+                                      img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
                                   .Polaris-MediaCard__InfoContainer
                                     .Polaris-Card__Section
                                       .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
