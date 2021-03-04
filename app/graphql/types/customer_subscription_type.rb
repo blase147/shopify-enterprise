@@ -29,7 +29,7 @@ module Types
     end
 
     def subscription
-      object.subscription.truncate(30)
+      object.subscription.truncate(30) rescue nil
     end
     
     # def status
