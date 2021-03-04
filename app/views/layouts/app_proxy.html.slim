@@ -2,14 +2,14 @@ doctype html
 html
   head
     meta[charset="utf-8"]
-    - application_name = ShopifyApp.configuration.application_name
-    title
-      = application_name
+    title Hotel Collection
     = csrf_meta_tags
     = csp_meta_tag
     = stylesheet_link_tag 'app_proxy', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_pack_tag 'app_proxy', 'data-turbolinks-track': 'reload'
     link[rel="stylesheet" href="https://unpkg.com/@shopify/polaris@5.8.4/dist/styles.css"]
+
+     
   body.chargezen-proxy
     .Polaris-Page
       = render 'app_proxy/shared/tabs'
@@ -18,4 +18,3 @@ html
           .Polaris-Layout__Section
             .Dashboard_wrapper__3SFrh
               = yield
-          / = render 'layouts/shared/footer'

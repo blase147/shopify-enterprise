@@ -26,6 +26,14 @@ class CustomerSubscriptionContractsService < GraphqlService
                 edges {
                   node {
                     title
+                    productId
+                    quantity
+                    sellingPlanId
+                    pricingPolicy
+                    sellingPlanName
+                    currentPrice {
+                      amount
+                    }
                   }
                 }
               }
@@ -55,7 +63,7 @@ class CustomerSubscriptionContractsService < GraphqlService
   def initialize customer_id
     @customer_id = customer_id
   end
-
+  
   def run cursor=nil
     query = LIST_QUERY
     query = query.gsub("first: #{PAGE}", "first: #{PAGE} after: \"#{cursor}\"") if cursor.present?
@@ -74,8 +82,8 @@ class CustomerSubscriptionContractsService < GraphqlService
       prev_cursort: subscriptions.first.cursor
     }
 
-  rescue Exception => ex
-    p ex.message
-    { error: ex.message }
+  # rescue Exception => ex
+  #   p ex.message
+  #   { error: ex.message }
   end
 end

@@ -112,15 +112,16 @@
                   tr
                     - if current_setting.cancel_enabled? && @subscription.status != 'CANCELLED'
                       th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
-                        = p_button text: 'Cancel Subscription', data: { url: action_subscription_path(:cancel) }, class: 'Polaris-Button--destructive'
+                        = p_button text: 'Cancel Subscription', data: { url: action_subscription_path(:cancel), confirm_text: 'Are you sure you want to Cancel your Subscription?' }, class: 'Polaris-Button--destructive'
 
                     - if current_setting.pause_resume?
                       - if @subscription.status == 'ACTIVE'
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
-                          = p_button text: 'Pause Subscription', data: { url:  action_subscription_path(:pause) }
+                          = p_button text: 'Pause Subscription', data: { url:  action_subscription_path(:pause), confirm_text: 'Are you sure you want to Pause your Subcription?' }
                       - else
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
-                          = p_button text: 'Resume Subscription', data: { url:  action_subscription_path(:resume) }
+                          = p_button text: 'Resume Subscription', data: { url:  action_subscription_path(:resume), confirm_text: 'Confirm Reactivation' }
 
 = render 'edit_date_modal'
 = render 'edit_quantity_modal'
+= render 'app_proxy/shared/confirm_modal'

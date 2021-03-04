@@ -6,51 +6,94 @@ nav.Polaris-Navigation
           a.Polaris-Navigation__Item class=active_nav('dashboard', 'index') href="/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}" tabindex="0"
             .Polaris-Navigation__Icon
               span.Polaris-Icon
-                svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
-                  path d=("M12.984 18a.999.999 0 0 1-.94-.658L8.967 8.888l-2.05 5.465a1.001 1.001 0 0 1-1.794.163L2.935 10.87l-1.124 1.685a1.002 1.002 0 0 1-1.665-1.11l2.001-3a.966.966 0 0 1 .856-.444.998.998 0 0 1 .834.485l1.936 3.223L8.044 5.65A1 1 0 0 1 8.982 5h.005a1.001 1.001 0 0 1 .935.658l2.948 8.1 3.154-11.033c.12-.42.502-.714.94-.724.43-.026.834.268.97.683l2.002 6a1 1 0 1 1-1.897.631l-.98-2.932-3.112 10.888a1 1 0 0 1-.928.726h-.035")
-            span.Polaris-Navigation__Text OverView
+                svg.Polaris-Icon__Svg fill="none" aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
+                  path d=("M1.90234 18.6003L1.90234 1.5166") stroke="#007EFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
+                  path d=("M1.90263 18.6001L18.9863 18.6001") stroke="#007EFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
+                  path d=("M5.73828 11.6929C7.96594 9.6582 9.56381 8.49482 11.3656 6.87939L12.4839 11.2598L17.3566 7.15236") stroke="#007EFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
+
+            span.Polaris-Navigation__Text Overview
+
+      li.Polaris-Navigation__ListItem
         .Polaris-Navigation__ItemWrapper
           a.Polaris-Navigation__Item class=active_nav('dashboard', 'subscription') href="/a/chargezen_production/dashboard/subscription?customer_id=#{params[:customer_id]}" tabindex="0"
             .Polaris-Navigation__Icon
               span.Polaris-Icon
-                svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
-                  path d=("M1 2.5A1.5 1.5 0 0 1 2.5 1h15A1.5 1.5 0 0 1 19 2.5v15a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 1 17.5v-15zM8 5h8v2H8V5zm8 4H8v2h8V9zm-8 4h8v2H8v-2zM5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm1 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-1 5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z") fill-rule="evenodd"
+                svg.Polaris-Icon__Svg aria-hidden="true" fill="none" focusable="false" viewbox=("0 0 20 20")
+                  path d=("M6.63672 1.84473H19.016") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
+                  path d=("M6.63672 7.55811H19.016") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
+                  path d=("M6.63672 13.272H19.016") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
+                  path d=("M1.875 1.84473H1.88356") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
+                  path d=("M1.875 7.55811H1.88356") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
+                  path d=("M1.875 13.272H1.88356") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
+
             span.Polaris-Navigation__Text Subscription
+      
+      li.Polaris-Navigation__ListItem
         .Polaris-Navigation__ItemWrapper
           a.Polaris-Navigation__Item class=active_nav('dashboard', 'upcoming') href="/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}" tabindex="0"
             .Polaris-Navigation__Icon
               span.Polaris-Icon
-                svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
-                  path d=("M17.5 6A1.5 1.5 0 0 1 19 7.5v10a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 1 17.5v-10A1.5 1.5 0 0 1 2.5 6H7v2H3v9h14V8h-4V6h4.5z")
-                  path d=("M1 2a1 1 0 0 1 0-2h5c2.757 0 5 2.243 5 5v6.586l1.293-1.293a1 1 0 0 1 1.414 1.414l-3 3a.998.998 0 0 1-1.414 0l-3-3a1 1 0 1 1 1.414-1.414L9 11.586V5c0-1.654-1.346-3-3-3H1z")
+                svg fill="none" height="18" viewbox=("0 0 22 18") width="22" xmlns="http://www.w3.org/2000/svg" 
+                  g clip-path="url(#clip0)" 
+                    path d=("M18.8089 1.80762H4.08168C3.17794 1.80762 2.44531 2.59112 2.44531 3.55762V14.0576C2.44531 15.0241 3.17794 15.8076 4.08168 15.8076H18.8089C19.7127 15.8076 20.4453 15.0241 20.4453 14.0576V3.55762C20.4453 2.59112 19.7127 1.80762 18.8089 1.80762Z") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill='#E5E5E5' /
+                    path d=("M2.44531 6.80762H20.4453") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
+                  defs
+                    clippath#clip0
+                      rect height="17" transform=("translate(0.753906 0.556641)") width="21" /
+
+
             span.Polaris-Navigation__Text Upcoming deliveries
+      
+      li.Polaris-Navigation__ListItem
         .Polaris-Navigation__ItemWrapper
           a.Polaris-Navigation__Item class=active_nav('dashboard', 'order_history') href="/a/chargezen_production/dashboard/order_history?customer_id=#{params[:customer_id]}" tabindex="0"
             .Polaris-Navigation__Icon
-              span.Polaris-Icon
-                svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
-                  path d=("M18 5a1 1 0 0 0-.293-.707l-4-4A1.002 1.002 0 0 0 13 0H3.5A1.5 1.5 0 0 0 2 1.5V6a1 1 0 1 0 2 0V2h8.586L16 5.414V18H4v-1a1 1 0 1 0-2 0v1.5A1.5 1.5 0 0 0 3.5 20h13a1.5 1.5 0 0 0 1.5-1.5V5z")
-                  path d=("M9 6a1 1 0 0 0 0 2h3v3a1 1 0 1 0 2 0V7a1 1 0 0 0-1-1H9z")
-                  path d=("M7 13l-.768.64a1 1 0 0 0 1.475.067L7 13zm-2.5-3l.768-.64a1 1 0 0 0-1.52-.018L4.5 10zM.247 13.341a1 1 0 0 0 1.506 1.318L.247 13.34zm11.046-6.048l-5 5 1.414 1.414 5-5-1.414-1.414zM7.768 12.36l-2.5-3-1.536 1.28 2.5 3 1.536-1.28zm-4.02-3.018l-3.5 4 1.505 1.316 3.5-4-1.506-1.316z")
-            span.Polaris-Navigation__Text Order History
+              span.Polaris-Icon.order-icon
+                svg.Polaris-Icon__Svg aria-hidden="true" fill="none" focusable="false" viewbox=("0 0 20 20")
+                  path d=("M9.0461 1.55078H2.64047C2.21575 1.55078 1.80843 1.7195 1.5081 2.01982C1.20778 2.32014 1.03906 2.72747 1.03906 3.15219V15.9634C1.03906 16.3882 1.20778 16.7955 1.5081 17.0958C1.80843 17.3961 2.21575 17.5649 2.64047 17.5649H12.2489C12.6736 17.5649 13.081 17.3961 13.3813 17.0958C13.6816 16.7955 13.8503 16.3882 13.8503 15.9634V6.355L9.0461 1.55078Z") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill='#E5E5E5'/
+                  path d=("M9.04688 1.55078V6.355H13.8511") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
+
+            span.Polaris-Navigation__Text Order history
+
+      li.Polaris-Navigation__ListItem
         .Polaris-Navigation__ItemWrapper
           a.Polaris-Navigation__Item class=active_nav('dashboard', 'addresses') href="/a/chargezen_production/dashboard/addresses?customer_id=#{params[:customer_id]}" tabindex="0"
             .Polaris-Navigation__Icon
               span.Polaris-Icon
-                svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
-                  path d=("M18 8c0-4.42-3.58-8-8-8S2 3.58 2 8c0 .15 0 .29.01.44.13 3.55 1.99 7.62 7.13 11.29.51.36 1.21.36 1.72 0 5.14-3.67 7-7.74 7.13-11.29.01-.15.01-.29.01-.44zm-5.879 2.121a2.996 2.996 0 0 0 0-4.242 2.996 2.996 0 0 0-4.242 0 2.996 2.996 0 0 0 0 4.242 2.996 2.996 0 0 0 4.242 0z") fill-rule="evenodd"
+                = icon_tag 'address'
+
             span.Polaris-Navigation__Text Addresses
+
+      li.Polaris-Navigation__ListItem
         .Polaris-Navigation__ItemWrapper
           a.Polaris-Navigation__Item class=active_nav('dashboard', 'payment_methods') href="/a/chargezen_production/dashboard/payment_methods?customer_id=#{params[:customer_id]}" tabindex="0"
             .Polaris-Navigation__Icon
               span.Polaris-Icon
-                svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
-                  path d=("M4.002 5L.55 6.76a.985.985 0 0 0-.549.9V18c0 .51.38.93.879.99l8.023 1a.997.997 0 0 0 1.068-.67L11.737 14h3.273c1.297 0 2.405-.84 2.814-2h.679c.828 0 1.497-.67 1.497-1.5V5H4.002zM5 10h10.01c.27 0 .509.1.709.31.19.18.289.42.289.69 0 .55-.449 1-.998 1h-3.992c-.429 0-.808.28-.948.68l-1.736 5.23-6.338-.79V8.27l2.006-1v1.74A1 1 0 0 0 5 10zm13.503-9H5.499c-.828 0-1.497.67-1.497 1.5V3H20v-.5c0-.83-.669-1.5-1.497-1.5z")
-            span.Polaris-Navigation__Text Payment Methods
+                svg.Polaris-Icon__Svg fill="none" height="16" viewbox=("0 0 16 16") width="16" xmlns="http://www.w3.org/2000/svg" 
+                  path d=("M15.5 10C15.224 10 15 10.224 15 10.5V14H1V8H6.5C6.776 8 7 7.776 7 7.5C7 7.224 6.776 7 6.5 7H1V5H6.5C6.776 5 7 4.776 7 4.5C7 4.224 6.776 4 6.5 4H1C0.448 4 0 4.448 0 5V14C0 14.552 0.448 15 1 15H15C15.552 15 16 14.552 16 14V10.5C16 10.224 15.776 10 15.5 10Z") fill="#4D506A"/
+                  path d=("M15.5 10C15.224 10 15 10.224 15 10.5V14H1V8H6.5C6.776 8 7 7.776 7 7.5C7 7.224 6.776 7 6.5 7H1V5H6.5C6.776 5 7 4.776 7 4.5C7 4.224 6.776 4 6.5 4H1C0.448 4 0 4.448 0 5V14C0 14.552 0.448 15 1 15H15C15.552 15 16 14.552 16 14V10.5C16 10.224 15.776 10 15.5 10Z") stroke="#4D506A" /
+                  path d=("M4.5 10H2.5C2.224 10 2 10.224 2 10.5C2 10.776 2.224 11 2.5 11H4.5C4.776 11 5 10.776 5 10.5C5 10.224 4.776 10 4.5 10Z") fill="#4D506A" /
+                  path d=("M15.697 2.53975L12.197 1.03975C12.07 0.98675 11.929 0.98675 11.802 1.03975L8.302 2.53975C8.119 2.61875 8 2.79975 8 2.99975V4.99975C8 7.75075 9.017 9.35875 11.751 10.9338C11.828 10.9777 11.914 10.9998 12 10.9998C12.086 10.9998 12.172 10.9777 12.249 10.9338C14.983 9.36275 16 7.75475 16 4.99975V2.99975C16 2.79975 15.881 2.61875 15.697 2.53975ZM15 4.99975C15 7.30875 14.236 8.57975 12 9.91975C9.764 8.57675 9 7.30575 9 4.99975V3.32975L12 2.04375L15 3.32975V4.99975Z") fill="#4D506A" /
+                  path d=("M15.697 2.53975L12.197 1.03975C12.07 0.98675 11.929 0.98675 11.802 1.03975L8.302 2.53975C8.119 2.61875 8 2.79975 8 2.99975V4.99975C8 7.75075 9.017 9.35875 11.751 10.9338C11.828 10.9777 11.914 10.9998 12 10.9998C12.086 10.9998 12.172 10.9777 12.249 10.9338C14.983 9.36275 16 7.75475 16 4.99975V2.99975C16 2.79975 15.881 2.61875 15.697 2.53975ZM15 4.99975C15 7.30875 14.236 8.57975 12 9.91975C9.764 8.57675 9 7.30575 9 4.99975V3.32975L12 2.04375L15 3.32975V4.99975Z") stroke="#4D506A" /
+                  path d=("M13.8127 4.10886C13.5977 3.93886 13.2837 3.97186 13.1097 4.18686L11.5377 6.15286L10.9157 5.22286C10.7607 4.99286 10.4497 4.93186 10.2227 5.08386C9.99365 5.23686 9.93065 5.54786 10.0837 5.77686L11.0837 7.27686C11.1727 7.40986 11.3187 7.49186 11.4787 7.49986C11.4857 7.49986 11.4937 7.49986 11.4997 7.49986C11.6507 7.49986 11.7947 7.43186 11.8907 7.31186L13.8907 4.81186C14.0627 4.59586 14.0287 4.28186 13.8127 4.10886Z") fill="#4D506A" /
+
+            span.Polaris-Navigation__Text Payment methods
+      
+      li.Polaris-Navigation__ListItem
         .Polaris-Navigation__ItemWrapper
           a.Polaris-Navigation__Item class=active_nav('dashboard', 'settings') href="/a/chargezen_production/dashboard/settings?customer_id=#{params[:customer_id]}" tabindex="0"
             .Polaris-Navigation__Icon
               span.Polaris-Icon
-                svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
-                  path d=("M9.027 0a1 1 0 0 0-.99.859l-.37 2.598A6.993 6.993 0 0 0 5.742 4.57l-2.437-.98a1 1 0 0 0-1.239.428L.934 5.981a1 1 0 0 0 .248 1.287l2.066 1.621a7.06 7.06 0 0 0 0 2.222l-2.066 1.621a1 1 0 0 0-.248 1.287l1.132 1.962a1 1 0 0 0 1.239.428l2.438-.979a6.995 6.995 0 0 0 1.923 1.113l.372 2.598a1 1 0 0 0 .99.859h2.265a1 1 0 0 0 .99-.859l.371-2.598a6.995 6.995 0 0 0 1.924-1.112l2.438.978a1 1 0 0 0 1.238-.428l1.133-1.962a1 1 0 0 0-.249-1.287l-2.065-1.621a7.063 7.063 0 0 0 0-2.222l2.065-1.621a1 1 0 0 0 .249-1.287l-1.133-1.962a1 1 0 0 0-1.239-.428l-2.437.979a6.994 6.994 0 0 0-1.924-1.113L12.283.86a1 1 0 0 0-.99-.859H9.027zm1.133 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z") fill-rule="evenodd"
+                = icon_tag 'setting'
+
             span.Polaris-Navigation__Text Settings
+
+.refer-tag
+  = icon_tag 'refer'
+  .Polaris-ButtonGroup__Item
+    .Polaris-Banner__PrimaryAction
+      a.Polaris-Button.Polaris-Button--primary href=Settings.landing_page
+        span.Polaris-Button__Content
+          span.Polaris-Button__Text 
+            | Upgrade to premium 
+            = icon_tag 'up-arrow'

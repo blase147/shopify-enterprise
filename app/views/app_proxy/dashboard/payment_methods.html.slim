@@ -16,18 +16,33 @@
                     .Polaris-Header-Title
                       h1.Polaris-DisplayText.Polaris-DisplayText--sizeLarge
                         span.Polaris-TextStyle--variationStrong Payment Methods
+
         .Polaris-Page__Content
           .Polaris-Layout
             .Polaris-Layout__AnnotatedSection
               .Polaris-Layout__AnnotationWrapper
                 .Polaris-Layout__AnnotationContent
-                  .Polaris-Card
+                  .Polaris-Card.active-heading-card
                     .Polaris-Banner.Polaris-Banner--withinContentContainer
-                      .Polaris-Banner__Ribbon
-                        span.Polaris-Icon.Polaris-Icon--colorInkLighter.Polaris-Icon--isColored.Polaris-Icon--hasBackdrop
-                          svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
-                            path d=("M10 20c5.514 0 10-4.486 10-10S15.514 0 10 0 0 4.486 0 10s4.486 10 10 10zm1-6a1 1 0 1 1-2 0v-4a1 1 0 1 1 2 0v4zm-1-9a1 1 0 1 0 0 2 1 1 0 0 0 0-2z") fill-rule="evenodd"
                       .Polaris-Banner__ContentWrapper
-                        #PolarisBanner8Heading.Polaris-Banner__Heading
-                          p Orders are typically delivered within 5-7 business days. In some cases deliveries may take longer due to extra safety precautions in our fulfillment center and carrier transportation delays.
-                          p If you need your subscription delivered by a specific date, we suggest adjusting your processing date accordingly
+                        .Polaris-Banner__Heading.active
+                          p.Polaris-Heading Backups come handy when your primary payment fails. Set a backup.
+                        .Polaris-Banner__Content
+                          h3 Choose Payment Method below
+                          br/
+
+                          .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
+                            .Polaris-Stack__Item
+                              .Polaris-Stack.payment-methods
+                                - @payment_methods.each do |card|
+                                  .Polaris-Stack__Item
+                                    .Polaris-Card
+                                      span.check-icon= icon_tag 'check'
+                                      .Polaris-Card__Section
+                                        .Polaris-Card__Subsection
+                                          img[src=asset_path('icons/visa.svg') role="presentation" alt=""]
+
+                                          br/
+                                          p #{card.credit_card_company} ending in #{card.credit_card_number[/\d+/]}
+                                          - if card.respond_to?(:credit_card_expiration_month)
+                                            p Expires #{card.credit_card_expiration_month}/#{card.credit_card_expiration_year}

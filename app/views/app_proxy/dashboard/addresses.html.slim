@@ -16,6 +16,7 @@
                     .Polaris-Header-Title
                       h1.Polaris-DisplayText.Polaris-DisplayText--sizeLarge
                         span.Polaris-TextStyle--variationStrong Addresses
+
         .Polaris-Page__Content
           .Polaris-Layout
             .Polaris-Layout__AnnotatedSection
@@ -23,11 +24,16 @@
                 .Polaris-Layout__AnnotationContent
                   .Polaris-Card
                     .Polaris-Banner.Polaris-Banner--withinContentContainer
-                      .Polaris-Banner__Ribbon
-                        span.Polaris-Icon.Polaris-Icon--colorInkLighter.Polaris-Icon--isColored.Polaris-Icon--hasBackdrop
-                          svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
-                            path d=("M10 20c5.514 0 10-4.486 10-10S15.514 0 10 0 0 4.486 0 10s4.486 10 10 10zm1-6a1 1 0 1 1-2 0v-4a1 1 0 1 1 2 0v4zm-1-9a1 1 0 1 0 0 2 1 1 0 0 0 0-2z") fill-rule="evenodd"
                       .Polaris-Banner__ContentWrapper
-                        #PolarisBanner8Heading.Polaris-Banner__Heading
-                          p Orders are typically delivered within 5-7 business days. In some cases deliveries may take longer due to extra safety precautions in our fulfillment center and carrier transportation delays.
-                          p If you need your subscription delivered by a specific date, we suggest adjusting your processing date accordingly
+                        #PolarisBanner8Content.Polaris-Banner__Content
+                          .Polaris-Stack
+                            .Polaris-Stack__Item.Polaris-Stack__Item--fill
+                              p= @customer.address_1
+                              p= @customer.address_2
+
+                            .Polaris-Stack__Item  
+                              .Polaris-Banner__Actions
+                                .Polaris-ButtonGroup__Item
+                                  = p_button text: 'Edit', data: { toggle: 'modal', target: '#editModal' }
+
+= render 'edit_address_modal'

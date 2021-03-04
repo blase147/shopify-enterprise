@@ -18,4 +18,8 @@ class AppProxyController < ApplicationController
   def init_session
     current_shop.connect
   end
+
+  def shopify_customer_id
+    "gid://shopify/Customer/#{customer_id}"
+  end
 end

@@ -5,12 +5,66 @@
   display: none;
 }
 
+@font-face {
+  font-family: 'AvenirLTStd';
+  font-style: normal;
+  font-weight: normal;
+  src: asset-url('AvenirLTProBook.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'AvenirLTStdBold';
+  font-style: normal;
+  font-weight: normal;
+  src: asset-url('AvenirLTProHeavy.woff') format('woff');
+}
+
+.turbolinks-progress-bar {
+  height: 5px;
+  background-color: #2980c1;
+}
+
 /* custom polaris css */
 body.chargezen-proxy {
+  overflow: auto;
   background: none;
+  // font-family: 'AvenirLTStd';
+
+  margin-top: 5px;
+  background: #E5E5E5;
+
+  .Polaris-Button__Yes {
+    background: #00A023;
+    color: white;
+  }
+
+  .Polaris-Button__No {
+    background: #FF0000;
+    color: white;
+  }
+
+  .Polaris-Navigation__Icon img {
+    filter: none;
+  }
 
   .Polaris-Page {
     padding: 0 !important;
+    max-width: none;
+    background: #E5E5E5;
+  }
+
+  .Polaris-Page__Content {
+    max-width: 1024px;
+    margin: 0 auto;
+    margin-top: 55px;
+
+    .Polaris-Page-Header {
+      padding-top: 0;
+    }
+
+    main span.Polaris-Icon {
+      margin-right: 20px;
+    }
   }
 
   .mr-10 {
@@ -42,5 +96,248 @@ body.chargezen-proxy {
   }
   .Polaris-Frame, .Polaris-Navigation, .Polaris-Banner--withinContentContainer{
     background-color: transparent;
+  }
+
+  ul.Polaris-Tabs {
+    background: #007EFF;
+    justify-content: center;
+    
+    a.Polaris-Tabs__Tab {
+      padding: 0 50px;
+    }
+
+    a {
+      color: white;
+      // font-family: Avenir LT Std;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 19px;
+      letter-spacing: 0em;
+      text-align: left;
+    }
+
+    .Polaris-Tabs__Tab.Polaris-Tabs__Tab--selected .Polaris-Tabs__Title {
+      border-bottom: 2px solid white;
+    }
+
+    .Polaris-Tabs__Title {
+      padding: 1.6rem 0 1rem 0;
+      margin-bottom: 8px;
+    }
+
+    .Polaris-Tabs__Tab.Polaris-Tabs__Tab:hover .Polaris-Tabs__Title {
+      font-weight: normal;
+      color: white;
+      border-bottom: 2px solid white
+    }
+  }
+
+  .Polaris-Navigation {
+    background: transparent;
+    // font-family: 'AvenirLTStdBold';
+
+    .Polaris-Navigation__Item--selected {
+      font-weight: 600;
+      color: #007EFF;
+      background-color: #D4E7FE;
+      position: relative;
+    }
+
+    a.Polaris-Navigation__Item:hover {
+      background-color: #D4E7FE;
+    }
+
+    li.Polaris-Navigation__ListItem {
+      padding: 0 0 10px 0;
+    }
+
+    .Polaris-Navigation__Text {
+      font-size: 14px;
+    }
+
+    .Polaris-Navigation__Section {
+      padding: 0 0 1.6rem 0;
+    }
+  }
+
+  h1 {
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 48px;
+    letter-spacing: 0em;
+    text-align: left;
+    // font-family: 'AvenirLTStdBold';
+  }
+
+  span.Polaris-Icon.order-icon {
+    margin-left: 3px;
+  }
+
+  .Polaris-Card {
+    border-radius: 20px;
+    padding: 20px;
+  }
+
+  .Polaris-Button--primary {
+    background: #007EFF;
+    border-color: #007EFF;
+    box-shadow: inset 0 1px 0 0 #007EFF, 0 1px 0 0 rgba(22, 29, 37, 0.05), 0 0 0 0 transparent;
+    color: white;
+    border-radius: 5px;
+
+    &:hover {
+      background: #3e85ce;
+      border-color: #3e85ce;
+      box-shadow: inset 0 1px 0 0 #3e85ce, 0 1px 0 0 rgba(22, 29, 37, 0.05), 0 0 0 0 transparent;
+    }
+  }
+
+  .refer-tag {
+    padding-top: 40%;
+
+    & > img {
+      padding-left: 36px;
+    }
+
+    button.Polaris-Button {
+      border-radius: 10px;
+      text-transform: none;
+
+      .Polaris-Navigation__Text {
+        font-size: 11.5px;
+      }
+    }
+  }
+
+  .mt-30 {
+    margin-top: 30px;
+  }
+
+  .Polaris-Tabs__Tab:focus {
+    box-shadow: none !important;
+  }
+
+  .payment-methods {
+    .Polaris-Card {
+      padding: 20px 0;
+      text-align: center;
+      border: 3px solid #007EFF;
+    }
+
+    .check-icon {
+      position: absolute;
+      margin-right: -1px;
+      display: inline-block;
+      left: 0px;
+      margin-top: -35px;
+      margin-left: 161px;
+
+      img {
+        width: 30px;
+        height: 30px;
+      }
+    }
+  }
+
+  main {
+    h2, h3 {
+      font-size: 18px;
+      // font-family: 'AvenirLTStdBold';
+    }
+
+    h3 {
+      font-size: 16px;
+    }
+
+    .Polaris-Layout__AnnotationDescription {
+      padding: 10px 0 0px 0;
+    }
+
+    .Polaris-Card.active {
+      background: #007EFF;
+      color: white;
+      padding: 20px 10px;
+
+      .round-icon {
+        position: absolute;
+        top: 0;
+      }
+
+      .Polaris-Banner__ContentWrapper {
+        margin-left: 20px;
+      }
+    }
+
+    .round-icon {
+      background: white;
+      border-radius: 50px;
+      height: 40px;
+      width: 40px;
+      text-align: center;
+      padding: 9px;
+      margin-top: -1px;
+    }
+
+    .Polaris-MediaCard {
+      .Polaris-MediaCard__MediaContainer:not(.Polaris-MediaCard--portrait) {
+        flex-basis: 15%;
+
+        img {
+          height: 100%; 
+          width: 100% 
+        }
+      }
+
+      .Polaris-Card__Section {
+        padding: 10px 20px; 
+      }
+
+      .Polaris-MediaCard__InfoContainer:not(.Polaris-MediaCard--portrait) {
+        flex-basis: 85%;
+      }
+      
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      &:not(:last-child){
+        border-bottom: 1px solid #ddd;
+      }
+    }
+
+    .Polaris-Stack {
+      margin-bottom: 10px;
+    }
+
+    .active-heading-card {
+      padding: 0;
+
+      .Polaris-Banner__Heading.active {
+        background: #007EFF;
+        color: white;
+        padding: 15px 22px;
+        border-radius: 20px 20px 0 0;
+
+        .Polaris-Heading {
+          font-size: 16px;
+        }
+      }
+
+      .Polaris-Banner__Content {
+        padding: 20px;
+      }
+
+      .Polaris-Banner--withinContentContainer {
+        padding: 0;
+      }
+    }
+
+    .pull-right {
+      float: right;
+    }
+
+    .clearfix {
+      clear: both;
+    }
   }
 }
