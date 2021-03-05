@@ -28,6 +28,11 @@ class Shop < ActiveRecord::Base
 
   def sync_contracts
     self.connect
+
+    self.customers.each do |cus|
+      cus.update_columns shopify_id: cus.shopify_id[/\d+/]
+    end
+
     items = SubscriptionContractsService.new.run
     items[:subscriptions].each do |item|
       billing_policy = item.node.billing_policy
