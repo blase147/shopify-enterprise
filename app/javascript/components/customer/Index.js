@@ -238,6 +238,7 @@ const Customers = () => {
     query {
       fetchCustomers {
         id
+        shopifyId
         firstName
         lastName
         name
@@ -309,7 +310,7 @@ const Customers = () => {
         }
       />,
       <a
-        href={`/subscriptions/${row.id}`}
+        href={`/subscriptions/${row.shopifyId}`}
         key={row.id}
       >{`${row.firstName} ${row.lastName}`}</a>,
       row.createdAt,

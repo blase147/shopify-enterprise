@@ -1,6 +1,7 @@
 module Types
   class CustomerSubscriptionType < Types::BaseObject
     field :id, ID, null: false
+    field :shopify_id, ID, null: false
     field :first_name, String, null: true
     field :last_name, String, null: true
     field :name, String, null: true
@@ -19,10 +20,6 @@ module Types
     field :created_at, String, null: true
     field :updated_at, String, null: true
     field :__typename , String, null: true
-
-    def id
-      object.shopify_id
-    end
 
     def created_at
       object.shopify_at&.strftime('%b %d %Y, %I:%M %p')
