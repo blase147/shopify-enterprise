@@ -111,7 +111,7 @@
                       br/
                       | #{billing_address.phone}
                   td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
-                    = p_button text: 'Change', data: { url: action_subscription_path(:change_bill) }
+                    = p_button text: 'Pause Subscription', data: { url: action_subscription_path(:pause) }
               tfoot
                   tr
                     - if current_setting.cancel_enabled? && @subscription.status != 'CANCELLED'
