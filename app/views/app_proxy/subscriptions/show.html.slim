@@ -110,8 +110,12 @@
                       | #{billing_address.city} #{billing_address.province} #{billing_address.zip} #{billing_address.country}
                       br/
                       | #{billing_address.phone}
-                  td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
-                    = p_button text: 'Pause Subscription', data: { url: action_subscription_path(:pause) }
+                  - if @subscription.status == 'ACTIVE'
+                    td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
+                      = p_button text: 'Pause Subscription', data: { url: action_subscription_path(:pause) }
+                  - else
+                    td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
+                      = p_button text: 'Resume Subscription', data: { url: action_subscription_path(:resume) }
               tfoot
                   tr
                     - if current_setting.cancel_enabled? && @subscription.status != 'CANCELLED'
