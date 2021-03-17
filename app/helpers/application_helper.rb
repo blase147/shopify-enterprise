@@ -26,4 +26,8 @@ module ApplicationHelper
   def app_path path
     "#{path}?hmac=#{session[:hmac]}&shop=#{session[:shop]}"
   end
+
+  def shopify_product_id(product_id)
+    "gid://shopify/Product/#{product_id}"
+  end
 end

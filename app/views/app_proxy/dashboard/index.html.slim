@@ -2,8 +2,8 @@
   div
     #AppFrameNav
       = render 'app_proxy/shared/dashboard_nav'
-      
-  - if @subscription_contracts.empty?               
+
+  - if @subscription_contracts.empty?
     .Polaris-Frame__ContextualSaveBar.Polaris-Frame-CSSAnimation--startFade
     main#AppFrameMain.Polaris-Frame__Main data-has-global-ribbon="false"
       a#AppFrameMainContent tabindex="-1"
@@ -30,17 +30,17 @@
                       .Polaris-Banner.Polaris-Banner--withinContentContainer
                         .Polaris-Banner__Ribbon
                           span.Polaris-Icon
-                            = icon_tag 'info' 
+                            = icon_tag 'info'
                         .Polaris-Banner__ContentWrapper
                           #PolarisBanner8Heading.Polaris-Banner__Heading
                             p Orders are typically delivered within 5-7 business days. In some cases deliveries may take longer due to extra safety precautions in our fulfillment center and carrier transportation delays.
                             p If you need your subscription delivered by a specific date, we suggest adjusting your processing date accordingly
-                    
+
                     .Polaris-Card
                       .Polaris-Banner.Polaris-Banner--withinContentContainer
                         .Polaris-Banner__Ribbon
                           span.Polaris-Icon
-                            = icon_tag 'info' 
+                            = icon_tag 'info'
                         .Polaris-Banner__ContentWrapper
                           #PolarisBanner8Heading.Polaris-Banner__Heading
                             p.Polaris-Heading You have no upcoming deliveries
@@ -48,7 +48,7 @@
                       .Polaris-Banner.Polaris-Banner--withinContentContainer
                         .Polaris-Banner__Ribbon
                           span.Polaris-Icon
-                            = icon_tag 'info' 
+                            = icon_tag 'info'
                         .Polaris-Banner__ContentWrapper
 
                           #PolarisBanner8Heading.Polaris-Banner__Heading
@@ -107,7 +107,7 @@
                       .Polaris-Banner.Polaris-Banner--withinContentContainer
                         .Polaris-Banner__Ribbon
                           span.Polaris-Icon.round-icon
-                            = icon_tag 'package' 
+                            = icon_tag 'package'
                         .Polaris-Banner__ContentWrapper
                           #PolarisBanner8Heading.Polaris-Banner__Heading
                             p We have your order. Your Order will be dispatched shortly
@@ -121,6 +121,10 @@
                                 - product_id = subscription.lines.edges.first.node.product_id[/\d+/]
                                 - price = subscription.lines.edges.first.node.current_price.amount
                                 - product = ShopifyAPI::Product.find(product_id)
+                                - shopify_product_id = shopify_product_id(product_id)
+                                - companigns = UpsellCampaign.where("rule_cart = 't' AND rule_cart_value ->> 'product_id' = ?", shopify_product_id).select("product_offer ->> 'product_id' AS product_id")
+                                - product_ids = companigns.map{|comp| comp.product_id[/\d+/]}.join(',')
+                                - upsell_products = product_ids.present? ? ShopifyAPI::Product.where(ids: product_ids) : nil
                                 - billing_policy = subscription.billing_policy
 
                                 .Polaris-MediaCard
@@ -147,3 +151,23 @@
                                               p
                                                 b Delivery Date:&nbsp;
                                                 =  DateTime.parse(subscription.next_billing_date).strftime("%a, %B %e")
+                                                .Polaris-MediaCard
+                                                  .Polaris-MediaCard__MediaContainer
+                                                    - if product.images.first.present?
+                                                      img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
+                                h2 Upsell Products
+                                - upsell_products.each do |product|
+                                  .Polaris-MediaCard
+                                    .Polaris-MediaCard__MediaContainer
+                                      - if product.images.first.present?
+                                        img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
+                                    .Polaris-MediaCard__InfoContainer
+                                      .Polaris-Card__Section
+                                        .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
+                                          .Polaris-Stack__Item
+                                            .Polaris-Stack
+                                              .Polaris-Stack__Item.Polaris-Stack__Item--fill
+                                                h2.Polaris-Heading
+                                                  = product.title
+                                                .Polaris-Stack__Item
+                                                  h2.Polaris-Heading= number_to_currency product.variants[0]&.price

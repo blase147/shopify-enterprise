@@ -63,7 +63,7 @@ class CustomerSubscriptionContractsService < GraphqlService
   def initialize customer_id
     @customer_id = customer_id
   end
-  
+
   def run cursor=nil
     query = LIST_QUERY
     query = query.gsub("first: #{PAGE}", "first: #{PAGE} after: \"#{cursor}\"") if cursor.present?
