@@ -1,3 +1,9 @@
+@import 'owl.carousel/dist/assets/owl.carousel.css';
+
+.carousal-container {
+  width: 100%;
+  max-width: 660px;
+}
 .product-card{
   width: 40%;
 }
@@ -104,7 +110,7 @@ body.chargezen-proxy {
   ul.Polaris-Tabs {
     background: #007EFF;
     justify-content: center;
-    
+
     a.Polaris-Tabs__Tab {
       padding: 0 50px;
     }
@@ -288,19 +294,19 @@ body.chargezen-proxy {
         flex-basis: 15%;
 
         img {
-          height: 100%; 
-          width: 100% 
+          height: 100%;
+          width: 100%
         }
       }
 
       .Polaris-Card__Section {
-        padding: 10px 20px; 
+        padding: 10px 20px;
       }
 
       .Polaris-MediaCard__InfoContainer:not(.Polaris-MediaCard--portrait) {
         flex-basis: 85%;
       }
-      
+
       margin-bottom: 10px;
       padding-bottom: 10px;
       &:not(:last-child){

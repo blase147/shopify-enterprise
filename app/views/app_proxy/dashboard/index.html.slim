@@ -111,7 +111,7 @@
                         .Polaris-Banner__ContentWrapper
                           #PolarisBanner8Heading.Polaris-Banner__Heading
                             p We have your order. Your Order will be dispatched shortly
-                    .Polaris-Card
+                    .Polaris-Card style=("overflow: hidden;")
                       .Polaris-Banner.Polaris-Banner--withinContentContainer
                         .Polaris-Banner__ContentWrapper
                             #PolarisBanner8Heading.Polaris-Banner__Heading
@@ -157,19 +157,29 @@
                                                     - if product.images.first.present?
                                                       img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
                                 - if upsell_products.present?
-                                  h2 Upsell Products
-                                  - upsell_products.each do |product|
-                                    .Polaris-MediaCard
-                                      .Polaris-MediaCard__MediaContainer
-                                        - if product.images.first.present?
-                                          img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
-                                      .Polaris-MediaCard__InfoContainer
-                                        .Polaris-Card__Section
-                                          .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
-                                            .Polaris-Stack__Item
-                                              .Polaris-Stack
-                                                .Polaris-Stack__Item.Polaris-Stack__Item--fill
-                                                  h2.Polaris-Heading
-                                                    = product.title
-                                                  .Polaris-Stack__Item
-                                                    h2.Polaris-Heading= number_to_currency product.variants[0]&.price
+                                  h2 Hey there! There's is an offer for you!
+                                  .carousal-container
+                                    .owl-carousel.owl-theme
+                                      - upsell_products.each do |product|
+                                        .Polaris-MediaCard
+                                          .Polaris-MediaCard__MediaContainer
+                                            - if product.images.first.present?
+                                              img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
+                                          .Polaris-MediaCard__InfoContainer
+                                            .Polaris-Card__Section
+                                              .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
+                                                .Polaris-Stack__Item
+                                                  .Polaris-Stack
+                                                    .Polaris-Stack__Item.Polaris-Stack__Item--fill
+                                                      h2.Polaris-Heading
+                                                        = product.title
+                                                      .Polaris-Stack__Item
+                                                        h2.Polaris-Heading= number_to_currency product.variants[0]&.price
+
+                                      / div Your Content
+                                      / div Your Content
+                                      / div Your Content
+                                      / div Your Content
+                                      / div Your Content
+                                      / div Your Content
+                                      / div Your Content

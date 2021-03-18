@@ -14,3 +14,9 @@ require('webpack-jquery-ui/css');
 require("app_proxy")
 require("app_proxy/custom")
 require("app_proxy/settings")
+
+require('owl.carousel');
+
+$(document).ready(function () {
+  $('.owl-carousel').owlCarousel();
+});
