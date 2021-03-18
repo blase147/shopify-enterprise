@@ -156,19 +156,20 @@
                                                   .Polaris-MediaCard__MediaContainer
                                                     - if product.images.first.present?
                                                       img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
-                                h2 Upsell Products
-                                - upsell_products.each do |product|
-                                  .Polaris-MediaCard
-                                    .Polaris-MediaCard__MediaContainer
-                                      - if product.images.first.present?
-                                        img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
-                                    .Polaris-MediaCard__InfoContainer
-                                      .Polaris-Card__Section
-                                        .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
-                                          .Polaris-Stack__Item
-                                            .Polaris-Stack
-                                              .Polaris-Stack__Item.Polaris-Stack__Item--fill
-                                                h2.Polaris-Heading
-                                                  = product.title
-                                                .Polaris-Stack__Item
-                                                  h2.Polaris-Heading= number_to_currency product.variants[0]&.price
+                                - if upsell_products.present?
+                                  h2 Upsell Products
+                                  - upsell_products.each do |product|
+                                    .Polaris-MediaCard
+                                      .Polaris-MediaCard__MediaContainer
+                                        - if product.images.first.present?
+                                          img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
+                                      .Polaris-MediaCard__InfoContainer
+                                        .Polaris-Card__Section
+                                          .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
+                                            .Polaris-Stack__Item
+                                              .Polaris-Stack
+                                                .Polaris-Stack__Item.Polaris-Stack__Item--fill
+                                                  h2.Polaris-Heading
+                                                    = product.title
+                                                  .Polaris-Stack__Item
+                                                    h2.Polaris-Heading= number_to_currency product.variants[0]&.price
