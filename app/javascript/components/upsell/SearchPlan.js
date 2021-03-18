@@ -18,6 +18,7 @@ const SearchPlan = (props) => {
       fetchSellingPlanByName(name: $name) {
         id
         name
+        shopifyId
       }
     }
   `;
@@ -40,7 +41,7 @@ const SearchPlan = (props) => {
       const result = [];
       plans.map((plan) =>
         result.push({
-          value: plan.id,
+          value: plan.shopifyId,
           label: plan.name,
         })
       );

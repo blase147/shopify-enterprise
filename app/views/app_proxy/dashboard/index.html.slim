@@ -122,7 +122,8 @@
                                 - price = subscription.lines.edges.first.node.current_price.amount
                                 - product = ShopifyAPI::Product.find(product_id)
                                 - shopify_product_id = shopify_product_id(product_id)
-                                - companigns = UpsellCampaign.where("rule_cart = 't' AND rule_cart_value ->> 'product_id' = ?", shopify_product_id).select("product_offer ->> 'product_id' AS product_id")
+                                - selling_plan_id = subscription.lines.edges.first.node.selling_plan_id
+                                - companigns = UpsellCampaign.where("(rule_cart = 't' AND rule_cart_value ->> 'product_id' = ?) OR (rule_customer = 't' AND rule_customer_value ->> 'sellingPlanId' = ?)", shopify_product_id, selling_plan_id).select("product_offer ->> 'product_id' AS product_id")
                                 - product_ids = companigns.map{|comp| comp.product_id[/\d+/]}.join(',')
                                 - upsell_products = product_ids.present? ? ShopifyAPI::Product.where(ids: product_ids) : nil
                                 - billing_policy = subscription.billing_policy
