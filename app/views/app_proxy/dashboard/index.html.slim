@@ -155,24 +155,26 @@
                                                     - if product.images.first.present?
                                                       img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
                                 - if upsell_products.present?
-                                  h2 companigns.first.offer_title.present? ? companigns.first.offer_title : "Hey there! There's is an offer for you!"
-                                  .carousal-container
-                                    .owl-carousel.owl-theme
-                                      - upsell_products.each do |product|
-                                        .Polaris-MediaCard
-                                          .Polaris-MediaCard__MediaContainer
-                                            - if product.images.first.present?
-                                              img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
-                                          .Polaris-MediaCard__InfoContainer
-                                            .Polaris-Card__Section
-                                              .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
-                                                .Polaris-Stack__Item
-                                                  .Polaris-Stack
-                                                    .Polaris-Stack__Item.Polaris-Stack__Item--fill
-                                                      h2.Polaris-Heading
-                                                        = product.title
-                                                      div
-                                                        button.Polaris-Button type="button"
-                                                          span.Polaris-Button__Content
-                                                            span.Polaris-Button__Text companigns.first.button_text_accept.present? ? companigns.first.button_text_accept : Add
-                                                        #PolarisPortalsContainer
+                                  h2
+                                    = companigns.first.offer_title.present? ? companigns.first.offer_title : "Hey there! There's is an offer for you!"
+                                    .carousal-container
+                                      .owl-carousel.owl-theme
+                                        - upsell_products.each do |product|
+                                          .Polaris-MediaCard
+                                            .Polaris-MediaCard__MediaContainer
+                                              - if product.images.first.present?
+                                                img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
+                                            .Polaris-MediaCard__InfoContainer
+                                              .Polaris-Card__Section
+                                                .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
+                                                  .Polaris-Stack__Item
+                                                    .Polaris-Stack
+                                                      .Polaris-Stack__Item.Polaris-Stack__Item--fill
+                                                        h2.Polaris-Heading
+                                                          = product.title
+                                                        div
+                                                          button.Polaris-Button type="button"
+                                                            span.Polaris-Button__Content
+                                                              span.Polaris-Button__Text
+                                                                = companigns.first.button_text_accept.present? ? companigns.first.button_text_accept : Add
+                                                          #PolarisPortalsContainer
