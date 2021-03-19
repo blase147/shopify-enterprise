@@ -709,7 +709,7 @@ const NewUpSell = () => {
                                 }
                                 }
                                 options={customerConditionOptions}
-                                disabled={checkboxDisabled ? true : false}
+                                disabled={!campaign.ruleCustomer ? true : false}
                               />
                               <p>of the following plans</p>
                             </Stack>
@@ -726,7 +726,7 @@ const NewUpSell = () => {
                                   errors.upsellCampaigns?.[index]
                                     ?.ruleCustomerValue?.sellingPlanId
                                 }
-                                disabled={checkboxDisabled ? true : false}
+                                disabled={!campaign.ruleCustomer ? true : false}
                               />
                             </div>
                           </div>
