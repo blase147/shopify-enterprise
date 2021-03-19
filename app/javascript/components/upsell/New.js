@@ -138,6 +138,7 @@ const NewUpSell = () => {
 
   const [formErrors, setFormErrors] = useState([]);
   const [campaignData, setCampaignData] = useState(null);
+  const [checkboxDisabled, setcheckboxDisabled] = useState(true);
 
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
@@ -491,19 +492,19 @@ const NewUpSell = () => {
                           index == 0
                             ? null
                             : [
-                                {
-                                  content: 'Remove',
-                                  onAction: () => {
-                                    setFieldValue(
-                                      'upsellCampaigns',
-                                      handleRemovingUpsellCampaign(
-                                        values,
-                                        index
-                                      )
-                                    );
-                                  },
+                              {
+                                content: 'Remove',
+                                onAction: () => {
+                                  setFieldValue(
+                                    'upsellCampaigns',
+                                    handleRemovingUpsellCampaign(
+                                      values,
+                                      index
+                                    )
+                                  );
                                 },
-                              ]
+                              },
+                            ]
                         }
                       >
                         <FormLayout>
@@ -621,7 +622,7 @@ const NewUpSell = () => {
                             />
                           </FormLayout.Group>
 
-                          <div className="when-cart">
+                          {/* <div className="when-cart">
                             <Stack>
                               <Checkbox
                                 label="When cart"
@@ -670,7 +671,7 @@ const NewUpSell = () => {
                                 }
                               />
                             </div>
-                          </div>
+                          </div> */}
 
                           <div className="when-cart">
                             <Stack>
@@ -682,11 +683,13 @@ const NewUpSell = () => {
                                     ?.ruleCustomer &&
                                   errors.upsellCampaigns?.[index]?.ruleCustomer
                                 }
-                                onChange={(e) =>
+                                onChange={(e) => {
                                   setFieldValue(
                                     `upsellCampaigns[${index}].ruleCustomer`,
                                     e
-                                  )
+                                  );
+                                  setcheckboxDisabled(checked => checked = !checkboxDisabled);
+                                }
                                 }
                               />
                               <Select
@@ -698,13 +701,15 @@ const NewUpSell = () => {
                                   errors.upsellCampaigns?.[index]
                                     ?.ruleCustomerCondition
                                 }
-                                onChange={(e) =>
+                                onChange={(e) => {
                                   setFieldValue(
                                     `upsellCampaigns[${index}].ruleCustomerCondition`,
                                     e
-                                  )
+                                  );
+                                }
                                 }
                                 options={customerConditionOptions}
+                                disabled={checkboxDisabled ? true : false}
                               />
                               <p>of the following plans</p>
                             </Stack>
@@ -721,10 +726,11 @@ const NewUpSell = () => {
                                   errors.upsellCampaigns?.[index]
                                     ?.ruleCustomerValue?.sellingPlanId
                                 }
+                                disabled={checkboxDisabled ? true : false}
                               />
                             </div>
                           </div>
-
+                          {/* 
                           <div className="when-order">
                             <Checkbox
                               label="When order value is"
@@ -833,7 +839,7 @@ const NewUpSell = () => {
                                 options={productOptions}
                               />
                             </div>
-                          </div>
+                          </div> */}
 
                           <TextContainer>
                             <Subheading>OFFERS</Subheading>
@@ -845,7 +851,7 @@ const NewUpSell = () => {
 
                           <FormLayout.Group>
                             <p className="card-offer">PRODUCT</p>
-                            <p className="card-offer">CUSTOMIZE</p>
+                            <div></div>
                           </FormLayout.Group>
 
                           <FormLayout.Group>
@@ -862,23 +868,8 @@ const NewUpSell = () => {
                                 }
                               />
                             </div>
-                            <Select
-                              label="Templates"
-                              value={campaign.template}
-                              error={
-                                touched.upsellCampaigns?.[index]?.template &&
-                                errors.upsellCampaigns?.[index]?.template
-                              }
-                              onChange={(e) =>
-                                setFieldValue(
-                                  `upsellCampaigns[${index}].template`,
-                                  e
-                                )
-                              }
-                              options={templateOptions}
-                            />
-                          </FormLayout.Group>
-                          <FormLayout.Group>
+
+
                             <div className="offer-left">
                               <Select
                                 label="Display Quantity ?"
@@ -934,95 +925,63 @@ const NewUpSell = () => {
                               />
                               <div></div>
                             </div>
+                          </FormLayout.Group>
 
-                            <div className="offer-right">
-                              <div className="offer-right-select">
-                                <Select
-                                  label="Offer title"
-                                  value={campaign.showOfferTitle}
-                                  error={
-                                    touched.upsellCampaigns?.[index]
-                                      ?.showOfferTitle &&
-                                    errors.upsellCampaigns?.[index]
-                                      ?.showOfferTitle
-                                  }
-                                  onChange={(e) =>
-                                    setFieldValue(
-                                      `upsellCampaigns[${index}].showOfferTitle`,
-                                      e
-                                    )
-                                  }
-                                  options={showOptions}
-                                />
-                              </div>
-                              <div className="offer-right-textfield">
-                                <TextField
-                                  label="  "
-                                  placeholder="Wait, there’s an offer for you!"
-                                  value={campaign.offerTitle}
-                                  type="text"
-                                  error={
-                                    touched.upsellCampaigns?.[index]
-                                      ?.offerTitle &&
-                                    errors.upsellCampaigns?.[index]?.offerTitle
-                                  }
-                                  onChange={(e) =>
-                                    setFieldValue(
-                                      `upsellCampaigns[${index}].offerTitle`,
-                                      e
-                                    )
-                                  }
-                                ></TextField>
-                              </div>
-                            </div>
-                          </FormLayout.Group>
                           <FormLayout.Group>
+                            <p className="card-offer">CUSTOMIZE</p>
                             <div></div>
-                            <div className="offer-right">
-                              <div className="offer-right-select">
-                                <Select
-                                  label="Timer"
-                                  value={campaign.showTimer}
-                                  error={
-                                    touched.upsellCampaigns?.[index]
-                                      ?.showTimer &&
-                                    errors.upsellCampaigns?.[index]?.showTimer
-                                  }
-                                  onChange={(e) =>
-                                    setFieldValue(
-                                      `upsellCampaigns[${index}].showTimer`,
-                                      String(e)
-                                    )
-                                  }
-                                  options={showOptions}
-                                />
-                              </div>
-                              <div className="offer-right-textfield">
-                                <TextField
-                                  label="Background Color"
-                                  placeholder="#00000"
-                                  value={campaign.backgroundColor}
-                                  type="text"
-                                  error={
-                                    touched.upsellCampaigns?.[index]
-                                      ?.backgroundColor &&
-                                    errors.upsellCampaigns?.[index]
-                                      ?.backgroundColor
-                                  }
-                                  onChange={(e) =>
-                                    setFieldValue(
-                                      `upsellCampaigns[${index}].backgroundColor`,
-                                      e
-                                    )
-                                  }
-                                ></TextField>
-                              </div>
-                            </div>
                           </FormLayout.Group>
+
                           <FormLayout.Group>
                             <div></div>
                             <TextContainer>
-                              <Heading>Buttons</Heading>
+                              <Heading>Button</Heading>
+                            </TextContainer>
+                          </FormLayout.Group>
+                          <FormLayout.Group>
+                            <TextContainer>
+                              <div className="offer-right">
+                                <div className="offer-right-select">
+                                  <Select
+                                    label="Offer title"
+                                    value={campaign.showOfferTitle}
+                                    error={
+                                      touched.upsellCampaigns?.[index]
+                                        ?.showOfferTitle &&
+                                      errors.upsellCampaigns?.[index]
+                                        ?.showOfferTitle
+                                    }
+                                    onChange={(e) =>
+                                      setFieldValue(
+                                        `upsellCampaigns[${index}].showOfferTitle`,
+                                        e
+                                      )
+                                    }
+                                    options={showOptions}
+                                  />
+                                </div>
+                                <div className="offer-right-textfield">
+                                  <TextField
+                                    label="  "
+                                    placeholder="Wait, there’s an offer for you!"
+                                    value={campaign.offerTitle}
+                                    type="text"
+                                    error={
+                                      touched.upsellCampaigns?.[index]
+                                        ?.offerTitle &&
+                                      errors.upsellCampaigns?.[index]?.offerTitle
+                                    }
+                                    onChange={(e) =>
+                                      setFieldValue(
+                                        `upsellCampaigns[${index}].offerTitle`,
+                                        e
+                                      )
+                                    }
+                                  ></TextField>
+                                </div>
+                              </div>
+                            </TextContainer>
+                            <TextContainer>
                               <div className="offer-right">
                                 <div className="offer-right-select">
                                   <Select
@@ -1065,29 +1024,6 @@ const NewUpSell = () => {
                                 </div>
                               </div>
                             </TextContainer>
-                          </FormLayout.Group>
-                          <FormLayout.Group>
-                            <div></div>
-                            <div className="decline">
-                              <TextField
-                                label="Button Text (Decline Offer)"
-                                placeholder="No thanks"
-                                value={campaign.buttonTextDecline}
-                                type="text"
-                                error={
-                                  touched.upsellCampaigns?.[index]
-                                    ?.buttonTextDecline &&
-                                  errors.upsellCampaigns?.[index]
-                                    ?.buttonTextDecline
-                                }
-                                onChange={(e) =>
-                                  setFieldValue(
-                                    `upsellCampaigns[${index}].buttonTextDecline`,
-                                    e
-                                  )
-                                }
-                              ></TextField>
-                            </div>
                           </FormLayout.Group>
                         </FormLayout>
                       </Card>
