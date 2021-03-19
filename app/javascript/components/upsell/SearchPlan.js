@@ -21,7 +21,7 @@ const SearchPlan = (props) => {
         shopifyId
       }
     }
-  `;
+  `; 
 
   const [sellingPlanList, setSellingPlanList] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);

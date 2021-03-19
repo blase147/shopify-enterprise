@@ -400,7 +400,7 @@ const NewUpSell = () => {
                       </Banner>
                       <br />
                     </>
-                  )}
+                  )} 
 
                   <Card title="Upsell campaign Group" sectioned>
                     <FormLayout>
@@ -730,7 +730,7 @@ const NewUpSell = () => {
                               />
                             </div>
                           </div>
-                          {/* 
+                          {/*
                           <div className="when-order">
                             <Checkbox
                               label="When order value is"
