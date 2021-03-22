@@ -16,6 +16,7 @@ require("app_proxy/custom")
 require("app_proxy/settings")
 
 require('owl.carousel');
+import 'owl.carousel/dist/assets/owl.carousel.css';
 
 $(document).ready(function () {
   $('.owl-carousel').owlCarousel();
