@@ -156,7 +156,7 @@
                                                       img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
                                 - if upsell_products.present?
                                   h2
-                                    = companigns.first.offer_title.present? ? companigns.first.offer_title : "Hey there! There's is an offer for you!"
+                                    = companigns.first.offer_title.present? ? companigns.first.offer_title : "Hey there! There's is an offer for you"
                                     .carousal-container
                                       .owl-carousel.owl-theme
                                         - upsell_products.each do |product|
