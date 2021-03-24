@@ -74,4 +74,25 @@ class AppProxy::SubscriptionsController < AppProxyController
       render js: "hideModal(true);"
     end
   end
+
+  def add_product
+    id = params[:id]
+    contract_id = "gid://shopify/SubscriptionContract/#{id}"
+    variant = ShopifyAPI::Variant.find(params[:variant_id])
+    result = SubscriptionContractUpdateService.new(contract_id).get_draft params
+    if result[:error].present?
+      flash[:error] = result[:error]
+      render js: "alert('#{result[:error]}'); hideLoading()"
+    else
+      draft_id = result[:draft_id]
+      product = ProductService.new(variant.product_id).run
+      if product&.selling_plan_group_count&.positive?
+        result = SubscriptionDraftsService.new.add_line(draft_id, { 'productVariantId': "gid://shopify/ProductVariant/#{params[:variant_id]}", 'quantity': 1, 'currentPrice': variant.price })
+        SubscriptionDraftsService.new.commit draft_id
+        render js: 'location.reload()' if result.present?
+      else
+        render js: "location.reload()"
+      end
+    end
+  end
 end

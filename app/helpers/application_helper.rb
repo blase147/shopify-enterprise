@@ -30,4 +30,8 @@ module ApplicationHelper
   def shopify_product_id(product_id)
     "gid://shopify/Product/#{product_id}"
   end
+
+  def action_subscription_contract_path(action, contractId)
+    "/a/chargezen_production/subscriptions/#{contractId}/#{action}?customer_id=#{params[:customer_id]}"
+  end
 end

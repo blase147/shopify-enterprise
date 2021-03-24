@@ -111,11 +111,9 @@ class SubscriptionDraftsService < GraphqlService
     { error: ex.message }
   end
 
-  def add_line
-    input = {}
-    result = client.query(client.parse(ADD_QUERY), variables: { draftId: id, input: { } } )
-
-    errors = result.data.subscription_draft_update.user_errors
+  def add_line(draft_id, input={})
+    result = client.query(client.parse(ADD_QUERY), variables: { draftId: draft_id, input: input })
+    errors = result.data.subscription_draft_line_add.user_errors
     raise errors.first.message if errors.present?
     result.original_hash
   rescue Exception => ex

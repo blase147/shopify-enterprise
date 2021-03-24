@@ -120,42 +120,45 @@
                               h2 Your Subscriptions
                               br/
                               - @subscription_contracts.each do |subscription|
-                                - product_id = subscription.lines.edges.first.node.product_id[/\d+/]
+                                h2 #{subscription.lines.edges.count} Items
+                                - line_products = subscription.lines.edges.map{|edge| edge.node.product_id[/\d+/]}
                                 - price = subscription.lines.edges.first.node.current_price.amount
-                                - product = ShopifyAPI::Product.find(product_id)
                                 - selling_plan_id = subscription.lines.edges.first.node.selling_plan_id
                                 - companigns = UpsellCampaign.where("rule_customer = 't' AND rule_customer_value ->> 'sellingPlanId' = ?", selling_plan_id).select("product_offer ->> 'product_id' AS product_id, offer_title, button_text_accept")
-                                - product_ids = companigns.map{|comp| comp.product_id[/\d+/]}.join(',')
-                                - upsell_products = product_ids.present? ? ShopifyAPI::Product.where(ids: product_ids) : nil
+                                - product_ids = companigns.map{|comp| comp.product_id[/\d+/]}
+                                - product_ids = product_ids - line_products
+                                - upsell_products = product_ids.present? ? ShopifyAPI::Product.where(ids: product_ids.join(',')) : nil
                                 - billing_policy = subscription.billing_policy
 
-                                .Polaris-MediaCard
-                                  .Polaris-MediaCard__MediaContainer
-                                    - if product.images.first.present?
-                                      img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
-                                  .Polaris-MediaCard__InfoContainer
-                                    .Polaris-Card__Section
-                                      .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
-                                        .Polaris-Stack__Item
-                                          .Polaris-Stack
-                                            .Polaris-Stack__Item.Polaris-Stack__Item--fill
-                                              h2.Polaris-Heading
-                                                = "#{product.title} (#{subscription.lines.edges.first.node.quantity} pack)"
-                                            .Polaris-Stack__Item
-                                              h2.Polaris-Heading= number_to_currency price
-                                          .Polaris-Stack
-                                            .Polaris-Stack__Item.Polaris-Stack__Item--fill
-                                              p
-                                                b Delivery Every:&nbsp;
-                                                = "#{billing_policy.interval_count} #{billing_policy.interval}".titleize
-                                            .Polaris-Stack__Item
-                                              p
-                                                b Delivery Date:&nbsp;
-                                                =  DateTime.parse(subscription.next_billing_date).strftime("%a, %B %e")
-                                                .Polaris-MediaCard
-                                                  .Polaris-MediaCard__MediaContainer
-                                                    - if product.images.first.present?
-                                                      img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
+                                - subscription.lines.edges.each do |edge|
+                                  - product = ShopifyAPI::Product.find(edge.node.product_id[/\d+/])
+                                  .Polaris-MediaCard
+                                    .Polaris-MediaCard__MediaContainer
+                                      - if product.images.first.present?
+                                        img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
+                                    .Polaris-MediaCard__InfoContainer
+                                      .Polaris-Card__Section
+                                        .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
+                                          .Polaris-Stack__Item
+                                            .Polaris-Stack
+                                              .Polaris-Stack__Item.Polaris-Stack__Item--fill
+                                                h2.Polaris-Heading
+                                                  = "#{product.title} (#{edge.node.quantity} pack)"
+                                              .Polaris-Stack__Item
+                                                h2.Polaris-Heading= number_to_currency price
+                                            .Polaris-Stack
+                                              .Polaris-Stack__Item.Polaris-Stack__Item--fill
+                                                p
+                                                  b Delivery Every:&nbsp;
+                                                  = "#{billing_policy.interval_count} #{billing_policy.interval}".titleize
+                                              .Polaris-Stack__Item
+                                                p
+                                                  b Delivery Date:&nbsp;
+                                                  =  DateTime.parse(subscription.next_billing_date).strftime("%a, %B %e")
+                                                  .Polaris-MediaCard
+                                                    .Polaris-MediaCard__MediaContainer
+                                                      - if product.images.first.present?
+                                                        img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
                                 - if upsell_products.present?
                                   h2
                                     = companigns.first.offer_title.present? ? companigns.first.offer_title : "Hey there! There's is an offer for you!"
@@ -174,9 +177,12 @@
                                                       .Polaris-Stack__Item.Polaris-Stack__Item--fill
                                                         h2.Polaris-Heading
                                                           = product.title
-                                                        div
-                                                          button.Polaris-Button type="button"
-                                                            span.Polaris-Button__Content
-                                                              span.Polaris-Button__Text
-                                                                = companigns.first.button_text_accept.present? ? companigns.first.button_text_accept : 'Add'
-                                                          #PolarisPortalsContainer
+                                                        = form_tag action_subscription_contract_path(:add_product, subscription.id[/\d+/]), method: :post, :id => "form-#{product.id}", remote: true do
+                                                          - product.variants.each_with_index do |variant, index|
+                                                            label
+                                                              - if index.zero?
+                                                                input name="variant_id" type="radio" value="#{variant.id}" checked='checked'
+                                                              - else
+                                                                input name="variant_id" type="radio" value="#{variant.id}"
+                                                              = "#{variant.title} (#{variant.price})"
+                                                          = submit_tag companigns.first.button_text_accept.present? ? companigns.first.button_text_accept : 'Add'

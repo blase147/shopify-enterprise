@@ -30,6 +30,7 @@ Rails.application.routes.draw do
         post :change_quantity
         post :change_date
         post :update_subscription
+        post :add_product
       end
     end
     resources :dashboard, only: [:index] do
@@ -53,7 +54,7 @@ Rails.application.routes.draw do
   end
 
   post "/graphql_extension", to: "extension#execute"
-  
+
   resources :subscriptions do
     collection do
       post :update_subscription
