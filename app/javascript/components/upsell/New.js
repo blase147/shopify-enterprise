@@ -8,6 +8,7 @@ import { gql, useMutation, useLazyQuery } from '@apollo/client';
 import offerImg from '../../../assets/images/upsell/offerImage.svg';
 import SearchProduct from './SearchProduct';
 import SearchPlan from './SearchPlan';
+import Preview from './preview';
 
 import {
   Card,
@@ -35,6 +36,9 @@ import {
 
 const NewUpSell = () => {
   const options = [...Array(99).keys()].map((foo) => (foo + 1).toString());
+  const [allProducts, setAllProducts] = useState([]);
+
+  console.log(allProducts);
 
   const interOptions = [
     { label: 'Day(s)', value: 'day' },
@@ -400,7 +404,7 @@ const NewUpSell = () => {
                       </Banner>
                       <br />
                     </>
-                  )} 
+                  )}
 
                   <Card title="Upsell campaign Group" sectioned>
                     <FormLayout>
@@ -860,6 +864,7 @@ const NewUpSell = () => {
                                 value={campaign.productOffer}
                                 setFieldValue={setFieldValue}
                                 fieldName={`upsellCampaigns[${index}].productOffer`}
+                                allProducts={allProducts}
                                 error={
                                   touched.upsellCampaigns?.[index]?.productOffer
                                     ?.productId &&
@@ -1026,6 +1031,7 @@ const NewUpSell = () => {
                             </TextContainer>
                           </FormLayout.Group>
                         </FormLayout>
+                        <Preview allProducts={allProducts} setAllProducts={setAllProducts} />
                       </Card>
                     </div>
                   ))}
