@@ -120,10 +120,7 @@ const NewUpSell = () => {
         ruleProduct: false,
         ruleProductCondition: '',
         ruleProductValue: '',
-        productOffer: {
-          productId: '',
-          title: '',
-        },
+        productOffer: [],
         productDisplayQuantity: 'true',
         productLimitQuantity: false,
         productQuantityValue: '',
@@ -306,10 +303,13 @@ const NewUpSell = () => {
               validationSchema={validationSchema}
               initialValues={campaignData || initialValues}
               onSubmit={(values, { setSubmitting }) => {
+                const formData = { ...values };
+                formData.upsellCampaigns[0].productOffer = allProducts;
+                console.log(formData);
                 if (id) {
                   updateUpsellCampaign({
                     variables: {
-                      input: { params: values },
+                      input: { params: formData },
                     },
                   })
                     .then((resp) => {
@@ -332,7 +332,7 @@ const NewUpSell = () => {
                 } else {
                   //const variables = formatUpsellCampaignGroup(values);
                   createUpsellCampaign({
-                    variables: { input: { params: values } },
+                    variables: { input: { params: formData } },
                   })
                     .then((resp) => {
                       const data = resp.data;
