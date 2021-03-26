@@ -36,9 +36,9 @@ import {
 
 const NewUpSell = () => {
   const options = [...Array(99).keys()].map((foo) => (foo + 1).toString());
+  const [canceledProducts, setCanceledProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
-
-  console.log(allProducts);
+  const [updated, setUpdated] = useState(false);
 
   const interOptions = [
     { label: 'Day(s)', value: 'day' },
@@ -214,6 +214,7 @@ const NewUpSell = () => {
           productOffer {
             productId
             title
+            image
           }
           productDisplayQuantity
           productLimitQuantity
@@ -276,6 +277,7 @@ const NewUpSell = () => {
   useEffect(() => {
     if (data) {
       setCampaignData(data.fetchCampaign);
+      setAllProducts(data.fetchCampaign.upsellCampaigns[0].productOffer);
     }
   }, [data]);
 
@@ -305,7 +307,6 @@ const NewUpSell = () => {
               onSubmit={(values, { setSubmitting }) => {
                 const formData = { ...values };
                 formData.upsellCampaigns[0].productOffer = allProducts;
-                console.log(formData);
                 if (id) {
                   updateUpsellCampaign({
                     variables: {
@@ -369,7 +370,7 @@ const NewUpSell = () => {
                 /* and other goodies */
               }) => (
                 <Form onSubmit={handleSubmit}>
-                  {dirty && (
+                  {(dirty || updated) && (
                     <ContextualSaveBar
                       message="Unsaved changes"
                       saveAction={{
@@ -378,7 +379,16 @@ const NewUpSell = () => {
                         disabled: false,
                       }}
                       discardAction={{
-                        onAction: resetForm,
+                        onAction: () => {
+                          canceledProducts.map(prod => {
+                            allProducts.push(prod)
+                          });
+
+                          setAllProducts(allProducts);
+                          setCanceledProducts(prod => prod = []);
+                          setUpdated(flag => flag = false);
+                          resetForm();
+                        },
                       }}
                     />
                   )}
@@ -423,13 +433,15 @@ const NewUpSell = () => {
                             </span>
                           }
                         />
-                        <div className={`btn-group ${!dirty && 'hidden'}`}>
+                        <div className={`btn-group ${(!dirty || !updated) && 'hidden'}`}>
                           <ButtonGroup>
                             <Button
                               primary
                               onClick={() =>
-                                setFieldValue('status', 'draft').then(() =>
+                                setFieldValue('status', 'draft').then(() => {
                                   handleSubmit()
+                                  setUpdated(flag => flag = false);
+                                }
                                 )
                               }
                               loading={isSubmitting}
@@ -438,8 +450,10 @@ const NewUpSell = () => {
                             </Button>
                             <Button
                               onClick={() =>
-                                setFieldValue('status', 'publish').then(() =>
+                                setFieldValue('status', 'publish').then(() => {
                                   handleSubmit()
+                                  setUpdated(flag => flag = false);
+                                }
                                 )
                               }
                               loading={isSubmitting}
@@ -1031,14 +1045,23 @@ const NewUpSell = () => {
                             </TextContainer>
                           </FormLayout.Group>
                         </FormLayout>
-                        <Preview allProducts={allProducts} setAllProducts={setAllProducts} />
+                        <Preview
+                          allProducts={allProducts}
+                          setAllProducts={setAllProducts}
+                          showOfferTitle={campaign.showOfferTitle}
+                          offerTitle={campaign.offerTitle}
+                          buttonText={campaign.buttonTextAccept}
+                          setUpdated={setUpdated}
+                          canceledProducts={canceledProducts}
+                          setCanceledProducts={setCanceledProducts}
+                        />
                       </Card>
                     </div>
                   ))}
 
                   <br />
                   <div className="addUpsellCampaigns">
-                    <Button
+                    {/* <Button
                       plain
                       onClick={() =>
                         setFieldValue(
@@ -1048,7 +1071,7 @@ const NewUpSell = () => {
                       }
                     >
                       Add upsell campaign
-                    </Button>
+                    </Button> */}
                   </div>
                 </Form>
               )}

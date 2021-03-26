@@ -5,7 +5,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-const Preview = ({ allProducts, setAllProducts }) => {
+const Preview = ({ allProducts, setAllProducts, showOfferTitle, offerTitle, buttonText, setUpdated, canceledProducts, setCanceledProducts }) => {
 
   const [removeFlag, setRemoveFlag] = useState(false);
 
@@ -22,16 +22,18 @@ const Preview = ({ allProducts, setAllProducts }) => {
       return prod.title;
     }).indexOf(title);
     if (index > -1) {
+      canceledProducts.push(allProducts[index]);
+      setCanceledProducts(prod => prod = canceledProducts);
       allProducts.splice(index, 1);
-      console.log(allProducts);
       setAllProducts(product => product = allProducts);
+      setUpdated(flag => flag = true);
       setRemoveFlag(flag => flag = !removeFlag);
     }
   }
 
   const previewCard = allProducts.map((product) => {
     return (
-      <div className="preview-item" id={`preview-${product.title.replaceAll(' ', '_')}`}>
+      <div key={product.productId} className="preview-item" id={`preview-${product.title.replaceAll(' ', '_')}`}>
         <div className="img">
           <div onClick={() => handleAllProducts(product.title)} className="cancel">
             <Icon
@@ -42,9 +44,12 @@ const Preview = ({ allProducts, setAllProducts }) => {
             src={product.image}
           />
         </div>
-        <p>{product.title}</p>
+        <p>
+          {product.title}
+          {product.title.length <= 26 ? <div><br /></div> : ''}
+        </p>
         <div className="btn-wrapper">
-          <button type="button">ADD</button>
+          <button type="button">{buttonText == '' ? 'ADD' : buttonText}</button>
         </div>
 
       </div>
@@ -52,10 +57,13 @@ const Preview = ({ allProducts, setAllProducts }) => {
   });
 
   return (
-    <div className="slider-preview" style={allProducts.length > 0 ? { display: "block" } : { display: "none" }}>
-      <Slider {...slickConfig}>
-        {previewCard}
-      </Slider>
+    <div className="preview-container" style={allProducts.length > 0 ? { display: "block" } : { display: "none" }}>
+      <h2 >{showOfferTitle == "true" && offerTitle != '' ? offerTitle : showOfferTitle == "true" && offerTitle == '' ? 'Hey there! There’s an offer for you!' : ''}</h2>
+      <div className="slider-preview">
+        <Slider {...slickConfig}>
+          {previewCard}
+        </Slider>
+      </div>
     </div>
   );
 }
