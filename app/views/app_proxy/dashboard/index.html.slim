@@ -123,8 +123,7 @@
                                 - line_products = subscription.lines.edges.map{|edge| edge.node.product_id[/\d+/]}
                                 - price = subscription.lines.edges.first.node.current_price.amount
                                 - selling_plan_ids = subscription.lines.edges.map{|edge| edge.node.selling_plan_id}
-                                / - selling_plan_id = selling_plan_ids.reject{|val| val.nil?}&.first
-                                - selling_plan_id = "gid://shopify/SellingPlan/393511118"
+                                - selling_plan_id = selling_plan_ids.reject{|val| val.nil?}&.first
                                 - campaigns = UpsellCampaign.joins(:upsell_campaign_group).where(upsell_campaign_groups: {status: :publish}).where("rule_customer = 't' AND rule_customer_value ->> 'sellingPlanId' = ?", selling_plan_id).select("product_offer AS product_offer, offer_title, button_text_accept, show_offer_title")
                                 - product_ids = []
                                 - campaigns.each do |campaign|
