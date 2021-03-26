@@ -124,7 +124,7 @@
                                 - price = subscription.lines.edges.first.node.current_price.amount
                                 - selling_plan_ids = subscription.lines.edges.map{|edge| edge.node.selling_plan_id}
                                 - selling_plan_id = selling_plan_ids.reject{|val| val.nil?}&.first
-                                - campaigns = UpsellCampaign.where("rule_customer = 't' AND rule_customer_value ->> 'sellingPlanId' = ?", selling_plan_id).select("product_offer AS product_offer, offer_title, button_text_accept")
+                                - campaigns = UpsellCampaign.joins(:upsell_campaign_group).where(upsell_campaign_groups: {status: :publish}).where("rule_customer = 't' AND rule_customer_value ->> 'sellingPlanId' = ?", selling_plan_id).select("product_offer AS product_offer, offer_title, button_text_accept, show_offer_title")
                                 - product_ids = []
                                 - campaigns.each do |campaign|
                                   - product_ids.push((campaign.product_offer.is_a? Array) ? campaign.product_offer.map{|a| a["product_id"][/\d+/]} : campaign.product_offer['product_id'][/\d+/])
@@ -163,7 +163,8 @@
                                                         img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
                                 - if upsell_products.present?
                                   h2
-                                    = campaigns.first.offer_title.present? ? campaigns.first.offer_title : "Hey there! There's is an offer for you!"
+                                    - if campaigns.first.show_offer_title
+                                      = campaigns.first.offer_title.present? ? campaigns.first.offer_title : "Hey there! There's is an offer for you!"
                                     .carousal-container
                                       .owl-carousel.owl-theme
                                         - upsell_products.each do |product|
@@ -186,5 +187,5 @@
                                                                 input name="variant_id" type="radio" value="#{variant.id}" checked='checked'
                                                               - else
                                                                 input name="variant_id" type="radio" value="#{variant.id}"
-                                                              = "#{variant.title} (#{variant.price})"
+                                                              = "#{variant.title} (#{number_to_currency variant.price})"
                                                           = submit_tag campaigns.first.button_text_accept.present? ? campaigns.first.button_text_accept : 'Add'

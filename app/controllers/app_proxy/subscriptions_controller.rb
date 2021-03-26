@@ -91,7 +91,7 @@ class AppProxy::SubscriptionsController < AppProxyController
         SubscriptionDraftsService.new.commit draft_id
         render js: 'location.reload()' if result.present?
       else
-        render js: "location.reload()"
+        render js: "window.top.location.href = '/cart/#{variant.id}:1';"
       end
     end
   end
