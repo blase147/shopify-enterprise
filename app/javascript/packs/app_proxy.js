@@ -19,5 +19,23 @@ require('owl.carousel');
 import 'owl.carousel/dist/assets/owl.carousel.css';
 
 $(document).ready(function () {
-  $('.owl-carousel').owlCarousel();
+  $('.owl-carousel').owlCarousel(
+    {
+      dots: true
+    }
+  );
+
+  $(document).on('click', '.btn-variant', function () {
+    let this_ = $(this);
+    $('.variants-wrapper').slideUp();
+    $('button[type="submit"]').hide();
+    $('.btn-variant').show();
+    this_.parents('.btn-wrapper').prev().slideDown();
+    this_.hide();
+    this_.parents('.btn-wrapper').next().find('button[type="submit"]').show();
+  });
+
+  $(document).on('click', 'button[type="submit"]', function () {
+    $(this).parents('.preview-item').find('.spinner').css('display', 'flex');
+  });
 });

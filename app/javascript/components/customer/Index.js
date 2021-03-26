@@ -173,7 +173,7 @@ const Customers = () => {
           ]}
           selected={taggedWith || []}
           onChange={handleTaggedWithChange}
-          // allowMultiple
+        // allowMultiple
         />
       ),
       shortcut: true,
@@ -301,40 +301,41 @@ const Customers = () => {
   };
   //each row in data table
   const formatRows = (rows) => {
-    return rows?.map((row) => [
-      <Checkbox
-        label={row.id}
-        checked={selectedCustomers.indexOf(row.id) != -1}
-        onChange={(newChecked) =>
-          handleChangeCheckedCustomers(newChecked, row.id)
-        }
-      />,
-      <a
-        href={`/subscriptions/${row.shopifyId}`}
-        key={row.id}
-      >{`${row.firstName} ${row.lastName}`}</a>,
-      row.createdAt,
-      <div
-        className={
-          row.status === 'PAUSED'
-            ? 'cancelled'
-            : row.status === 'ACTIVE'
-            ? 'active'
-            : 'future'
-        }
-      >
-        <Badge>{capitalize(row.status)}</Badge>
-      </div>,
-      <div className='subscription'>{row.subscription}</div>,
-      <div>
-        <p className="more">
-          {row.communication}
-        </p>
-        <p>
-          <span className="price">{row.language}</span>
-        </p>
-      </div>,
-    ]);
+    return rows?.map((row) =>
+      [
+        <Checkbox
+          label={row.id}
+          checked={selectedCustomers.indexOf(row.id) != -1}
+          onChange={(newChecked) =>
+            handleChangeCheckedCustomers(newChecked, row.id)
+          }
+        />,
+        <a
+          href={`/subscriptions/${row.shopifyId}`}
+          key={row.id}
+        >{`${row.firstName} ${row.lastName}`}</a>,
+        row.createdAt,
+        <div
+          className={
+            row.status === 'PAUSED'
+              ? 'cancelled'
+              : row.status === 'ACTIVE'
+                ? 'active'
+                : 'future'
+          }
+        >
+          <Badge>{capitalize(row.status)}</Badge>
+        </div>,
+        <div className='subscription'>{row.subscription}</div>,
+        <div>
+          <p className="more">
+            {row.communication}
+          </p>
+          <p>
+            <span className="price">{row.language}</span>
+          </p>
+        </div>
+      ]);
   };
   const [customers, setCustomers] = useState([]);
   const [filterCustomers, setFilterCustomers] = useState([]);
@@ -527,14 +528,14 @@ const Customers = () => {
             item[11] === ''
               ? []
               : [
-                  {
-                    email: item[11],
-                    firstName: item[12],
-                    lastName: item[13],
-                    companyName: item[14],
-                    phone: item[15],
-                  },
-                ],
+                {
+                  email: item[11],
+                  firstName: item[12],
+                  lastName: item[13],
+                  companyName: item[14],
+                  phone: item[15],
+                },
+              ],
           billingAddress: {
             firstName: item[16],
             lastName: item[17],
@@ -605,7 +606,7 @@ const Customers = () => {
           title="Customer Subscriptions"
           primaryAction={
             <ButtonGroup>
-              <Button onClick={() => {}}>
+              <Button onClick={() => { }}>
                 {dataSelected.length > 0 ? (
                   <CSVLink
                     data={json2csvParser.parse(dataSelected)}

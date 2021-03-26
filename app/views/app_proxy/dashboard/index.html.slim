@@ -123,7 +123,8 @@
                                 - line_products = subscription.lines.edges.map{|edge| edge.node.product_id[/\d+/]}
                                 - price = subscription.lines.edges.first.node.current_price.amount
                                 - selling_plan_ids = subscription.lines.edges.map{|edge| edge.node.selling_plan_id}
-                                - selling_plan_id = selling_plan_ids.reject{|val| val.nil?}&.first
+                                / - selling_plan_id = selling_plan_ids.reject{|val| val.nil?}&.first
+                                - selling_plan_id = "gid://shopify/SellingPlan/393511118"
                                 - campaigns = UpsellCampaign.joins(:upsell_campaign_group).where(upsell_campaign_groups: {status: :publish}).where("rule_customer = 't' AND rule_customer_value ->> 'sellingPlanId' = ?", selling_plan_id).select("product_offer AS product_offer, offer_title, button_text_accept, show_offer_title")
                                 - product_ids = []
                                 - campaigns.each do |campaign|
@@ -157,35 +158,62 @@
                                                 p
                                                   b Delivery Date:&nbsp;
                                                   =  DateTime.parse(subscription.next_billing_date).strftime("%a, %B %e")
-                                                  .Polaris-MediaCard
-                                                    .Polaris-MediaCard__MediaContainer
-                                                      - if product.images.first.present?
-                                                        img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
+                                                  / .Polaris-MediaCard
+                                                  /   .Polaris-MediaCard__MediaContainer
+                                                  /     - if product.images.first.present?
+                                                  /       img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
                                 - if upsell_products.present?
-                                  h2
-                                    - if campaigns.first.show_offer_title
-                                      = campaigns.first.offer_title.present? ? campaigns.first.offer_title : "Hey there! There's is an offer for you!"
-                                    .carousal-container
-                                      .owl-carousel.owl-theme
-                                        - upsell_products.each do |product|
-                                          .Polaris-MediaCard
-                                            .Polaris-MediaCard__MediaContainer
-                                              - if product.images.first.present?
-                                                img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
-                                            .Polaris-MediaCard__InfoContainer
-                                              .Polaris-Card__Section
-                                                .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
-                                                  .Polaris-Stack__Item
-                                                    .Polaris-Stack
-                                                      .Polaris-Stack__Item.Polaris-Stack__Item--fill
-                                                        h2.Polaris-Heading
-                                                          = product.title
-                                                        = form_tag action_subscription_contract_path(:add_product, subscription.id[/\d+/]), method: :post, :id => "form-#{product.id}", remote: true do
-                                                          - product.variants.each_with_index do |variant, index|
-                                                            label
-                                                              - if index.zero?
-                                                                input name="variant_id" type="radio" value="#{variant.id}" checked='checked'
-                                                              - else
-                                                                input name="variant_id" type="radio" value="#{variant.id}"
-                                                              = "#{variant.title} (#{number_to_currency variant.price})"
-                                                          = submit_tag campaigns.first.button_text_accept.present? ? campaigns.first.button_text_accept : 'Add'
+                                  .carousal-container.preview-container
+                                    h2.offerTitle
+                                      - if campaigns.first.show_offer_title
+                                        = campaigns.first.offer_title.present? ? campaigns.first.offer_title : "Hey there! There's is an offer for you!"
+                                    .owl-carousel.owl-theme
+                                      - upsell_products.each do |product|
+                                        .preview-item
+                                          .img
+                                            - if product.images.first.present?
+                                              img alt="" height="100%" src=product.images.first&.src
+                                          p
+                                            = product.title
+                                            - if product.title.size <= 26
+                                              br /
+                                              br /
+                                          .spinner
+                                            .loader
+                                          = form_tag action_subscription_contract_path(:add_product, subscription.id[/\d+/]), method: :post, :id => "form-#{product.id}", remote: true do
+                                            .variants-wrapper
+                                              - product.variants.each_with_index do |variant, index|
+                                                label
+                                                  - if index.zero?
+                                                    input name="variant_id" type="radio" value="#{variant.id}" checked='checked'
+                                                  - else
+                                                    input name="variant_id" type="radio" value="#{variant.id}"
+                                                  = "#{variant.title} (#{number_to_currency variant.price})"
+                                            .btn-wrapper
+                                              button.btn-variant type="button"
+                                                = campaigns.first.button_text_accept.present? ? campaigns.first.button_text_accept : 'Add'
+                                            .btn-wrapper
+                                              button type="submit" style=("display: none;")
+                                                = campaigns.first.button_text_accept.present? ? campaigns.first.button_text_accept : 'Add'
+
+                                          / .Polaris-MediaCard
+                                          /   .Polaris-MediaCard__MediaContainer
+                                          /     - if product.images.first.present?
+                                          /       img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
+                                          /   .Polaris-MediaCard__InfoContainer
+                                          /     .Polaris-Card__Section
+                                          /       .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
+                                          /         .Polaris-Stack__Item
+                                          /           .Polaris-Stack
+                                          /             .Polaris-Stack__Item.Polaris-Stack__Item--fill
+                                          /               h2.Polaris-Heading
+                                          /                 = product.title
+                                          /               = form_tag action_subscription_contract_path(:add_product, subscription.id[/\d+/]), method: :post, :id => "form-#{product.id}", remote: true do
+                                          /                 - product.variants.each_with_index do |variant, index|
+                                          /                   label
+                                          /                     - if index.zero?
+                                          /                       input name="variant_id" type="radio" value="#{variant.id}" checked='checked'
+                                          /                     - else
+                                          /                       input name="variant_id" type="radio" value="#{variant.id}"
+                                          /                     = "#{variant.title} (#{number_to_currency variant.price})"
+                                          /                 = submit_tag campaigns.first.button_text_accept.present? ? campaigns.first.button_text_accept : 'Add'

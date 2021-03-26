@@ -58,7 +58,7 @@ const Preview = ({ allProducts, setAllProducts, showOfferTitle, offerTitle, butt
 
   return (
     <div className="preview-container" style={allProducts.length > 0 ? { display: "block" } : { display: "none" }}>
-      <h2 >{showOfferTitle == "true" && offerTitle != '' ? offerTitle : showOfferTitle == "true" && offerTitle == '' ? 'Hey there! There’s an offer for you!' : ''}</h2>
+      <h2 className="offerTitle">{showOfferTitle == "true" && offerTitle != '' ? offerTitle : showOfferTitle == "true" && offerTitle == '' ? 'Hey there! There’s an offer for you!' : ''}</h2>
       <div className="slider-preview">
         <Slider {...slickConfig}>
           {previewCard}
