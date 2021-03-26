@@ -433,7 +433,7 @@ const NewUpSell = () => {
                             </span>
                           }
                         />
-                        <div className={`btn-group ${(!dirty || !updated) && 'hidden'}`}>
+                        <div className={`btn-group ${(!dirty && !updated) && 'hidden'}`}>
                           <ButtonGroup>
                             <Button
                               primary
