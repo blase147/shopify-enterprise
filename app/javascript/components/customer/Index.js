@@ -302,40 +302,41 @@ const Customers = () => {
   //each row in data table
   const formatRows = (rows) => {
     return rows?.map((row) =>
-      [
-        <Checkbox
-          label={row.id}
-          checked={selectedCustomers.indexOf(row.id) != -1}
-          onChange={(newChecked) =>
-            handleChangeCheckedCustomers(newChecked, row.id)
-          }
-        />,
-        <a
-          href={`/subscriptions/${row.shopifyId}`}
-          key={row.id}
-        >{`${row.firstName} ${row.lastName}`}</a>,
-        row.createdAt,
-        <div
-          className={
-            row.status === 'PAUSED'
-              ? 'cancelled'
-              : row.status === 'ACTIVE'
-                ? 'active'
-                : 'future'
-          }
-        >
-          <Badge>{capitalize(row.status)}</Badge>
-        </div>,
-        <div className='subscription'>{row.subscription}</div>,
-        <div>
-          <p className="more">
-            {row.communication}
-          </p>
-          <p>
-            <span className="price">{row.language}</span>
-          </p>
-        </div>
-      ]);
+      row?.subscription !== null ?
+        [
+          <Checkbox
+            label={row.id}
+            checked={selectedCustomers.indexOf(row.id) != -1}
+            onChange={(newChecked) =>
+              handleChangeCheckedCustomers(newChecked, row.id)
+            }
+          />,
+          <a
+            href={`/subscriptions/${row.shopifyId}`}
+            key={row.id}
+          >{`${row.firstName} ${row.lastName}`}</a>,
+          row.createdAt,
+          <div
+            className={
+              row.status === 'PAUSED'
+                ? 'cancelled'
+                : row.status === 'ACTIVE'
+                  ? 'active'
+                  : 'future'
+            }
+          >
+            <Badge>{capitalize(row.status)}</Badge>
+          </div>,
+          <div className='subscription'>{row.subscription}</div>,
+          <div>
+            <p className="more">
+              {row.communication}
+            </p>
+            <p>
+              <span className="price">{row.language}</span>
+            </p>
+          </div>
+        ] : []);
   };
   const [customers, setCustomers] = useState([]);
   const [filterCustomers, setFilterCustomers] = useState([]);
