@@ -1,6 +1,6 @@
 class AppProxy::DashboardController < AppProxyController
   before_action :load_subscriptions
-  before_action :load_customer, only: %w(addresses payment_methods settings)
+  before_action :load_customer, only: %w(index addresses payment_methods settings)
   def index
   end
 

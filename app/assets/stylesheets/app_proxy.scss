@@ -1,4 +1,153 @@
-// @import 'owl.carousel/dist/assets/owl.carousel.css';
+// @import 'owl.carousel/dist/assets/owl.carousel.css'; 
+
+$primary: #007EFF;
+
+// TOP NAV
+nav.top-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 150px;
+  background: $primary;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+    padding: 25px 0;
+  }
+
+  > .nav-brand {
+    font-size: 2.5rem;
+    color: #fff;
+    font-weight: bold;
+    @media (max-width: 900px) {
+      margin-bottom: 25px;
+    }
+  }
+
+  > .nav-menu {
+    @media (max-width: 900px) {
+      margin-bottom: 10px;
+    }
+    ul.items {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: space-between;
+
+      li.item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0px 10px;
+        > a {
+          color: #fff;
+          text-decoration: none;
+          font-size: 2rem;
+          display: block;
+          padding: 0px 10px;
+
+          @media (max-width: 1100px) {
+            font-size: 1.5rem;
+          }
+          @media (max-width: 900px) {
+            padding: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+// INFO BANNER
+
+.info-banner {
+  width: 100%;
+  height: 130px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: #fff;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .details {
+    @media (max-width: 768px) {
+      padding: 10px 0;
+    }
+    > .profile{
+      display: flex;
+      align-items: center;
+      .initials {
+        width: 70px;
+        height: 70px;
+        background: #A3CCFF;
+        color: #fff;
+        font-size: 24px;
+        font-weight: bold;
+        text-transform: uppercase;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        margin-right: 30px;
+
+        @media (max-width: 1100px) {
+          width: 50px;
+          height: 50px;
+          font-size: 18px;
+          margin-right: 10px;
+        }
+      }
+      .full-name {
+        font-size: 24px;
+        color: #000;
+        text-transform: capitalize;
+        font-weight: bold;
+
+        @media (max-width: 1100px) {
+          font-size: 20px;
+        }
+      }
+    }
+    > .contact {
+      p:nth-child(1) {
+        font-size: 20px;
+
+        @media (max-width: 1100px) {
+          font-size: 16px;
+        }
+      }
+      p:nth-child(2) {
+        font-size: 16px;
+        margin-top: 10px;
+        color: #4D506A;
+
+        @media (max-width: 1100px) {
+          font-size: 14px;
+        }
+      }
+    }
+    > .btn-discount {
+      padding: 20px 25px;
+      display: block;
+      color: #fff;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 31px;
+      background: $primary;
+      text-decoration: none;
+
+      @media (max-width: 1100px) {
+        padding: 10px 15px;
+        font-size: 16px;
+      }
+    }
+  }
+}
 
 .preview-container {
 
@@ -140,13 +289,11 @@
 
 /* custom polaris css */
 body.chargezen-proxy {
-  padding: 30px 0;
+  padding: 0 0 30px 0;
 
   overflow: auto;
   background: none;
   // font-family: 'AvenirLTStd';
-
-  margin-top: 5px;
   background: #E5E5E5;
 
   .Polaris-Button__Yes {
@@ -164,14 +311,14 @@ body.chargezen-proxy {
   }
 
   .Polaris-Page {
-    margin: 30px 0;
+    margin: 0;
     padding: 0 !important;
     max-width: none;
     background: #E5E5E5;
   }
 
   .Polaris-Page__Content {
-    max-width: 1024px;
+    max-width: 1200px;
     margin: 0 auto;
     margin-top: 55px;
 
