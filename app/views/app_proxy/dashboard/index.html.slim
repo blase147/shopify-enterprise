@@ -91,39 +91,78 @@
     div.content-wrapper
       div.display-text
         p
-          span MY 
-          span.active ACTIVE 
-          span SUBSCRIPTION  
-        a href="#"
-          span Add one more weekly box
-          svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg" 
-            path d=("M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z") fill="black" /
-      .subscription-contract-products 
-        .grid
-          .grid-item
-            .img
-              img src="" alt=""
-            p.text Super Bundle Urnaduis Egestas 
-            p.text $39.99 / 3 Weeks
-          .grid-item 
-            h4 NEXT CARD CHARGE
-            p.text.right May 5, 2021
-            p.text.right $39.99
-          .grid-item
-            button.white-btn type="button" DELAY NEXT ORDER
-            button.white-btn type="button" DELIVERY SCHEDULE
-            button.text-btn type="button" Edit Subscription 
+          span MY
+          span.active ACTIVE
+          span SUBSCRIPTION
+      - if @active_subscriptions.present? && (params[:status].present? ? params[:status] == 'active' : true)
+        - @active_subscriptions.each do |subscription|
+          a href="#"
+            span Add one more weekly box
+            svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg"
+              path d=("M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z") fill="black" /
+          - billing_policy = subscription.node.billing_policy
+          - subscription.node.lines.edges.each do |edge|
+            - product = ShopifyAPI::Product.find(edge.node.product_id[/\d+/])
+            .subscription-contract-products
+              .grid
+                .grid-item
+                  .img
+                    img src=product.images.first&.src alt=""
+                  p.text
+                    = product.title
+                  p.text
+                    = "#{number_to_currency edge.node.current_price.amount} / #{billing_policy.interval_count} #{billing_policy.interval}"
+                .grid-item
+                  h4 NEXT CARD CHARGE
+                  p.text.right
+                    = DateTime.parse(subscription.node.next_billing_date).strftime("%a, %B %e")
+                  p.text.right
+                    = number_to_currency edge.node.current_price.amount * edge.node.quantity
+                .grid-item
+                  button.white-btn type="button" DELAY NEXT ORDER
+                  = link_to "/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}" do
+                    button.white-btn DELIVERY SCHEDULE
+                  = link_to proxy_path("subscriptions/#{subscription.node.id[/\d+/]}") do
+                    button.text-btn Edit Subscription
+          p.text Address
+          = subscription.node.origin_order.shipping_address.formatted.first
+      - elsif (params[:status].present? && params[:status] == 'active') || !params[:status].present?
+        div.notification-banner
+          p.Polaris-Heading No subscription have been found for your account
       div.display-text
         p
-          span MY 
-          span.canceled CANCELLED 
-          span SUBSCRIPTION 
-      div.notification-banner
-        p.Polaris-Heading No cancelled subscription have been found for your account
-      - @subscription_contracts.each do |subscription|
-        - line_products = subscription.lines.edges.map{|edge| edge.node.product_id[/\d+/]}
-        - price = subscription.lines.edges.first.node.current_price.amount
-        - selling_plan_ids = subscription.lines.edges.map{|edge| edge.node.selling_plan_id}
+          span MY
+          span.canceled CANCELLED
+          span SUBSCRIPTION
+      - if @cancelled_subscriptions.present? && (params[:status].present? ? params[:status] == 'cancelled' : true)
+        - @cancelled_subscriptions.each do |subscription|
+          - billing_policy = subscription.node.billing_policy
+          - subscription.node.lines.edges.each do |edge|
+            - product = ShopifyAPI::Product.find(edge.node.product_id[/\d+/])
+            .subscription-contract-products
+              .grid
+                .grid-item
+                  .img
+                    img src=product.images.first&.src alt=""
+                  p.text
+                    = product.title
+                  p.text
+                    = "#{number_to_currency edge.node.current_price.amount} / #{billing_policy.interval_count} #{billing_policy.interval}"
+                .grid-item
+                  h4 Start Date
+                  p.text.right
+                    = DateTime.parse(subscription.node.created_at).strftime("%a, %B %e")
+                  h4 Quantity
+                  p.text.right
+                    = edge.node.quantity
+                  = link_to action_subscription_contract_path(:resume, subscription.node.id[/\d+/]) do
+                    button.text-btn RE-ACTIVATE
+      - elsif (params[:status].present? && params[:status] == 'cancelled') || !params[:status].present?
+        div.notification-banner
+          p.Polaris-Heading No cancelled subscription have been found for your account
+      - if @subscription_contracts.present?
+        - line_products = @subscription_contracts.first.lines.edges.map{|edge| edge.node.product_id[/\d+/]}
+        - selling_plan_ids = @subscription_contracts.first.lines.edges.map{|edge| edge.node.selling_plan_id}
         - selling_plan_id = selling_plan_ids.reject{|val| val.nil?}&.first
         / - selling_plan_id = 'gid://shopify/SellingPlan/393511118'
         - campaigns = UpsellCampaign.joins(:upsell_campaign_group).where(upsell_campaign_groups: {status: :publish}).where("rule_customer = 't' AND rule_customer_value ->> 'sellingPlanId' = ?", selling_plan_id).select("product_offer AS product_offer, offer_title, button_text_accept, show_offer_title")
@@ -132,7 +171,6 @@
           - product_ids.push((campaign.product_offer.is_a? Array) ? campaign.product_offer.map{|a| a["product_id"][/\d+/]} : campaign.product_offer['product_id'][/\d+/])
         - product_ids = product_ids.flatten - line_products
         - upsell_products = product_ids.present? ? ShopifyAPI::Product.where(ids: product_ids.join(',')) : nil
-        - billing_policy = subscription.billing_policy
 
         / - subscription.lines.edges.each do |edge|
         /   - product = ShopifyAPI::Product.find(edge.node.product_id[/\d+/])
@@ -180,7 +218,7 @@
                       br /
                   .spinner
                     .loader
-                  = form_tag action_subscription_contract_path(:add_product, subscription.id[/\d+/]), method: :post, :id => "form-#{product.id}", remote: true do
+                  = form_tag action_subscription_contract_path(:add_product, @subscription_contracts.first.id[/\d+/]), method: :post, :id => "form-#{product.id}", remote: true do
                     .variants-wrapper
                       - product.variants.each_with_index do |variant, index|
                         label

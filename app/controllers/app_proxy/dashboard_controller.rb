@@ -1,19 +1,18 @@
 class AppProxy::DashboardController < AppProxyController
   before_action :load_subscriptions
   before_action :load_customer, only: %w(index addresses payment_methods settings)
-  def index
-  end
+  def index; end
 
   def subscription; end
+
   def upcoming; end
+
   def order_history; end
-  
-  def addresses
-    
-  end
-  
+
+  def addresses; end
+
   def payment_methods
-    @orders = ShopifyAPI::Order.find(:all, 
+    @orders = ShopifyAPI::Order.find(:all,
       params: { customer_id: customer_id, limit: PER_PAGE, page_info: params[:page_info] }
     )
 
@@ -39,5 +38,7 @@ class AppProxy::DashboardController < AppProxyController
   def load_subscriptions
     @data = CustomerSubscriptionContractsService.new(shopify_customer_id).run
     @subscription_contracts = @data[:subscriptions] || []
+    @cancelled_subscriptions = @data[:cancelled_subscriptions] || []
+    @active_subscriptions = @data[:active_subscriptions] || []
   end
 end

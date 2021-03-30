@@ -39,4 +39,8 @@ $(document).ready(function () {
   $(document).on('click', 'button[type="submit"]', function () {
     $(this).parents('.preview-item').find('.spinner').css('display', 'flex');
   });
+
+  $(document).on('click', '.logout-btn', function () {
+    window.top.location.href = 'account/logout';
+  });
 });

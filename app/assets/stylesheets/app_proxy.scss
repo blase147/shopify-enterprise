@@ -1,4 +1,4 @@
-// @import 'owl.carousel/dist/assets/owl.carousel.css'; 
+// @import 'owl.carousel/dist/assets/owl.carousel.css';
 
 $primary: #007EFF;
 
@@ -166,7 +166,7 @@ nav.top-nav {
     font-size: 18px;
     color: #212B36;
     font-weight: bold;
-  
+
     > span.active {
       color: $primary;
     }
@@ -239,7 +239,7 @@ div.notification-banner {
           text-align: right;
         }
       }
-      > button.white-btn {
+      button.white-btn {
         border: 0.5px solid #C4CDD5;
         box-sizing: border-box;
         border-radius: 5px;
@@ -250,7 +250,7 @@ div.notification-banner {
         margin-bottom: 15px;
         cursor: pointer;
       }
-      > button.text-btn {
+      button.text-btn {
         color: #4D506A;
         font-size: 14px;
         font-weight: 600;
@@ -277,15 +277,15 @@ div.notification-banner {
   }
 
   .slider-preview {
-    box-shadow: 
-                0px 16px 24px rgba(0, 0, 0, 0.06), 
-                0px 2px 6px rgba(0, 0, 0, 0.04), 
+    box-shadow:
+                0px 16px 24px rgba(0, 0, 0, 0.06),
+                0px 2px 6px rgba(0, 0, 0, 0.04),
                 0px 0px 1px rgba(0, 0, 0, 0.04);
     background: #fff;
     border-radius: 5px;
     padding: 30px;
   }
-  
+
   .preview-item {
     position: relative;
     outline: 0 none;
@@ -315,7 +315,7 @@ div.notification-banner {
         object-fit: contain;
       }
     }
-  
+
     > p {
       margin: 20px 0;
       font-size: 16px;
@@ -342,7 +342,7 @@ div.notification-banner {
         height: 60px;
         -webkit-animation: spin 2s linear infinite; /* Safari */
         animation: spin 1s linear infinite;
-  
+
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
@@ -374,7 +374,7 @@ div.notification-banner {
         cursor: pointer;
       }
     }
-  
+
   }
 }
 

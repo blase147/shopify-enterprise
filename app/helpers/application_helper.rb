@@ -19,8 +19,8 @@ module ApplicationHelper
     image_tag("icons/#{icon}.svg", class: 'icon')
   end
 
-  def action_subscription_path action
-    "/a/chargezen_production/subscriptions/#{params[:id]}/#{action}?customer_id=#{params[:customer_id]}"
+  def action_subscription_path(action, query = '')
+    "/a/chargezen_production/subscriptions/#{params[:id]}/#{action}?customer_id=#{params[:customer_id]} #{query.present? ? "&#{query}" : ''}"
   end
 
   def app_path path
