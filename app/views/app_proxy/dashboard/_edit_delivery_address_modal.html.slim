@@ -1,0 +1,54 @@
+.Polaris-Modal#deliveryEditModal
+  .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"
+    form action="/a/chargezen_production/account/update_info" method='post' data-remote=true enctype="multipart/form-data"
+      .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1"
+        .Polaris-Modal-Dialog__Modal.Polaris-Modal-Dialog--sizeLarge
+          .Polaris-Modal__BodyWrapper
+            .Polaris-Modal__Body.Polaris-Scrollable.Polaris-Scrollable--vertical data-polaris-scrollable="true"
+              = hidden_field_tag :id, @customer.shopify_id
+              section.Polaris-Modal-Section
+                .modal-fields-wrapper 
+                  .group 
+                    p First Name
+                    input type="text"/ 
+                  .group 
+                    p LAST NAME*
+                    input type="text"/
+                  .group 
+                    p ADDRESS 1*
+                    input type="text"/ 
+                  .group 
+                    p ADDRESS 2
+                    input type="text"/
+                  .group 
+                    p COMPANY
+                    input type="text"/ 
+                  .group 
+                    p CITY*
+                    input type="text"/
+                  .group 
+                    p COUNTRY*
+                    select
+                      option value="UK" selected="true" United Kingdom
+                      option value="DE" selected="true" Dutchland
+                      option value="PK" selected="true" Pakistan
+                      option value="AF" selected="true" Afghanistan
+                      option value="AU" selected="true" Australia
+                  .group 
+                    p ZIP/POSTAL CODE*
+                    input type="text"/
+                  .group 
+                    p STATE/PROVINCE
+                    input type="text"/ 
+                  .group 
+                    p PHONE
+                    input type="text"/
+
+                  
+          .Polaris-Modal-Footer
+            button.Polaris-Button.mr-10[type="button" aria-hidden="true" tabindex="-1" data-action='close']
+              | Cancel
+
+            = p_button text: 'Update', type: 'submit'
+
+  .Polaris-Backdrop

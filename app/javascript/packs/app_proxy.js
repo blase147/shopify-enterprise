@@ -43,4 +43,46 @@ $(document).ready(function () {
   $(document).on('click', '.logout-btn', function () {
     window.top.location.href = 'account/logout';
   });
+
+  $(document).on('click', 'button.minus-quantity', function () {
+    let val = $(this).next().val() * 1;
+    let prevQuantity = $(this).parents('.quantity-field ').find('input.prev-quantity').val() * 1;
+    if (val > 1) {
+      val -= 1;
+    }
+    $(this).next().val(val);
+
+    if (val == prevQuantity) {
+      $(this).parents('.quantity-field').find('.update-quantity').removeClass('active');
+    } else {
+      $(this).parents('.quantity-field').find('.update-quantity').addClass('active');
+    }
+
+  });
+
+  $(document).on('click', 'button.plus-quantity', function () {
+    let val = $(this).prev().val() * 1;
+    let prevQuantity = $(this).parents('.quantity-field ').find('input.prev-quantity').val() * 1;
+    if (val >= 1) {
+      val += 1;
+    }
+    $(this).prev().val(val);
+
+    if (val == prevQuantity) {
+      $(this).parents('.quantity-field').find('.update-quantity').removeClass('active');
+    } else {
+      $(this).parents('.quantity-field').find('.update-quantity').addClass('active');
+    }
+  });
+
+  $(document).on('input', 'input.quatity-val', function () {
+    console.log('active');
+    $(this).parents('.quantity-field').find('.update-quantity').addClass('active');
+  });
+
+  $(document).on('click', '.chevron', function () {
+    $(this).toggleClass('active');
+    $(this).parents('.subscription-contract-products').find('.slide-down').slideToggle();
+
+  });
 });

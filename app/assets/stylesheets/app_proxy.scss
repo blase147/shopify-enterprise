@@ -202,20 +202,21 @@ div.notification-banner {
 // SUBSCRIPTION CONTRACT
 
 .subscription-contract-products {
+  background: #fff;
+  box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+  border-radius: 5px;
+  padding: 35px;
+  margin: 30px 0;
   > .grid {
-    background: #fff;
-    box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
-    border-radius: 5px;
-    padding: 35px;
-    margin: 30px 0;
     display: grid;
-    grid-template-columns: 3fr 1fr 1fr;
+    grid-template-columns: 3fr 2fr 1fr;
     column-gap: 50px;
+    // border-bottom: 1px solid #ececec;
 
     > .grid-item {
       > .img {
-        width: 200px;
-        height: 200px;
+        width: 150px;
+        height: 150px;
         margin-bottom: 30px;
         > img {
           width: 100%;
@@ -261,6 +262,160 @@ div.notification-banner {
         border: none;
         cursor: pointer;
       }
+    }
+  }
+  > .quantity-wrapper {
+    padding: 10px 0px;
+    border-bottom: 1px solid #C4CDD5;
+    > form {
+      > .quantity-field {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        div {
+          display: flex;
+          align-items: center;
+          > span.label {
+            font-size: 16px;
+            font-weight: 900;
+            margin-right: 10px;
+          }
+          > .btn-wrapper {
+            display: inline-flex;
+            > button {
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+              background: #fff;
+              border: 1px solid #b7b7b7;
+              outline: 0 none;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              &:active {
+                border-color: #007EFF;
+              }
+            }
+            > input {
+              border: none;
+              -moz-appearance: textfield;
+              outline: 0 none;
+              width: 30px;
+              text-align: center;
+  
+              &::-webkit-outer-spin-button,
+              &::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+              }
+            }
+          }
+          > .update-quantity  {
+            margin-left: 30px;
+            display: none;
+            &.active {
+              display: inline;
+            }
+            > button[type="submit"] {
+              border-radius: 12px;
+              border: none;
+              color: #fff;
+              background: $primary;
+              font-size: 14px;
+              font-weight: bold;
+              padding: 7px;
+              transition: 0.3s all ease-in-out;
+              cursor: pointer;
+  
+              &:hover {
+                background: #5badff;
+              }
+            }
+          }
+
+          > .chevron {
+            cursor: pointer;
+            transition: 0.3s all ease-in-out;
+
+            &.active {
+              transform: rotate(-180deg);
+            }
+          }
+        }
+      }
+    }
+  }
+  > .slide-down  {
+    padding: 10px 0;
+    padding: 10px 0;
+    border-bottom: 1px solid #C4CDD5;
+    margin-bottom: 50px;
+    display: none;
+    > .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      > p {
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+
+        &:nth-child(1) {
+          color: #C4C4C4;
+        }
+      }
+    }
+  }
+  > .delivery-address {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    >div {
+      > p{
+        font-size: 16px;
+        font-weight: bold;
+        color: #4D506A;
+      }
+      > h3 {
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+      > button.edit-address {
+        border: 0.5px solid #C4CDD5;
+        border-radius: 5px;
+        background: #fff;
+        font-size: 14px;
+        width: 150px;
+        height: 37px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+// MODAL ADDRESS FORM
+
+.modal-fields-wrapper  {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px 39px;
+
+  > .group {
+    > p {
+      font-size: 14px;
+      font-weight: bold;
+      color: #96A2AF;
+      text-transform: uppercase;
+    }
+    > input, select {
+      width: 100%;
+      border-radius: 5px;
+      border: 1px solid #C4CDD5;
+      background: #fff;
+      height: 40px;
+      margin-top: 15px;
     }
   }
 }

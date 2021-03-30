@@ -69,10 +69,7 @@
   /                                   button.Polaris-Button.Polaris-Button--outline type="button"
   /                                     span.Polaris-Button__Content
   /                                       span.Polaris-Button__Text No active subscription found
-  /                               .Polaris-ButtonGroup__Item
-  /                                 .Polaris-Banner__PrimaryAction
-  /                                   button.Polaris-Button.Polaris-Button--primary type="button"
-  /                                     span.Polaris-Button__Content
+  /                               .Polaris-ButtonGroup__Item&nbsp;Content
   /                                       span.Polaris-Button__Text Subcribe Now
   /                   .Polaris-Card
   /                     .Polaris-Card__Header
@@ -91,19 +88,19 @@
     div.content-wrapper
       div.display-text
         p
-          span MY
-          span.active ACTIVE
+          span MY &nbsp;
+          span.active ACTIVE &nbsp;
           span SUBSCRIPTION
+        a href="#"
+          span Add one more weekly box
+          svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg"
+            path d=("M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z") fill="black" /
       - if @active_subscriptions.present? && (params[:status].present? ? params[:status] == 'active' : true)
         - @active_subscriptions.each do |subscription|
-          a href="#"
-            span Add one more weekly box
-            svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg"
-              path d=("M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z") fill="black" /
           - billing_policy = subscription.node.billing_policy
-          - subscription.node.lines.edges.each do |edge|
-            - product = ShopifyAPI::Product.find(edge.node.product_id[/\d+/])
-            .subscription-contract-products
+          .subscription-contract-products
+            - subscription.node.lines.edges.each_with_index do |edge, index|
+              - product = ShopifyAPI::Product.find(edge.node.product_id[/\d+/])
               .grid
                 .grid-item
                   .img
@@ -112,27 +109,111 @@
                     = product.title
                   p.text
                     = "#{number_to_currency edge.node.current_price.amount} / #{billing_policy.interval_count} #{billing_policy.interval}"
-                .grid-item
-                  h4 NEXT CARD CHARGE
-                  p.text.right
-                    = DateTime.parse(subscription.node.next_billing_date).strftime("%a, %B %e")
-                  p.text.right
-                    = number_to_currency edge.node.current_price.amount * edge.node.quantity
-                .grid-item
-                  button.white-btn type="button" DELAY NEXT ORDER
-                  = link_to "/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}" do
-                    button.white-btn DELIVERY SCHEDULE
-                  = link_to proxy_path("subscriptions/#{subscription.node.id[/\d+/]}") do
-                    button.text-btn Edit Subscription
-          p.text Address
-          = subscription.node.origin_order.shipping_address.formatted.first
+                - if index.zero?
+                  .grid-item
+                    h4 NEXT CARD CHARGE
+                    p.text.right
+                      = DateTime.parse(subscription.node.next_billing_date).strftime("%a, %B %e")
+                    p.text.right
+                      = number_to_currency edge.node.current_price.amount * edge.node.quantity
+                  .grid-item
+                    button.white-btn type="button" DELAY NEXT ORDER
+                    = link_to "/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}" do
+                      button.white-btn DELIVERY SCHEDULE
+                    = link_to proxy_path("subscriptions/#{subscription.node.id[/\d+/]}") do
+                      button.text-btn Edit Subscription
+              .quantity-wrapper 
+                form
+                  .quantity-field 
+                    div
+                      span.label Quantity: 
+                      span.btn-wrapper
+                        button.minus-quantity type="button"
+                          svg fill="none" height="2" viewbox=("0 0 7 2") width="7" xmlns="http://www.w3.org/2000/svg" 
+                            path d=("M7 0H0V1.5H7V0Z") fill="#637381" /
+
+                        input.quatity-val type="number" name="quantity" value="#{edge.node.quantity}"/
+                        button.plus-quantity type="button"
+                          svg fill="none" height="8" viewbox=("0 0 8 8") width="8" xmlns="http://www.w3.org/2000/svg" 
+                            path d=("M0 3.08V4.508H3.08V7.588H4.508V4.508H7.588V3.08H4.508V0H3.08V3.08H0Z") fill="#212B36" /
+                        input.prev-quantity type="hidden" value="#{edge.node.quantity}"/
+                      span.update-quantity 
+                        button type="submit" APPLY
+                    - if subscription.node.lines.edges.size == (index + 1)
+                      div 
+                        div.chevron
+                          svg fill="none" height="30" viewbox=("0 0 30 30") width="30" xmlns="http://www.w3.org/2000/svg" 
+                            circle cx="15" cy="15" r="14" stroke="#007EFF" stroke-width="2" /
+                            path d=("M7.5 12L14.5 19L21.5 12") stroke="#007EFF" stroke-width="2" /
+            .slide-down 
+              .item 
+                p start date
+                p March 16, 2021
+              .item 
+                p est. next delivery
+                p March 16, 2021
+              .item 
+                p last card charge
+                p -
+              .item 
+                p quantity
+                p 1
+            .delivery-address
+              div
+                p.text DELIVERY ADDRESS
+                h3
+                  = subscription.node.origin_order.shipping_address.formatted.first
+              div 
+                button.edit-address data-toggle="modal" data-target="#deliveryEditModal" EDIT 
+          - line_products = subscription.node.lines.edges.map{|edge| edge.node.product_id[/\d+/]}
+          - selling_plan_ids = subscription.node.lines.edges.map{|edge| edge.node.selling_plan_id}
+          / - selling_plan_id = selling_plan_ids.reject{|val| val.nil?}&.first
+          - selling_plan_id = 'gid://shopify/SellingPlan/393511118'
+          - campaigns = UpsellCampaign.joins(:upsell_campaign_group).where(upsell_campaign_groups: {status: :publish}).where("rule_customer = 't' AND rule_customer_value ->> 'sellingPlanId' = ?", selling_plan_id).select("product_offer AS product_offer, offer_title, button_text_accept, show_offer_title")
+          - product_ids = []
+          - campaigns.each do |campaign|
+            - product_ids.push((campaign.product_offer.is_a? Array) ? campaign.product_offer.map{|a| a["product_id"][/\d+/]} : campaign.product_offer['product_id'][/\d+/])
+          - product_ids = product_ids.flatten - line_products
+          - upsell_products = product_ids.present? ? ShopifyAPI::Product.where(ids: product_ids.join(',')) : nil
+          - if upsell_products.present?
+            .carousal-container.preview-container
+              h2.offerTitle
+                - if campaigns.first.show_offer_title
+                  = campaigns.first.offer_title.present? ? campaigns.first.offer_title : "Hey there! There's is an offer for you!"
+              .owl-carousel.owl-theme
+                - upsell_products.each do |product|
+                  .preview-item
+                    .img
+                      - if product.images.first.present?
+                        img alt="" height="100%" src=product.images.first&.src
+                    p
+                      = product.title
+                      - if product.title.size <= 38
+                        br /
+                    .spinner
+                      .loader
+                    = form_tag action_subscription_contract_path(:add_product, subscription.node.id[/\d+/]), method: :post, :id => "form-#{product.id}", remote: true do
+                      .variants-wrapper
+                        - product.variants.each_with_index do |variant, index|
+                          label
+                            - if index.zero?
+                              input name="variant_id" type="radio" value="#{variant.id}" checked='checked'
+                            - else
+                              input name="variant_id" type="radio" value="#{variant.id}"
+                            = "#{variant.title} (#{number_to_currency variant.price})"
+                      .btn-wrapper
+                        button.btn-variant type="button"
+                          = campaigns.first.button_text_accept.present? ? campaigns.first.button_text_accept : 'Add'
+                      .btn-wrapper
+                        button type="submit" style=("display: none;")
+                          = campaigns.first.button_text_accept.present? ? campaigns.first.button_text_accept : 'Add'
       - elsif (params[:status].present? && params[:status] == 'active') || !params[:status].present?
         div.notification-banner
           p.Polaris-Heading No subscription have been found for your account
       div.display-text
         p
-          span MY
-          span.canceled CANCELLED
+          span MY &nbsp;
+          span.canceled CANCELLED &nbsp;
           span SUBSCRIPTION
       - if @cancelled_subscriptions.present? && (params[:status].present? ? params[:status] == 'cancelled' : true)
         - @cancelled_subscriptions.each do |subscription|
@@ -160,98 +241,5 @@
       - elsif (params[:status].present? && params[:status] == 'cancelled') || !params[:status].present?
         div.notification-banner
           p.Polaris-Heading No cancelled subscription have been found for your account
-      - if @subscription_contracts.present?
-        - line_products = @subscription_contracts.first.lines.edges.map{|edge| edge.node.product_id[/\d+/]}
-        - selling_plan_ids = @subscription_contracts.first.lines.edges.map{|edge| edge.node.selling_plan_id}
-        - selling_plan_id = selling_plan_ids.reject{|val| val.nil?}&.first
-        / - selling_plan_id = 'gid://shopify/SellingPlan/393511118'
-        - campaigns = UpsellCampaign.joins(:upsell_campaign_group).where(upsell_campaign_groups: {status: :publish}).where("rule_customer = 't' AND rule_customer_value ->> 'sellingPlanId' = ?", selling_plan_id).select("product_offer AS product_offer, offer_title, button_text_accept, show_offer_title")
-        - product_ids = []
-        - campaigns.each do |campaign|
-          - product_ids.push((campaign.product_offer.is_a? Array) ? campaign.product_offer.map{|a| a["product_id"][/\d+/]} : campaign.product_offer['product_id'][/\d+/])
-        - product_ids = product_ids.flatten - line_products
-        - upsell_products = product_ids.present? ? ShopifyAPI::Product.where(ids: product_ids.join(',')) : nil
 
-        / - subscription.lines.edges.each do |edge|
-        /   - product = ShopifyAPI::Product.find(edge.node.product_id[/\d+/])
-        /   .Polaris-MediaCard
-        /     .Polaris-MediaCard__MediaContainer
-        /       - if product.images.first.present?
-        /         img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
-        /     .Polaris-MediaCard__InfoContainer
-        /       .Polaris-Card__Section
-        /         .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
-        /           .Polaris-Stack__Item
-        /             .Polaris-Stack
-        /               .Polaris-Stack__Item.Polaris-Stack__Item--fill
-        /                 h2.Polaris-Heading
-        /                   = "#{product.title} (#{edge.node.quantity} pack)"
-        /               .Polaris-Stack__Item
-        /                 h2.Polaris-Heading= number_to_currency price
-        /             .Polaris-Stack
-        /               .Polaris-Stack__Item.Polaris-Stack__Item--fill
-        /                 p
-        /                   b Delivery Every:&nbsp;
-        /                   = "#{billing_policy.interval_count} #{billing_policy.interval}".titleize
-        /               .Polaris-Stack__Item
-        /                 p
-        /                   b Delivery Date:&nbsp;
-        /                   =  DateTime.parse(subscription.next_billing_date).strftime("%a, %B %e")
-                          / .Polaris-MediaCard
-                          /   .Polaris-MediaCard__MediaContainer
-                          /     - if product.images.first.present?
-                          /       img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
-        - if upsell_products.present?
-          .carousal-container.preview-container
-            h2.offerTitle
-              - if campaigns.first.show_offer_title
-                = campaigns.first.offer_title.present? ? campaigns.first.offer_title : "Hey there! There's is an offer for you!"
-            .owl-carousel.owl-theme
-              - upsell_products.each do |product|
-                .preview-item
-                  .img
-                    - if product.images.first.present?
-                      img alt="" height="100%" src=product.images.first&.src
-                  p
-                    = product.title
-                    - if product.title.size <= 38
-                      br /
-                  .spinner
-                    .loader
-                  = form_tag action_subscription_contract_path(:add_product, @subscription_contracts.first.id[/\d+/]), method: :post, :id => "form-#{product.id}", remote: true do
-                    .variants-wrapper
-                      - product.variants.each_with_index do |variant, index|
-                        label
-                          - if index.zero?
-                            input name="variant_id" type="radio" value="#{variant.id}" checked='checked'
-                          - else
-                            input name="variant_id" type="radio" value="#{variant.id}"
-                          = "#{variant.title} (#{number_to_currency variant.price})"
-                    .btn-wrapper
-                      button.btn-variant type="button"
-                        = campaigns.first.button_text_accept.present? ? campaigns.first.button_text_accept : 'Add'
-                    .btn-wrapper
-                      button type="submit" style=("display: none;")
-                        = campaigns.first.button_text_accept.present? ? campaigns.first.button_text_accept : 'Add'
-
-                                          / .Polaris-MediaCard
-                                          /   .Polaris-MediaCard__MediaContainer
-                                          /     - if product.images.first.present?
-                                          /       img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
-                                          /   .Polaris-MediaCard__InfoContainer
-                                          /     .Polaris-Card__Section
-                                          /       .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
-                                          /         .Polaris-Stack__Item
-                                          /           .Polaris-Stack
-                                          /             .Polaris-Stack__Item.Polaris-Stack__Item--fill
-                                          /               h2.Polaris-Heading
-                                          /                 = product.title
-                                          /               = form_tag action_subscription_contract_path(:add_product, subscription.id[/\d+/]), method: :post, :id => "form-#{product.id}", remote: true do
-                                          /                 - product.variants.each_with_index do |variant, index|
-                                          /                   label
-                                          /                     - if index.zero?
-                                          /                       input name="variant_id" type="radio" value="#{variant.id}" checked='checked'
-                                          /                     - else
-                                          /                       input name="variant_id" type="radio" value="#{variant.id}"
-                                          /                     = "#{variant.title} (#{number_to_currency variant.price})"
-                                          /                 = submit_tag campaigns.first.button_text_accept.present? ? campaigns.first.button_text_accept : 'Add'
+= render 'edit_delivery_address_modal'
