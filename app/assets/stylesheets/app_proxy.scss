@@ -302,7 +302,7 @@ div.notification-banner {
               outline: 0 none;
               width: 30px;
               text-align: center;
-  
+
               &::-webkit-outer-spin-button,
               &::-webkit-inner-spin-button {
                 -webkit-appearance: none;
@@ -326,7 +326,7 @@ div.notification-banner {
               padding: 7px;
               transition: 0.3s all ease-in-out;
               cursor: pointer;
-  
+
               &:hover {
                 background: #5badff;
               }
@@ -409,7 +409,7 @@ div.notification-banner {
       color: #96A2AF;
       text-transform: uppercase;
     }
-    > input, select {
+    input, select {
       width: 100%;
       border-radius: 5px;
       border: 1px solid #C4CDD5;
@@ -1065,4 +1065,12 @@ body.chargezen-proxy {
   z-index: 1;
   height: 100%;
   width: 100%;
+}
+
+.hidden {
+  display: none;
+}
+
+.add_weekly_box {
+  display: none !important;
 }

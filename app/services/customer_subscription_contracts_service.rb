@@ -25,6 +25,7 @@ class CustomerSubscriptionContractsService < GraphqlService
               lines(first: 10) {
                 edges {
                   node {
+                    id
                     title
                     productId
                     quantity
@@ -57,6 +58,30 @@ class CustomerSubscriptionContractsService < GraphqlService
                 id
                 shippingAddress {
                   formatted
+                }
+              }
+              deliveryMethod {
+                __typename
+
+                ... on SubscriptionDeliveryMethodShipping {
+                  address {
+                    address1
+                    address2
+                    city
+                    country
+                    phone
+                    zip
+                    firstName
+                    lastName
+                    company
+                    province
+                  }
+                  shippingOption {
+                    title
+                    presentmentTitle
+                    code
+                    description
+                  }
                 }
               }
             }

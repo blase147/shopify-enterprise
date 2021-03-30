@@ -86,10 +86,26 @@ class SubscriptionDraftsService < GraphqlService
     }
   GRAPHQL
 
+  APPLY_DISCOUNT = <<-GRAPHQL
+    mutation subscriptionDraftDiscountCodeApply($draftId: ID!, $redeemCode: String!) {
+      subscriptionDraftDiscountCodeApply(draftId: $draftId, redeemCode: $redeemCode) {
+        appliedDiscount {
+          id
+        }
+        draft {
+          id
+        }
+        userErrors {
+          code
+          field
+          message
+        }
+      }
+    }
+  GRAPHQL
+
   def update id, input={}
     result = client.query(client.parse(UPDATE_QUERY), variables: { draftId: id, input: input } )
-    p result
-
     errors = result.data.subscription_draft_update.user_errors
     raise errors.first.message if errors.present?
     result.original_hash
@@ -101,7 +117,6 @@ class SubscriptionDraftsService < GraphqlService
   def line_update id, line_id, input={}
     result = client.query(client.parse(LINE_UPDATE), variables: { draftId: id, lineId: line_id, input: input } )
     p result
-
     errors = result.data.subscription_draft_line_update.user_errors
 
     raise errors.first.message if errors.present?
@@ -138,6 +153,16 @@ class SubscriptionDraftsService < GraphqlService
     p result
 
     errors = result.data.subscription_draft_commit.user_errors
+    raise errors.first.message if errors.present?
+    result.original_hash
+  rescue Exception => ex
+    p ex.message
+    { error: ex.message }
+  end
+
+  def apply_discount(draft_id, redeem_code)
+    result = client.query(client.parse(APPLY_DISCOUNT), variables: { draftId: id, redeem_code: redeem_code} )
+    errors = result.data.subscription_draft_update.user_errors
     raise errors.first.message if errors.present?
     result.original_hash
   rescue Exception => ex

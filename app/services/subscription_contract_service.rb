@@ -100,7 +100,7 @@ class SubscriptionContractService < GraphqlService
   def initialize id
     @id = id
   end
-  
+
   def run
     id = "gid://shopify/SubscriptionContract/#{@id}"
 

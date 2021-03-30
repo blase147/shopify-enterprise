@@ -31,6 +31,9 @@ Rails.application.routes.draw do
         post :change_date
         post :update_subscription
         post :add_product
+        post :update_quantity
+        post :apply_discount
+        post :update_shiping_detail
       end
     end
     resources :dashboard, only: [:index] do
