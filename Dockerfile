@@ -15,6 +15,7 @@ WORKDIR /app
 COPY Gemfile Gemfile.lock ./
 
 RUN bundle config set deployment 'true' && bundle config set without 'development test'
+RUN apk add shared-mime-info
 RUN gem install mimemagic -v '0.3.10' --source 'https://rubygems.org/'
 RUN bundle install --jobs=4
 COPY package.json yarn.lock /app/
