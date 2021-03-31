@@ -28,6 +28,13 @@ class SubscriptionContractUpdateService < GraphqlService
       raise result[:error] if result[:error].present?
     end
 
+    if params[:subscription] && params[:subscription][:next_billing_date].present?
+      input = { }
+      input['nextBillingDate'] = DateTime.parse(params[:subscription][:next_billing_date])
+      result = SubscriptionDraftsService.new.update draft_id, input
+      raise result[:error] if result[:error].present?
+    end
+
     if params[:quantity].present?
       subscription = SubscriptionContractService.new(@id[/\d+/]).run
       line_id = subscription.lines.edges.first.node.id

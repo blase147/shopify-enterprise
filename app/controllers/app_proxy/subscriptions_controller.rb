@@ -1,6 +1,6 @@
 class AppProxy::SubscriptionsController < AppProxyController
   before_action :init_session
-  before_action :set_draft_contract, only: [:add_product, :update_quantity, :apply_discount, :update_shiping_detail, :delay_order]
+  before_action :set_draft_contract, only: [:add_product, :update_quantity, :apply_discount, :update_shiping_detail]
 
   def index
     customer_id = "gid://shopify/Customer/#{params[:customer_id]}"
@@ -64,8 +64,14 @@ class AppProxy::SubscriptionsController < AppProxyController
   end
 
   def update_subscription
-    id = params[:id]
-    id = "gid://shopify/SubscriptionContract/#{id}"
+    if params[:subscription].present?
+      date = params[:subscription][:next_billing_date].to_date rescue nil
+      if date.nil?
+        splitted_date = params[:subscription][:next_billing_date].split('/')
+        params[:subscription][:next_billing_date] = [splitted_date[2], splitted_date[0], splitted_date[1]].join('-')
+      end
+    end
+    id = "gid://shopify/SubscriptionContract/#{params[:id]}"
     result = SubscriptionContractUpdateService.new(id).run params
 
     if result.is_a?(Hash)
@@ -106,9 +112,6 @@ class AppProxy::SubscriptionsController < AppProxyController
     result = SubscriptionDraftsService.new.update @draft_id, input
     SubscriptionDraftsService.new.commit @draft_id
     render js: 'location.reload()' if result.present?
-  end
-
-  def delay_order
   end
 
   def set_draft_contract

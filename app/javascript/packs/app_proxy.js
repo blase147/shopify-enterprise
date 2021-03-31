@@ -13,7 +13,8 @@ require('webpack-jquery-ui/css');
 
 require("app_proxy")
 require("app_proxy/custom")
-require("app_proxy/settings")
+require("app_proxy/settings");
+import TinyDatePicker from 'app_proxy/datepicker';
 
 require('owl.carousel');
 import 'owl.carousel/dist/assets/owl.carousel.css';
@@ -25,6 +26,42 @@ $(document).ready(function () {
       margin: 30
     }
   );
+
+  $(document).on('click', 'button.open-dp', function () {
+    $(this).hide();
+    let this_ = $(this).parent();
+    this_.next().click();
+    this_.parents('.Polaris-Modal__Body').find('.options-btn-wrapper').hide();
+    this_.parents('.Polaris-Modal__Body').find('.append-dp').show();
+  });
+
+  $(document).on('click', 'button.back-dp', function () {
+    $(this).parents('.append-dp').hide();
+    $(this).parents('form').next().show();
+    $(this).parents('form').find('.btn-wrapper > .open-dp').show();
+  });
+
+  $(document).on('click', 'div.close-modal', function () {
+    $(this).parents('.Polaris-Modal__Body').find('.open-dp').show();
+    $(this).parents('.Polaris-Modal__Body').find('.append-dp').hide();
+    $(this).parents('.Polaris-Modal__Body').find('.options-btn-wrapper').show();
+  });
+
+  $(document).on('click', 'input.datepicker-delay', function () {
+    let id = $(this).attr('id');
+    const today = new Date()
+    const tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+    if ($('.dp-permanent').length <= 0) {
+      let dp = TinyDatePicker(document.getElementById(id), {
+        mode: 'dp-permanent',
+        close: 'Ahsan',
+        min: tomorrow,
+        onChangeDate: () => console.log("here"),
+      });
+      dp.open();
+    }
+  });
 
   $(document).on('click', '.btn-variant', function () {
     let this_ = $(this);

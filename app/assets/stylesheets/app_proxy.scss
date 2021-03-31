@@ -1,6 +1,106 @@
 // @import 'owl.carousel/dist/assets/owl.carousel.css';
+@import './datepicker.css';
 
 $primary: #007EFF;
+
+
+.delivery-delay-modal {
+  min-height: 500px;
+  .header {
+    width: 100%;
+    height: 75px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0px 20px;
+
+    div {
+      outline: 0 none;
+      > h2 {
+        font-size: 22px;
+        font-weight: bold;
+        margin-left: 40px;
+      }
+      > svg {
+        cursor: pointer;
+      }
+    }
+  }
+  div.append-dp {
+    display: none;
+
+    .btn-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+
+      > button {
+        width: 144px;
+        height: 40px;
+        border: none;
+        border-radius: 30px;
+        margin-bottom: 10px;
+        background: $primary;
+        font-size: 14px;
+        font-weight: bold;
+        color: #fff;
+        cursor: pointer;
+        outline: 0 none;
+
+        &.back-dp {
+          background: #fff;
+          color: #000;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border: 2px solid #000;
+          margin-right: 20px;
+          > span:nth-child(1) {
+            margin-right: 10px;
+          }
+        }
+      }
+    }  
+  }
+  
+  input.datepicker-delay {
+    display: none;
+  }
+
+  form > .btn-wrapper {
+    display: flex;
+    justify-content: center;
+
+    > button {
+      width: 206px;
+      height: 60px;
+      border: none;
+      border-radius: 30px;
+      margin-bottom: 10px;
+      background: $primary;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+      cursor: pointer;
+      outline: 0 none;
+
+      &.open-dp {
+        margin-top: 40px;
+        background: #fff;
+        color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid #000;
+        > span:nth-child(1) {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+}
 
 .content-wrapper {
   width: 100%;
