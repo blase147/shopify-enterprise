@@ -15,8 +15,8 @@ WORKDIR /app
 COPY Gemfile Gemfile.lock ./
 
 RUN bundle config set deployment 'true' && bundle config set without 'development test'
-RUN gem install mimemagic -v '0.3.10' --source 'https://rubygems.org/'
 RUN apk add shared-mime-info
+RUN gem install mimemagic -v '0.3.10' --source 'https://rubygems.org/'
 RUN bundle install --jobs=4
 COPY package.json yarn.lock /app/
 RUN yarn install  --check-files
@@ -28,6 +28,7 @@ RUN bundle exec rake assets:precompile RAILS_ENV=production
 FROM ruby:2.7.0-alpine
 WORKDIR /app
 RUN apk add --update build-base postgresql-dev nodejs tzdata && rm -rf /var/cache/apk/*
+RUN apk add shared-mime-info
 
 COPY --from=base /app /app
 
