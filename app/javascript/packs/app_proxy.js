@@ -40,10 +40,6 @@ $(document).ready(function () {
     $(this).parents('.preview-item').find('.spinner').css('display', 'flex');
   });
 
-  $(document).on('click', '.logout-btn', function () {
-    window.top.location.href = 'account/logout';
-  });
-
   $(document).on('click', 'button.minus-quantity', function () {
     let val = $(this).next().val() * 1;
     let prevQuantity = $(this).parents('.quantity-field ').find('input.prev-quantity').val() * 1;

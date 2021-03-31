@@ -1,0 +1,22 @@
+.Polaris-Modal#delayOrderModal
+  .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"
+    = simple_form_for :subscription, url: "#{action_subscription_contract_path(:delay_order, subscription.id[/\d+/])}", method: :post, remote: true do |f|
+      .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1"
+        .Polaris-Modal-Dialog__Modal.Polaris-Modal-Dialog--sizeLarge
+          .Polaris-Modal__BodyWrapper
+            .Polaris-Modal__Body.Polaris-Scrollable.Polaris-Scrollable--vertical data-polaris-scrollable="true"
+              = f.input :id, as: :hidden, value: subscription.id
+              section.Polaris-Modal-Section
+                .modal-fields-wrapper
+                  - next_billing_date = subscription.next_billing_date.to_date
+                  .group
+                    = f.input :delay_date, as: :date, label: 'Choose Date'
+                    = f.input :delay_methods, as: :radio_buttons, collection: [['2 Weeks', next_billing_date + 2.weeks] , ['1 Month', next_billing_date + 1.month], ['2 Month', next_billing_date + 2.month], ['3 Month', next_billing_date + 3.month]], label: false, inclue_blank: true
+
+          .Polaris-Modal-Footer
+            button.Polaris-Button.mr-10[type="button" aria-hidden="true" tabindex="-1" data-action='close']
+              | Cancel
+
+            = p_button text: 'Update', type: 'submit'
+
+  .Polaris-Backdrop

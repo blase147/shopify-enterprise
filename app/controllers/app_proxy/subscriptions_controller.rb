@@ -1,6 +1,6 @@
 class AppProxy::SubscriptionsController < AppProxyController
   before_action :init_session
-  before_action :set_draft_contract, only: [:add_product, :update_quantity, :apply_discount, :update_shiping_detail]
+  before_action :set_draft_contract, only: [:add_product, :update_quantity, :apply_discount, :update_shiping_detail, :delay_order]
 
   def index
     customer_id = "gid://shopify/Customer/#{params[:customer_id]}"
@@ -106,6 +106,9 @@ class AppProxy::SubscriptionsController < AppProxyController
     result = SubscriptionDraftsService.new.update @draft_id, input
     SubscriptionDraftsService.new.commit @draft_id
     render js: 'location.reload()' if result.present?
+  end
+
+  def delay_order
   end
 
   def set_draft_contract
