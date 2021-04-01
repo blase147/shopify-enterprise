@@ -1,6 +1,6 @@
 class AppProxy::SubscriptionsController < AppProxyController
   before_action :init_session
-  before_action :set_draft_contract, only: [:add_product, :update_quantity, :apply_discount, :update_shiping_detail]
+  before_action :set_draft_contract, only: [:add_product, :update_quantity, :apply_discount, :update_shiping_detail, :swap_product]
 
   def index
     customer_id = "gid://shopify/Customer/#{params[:customer_id]}"
@@ -34,10 +34,10 @@ class AppProxy::SubscriptionsController < AppProxyController
     id = params[:id]
     result = SubscriptionContractDeleteService.new(id).run 'ACTIVE'
 
-    if result.is_a?(Hash)
+    if result[:error].present?
       render :json => { error: result[:error] }
     else
-      render :json => { status: :ok, message: "Success" }
+      render js: "location.reload();"
     end
   end
 
@@ -45,10 +45,10 @@ class AppProxy::SubscriptionsController < AppProxyController
     id = params[:id]
     result = SubscriptionContractDeleteService.new(id).run
 
-    if result.is_a?(Hash)
+    if result[:error].present?
       render :json => { error: result[:error] }
     else
-      render :json => { status: :ok, message: "Success" }
+      render js: "location.reload();"
     end
   end
 
@@ -120,6 +120,17 @@ class AppProxy::SubscriptionsController < AppProxyController
   def update_shiping_detail
     input = { deliveryMethod: { shipping: {address: params[:address].permit!.to_h.except(:id) } } }
     result = SubscriptionDraftsService.new.update @draft_id, input
+    SubscriptionDraftsService.new.commit @draft_id
+    if result[:error].present?
+      flash[:error] = result[:error]
+      render js: "alert('#{result[:error]}'); hideLoading()"
+    else
+      render js: 'location.reload()'
+    end
+  end
+
+  def swap_product
+    result = SubscriptionDraftsService.new.line_update @draft_id, params[:line_id], { 'productVariantId': params[:variant_id], 'quantity': 1, 'currentPrice': params[:variant_price] }
     SubscriptionDraftsService.new.commit @draft_id
     if result[:error].present?
       flash[:error] = result[:error]

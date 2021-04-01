@@ -6,17 +6,17 @@
           .Polaris-Modal__Body.Polaris-Scrollable.Polaris-Scrollable--vertical.delivery-delay-modal data-polaris-scrollable="true"
             .header
               div.close-modal aria-hidden="true" tabindex="-1" data-action='close'
-                svg fill="none" height="20" viewbox=("0 0 18 20") width="18" xmlns="http://www.w3.org/2000/svg" 
+                svg fill="none" height="20" viewbox=("0 0 18 20") width="18" xmlns="http://www.w3.org/2000/svg"
                   path d=("M0 19.824H2.212L8.484 10.864L14.756 19.824H17.052L9.688 9.408L16.408 0H14.196L8.568 8.064L2.856 0H0.672L7.448 9.408L0 19.824Z") fill="#212B36" /
               div
-                h2 Delay your next shipment
+                h2 Delay/Speedup your next shipment
             = simple_form_for :subscription, url: "#{action_subscription_contract_path(:update_subscription, subscription.id[/\d+/])}", method: :post, remote: true do |f|
               = f.input :id, as: :hidden, value: subscription.id
               .btn-wrapper
                 button.open-dp type="button"
-                  span 
-                    svg fill="none" height="20" viewbox=("0 0 20 20") width="20" xmlns="http://www.w3.org/2000/svg" 
-                      g clip-path="url(#clip0)" 
+                  span
+                    svg fill="none" height="20" viewbox=("0 0 20 20") width="20" xmlns="http://www.w3.org/2000/svg"
+                      g clip-path="url(#clip0)"
                         path d=("M15.0703 8.98438C15.5018 8.98438 15.8516 8.6346 15.8516 8.20312C15.8516 7.77165 15.5018 7.42188 15.0703 7.42188C14.6388 7.42188 14.2891 7.77165 14.2891 8.20312C14.2891 8.6346 14.6388 8.98438 15.0703 8.98438Z") fill="black" /
                         path d=("M16.875 1.5625H15.8594V0.78125C15.8594 0.349766 15.5096 0 15.0781 0C14.6466 0 14.2969 0.349766 14.2969 0.78125V1.5625H10.7422V0.78125C10.7422 0.349766 10.3924 0 9.96094 0C9.52945 0 9.17969 0.349766 9.17969 0.78125V1.5625H5.66406V0.78125C5.66406 0.349766 5.3143 0 4.88281 0C4.45133 0 4.10156 0.349766 4.10156 0.78125V1.5625H3.125C1.40188 1.5625 0 2.96438 0 4.6875V16.875C0 18.5981 1.40188 20 3.125 20H9.10156C9.53305 20 9.88281 19.6502 9.88281 19.2188C9.88281 18.7873 9.53305 18.4375 9.10156 18.4375H3.125C2.26344 18.4375 1.5625 17.7366 1.5625 16.875V4.6875C1.5625 3.82594 2.26344 3.125 3.125 3.125H4.10156V3.90625C4.10156 4.33773 4.45133 4.6875 4.88281 4.6875C5.3143 4.6875 5.66406 4.33773 5.66406 3.90625V3.125H9.17969V3.90625C9.17969 4.33773 9.52945 4.6875 9.96094 4.6875C10.3924 4.6875 10.7422 4.33773 10.7422 3.90625V3.125H14.2969V3.90625C14.2969 4.33773 14.6466 4.6875 15.0781 4.6875C15.5096 4.6875 15.8594 4.33773 15.8594 3.90625V3.125H16.875C17.7366 3.125 18.4375 3.82594 18.4375 4.6875V9.14062C18.4375 9.57211 18.7873 9.92188 19.2188 9.92188C19.6502 9.92188 20 9.57211 20 9.14062V4.6875C20 2.96438 18.5981 1.5625 16.875 1.5625Z") fill="black" /
                         path d=("M15.2819 10.5469C12.6756 10.5469 10.5553 12.6672 10.5553 15.2734C10.5553 17.8797 12.6756 20 15.2819 20C17.8881 20 20.0084 17.8797 20.0084 15.2734C20.0084 12.6672 17.8881 10.5469 15.2819 10.5469ZM15.2819 18.4375C13.5372 18.4375 12.1178 17.0181 12.1178 15.2734C12.1178 13.5287 13.5372 12.1094 15.2819 12.1094C17.0265 12.1094 18.4459 13.5287 18.4459 15.2734C18.4459 17.0181 17.0265 18.4375 15.2819 18.4375Z") fill="black" /
@@ -31,7 +31,7 @@
                       defs
                         clippath#clip0
                           rect fill="white" height="20" width="20" /
-                  span CHOOSE DATE
+                  span PICK ORDER DATE
               input.datepicker-delay type="text" id=("input-#{subscription.id[/\d+/]}") name="subscription[next_billing_date]"
               div.append-dp id=("append-dp-#{subscription.id[/\d+/]}")
                 .btn-wrapper.calender-btn
@@ -53,7 +53,7 @@
               = simple_form_for :subscription, url: "#{action_subscription_contract_path(:update_subscription, subscription.id[/\d+/])}", method: :post, remote: true do |f|
                 = f.input :id, as: :hidden, value: subscription.id
                 = f.input :next_billing_date, as: :hidden, input_html: { value: next_billing_date + 2.month }
-                .btn-wrapper 
+                .btn-wrapper
                   button type="submit" DELAY FOR 2 MONTHS
               = simple_form_for :subscription, url: "#{action_subscription_contract_path(:update_subscription, subscription.id[/\d+/])}", method: :post, remote: true do |f|
                 = f.input :id, as: :hidden, value: subscription.id

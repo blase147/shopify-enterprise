@@ -17,9 +17,9 @@ class SubscriptionContractDeleteService < GraphqlService
   def initialize id
     @id = id
   end
-  
+
   def run status='CANCELLED'
-    input = { 
+    input = {
       status: status
     }
     id = "gid://shopify/SubscriptionContract/#{@id}"

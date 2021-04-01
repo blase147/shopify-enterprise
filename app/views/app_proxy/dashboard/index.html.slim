@@ -122,9 +122,9 @@
                     = link_to "/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}" do
                       button.white-btn DELIVERY SCHEDULE
                     button.edit-subscription.text-btn data-toggle="modal" data-target="#editSubscriptionModal-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" Edit Subscription
-                    = render 'edit_subscription_modal', subscription: subscription.node, line_id: edge.node.id
-                    = render 'swap_subscription_modal', subscription: subscription.node, line_id: edge.node.id
-                    = render 'upgrade_subscription_modal', subscription: subscription.node, line_id: edge.node.id
+                    = render 'edit_subscription_modal', subscription: subscription.node, line_item: edge.node, product_image: product.images.first&.src
+                    = render 'swap_subscription_modal', subscription: subscription.node, line_item: edge.node
+                    = render 'upgrade_subscription_modal', subscription: subscription.node, line_item: edge.node
                 .quantity-wrapper
                   form action="#{action_subscription_contract_path(:update_quantity, subscription.node.id[/\d+/])}" method='post' data-remote=true enctype="multipart/form-data"
                     .quantity-field
@@ -246,7 +246,7 @@
                     h4 Quantity
                     p.text.right
                       = edge.node.quantity
-                    = link_to action_subscription_contract_path(:resume, subscription.node.id[/\d+/]) do
+                    = link_to action_subscription_contract_path(:resume, subscription.node.id[/\d+/]), remote: true, method: :post do
                       button.text-btn RE-ACTIVATE
         - elsif (params[:status].present? && params[:status] == 'cancelled') || !params[:status].present?
           div.notification-banner

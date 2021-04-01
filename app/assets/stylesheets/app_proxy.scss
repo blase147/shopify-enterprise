@@ -251,7 +251,7 @@ $primary: #007EFF;
           width: 100%;
           height: 100%;
           object-fit: cover;
-        } 
+        }
       }
       .title {
         > h2 {
@@ -351,14 +351,14 @@ $primary: #007EFF;
     justify-content: center;
     align-items: center;
     padding: 50px 0;
-    > button {
+    button {
       width: 228px;
       height: 40px;
       border-radius: 5px;
       font-size: 14px;
       cursor: pointer;
       outline: 0 none;
-      
+
       &.btn-cancel {
         border: 1px solid #C6C7C8;
         background: #fff;

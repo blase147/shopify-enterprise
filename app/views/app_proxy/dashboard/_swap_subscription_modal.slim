@@ -1,4 +1,4 @@
-.Polaris-Modal id=("swap-#{line_id.split("gid://shopify/SubscriptionLine/")[1]}")
+.Polaris-Modal id=("swap-#{line_item.id.split("gid://shopify/SubscriptionLine/")[1]}")
   .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"
     .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1"
       .Polaris-Modal-Dialog__Modal.Polaris-Modal-Dialog--sizeLarge
@@ -6,63 +6,44 @@
           .Polaris-Modal__Body.Polaris-Scrollable.Polaris-Scrollable--vertical.swap-subscription-modal data-polaris-scrollable="true"
             .header
               div
-                h2 
+                h2
                   span Swap&nbsp;
-                  span.blue Super Bundle Urnadui&nbsp;
+                  span.blue
+                    = line_item.title
                   span Subscription to:
               div.close-modal aria-hidden="true" tabindex="-1" data-action='close'
-                svg fill="none" height="20" viewbox=("0 0 18 20") width="18" xmlns="http://www.w3.org/2000/svg" 
+                svg fill="none" height="20" viewbox=("0 0 18 20") width="18" xmlns="http://www.w3.org/2000/svg"
                   path d=("M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z") fill="#DDDDDD" /
-            .swap-grid 
-              .item 
-                .img
-                  img src=""
-                .title 
-                  h2 Super Bundle Urnaduis (Multi, Omega, Cognition) 
-                  p $39.99 / 3 Weeks
-                .btn-wrapper 
-                  button type="button" 
-                    span SWAP SUBSCRIPTION &nbsp;
-                    span 
-                      svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg" 
-                        path d=("M14.5148 0.514648L13.6239 1.40555L17.5882 5.36991H0V6.62985H17.5882L13.6239 10.5942L14.5148 11.4851L20 5.99984L14.5148 0.514648Z") fill="white" /
-              .item 
-                .img
-                  img src=""
-                .title 
-                  h2 Super Bundle Urnaduis (Multi, Omega, Cognition) 
-                  p $39.99 / 3 Weeks
-                .btn-wrapper 
-                  button type="button" 
-                    span SWAP SUBSCRIPTION &nbsp;
-                    span 
-                      svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg" 
-                        path d=("M14.5148 0.514648L13.6239 1.40555L17.5882 5.36991H0V6.62985H17.5882L13.6239 10.5942L14.5148 11.4851L20 5.99984L14.5148 0.514648Z") fill="white" /
-              .item 
-                .img
-                  img src=""
-                .title 
-                  h2 Super Bundle Urnaduis (Multi, Omega, Cognition) 
-                  p $39.99 / 3 Weeks
-                .btn-wrapper 
-                  button type="button" 
-                    span SWAP SUBSCRIPTION &nbsp;
-                    span 
-                      svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg" 
-                        path d=("M14.5148 0.514648L13.6239 1.40555L17.5882 5.36991H0V6.62985H17.5882L13.6239 10.5942L14.5148 11.4851L20 5.99984L14.5148 0.514648Z") fill="white" /
-              .item 
-                .img
-                  img src=""
-                .title 
-                  h2 Super Bundle Urnaduis (Multi, Omega, Cognition) 
-                  p $39.99 / 3 Weeks
-                .btn-wrapper 
-                  button type="button" 
-                    span SWAP SUBSCRIPTION &nbsp;
-                    span 
-                      svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg" 
-                        path d=("M14.5148 0.514648L13.6239 1.40555L17.5882 5.36991H0V6.62985H17.5882L13.6239 10.5942L14.5148 11.4851L20 5.99984L14.5148 0.514648Z") fill="white" /
+            - if @swap_products.present?
+              .swap-grid
+                - @swap_products.each do |product|
+                  .item
+                    .img
+                      img src=product.node.images.edges.first&.node&.original_src
+                    .title
+                      h2
+                        = product.node.title
+                      p
+                        = "#{number_to_currency product.node.variants.edges.first.node.price} / #{subscription.billing_policy.interval_count} #{subscription.billing_policy.interval}"
+                    = form_tag action_subscription_contract_path(:swap_product, subscription.id[/\d+/]), method: :post, :id => "form-#{line_item.id}", remote: true do
+                      .variants-wrapper
+                        - product.node.variants.edges.each_with_index do |variant, index|
+                          label
+                            input.hidden name="line_id" type="text" value="#{line_item.id}"
+                            input name="variant_price" type="hidden" value="#{variant.node.price}"
+                            - if index.zero?
+                              input name="variant_id" type="radio" value="#{variant.node.id}" checked='checked'
+                            - else
+                              input name="variant_id" type="radio" value="#{variant.node.id}"
+                            = "#{variant.node.title} (#{number_to_currency variant.node.price})"
+                      .btn-wrapper
+                        button type="submit"
+                          span SWAP SUBSCRIPTION &nbsp;
+                          span
+                          svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg"
+                            path d=("M14.5148 0.514648L13.6239 1.40555L17.5882 5.36991H0V6.62985H17.5882L13.6239 10.5942L14.5148 11.4851L20 5.99984L14.5148 0.514648Z") fill="white" /
+            - else
+              p.Polaris-Heading No other subscription products available
 
-            / = p_button text: 'Cancel Subscription', data: { url: action_subscription_path(:cancel), confirm_text: 'Are you sure you want to Cancel your Subscription?' }
 
   .Polaris-Backdrop

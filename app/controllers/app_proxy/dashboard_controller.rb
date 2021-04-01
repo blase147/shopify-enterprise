@@ -1,7 +1,10 @@
 class AppProxy::DashboardController < AppProxyController
   before_action :load_subscriptions
   before_action :load_customer, only: %w(index addresses payment_methods settings)
-  def index; end
+  def index
+    products = ProductService.new.list
+    @swap_products = products.is_a?(Hash) ? nil : products.select{ |p| p.node.selling_plan_group_count > 0 }
+  end
 
   def subscription; end
 
