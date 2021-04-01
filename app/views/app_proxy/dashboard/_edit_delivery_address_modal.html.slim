@@ -28,7 +28,7 @@
                     = f.input :city, label: false, input_html: { value: subscription.delivery_method.address.city  }, required: true
                   .group
                     p COUNTRY*
-                    = f.input :country, as: :select, collection: ['United States', ''], input_html: { value: subscription.delivery_method.address.country  }, label: false, required: true, selected: 1
+                    = f.input :country, as: :select, collection: [['United States', 'United States']], label: false, required: true, selected: subscription.delivery_method.address.country
                   .group
                     p ZIP/POSTAL CODE*
                     = f.input :zip, label: false, input_html: { value: subscription.delivery_method.address.zip  }, required: true

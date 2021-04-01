@@ -54,15 +54,7 @@ class CustomerSubscriptionContractsService < GraphqlService
                 interval
                 intervalCount
               }
-              originOrder {
-                id
-                shippingAddress {
-                  formatted
-                }
-              }
               deliveryMethod {
-                __typename
-
                 ... on SubscriptionDeliveryMethodShipping {
                   address {
                     address1
@@ -75,12 +67,6 @@ class CustomerSubscriptionContractsService < GraphqlService
                     lastName
                     company
                     province
-                  }
-                  shippingOption {
-                    title
-                    presentmentTitle
-                    code
-                    description
                   }
                 }
               }

@@ -1,0 +1,5 @@
+.Polaris-Modal id=("editSubscriptionModal-#{subscription.id[/\d+/]}")
+  .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"
+    = p_button text: 'Cancel Subscription', data: { url: action_subscription_path(:cancel), confirm_text: 'Are you sure you want to Cancel your Subscription?' }
+
+  .Polaris-Backdrop

@@ -56,6 +56,14 @@ nav.Polaris-Navigation
 
 
             span.Polaris-Navigation__Text Delivery Schedules
+      li.Polaris-Navigation__ListItem
+        .Polaris-Navigation__ItemWrapper
+          a.Polaris-Navigation__Item class=active_nav('dashboard', 'addresses') href="/a/chargezen_production/orders?customer_id=#{params[:customer_id]}" tabindex="0"
+            .Polaris-Navigation__Icon
+              span.Polaris-Icon
+                = icon_tag 'address'
+
+            span.Polaris-Navigation__Text Order History
 
       / li.Polaris-Navigation__ListItem
       /   .Polaris-Navigation__ItemWrapper
@@ -76,6 +84,7 @@ nav.Polaris-Navigation
                 = icon_tag 'address'
 
             span.Polaris-Navigation__Text Addresses
+
 
       li.Polaris-Navigation__ListItem
         .Polaris-Navigation__ItemWrapper
@@ -101,12 +110,12 @@ nav.Polaris-Navigation
 
             span.Polaris-Navigation__Text Settings
 
-.refer-tag
-  = icon_tag 'refer'
-  .Polaris-ButtonGroup__Item
-    .Polaris-Banner__PrimaryAction
-      a.Polaris-Button.Polaris-Button--primary href=Settings.landing_page
-        span.Polaris-Button__Content
-          span.Polaris-Button__Text
-            | Upgrade to premium
-            = icon_tag 'up-arrow'
+/ .refer-tag
+/   = icon_tag 'refer'
+/   .Polaris-ButtonGroup__Item
+/     .Polaris-Banner__PrimaryAction
+/       a.Polaris-Button.Polaris-Button--primary href=Settings.landing_page
+/         span.Polaris-Button__Content
+/           span.Polaris-Button__Text
+/             | Upgrade to premium
+/             = icon_tag 'up-arrow'

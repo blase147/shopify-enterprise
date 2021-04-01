@@ -115,14 +115,14 @@
                     p.text.right
                       = DateTime.parse(subscription.node.next_billing_date).strftime("%a, %B %e")
                     p.text.right
-                      = number_to_currency edge.node.current_price.amount * edge.node.quantity
+                      = number_to_currency (edge.node.current_price.amount.to_f * edge.node.quantity)
                   .grid-item
                     button.delivery-schedule.white-btn data-toggle="modal" data-target="#delayOrderModal-#{subscription.node.id[/\d+/]}" DELAY NEXT ORDER
                     = render 'delay_order_modal', subscription: subscription.node
                     = link_to "/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}" do
                       button.white-btn DELIVERY SCHEDULE
-                    = link_to proxy_path("subscriptions/#{subscription.node.id[/\d+/]}") do
-                      button.text-btn Edit Subscription
+                    button.edit-subscription.text-btn data-toggle="modal" data-target="#editSubscriptionModal-#{subscription.node.id[/\d+/]}" Edit Subscription
+                    = render 'edit_subscription_modal', subscription: subscription.node
                 .quantity-wrapper
                   form action="#{action_subscription_contract_path(:update_quantity, subscription.node.id[/\d+/])}" method='post' data-remote=true enctype="multipart/form-data"
                     .quantity-field

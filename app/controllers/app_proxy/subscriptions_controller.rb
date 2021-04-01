@@ -78,7 +78,7 @@ class AppProxy::SubscriptionsController < AppProxyController
       flash[:error] = result[:error]
       render js: "alert('#{result[:error]}'); hideLoading()"
     else
-      render js: "hideModal(true);"
+      render js: "location.reload();"
     end
   end
 
@@ -97,21 +97,36 @@ class AppProxy::SubscriptionsController < AppProxyController
     line_item_id = params[:line_item_id]
     result = SubscriptionDraftsService.new.line_update(@draft_id, line_item_id, { quantity: params[:quantity].to_i })
     SubscriptionDraftsService.new.commit @draft_id
-    render js: 'location.reload()' if result.present?
+    if result[:error].present?
+      flash[:error] = result[:error]
+      render js: "alert('#{result[:error]}'); hideLoading()"
+    else
+      render js: 'location.reload()'
+    end
   end
 
   def apply_discount
     redeem_code = params[:redeem_code]
     result = SubscriptionDraftsService.new.apply_discount(@draft_id, redeem_code)
     SubscriptionDraftsService.new.commit @draft_id
-    render js: 'location.reload()' if result.present?
+    if result[:error].present?
+      flash[:error] = result[:error]
+      render js: "alert('#{result[:error]}'); hideLoading()"
+    else
+      render js: 'location.reload()'
+    end
   end
 
   def update_shiping_detail
     input = { deliveryMethod: { shipping: {address: params[:address].permit!.to_h.except(:id) } } }
     result = SubscriptionDraftsService.new.update @draft_id, input
     SubscriptionDraftsService.new.commit @draft_id
-    render js: 'location.reload()' if result.present?
+    if result[:error].present?
+      flash[:error] = result[:error]
+      render js: "alert('#{result[:error]}'); hideLoading()"
+    else
+      render js: 'location.reload()'
+    end
   end
 
   def set_draft_contract
