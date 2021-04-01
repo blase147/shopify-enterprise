@@ -267,6 +267,14 @@ $primary: #007EFF;
           color: #ACB5BD;
         }
       }
+      .variants-wrapper {
+        display: flex;
+        flex-direction: column;
+        padding: 10px 0;
+        > label {
+          margin: 5px 0;
+        }
+      }
       .btn-wrapper {
         margin-top: 10px;
         > button {
@@ -302,14 +310,13 @@ $primary: #007EFF;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0px 20px;
+    padding: 0px 33px;
 
     div {
       outline: 0 none;
       > h2 {
         font-size: 22px;
         font-weight: bold;
-        margin-left: 40px;
 
         > span.blue {
           color: $primary;

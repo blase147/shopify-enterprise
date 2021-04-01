@@ -143,12 +143,11 @@
                         span.update-quantity
                           input.hidden type="text" name="line_item_id" value="#{edge.node.id}"/
                           button type="submit" APPLY
-                      - if subscription.node.lines.edges.size == (index + 1)
-                        div
-                          div.chevron
-                            svg fill="none" height="30" viewbox=("0 0 30 30") width="30" xmlns="http://www.w3.org/2000/svg"
-                              circle cx="15" cy="15" r="14" stroke="#007EFF" stroke-width="2" /
-                              path d=("M7.5 12L14.5 19L21.5 12") stroke="#007EFF" stroke-width="2" /
+                      div
+                        div.chevron
+                          svg fill="none" height="30" viewbox=("0 0 30 30") width="30" xmlns="http://www.w3.org/2000/svg"
+                            circle cx="15" cy="15" r="14" stroke="#007EFF" stroke-width="2" /
+                            path d=("M7.5 12L14.5 19L21.5 12") stroke="#007EFF" stroke-width="2" /
                 .slide-down
                   .item
                     p start date

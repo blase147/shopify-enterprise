@@ -60,9 +60,10 @@ const Installation = () => {
   const [addInstallation] = useMutation(ADD_INSTALLATION);
 
   useEffect(() => {
-    if(data) {
+    if (data) {
       const themesData = data.fetchThemes.map((item) => (
-        { label: `${item.name}(${item.role})`,
+        {
+          label: `${item.name}(${item.role})`,
           value: item.id
         }
       ))
@@ -72,17 +73,17 @@ const Installation = () => {
     }
   }, [data]);
 
-  const handleInstallation=(widget) => {
+  const handleInstallation = (widget) => {
     setLoadingAction(widget)
 
-    addInstallation({ variables: { input: { params: { widget: widget, theme: selectedTheme } } }})
-    .then((resp) => {
-      setLoadingAction(null);
-      setSaveSuccess(true);
-    })
-    .catch((error) => {
-      setLoadingAction(null);
-    });
+    addInstallation({ variables: { input: { params: { widget: widget, theme: selectedTheme } } } })
+      .then((resp) => {
+        setLoadingAction(null);
+        setSaveSuccess(true);
+      })
+      .catch((error) => {
+        setLoadingAction(null);
+      });
   }
 
   const content_4b = ` <select name="id" ...>...</select> `;
@@ -128,12 +129,12 @@ const Installation = () => {
                 <Heading>1. Select your theme</Heading>
 
                 <p>Select theme to install snippets in:</p>
-                { loading && <Spinner accessibilityLabel="Spinner example" size="small" color="teal" /> }
-                { themes && <Select
-                    options={themes}
-                    onChange={handleSelectChangeThemes}
-                    value={selectedTheme}
-                  ></Select>
+                {loading && <Spinner accessibilityLabel="Spinner example" size="small" color="teal" />}
+                {themes && <Select
+                  options={themes}
+                  onChange={handleSelectChangeThemes}
+                  value={selectedTheme}
+                ></Select>
                 }
               </TextContainer>
             </Card.Section>
@@ -143,7 +144,7 @@ const Installation = () => {
 
                 <p>Install Snippets v2.0 in the selected theme:</p>
                 <ButtonGroup>
-                  <Button loading={loadingAction == 'install' } primary onClick={(e) => handleInstallation('install') }>
+                  <Button loading={loadingAction == 'install'} primary onClick={(e) => handleInstallation('install')}>
                     Install Snippets
                   </Button>
                   <Button>Version History</Button>
@@ -161,7 +162,7 @@ const Installation = () => {
 
                 <CodeSnippet code={`{% render 'chargezen-main' %}`} />
 
-                <Button loading={loadingAction == 'add_to_theme' } primary onClick={(e) => handleInstallation('add_to_theme') }>
+                <Button loading={loadingAction == 'add_to_theme'} primary onClick={(e) => handleInstallation('add_to_theme')}>
                   Install Automatically
                 </Button>
               </TextContainer>
@@ -173,12 +174,12 @@ const Installation = () => {
                 </Heading>
 
                 <p>
-                   Localize your product template, usually it's either Sections/product-template.liquid or Snippets/product-form.liquid. Put the following snippet wherever you want to display the plan selector.
+                  Localize your product template, usually it's either Sections/product-template.liquid or Snippets/product-form.liquid. Put the following snippet wherever you want to display the plan selector.
                 </p>
 
                 <CodeSnippet code={`{% render 'chargezen-plan-selector', product: product %}`} />
 
-                <Button loading={loadingAction == 'add_to_product' } primary onClick={(e) => handleInstallation('add_to_product') }>
+                <Button loading={loadingAction == 'add_to_product'} primary onClick={(e) => handleInstallation('add_to_product')}>
                   Install Automatically
                 </Button>
               </TextContainer>
@@ -221,7 +222,7 @@ const Installation = () => {
 
                 <CodeSnippet code={`{% render 'chargezen-subscriptions-cart-selling-plans', item: item %}`} />
 
-                <Button loading={loadingAction == 'add_to_cart' } primary onClick={(e) => handleInstallation('add_to_cart') }>
+                <Button loading={loadingAction == 'add_to_cart'} primary onClick={(e) => handleInstallation('add_to_cart')}>
                   Install Automatically
                 </Button>
               </TextContainer>
@@ -239,7 +240,7 @@ const Installation = () => {
 
                 <CodeSnippet code={`{% render 'chargezen-customer-portal-frame' %}`} />
 
-                <Button loading={loadingAction == 'add_to_account' } primary onClick={(e) => handleInstallation('add_to_account') }>
+                <Button loading={loadingAction == 'add_to_account'} primary onClick={(e) => handleInstallation('add_to_account')}>
                   Install Automatically
                 </Button>
               </TextContainer>

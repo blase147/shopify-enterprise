@@ -10,7 +10,7 @@
                   span Swap&nbsp;
                   span.blue
                     = line_item.title
-                  span Subscription to:
+                  span &nbsp;Subscription to:
               div.close-modal aria-hidden="true" tabindex="-1" data-action='close'
                 svg fill="none" height="20" viewbox=("0 0 18 20") width="18" xmlns="http://www.w3.org/2000/svg"
                   path d=("M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z") fill="#DDDDDD" /
@@ -28,13 +28,13 @@
                     = form_tag action_subscription_contract_path(:swap_product, subscription.id[/\d+/]), method: :post, :id => "form-#{line_item.id}", remote: true do
                       .variants-wrapper
                         - product.node.variants.edges.each_with_index do |variant, index|
-                          label
+                          label for="input-#{index}"
                             input.hidden name="line_id" type="text" value="#{line_item.id}"
                             input name="variant_price" type="hidden" value="#{variant.node.price}"
                             - if index.zero?
-                              input name="variant_id" type="radio" value="#{variant.node.id}" checked='checked'
+                              input name="variant_id" type="radio" value="#{variant.node.id}" checked='checked' id="input-#{index}"
                             - else
-                              input name="variant_id" type="radio" value="#{variant.node.id}"
+                              input name="variant_id" type="radio" value="#{variant.node.id}" id="input-#{index}"
                             = "#{variant.node.title} (#{number_to_currency variant.node.price})"
                       .btn-wrapper
                         button type="submit"
