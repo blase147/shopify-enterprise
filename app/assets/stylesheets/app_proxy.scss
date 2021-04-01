@@ -1,5 +1,6 @@
 $primary: #007EFF;
 
+// DELIVERY DELAY MODAL
 
 .delivery-delay-modal {
   min-height: 500px;
@@ -94,6 +95,281 @@ $primary: #007EFF;
         > span:nth-child(1) {
           margin-right: 10px;
         }
+      }
+    }
+  }
+}
+
+// EDIT SUBSCRIPTION MODAL
+
+.edit-subscription-modal {
+  .header {
+    width: 100%;
+    height: 75px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 20px;
+
+    div {
+      outline: 0 none;
+      > h2 {
+        font-size: 22px;
+        font-weight: bold;
+        margin-left: 40px;
+      }
+      > svg {
+        cursor: pointer;
+      }
+    }
+  }
+  .subscription-details {
+    padding: 0px 35px;
+    .img {
+      width: 200px;
+      height: 100px;
+      margin: 30px auto;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    .title {
+      padding-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+      h2 {
+        font-size: 18px;
+        font-weight: 900;
+        margin-bottom: 10px;
+      }
+      h3 {
+        font-size: 16px;
+        font-weight: 900;
+        color: #4D506A;
+      }
+    }
+    .delivery-charge {
+      padding: 20px 0px;
+      border-bottom: 1px solid #ddd;
+
+      > div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &:nth-child(1) {
+          margin-bottom: 16px;
+        }
+
+        h3 {
+          color: #C4C4C4;
+          font-size: 14px;
+          font-weight: bold;
+          text-transform: uppercase;
+        }
+        h4 {
+          color: #000;
+          font-size: 14px;
+          font-weight: bold;
+          text-transform: uppercase;
+        }
+      }
+    }
+    .btn-wrapper {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      padding-bottom: 20px;
+
+      > button {
+        width: 100%;
+        height: 40px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #000;
+        margin-bottom: 10px;
+        background: transparent;
+        cursor: pointer;
+        outline: 0 none;
+
+        &.light {
+          color: #ddd;
+        }
+      }
+    }
+  }
+}
+
+// SWAP SUBSCRIPTION MODAL
+
+.swap-subscription-modal, .upgrade-subscription-modal {
+  .header {
+    width: 100%;
+    height: 75px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 20px;
+
+    div {
+      outline: 0 none;
+      > h2 {
+        font-size: 22px;
+        font-weight: bold;
+        margin-left: 40px;
+
+        > span.blue {
+          color: $primary;
+        }
+      }
+      > svg {
+        cursor: pointer;
+      }
+    }
+  }
+  .swap-grid  {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    padding: 30px;
+
+    > .item {
+      box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+      border-radius: 5px;
+      padding: 25px 40px;
+
+      .img {
+        width: 100%;
+        height: 115px;
+        margin-bottom: 25px;
+        > img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        } 
+      }
+      .title {
+        > h2 {
+          font-size: 18px;
+          line-height: 24px;
+          font-weight: bold;
+          text-align: center;
+          margin-bottom: 15px;
+        }
+        > p {
+          font-size: 14px;
+          text-align: center;
+          color: #ACB5BD;
+        }
+      }
+      .btn-wrapper {
+        margin-top: 10px;
+        > button {
+          width: 100%;
+          height: 40px;
+          font-size: 16px;
+          font-weight: bold;
+          text-transform: uppercase;
+          color: #fff;
+          background: $primary;
+          border-radius: 5px;
+          border: none;
+          cursor: pointer;
+          outline: 0 none;
+          transition: 0.3s all ease-in-out;
+
+          &:hover {
+            background: #43a1ff;
+          }
+        }
+      }
+    }
+  }
+}
+
+// SWAP SUBSCRIPTION MODAL
+
+.cancel-subscription-modal {
+  .header {
+    width: 100%;
+    height: 75px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 20px;
+
+    div {
+      outline: 0 none;
+      > h2 {
+        font-size: 22px;
+        font-weight: bold;
+        margin-left: 40px;
+
+        > span.blue {
+          color: $primary;
+        }
+      }
+      > svg {
+        cursor: pointer;
+      }
+    }
+  }
+  .warning {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 25px 0px;
+    border-bottom: 1px solid #ddd;
+
+    > h2 {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 25px;
+      color: #212B36;
+    }
+    > h3 {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 25px;
+      color: #212B36;
+    }
+    > p {
+      font-size: 18px;
+      font-weight: bold;
+      color: #8B8A8A;
+    }
+  }
+  .btn-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 0;
+    > button {
+      width: 228px;
+      height: 40px;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+      outline: 0 none;
+      
+      &.btn-cancel {
+        border: 1px solid #C6C7C8;
+        background: #fff;
+        margin-right: 20px;
+        font-weight: 600px;
+      }
+      &.btn-keep {
+        background: $primary;
+        color: #fff;
+        border: none;
+        font-weight: 800;
       }
     }
   }
@@ -308,6 +584,10 @@ div.notification-banner {
     display: grid;
     grid-template-columns: 3fr 2fr 1fr;
     column-gap: 50px;
+
+    &:not(:nth-child(1)) {
+      margin-top: 30px;
+    }
     // border-bottom: 1px solid #ececec;
 
     > .grid-item {
@@ -369,6 +649,7 @@ div.notification-banner {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        min-height: 30px;
         div {
           display: flex;
           align-items: center;
@@ -389,6 +670,7 @@ div.notification-banner {
               display: flex;
               justify-content: center;
               align-items: center;
+              padding: 0;
               &:active {
                 border-color: #007EFF;
               }

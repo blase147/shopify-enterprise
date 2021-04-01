@@ -121,8 +121,10 @@
                     = render 'delay_order_modal', subscription: subscription.node
                     = link_to "/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}" do
                       button.white-btn DELIVERY SCHEDULE
-                    button.edit-subscription.text-btn data-toggle="modal" data-target="#editSubscriptionModal-#{subscription.node.id[/\d+/]}" Edit Subscription
-                    = render 'edit_subscription_modal', subscription: subscription.node
+                    button.edit-subscription.text-btn data-toggle="modal" data-target="#editSubscriptionModal-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" Edit Subscription
+                    = render 'edit_subscription_modal', subscription: subscription.node, line_id: edge.node.id
+                    = render 'swap_subscription_modal', subscription: subscription.node, line_id: edge.node.id
+                    = render 'upgrade_subscription_modal', subscription: subscription.node, line_id: edge.node.id
                 .quantity-wrapper
                   form action="#{action_subscription_contract_path(:update_quantity, subscription.node.id[/\d+/])}" method='post' data-remote=true enctype="multipart/form-data"
                     .quantity-field
@@ -130,7 +132,7 @@
                         span.label Quantity:
                         span.btn-wrapper
                           button.minus-quantity type="button"
-                            svg fill="none" height="2" viewbox=("0 0 7 2") width="7" xmlns="http://www.w3.org/2000/svg"
+                            svg fill="none" height="8" viewbox=("0 0 7 2") width="8" xmlns="http://www.w3.org/2000/svg"
                               path d=("M7 0H0V1.5H7V0Z") fill="#637381" /
 
                           input.quatity-val type="number" name="quantity" value="#{edge.node.quantity}"/
@@ -171,6 +173,7 @@
                 div
                   button.edit-address data-toggle="modal" data-target="#deliveryEditModal" EDIT
               = render 'edit_delivery_address_modal', subscription: subscription.node
+              = render 'cancel_subscription_modal', subscription: subscription.node
             - line_products = subscription.node.lines.edges.map{|edge| edge.node.product_id[/\d+/]}
             - selling_plan_ids = subscription.node.lines.edges.map{|edge| edge.node.selling_plan_id}
             - selling_plan_id = selling_plan_ids.reject{|val| val.nil?}&.first
