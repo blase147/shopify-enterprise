@@ -115,7 +115,14 @@ $(document).ready(function () {
 
   $(document).on('click', '.chevron', function () {
     $(this).toggleClass('active');
-    $(this).parents('.subscription-contract-products').find('.slide-down').slideToggle();
+    $(this).parents('.quantity-wrapper').next('.slide-down').slideToggle();
 
   });
+
+  $(document).on('click', 'button.cancel-subscription', function () {
+    let title = $(this).attr('data-name');
+
+    $('.cancel-subscription-modal .header > div h2 span.blue').html(title);
+  });
+
 });
