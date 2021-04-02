@@ -34,4 +34,5 @@ COPY --from=base /app /app
 
 # copy gems that already build
 COPY --from=base /usr/local/bundle/ /usr/local/bundle/
+CMD ["bundle", "exec", "rails", "db:migrate", "-e", "production"]
 CMD ["bundle", "exec", "rails", "s", "-e", "production", "-b", "0.0.0.0"]
