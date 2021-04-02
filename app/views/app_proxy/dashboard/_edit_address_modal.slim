@@ -9,13 +9,16 @@
               section.Polaris-Modal-Section
                 .modal-fields-wrapper
                   .group
-                    p FIRST NAME*
+                    p FIRST NAME
+                      span *
                     = f.input :first_name, input_html: { value: @customer.first_name  }, label: false, required: true
                   .group
-                    p LAST NAME*
+                    p LAST NAME
+                      span *
                     = f.input :last_name, input_html: { value: @customer.last_name  }, label: false, required: true
                   .group
-                    p ADDRESS 1*
+                    p ADDRESS 1
+                      span *
                     = f.input :address_1, label: false, input_html: { value: @customer.address_1 }, required: true
                   .group
                     p ADDRESS 2
@@ -24,13 +27,16 @@
                     p COMPANY
                     = f.input :company, input_html: { value: @customer.company  }, label: false, required: false
                   .group
-                    p CITY*
+                    p CITY
+                      span *
                     = f.input :city, label: false, input_html: { value: @customer.city  }, required: true
                   .group
-                    p COUNTRY*
+                    p COUNTRY
+                      span *
                     = f.input :country, as: :select, collection: [['United States', 'United States']], label: false, required: true, selected: @customer.country
                   .group
-                    p ZIP/POSTAL CODE*
+                    p ZIP/POSTAL CODE
+                      span *
                     = f.input :zip, label: false, input_html: { value: @customer.zip  }, required: true
                   .group
                     p STATE/PROVINCE

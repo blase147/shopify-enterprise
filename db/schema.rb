@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_04_040555) do
+ActiveRecord::Schema.define(version: 2021_04_02_082016) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2021_02_04_040555) do
     t.string "first_name"
     t.string "last_name"
     t.string "company_name"
-    t.integer "phone"
+    t.string "phone"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -32,7 +32,6 @@ ActiveRecord::Schema.define(version: 2021_02_04_040555) do
     t.string "last_name"
     t.string "email"
     t.string "company"
-    t.integer "phone"
     t.string "address_1"
     t.string "address_2"
     t.string "city"
@@ -40,6 +39,7 @@ ActiveRecord::Schema.define(version: 2021_02_04_040555) do
     t.integer "customer_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "phone"
   end
 
   create_table "customers", force: :cascade do |t|
@@ -61,6 +61,14 @@ ActiveRecord::Schema.define(version: 2021_02_04_040555) do
     t.string "subscription"
     t.string "language"
     t.boolean "auto_collection"
+    t.string "pack"
+    t.string "frequency"
+    t.datetime "shopify_at"
+    t.string "country"
+    t.string "city"
+    t.string "province"
+    t.string "zip"
+    t.string "company"
   end
 
   create_table "email_notifications", force: :cascade do |t|
@@ -75,16 +83,6 @@ ActiveRecord::Schema.define(version: 2021_02_04_040555) do
     t.boolean "status"
     t.integer "setting_id"
     t.string "slug"
-  end
-
-  create_table "product_images", force: :cascade do |t|
-    t.integer "selling_plan_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "image_file_name"
-    t.string "image_content_type"
-    t.bigint "image_file_size"
-    t.datetime "image_updated_at"
   end
 
   create_table "reasons_cancels", force: :cascade do |t|

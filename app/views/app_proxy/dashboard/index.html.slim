@@ -117,11 +117,11 @@
                     p.text.right
                       = number_to_currency (edge.node.current_price.amount.to_f * edge.node.quantity)
                   .grid-item
-                    button.delivery-schedule.white-btn data-toggle="modal" data-target="#delayOrderModal-#{subscription.node.id[/\d+/]}" DELAY NEXT ORDER
+                    button.delivery-schedule.white-btn.action-btn data-toggle="modal" data-target="#delayOrderModal-#{subscription.node.id[/\d+/]}" DELAY NEXT ORDER
                     = render 'delay_order_modal', subscription: subscription.node
                     = link_to "/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}" do
-                      button.white-btn DELIVERY SCHEDULE
-                    button.edit-subscription.text-btn data-toggle="modal" data-target="#editSubscriptionModal-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" Edit Subscription
+                      button.white-btn.action-btn DELIVERY SCHEDULE
+                    button.edit-subscription.text-btn.action-btn data-toggle="modal" data-target="#editSubscriptionModal-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" Edit Subscription
                     = render 'edit_subscription_modal', subscription: subscription.node, line_item: edge.node, product_image: product.images.first&.src
                     = render 'swap_subscription_modal', subscription: subscription.node, line_item: edge.node
                     = render 'upgrade_subscription_modal', subscription: subscription.node, line_item: edge.node
@@ -219,17 +219,17 @@
           div.notification-banner
             p.Polaris-Heading No subscription have been found for your account
       - if !params[:status].present? || (params[:status].present? && params[:status] == 'cancelled')
-        div.display-text
+        div.display-text.cancel-text
           p
             span MY &nbsp;
             span.canceled CANCELLED &nbsp;
             span SUBSCRIPTION
         - if @cancelled_subscriptions.present? && (params[:status].present? ? params[:status] == 'cancelled' : true)
-          - @cancelled_subscriptions.each do |subscription|
-            - billing_policy = subscription.node.billing_policy
-            - subscription.node.lines.edges.each do |edge|
-              - product = ShopifyAPI::Product.find(edge.node.product_id[/\d+/])
-              .subscription-contract-products
+          .subscription-contract-products
+            - @cancelled_subscriptions.each do |subscription|
+              - billing_policy = subscription.node.billing_policy
+              - subscription.node.lines.edges.each do |edge|
+                - product = ShopifyAPI::Product.find(edge.node.product_id[/\d+/])
                 .grid
                   .grid-item
                     .img
@@ -239,14 +239,34 @@
                     p.text
                       = "#{number_to_currency edge.node.current_price.amount} / #{billing_policy.interval_count} #{billing_policy.interval}"
                   .grid-item
-                    h4 Start Date
-                    p.text.right
-                      = DateTime.parse(subscription.node.created_at).strftime("%a, %B %e")
-                    h4 Quantity
-                    p.text.right
-                      = edge.node.quantity
+                  .grid-item
                     = link_to action_subscription_contract_path(:resume, subscription.node.id[/\d+/]), remote: true, method: :post do
-                      button.text-btn RE-ACTIVATE
+                      button.blue-btn.action-btn RE-ACTIVATE
+                .quantity-wrapper
+                  form
+                    .quantity-field
+                      div
+                      div
+                        div.chevron
+                          svg fill="none" height="30" viewbox=("0 0 30 30") width="30" xmlns="http://www.w3.org/2000/svg"
+                            circle cx="15" cy="15" r="14" stroke="#007EFF" stroke-width="2" /
+                            path d=("M7.5 12L14.5 19L21.5 12") stroke="#007EFF" stroke-width="2" /
+                .slide-down
+                  .item
+                    p start date
+                    p
+                      = DateTime.parse(subscription.node.created_at).strftime("%a, %B %e")
+                  .item
+                    p est. next delivery
+                    p
+                      = DateTime.parse(subscription.node.next_billing_date).strftime("%a, %B %e")
+                  .item
+                    p last card charge
+                    p -
+                  .item
+                    p quantity
+                    p
+                      = edge.node.quantity
         - elsif (params[:status].present? && params[:status] == 'cancelled') || !params[:status].present?
           div.notification-banner
             p.Polaris-Heading No cancelled subscription have been found for your account

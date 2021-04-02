@@ -542,6 +542,9 @@ nav.top-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  &.cancel-text {
+    margin-top: 30px;
+  }
   > p {
     font-size: 18px;
     color: #212B36;
@@ -624,27 +627,30 @@ div.notification-banner {
           text-align: right;
         }
       }
-      button.white-btn {
-        border: 0.5px solid #C4CDD5;
+      button.action-btn {
+        border: none;
         box-sizing: border-box;
         border-radius: 5px;
-        background: #fff;
         font-size: 14px;
         width: 177px;
         height: 37px;
         margin-bottom: 15px;
         cursor: pointer;
-      }
-      button.text-btn {
-        color: #4D506A;
-        font-size: 14px;
-        font-weight: 600;
-        width: 177px;
-        height: 37px;
-        margin-bottom: 15px;
-        background: #fff;
-        border: none;
-        cursor: pointer;
+        outline: 0 none;
+
+        &.white-btn {
+          border: 0.5px solid #C4CDD5;
+          background: #fff;
+        }
+        &.blue-btn {
+          background: $primary;
+          color: #fff;
+        }
+        &.text-btn {
+          color: #4D506A;
+          background: #fff;
+          font-weight: 600;
+        }
       }
     }
   }
@@ -794,6 +800,9 @@ div.notification-banner {
       font-weight: bold;
       color: #96A2AF;
       text-transform: uppercase;
+      > span.red {
+        color: red;
+      }
     }
     input, select {
       width: 100%;
