@@ -77,10 +77,10 @@ class CustomerService < GraphqlService
     result = client.query(client.parse(GET_QUERY), variables: { id: id} )
     customer = result.data.customer
     db_customer = Customer.find_or_initialize_by(shopify_id: id)
-    db_customer.first_name = customer.first_name unless customer.first_name.present?
-    db_customer.last_name = customer.last_name unless customer.last_name.present?
-    db_customer.email = customer.email unless customer.email.present?
-    db_customer.phone = customer.phone unless customer.phone.present?
+    db_customer.first_name = customer.first_name unless db_customer.first_name.present?
+    db_customer.last_name = customer.last_name unless db_customer.last_name.present?
+    db_customer.email = customer.email unless db_customer.email.present?
+    db_customer.phone = customer.phone unless db_customer.phone.present?
     db_customer.address_1 = customer.default_address.try(:address1)
     db_customer.address_2 =  customer.default_address.try(:address2)
     db_customer.shop_id = @shop.id

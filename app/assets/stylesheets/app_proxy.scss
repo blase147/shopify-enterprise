@@ -815,6 +815,57 @@ div.notification-banner {
   }
 }
 
+// CUSTOMER ADDRESS PAGE
+
+.customer-address-details {
+  width: 100%;
+  max-width: 450px;
+  background: #fff;
+  box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+  border-radius: 5px;
+  padding: 40px;
+  margin-top: 30px;
+
+  > .header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #ddd;
+
+    > h2 {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    > button.edit {
+      border: 0.5px solid #C4CDD5;
+      border-radius: 5px;
+      background: #fff;
+      font-size: 14px;
+      width: 70px;
+      height: 37px;
+      cursor: pointer;
+      color: #4D506A;
+      outline: 0 none;
+    }
+  }
+  > .item {
+    margin: 25px 0px 30px 0px;
+
+    > h3 {
+      font-size: 14px;
+      font-weight: bold;
+      color: #96A2AF;
+      margin-bottom: 15px;
+    }
+    > p {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+}
+
 // CAROUSAL
 
 .preview-container {
