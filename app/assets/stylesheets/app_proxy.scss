@@ -1,5 +1,18 @@
 $primary: #007EFF;
 
+// MODAL POSTION
+
+div.Polaris-Modal-Dialog__Container {
+  justify-content: flex-start;
+  margin-top: 50px;
+}
+
+// SUB MENU ACTIVE
+.sub-active {
+  border-bottom: 2px solid $primary;
+  padding-bottom: 3px;
+}
+
 // DELIVERY DELAY MODAL
 
 .delivery-delay-modal {
@@ -811,6 +824,7 @@ div.notification-banner {
       background: #fff;
       height: 40px;
       margin-top: 15px;
+      padding: 0px 10px;
     }
   }
 }

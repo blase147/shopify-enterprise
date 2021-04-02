@@ -20,11 +20,13 @@ nav.Polaris-Navigation
                 .Polaris-Navigation__ItemWrapper
                   span.Polaris-Navigation__Text
                     = link_to "/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}&status=active", class: 'Polaris-Navigation__Item', data: {'polaris-unstyled': true}, tab_index: '0', aria: {disabled: false} do
-                      span.Polaris-Navigation__Text Active
+                      span.Polaris-Navigation__Text
+                        span class=("#{params[:status] == "active" ? 'sub-active' : ''}") Active
               li.Polaris-Navigation__ListItem
                 .Polaris-Navigation__ItemWrapper
                 = link_to "/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}&status=cancelled", class: 'Polaris-Navigation__Item', data: {'polaris-unstyled': true}, tab_index: '0', aria: {disabled: false} do
-                  span.Polaris-Navigation__Text Cancelled
+                  span.Polaris-Navigation__Text 
+                    span class=("#{params[:status] == "cancelled" ? 'sub-active' : ''}") Cancelled
 
       / li.Polaris-Navigation__ListItem
       /   .Polaris-Navigation__ItemWrapper
