@@ -17,6 +17,7 @@ Rails.application.routes.draw do
         get :password
 
         post :update_info
+        post :update_address
       end
     end
     resources :orders

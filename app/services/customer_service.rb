@@ -77,16 +77,33 @@ class CustomerService < GraphqlService
     result = client.query(client.parse(GET_QUERY), variables: { id: id} )
     customer = result.data.customer
     db_customer = Customer.find_or_initialize_by(shopify_id: id)
-    db_customer.first_name = customer.first_name
-    db_customer.last_name = customer.last_name
-    db_customer.email = customer.email
-    db_customer.phone = customer.phone
+    db_customer.first_name = customer.first_name unless customer.first_name.present?
+    db_customer.last_name = customer.last_name unless customer.last_name.present?
+    db_customer.email = customer.email unless customer.email.present?
+    db_customer.phone = customer.phone unless customer.phone.present?
     db_customer.address_1 = customer.default_address.try(:address1)
     db_customer.address_2 =  customer.default_address.try(:address2)
     db_customer.shop_id = @shop.id
     db_customer.save
 
     db_customer
+  rescue Exception => ex
+    p ex.message
+    { error: ex.message }
+  end
+
+  def update_address params
+    address_attr = params[:address].permit!.to_h.deep_transform_keys! { |key| key.camelize(:lower) }
+    result = client.query(client.parse(UPDATE_QUERY), variables: { input: {id: params[:id], "addresses": address_attr} })
+    errors = result.data.customer_update.user_errors
+    raise errors.first.message if errors.present?
+    db_customer = Customer.find_or_initialize_by(shopify_id: params[:id])
+    db_params = params[:address].permit!
+    db_customer.shop_id = @shop.id
+    db_customer.assign_attributes(db_params)
+    db_customer.save
+    errors = db_customer.errors.full_messages
+    raise errors if errors.present?
   rescue Exception => ex
     p ex.message
     { error: ex.message }
