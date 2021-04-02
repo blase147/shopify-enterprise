@@ -866,6 +866,74 @@ div.notification-banner {
   }
 }
 
+// ORDER HISTORY
+
+.order-history {
+  width: 100%;
+  max-width: 900px;
+  background: #fff;
+  box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+  border-radius: 5px;
+  padding: 50px 40px;
+  margin-top: 30px;
+
+  > .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    &:not(:nth-last-child(1)) {
+      padding-bottom: 25px;
+      border-bottom: 1px solid #ddd;
+    }
+    &:not(:nth-child(1)) {
+      margin-top: 25px;
+    }
+    > .item {
+      > h2 {
+        font-size: 14px;
+        font-weight: bold;
+        color: #96A2AF;
+        margin-bottom: 25px;
+      }
+      > p {
+        font-size: 16px;
+        font-weight: bold;
+
+        &.blue {
+          color: $primary;
+        }
+      }
+      > .btn-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        height: 100%;
+
+        > button {
+          width: 80px;
+          height: 32px;
+          border-radius: 5px;
+          border: none;
+          font-size: 14px;
+          cursor: pointer;
+          outline: 0 none;
+
+          &.btn-view {
+            border: 1px solid #ddd;
+            background: #fff;
+            color: #4D506A;
+            margin-right: 8px;
+          }
+          &.btn-invoice {
+            background: #fff;
+            color: #fff;
+            background: $primary;
+          }
+        }
+      }
+    }
+  }
+}
+
 // CAROUSAL
 
 .preview-container {
