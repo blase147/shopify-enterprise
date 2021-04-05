@@ -7,63 +7,43 @@
     a#AppFrameMainContent tabindex="-1"
     .Polaris-Frame__Content
       .Polaris-Page
-        .Polaris-Page-Header.Polaris-Page-Header--isSingleRow.Polaris-Page-Header--noBreadcrumbs.Polaris-Page-Header--mediumTitle
-          .Polaris-Page-Header__MainContent
-            .Polaris-Page-Header__TitleActionMenuWrapper
-              .Polaris-Page-Header__TitleWrapper
-                div
-                  .Polaris-Header-Title__TitleAndSubtitleWrapper
-                    .Polaris-Header-Title
-                      h1.Polaris-DisplayText.Polaris-DisplayText--sizeLarge
-                        span.Polaris-TextStyle--variationStrong Settings
-        .Polaris-Page__Content
-          .Polaris-Layout
-            .Polaris-Layout__AnnotatedSection
-              .Polaris-Layout__AnnotationWrapper
-                .Polaris-Layout__AnnotationContent
-                  .Polaris-Card
-                    .Polaris-Card__Section
-                      form action="/a/chargezen_production/account/update_info" method='post' data-remote=true enctype="multipart/form-data"
-                        p Want to change your details? Please type them in these boxes and click “Update details”. This will change how we address you on our website and in email communications.
-                        = hidden_field_tag :id, @customer.shopify_id
-                        br/
-                        .Polaris-FormLayout
-                          .Polaris-FormLayout--grouped role="group"
-                            .Polaris-FormLayout__Item
-                              = p_text_field name: 'first_name', label: 'First Name', value:  @customer.try(:first_name)
-                            .Polaris-FormLayout__Item
-                              = p_text_field name: 'last_name', label: 'Last Name', value:  @customer.try(:last_name)
-                          .Polaris-FormLayout__Item
-                              button.Polaris-Button.mr-10[type="button" aria-hidden="true" tabindex="-1" data-action='close']
-                                | Cancel
-
-                              = p_button text: 'Save', type: 'submit'
-
-                  .Polaris-Card
-                    .Polaris-Card__Section
-                      form action="/a/chargezen_production/account/update_info" method='post' data-remote=true enctype="multipart/form-data"        
-                        p If you want us to contact you on a different email, please type the new email in this box and click “Update email”. You will receive a confirmation email where we will ask you to verify your new email address. All emails from us will be sent to your new address.
-                        br/
-                        .Polaris-FormLayout
-                          .Polaris-FormLayout--grouped role="group"
-                            .Polaris-FormLayout__Items
-                              .Polaris-FormLayout__Item
-                                = p_text_field name: 'email', label: 'Email', value:  @customer.try(:email), type: "email"
-                          .Polaris-FormLayout__Item
-                            button.Polaris-Button.mr-10[type="button" aria-hidden="true" tabindex="-1" data-action='close']
-                              | Cancel
-
-                            = p_button text: 'Save', type: 'submit'
-                  .Polaris-Card
-                    .Polaris-Card__Section
-                      form action="/a/chargezen_production/account/update_info" method='post' data-remote=true enctype="multipart/form-data"
-                        p If you want to change your Hotel Collection Account password, click this button. We will send you an email with all the instructions you need to update your password.
-                        br/
-                        .Polaris-FormLayout
-                          .Polaris-FormLayout--grouped role="group"
-                            .Polaris-FormLayout__Items
-                              .Polaris-FormLayout__Item
-                                = p_text_field name: 'forgot_email', label: 'Email', value:  @customer.try(:forgot_email), type: "email"
-
-                          .Polaris-FormLayout__Item
-                            = p_button text: 'Reset Password', type: 'submit'
+        - if false
+          div.content-wrapper
+            div
+              .Polaris-Header-Title__TitleAndSubtitleWrapper
+                .Polaris-Header-Title
+                  h2.Polaris-DisplayText
+                    span.Polaris-TextStyle--variationStrong MY&nbsp;
+                    span.Polaris-TextStyle--variationStrong style="color: #007EFF" BILLING
+                    span.Polaris-TextStyle--variationStrong &nbsp;INFORMATION
+            div.notification-banner
+              p.Polaris-Heading No subscription have been found for your account
+        - else
+          div.content-wrapper
+            div
+              .Polaris-Header-Title__TitleAndSubtitleWrapper
+                .Polaris-Header-Title
+                  h2.Polaris-DisplayText
+                    span.Polaris-TextStyle--variationStrong MY&nbsp;
+                    span.Polaris-TextStyle--variationStrong style="color: #007EFF" ACCOUNT
+                    span.Polaris-TextStyle--variationStrong &nbsp;DETAILS 
+            .form-wrapper
+              form 
+                .group 
+                  .field 
+                    label FIRST NAME
+                    input type="text" placeholder="Ipsum"/
+                  .field 
+                    label 
+                      span LAST NAME
+                      span.red*
+                    input type="text" placeholder="Antley"/
+                .group 
+                  .field 
+                    label 
+                      span EMAIL
+                      span.red*
+                    input type="text" placeholder="Ipsum@accountdetails.information"/
+                  .field
+                .btn-wrapper 
+                  button.update-btn SAVE
