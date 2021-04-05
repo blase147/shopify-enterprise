@@ -7,42 +7,95 @@
     a#AppFrameMainContent tabindex="-1"
     .Polaris-Frame__Content
       .Polaris-Page
-        .Polaris-Page-Header.Polaris-Page-Header--isSingleRow.Polaris-Page-Header--noBreadcrumbs.Polaris-Page-Header--mediumTitle
-          .Polaris-Page-Header__MainContent
-            .Polaris-Page-Header__TitleActionMenuWrapper
-              .Polaris-Page-Header__TitleWrapper
-                div
-                  .Polaris-Header-Title__TitleAndSubtitleWrapper
-                    .Polaris-Header-Title
-                      h1.Polaris-DisplayText.Polaris-DisplayText--sizeLarge
-                        span.Polaris-TextStyle--variationStrong Payment Methods
+        - if false
+          div.content-wrapper
+            div
+              .Polaris-Header-Title__TitleAndSubtitleWrapper
+                .Polaris-Header-Title
+                  h2.Polaris-DisplayText
+                    span.Polaris-TextStyle--variationStrong MY&nbsp;
+                    span.Polaris-TextStyle--variationStrong style="color: #007EFF" BILLING
+                    span.Polaris-TextStyle--variationStrong &nbsp;INFORMATION
+            div.notification-banner
+              p.Polaris-Heading No subscription have been found for your account
+        - else
+          div.content-wrapper
+            div
+              .Polaris-Header-Title__TitleAndSubtitleWrapper
+                .Polaris-Header-Title
+                  h2.Polaris-DisplayText
+                    span.Polaris-TextStyle--variationStrong MY&nbsp;
+                    span.Polaris-TextStyle--variationStrong style="color: #007EFF" BILLING
+                    span.Polaris-TextStyle--variationStrong &nbsp;INFORMATION  
+            .billing-details-tile 
+              .card-information 
+                h2 CARD ON FILE
+                .card-details 
+                  .img 
+                    svg fill="none" height="31" viewbox=("0 0 50 31") width="50" xmlns="http://www.w3.org/2000/svg" 
+                      path d=("M15.4235 30.8852C23.9375 30.8852 30.8394 23.9739 30.8394 15.4484C30.8394 6.92284 23.9375 0.0115356 15.4235 0.0115356C6.90956 0.0115356 0.00762939 6.92284 0.00762939 15.4484C0.00762939 23.9739 6.90956 30.8852 15.4235 30.8852Z") fill="#EE0005" /
+                      path d=("M34.5759 30.8842C43.0899 30.8842 49.9918 23.9729 49.9918 15.4473C49.9918 6.9218 43.0899 0.010498 34.5759 0.010498C26.062 0.010498 19.16 6.9218 19.16 15.4473C19.16 23.9729 26.062 30.8842 34.5759 30.8842Z") fill="#F9A000" /
+                      path d=("M19.1603 15.4471C19.1603 20.3486 21.4421 24.7161 24.9995 27.5438C28.5569 24.716 30.8388 20.3486 30.8388 15.4471C30.8388 10.5456 28.557 6.17813 24.9995 3.35046C21.4422 6.17837 19.1603 10.5457 19.1603 15.4471Z") fill="#FF6300" /
 
-        .Polaris-Page__Content
-          .Polaris-Layout
-            .Polaris-Layout__AnnotatedSection
-              .Polaris-Layout__AnnotationWrapper
-                .Polaris-Layout__AnnotationContent
-                  .Polaris-Card.active-heading-card
-                    .Polaris-Banner.Polaris-Banner--withinContentContainer
-                      .Polaris-Banner__ContentWrapper
-                        .Polaris-Banner__Heading.active
-                          p.Polaris-Heading Backups come handy when your primary payment fails. Set a backup.
-                        .Polaris-Banner__Content
-                          h3 Choose Payment Method below
-                          br/
+                  .details 
+                    p 
+                      span &#42;&#42;&#42;&#42; &#42;&#42;&#42;&#42; &#42;&#42;&#42;&#42;&nbsp;
+                      span 3214
+                    p Expires 3/2035
+                .btn-wrapper 
+                  button.white type="button" data-toggle="modal" data-target="#update-payment" UPDATE CARD
+              .address-information
+                .header   
+                  h2 = "#{@customer.first_name.present? ? @customer.first_name : '-'} #{@customer.last_name.present? ? @customer.last_name : '-'}"
+                  button.edit type="button" data-toggle="modal" data-target="#editAddressModal" Edit
+                .item 
+                  h3 PHONE 
+                  p = @customer.phone.present? ? @customer.phone : '-'
+                .item 
+                  h3 COMPANY 
+                  p = @customer.company.present? ? @customer.company : '-'
+                .item 
+                  h3 ADDRESS 
+                  p = @customer.address_1.present? ? @customer.address_1 : '-'
+= render 'edit_address_modal'
+= render 'update_payment_modal'
 
-                          .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
-                            .Polaris-Stack__Item
-                              .Polaris-Stack.payment-methods
-                                - @payment_methods.each do |card|
-                                  .Polaris-Stack__Item
-                                    .Polaris-Card
-                                      span.check-icon= icon_tag 'check'
-                                      .Polaris-Card__Section
-                                        .Polaris-Card__Subsection
-                                          img[src=asset_path('icons/visa.svg') role="presentation" alt=""]
+        / .Polaris-Page-Header.Polaris-Page-Header--isSingleRow.Polaris-Page-Header--noBreadcrumbs.Polaris-Page-Header--mediumTitle
+        /   .Polaris-Page-Header__MainContent
+        /     .Polaris-Page-Header__TitleActionMenuWrapper
+        /       .Polaris-Page-Header__TitleWrapper
+        /         div
+        /           .Polaris-Header-Title__TitleAndSubtitleWrapper
+        /             .Polaris-Header-Title
+        /               h1.Polaris-DisplayText.Polaris-DisplayText--sizeLarge
+        /                 span.Polaris-TextStyle--variationStrong Payment Methods
 
-                                          br/
-                                          p #{card.credit_card_company} ending in #{card.credit_card_number[/\d+/]}
-                                          - if card.respond_to?(:credit_card_expiration_month)
-                                            p Expires #{card.credit_card_expiration_month}/#{card.credit_card_expiration_year}
+        / .Polaris-Page__Content
+        /   .Polaris-Layout
+        /     .Polaris-Layout__AnnotatedSection
+        /       .Polaris-Layout__AnnotationWrapper
+        /         .Polaris-Layout__AnnotationContent
+        /           .Polaris-Card.active-heading-card
+        /             .Polaris-Banner.Polaris-Banner--withinContentContainer
+        /               .Polaris-Banner__ContentWrapper
+        /                 .Polaris-Banner__Heading.active
+        /                   p.Polaris-Heading Backups come handy when your primary payment fails. Set a backup.
+        /                 .Polaris-Banner__Content
+        /                   h3 Choose Payment Method below
+        /                   br/
+
+        /                   .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
+        /                     .Polaris-Stack__Item
+        /                       .Polaris-Stack.payment-methods
+        /                         - @payment_methods.each do |card|
+        /                           .Polaris-Stack__Item
+        /                             .Polaris-Card
+        /                               span.check-icon= icon_tag 'check'
+        /                               .Polaris-Card__Section
+        /                                 .Polaris-Card__Subsection
+        /                                   img[src=asset_path('icons/visa.svg') role="presentation" alt=""]
+
+        /                                   br/
+        /                                   p #{card.credit_card_company} ending in #{card.credit_card_number[/\d+/]}
+        /                                   - if card.respond_to?(:credit_card_expiration_month)
+        /                                     p Expires #{card.credit_card_expiration_month}/#{card.credit_card_expiration_year}

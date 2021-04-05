@@ -217,6 +217,99 @@ div.Polaris-Modal-Dialog__Container {
   }
 }
 
+// UPDATE PAYMENT CARD MODAL
+
+.update-payment-card-modal {
+  .header {
+    width: 100%;
+    height: 75px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 20px;
+
+    div {
+      outline: 0 none;
+      > h2 {
+        font-size: 22px;
+        font-weight: bold;
+        margin-left: 40px;
+
+        > span.blue {
+          color: $primary;
+        }
+      }
+      > svg {
+        cursor: pointer;
+      }
+    }
+  }
+  > .form-wrapper  {
+    padding: 25px 45px;
+    > form {
+      > .field {
+        margin-bottom: 40px;
+        > label {
+          font-size: 18px;
+          font-weight: bold;
+          margin-bottom: 10px;
+          display: block;
+        }
+        > input {
+          width: 100%;
+          height: 42px;
+          padding: 13px 18px;
+          background: #FFFFFF;
+          border: 0.850418px solid #DDDDDD;
+          box-sizing: border-box;
+          border-radius: 3px;
+        }
+      }
+  
+      > .group  {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 30px;
+  
+        > .field {
+          margin-bottom: 40px;
+          > label {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+          }
+          > input {
+            width: 100%;
+            height: 42px;
+            padding: 13px 18px;
+            background: #FFFFFF;
+            border: 0.850418px solid #DDDDDD;
+            box-sizing: border-box;
+            border-radius: 3px;
+          }
+        }
+      }
+
+      > .btn-wrapper {
+        margin-top: 40px;
+
+        > .update-card {
+          width: 171px;
+          height: 44px;
+          background: #007EFF;
+          border: none;
+          border-radius: 3px;
+          color: #fff;
+          cursor: pointer;
+          outline: 0 none;
+        }
+      }
+    }
+  }
+}
+
 // SWAP SUBSCRIPTION MODAL
 
 .swap-subscription-modal, .upgrade-subscription-modal {
@@ -459,6 +552,113 @@ div.Polaris-Modal-Dialog__Container {
             cursor: pointer;
             outline: 0 none;
           }
+        }
+      }
+    }
+  }
+
+  // BILLING DETAILS
+
+  > .billing-details-tile {
+    background: #fff;
+    box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+    border-radius: 5px;
+    padding: 49px 40px;
+    margin: 30px 0;
+    display: flex;
+
+    > .card-information  {
+      width: 50%;
+
+      > h2 {
+        font-size: 14px;
+        font-weight: bold;
+        color: #96A2AF;
+        text-transform: uppercase;
+      }
+      > .card-details  {
+        margin-top: 50px;
+        display: flex;
+        > .img {
+          width: 80px;
+          height: 50px;
+          border: 1px solid #C4CDD5;
+          box-sizing: border-box;
+          border-radius: 5px;
+          margin-right: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        > .details {
+          > p {
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 16px;
+            color: #212B36;
+            margin-bottom: 10px;
+          }
+        }
+      }
+      > .btn-wrapper {
+        margin-top: 30px;
+        > button {
+          width: 159px;
+          height: 32px;
+          background: #fff;
+          border: 0.5px solid #C4CDD5;
+          box-sizing: border-box;
+          border-radius: 5px;
+          cursor: pointer;
+          outline: 0 none;
+          font-size: 14px;
+          text-transform: uppercase;
+        }
+      }
+    }
+
+    > .address-information {
+      width: 50%;
+      max-width: 450px;
+      background: #fff;
+
+      > .header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 30px;
+        border-bottom: 1px solid #ddd;
+
+        > h2 {
+          font-size: 24px;
+          font-weight: bold;
+        }
+
+        > button.edit {
+          border: 0.5px solid #C4CDD5;
+          border-radius: 5px;
+          background: #fff;
+          font-size: 14px;
+          width: 70px;
+          height: 37px;
+          cursor: pointer;
+          color: #4D506A;
+          outline: 0 none;
+        }
+      }
+      > .item {
+        margin: 25px 0px 30px 0px;
+
+        > h3 {
+          font-size: 14px;
+          font-weight: bold;
+          color: #96A2AF;
+          margin-bottom: 15px;
+        }
+        > p {
+          font-size: 16px;
+          font-weight: bold;
         }
       }
     }
