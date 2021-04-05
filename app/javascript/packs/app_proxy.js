@@ -119,10 +119,4 @@ $(document).ready(function () {
 
   });
 
-  $(document).on('click', 'button.cancel-subscription', function () {
-    let title = $(this).attr('data-name');
-
-    $('.cancel-subscription-modal .header > div h2 span.blue').html(title);
-  });
-
 });

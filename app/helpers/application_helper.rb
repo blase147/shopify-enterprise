@@ -31,7 +31,7 @@ module ApplicationHelper
     "gid://shopify/Product/#{product_id}"
   end
 
-  def action_subscription_contract_path(action, contractId)
-    "/a/chargezen_production/subscriptions/#{contractId}/#{action}?customer_id=#{params[:customer_id]}"
+  def action_subscription_contract_path(action, contractId, query = '')
+    "/a/chargezen_production/subscriptions/#{contractId}/#{action}?customer_id=#{params[:customer_id]} #{query.present? ? "&#{query}" : ''}"
   end
 end

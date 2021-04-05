@@ -136,11 +136,10 @@ class SubscriptionDraftsService < GraphqlService
     { error: ex.message }
   end
 
-  def remove
-    input = {}
-    result = client.query(client.parse(LINE_REMOVE), variables: { draftId: id, input: { } } )
+  def remove(draft_id, line_id)
+    result = client.query(client.parse(LINE_REMOVE), variables: { draftId: draft_id, lineId: line_id } )
 
-    errors = result.data.subscription_draft_update.user_errors
+    errors = result.data.subscription_draft_line_remove.user_errors
     raise errors.first.message if errors.present?
     result.original_hash
   rescue Exception => ex

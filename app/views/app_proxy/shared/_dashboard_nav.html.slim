@@ -25,7 +25,7 @@ nav.Polaris-Navigation
               li.Polaris-Navigation__ListItem
                 .Polaris-Navigation__ItemWrapper
                 = link_to "/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}&status=cancelled", class: 'Polaris-Navigation__Item', data: {'polaris-unstyled': true}, tab_index: '0', aria: {disabled: false} do
-                  span.Polaris-Navigation__Text 
+                  span.Polaris-Navigation__Text
                     span class=("#{params[:status] == "cancelled" ? 'sub-active' : ''}") Cancelled
 
       / li.Polaris-Navigation__ListItem
@@ -45,7 +45,7 @@ nav.Polaris-Navigation
 
       li.Polaris-Navigation__ListItem
         .Polaris-Navigation__ItemWrapper
-          a.Polaris-Navigation__Item class=active_nav('dashboard', 'upcoming') href="/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}" tabindex="0"
+          a.Polaris-Navigation__Item class=active_nav('dashboard', 'upcoming') href="/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions&.count}" tabindex="0"
             .Polaris-Navigation__Icon
               span.Polaris-Icon
                 svg fill="none" height="18" viewbox=("0 0 22 18") width="22" xmlns="http://www.w3.org/2000/svg"
@@ -60,10 +60,10 @@ nav.Polaris-Navigation
             span.Polaris-Navigation__Text Delivery Schedules
       li.Polaris-Navigation__ListItem
         .Polaris-Navigation__ItemWrapper
-          a.Polaris-Navigation__Item class=active_nav('orders', 'index') href="/a/chargezen_production/orders?customer_id=#{params[:customer_id]}" tabindex="0"
+          a.Polaris-Navigation__Item class=active_nav('orders', 'index') href="/a/chargezen_production/orders?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions&.count}" tabindex="0"
             div style="margin-right: 20px;display: flex;align-items: center;justify-content: center;height: 100%;"
               span style="display: flex;align-items: center;justify-content: center;"
-                svg fill="none" height="19" viewbox=("0 0 16 19") width="16" xmlns="http://www.w3.org/2000/svg" 
+                svg fill="none" height="19" viewbox=("0 0 16 19") width="16" xmlns="http://www.w3.org/2000/svg"
                   path d=("M9.2917 1.24365H2.88608C2.46136 1.24365 2.05403 1.41237 1.75371 1.71269C1.45339 2.01302 1.28467 2.42034 1.28467 2.84506V15.6563C1.28467 16.081 1.45339 16.4884 1.75371 16.7887C2.05403 17.089 2.46136 17.2577 2.88608 17.2577H12.4945C12.9192 17.2577 13.3266 17.089 13.6269 16.7887C13.9272 16.4884 14.0959 16.081 14.0959 15.6563V6.04787L9.2917 1.24365Z") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
                   path d=("M9.29199 1.24341V6.04763H14.0962") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
 
@@ -80,10 +80,9 @@ nav.Polaris-Navigation
       /             path d=("M9.04688 1.55078V6.355H13.8511") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
 
       /       span.Polaris-Navigation__Text Order history
-
       li.Polaris-Navigation__ListItem
         .Polaris-Navigation__ItemWrapper
-          a.Polaris-Navigation__Item class=active_nav('dashboard', 'addresses') href="/a/chargezen_production/dashboard/addresses?customer_id=#{params[:customer_id]}" tabindex="0"
+          a.Polaris-Navigation__Item class=active_nav('dashboard', 'addresses') href="/a/chargezen_production/dashboard/addresses?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions&.count}" tabindex="0"
             .Polaris-Navigation__Icon
               span.Polaris-Icon
                 = icon_tag 'address'
@@ -93,7 +92,7 @@ nav.Polaris-Navigation
 
       li.Polaris-Navigation__ListItem
         .Polaris-Navigation__ItemWrapper
-          a.Polaris-Navigation__Item class=active_nav('dashboard', 'payment_methods') href="/a/chargezen_production/dashboard/payment_methods?customer_id=#{params[:customer_id]}" tabindex="0"
+          a.Polaris-Navigation__Item class=active_nav('dashboard', 'payment_methods') href="/a/chargezen_production/dashboard/payment_methods?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions&.count}" tabindex="0"
             .Polaris-Navigation__Icon
               span.Polaris-Icon
                 svg.Polaris-Icon__Svg fill="none" height="16" viewbox=("0 0 16 16") width="16" xmlns="http://www.w3.org/2000/svg"
@@ -111,7 +110,7 @@ nav.Polaris-Navigation
           a.Polaris-Navigation__Item class=active_nav('dashboard', 'settings') href="/a/chargezen_production/dashboard/settings?customer_id=#{params[:customer_id]}" tabindex="0"
             .Polaris-Navigation__Icon
               span.Polaris-Icon
-                svg fill="none" height="18" viewbox=("0 0 18 18") width="18" xmlns="http://www.w3.org/2000/svg" 
+                svg fill="none" height="18" viewbox=("0 0 18 18") width="18" xmlns="http://www.w3.org/2000/svg"
                   path d=("M9.74356 17.2167C9.97365 17.1961 10.2008 17.1646 10.4251 17.1254L10.4256 17.1254L10.5096 17.1105L10.512 17.1101C14.7016 16.3283 17.6065 12.4849 17.2146 8.24146C16.8228 3.99801 13.2631 0.751343 9.00116 0.75L9.00108 0.75L8.75108 0.749921V0.753715C4.30986 0.885866 0.75 4.52729 0.75 9C0.75 13.5563 4.44422 17.25 9.00108 17.25C9.24959 17.25 9.49718 17.2389 9.74356 17.2167ZM9.74356 17.2167L9.72123 16.9677L9.74362 17.2167C9.7436 17.2167 9.74358 17.2167 9.74356 17.2167ZM8.36905 16.1884L8.37976 16.1893C8.58462 16.207 8.79252 16.2148 9.00239 16.2148C9.21075 16.2148 9.41702 16.2053 9.62374 16.1875L9.63444 16.1866H9.64518H9.65285C9.84931 16.1688 10.0448 16.1423 10.2391 16.1084L10.2428 16.1078L10.2428 16.1078C10.2578 16.1054 10.2616 16.105 10.2647 16.1045C10.2665 16.1043 10.2681 16.1041 10.2718 16.1034L10.2724 16.1033C10.4649 16.0688 10.6559 16.0257 10.8457 15.9756L10.8491 15.9747L10.8491 15.9747L10.8926 15.9639C11.0756 15.9142 11.2571 15.8562 11.437 15.7918C11.4484 15.7875 11.4596 15.7836 11.4676 15.7809C11.4723 15.7792 11.4763 15.7778 11.4798 15.7766C11.4834 15.7753 11.4866 15.7742 11.4897 15.7731L11.4904 15.7728C11.6671 15.7078 11.8415 15.635 12.0136 15.5557L12.0208 15.5523L12.0209 15.5524C12.0403 15.5442 12.0571 15.5369 12.073 15.5295L12.0731 15.5295C12.2403 15.4514 12.4055 15.3642 12.5695 15.2709C12.5761 15.2671 12.5828 15.2633 12.589 15.2598C12.5942 15.2569 12.599 15.2542 12.6035 15.2517C12.6142 15.2457 12.6229 15.2409 12.6312 15.2361L12.7568 15.4522M8.36905 16.1884L7.7426 16.1069L7.74107 16.1067C7.73517 16.1058 7.73427 16.1057 7.73451 16.1057L7.73452 16.1057L7.73111 16.1051C7.53875 16.0707 7.34798 16.0279 7.15862 15.9778L7.15674 15.9774L7.11117 15.9657C6.92806 15.916 6.74641 15.8582 6.5668 15.7937L6.56667 15.7937C6.54716 15.7867 6.53952 15.7842 6.53347 15.7822C6.52769 15.7803 6.52334 15.7789 6.51151 15.7745L6.51064 15.7742C6.33544 15.7098 6.16266 15.6374 5.99167 15.5587L5.99168 15.5587L5.98902 15.5575C5.98077 15.5538 5.97358 15.5507 5.96705 15.5478C5.95269 15.5414 5.94147 15.5365 5.92896 15.5305L5.92646 15.5294C5.76191 15.4532 5.599 15.3667 5.43696 15.2743L5.43633 15.2739L5.36684 15.2348C5.21001 15.1432 5.05627 15.0448 4.90481 14.9404C4.88606 14.9273 4.87661 14.9209 4.86791 14.915C4.85914 14.909 4.85115 14.9036 4.83516 14.8924C4.70433 14.7996 4.57609 14.7015 4.45043 14.599L4.45043 12.467C4.45043 12.4669 4.45043 12.4668 4.45043 12.4668C4.45232 10.9855 5.65284 9.78512 7.13447 9.78333H10.8677C12.3494 9.78512 13.5499 10.9856 13.5517 12.467V14.5978C13.4251 14.7014 13.2957 14.7999 13.1632 14.8937C13.1508 14.9023 13.1432 14.9075 13.1344 14.9134C13.1262 14.9189 13.117 14.9251 13.1021 14.9354L13.1018 14.9357C12.9485 15.0421 12.7915 15.1423 12.6305 15.2364L12.7568 15.4522M8.36905 16.1884H8.35829H8.35055C8.15445 16.1707 7.95932 16.1443 7.76533 16.1106L8.36905 16.1884ZM12.7568 15.4522C12.9232 15.3548 13.0858 15.2512 13.2444 15.141L12.6939 15.4878C12.7039 15.482 12.7141 15.4763 12.7243 15.4706C12.7352 15.4645 12.7461 15.4585 12.7568 15.4522ZM10.2821 16.3547C10.2864 16.354 10.2907 16.3534 10.295 16.3527C10.3022 16.3517 10.3093 16.3507 10.3165 16.3493L10.2821 16.3547ZM10.2821 16.3547C10.0778 16.3904 9.87164 16.4181 9.66406 16.4366H9.64518M10.2821 16.3547L9.64518 16.4366M9.64518 16.4366C9.43187 16.4549 9.21843 16.4648 9.00239 16.4648C8.78634 16.4648 8.57121 16.4568 8.35829 16.4384L9.64518 16.4366ZM14.5851 12.4667V12.4664C14.5828 10.4148 12.92 8.75237 10.8683 8.75H10.868H7.13416H7.13387C5.08213 8.75237 3.4194 10.4148 3.41703 12.4664V12.4667V13.5681C1.08087 10.7229 1.25346 6.51768 3.91482 3.87465C6.72944 1.07954 11.2727 1.07954 14.0874 3.87466C16.7487 6.51768 16.9213 10.7229 14.5851 13.5681V12.4667Z") fill="#4D506A" stroke="#4D506A" stroke-width="0.5" /
                   path d=("M9.06424 3.82199H9.06398C7.44134 3.82199 6.12598 5.13735 6.12598 6.75999C6.12598 8.38263 7.44134 9.69799 9.06398 9.69799C10.6866 9.69799 12.002 8.38263 12.002 6.75999V6.75973C12.0003 5.13795 10.686 3.82371 9.06424 3.82199ZM9.0637 8.66039C8.01422 8.66024 7.16358 7.80951 7.16358 6.75999C7.16358 5.71038 8.01437 4.85959 9.06398 4.85959C10.1135 4.85959 10.9642 5.71023 10.9644 6.75971C10.9632 7.80888 10.1129 8.65923 9.0637 8.66039Z") fill="#4D506A" stroke="#4D506A" stroke-width="0.5" /
 

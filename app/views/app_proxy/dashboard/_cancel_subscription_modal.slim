@@ -8,7 +8,8 @@
               div
                 h2
                   span Cancel&nbsp;
-                  span.blue Lorem Ipesum&nbsp;
+                  span.blue
+                    = line_item.title
                   span &nbsp;Subscription
               div.close-modal aria-hidden="true" tabindex="-1" data-action='close'
                 svg fill="none" height="20" viewbox=("0 0 18 20") width="18" xmlns="http://www.w3.org/2000/svg"
@@ -18,7 +19,7 @@
               h3 IF you cancel, you won't get upcomming deliveries
               p You get always reactive anytime
             .btn-wrapper
-              = link_to action_subscription_contract_path(:cancel, subscription.id[/\d+/]), remote: true, method: :post do
+              = link_to action_subscription_contract_path(:remove_line, subscription.id[/\d+/], "line_id=#{line_item.id}&lines_count=#{lines_count}"), remote: true, method: :post do
                 button.btn-cancel type="button" CANCEL ANYWAY
               button.btn-keep type="button" aria-hidden="true" tabindex="-1" data-action='close' KEEP SUBSCRIPTION
 

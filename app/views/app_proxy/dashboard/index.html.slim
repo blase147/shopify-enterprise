@@ -125,6 +125,7 @@
                     = render 'edit_subscription_modal', subscription: subscription.node, line_item: edge.node, product_image: product.images.first&.src
                     = render 'swap_subscription_modal', subscription: subscription.node, line_item: edge.node
                     = render 'upgrade_subscription_modal', subscription: subscription.node, line_item: edge.node
+                    = render 'cancel_subscription_modal', subscription: subscription.node, line_item: edge.node, lines_count: subscription.node.lines.edges.size
                 .quantity-wrapper
                   form action="#{action_subscription_contract_path(:update_quantity, subscription.node.id[/\d+/])}" method='post' data-remote=true enctype="multipart/form-data"
                     .quantity-field
@@ -172,7 +173,6 @@
                 div
                   button.edit-address data-toggle="modal" data-target="#deliveryEditModal" EDIT
               = render 'edit_delivery_address_modal', subscription: subscription.node
-              = render 'cancel_subscription_modal', subscription: subscription.node
             - line_products = subscription.node.lines.edges.map{|edge| edge.node.product_id[/\d+/]}
             - selling_plan_ids = subscription.node.lines.edges.map{|edge| edge.node.selling_plan_id}
             - selling_plan_id = selling_plan_ids.reject{|val| val.nil?}&.first
@@ -257,16 +257,17 @@
                     p
                       = DateTime.parse(subscription.node.created_at).strftime("%a, %B %e")
                   .item
-                    p est. next delivery
-                    p
-                      = DateTime.parse(subscription.node.next_billing_date).strftime("%a, %B %e")
-                  .item
-                    p last card charge
-                    p -
-                  .item
                     p quantity
                     p
                       = edge.node.quantity
         - elsif (params[:status].present? && params[:status] == 'cancelled') || !params[:status].present?
           div.notification-banner
             p.Polaris-Heading No cancelled subscription have been found for your account
+
+javascript:
+  $('.owl-carousel').owlCarousel(
+    {
+      dots: true,
+      margin: 30
+    }
+  );

@@ -20,19 +20,20 @@
                         span.Polaris-TextStyle--variationStrong HISTORY
         .order-history
           - @orders.each do |order|
-            .grid 
-              .item 
+            .grid
+              .item
                 h2 ORDER #
                 p = order.order_number
-              .item 
+              .item
                 h2 DATE
                 p = DateTime.parse(order.created_at).strftime("%d %b %Y")
-              .item 
+              .item
                 h2 AMOUNT
                 p.blue = number_to_currency order.total_price.to_f rescue nil
               .item
-                .btn-wrapper 
-                  button.btn-view type="button" VIEW
+                .btn-wrapper
+                  = link_to "/a/chargezen_production/orders/#{order.id}?customer_id=#{params[:customer_id]}" do
+                    button.btn-view type="button" VIEW
                   button.btn-invoice type="button" INVOICE
 
         / .Polaris-DataTable__Footer

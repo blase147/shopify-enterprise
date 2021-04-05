@@ -36,6 +36,7 @@ Rails.application.routes.draw do
         post :apply_discount
         post :update_shiping_detail
         post :swap_product
+        post :remove_line
       end
     end
     resources :dashboard, only: [:index] do
