@@ -7,7 +7,7 @@
     a#AppFrameMainContent tabindex="-1"
     .Polaris-Frame__Content
       .Polaris-Page
-        - if @subscription_contracts.empty?
+        - if @active_subscriptions_count == 0
           div.content-wrapper
             div
               .Polaris-Header-Title__TitleAndSubtitleWrapper
@@ -27,20 +27,20 @@
                     span.Polaris-TextStyle--variationStrong MY&nbsp;
                     span.Polaris-TextStyle--variationStrong style="color: #007EFF" NEXT
                     span.Polaris-TextStyle--variationStrong &nbsp;ORDER
-            .delivery-details-tile 
-              .date-details 
+            .delivery-details-tile
+              .date-details
                 h2 April 5, 2021
                 p
                   span EST DELIVERY&nbsp;
                   span.blue APRIL 17, 2021
-              .grid 
-                .item 
+              .grid
+                .item
                   h2 ORDER PRODUCT
                   p 1. Duisnon Magna Nunc
-                .item 
+                .item
                   h2 ORDER ADDRESS
                   p 123 Main Street, Somewhere, CA 94000
-                .item 
+                .item
                   .btn-wrapper
                     button type="button" SKIP
 
@@ -51,39 +51,39 @@
                     span.Polaris-TextStyle--variationStrong MY&nbsp;
                     span.Polaris-TextStyle--variationStrong style="color: #007EFF" SCHEDULED
                     span.Polaris-TextStyle--variationStrong &nbsp;ORDERS
-            
+
             // LOOP IT
 
-            .delivery-details-tile 
-              .date-details 
+            .delivery-details-tile
+              .date-details
                 h2 April 5, 2021
                 p
                   span EST DELIVERY&nbsp;
                   span.blue APRIL 17, 2021
-              .grid 
-                .item 
+              .grid
+                .item
                   h2 ORDER PRODUCT
                   p 1. Duisnon Magna Nunc
-                .item 
+                .item
                   h2 ORDER ADDRESS
                   p 123 Main Street, Somewhere, CA 94000
-                .item 
+                .item
                   .btn-wrapper
                     button type="button" SKIP
-            .delivery-details-tile 
-              .date-details 
+            .delivery-details-tile
+              .date-details
                 h2 April 5, 2021
                 p
                   span EST DELIVERY&nbsp;
                   span.blue APRIL 17, 2021
-              .grid 
-                .item 
+              .grid
+                .item
                   h2 ORDER PRODUCT
                   p 1. Duisnon Magna Nunc
-                .item 
+                .item
                   h2 ORDER ADDRESS
                   p 123 Main Street, Somewhere, CA 94000
-                .item 
+                .item
                   .btn-wrapper
                     button type="button" SKIP
           / .Polaris-Page__Content.mt-30
@@ -150,7 +150,7 @@
           /                   .Polaris-Stack
           /                     .Polaris-Stack__Item.Polaris-Stack__Item--fill
           /                       h3 Add more products to your order
-          /                     .Polaris-Stack__Item  
+          /                     .Polaris-Stack__Item
           /                       .Polaris-Banner__Actions
           /                         .Polaris-ButtonGroup__Item
           /                           .Polaris-Banner__PrimaryAction

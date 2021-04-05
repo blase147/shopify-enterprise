@@ -44,5 +44,6 @@ class AppProxy::DashboardController < AppProxyController
     @subscription_contracts = @data[:subscriptions] || []
     @cancelled_subscriptions = @data[:cancelled_subscriptions] || []
     @active_subscriptions = @data[:active_subscriptions] || []
+    @cancelled_line_items = RemovedSubscriptionLine.where(customer_id: params[:customer_id])
   end
 end

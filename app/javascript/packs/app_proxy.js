@@ -20,9 +20,6 @@ require('owl.carousel');
 import 'owl.carousel/dist/assets/owl.carousel.css';
 
 $(document).ready(function () {
-
-  $(":input").inputmask();
-
   $('.owl-carousel').owlCarousel(
     {
       dots: true,

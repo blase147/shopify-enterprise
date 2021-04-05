@@ -32,6 +32,6 @@ module ApplicationHelper
   end
 
   def action_subscription_contract_path(action, contractId, query = '')
-    "/a/chargezen_production/subscriptions/#{contractId}/#{action}?customer_id=#{params[:customer_id]} #{query.present? ? "&#{query}" : ''}"
+    "/a/chargezen_production/subscriptions/#{contractId}/#{action}?customer_id=#{params[:customer_id]}#{query.present? ? "&#{query}" : ''}"
   end
 end

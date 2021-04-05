@@ -86,8 +86,10 @@ class AppProxy::SubscriptionsController < AppProxyController
     variant = ShopifyAPI::Variant.find(params[:variant_id])
     product = ProductService.new(variant.product_id).run
     if product&.selling_plan_group_count&.positive?
-      result = SubscriptionDraftsService.new.add_line(@draft_id, { 'productVariantId': "gid://shopify/ProductVariant/#{params[:variant_id]}", 'quantity': 1, 'currentPrice': variant.price })
+      result = SubscriptionDraftsService.new.add_line(@draft_id, { 'productVariantId': "gid://shopify/ProductVariant/#{params[:variant_id]}", 'quantity': params[:quantity].to_i.zero? ? 1 : params[:quantity].to_i, 'currentPrice': variant.price })
+      render js: "alert('#{result[:error]}'); hideLoading()" if result[:error].present?
       SubscriptionDraftsService.new.commit @draft_id
+      RemovedSubscriptionLine.find(params[:line_item_id]).destroy if params[:line_item_id].present?
       render js: 'location.reload()' if result.present?
     else
       render js: "window.top.location.href = '/cart/#{variant.id}:1';"
@@ -142,7 +144,12 @@ class AppProxy::SubscriptionsController < AppProxyController
   end
 
   def remove_line
-    result = params[:lines_count].to_i > 1 ? SubscriptionDraftsService.new.remove(@draft_id, params[:line_id]) : SubscriptionContractDeleteService.new(params[:id]).run
+    if params[:lines_count].to_i > 1
+      result = SubscriptionDraftsService.new.remove(@draft_id, params[:line_id])
+      RemovedSubscriptionLine.create(subscription_id: params[:id], customer_id: params[:customer_id], variant_id: params[:variant_id], quantity: params[:quantity] )
+    else
+      result = SubscriptionContractDeleteService.new(params[:id]).run
+    end
     if result[:error].present?
       render js: "alert('#{result[:error]}'); hideLoading()"
     else
