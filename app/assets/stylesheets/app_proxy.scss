@@ -516,6 +516,9 @@ div.Polaris-Modal-Dialog__Container {
             display: block;
             color: #96A2AF;
             text-transform: uppercase;
+            span.red {
+              color: red;
+            }
           }
           > input {
             width: 100%;
