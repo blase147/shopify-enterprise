@@ -1,0 +1,21 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: aroma
+  password: aroma
+  host: db
+  port: 5432
+  database: aroma_db
+
+development:
+  <<: *default
+
+staging:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
