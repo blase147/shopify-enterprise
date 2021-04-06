@@ -17,7 +17,7 @@
                       h2.Polaris-DisplayText
                         span.Polaris-TextStyle--variationStrong MY&nbsp;
                         span.Polaris-TextStyle--variationStrong style="color: #007EFF" ADDRESS
-        - if @active_subscriptions_count == 0
+        - if !@active_subscriptions_count == 0
           div.notification-banner
             p.Polaris-Heading No subscription have been found for your account
         - else

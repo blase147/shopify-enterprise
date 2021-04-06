@@ -119,4 +119,9 @@ $(document).ready(function () {
 
   });
 
+  $(document).on('click', 'div#AppFrameNav .sm-nav-trigger', function () {
+    $(this).parents('#AppFrameNav').toggleClass('active');
+    $(this).find('.icon-chevron').toggleClass('active');
+    $(this).next().toggle();
+  });
 });
