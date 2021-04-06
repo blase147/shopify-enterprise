@@ -1,6 +1,6 @@
 class AppProxy::DashboardController < AppProxyController
   before_action :load_subscriptions
-  before_action :load_customer, only: %w(index addresses payment_methods settings)
+  before_action :load_customer, only: %w(index addresses payment_methods settings upcoming)
   def index
     products = ProductService.new.list
     @swap_products = products.is_a?(Hash) ? nil : products.select{ |p| p.node.selling_plan_group_count > 0 }
@@ -44,5 +44,6 @@ class AppProxy::DashboardController < AppProxyController
     @subscription_contracts = @data[:subscriptions] || []
     @cancelled_subscriptions = @data[:cancelled_subscriptions] || []
     @active_subscriptions = @data[:active_subscriptions] || []
+    @cancelled_line_items = RemovedSubscriptionLine.where(customer_id: params[:customer_id])
   end
 end

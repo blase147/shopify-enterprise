@@ -7,7 +7,7 @@
     a#AppFrameMainContent tabindex="-1"
     .Polaris-Frame__Content
       .Polaris-Page
-        - if false
+        - if @active_subscriptions_count == 0
           div.content-wrapper
             div
               .Polaris-Header-Title__TitleAndSubtitleWrapper
@@ -26,24 +26,25 @@
                   h2.Polaris-DisplayText
                     span.Polaris-TextStyle--variationStrong MY&nbsp;
                     span.Polaris-TextStyle--variationStrong style="color: #007EFF" ACCOUNT
-                    span.Polaris-TextStyle--variationStrong &nbsp;DETAILS 
+                    span.Polaris-TextStyle--variationStrong &nbsp;DETAILS
             .form-wrapper
-              form 
-                .group 
-                  .field 
+              form action="/a/chargezen_production/account/update_info" method='post' data-remote=true enctype="multipart/form-data"
+                = hidden_field_tag :id, @customer.shopify_id
+                .group
+                  .field
                     label FIRST NAME
-                    input type="text" placeholder="Ipsum"/
-                  .field 
-                    label 
+                    input type="text" name="first_name" placeholder="#{@customer.first_name}" value="#{@customer.try(:first_name)}"
+                  .field
+                    label
                       span LAST NAME
                       span.red*
-                    input type="text" placeholder="Antley"/
-                .group 
-                  .field 
-                    label 
+                    input type="text" name="last_name" placeholder="#{@customer.last_name}" value="#{@customer.try(:last_name)}"
+                .group
+                  .field
+                    label
                       span EMAIL
                       span.red*
-                    input type="text" placeholder="Ipsum@accountdetails.information"/
+                    input type="text" name="email" placeholder="#{@customer.email}"  value="#{@customer.try(:email)}"
                   .field
-                .btn-wrapper 
-                  button.update-btn SAVE
+                .btn-wrapper
+                  button.update-btn type="submit" SAVE

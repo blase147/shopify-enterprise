@@ -19,7 +19,7 @@
               h3 IF you cancel, you won't get upcomming deliveries
               p You get always reactive anytime
             .btn-wrapper
-              = link_to action_subscription_contract_path(:remove_line, subscription.id[/\d+/], "line_id=#{line_item.id}&lines_count=#{lines_count}"), remote: true, method: :post do
+              = link_to action_subscription_contract_path(:remove_line, subscription.id[/\d+/], "line_id=#{line_item.id}&lines_count=#{lines_count}&quantity=#{line_item.quantity}&variant_id=#{line_item.variant_id}"), remote: true, method: :post do
                 button.btn-cancel type="button" CANCEL ANYWAY
               button.btn-keep type="button" aria-hidden="true" tabindex="-1" data-action='close' KEEP SUBSCRIPTION
 

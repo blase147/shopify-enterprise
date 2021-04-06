@@ -224,7 +224,7 @@
             span MY &nbsp;
             span.canceled CANCELLED &nbsp;
             span SUBSCRIPTION
-        - if @cancelled_subscriptions.present? && (params[:status].present? ? params[:status] == 'cancelled' : true)
+        - if (@cancelled_subscriptions.present? || @cancelled_line_items.present?) && (params[:status].present? ? params[:status] == 'cancelled' : true)
           .subscription-contract-products
             - @cancelled_subscriptions.each do |subscription|
               - billing_policy = subscription.node.billing_policy
@@ -260,6 +260,43 @@
                     p quantity
                     p
                       = edge.node.quantity
+            - @cancelled_line_items.each do |line_item|
+              - subscription = @active_subscriptions.select{|sub| sub.node.status == "ACTIVE" && sub.node.id == "gid://shopify/SubscriptionContract/#{line_item.subscription_id}"}
+              - if subscription.present?
+                - subscription = subscription.first
+                - billing_policy = subscription.node.billing_policy
+                - variant = ShopifyAPI::Variant.find(line_item.variant_id[/\d+/])
+                - product = ShopifyAPI::Product.find(variant.product_id)
+                .grid
+                  .grid-item
+                    .img
+                      img src=product.images.first&.src alt=""
+                    p.text
+                      = product.title
+                    p.text
+                      = "#{number_to_currency variant.price} / #{billing_policy.interval_count} #{billing_policy.interval}"
+                  .grid-item
+                  .grid-item
+                    = link_to action_subscription_contract_path(:add_product, subscription.node.id[/\d+/], "quantity=#{line_item.quantity}&line_item_id=#{line_item.id}&variant_id=#{line_item.variant_id[/\d+/]}"), remote: true, method: :post do
+                      button.blue-btn.action-btn RE-ACTIVATE
+                .quantity-wrapper
+                  form
+                    .quantity-field
+                      div
+                      div
+                        div.chevron
+                          svg fill="none" height="30" viewbox=("0 0 30 30") width="30" xmlns="http://www.w3.org/2000/svg"
+                            circle cx="15" cy="15" r="14" stroke="#007EFF" stroke-width="2" /
+                            path d=("M7.5 12L14.5 19L21.5 12") stroke="#007EFF" stroke-width="2" /
+                .slide-down
+                  .item
+                    p start date
+                    p
+                      = DateTime.parse(subscription.node.created_at).strftime("%a, %B %e")
+                  .item
+                    p quantity
+                    p
+                      = line_item.quantity
         - elsif (params[:status].present? && params[:status] == 'cancelled') || !params[:status].present?
           div.notification-banner
             p.Polaris-Heading No cancelled subscription have been found for your account

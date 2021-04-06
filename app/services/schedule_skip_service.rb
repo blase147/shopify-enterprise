@@ -17,7 +17,7 @@ class ScheduleSkipService < GraphqlService
   def initialize id
     @id = id
   end
-  
+
   def run
     subscription = SubscriptionContractService.new(@id).run
 

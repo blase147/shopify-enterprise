@@ -107,7 +107,7 @@ nav.Polaris-Navigation
 
       li.Polaris-Navigation__ListItem
         .Polaris-Navigation__ItemWrapper
-          a.Polaris-Navigation__Item class=active_nav('dashboard', 'settings') href="/a/chargezen_production/dashboard/settings?customer_id=#{params[:customer_id]}" tabindex="0"
+          a.Polaris-Navigation__Item class=active_nav('dashboard', 'settings') href="/a/chargezen_production/dashboard/settings?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions&.count}" tabindex="0"
             .Polaris-Navigation__Icon
               span.Polaris-Icon
                 svg fill="none" height="18" viewbox=("0 0 18 18") width="18" xmlns="http://www.w3.org/2000/svg"

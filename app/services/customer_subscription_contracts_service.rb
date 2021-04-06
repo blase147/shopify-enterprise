@@ -31,6 +31,7 @@ class CustomerSubscriptionContractsService < GraphqlService
                     quantity
                     sellingPlanId
                     pricingPolicy
+                    variantId
                     sellingPlanName
                     currentPrice {
                       amount

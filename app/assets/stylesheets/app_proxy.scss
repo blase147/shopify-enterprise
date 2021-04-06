@@ -266,12 +266,12 @@ div.Polaris-Modal-Dialog__Container {
           border-radius: 3px;
         }
       }
-  
+
       > .group  {
         display: grid;
         grid-template-columns: 1fr 1fr;
         column-gap: 30px;
-  
+
         > .field {
           margin-bottom: 40px;
           > label {
@@ -506,7 +506,7 @@ div.Polaris-Modal-Dialog__Container {
         display: grid;
         grid-template-columns: 1fr 1fr;
         column-gap: 30px;
-  
+
         > .field {
           margin-bottom: 25px;
           > label {
@@ -516,7 +516,7 @@ div.Polaris-Modal-Dialog__Container {
             display: block;
             color: #96A2AF;
             text-transform: uppercase;
-            span.red {
+            > span.red {
               color: red;
             }
           }
