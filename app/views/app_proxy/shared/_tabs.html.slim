@@ -1,0 +1,11 @@
+.info-banner
+  .details
+    .profile
+      .initials = "#{@customer&.first_name&.first}#{@customer&.last_name&.first}"
+      .full-name = "#{@customer&.first_name} #{@customer&.last_name}"
+  .details
+    .contact
+      p Questions? Call Us: +1 800 000 0000
+      p Monday - Friday 8:30 - 18:30
+  .details
+    a.btn-discount href="#" GET $5 OFF
