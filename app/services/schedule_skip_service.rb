@@ -18,11 +18,16 @@ class ScheduleSkipService < GraphqlService
     @id = id
   end
 
-  def run
-    subscription = SubscriptionContractService.new(@id).run
+  def run(params = nil)
+    if params[:billing_date].present?
+      billing_date = DateTime.parse(params[:billing_date])
+      skip_billing_offset = params[:billing_interval_count].to_i.send(params[:billing_interval].downcase)
+    else
+      subscription = SubscriptionContractService.new(@id).run
 
-    billing_date = DateTime.parse(subscription.next_billing_date)
-    skip_billing_offset = subscription.billing_policy.interval_count.send(subscription.billing_policy.interval.downcase)
+      billing_date = DateTime.parse(subscription.next_billing_date)
+      skip_billing_offset = subscription.billing_policy.interval_count.send(subscription.billing_policy.interval.downcase)
+    end
     skip_billing_date = billing_date + skip_billing_offset
 
     p skip_billing_date

@@ -37,6 +37,7 @@ Rails.application.routes.draw do
         post :update_shiping_detail
         post :swap_product
         post :remove_line
+        post :skip_schedule
       end
     end
     resources :dashboard, only: [:index] do

@@ -1,6 +1,6 @@
 class AppProxy::SubscriptionsController < AppProxyController
   before_action :init_session
-  before_action :set_draft_contract, only: [:add_product, :update_quantity, :apply_discount, :update_shiping_detail, :swap_product, :remove_line]
+  before_action :set_draft_contract, only: [:add_product, :update_quantity, :apply_discount, :update_shiping_detail, :swap_product, :remove_line, :billing_policy]
 
   def index
     customer_id = "gid://shopify/Customer/#{params[:customer_id]}"
@@ -154,6 +154,15 @@ class AppProxy::SubscriptionsController < AppProxyController
       render js: "alert('#{result[:error]}'); hideLoading()"
     else
       SubscriptionDraftsService.new.commit @draft_id
+      render js: 'location.reload()'
+    end
+  end
+
+  def skip_schedule
+    result = ScheduleSkipService.new(params[:id]).run params
+    if result[:error].present?
+      render js: "alert('#{result[:error]}'); hideLoading()"
+    else
       render js: 'location.reload()'
     end
   end
