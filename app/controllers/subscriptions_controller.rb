@@ -83,7 +83,7 @@ class SubscriptionsController < AuthenticatedController
     id = params[:id]
     result = SubscriptionContractDeleteService.new(id).run
     p result
-    
+
     if result.is_a?(Hash)
       flash[:error] = result[:error]
       render js: "showToast('error', '#{result[:error]}'); hideLoading()"

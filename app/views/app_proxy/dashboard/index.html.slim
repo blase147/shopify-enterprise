@@ -117,10 +117,11 @@
                     p.text.right
                       = number_to_currency (edge.node.current_price.amount.to_f * edge.node.quantity)
                   .grid-item
-                    button.delivery-schedule.white-btn.action-btn data-toggle="modal" data-target="#delayOrderModal-#{subscription.node.id[/\d+/]}" DELAY NEXT ORDER
+                    button.white-btn.action-btn type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#swap-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" SWAP SUBSCRIPTION
                     = link_to "/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}" do
                       button.white-btn.action-btn DELIVERY SCHEDULE
-                    button.edit-subscription.text-btn.action-btn data-toggle="modal" data-target="#editSubscriptionModal-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" Edit Subscription
+                    button.edit-subscription.white-btn.action-btn data-toggle="modal" data-target="#editSubscriptionModal-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" Edit Subscription
+                    button.delivery-schedule.text-btn.action-btn data-toggle="modal" data-target="#delayOrderModal-#{subscription.node.id[/\d+/]}" DELAY NEXT ORDER
                     = render 'delay_order_modal', subscription: subscription.node
                     = render 'edit_subscription_modal', subscription: subscription.node, line_item: edge.node, product_image: product.images.first&.src
                     = render 'swap_subscription_modal', subscription: subscription.node, line_item: edge.node
