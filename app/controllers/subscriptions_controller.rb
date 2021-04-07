@@ -13,7 +13,8 @@ class SubscriptionsController < AuthenticatedController
     id = params[:id]
 
     @subscription = SubscriptionContractService.new(id).run
-
+    products = ProductService.new.list
+    @swap_products = products.is_a?(Hash) ? nil : products.select{ |p| p.node.selling_plan_group_count > 0 }
     @total = @subscription.orders.edges.map { |order|
       order.node.total_received_set.presentment_money.amount.to_f
     }.sum
