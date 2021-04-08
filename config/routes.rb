@@ -72,6 +72,13 @@ Rails.application.routes.draw do
       get :send_update_card
       get :remove_card
       get :skip_schedule
+      post :resume
+      post :add_product
+      post :update_quantity
+      post :swap_product
+      post :remove_line
+      post :skip_schedule
+      post :pause
     end
   end
 

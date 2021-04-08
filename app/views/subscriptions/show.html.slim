@@ -55,25 +55,26 @@
               .Polaris-Stack.Polaris-Stack--alignmentBaseline
                 .Polaris-Stack__Item.Polaris-Stack__Item--fill
                   span= line.node.title
-                .Polaris-Stack__Item
-                  .quantity-field
-                    div
-                      / span.label Quantity:
-                      span.btn-wrapper
-                        button.minus-quantity type="button"
-                          svg fill="none" height="8" viewbox=("0 0 7 2") width="8" xmlns="http://www.w3.org/2000/svg"
-                            path d=("M7 0H0V1.5H7V0Z") fill="#637381" /
-
-                        input.quatity-val type="number" name="quantity" value="1"/
-                        button.plus-quantity type="button"
-                          svg fill="none" height="8" viewbox=("0 0 8 8") width="8" xmlns="http://www.w3.org/2000/svg"
-                            path d=("M0 3.08V4.508H3.08V7.588H4.508V4.508H7.588V3.08H4.508V0H3.08V3.08H0Z") fill="#212B36" /
-                        input.prev-quantity type="hidden" value="1"/
-                      span.update-quantity
-                        input.hidden type="text" name="line_item_id" value="1"/
-                        button type="submit" APPLY
-                    div
                 - if @subscription.status == 'ACTIVE'
+                  .Polaris-Stack__Item
+                    form action="#{action_subscription_contract_path(:update_quantity, @subscription.id[/\d+/])}" method='post' data-remote=true enctype="multipart/form-data"
+                      .quantity-field
+                        div
+                          / span.label Quantity:
+                          span.btn-wrapper
+                            button.minus-quantity type="button"
+                              svg fill="none" height="8" viewbox=("0 0 7 2") width="8" xmlns="http://www.w3.org/2000/svg"
+                                path d=("M7 0H0V1.5H7V0Z") fill="#637381" /
+
+                            input.quatity-val type="number" name="quantity" value="#{line.node.quantity}"/
+                            button.plus-quantity type="button"
+                              svg fill="none" height="8" viewbox=("0 0 8 8") width="8" xmlns="http://www.w3.org/2000/svg"
+                                path d=("M0 3.08V4.508H3.08V7.588H4.508V4.508H7.588V3.08H4.508V0H3.08V3.08H0Z") fill="#212B36" /
+                            input.prev-quantity type="hidden" value="#{line.node.quantity}"/
+                          span.update-quantity
+                            input.hidden type="text" name="line_item_id" value="#{line.node.id}"/
+                            button type="submit" APPLY
+                        div
                   .Polaris-Stack__Item
                     .Polaris-ButtonGroup
                       .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
@@ -91,6 +92,11 @@
                   .Polaris-Stack__Item
                     .Polaris-ButtonGroup
                       .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
+                        = link_to action_subscription_contract_path(:pause, @subscription.id[/\d+/]), remote: true, method: :post do
+                          button.pause-btn type="button" Pause
+                  .Polaris-Stack__Item
+                    .Polaris-ButtonGroup
+                      .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
                         button.Polaris-Button.Polaris-Button--plain type="button" data-toggle='modal' data-target="#cancel-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}"
                           span.Polaris-Button__Content
                             = icon_tag 'edit'
@@ -102,10 +108,10 @@
                   = render 'app_proxy/dashboard/cancel_subscription_modal', subscription: @subscription, line_item: line.node, lines_count: @subscription.lines.edges.size
                 - else
                   .Polaris-Stack__Item
-                    span.Polaris-Badge.Polaris-Badge--progressIncomplete= @subscription.status
-
-
-
+                    .Polaris-ButtonGroup
+                      .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
+                        = link_to action_subscription_contract_path(:resume, @subscription.id[/\d+/]), remote: true, method: :post do
+                          button.resume-btn type="button" Resume
   .Polaris-Page__Content
     .Polaris-Layout
       .Polaris-Layout__Section.Polaris-Layout__Section--oneSix
@@ -263,7 +269,6 @@
                     -  billing_date = @subscription.next_billing_date.to_date + (index * billing_policy.interval_count).send(billing_policy.interval.downcase)
                     p.text
                       = billing_date.strftime("%B %e, %Y")
-                      = billing_date
                     = link_to action_subscription_contract_path(:skip_schedule, @subscription.id[/\d+/], "billing_date=#{billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post do
                       button.skip-btn type="button" SKIP
               p= order&.shipping_address&.formatted&.join(', ')&.titleize
