@@ -394,3 +394,79 @@ div.Polaris-Modal-Dialog__Container {
 .hidden {
   display: none;
 }
+
+/* for input change and appluy */
+
+
+    .quantity-field {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 30px;
+
+      div {
+        display: flex;
+        align-items: center;
+        > span.label {
+          font-size: 16px;
+          font-weight: 900;
+          margin-right: 10px;
+        }
+        > .btn-wrapper {
+          display: inline-flex;
+          > button {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #fff;
+            border: 1px solid #b7b7b7;
+            outline: 0 none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            &:active {
+              border-color: #007EFF;
+            }
+          }
+          > input {
+            border: none;
+            -moz-appearance: textfield;
+            outline: 0 none;
+            width: 30px;
+            text-align: center;
+
+            &::-webkit-outer-spin-button,
+            &::-webkit-inner-spin-button {
+              -webkit-appearance: none;
+              margin: 0;
+            }
+          }
+        }
+        > .update-quantity  {
+          margin-left: 30px;
+          display: none;
+
+          &.active {
+            display: inline;
+          }
+
+          > button[type="submit"] {
+            border-radius: 12px;
+            border: none;
+            color: #fff;
+            background: $primary;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 7px;
+            transition: 0.3s all ease-in-out;
+            cursor: pointer;
+
+            &:hover {
+              background: #5badff;
+            }
+          }
+        }
+      }
+    }
+ 

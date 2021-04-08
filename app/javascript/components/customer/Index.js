@@ -1,52 +1,136 @@
-import {
-  ApolloClient,
-  ApolloProvider,
-  HttpLink,
-  InMemoryCache,
-} from '@apollo/client';
-import { Link, useHistory } from 'react-router-dom';
-import { CSVLink } from 'react-csv';
-import Papa from 'papaparse';
-import {
-  Layout,
-  Card,
-  Button,
-  ResourceList,
-  Stack,
-  TextStyle,
-  Thumbnail,
-  DataTable,
-  Page,
-  ButtonGroup,
-  Select,
-  Tabs,
-  Autocomplete,
-  Icon,
-  Badge,
-  Filters,
-  TextField,
-  RangeSlider,
-  FormLayout,
-  Spinner,
-  ChoiceList,
-  Checkbox,
-  Modal,
-  DropZone,
-  Caption,
-  Banner,
-  Toast,
-  List,
-  Frame,
-} from '@shopify/polaris';
-import { NoteMinor } from '@shopify/polaris-icons';
-
-import { authenticatedFetch } from '@shopify/app-bridge-utils';
 import { gql, useMutation, useQuery } from '@apollo/client';
+import {
+  Badge,
 
-import React, { useState, useCallback, useEffect } from 'react';
-import AppLayout from '../layout/Layout';
-import { SearchMajor, DeleteMajor } from '@shopify/polaris-icons';
+
+
+
+
+
+
+
+
+
+  Banner, Button,
+
+
+
+
+
+
+  ButtonGroup,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Caption, Card,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Checkbox, ChoiceList, DataTable,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  DropZone, Filters,
+
+
+
+
+
+
+
+
+
+
+
+
+  Frame, List, Modal, Page,
+
+
+
+
+
+
+
+
+
+
+  Spinner, Stack,
+
+
+
+
+
+
+  Tabs, Thumbnail,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Toast
+} from '@shopify/polaris';
+import { DeleteMajor, NoteMinor } from '@shopify/polaris-icons';
+import Papa from 'papaparse';
+import React, { useCallback, useEffect, useState } from 'react';
+import { CSVLink } from 'react-csv';
+import { useHistory } from 'react-router-dom';
 import swapIcon from '../../../assets/images/icons/swap.svg';
+import AppLayout from '../layout/Layout';
+
+
 // import json2csv from 'json2csv';
 const subscriptions = ['all', 'inTrial', 'future', 'active', 'cancelled'];
 

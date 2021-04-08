@@ -56,7 +56,23 @@
                 .Polaris-Stack__Item.Polaris-Stack__Item--fill
                   span= line.node.title
                 .Polaris-Stack__Item
-                  = p_text_field value: line.node.quantity
+                  .quantity-field
+                    div
+                      / span.label Quantity:
+                      span.btn-wrapper
+                        button.minus-quantity type="button"
+                          svg fill="none" height="8" viewbox=("0 0 7 2") width="8" xmlns="http://www.w3.org/2000/svg"
+                            path d=("M7 0H0V1.5H7V0Z") fill="#637381" /
+
+                        input.quatity-val type="number" name="quantity" value="1"/
+                        button.plus-quantity type="button"
+                          svg fill="none" height="8" viewbox=("0 0 8 8") width="8" xmlns="http://www.w3.org/2000/svg"
+                            path d=("M0 3.08V4.508H3.08V7.588H4.508V4.508H7.588V3.08H4.508V0H3.08V3.08H0Z") fill="#212B36" /
+                        input.prev-quantity type="hidden" value="1"/
+                      span.update-quantity
+                        input.hidden type="text" name="line_item_id" value="1"/
+                        button type="submit" APPLY
+                    div
                 - if @subscription.status == 'ACTIVE'
                   .Polaris-Stack__Item
                     .Polaris-ButtonGroup
