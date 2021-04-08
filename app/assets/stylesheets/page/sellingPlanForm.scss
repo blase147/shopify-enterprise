@@ -75,4 +75,26 @@
   .Polaris-Button--plain {
     background: none;
   }
+  .box-subscription-search {
+    display: flex;
+    flex-direction: column;
+    height: 68px;
+    justify-content: space-between;
+  }
+  .box-subscription-detail {
+    display: flex;
+    > div:first-child {
+      display: flex;
+      flex-direction: column;
+      height: 68px;
+      justify-content: space-between;
+      margin-right: 25px;
+    }
+    > div:nth-child(2) {
+      .Polaris-Choice {
+        padding: 0;
+        padding-bottom: .8rem;
+      }
+    }
+  }
 }
