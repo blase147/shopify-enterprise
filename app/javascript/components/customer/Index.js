@@ -665,13 +665,22 @@ const Customers = () => {
   `;
   const [createCustomer] = useMutation(CREATE_CUSTOMER);
 
+  const isToday = (someDate) => {
+    const today = new Date()
+    return someDate.getDate() == today.getDate() &&
+      someDate.getMonth() == today.getMonth() &&
+      someDate.getFullYear() == today.getFullYear()
+  }
+
   let activeArr = [],
     newArr = [],
     pausedArr = [],
     cancelledArr = [];
   if (selectedTab == 1 && filterCustomers.length !== 0) {
     filterCustomers?.map(res => {
-      res.status == 'NEW' && newArr.push(res);
+      console.log(res.createdAt !== null && (new Date(Date.parse(res.createdAt)).toString()), " ---- ", new Date(new Date().getTime()).toString());
+      // console.log(isToday(res.createdAt !== null && Date.parse(res.createdAt)));
+      // res.date == 'NEW' && newArr.push(res);
     });
   } else if (selectedTab == 2 && filterCustomers.length !== 0) {
     filterCustomers?.map(res => {
