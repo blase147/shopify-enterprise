@@ -12,5 +12,5 @@ class Customer < ApplicationRecord
   accepts_nested_attributes_for :billing_address,
   reject_if: :all_blank, allow_destroy: true
 
-  default_scope { order(created_at: :asc) }
+  # default_scope { order(created_at: :asc) }
 end
