@@ -400,7 +400,17 @@ div.Polaris-Modal-Dialog__Container {
     width: 160px;
   }
   a {
-    margin-right: 6px;
+    // margin-right: 6px;
+    display: flex;
+    align-items: center;
+    color: #000;
+    text-decoration: none;
+
+  }
+
+  span {
+    margin-left: 6px;
+    font-weight: 300;
   }
 }
 
@@ -443,12 +453,12 @@ div.Polaris-Modal-Dialog__Container {
   margin-right: 100px;
 }
 .slider-btns {
-  
+
   display: flex;
   margin-bottom: 20px;
   > div {
     margin-right: 30px;
-   
+
   }
   svg {
     margin-right: 10px;
@@ -561,7 +571,7 @@ div.Polaris-Modal-Dialog__Container {
 .billing-actions {
   display: flex;
   align-items:center;
-  
+
   .eidt {
     margin-right: 30px;
     display:flex;
@@ -580,5 +590,20 @@ div.Polaris-Modal-Dialog__Container {
 .delivery-schedule {
   p {
     line-height: 28px;
+  }
+}
+
+.resume {
+  padding-bottom: 15px;
+  margin-top: 30px;
+  a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    color: #000;
+  }
+
+  .resume-btn {
+    margin-left: 6px;
   }
 }
