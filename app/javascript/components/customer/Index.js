@@ -429,7 +429,7 @@ const Customers = () => {
     const rowsData = customers.filter((item) => {
       return (
         (item.subscription === subscriptions[selectedTab] ||
-          subscriptions[selectedTab] === 'all') &&
+          (subscriptions[selectedTab] === 'all') || (subscriptions[selectedTab] === 'returning') || (subscriptions[selectedTab] === 'active')) &&
         (item.name?.toLowerCase()?.includes(queryValue?.toLowerCase()) ||
           !queryValue) &&
         (item.subscription?.toLowerCase()?.includes(taggedWith) || !taggedWith)
@@ -443,7 +443,7 @@ const Customers = () => {
       filterCustomersValue();
     }
     // console.log('searchvalue: ', queryValue);
-  }, [queryValue, taggedWith, customers, selectedTab]);
+  }, [queryValue, taggedWith, customers]);
 
   useEffect(() => {
     filterCustomersValue();
@@ -665,6 +665,37 @@ const Customers = () => {
   `;
   const [createCustomer] = useMutation(CREATE_CUSTOMER);
 
+  const isToday = (someDate) => {
+    const today = new Date()
+    return someDate.getDate() == today.getDate() &&
+      someDate.getMonth() == today.getMonth() &&
+      someDate.getFullYear() == today.getFullYear()
+  }
+
+  let activeArr = [],
+    newArr = [],
+    pausedArr = [],
+    cancelledArr = [];
+  if (selectedTab == 1 && filterCustomers.length !== 0) {
+    filterCustomers?.map(res => {
+      console.log(res.createdAt !== null && (new Date(Date.parse(res.createdAt)).toString()), " ---- ", new Date(new Date().getTime()).toString());
+      // console.log(isToday(res.createdAt !== null && Date.parse(res.createdAt)));
+      // res.date == 'NEW' && newArr.push(res);
+    });
+  } else if (selectedTab == 2 && filterCustomers.length !== 0) {
+    filterCustomers?.map(res => {
+      res.status == 'PAUSED' && pausedArr.push(res);
+    });
+  } else if (selectedTab == 3 && filterCustomers.length !== 0) {
+    filterCustomers?.map(res => {
+      res.status == 'ACTIVE' && activeArr.push(res);
+    });
+  } else if (selectedTab == 4 && filterCustomers.length !== 0) {
+    filterCustomers?.map(res => {
+      res.status == 'CANCELLED' && cancelledArr.push(res);
+    });
+  }
+
   return (
     <AppLayout typePage="customers" tabIndex="2">
       <Frame>
@@ -762,7 +793,7 @@ const Customers = () => {
                   </Button>
                 </div>
               </div>
-              <div className="table">
+              <div className={"table" + " " + selectedTab}>
                 <DataTable
                   columnContentTypes={[
                     'text',
@@ -779,7 +810,7 @@ const Customers = () => {
                     'Product',
                     '',
                   ]}
-                  rows={formatRows(filterCustomers)}
+                  rows={selectedTab == 1 ? formatRows(newArr) : selectedTab == 2 ? formatRows(pausedArr) : selectedTab == 3 ? formatRows(activeArr) : selectedTab == 4 ? formatRows(cancelledArr) : formatRows(filterCustomers)}
                 />
               </div>
               {loading && (

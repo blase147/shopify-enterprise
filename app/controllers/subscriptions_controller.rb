@@ -1,6 +1,7 @@
 class SubscriptionsController < AuthenticatedController
   skip_before_action :verify_authenticity_token
   layout 'subscriptions'
+  include SubscriptionConcern
 
   def index
     redirect_to subscription_path(id: params[:id]) if params[:id].present?
@@ -65,18 +66,6 @@ class SubscriptionsController < AuthenticatedController
       render js: "showToast('error', '#{result[:error]}'); hideLoading()"
     else
       render js: "showToast('notice', 'Card is removed!'); hideModal();"
-    end
-  end
-
-  def skip_schedule
-    id = params[:id]
-    result = ScheduleSkipService.new(id).run
-
-    if result.is_a?(Hash)
-      flash[:error] = result[:error]
-      render js: "showToast('error', '#{result[:error]}'); hideLoading()"
-    else
-      render js: "showToast('notice', 'Next schedule is skipped!'); hideModal();"
     end
   end
 
