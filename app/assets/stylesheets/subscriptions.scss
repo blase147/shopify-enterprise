@@ -378,16 +378,88 @@ div.Polaris-Modal-Dialog__Container {
 
 .text-par {
   display: flex;
-  justify-content: space-between;
+  padding-bottom: 3rem;
+  padding-top: 3rem;
+  border-bottom: 0.1rem solid var(--p-divider, #dfe3e8);
+  &:nth-last-child(1) {
+    border-bottom: 0;
+  }
+  // justify-content: space-between;
 
   .skip-btn {
-    background-color: $primary;
-    color: #fff;
-    border: 0;
-    padding: 6px 12px;
-    border-radius: 3px;
-    margin-top: 3px;
-    outline: 0;
+    // background-color: $primary;
+    // color: #fff;
+    // border: 0;
+    // padding: 6px 12px;
+    // border-radius: 3px;
+    // margin-top: 3px;
+    // outline: 0;
+  }
+  p {
+    font-size: 18px;
+    width: 160px;
+  }
+  a {
+    margin-right: 6px;
+  }
+}
+
+.product-carousel {
+  padding: 0 !important;
+  .product-qty {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 27px;
+    margin-bottom: 27px;
+    margin-right: 100px;
+  }
+  .owl-carousel .owl-nav.disabled, .owl-carousel .owl-dots.disabled {
+    display: flex !important;
+    position: absolute;
+    top: -27px;
+    right: 0;
+  }
+  .owl-carousel .owl-nav button.owl-prev, .owl-carousel .owl-nav button.owl-next {
+    border: 2px solid;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    &:focus {
+      outline: 0 none;
+    }
+  }
+  .owl-carousel .owl-nav button.owl-prev span, .owl-carousel .owl-nav button.owl-next span {
+    display: block;
+    height: 85%;
+    width: 100%;
+  }
+}
+.product-header {
+  margin-right: 100px;
+}
+.slider-btns {
+  
+  display: flex;
+  > div {
+    margin-right: 30px;
+   
+  }
+  svg {
+    margin-right: 10px;
+  }
+  img {
+    margin-right: 10px;
+  }
+  a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #000;
   }
 }
 
@@ -473,4 +545,39 @@ div.Polaris-Modal-Dialog__Container {
 .Polaris-Stack.visa-section {
   display: flex;
   align-items: center;
+}
+
+.billing-info-text {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 0.1rem solid var(--p-divider, #dfe3e8);
+  p {
+  font-size: 18px;
+  line-height: 28px;
+  }
+}
+
+.billing-actions {
+  display: flex;
+  align-items:center;
+  
+  .eidt {
+    margin-right: 30px;
+    display:flex;
+    align-items:center;
+    margin-left: 20px;
+    padding-bottom: 15px;
+    svg {
+      margin-right:10px;
+    }
+    a {
+      text-decoration: none;
+      color: #000;
+    }
+  }
+}
+.delivery-schedule {
+  p {
+    line-height: 28px;
+  }
 }

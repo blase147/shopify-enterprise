@@ -8,6 +8,8 @@ require("turbolinks").start()
 require("@rails/activestorage").start()
 require("channels")
 require("jquery")
+require('owl.carousel');
+import 'owl.carousel/dist/assets/owl.carousel.css'
 
 // Uncomment to copy all static images under ../images to the output folder and reference
 // them with the image_pack_tag helper in views (e.g <%= image_pack_tag 'rails.png' %>)
@@ -90,4 +92,23 @@ $(document).on('click', 'button.plus-quantity', function () {
   } else {
     $(this).parents('.quantity-field').find('.update-quantity').addClass('active');
   }
+});
+$(document).ready(function() {
+ 
+  $("#owl-demo").owlCarousel({
+ 
+      navigation : false, // Show next and prev buttons
+      slideSpeed : 300,
+      paginationSpeed : 400,
+      singleItem:true,
+ 
+      // "singleItem:true" is a shortcut for:
+      items : 1
+      // itemsDesktop : false,
+      // itemsDesktopSmall : false,
+      // itemsTablet: false,
+      // itemsMobile : false
+ 
+  });
+ 
 });
