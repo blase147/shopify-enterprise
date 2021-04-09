@@ -49,15 +49,15 @@ function showToast(type, message) {
 }
 window.showToast = showToast;
 
-window.hideModal = function(reload) {
+window.hideModal = function (reload) {
   var modal = $('.Polaris-Modal')
   modal.removeClass('shown');
   hideLoading()
 
-  if(reload) { window.location.reload() }
+  if (reload) { window.location.reload() }
 }
 
-window.hideLoading = function() {
+window.hideLoading = function () {
   var modal = $('.Polaris-Modal')
   modal.find('[type=submit]').removeClass('Polaris-Button--loading')
   modal.find('.Polaris-Button__Spinner').addClass('hide')
@@ -93,22 +93,22 @@ $(document).on('click', 'button.plus-quantity', function () {
     $(this).parents('.quantity-field').find('.update-quantity').addClass('active');
   }
 });
-$(document).ready(function() {
- 
+$(document).ready(function () {
+
   $("#owl-demo").owlCarousel({
- 
-      navigation : false, // Show next and prev buttons
-      slideSpeed : 300,
-      paginationSpeed : 400,
-      singleItem:true,
- 
-      // "singleItem:true" is a shortcut for:
-      items : 1
-      // itemsDesktop : false,
-      // itemsDesktopSmall : false,
-      // itemsTablet: false,
-      // itemsMobile : false
- 
+
+    navigation: false, // Show next and prev buttons
+    slideSpeed: 300,
+    paginationSpeed: 400,
+    singleItem: true,
+
+    // "singleItem:true" is a shortcut for:
+    items: 1
+    // itemsDesktop : false,
+    // itemsDesktopSmall : false,
+    // itemsTablet: false,
+    // itemsMobile : false
+
   });
- 
+
 });

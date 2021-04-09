@@ -319,8 +319,8 @@ const Customers = () => {
   }
   // -------------------
   const GET_CUSTOMERS = gql`
-    query {
-      fetchCustomers {
+    query($sortColumn: String, $sortDirection: String) {
+      fetchCustomers(sortColumn: $sortColumn, sortDirection: $sortDirection) {
         id
         shopifyId
         firstName
@@ -678,9 +678,9 @@ const Customers = () => {
     cancelledArr = [];
   if (selectedTab == 1 && filterCustomers.length !== 0) {
     filterCustomers?.map(res => {
-      console.log(res.createdAt !== null && (new Date(Date.parse(res.createdAt)).toString()), " ---- ", new Date(new Date().getTime()).toString());
-      // console.log(isToday(res.createdAt !== null && Date.parse(res.createdAt)));
-      // res.date == 'NEW' && newArr.push(res);
+      if (res.createdAt !== null && (new Date(Date.parse(res.createdAt)).toDateString()) === new Date(new Date().getTime()).toDateString()) {
+        newArr.push(res);
+      }
     });
   } else if (selectedTab == 2 && filterCustomers.length !== 0) {
     filterCustomers?.map(res => {
