@@ -28,7 +28,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import LayoutIndex from '../layout/Layout';
 import AppendProductsModal from './AppendProductsModal';
 import SearchCollection from './SearchCollection';
-import SearchProduct from '../upsell/SearchProduct';
+import SearchProduct from './SearchProduct';
 
 import { gql, useMutation, useLazyQuery } from '@apollo/client';
 
@@ -814,9 +814,10 @@ const BuildABoxPlan = () => {
                               <div className="box-subscription-search">
                                   <TextContainer>Product</TextContainer>
                                   <SearchProduct
-                                    value={plan.selectedProduct}
-                                    setFieldValue={setFieldValue}
-                                    fieldName={`sellingPlans[${index}].selectedProduct`}
+                                    selectedOptions={selectedOptions}
+                                    setSelectedOptions={setSelectedOptions}
+                                    selectedProducts={selectedProducts}
+                                    setSelectedProducts={setSelectedProducts}
                                   />
                               </div>
                             )}
@@ -860,6 +861,34 @@ const BuildABoxPlan = () => {
                               </div>
                             )}
                           </FormLayout.Group>
+                          {plan.isProductBox && (
+                            <div className="product-stack">
+                              <div>Selected products (subscription box options)</div>
+                              <Stack>
+                                {selectedProducts.map(
+                                  (product, i) =>
+                                    product._destroy === false && (
+                                      <div
+                                        key={i}
+                                        className="building-box-product"
+                                      >
+                                        <img
+                                          className="product"
+                                          src={product?.image}
+                                        />
+                                        <img
+                                          onClick={() => {
+                                            handleRemoveProduct(i);
+                                          }}
+                                          className="removeIcon"
+                                          src={removeIcon}
+                                        />
+                                      </div>
+                                    )
+                                )}
+                              </Stack>
+                            </div>
+                          )}
                         </FormLayout>
                         <br />
                       </Card>
