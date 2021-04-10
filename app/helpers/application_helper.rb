@@ -32,10 +32,10 @@ module ApplicationHelper
   end
 
   def action_subscription_contract_path(action, contract_id, query = '')
-    # if params[:shop].present?
-    #   "/a/chargezen_production/subscriptions/#{contract_id}/#{action}?customer_id=#{params[:customer_id]}#{query.present? ? "&#{query}" : ''}"
-    # else
+    if params[:shop].present?
+      "/a/chargezen_production/subscriptions/#{contract_id}/#{action}?customer_id=#{params[:customer_id]}#{query.present? ? "&#{query}" : ''}"
+    else
       "/subscriptions/#{contract_id}/#{action}?#{query.present? ? "#{query}" : ''}"
-    # end
+    end
   end
 end

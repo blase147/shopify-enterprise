@@ -210,7 +210,7 @@ const Customers = () => {
     },
     {
       id: 'expired',
-      content: 'Expired',
+      content: 'Canceled',
     },
   ];
   // End tabs
