@@ -428,8 +428,8 @@ div.Polaris-Modal-Dialog__Container {
   #owl-demo {
     position: static;
   }
-  .owl-carousel .owl-nav.disabled, .owl-carousel .owl-dots.disabled {
-    display: flex !important;
+  .owl-carousel.owl-items-display .owl-nav.disabled, .owl-carousel .owl-dots.disabled {
+    display: flex;
     position: absolute;
     top: 17px;
     right: 0;

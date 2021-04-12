@@ -50,7 +50,7 @@
               .Polaris-Stack__Item
                 span.Polaris-DisplayText.Polaris-DisplayText--sizeSmall Qty
             .Polaris-Card__Section.product-carousel
-              #owl-demo.owl-carousel.owl-theme
+              #owl-demo.owl-carousel.owl-theme class=("#{@subscription.lines.edges.count > 1 ? 'owl-items-display' : ''}")
                 - @subscription.lines.edges.each do |line|
                   - if @subscription.status == 'ACTIVE'
                     div.item
@@ -234,17 +234,18 @@
 
                   .Polaris-Stack__Item
                     p #{card.credit_card_company} ending in #{card.credit_card_number}
-                    p Expires 11/2024
                     - if card.respond_to?(:credit_card_expiration_month)
                       p Expires #{card.credit_card_expiration_month}/#{card.credit_card_expiration_year}
               .Polaris-Card__Subsection.billing-info-text
-                p = billing_address.name
+                p = billing_address.name&.titleize
 
                 p = billing_address.address1
 
                 p #{billing_address.city} #{billing_address.province} #{billing_address.zip} #{billing_address.country}
 
                 p #{billing_address.phone}
+
+                p #{api_order.contact_email}
 
             .Polaris-Card__Subsection
               .Polaris-Stack
@@ -268,12 +269,6 @@
                             path d=("M10.5713 7.89999C10.3583 7.89999 10.1856 8.07268 10.1856 8.28571V11.1428C10.1856 11.2454 10.1025 11.3285 9.9999 11.3285H4.85713C4.75456 11.3285 4.67142 11.2454 4.67142 11.1428V5.4286C4.67142 5.32603 4.75456 5.24288 4.85713 5.24288H8.28566C8.49869 5.24288 8.67137 5.07019 8.67137 4.85716C8.67137 4.64413 8.49868 4.47146 8.28566 4.47146H4.85713C4.32852 4.47146 3.9 4.89999 3.9 5.4286V11.1428C3.9 11.6714 4.32852 12.0999 4.85713 12.0999H9.99992C10.5285 12.0999 10.9571 11.6714 10.9571 11.1428V8.28569C10.9571 8.07267 10.7844 7.89999 10.5713 7.89999Z") fill="white" stroke="white" stroke-width="0.2" /
                             path d=("M11.6799 4.32049C11.4748 4.11531 11.1965 4.00007 10.9064 4.0001C10.6161 3.99927 10.3376 4.11471 10.133 4.32067L6.36959 8.08375C6.33837 8.11521 6.31482 8.15344 6.30074 8.19546L5.72932 9.90972C5.67945 10.0594 5.76039 10.2212 5.91011 10.2711C5.93915 10.2808 5.96957 10.2857 6.00017 10.2857C6.03084 10.2857 6.06133 10.2808 6.09046 10.2712L7.80472 9.69974C7.84683 9.68568 7.88508 9.66201 7.91644 9.6306L11.6798 5.86723C12.107 5.44013 12.107 4.74763 11.6799 4.32049ZM11.2758 5.46351L7.56158 9.17775L6.45188 9.54831L6.8213 8.44003L10.537 4.7258C10.7412 4.52193 11.0721 4.52227 11.276 4.72654C11.3734 4.82412 11.4283 4.95622 11.4287 5.09408C11.429 5.23268 11.374 5.36567 11.2758 5.46351Z") fill="white" /
                           a href=""  Update Card
-                        .eidt
-                          svg fill="none" height="16" viewbox=("0 0 16 16") width="16" xmlns="http://www.w3.org/2000/svg"
-                            circle cx="8" cy="8" fill="#212B36" r="8" /
-                            path d=("M11 5L8 8L11 11") stroke="white" /
-                            path d=("M5 5L8 8L5 11") stroke="white" /
-                          a href=""  Remove
 
 
 
