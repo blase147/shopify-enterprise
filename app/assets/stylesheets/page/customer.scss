@@ -57,6 +57,9 @@
         }
       }
     }
+    button {
+      display: none;
+    }
   }
   .filter::after {
     display: block;
@@ -119,4 +122,8 @@
       color: #777777;
     }
   }
+}
+
+#installation {
+  display: none;
 }
