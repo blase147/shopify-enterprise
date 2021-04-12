@@ -424,11 +424,12 @@ div.Polaris-Modal-Dialog__Container {
     margin-top: 27px;
     margin-bottom: 27px;
     margin-right: 100px;
+   
   }
   #owl-demo {
     position: static;
   }
-  .owl-carousel.owl-items-display .owl-nav.disabled, .owl-carousel .owl-dots.disabled {
+  .owl-carousel.owl-items-display .owl-nav, .owl-carousel .owl-dots {
     display: flex;
     position: absolute;
     top: 17px;
@@ -448,14 +449,16 @@ div.Polaris-Modal-Dialog__Container {
       outline: 0 none;
     }
   }
+
   .owl-carousel .owl-nav button.owl-prev span, .owl-carousel .owl-nav button.owl-next span {
-    // display: block;
-    // height: 85%;
-    // width: 100%;
+    display: block;
+    height: 85%;
+    width: 100%;
+    margin-top: -1px;
   }
 
-  .owl-nav .owl-prev.disabled,
-  .owl-nav .owl-next.disabled {
+  .owl-carousel .owl-nav .owl-prev.disabled,
+  .owl-carousel .owl-nav .owl-next.disabled {
      display: none;
   }
 }
@@ -615,5 +618,24 @@ div.Polaris-Modal-Dialog__Container {
 
   .resume-btn {
     margin-left: 6px;
+  }
+}
+
+.payments-spacing {
+  margin-top: 4rem;
+  margin-left: 1.5rem;
+}
+
+// @media screen and (min-width: 1479px) and  (max-width: 1757px){
+//   .polaris-product {
+//     height: 196px;
+//   }
+
+// }
+
+
+@media (min-width: 46.5em) {
+  .Polaris-Page__Content.shipment-process {
+    margin-top: 4rem;
   }
 }
