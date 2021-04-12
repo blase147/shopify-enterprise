@@ -139,6 +139,8 @@ const {
   transforms: { unwind },
 } = require('json2csv');
 
+let sortOrder = 0;
+
 const ButtonRemove = (props) => {
   const { selectedCustomers, refetch, setselectedCustomers } = props;
   const DELETE_CUSTOMER = gql`
@@ -780,10 +782,19 @@ const Customers = () => {
                   <Button
                     onClick={() => {
                       setFilterCustomers(() => {
-                        return [...filterCustomers].sort(
-                          (a, b) =>
-                            Date.parse(b.updatedAt) - Date.parse(a.updatedAt)
-                        );
+                        if (sortOrder == 0) {
+                          sortOrder = 1;
+                          return [...filterCustomers].sort(
+                            (a, b) =>
+                              Date.parse(b.updatedAt) - Date.parse(a.updatedAt)
+                          );
+                        } else {
+                          sortOrder = 0;
+                          return [...filterCustomers].sort(
+                            (a, b) =>
+                              Date.parse(a.updatedAt) - Date.parse(b.updatedAt)
+                          );
+                        }
                       });
                       // console.log('filterCustomers--after', filterCustomers);
                     }}
