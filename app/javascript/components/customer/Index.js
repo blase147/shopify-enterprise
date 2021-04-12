@@ -782,7 +782,7 @@ const Customers = () => {
                   <Button
                     onClick={() => {
                       setFilterCustomers(() => {
-                        if (sortOrder == 0) {
+                        if (sortOrder === 0) {
                           sortOrder = 1;
                           return [...filterCustomers].sort(
                             (a, b) =>
