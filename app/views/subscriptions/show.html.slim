@@ -274,6 +274,7 @@
                 /           = icon_tag 'edit'
                 /           span.Polaris-Button__Text Update Card
 
+<<<<<<< HEAD
                 / .Polaris-Stack__Item
                 /   .Polaris-ButtonGroup
                 /     .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
@@ -281,6 +282,15 @@
                 /         span.Polaris-Button__Content
                 /           == icon_tag 'cancel'
                 /           span.Polaris-Button__Text Remove
+=======
+                .Polaris-Stack__Item
+                  .Polaris-ButtonGroup
+                    .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
+                      a.Polaris-Button.Polaris-Button--plain href=remove_card_subscription_path(params[:id]) data-remote=true
+                        span.Polaris-Button__Content
+                          == icon_tag 'cancel'
+                          span.Polaris-Button__Text Remove
+>>>>>>> e7a675c84693eaf5e744938c8f7e4488a651a687
         br/
         .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
           h2.Polaris-Heading.Polaris-TextStyle--variationStrongDelivery Delivery schedule
@@ -289,6 +299,7 @@
             .Polaris-Card__Subsection.delivery-schedule
               p Delivery schedule dates are when your order will be placed. Future deliveries will be added to your schedule as the date approaches.
             .Polaris-Card__Subsection
+<<<<<<< HEAD
               .Polaris-TextStyle--variationStrong
                 .text-par
                   p.text
@@ -310,6 +321,15 @@
             /   p Recurring
             / .Polaris-Card__Subsection
             /   .Polaris-Stack
+=======
+              .Polaris-TextStyle--variationStrong= DateTime.parse(@subscription.next_billing_date).strftime("%B %e, %Y")
+              p= order&.shipping_address&.formatted&.join(', ')&.titleize
+            .Polaris-Card__Subsection
+              .Polaris-TextStyle--variationStrong Type
+              p Recurring
+            .Polaris-Card__Subsection
+              .Polaris-Stack
+>>>>>>> e7a675c84693eaf5e744938c8f7e4488a651a687
                 / .Polaris-Stack__Item
                 /   .Polaris-ButtonGroup
                 /     .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain

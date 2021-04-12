@@ -804,7 +804,11 @@ const Customers = () => {
                   </Button>
                 </div>
               </div>
-              <div className={"table" + " " + selectedTab}>
+<<<<<<< HEAD
+              <div className={"table customer-subscription-tbl" + " " + selectedTab}>
+=======
+              <div className="table customer-subscription-tbl">
+>>>>>>> e7a675c84693eaf5e744938c8f7e4488a651a687
                 <DataTable
                   columnContentTypes={[
                     'text',

@@ -30,6 +30,10 @@
         border-radius: 5px 5px 0px 0px;
         padding: 13px 11px 15px 14px;
       }
+      #dunning, #store-information,#legal {
+        display: none;
+      }
+
     }
   }
   //Billing
@@ -168,3 +172,4 @@
     }
   }
 }
+
