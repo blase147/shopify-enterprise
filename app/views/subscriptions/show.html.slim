@@ -28,7 +28,7 @@
           .Polaris-Card__Header
             h1.Polaris-Heading.Polaris-DisplayText.Polaris-DisplayText--sizeLarge
               = customer.display_name.titleize
-            
+
           .Polaris-Card__Section
             p.Polaris-DisplayText #{formatted} . #{customer.email}
             p Address ID: ##{address_id}
@@ -40,7 +40,7 @@
                   span.Polaris-Button__Content
                     = icon_tag 'edit'
                     span.Polaris-Button__Text Edit
-      
+
       .Polaris-Layout__Section.Polaris-Layout__Section--oneHalf
         .Polaris-Card
           .Polaris-Card__Header
@@ -60,14 +60,14 @@
 
           .Polaris-Card__Footer.Polaris-Card__LeftJustified
             .Polaris-Stack
-              / .Polaris-Stack__Item 
+              / .Polaris-Stack__Item
               /   .Polaris-ButtonGroup
               /     .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
               /       button.Polaris-Button.Polaris-Button--plain type="button"
               /         span.Polaris-Button__Content
               /           = icon_tag 'add'
               /           span.Polaris-Button__Text Add Product
-  
+
 
               - if @subscription.status == 'ACTIVE'
                 .Polaris-Stack__Item
@@ -183,7 +183,7 @@
                         th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"= DateTime.parse(order.node.created_at).strftime("%b %d, %H:%M%P")
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= order.node.name
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--numeric $#{order.node.total_received_set.presentment_money.amount}
-      
+
       .Polaris-Layout__Section.Polaris-Layout__Section--secondary
         .Polaris-TextContainer.Polaris-TextContainer--spacingTight
           h2.Polaris-Heading.Polaris-TextStyle--variationStrong Billing Information
@@ -212,7 +212,7 @@
 
             .Polaris-Card__Subsection
               .Polaris-Stack
-                .Polaris-Stack__Item 
+                .Polaris-Stack__Item
                   .Polaris-ButtonGroup
                     .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
                       a.Polaris-Button.Polaris-Button--plain href=send_update_card_subscription_path(params[:id]) data-remote=true
@@ -230,7 +230,7 @@
 
                 .Polaris-Stack__Item
                   .Polaris-ButtonGroup
-                    .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain 
+                    .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
                       a.Polaris-Button.Polaris-Button--plain href=remove_card_subscription_path(params[:id]) data-remote=true
                         span.Polaris-Button__Content
                           == icon_tag 'cancel'
@@ -244,13 +244,13 @@
               p Delivery schedule dates are when your order will be placed. Future deliveries will be added to your schedule as the date approaches.
             .Polaris-Card__Subsection
               .Polaris-TextStyle--variationStrong= DateTime.parse(@subscription.next_billing_date).strftime("%B %e, %Y")
-              p= order.shipping_address.formatted.join(', ').titleize
+              p= order&.shipping_address&.formatted&.join(', ')&.titleize
             .Polaris-Card__Subsection
               .Polaris-TextStyle--variationStrong Type
               p Recurring
             .Polaris-Card__Subsection
               .Polaris-Stack
-                / .Polaris-Stack__Item 
+                / .Polaris-Stack__Item
                 /   .Polaris-ButtonGroup
                 /     .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
                 /       button.Polaris-Button.Polaris-Button--plain type="button"

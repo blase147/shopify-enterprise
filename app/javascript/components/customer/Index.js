@@ -678,7 +678,7 @@ const Customers = () => {
                   </Button>
                 </div>
               </div>
-              <div className="table">
+              <div className="table customer-subscription-tbl">
                 <DataTable
                   columnContentTypes={[
                     'text',

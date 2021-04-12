@@ -35,12 +35,20 @@
       }
     }
   }
+  .customer-subscription-tbl {
+    .Polaris-DataTable__Navigation {
+      display: none;
+    }
+  }
   .filter {
     position: relative;
     display: flex;
     .Polaris-Filters {
       width: 60%;
       display: inline-block;
+      button {
+        display: none;
+      }
     }
     .btn-sort {
       position: absolute;
@@ -56,9 +64,6 @@
           }
         }
       }
-    }
-    button {
-      display: none;
     }
   }
   .filter::after {
