@@ -453,6 +453,11 @@ div.Polaris-Modal-Dialog__Container {
     // height: 85%;
     // width: 100%;
   }
+
+  .owl-nav .owl-prev.disabled,
+  .owl-nav .owl-next.disabled {
+     display: none;
+  }
 }
 .product-header {
   margin-right: 100px;
