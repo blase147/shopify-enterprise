@@ -22,7 +22,7 @@ class AppProxy::DashboardController < AppProxyController
 
     @payment_methods = {}
     @orders.each do |order|
-      @payment_methods[order.payment_details.credit_card_number] = order.payment_details
+      @payment_methods[order.payment_details.credit_card_number] = order.payment_details if order.try(:payment_details).present?
     end
 
     @payment_methods = @payment_methods.values
