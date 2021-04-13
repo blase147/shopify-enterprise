@@ -1,125 +1,14 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import {
   Badge,
-
-
-
-
-
-
-
-
-
-
   Banner, Button,
-
-
-
-
-
-
   ButtonGroup,
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   Caption, Card,
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   Checkbox, ChoiceList, DataTable,
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   DropZone, Filters,
-
-
-
-
-
-
-
-
-
-
-
-
   Frame, List, Modal, Page,
-
-
-
-
-
-
-
-
-
-
   Spinner, Stack,
-
-
-
-
-
-
   Tabs, Thumbnail,
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   Toast
 } from '@shopify/polaris';
 import { DeleteMajor, NoteMinor } from '@shopify/polaris-icons';
@@ -804,11 +693,7 @@ const Customers = () => {
                   </Button>
                 </div>
               </div>
-<<<<<<< HEAD
               <div className={"table customer-subscription-tbl" + " " + selectedTab}>
-=======
-              <div className="table customer-subscription-tbl">
->>>>>>> e7a675c84693eaf5e744938c8f7e4488a651a687
                 <DataTable
                   columnContentTypes={[
                     'text',
