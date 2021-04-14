@@ -1,24 +1,35 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import AppLayout from '../layout/Layout';
 // import RoundCheckbox from 'rn-round-checkbox';
 import {
-  Card,
-  Select,
-  Page,
-  DisplayText,
-  ChoiceList,
-  Checkbox,
-  Badge,
-  TextField,
-  Button,
-  TextStyle,
-  Stack,
-  FormLayout,
-  Layout,
-  Heading,
-} from '@shopify/polaris';
+  Button, Card,
 
+
+
+  ChoiceList,
+
+
+
+
+
+
+
+  FormLayout,
+
+  Heading, Layout, Select,
+
+
+
+
+
+
+
+
+  Stack, TextField,
+
+  TextStyle
+} from '@shopify/polaris';
+import React, { useCallback, useState } from 'react';
 import Trash from '../../../assets/images/settings/trash.svg';
+
 
 const CustomPortal = (props) => {
   const [checkedProTheme, setCheckedProTheme] = useState(false);
@@ -141,14 +152,17 @@ const CustomPortal = (props) => {
       <Card.Section>
         <Stack vertical>
           <Stack.Item>
-            <DisplayText size="small" element="h6">
-              <TextStyle variation="subdued">
+            <div className="form-head">
+              <p className="control-text">
                 Control actions available to your customers after purchase
-              </TextStyle>
-            </DisplayText>
+            </p>
+              <div className="purchase-preview">
+                <button className="preview">PREVIEW</button>
+                <button className="preview">PUBLISH</button>
+              </div>
+            </div>
           </Stack.Item>
-          <Stack.Item>
-            {/* <div className="select-pro-themes"> */}
+          {/* <Stack.Item>
             <Stack alignment="center">
               <Stack.Item>
                 <div className="protheme">
@@ -156,7 +170,6 @@ const CustomPortal = (props) => {
                     label="PRO Theme Engine"
                     onChange={handleChangeProTheme}
                     checked="indeterminate"
-                    // disabled={false}
                   />
                   <Badge status="success">PRO</Badge>
                 </div>
@@ -180,53 +193,79 @@ const CustomPortal = (props) => {
                 </div>
               </Stack.Item>
             </Stack>
-            {/* </div> */}
+          </Stack.Item> */}
+          <Stack.Item>
+            <h5 className="customize-text">Customize Styles</h5>
           </Stack.Item>
           <Stack.Item>
-            <Heading>Customize Styles</Heading>
-          </Stack.Item>
-          <Stack.Item>
-            <FormLayout>
-              <TextField
-                label={
-                  <TextStyle variation="subdued">Header HTML/CSS/JS</TextStyle>
-                }
-                placeholder="Add Code Here..."
-                multiline={10}
-                value={values.styleHeader ? values.styleHeader : ''}
-                error={touched.styleHeader && errors.styleHeader}
-                onChange={(e) => setFieldValue('styleHeader', e)}
-              />
+            <div className="custom-portal">
+              <FormLayout>
+                <p className="applied-classes">Account Profile, Contact box & promo/contact button & portal background</p>
+                <TextField
+                  label={
+                    <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .leorem, .ipsum</span>   </TextStyle>
+                  }
+                  placeholder=".lorem {font-size: 34px;}"
+                  multiline={10}
+                  value={values.styleHeader ? values.styleHeader : ''}
+                  error={touched.styleHeader && errors.styleHeader}
+                  onChange={(e) => setFieldValue('styleHeader', e)}
+                />
+                <p className="applied-classes">Sidebar menu, promo tagline I, promo tagline II </p>
+                <TextField
+                  label={
+                    <TextStyle variation="subdued"> CSS classes available for customization: </TextStyle>
+                  }
+                  placeholder="Add Code Here..."
+                  multiline={10}
+                  value={values.styleHeader ? values.styleHeader : ''}
+                  error={touched.styleHeader && errors.styleHeader}
+                  onChange={(e) => setFieldValue('styleHeader', e)}
+                />
+                <p className="applied-classes">Active & canceled subscriptions box</p>
+                <TextField
+                  label={
+                    <TextStyle variation="subdued"> CSS classes available for customization:</TextStyle>
+                  }
+                  placeholder="Add Code Here..."
+                  multiline={10}
+                  value={values.styleHeader ? values.styleHeader : ''}
+                  error={touched.styleHeader && errors.styleHeader}
+                  onChange={(e) => setFieldValue('styleHeader', e)}
+                />
+                <p className="applied-classes">Delivery schedule, order history, addresses, billings & account pages</p>
 
-              <TextField
-                label={
-                  <TextStyle variation="subdued">Footer HTML/CSS/JS</TextStyle>
-                }
-                placeholder="Add Code Here..."
-                multiline={10}
-                value={values.styleFooter ? values.styleFooter : ''}
-                error={touched.styleFooter && errors.styleFooter}
-                onChange={(e) => setFieldValue('styleFooter', e)}
-              />
-
-              <TextField
-                label={
-                  <TextStyle variation="subdued">
-                    Credit Card Page CSS
+                <TextField
+                  label={
+                    <TextStyle variation="subdued">  CSS classes available for customization:</TextStyle>
+                  }
+                  placeholder="Add Code Here..."
+                  multiline={10}
+                  value={values.styleFooter ? values.styleFooter : ''}
+                  error={touched.styleFooter && errors.styleFooter}
+                  onChange={(e) => setFieldValue('styleFooter', e)}
+                />
+                <p className="applied-classes">Upsells Carousel</p>
+                <TextField
+                  label={
+                    <TextStyle variation="subdued">
+                      Credit Card Page CSS
                   </TextStyle>
-                }
-                placeholder="Add Code Here..."
-                multiline={10}
-                value={values.styleCreditCard ? values.styleCreditCard : ''}
-                error={touched.styleCreditCard && errors.styleCreditCard}
-                onChange={(e) => setFieldValue('styleCreditCard', e)}
-              />
-            </FormLayout>
+                  }
+                  placeholder="Add Code Here..."
+                  multiline={10}
+                  value={values.styleCreditCard ? values.styleCreditCard : ''}
+                  error={touched.styleCreditCard && errors.styleCreditCard}
+                  onChange={(e) => setFieldValue('styleCreditCard', e)}
+                />
+              </FormLayout>
+            </div>
           </Stack.Item>
         </Stack>
       </Card.Section>
       <Card.Section>
         <Stack vertical>
+          <div className="customer-portal">
           <Stack.Item>
             <Heading>Customer Portal Controls</Heading>
           </Stack.Item>
@@ -349,15 +388,16 @@ const CustomPortal = (props) => {
               </FormLayout>
             </Stack>
           </Stack.Item>
+          </div>
         </Stack>
       </Card.Section>
       <Card.Section>
         <Stack vertical>
-          <Stack.Item>
-            <TextStyle variation="strong">
+          <div className="frequency-checkbox">
+            <p variation="strong">
               Customer facing frequency options
-            </TextStyle>
-          </Stack.Item>
+            </p>
+         
           <Stack.Item>
             <ChoiceList
               allowMultiple
@@ -383,6 +423,7 @@ const CustomPortal = (props) => {
               onChange={(e) => setFieldValue('facingFrequencyOption', e)}
             />
           </Stack.Item>
+          </div>
           <Stack.Item>
             <p>
               Delivery schedule number of days in future shows 90 days (Max.
@@ -451,7 +492,7 @@ const CustomPortal = (props) => {
               </TextStyle>
               <FormLayout>
                 <FormLayout.Group>
-                  <p>Cancel Subscription</p>
+                  <p className="reactive-text">Cancel Subscription</p>
                   <Select
                     options={options}
                     value={values.subscriptionCancellation}
@@ -473,6 +514,7 @@ const CustomPortal = (props) => {
       <Card.Section>
         <Stack vertical>
           <Stack.Item>
+            <div className="frequency-checkbox">
             <FormLayout>
               <Heading>Customer Cancellation Email Contact</Heading>
               <TextField
@@ -497,15 +539,15 @@ const CustomPortal = (props) => {
                   onChange={(e) => setFieldValue('allowCancelAfter', e)}
                 />
                 <p>Charge(s)</p>
-                <p>&nbsp;</p>
-                <p>&nbsp;</p>
+                
               </FormLayout.Group>
             </FormLayout>
+            </div>
           </Stack.Item>
           <Stack.Item>
             <FormLayout>
               <FormLayout.Group>
-                <p>Reactivate Subscription</p>
+                <p className="reactive-text">Reactivate Subscription</p>
                 <Select
                   options={options}
                   value={values.reactiveSubscription}

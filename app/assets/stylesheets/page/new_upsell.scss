@@ -138,3 +138,63 @@
     background: none;
   }
 }
+
+.form-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  .preview {
+    margin-right: 20px;
+    background-color: #007EFF;
+    color: #eee;
+    padding: 10px 46px;
+    border-radius: 5px;
+    border: 0 none;
+    font-weight: bold;
+  }
+}
+.customize-text {
+  margin-bottom: 14px;
+  font-size: 20px;
+  color: #000000;
+  margin-bottom: 0px;
+}
+.applied-classes {
+  font-size: 18px;
+  margin-top: 50px;
+}
+.control-text {
+  font-size: 18px;
+}
+.custom-portal {
+  .Polaris-TextField--multiline>.Polaris-TextField__Input {
+    height: 120px !important;
+    margin-bottom: 30px;
+   &::placeholder {
+     font-size: 18px;
+   } 
+  }
+  .custom-classes {
+    color:red;
+  }
+  label {
+    margin-bottom: 12px;
+    .Polaris-TextStyle--variationSubdued {
+      font-size: 18px;
+    }
+  }
+}
+.customer-portal {
+  .Polaris-Select {
+    margin-bottom: 30px;
+  }
+}
+.frequency-checkbox {
+  background-color: #F7F7F7;
+  padding: 24px 18px;
+}
+.reactive-text {
+  font-size: 16px;
+  color: #000000;
+}
