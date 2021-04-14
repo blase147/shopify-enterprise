@@ -35,6 +35,7 @@ import { gql, useMutation, useLazyQuery } from '@apollo/client';
 import removeIcon from '../../../assets/images/subscriptionsPlans/removeProduct.svg';
 
 const BuildABoxPlan = () => {
+  const { id } = useParams();
   const GET_SELLING_PLAN = gql`
     query($id: ID!) {
       fetchPlanGroup(id: $id) {
@@ -59,10 +60,10 @@ const BuildABoxPlan = () => {
           trialAdjustmentType
           trialIntervalType
           trialIntervalCount
-          buildABoxMinNumber
-          buildABoxMaxNumber
-          buildABoxDuration
-          buildABoxDurationValue
+          box_subscription_type,
+          box_is_quantity,
+          box_is_quantity_limited,
+          box_quantity_limit,
           productImages {
             productId
             image
@@ -72,8 +73,6 @@ const BuildABoxPlan = () => {
       }
     }
   `;
-
-  const { id } = useParams();
   const [getSellingPlan, { data, loading, error }] = useLazyQuery(
     GET_SELLING_PLAN,
     {
@@ -81,7 +80,6 @@ const BuildABoxPlan = () => {
       fetchPolicy: 'no-cache',
     }
   );
-
   useEffect(() => {
     if (id) {
       getSellingPlan();
@@ -90,22 +88,23 @@ const BuildABoxPlan = () => {
 
   // consts ###
   const options = [...Array(99).keys()].map((foo) => (foo + 1).toString());
-
   const optionsWithNone = [...options];
   optionsWithNone.unshift({ value: '', label: 'None' });
-
   const interOptions = [
     { label: 'Day(s)', value: 'DAY' },
     { label: 'Week(s)', value: 'WEEK' },
     { label: 'Month(s)', value: 'MONTH' },
     { label: 'Year(s)', value: 'YEAR' },
   ];
-
   const adjusmentOptions = [
     { label: 'None', value: '' },
     { label: 'Fixed amount discount', value: 'FIXED_AMOUNT' },
     { label: 'Percentage discount', value: 'PERCENTAGE' },
     { label: 'Manual price', value: 'PRICE' },
+  ];
+  const boxQuantityOptions = [
+    { label: 'Yes', value: 'true' },
+    { label: 'No', value: 'false' },
   ];
 
   const [formErrors, setFormErrors] = useState([]);
@@ -130,11 +129,6 @@ const BuildABoxPlan = () => {
     }
   }, [data]);
 
-  const boxQuantityOptions = [
-    { label: 'Yes', value: 'true' },
-    { label: 'No', value: 'false' },
-  ];
-
   const initialValues = {
     name: '',
     selectorLabel: '',
@@ -150,24 +144,10 @@ const BuildABoxPlan = () => {
     trialIntervalType: 'DAY',
     trialAdjustmentType: '',
     trialAdjustmentValue: '0',
-    buildABoxMinNumber: '1',
-    buildABoxMaxNumber: '100',
-    buildABoxDuration: '1',
-    buildABoxDurationValue: '',
-    productImages: [],
-    isCollectionBox: false,
-    isProductBox: false,
-    selectedProduct: {
-      productId: '',
-      title: '',
-    },
-    selectedCollection: {
-      collectionId: '',
-      title: '',
-    },
-    boxDisplayQuantity: 'true',
-    boxLimitQuantity: false,
-    boxQuantityValue: '',
+    box_subscription_type: 0,
+    box_is_quantity: false,
+    box_is_quantity_limited: false,
+    box_quantity_limit: 0
   };
 
   const [productImagesFirst, setProductListFirst] = useState([]);
@@ -212,7 +192,6 @@ const BuildABoxPlan = () => {
 
   // controll product image
   const formRef = useRef(null);
-  const [activeModal, setActiveModal] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
 
@@ -763,47 +742,37 @@ const BuildABoxPlan = () => {
                           <FormLayout.Group>
                             <Checkbox
                               label="Sort box choices by collection"
-                              checked={plan.isCollectionBox}
+                              checked={plan.box_subscription_type == 1}
                               onChange={(e) => {
-                                  setFieldValue(
-                                    `sellingPlans[${index}].isCollectionBox`,
-                                    e
-                                  )
-                                  setFieldValue(
-                                    `sellingPlans[${index}].isProductBox`,
-                                    false
-                                  )
-                                }
+                                setFieldValue(
+                                  `sellingPlans[${index}].box_subscription_type`,
+                                  (e === true ? 1 : 0)
+                                )}
                               }
                             />
                             <Checkbox
                               label="Display box choices by products"
-                              checked={plan.isProductBox}
+                              checked={plan.box_subscription_type === 2}
                               onChange={(e) => {
-                                  setFieldValue(
-                                    `sellingPlans[${index}].isProductBox`,
-                                    e
-                                  )
-                                  setFieldValue(
-                                    `sellingPlans[${index}].isCollectionBox`,
-                                    false
-                                  )
-                                }
+                                setFieldValue(
+                                  `sellingPlans[${index}].box_subscription_type`,
+                                  (e === true ? 2 : 0)
+                                )}
                               }
                             />
                           </FormLayout.Group>
                           <FormLayout.Group>
-                            {plan.isCollectionBox && (
+                            {plan.box_subscription_type === 1 && (
                               <div className="box-subscription-search">
                                   <TextContainer>Collection</TextContainer>
-                                  <SearchCollection
+                                  {/* <SearchCollection
                                     value={plan.selectedCollection}
                                     setFieldValue={setFieldValue}
                                     fieldName={`sellingPlans[${index}].selectedCollection`}
-                                  />
+                                  /> */}
                               </div>
                             )}
-                            {plan.isProductBox && (
+                            {plan.box_subscription_type === 2 && (
                               <div className="box-subscription-search">
                                   <TextContainer>Product</TextContainer>
                                   <SearchProduct
@@ -814,15 +783,15 @@ const BuildABoxPlan = () => {
                                   />
                               </div>
                             )}
-                            {(plan.isCollectionBox || plan.isProductBox) && (
+                            { (plan.box_subscription_type !== 0) && (
                               <div className="box-subscription-detail">
                                 <Select
                                   className="box-subscription-align"
                                   label="Display Quantity ?"
-                                  value={plan.boxDisplayQuantity}
+                                  value={plan.box_is_quantity}
                                   onChange={(e) =>
                                     setFieldValue(
-                                      `sellingPlans[${index}].boxDisplayQuantity`,
+                                      `sellingPlans[${index}].box_is_quantity`,
                                       String(e)
                                     )
                                   }
@@ -832,20 +801,20 @@ const BuildABoxPlan = () => {
                                   label={
                                     <Checkbox
                                       label="Limit Quantity"
-                                      checked={plan.boxLimitQuantity}
+                                      checked={plan.box_is_quantity_limited}
                                       onChange={(e) =>
                                         setFieldValue(
-                                          `sellingPlans[${index}].boxLimitQuantity`,
+                                          `sellingPlans[${index}].box_is_quantity_limited`,
                                           e
                                         )
                                       }
                                     />
                                   }
-                                  value={plan.boxQuantityValue}
+                                  value={plan.box_quantity_limit}
                                   type="number"
                                   onChange={(e) =>
                                     setFieldValue(
-                                      `sellingPlans[${index}].boxQuantityValue`,
+                                      `sellingPlans[${index}].box_quantity_limit`,
                                       e
                                     )
                                   }
@@ -854,7 +823,7 @@ const BuildABoxPlan = () => {
                               </div>
                             )}
                           </FormLayout.Group>
-                          {plan.isProductBox && (
+                          {plan.box_subscription_type === 2 && (
                             <div className="product-stack">
                               <div>Selected products (subscription box options)</div>
                               <Stack>
