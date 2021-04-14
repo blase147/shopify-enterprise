@@ -56,8 +56,7 @@ const CustomPortal = (props) => {
   );
   const options = [
     { label: 'Storeowner and Customer', value: 'storeownerAndCustomer' },
-    { label: 'Yesterday', value: 'yesterday' },
-    { label: 'Last 7 days', value: 'lastWeek' },
+    { label: 'Customer', value: 'customer' },
   ];
 
   const [selectedFrequency, setSelectedFrequency] = useState(['hidden']);

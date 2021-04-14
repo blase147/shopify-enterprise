@@ -32,6 +32,9 @@ module Queries
           {title: 'This was created by accident', return_content: 'Returns cancel option and comment field'},
           {title: 'I already have more than I need', return_content: 'Returns cancel and skip or pause options'},
           {title: 'I need it sooner', return_content: 'Returns cancel option and comment field'},
+          {title: 'I no longer use this product', return_content: 'Returns cancel option and comment field'},
+          {title: 'I want a different product or variety', return_content: 'Returns cancel and swap link'},
+          {title: 'Other Reason', return_content: 'Returns cancel option and comment field'},
         ]
         @setting.reasons_cancels.create(reason_cancels)
       end
