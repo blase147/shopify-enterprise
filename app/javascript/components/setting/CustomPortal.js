@@ -32,32 +32,45 @@ import Trash from '../../../assets/images/settings/trash.svg';
 
 
 const CustomPortal = (props) => {
-  const [checkedProTheme, setCheckedProTheme] = useState(false);
-  const handleChangeProTheme = useCallback(
-    (newChecked) => setCheckedProTheme(newChecked),
-    []
-  );
-  const [selectedTheme, setSelectedTheme] = useState(); //['lotus']
+  // const [checkedProTheme, setCheckedProTheme] = useState(false);
+  // const handleChangeProTheme = useCallback(
+  //   (newChecked) => setCheckedProTheme(newChecked),
+  //   []
+  // );
+  // const [selectedTheme, setSelectedTheme] = useState(); //['lotus']
+  //
+  // const handleChangeTheme = useCallback((value) => setSelectedTheme(value), []);
 
-  const handleChangeTheme = useCallback((value) => setSelectedTheme(value), []);
-
-  const [valueHeaderHTML_CSS, setValueHeaderHTML_CSS] = useState();
-  const handleChangeHeaderHTML_CSS = useCallback(
-    (newValue) => setValueHeaderHTML_CSS(newValue),
-    []
-  );
-
-  const [valueFooterHTML_CSS, setValueFooterHTML_CSS] = useState();
-  const handleChangeFooterHTML_CSS = useCallback(
-    (newValue) => setValueFooterHTML_CSS(newValue),
+  const [valueAccountProfile_CSS, setValueAccountProfile_CSS] = useState();
+  const handleChangeAccountProfile_CSS = useCallback(
+    (newValue) => setValueAccountProfile_CSS(newValue),
     []
   );
 
-  const [valueCreditCard, setValueCreditCard] = useState();
-  const handleChangeCCreditCard = useCallback(
-    (newValue) => setValueCreditCard(newValue),
+  const [valueSidebar_CSS, setValueSidebar_CSS] = useState();
+  const handleChangeSidebar_CSS = useCallback(
+    (newValue) => setValueSidebar_CSS(newValue),
     []
   );
+
+  const [valueSubscription_CSS, setValueSubscription_CSS] = useState();
+  const handleChangeSubscription_CSS = useCallback(
+    (newValue) => setValueSubscription_CSS(newValue),
+    []
+  );
+
+  const [valueUpsell_CSS, setValueUpsell_CSS] = useState();
+  const handleChangeUpsel_CSS = useCallback(
+    (newValue) => setValueUpsell_CSS(newValue),
+    []
+  );
+
+  const [valueSidebarPages_CSS, setValueSidebarPages_CSS] = useState();
+  const handleChangeSidebarPages_CSS = useCallback(
+    (newValue) => setValueSidebarPages_CSS(newValue),
+    []
+  );
+
   const [selectedDelivery, setSelectedDelivery] = useState(
     'Storeowner and Customer'
   );
@@ -207,9 +220,9 @@ const CustomPortal = (props) => {
                   }
                   placeholder=".lorem {font-size: 34px;}"
                   multiline={10}
-                  value={values.styleHeader ? values.styleHeader : ''}
-                  error={touched.styleHeader && errors.styleHeader}
-                  onChange={(e) => setFieldValue('styleHeader', e)}
+                  value={values.styleAccountProfile ? values.styleAccountProfile : ''}
+                  error={touched.styleAccountProfile && errors.styleAccountProfile}
+                  onChange={(e) => setFieldValue('styleAccountProfile', e)}
                 />
                 <p className="applied-classes">Sidebar menu, promo tagline I, promo tagline II </p>
                 <TextField
@@ -218,9 +231,9 @@ const CustomPortal = (props) => {
                   }
                   placeholder="Add Code Here..."
                   multiline={10}
-                  value={values.styleHeader ? values.styleHeader : ''}
-                  error={touched.styleHeader && errors.styleHeader}
-                  onChange={(e) => setFieldValue('styleHeader', e)}
+                  value={values.styleSidebar ? values.styleSidebar : ''}
+                  error={touched.styleSidebar && errors.styleSidebar}
+                  onChange={(e) => setFieldValue('styleSidebar', e)}
                 />
                 <p className="applied-classes">Active & canceled subscriptions box</p>
                 <TextField
@@ -229,9 +242,9 @@ const CustomPortal = (props) => {
                   }
                   placeholder="Add Code Here..."
                   multiline={10}
-                  value={values.styleHeader ? values.styleHeader : ''}
-                  error={touched.styleHeader && errors.styleHeader}
-                  onChange={(e) => setFieldValue('styleHeader', e)}
+                  value={values.styleSubscription ? values.styleSubscription : ''}
+                  error={touched.styleSubscription && errors.styleSubscription}
+                  onChange={(e) => setFieldValue('styleSubscription', e)}
                 />
                 <p className="applied-classes">Delivery schedule, order history, addresses, billings & account pages</p>
 
@@ -241,22 +254,22 @@ const CustomPortal = (props) => {
                   }
                   placeholder="Add Code Here..."
                   multiline={10}
-                  value={values.styleFooter ? values.styleFooter : ''}
-                  error={touched.styleFooter && errors.styleFooter}
-                  onChange={(e) => setFieldValue('styleFooter', e)}
+                  value={values.styleSidebarPages ? values.styleSidebarPages : ''}
+                  error={touched.styleSidebarPages && errors.styleSidebarPages}
+                  onChange={(e) => setFieldValue('styleSidebarPages', e)}
                 />
                 <p className="applied-classes">Upsells Carousel</p>
                 <TextField
                   label={
                     <TextStyle variation="subdued">
-                      Credit Card Page CSS
+                      CSS classes available for customization:
                   </TextStyle>
                   }
                   placeholder="Add Code Here..."
                   multiline={10}
-                  value={values.styleCreditCard ? values.styleCreditCard : ''}
-                  error={touched.styleCreditCard && errors.styleCreditCard}
-                  onChange={(e) => setFieldValue('styleCreditCard', e)}
+                  value={values.styleUpsell ? values.styleUpsell : ''}
+                  error={touched.styleUpsell && errors.styleUpsell}
+                  onChange={(e) => setFieldValue('styleUpsell', e)}
                 />
               </FormLayout>
             </div>
@@ -397,7 +410,7 @@ const CustomPortal = (props) => {
             <p variation="strong">
               Customer facing frequency options
             </p>
-         
+
           <Stack.Item>
             <ChoiceList
               allowMultiple
@@ -539,7 +552,7 @@ const CustomPortal = (props) => {
                   onChange={(e) => setFieldValue('allowCancelAfter', e)}
                 />
                 <p>Charge(s)</p>
-                
+
               </FormLayout.Group>
             </FormLayout>
             </div>

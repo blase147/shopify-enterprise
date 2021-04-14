@@ -13,6 +13,9 @@ class Setting < ApplicationRecord
   accepts_nested_attributes_for :reasons_cancels,
   reject_if: :all_blank, allow_destroy: true
 
+  def style_content
+    "#{style_account_profile} #{style_account_profile} #{style_subscription} #{style_upsell} #{style_sidebar_pages}"
+  end
 
   private ##
 

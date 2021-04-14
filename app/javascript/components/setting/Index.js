@@ -60,10 +60,11 @@ const Settings = () => {
         paymentRetries
         paymentDelayRetries
 
-        themes
-        styleHeader
-        styleFooter
-        styleCreditCard
+        styleAccountProfile
+        styleSidebar
+        styleSubscription
+        styleUpsell
+        styleSidebarPages
         navigationDelivery
         shipingAddress
         upcomingOderDate
@@ -141,10 +142,11 @@ const Settings = () => {
         setting {
           paymentRetries
           paymentDelayRetries
-          themes
-          styleHeader
-          styleFooter
-          styleCreditCard
+          styleAccountProfile
+          styleSidebar
+          styleSubscription
+          styleUpsell
+          styleSidebarPages
           navigationDelivery
           shipingAddress
           upcomingOderDate
@@ -279,9 +281,11 @@ const Settings = () => {
     reactiveSubscription: '',
     shipingAddress: '',
     shipment: '',
-    styleCreditCard: '',
-    styleFooter: '',
-    styleHeader: '',
+    styleAccountProfile: '',
+    styleSidebar: '',
+    styleSidebarPages: '',
+    styleSubscription: '',
+    styleUpsell: '',
     subscriptionCancellation: '',
     swapProduct: '',
     themes: '',
