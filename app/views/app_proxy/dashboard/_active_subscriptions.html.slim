@@ -6,17 +6,17 @@
         - product = ShopifyAPI::Product.find(edge.node.product_id[/\d+/])
         .grid
           .grid-item
-            .img
+            .img.account-img
               img src=product.images.first&.src alt=""
-            p.text
+            p.text.active-text
               = product.title
-            p.text
+            p.text.active-text
               = "#{number_to_currency edge.node.current_price.amount} / #{billing_policy.interval_count} #{billing_policy.interval}"
           .grid-item
             h4 NEXT CARD CHARGE
-            p.text.right
+            p.text.right.active-text
               = DateTime.parse(subscription.node.next_billing_date).strftime("%a, %B %e")
-            p.text.right
+            p.text.right.active-text
               = number_to_currency (edge.node.current_price.amount.to_f * edge.node.quantity)
           .grid-item
             button.white-btn.action-btn type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#swap-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" SWAP SUBSCRIPTION
@@ -33,7 +33,7 @@
           form action="#{action_subscription_contract_path(:update_quantity, subscription.node.id[/\d+/])}" method='post' data-remote=true enctype="multipart/form-data"
             .quantity-field
               div
-                span.label Quantity:
+                span.label.active-text Quantity:
                 span.btn-wrapper
                   button.minus-quantity type="button"
                     svg fill="none" height="8" viewbox=("0 0 7 2") width="8" xmlns="http://www.w3.org/2000/svg"
@@ -70,8 +70,8 @@
               = edge.node.quantity
       .delivery-address
         div
-          p.text DELIVERY ADDRESS
-          h3
+          p.text.active-text DELIVERY ADDRESS
+          h3.active-text
             = subscription.node.delivery_method.address.address1
         div
           button.edit-address data-toggle="modal" data-target="#deliveryEditModal" EDIT
@@ -79,7 +79,7 @@
     - line_products = subscription.node.lines.edges.map{|edge| edge.node.product_id[/\d+/]}
     - selling_plan_ids = subscription.node.lines.edges.map{|edge| edge.node.selling_plan_id}
     - selling_plan_id = selling_plan_ids.reject{|val| val.nil?}&.first
-    / - selling_plan_id = 'gid://shopify/SellingPlan/393543886'
+    / - selling_plan_id = "gid://shopify/SellingPlan/404848846"
     - campaigns = UpsellCampaign.joins(:upsell_campaign_group).where(upsell_campaign_groups: {status: :publish}).where("rule_customer = 't' AND rule_customer_value ->> 'sellingPlanId' = ?", selling_plan_id).select("product_offer AS product_offer, offer_title, button_text_accept, show_offer_title")
     - product_ids = []
     - campaigns.each do |campaign|
@@ -91,13 +91,13 @@
         h2.offerTitle
           - if campaigns.first.show_offer_title
             = campaigns.first.offer_title.present? ? campaigns.first.offer_title : "Hey there! There's is an offer for you!"
-        .owl-carousel.owl-theme
+        .owl-carousel.owl-theme.account-carousel
           - upsell_products.each do |product|
             .preview-item
-              .img
+              .img.carousel-img
                 - if product.images.first.present?
                   img alt="" height="100%" src=product.images.first&.src
-              p
+              p.carousel-text
                 = product.title
                 - if product.title.size <= 38
                   br /

@@ -13,9 +13,9 @@
     svg fill="none" height="24px" viewbox=("0 0 17 10") width="24px" xmlns="http://www.w3.org/2000/svg"
       path d=("M1.5 1L8.5 8L15.5 1") stroke="#4D506A" stroke-width="2" /
 
-nav.Polaris-Navigation
+nav.Polaris-Navigation.account
   .Polaris-Navigation__PrimaryNavigation.Polaris-Scrollable.Polaris-Scrollable--vertical data-polaris-scrollable="true"
-    ul.Polaris-Navigation__Section
+    ul.Polaris-Navigation__Section.account-sidebar
       li.Polaris-Navigation__ListItem
         .Polaris-Navigation__ItemWrapper
           a.Polaris-Navigation__Item class=active_nav('dashboard', 'index') href="/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}" tabindex="0"
@@ -32,13 +32,13 @@ nav.Polaris-Navigation
           #PolarisSecondaryNavigation15 aria-expanded="true" style=("transition-duration: 0ms; transition-timing-function: linear; max-height: none; overflow: visible;")
             ul.Polaris-Navigation__List
               li.Polaris-Navigation__ListItem
-                .Polaris-Navigation__ItemWrapper
+                .Polaris-Navigation__ItemWrapper.active-subscription
                   span.Polaris-Navigation__Text
                     = link_to "/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}&status=active", class: 'Polaris-Navigation__Item', data: {'polaris-unstyled': true}, tab_index: '0', aria: {disabled: false} do
                       span.Polaris-Navigation__Text
                         span class=("#{params[:status] == "active" ? 'sub-active' : ''}") Active
               li.Polaris-Navigation__ListItem
-                .Polaris-Navigation__ItemWrapper
+                .Polaris-Navigation__ItemWrapper.cancel-subscription
                 = link_to "/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}&status=cancelled", class: 'Polaris-Navigation__Item', data: {'polaris-unstyled': true}, tab_index: '0', aria: {disabled: false} do
                   span.Polaris-Navigation__Text
                     span class=("#{params[:status] == "cancelled" ? 'sub-active' : ''}") Cancelled

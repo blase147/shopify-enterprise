@@ -32,19 +32,19 @@
                 = hidden_field_tag :id, @customer.shopify_id
                 .group
                   .field
-                    label FIRST NAME
-                    input type="text" name="first_name" placeholder="#{@customer.first_name}" value="#{@customer.try(:first_name)}"
+                    label.account-label FIRST NAME
+                    input.account-input type="text" name="first_name" placeholder="#{@customer.first_name}" value="#{@customer.try(:first_name)}"
                   .field
-                    label
+                    label.account-label
                       span LAST NAME
                       span.red*
-                    input type="text" name="last_name" placeholder="#{@customer.last_name}" value="#{@customer.try(:last_name)}"
+                    input.account-input type="text" name="last_name" placeholder="#{@customer.last_name}" value="#{@customer.try(:last_name)}"
                 .group
                   .field
-                    label
+                    label.account-label
                       span EMAIL
                       span.red*
-                    input type="text" name="email" placeholder="#{@customer.email}"  value="#{@customer.try(:email)}"
+                    input.account-input type="text" name="email" placeholder="#{@customer.email}"  value="#{@customer.try(:email)}"
                   .field
                 .btn-wrapper
                   button.update-btn type="submit" SAVE

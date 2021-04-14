@@ -14,25 +14,25 @@
                 div
                   .Polaris-Header-Title__TitleAndSubtitleWrapper
                     .Polaris-Header-Title
-                      h2.Polaris-DisplayText
+                      h2.Polaris-DisplayText.main-heading
                         span.Polaris-TextStyle--variationStrong MY&nbsp;
                         span.Polaris-TextStyle--variationStrong style="color: #007EFF" ORDER&nbsp;
                         span.Polaris-TextStyle--variationStrong HISTORY
         - if @active_subscriptions_count == 0
             div.notification-banner
-              p.Polaris-Heading No subscription have been found for your account
+              p.Polaris-Heading.order-text No subscription have been found for your account
         - else
           .order-history
             - @orders.each do |order|
               .grid
                 .item
-                  h2 ORDER #
-                  p = order.order_number
+                  h2.order-text-heading ORDER #
+                  p.order-text = order.order_number
                 .item
-                  h2 DATE
-                  p = DateTime.parse(order.created_at).strftime("%d %b %Y")
+                  h2.order-text-heading DATE
+                  p.order-text = DateTime.parse(order.created_at).strftime("%d %b %Y")
                 .item
-                  h2 AMOUNT
+                  h2.order-text-heading AMOUNT
                   p.blue = number_to_currency order.total_price.to_f rescue nil
                 .item
                   .btn-wrapper

@@ -144,6 +144,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
+  margin-top: 10px;
   .preview {
     margin-right: 20px;
     background-color: #007EFF;
@@ -179,22 +180,66 @@
     color:red;
   }
   label {
-    margin-bottom: 12px;
+    margin-bottom: 25px;
+    margin-left: 8px;
     .Polaris-TextStyle--variationSubdued {
       font-size: 18px;
     }
   }
 }
 .customer-portal {
-  .Polaris-Select {
+  .Polaris-FormLayout__Items {
     margin-bottom: 30px;
   }
+  .Polaris-FormLayout--grouped {
+    margin-bottom: 30px;
+  }
+  .portal-heading {
+    margin-bottom: 30px;
+    font-size: 20px;
+  }
+  .Polaris-Stack__Item .navigation-text  {
+    font-size: 18px;
+    font-weight: 900;
+    margin-bottom: 10px;
+  }
+  p {
+    font-size: 16px;
+  }
+    
+   
 }
 .frequency-checkbox {
   background-color: #F7F7F7;
   padding: 24px 18px;
+  p {
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: 900;
+  }
+}
+.frequency-heading {
+  font-size: 16px;
+  font-weight: 900;
+  margin-top: 12px;
+  margin-bottom: 10px;
+}
+.future-delivery {
+  margin-top:35px;
+  margin-bottom: 23px;
 }
 .reactive-text {
   font-size: 16px;
   color: #000000;
+}
+
+.Polaris-Card__Section .cancelation-section  .Polaris-Stack--vertical .Polaris-TextStyle--variationStrong a {
+  color: #004E82;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+.cancelation-section {
+  .Polaris-Stack.Polaris-Stack--distributionEqualSpacing {
+    margin-bottom: 10px;
+  }
 }

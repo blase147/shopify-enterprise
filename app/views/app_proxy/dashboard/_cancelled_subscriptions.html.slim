@@ -6,11 +6,11 @@
         - product = ShopifyAPI::Product.find(edge.node.product_id[/\d+/])
         .grid
           .grid-item
-            .img
+            .img.account-img
               img src=product.images.first&.src alt=""
-            p.text
+            p.text.cancel-text
               = product.title
-            p.text
+            p.text.cancel-text
               = "#{number_to_currency edge.node.current_price.amount} / #{billing_policy.interval_count} #{billing_policy.interval}"
           .grid-item
           .grid-item
@@ -43,11 +43,11 @@
         - product = ShopifyAPI::Product.find(variant.product_id)
         .grid
           .grid-item
-            .img
+            .img.account-img
               img src=product.images.first&.src alt=""
-            p.text
+            p.text.cancel-text
               = product.title
-            p.text
+            p.text.cancel-text
               = "#{number_to_currency variant.price} / #{billing_policy.interval_count} #{billing_policy.interval}"
           .grid-item
           .grid-item

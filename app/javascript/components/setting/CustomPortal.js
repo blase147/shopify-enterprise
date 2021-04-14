@@ -203,7 +203,8 @@ const CustomPortal = (props) => {
                 <p className="applied-classes">Account Profile, Contact box & promo/contact button & portal background</p>
                 <TextField
                   label={
-                    <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .leorem, .ipsum</span>   </TextStyle>
+                    <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .info-banner, .profile, .initials, 
+                    .full-name, .contact, .btn-discount, .chargezen-proxy</span>   </TextStyle>
                   }
                   placeholder=".lorem {font-size: 34px;}"
                   multiline={10}
@@ -214,7 +215,7 @@ const CustomPortal = (props) => {
                 <p className="applied-classes">Sidebar menu, promo tagline I, promo tagline II </p>
                 <TextField
                   label={
-                    <TextStyle variation="subdued"> CSS classes available for customization: </TextStyle>
+                    <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .account-sidebar, .active-subscription .cancel-subscription</span> </TextStyle>
                   }
                   placeholder="Add Code Here..."
                   multiline={10}
@@ -225,7 +226,8 @@ const CustomPortal = (props) => {
                 <p className="applied-classes">Active & canceled subscriptions box</p>
                 <TextField
                   label={
-                    <TextStyle variation="subdued"> CSS classes available for customization:</TextStyle>
+                    <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .display-text, .account-img,  .active-text, edit-subscription, delivery-schedule , .action-btn, 
+                     , btn-wrapper, .minus-quantity, .plus-quantity, .chevron, .edit-address, .notification-banner, .cancel-text </span></TextStyle>
                   }
                   placeholder="Add Code Here..."
                   multiline={10}
@@ -237,7 +239,7 @@ const CustomPortal = (props) => {
 
                 <TextField
                   label={
-                    <TextStyle variation="subdued">  CSS classes available for customization:</TextStyle>
+                    <TextStyle variation="subdued">  CSS classes available for customization: <span className="custom-classes"> .delivery-heading .delivery-text, .delivery-btn, .order-heading, .order-text-heading, .order-text, .btn-view, .btn-invoice, .subscription-text, .edit, .address-text, .address-heading, .main-heading, .card-heading, .payment-img, .card-text, .card-btn, .account-label, .account-input, update-btn </span></TextStyle>
                   }
                   placeholder="Add Code Here..."
                   multiline={10}
@@ -249,7 +251,7 @@ const CustomPortal = (props) => {
                 <TextField
                   label={
                     <TextStyle variation="subdued">
-                      Credit Card Page CSS
+                       CSS classes available for customization: <span className="custom-classes"> .offerTitle, .account-carousel, .carousel-img, .carousel-text, .btn-variant</span> 
                   </TextStyle>
                   }
                   placeholder="Add Code Here..."
@@ -266,128 +268,128 @@ const CustomPortal = (props) => {
       <Card.Section>
         <Stack vertical>
           <div className="customer-portal">
-          <Stack.Item>
-            <Heading>Customer Portal Controls</Heading>
-          </Stack.Item>
-          <Stack.Item>
-            <TextStyle variation="strong">Navigation</TextStyle>
-            <FormLayout>
-              <FormLayout.Group>
-                <p>Delivery Schedule</p>
-                <Select
-                  options={options}
-                  value={values.navigationDelivery}
-                  error={
-                    touched.navigationDelivery && errors.navigationDelivery
-                  }
-                  onChange={(e) => setFieldValue('navigationDelivery', e)}
-                />
-                <p>&nbsp;</p>
-              </FormLayout.Group>
-            </FormLayout>
-          </Stack.Item>
-          <Stack.Item>
-            <TextStyle variation="strong">Customer Details</TextStyle>
-            <FormLayout>
-              <FormLayout.Group>
-                <p>Edit Shipping Address</p>
-                <Select
-                  options={options}
-                  value={values.shipingAddress}
-                  error={touched.shipingAddress && errors.shipingAddress}
-                  onChange={(e) => setFieldValue('shipingAddress', e)}
-                />
-                <p>&nbsp;</p>
-              </FormLayout.Group>
-            </FormLayout>
-          </Stack.Item>
-          <Stack.Item>
-            <Stack vertical>
-              <TextStyle variation="strong">Subscription Details</TextStyle>
+            <h2 className="portal-heading">Customer Portal Controls</h2>
+            <Stack.Item>
+              <p className="navigation-text" variation="strong">Navigation</p>
               <FormLayout>
                 <FormLayout.Group>
-                  <p>Edit Upcoming Order Date</p>
+                  <p>Delivery Schedule</p>
                   <Select
                     options={options}
-                    value={values.upcomingOderDate}
-                    error={touched.upcomingOderDate && errors.upcomingOderDate}
-                    onChange={(e) => setFieldValue('upcomingOderDate', e)}
-                  />
-                  <p>&nbsp;</p>
-                </FormLayout.Group>
-                <FormLayout.Group>
-                  <p>Edit Upcoming Quantity</p>
-                  <Select
-                    options={options}
-                    value={values.upcomingQuantity}
-                    error={touched.upcomingQuantity && errors.upcomingQuantity}
-                    onChange={(e) => setFieldValue('upcomingQuantity', e)}
-                  />
-                  <p>&nbsp;</p>
-                </FormLayout.Group>
-                <FormLayout.Group>
-                  <p>Add Products to Subscription</p>
-                  <Select
-                    options={options}
-                    value={values.productToSubscription}
+                    value={values.navigationDelivery}
                     error={
-                      touched.productToSubscription &&
-                      errors.productToSubscription
+                      touched.navigationDelivery && errors.navigationDelivery
                     }
-                    onChange={(e) => setFieldValue('productToSubscription', e)}
-                  />
-                  <p>&nbsp;</p>
-                </FormLayout.Group>
-                <FormLayout.Group>
-                  <p>Change Variants</p>
-                  <Select
-                    options={options}
-                    value={values.changeVariant}
-                    error={touched.changeVariant && errors.changeVariant}
-                    onChange={(e) => setFieldValue('changeVariant', e)}
-                  />
-                  <p>&nbsp;</p>
-                </FormLayout.Group>
-                <FormLayout.Group>
-                  <p>Swap Product</p>
-                  <Select
-                    options={options}
-                    value={values.swapProduct}
-                    error={touched.swapProduct && errors.swapProduct}
-                    onChange={(e) => setFieldValue('swapProduct', e)}
+                    onChange={(e) => setFieldValue('navigationDelivery', e)}
                   />
                   <p>&nbsp;</p>
                 </FormLayout.Group>
               </FormLayout>
-            </Stack>
-          </Stack.Item>
-          <Stack.Item>
-            <Stack vertical>
-              <TextStyle variation="strong">Shipment Frequency</TextStyle>
+            </Stack.Item>
+            <Stack.Item>
+              <p className="navigation-text" variation="strong">Customer Details</p>
               <FormLayout>
                 <FormLayout.Group>
-                  <p>Skip Shipment</p>
+                  <p>Edit Shipping Address</p>
                   <Select
                     options={options}
-                    value={values.shipment}
-                    error={touched.shipment && errors.shipment}
-                    onChange={(e) => setFieldValue('shipment', e)}
-                  />
-                  <p>&nbsp;</p>
-                </FormLayout.Group>
-                <FormLayout.Group>
-                  <p>Edit Frequency</p>
-                  <Select
-                    options={options}
-                    value={values.frequency}
-                    error={touched.frequency && errors.frequency}
-                    onChange={(e) => setFieldValue('frequency', e)}
+                    value={values.shipingAddress}
+                    error={touched.shipingAddress && errors.shipingAddress}
+                    onChange={(e) => setFieldValue('shipingAddress', e)}
                   />
                   <p>&nbsp;</p>
                 </FormLayout.Group>
               </FormLayout>
-            </Stack>
-          </Stack.Item>
+            </Stack.Item>
+            <Stack.Item>
+              <Stack vertical>
+                <p className="navigation-text" variation="strong">Subscription Details</p>
+                
+                <FormLayout>
+                  
+                  <FormLayout.Group>
+                    <p>Edit Upcoming Order Date</p>
+                    <Select
+                      options={options}
+                      value={values.upcomingOderDate}
+                      error={touched.upcomingOderDate && errors.upcomingOderDate}
+                      onChange={(e) => setFieldValue('upcomingOderDate', e)}
+                    />
+                    <p>&nbsp;</p>
+                  </FormLayout.Group>
+                  <FormLayout.Group>
+                    <p>Edit Upcoming Quantity</p>
+                    <Select
+                      options={options}
+                      value={values.upcomingQuantity}
+                      error={touched.upcomingQuantity && errors.upcomingQuantity}
+                      onChange={(e) => setFieldValue('upcomingQuantity', e)}
+                    />
+                    <p>&nbsp;</p>
+                  </FormLayout.Group>
+                  <FormLayout.Group>
+                    <p>Add Products to Subscription</p>
+                    <Select
+                      options={options}
+                      value={values.productToSubscription}
+                      error={
+                        touched.productToSubscription &&
+                        errors.productToSubscription
+                      }
+                      onChange={(e) => setFieldValue('productToSubscription', e)}
+                    />
+                    <p>&nbsp;</p>
+                  </FormLayout.Group>
+                  <FormLayout.Group>
+                    <p>Change Variants</p>
+                    <Select
+                      options={options}
+                      value={values.changeVariant}
+                      error={touched.changeVariant && errors.changeVariant}
+                      onChange={(e) => setFieldValue('changeVariant', e)}
+                    />
+                    <p>&nbsp;</p>
+                  </FormLayout.Group>
+                  <FormLayout.Group>
+                    <p>Swap Product</p>
+                    <Select
+                      options={options}
+                      value={values.swapProduct}
+                      error={touched.swapProduct && errors.swapProduct}
+                      onChange={(e) => setFieldValue('swapProduct', e)}
+                    />
+                    <p>&nbsp;</p>
+                  </FormLayout.Group>
+                </FormLayout>
+              </Stack>
+            </Stack.Item>
+            <Stack.Item>
+              <Stack vertical>
+                <p className="navigation-text" variation="strong">Shipment Frequency</p>
+                <FormLayout>
+                  <FormLayout.Group>
+                    <p>Skip Shipment</p>
+                    <Select
+                      options={options}
+                      value={values.shipment}
+                      error={touched.shipment && errors.shipment}
+                      onChange={(e) => setFieldValue('shipment', e)}
+                    />
+                    <p>&nbsp;</p>
+                  </FormLayout.Group>
+                  <FormLayout.Group>
+                    <p>Edit Frequency</p>
+                    <Select
+                      options={options}
+                      value={values.frequency}
+                      error={touched.frequency && errors.frequency}
+                      onChange={(e) => setFieldValue('frequency', e)}
+                    />
+                    <p>&nbsp;</p>
+                  </FormLayout.Group>
+                </FormLayout>
+              </Stack>
+            </Stack.Item>
           </div>
         </Stack>
       </Card.Section>
@@ -397,46 +399,46 @@ const CustomPortal = (props) => {
             <p variation="strong">
               Customer facing frequency options
             </p>
-         
-          <Stack.Item>
-            <ChoiceList
-              allowMultiple
-              choices={[
-                {
-                  label: 'Customer can choose any frequency',
-                  value: 'can_choose_any_frequency',
-                },
-                {
-                  label:
-                    'Limit to frequency options preselected for the subscription ruleset',
-                  value: 'limit',
-                },
-              ]}
-              selected={
-                values.facingFrequencyOption
-                  ? values.facingFrequencyOption
-                  : ['can_choose_any_frequency']
-              }
-              error={
-                touched.facingFrequencyOption && errors.facingFrequencyOption
-              }
-              onChange={(e) => setFieldValue('facingFrequencyOption', e)}
-            />
-          </Stack.Item>
+
+            <Stack.Item>
+              <ChoiceList
+                allowMultiple
+                choices={[
+                  {
+                    label: 'Customer can choose any frequency',
+                    value: 'can_choose_any_frequency',
+                  },
+                  {
+                    label:
+                      'Limit to frequency options preselected for the subscription ruleset',
+                    value: 'limit',
+                  },
+                ]}
+                selected={
+                  values.facingFrequencyOption
+                    ? values.facingFrequencyOption
+                    : ['can_choose_any_frequency']
+                }
+                error={
+                  touched.facingFrequencyOption && errors.facingFrequencyOption
+                }
+                onChange={(e) => setFieldValue('facingFrequencyOption', e)}
+              />
+            </Stack.Item>
           </div>
           <Stack.Item>
-            <p>
+            <p className="future-delivery">
               Delivery schedule number of days in future shows 90 days (Max.
               180)
             </p>
           </Stack.Item>
-          <Stack.Item>
+          <Stack.Item style={{marginTop:'0'}}>
             <Stack vertical>
-              <TextStyle variation="strong">
+              <p className="frequency-heading"  variation="strong">
                 {' '}
                 Products available for purchase on the customer protal
-              </TextStyle>
-
+              </p>
+              <div className="">
               <FormLayout.Group>
                 <p>One-time purchases</p>
                 <Select
@@ -458,11 +460,12 @@ const CustomPortal = (props) => {
                 />
                 <p>&nbsp;</p>
               </FormLayout.Group>
+              </div>
             </Stack>
           </Stack.Item>
           <Stack.Item>
             <Stack vertical>
-              <TextStyle variation="strong">Discounts</TextStyle>
+              <p className="frequency-heading"variation="strong">Discounts</p>
 
               <ChoiceList
                 allowMultiple
@@ -486,10 +489,10 @@ const CustomPortal = (props) => {
           </Stack.Item>
           <Stack.Item>
             <Stack vertical>
-              <TextStyle variation="strong">
+              <p className="frequency-heading" variation="strong">
                 {' '}
                 Subscription Cancellation
-              </TextStyle>
+              </p>
               <FormLayout>
                 <FormLayout.Group>
                   <p className="reactive-text">Cancel Subscription</p>
@@ -515,36 +518,37 @@ const CustomPortal = (props) => {
         <Stack vertical>
           <Stack.Item>
             <div className="frequency-checkbox">
-            <FormLayout>
-              <Heading>Customer Cancellation Email Contact</Heading>
-              <TextField
-                placeholder="hello@xyz.com"
-                value={values.cancellationEmailContact}
-                error={
-                  touched.cancellationEmailContact &&
-                  errors.cancellationEmailContact
-                }
-                onChange={(e) => setFieldValue('cancellationEmailContact', e)}
-              />
-              <Heading>Allow Customer to Cancel After</Heading>
-              <FormLayout.Group>
+              <FormLayout>
+                <Heading>Customer Cancellation Email Contact</Heading>
                 <TextField
-                  placeholder="No Restriction"
-                  value={
-                    values.allowCancelAfter
-                      ? values.allowCancelAfter
-                      : 'No Restriction'
+                  placeholder="hello@xyz.com"
+                  value={values.cancellationEmailContact}
+                  error={
+                    touched.cancellationEmailContact &&
+                    errors.cancellationEmailContact
                   }
-                  error={touched.allowCancelAfter && errors.allowCancelAfter}
-                  onChange={(e) => setFieldValue('allowCancelAfter', e)}
+                  onChange={(e) => setFieldValue('cancellationEmailContact', e)}
                 />
-                <p>Charge(s)</p>
-                
-              </FormLayout.Group>
-            </FormLayout>
+                <Heading>Allow Customer to Cancel After</Heading>
+                <FormLayout.Group>
+                  <TextField
+                    placeholder="No Restriction"
+                    value={
+                      values.allowCancelAfter
+                        ? values.allowCancelAfter
+                        : 'No Restriction'
+                    }
+                    error={touched.allowCancelAfter && errors.allowCancelAfter}
+                    onChange={(e) => setFieldValue('allowCancelAfter', e)}
+                  />
+                  <span>Charge(s)</span>
+
+                </FormLayout.Group>
+              </FormLayout>
             </div>
           </Stack.Item>
           <Stack.Item>
+            <div style={{marginTop:'10px'}}>
             <FormLayout>
               <FormLayout.Group>
                 <p className="reactive-text">Reactivate Subscription</p>
@@ -559,10 +563,12 @@ const CustomPortal = (props) => {
                 <p>&nbsp;</p>
               </FormLayout.Group>
             </FormLayout>
+            </div>
           </Stack.Item>
         </Stack>
       </Card.Section>
       <Card.Section>
+        <div className="cancelation-section">
         <Stack vertical>
           <Stack.Item>
             <Heading>Reasons for Cancellation</Heading>
@@ -605,6 +611,7 @@ const CustomPortal = (props) => {
             Save
           </Button>
         </Stack>
+        </div>
       </Card.Section>
     </Layout>
   );
