@@ -82,13 +82,6 @@ const BuildABoxPlan = () => {
     }
   );
 
-  const [boxSubscribeMode, setBoxSubscribeMode] = React.useState(true)
-  // const changeCollectionMode = useCallback((newChecked) => setBoxSubscribeMode(true), [])
-  // const changeProductMode = useCallback((newChecked) => setBoxSubscribeMode(false), [])
-  const [selectedBoxCollections, setSelectedBoxCollections] = React.useState([]);
-  const [selectedBoxProducts, setSelectedBoxProducts] = React.useState([]);
-
-
   useEffect(() => {
     if (id) {
       getSellingPlan();
@@ -722,7 +715,7 @@ const BuildABoxPlan = () => {
                           <FormLayout.Group>
                             <Select
                               options={adjusmentOptions}
-                              label="Discount or manual price"
+                              label="Trial or manual price"
                               value={plan.trialAdjustmentType}
                               error={
                                 touched.sellingPlans?.[index]

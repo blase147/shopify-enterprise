@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_04_040555) do
+ActiveRecord::Schema.define(version: 2021_04_13_193848) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2021_02_04_040555) do
     t.string "first_name"
     t.string "last_name"
     t.string "company_name"
-    t.integer "phone"
+    t.string "phone"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -32,7 +32,6 @@ ActiveRecord::Schema.define(version: 2021_02_04_040555) do
     t.string "last_name"
     t.string "email"
     t.string "company"
-    t.integer "phone"
     t.string "address_1"
     t.string "address_2"
     t.string "city"
@@ -40,6 +39,7 @@ ActiveRecord::Schema.define(version: 2021_02_04_040555) do
     t.integer "customer_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "phone"
   end
 
   create_table "customers", force: :cascade do |t|
@@ -61,6 +61,9 @@ ActiveRecord::Schema.define(version: 2021_02_04_040555) do
     t.string "subscription"
     t.string "language"
     t.boolean "auto_collection"
+    t.string "pack"
+    t.string "frequency"
+    t.datetime "shopify_at"
   end
 
   create_table "email_notifications", force: :cascade do |t|
@@ -77,20 +80,33 @@ ActiveRecord::Schema.define(version: 2021_02_04_040555) do
     t.string "slug"
   end
 
-  create_table "product_images", force: :cascade do |t|
-    t.integer "selling_plan_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "image_file_name"
-    t.string "image_content_type"
-    t.bigint "image_file_size"
-    t.datetime "image_updated_at"
-  end
-
   create_table "reasons_cancels", force: :cascade do |t|
     t.string "title"
     t.string "return_content"
     t.integer "setting_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "selling_plan_boxes", force: :cascade do |t|
+    t.integer "selling_plan_group_id"
+    t.string "name"
+    t.string "selector_label"
+    t.text "description"
+    t.string "interval_type"
+    t.integer "interval_count"
+    t.integer "min_fullfilment"
+    t.integer "max_fullfilment"
+    t.string "adjustment_type"
+    t.decimal "adjustment_value"
+    t.string "trial_interval_type"
+    t.integer "trial_interval_count"
+    t.string "trial_adjustment_type"
+    t.decimal "trial_adjustment_value"
+    t.integer "box_subscription_type"
+    t.boolean "box_is_quantity"
+    t.boolean "box_is_quantity_limited"
+    t.integer "box_quantity_limit"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
