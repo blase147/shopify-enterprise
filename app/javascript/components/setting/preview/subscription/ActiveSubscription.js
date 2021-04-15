@@ -7,13 +7,13 @@ const ActiveSubscription = () => {
         <div className="info-banner">
           <div className="details">
             <div className="profile">
-              <div className="initials">st</div>
-              <div className="full-name">subscription testing</div>
+              <div className="initials">IA</div>
+              <div className="full-name">Ipsum Antely</div>
             </div>
           </div>
           <div className="details">
             <div className="contact">
-              <p>Questions? Call Us: +1 800 000 0000</p>
+              <p>Questions? Call Us: +44 1234 5678 9000</p>
               <p>Monday - Friday 8:30 - 18:30</p>
             </div>
           </div>
@@ -131,7 +131,7 @@ const ActiveSubscription = () => {
                             <button className="white-btn action-btn">DELIVERY SCHEDULE</button>
                           </a>
                           <button className="edit-subscription white-btn action-btn"  >Edit Subscription</button>
-                          <button className="delivery-schedule text-btn action-btn"  >DELAY NEXT ORDER</button>
+                          {/* <button className="delivery-schedule text-btn action-btn"  >DELAY NEXT ORDER</button> */}
                           <div className="Polaris-Modal" id="delayOrderModal-1080164558">
                             <div className="Polaris-Modal-Dialog__Container" data-polaris-layer="true" data-polaris-overlay="true">
                               <div aria-labelledby="Polarismodal-header20" className="Polaris-Modal-Dialog" role="dialog" tabIndex={-1}>
@@ -823,7 +823,7 @@ const ActiveSubscription = () => {
                       <div className="delivery-address">
                         <div>
                           <p className="text active-text">DELIVERY ADDRESS</p>
-                          <h3 className="active-text">600 California street, San Francisco CA 95108</h3></div>
+                          <h3 className="active-text">123 MAIN STREET, SOMEWHERE, CA 94000</h3></div>
                         <div>
                           <button className="edit-address">EDIT</button>
                         </div>
