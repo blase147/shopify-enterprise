@@ -1,30 +1,10 @@
 // import RoundCheckbox from 'rn-round-checkbox';
 import {
   Button, Card,
-
-
-
   ChoiceList,
-
-
-
-
-
-
-
   FormLayout,
-
   Heading, Layout, Select,
-
-
-
-
-
-
-
-
   Stack, TextField,
-
   TextStyle
 } from '@shopify/polaris';
 import React, { useCallback, useState } from 'react';
@@ -42,6 +22,22 @@ const CustomPortal = (props) => {
   //
   // const handleChangeTheme = useCallback((value) => setSelectedTheme(value), []);
 
+  const [preview,setPreview]=useState(false)
+  const [canPreview,setCanPreview]=useState(false)
+
+  const handleChange=(label,e)=>{
+    setFieldValue(label,e)
+    setCanPreview(true)
+    console.log(e.target.value);
+    
+  }
+  const applyStyles= (s) => {
+    document.head.appendChild(document.createElement("style")).innerHTML=s;
+  }
+  const handleApplyStyles =()=>{
+    const styles = `${values?.styleSubscription || ''} ${values?.styleUpsell || ''} ${values?.styleSidebarPages || ''} ${values?.styleSidebar || ''} ${values?.styleAccountProfile || ''}`;
+    applyStyles(styles)
+  }
   const [valueAccountProfile_CSS, setValueAccountProfile_CSS] = useState();
   const handleChangeAccountProfile_CSS = useCallback(
     (newValue) => setValueAccountProfile_CSS(newValue),
@@ -178,13 +174,22 @@ const CustomPortal = (props) => {
                 Control actions available to your customers after purchase
               </p>
               <div className="purchase-preview">
-                <button className="preview">PREVIEW</button>
-                <button style={{ display: 'none' }} className="preview">CLOSE PREVIEW</button>
+                {
+                  !preview &&
+                  <button className={!canPreview ?"preview disabled":"preview"} disabled={!canPreview} onClick={()=>{setPreview(true);handleApplyStyles();}} >PREVIEW</button>
+                }
+                {
+                  preview && 
+                  <button className="preview" onClick={()=>setPreview(false)} >CLOSE PREVIEW</button>
+                }
                 <button className="preview">PUBLISH</button>
               </div>
             </div>
 
+            { preview && 
             <ActiveSubscription />
+            }
+            
           </Stack.Item>
           {/* <Stack.Item>
             <Stack alignment="center">
@@ -218,6 +223,9 @@ const CustomPortal = (props) => {
               </Stack.Item>
             </Stack>
           </Stack.Item> */}
+          {
+            !preview && 
+              <>
           <Stack.Item>
             <h5 className="customize-text">Customize Styles</h5>
           </Stack.Item>
@@ -234,7 +242,7 @@ const CustomPortal = (props) => {
                   multiline={10}
                   value={values.styleAccountProfile ? values.styleAccountProfile : ''}
                   error={touched.styleAccountProfile && errors.styleAccountProfile}
-                  onChange={(e) => setFieldValue('styleAccountProfile', e)}
+                  onChange={(e) => handleChange('styleAccountProfile', e)}
                 />
                 <p className="applied-classes">Sidebar menu, promo tagline I, promo tagline II </p>
                 <TextField
@@ -245,7 +253,7 @@ const CustomPortal = (props) => {
                   multiline={10}
                   value={values.styleSidebar ? values.styleSidebar : ''}
                   error={touched.styleSidebar && errors.styleSidebar}
-                  onChange={(e) => setFieldValue('styleSidebar', e)}
+                  onChange={(e) => handleChange('styleSidebar', e)}
                 />
                 <p className="applied-classes">Active & canceled subscriptions box</p>
                 <TextField
@@ -257,7 +265,7 @@ const CustomPortal = (props) => {
                   multiline={10}
                   value={values.styleSubscription ? values.styleSubscription : ''}
                   error={touched.styleSubscription && errors.styleSubscription}
-                  onChange={(e) => setFieldValue('styleSubscription', e)}
+                  onChange={(e) => handleChange('styleSubscription', e)}
                 />
                 <p className="applied-classes">Delivery schedule, order history, addresses, billings & account pages</p>
 
@@ -269,7 +277,7 @@ const CustomPortal = (props) => {
                   multiline={10}
                   value={values.styleSidebarPages ? values.styleSidebarPages : ''}
                   error={touched.styleSidebarPages && errors.styleSidebarPages}
-                  onChange={(e) => setFieldValue('styleSidebarPages', e)}
+                  onChange={(e) => handleChange('styleSidebarPages', e)}
                 />
                 <p className="applied-classes">Upsells Carousel</p>
                 <TextField
@@ -282,11 +290,13 @@ const CustomPortal = (props) => {
                   multiline={10}
                   value={values.styleUpsell ? values.styleUpsell : ''}
                   error={touched.styleUpsell && errors.styleUpsell}
-                  onChange={(e) => setFieldValue('styleUpsell', e)}
+                  onChange={(e) => handleChange('styleUpsell', e)}
                 />
               </FormLayout>
             </div>
           </Stack.Item>
+          </>
+          }
         </Stack>
       </Card.Section>
       <Card.Section>
