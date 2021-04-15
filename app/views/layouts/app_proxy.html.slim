@@ -8,8 +8,6 @@ html
     = stylesheet_link_tag 'app_proxy', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_pack_tag 'app_proxy', 'data-turbolinks-track': 'reload'
     link[rel="stylesheet" href="https://unpkg.com/@shopify/polaris@5.8.4/dist/styles.css"]
-
-
   body.chargezen-proxy
     .Polaris-Page
       = render 'app_proxy/shared/tabs'
@@ -18,3 +16,7 @@ html
           .Polaris-Layout__Section
             .Dashboard_wrapper__3SFrh
               = yield
+
+javascript:
+  const addCSS = s => document.head.appendChild(document.createElement("style")).innerHTML=s;
+  addCSS("#{@current_shop&.setting&.style_content.squish}")

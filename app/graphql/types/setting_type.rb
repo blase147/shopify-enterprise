@@ -8,6 +8,11 @@ module Types
     field :style_header, String, null: true
     field :style_footer, String, null: true
     field :style_credit_card, String, null: true
+    field :style_account_profile, String, null: true
+    field :style_sidebar, String, null: true
+    field :style_sidebar_pages, String, null: true
+    field :style_subscription, String, null: true
+    field :style_upsell, String, null: true
     field :navigation_delivery, String, null: true
     field :shiping_address, String, null: true
     field :upcoming_oder_date, String, null: true
@@ -34,7 +39,7 @@ module Types
     field :cc_storeowner, GraphQL::Types::Boolean, null: true
     field :send_shopify_receipt, GraphQL::Types::Boolean, null: true
     field :send_fullfillment, GraphQL::Types::Boolean, null: true
-    
+
     #dunning
     field :activate_dunning_for_cards, GraphQL::Types::Boolean, null: true
     field :dunning_period, String, null: true

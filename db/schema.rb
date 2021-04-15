@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_05_130413) do
+ActiveRecord::Schema.define(version: 2021_04_14_053022) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -202,6 +202,11 @@ ActiveRecord::Schema.define(version: 2021_04_05_130413) do
     t.text "checkout_subscription_terms"
     t.text "email_subscription_terms"
     t.text "apple_pay_subscription_terms"
+    t.text "style_account_profile"
+    t.text "style_sidebar"
+    t.text "style_subscription"
+    t.text "style_sidebar_pages"
+    t.text "style_upsell"
     t.index ["shop_id"], name: "index_settings_on_shop_id", unique: true
   end
 

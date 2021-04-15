@@ -29,35 +29,49 @@ import {
 } from '@shopify/polaris';
 import React, { useCallback, useState } from 'react';
 import Trash from '../../../assets/images/settings/trash.svg';
+import ActiveSubscription from './preview/subscription/ActiveSubscription';
 
 
 const CustomPortal = (props) => {
-  const [checkedProTheme, setCheckedProTheme] = useState(false);
-  const handleChangeProTheme = useCallback(
-    (newChecked) => setCheckedProTheme(newChecked),
-    []
-  );
-  const [selectedTheme, setSelectedTheme] = useState(); //['lotus']
+  // const [checkedProTheme, setCheckedProTheme] = useState(false);
+  // const handleChangeProTheme = useCallback(
+  //   (newChecked) => setCheckedProTheme(newChecked),
+  //   []
+  // );
+  // const [selectedTheme, setSelectedTheme] = useState(); //['lotus']
+  //
+  // const handleChangeTheme = useCallback((value) => setSelectedTheme(value), []);
 
-  const handleChangeTheme = useCallback((value) => setSelectedTheme(value), []);
-
-  const [valueHeaderHTML_CSS, setValueHeaderHTML_CSS] = useState();
-  const handleChangeHeaderHTML_CSS = useCallback(
-    (newValue) => setValueHeaderHTML_CSS(newValue),
-    []
-  );
-
-  const [valueFooterHTML_CSS, setValueFooterHTML_CSS] = useState();
-  const handleChangeFooterHTML_CSS = useCallback(
-    (newValue) => setValueFooterHTML_CSS(newValue),
+  const [valueAccountProfile_CSS, setValueAccountProfile_CSS] = useState();
+  const handleChangeAccountProfile_CSS = useCallback(
+    (newValue) => setValueAccountProfile_CSS(newValue),
     []
   );
 
-  const [valueCreditCard, setValueCreditCard] = useState();
-  const handleChangeCCreditCard = useCallback(
-    (newValue) => setValueCreditCard(newValue),
+  const [valueSidebar_CSS, setValueSidebar_CSS] = useState();
+  const handleChangeSidebar_CSS = useCallback(
+    (newValue) => setValueSidebar_CSS(newValue),
     []
   );
+
+  const [valueSubscription_CSS, setValueSubscription_CSS] = useState();
+  const handleChangeSubscription_CSS = useCallback(
+    (newValue) => setValueSubscription_CSS(newValue),
+    []
+  );
+
+  const [valueUpsell_CSS, setValueUpsell_CSS] = useState();
+  const handleChangeUpsel_CSS = useCallback(
+    (newValue) => setValueUpsell_CSS(newValue),
+    []
+  );
+
+  const [valueSidebarPages_CSS, setValueSidebarPages_CSS] = useState();
+  const handleChangeSidebarPages_CSS = useCallback(
+    (newValue) => setValueSidebarPages_CSS(newValue),
+    []
+  );
+
   const [selectedDelivery, setSelectedDelivery] = useState(
     'Storeowner and Customer'
   );
@@ -68,6 +82,13 @@ const CustomPortal = (props) => {
   const options = [
     { label: 'Storeowner and Customer', value: 'storeownerAndCustomer' },
     { label: 'Customer', value: 'customer' },
+  ];
+  const oneTimePurchaseOptions = [
+    { label: 'Disabled for everyone', value: 'DisabledForEveryone' }
+  ];
+
+  const AllChargeZenProductsOptions = [
+    { label: 'All ChargeZen Products', value: 'AllChargeZenProducts' }
   ];
 
   const [selectedFrequency, setSelectedFrequency] = useState(['hidden']);
@@ -155,12 +176,15 @@ const CustomPortal = (props) => {
             <div className="form-head">
               <p className="control-text">
                 Control actions available to your customers after purchase
-            </p>
+              </p>
               <div className="purchase-preview">
                 <button className="preview">PREVIEW</button>
+                <button style={{ display: 'none' }} className="preview">CLOSE PREVIEW</button>
                 <button className="preview">PUBLISH</button>
               </div>
             </div>
+
+            <ActiveSubscription />
           </Stack.Item>
           {/* <Stack.Item>
             <Stack alignment="center">
@@ -203,14 +227,14 @@ const CustomPortal = (props) => {
                 <p className="applied-classes">Account Profile, Contact box & promo/contact button & portal background</p>
                 <TextField
                   label={
-                    <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .info-banner, .profile, .initials, 
+                    <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .info-banner, .profile, .initials,
                     .full-name, .contact, .btn-discount, .chargezen-proxy</span>   </TextStyle>
                   }
                   placeholder=".lorem {font-size: 34px;}"
                   multiline={10}
-                  value={values.styleHeader ? values.styleHeader : ''}
-                  error={touched.styleHeader && errors.styleHeader}
-                  onChange={(e) => setFieldValue('styleHeader', e)}
+                  value={values.styleAccountProfile ? values.styleAccountProfile : ''}
+                  error={touched.styleAccountProfile && errors.styleAccountProfile}
+                  onChange={(e) => setFieldValue('styleAccountProfile', e)}
                 />
                 <p className="applied-classes">Sidebar menu, promo tagline I, promo tagline II </p>
                 <TextField
@@ -219,21 +243,21 @@ const CustomPortal = (props) => {
                   }
                   placeholder="Add Code Here..."
                   multiline={10}
-                  value={values.styleHeader ? values.styleHeader : ''}
-                  error={touched.styleHeader && errors.styleHeader}
-                  onChange={(e) => setFieldValue('styleHeader', e)}
+                  value={values.styleSidebar ? values.styleSidebar : ''}
+                  error={touched.styleSidebar && errors.styleSidebar}
+                  onChange={(e) => setFieldValue('styleSidebar', e)}
                 />
                 <p className="applied-classes">Active & canceled subscriptions box</p>
                 <TextField
                   label={
-                    <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .display-text, .account-img,  .active-text, edit-subscription, delivery-schedule , .action-btn, 
+                    <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .display-text, .account-img,  .active-text, edit-subscription, delivery-schedule , .action-btn,
                      , btn-wrapper, .minus-quantity, .plus-quantity, .chevron, .edit-address, .notification-banner, .cancel-text </span></TextStyle>
                   }
                   placeholder="Add Code Here..."
                   multiline={10}
-                  value={values.styleHeader ? values.styleHeader : ''}
-                  error={touched.styleHeader && errors.styleHeader}
-                  onChange={(e) => setFieldValue('styleHeader', e)}
+                  value={values.styleSubscription ? values.styleSubscription : ''}
+                  error={touched.styleSubscription && errors.styleSubscription}
+                  onChange={(e) => setFieldValue('styleSubscription', e)}
                 />
                 <p className="applied-classes">Delivery schedule, order history, addresses, billings & account pages</p>
 
@@ -243,22 +267,22 @@ const CustomPortal = (props) => {
                   }
                   placeholder="Add Code Here..."
                   multiline={10}
-                  value={values.styleFooter ? values.styleFooter : ''}
-                  error={touched.styleFooter && errors.styleFooter}
-                  onChange={(e) => setFieldValue('styleFooter', e)}
+                  value={values.styleSidebarPages ? values.styleSidebarPages : ''}
+                  error={touched.styleSidebarPages && errors.styleSidebarPages}
+                  onChange={(e) => setFieldValue('styleSidebarPages', e)}
                 />
                 <p className="applied-classes">Upsells Carousel</p>
                 <TextField
                   label={
                     <TextStyle variation="subdued">
-                       CSS classes available for customization: <span className="custom-classes"> .offerTitle, .account-carousel, .carousel-img, .carousel-text, .btn-variant</span> 
-                  </TextStyle>
+                      CSS classes available for customization: <span className="custom-classes"> .offerTitle, .account-carousel, .carousel-img, .carousel-text, .btn-variant</span>
+                    </TextStyle>
                   }
                   placeholder="Add Code Here..."
                   multiline={10}
-                  value={values.styleCreditCard ? values.styleCreditCard : ''}
-                  error={touched.styleCreditCard && errors.styleCreditCard}
-                  onChange={(e) => setFieldValue('styleCreditCard', e)}
+                  value={values.styleUpsell ? values.styleUpsell : ''}
+                  error={touched.styleUpsell && errors.styleUpsell}
+                  onChange={(e) => setFieldValue('styleUpsell', e)}
                 />
               </FormLayout>
             </div>
@@ -304,9 +328,9 @@ const CustomPortal = (props) => {
             <Stack.Item>
               <Stack vertical>
                 <p className="navigation-text" variation="strong">Subscription Details</p>
-                
+
                 <FormLayout>
-                  
+
                   <FormLayout.Group>
                     <p>Edit Upcoming Order Date</p>
                     <Select
@@ -432,40 +456,40 @@ const CustomPortal = (props) => {
               180)
             </p>
           </Stack.Item>
-          <Stack.Item style={{marginTop:'0'}}>
+          <Stack.Item style={{ marginTop: '0' }}>
             <Stack vertical>
-              <p className="frequency-heading"  variation="strong">
+              <p className="frequency-heading" variation="strong">
                 {' '}
                 Products available for purchase on the customer protal
               </p>
               <div className="">
-              <FormLayout.Group>
-                <p>One-time purchases</p>
-                <Select
-                  options={options}
-                  value={values.oneTimePurchase}
-                  error={touched.oneTimePurchase && errors.oneTimePurchase}
-                  onChange={(e) => setFieldValue('oneTimePurchase', e)}
-                />
-                <p>&nbsp;</p>
-              </FormLayout.Group>
+                <FormLayout.Group>
+                  <p>One-time purchases</p>
+                  <Select
+                    options={oneTimePurchaseOptions}
+                    value={values.oneTimePurchase}
+                    error={touched.oneTimePurchase && errors.oneTimePurchase}
+                    onChange={(e) => setFieldValue('oneTimePurchase', e)}
+                  />
+                  <p>&nbsp;</p>
+                </FormLayout.Group>
 
-              <FormLayout.Group>
-                <p>Products available for purchase</p>
-                <Select
-                  options={options}
-                  value={values.availablePurchase}
-                  error={touched.availablePurchase && errors.availablePurchase}
-                  onChange={(e) => setFieldValue('availablePurchase', e)}
-                />
-                <p>&nbsp;</p>
-              </FormLayout.Group>
+                <FormLayout.Group>
+                  <p>Products available for purchase</p>
+                  <Select
+                    options={AllChargeZenProductsOptions}
+                    value={values.availablePurchase}
+                    error={touched.availablePurchase && errors.availablePurchase}
+                    onChange={(e) => setFieldValue('availablePurchase', e)}
+                  />
+                  <p>&nbsp;</p>
+                </FormLayout.Group>
               </div>
             </Stack>
           </Stack.Item>
           <Stack.Item>
             <Stack vertical>
-              <p className="frequency-heading"variation="strong">Discounts</p>
+              <p className="frequency-heading" variation="strong">Discounts</p>
 
               <ChoiceList
                 allowMultiple
@@ -548,69 +572,69 @@ const CustomPortal = (props) => {
             </div>
           </Stack.Item>
           <Stack.Item>
-            <div style={{marginTop:'10px'}}>
-            <FormLayout>
-              <FormLayout.Group>
-                <p className="reactive-text">Reactivate Subscription</p>
-                <Select
-                  options={options}
-                  value={values.reactiveSubscription}
-                  error={
-                    touched.reactiveSubscription && errors.reactiveSubscription
-                  }
-                  onChange={(e) => setFieldValue('reactiveSubscription', e)}
-                />
-                <p>&nbsp;</p>
-              </FormLayout.Group>
-            </FormLayout>
+            <div style={{ marginTop: '10px' }}>
+              <FormLayout>
+                <FormLayout.Group>
+                  <p className="reactive-text">Reactivate Subscription</p>
+                  <Select
+                    options={options}
+                    value={values.reactiveSubscription}
+                    error={
+                      touched.reactiveSubscription && errors.reactiveSubscription
+                    }
+                    onChange={(e) => setFieldValue('reactiveSubscription', e)}
+                  />
+                  <p>&nbsp;</p>
+                </FormLayout.Group>
+              </FormLayout>
             </div>
           </Stack.Item>
         </Stack>
       </Card.Section>
       <Card.Section>
         <div className="cancelation-section">
-        <Stack vertical>
-          <Stack.Item>
-            <Heading>Reasons for Cancellation</Heading>
-          </Stack.Item>
-          {/* {reasonsForCancellationList?.map((item, i) => ( */}
-          {values.reasonsCancels?.map((item, i) => (
-            <div className={item._destroy ? 'hidden' : ''} key={i}>
-              <Stack.Item>
-                <Stack distribution="equalSpacing">
-                  <Stack.Item>
-                    <TextStyle variation="strong">
-                      <a>{item.title}</a>
-                    </TextStyle>
-                    <br />
-                    <TextStyle variation="subdued">
-                      {item.returnContent}
-                    </TextStyle>
-                  </Stack.Item>
+          <Stack vertical>
+            <Stack.Item>
+              <Heading>Reasons for Cancellation</Heading>
+            </Stack.Item>
+            {/* {reasonsForCancellationList?.map((item, i) => ( */}
+            {values.reasonsCancels?.map((item, i) => (
+              <div className={item._destroy ? 'hidden' : ''} key={i}>
+                <Stack.Item>
+                  <Stack distribution="equalSpacing">
+                    <Stack.Item>
+                      <TextStyle variation="strong">
+                        <a>{item.title}</a>
+                      </TextStyle>
+                      <br />
+                      <TextStyle variation="subdued">
+                        {item.returnContent}
+                      </TextStyle>
+                    </Stack.Item>
                   isSubmitting
                   <Stack.Item>
-                    <div className="trash">
-                      <Button
-                        onClick={() =>
-                          // handleRemoveReasons(i)}
-                          setFieldValue(
-                            'reasonsCancels',
-                            handleRemoveReasons(values, i)
-                          )
-                        }
-                      >
-                        <img src={Trash}></img>
-                      </Button>
-                    </div>
-                  </Stack.Item>
-                </Stack>
-              </Stack.Item>
-            </div>
-          ))}
-          <Button loading={isSubmitting} primary onClick={() => handleSubmit()}>
-            Save
+                      <div className="trash">
+                        <Button
+                          onClick={() =>
+                            // handleRemoveReasons(i)}
+                            setFieldValue(
+                              'reasonsCancels',
+                              handleRemoveReasons(values, i)
+                            )
+                          }
+                        >
+                          <img src={Trash}></img>
+                        </Button>
+                      </div>
+                    </Stack.Item>
+                  </Stack>
+                </Stack.Item>
+              </div>
+            ))}
+            <Button loading={isSubmitting} primary onClick={() => handleSubmit()}>
+              Save
           </Button>
-        </Stack>
+          </Stack>
         </div>
       </Card.Section>
     </Layout>

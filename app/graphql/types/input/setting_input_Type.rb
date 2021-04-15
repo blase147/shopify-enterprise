@@ -10,6 +10,11 @@ module Types
       argument :style_header, String, required: false
       argument :style_footer, String, required: false
       argument :style_credit_card, String, required: false
+      argument :style_account_profile, String, required: false
+      argument :style_sidebar, String, required: false
+      argument :style_sidebar_pages, String, required: false
+      argument :style_subscription, String, required: false
+      argument :style_upsell, String, required: false
       argument :navigation_delivery, String, required: false
       argument :shiping_address, String, required: false
       argument :upcoming_oder_date, String, required: false
