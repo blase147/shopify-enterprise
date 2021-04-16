@@ -992,7 +992,7 @@ nav.top-nav {
     font-weight: bold;
     border-bottom: 2px solid $primary;
     text-decoration: none;
-    display: block;
+    display: none;
     padding: 7px 0px;
   }
 
@@ -1913,7 +1913,7 @@ body.chargezen-proxy {
 
         img {
           height: 100%;
-          width: 100%div#AppFrameNav {
+          width: 100%; div#AppFrameNav {
             position: fixed;
             width: 100%;
             top: 0;
@@ -1997,10 +1997,13 @@ body.chargezen-proxy {
   display: none;
 }
 
-.add_weekly_box {
-  display: none !important;
-}
+// .add_weekly_box {
+//   display: none !important;
+// }
 
+.preview-changes a.add_weekly_box{
+  display: block !important;
+}
 
 
 // Date Picker Styles

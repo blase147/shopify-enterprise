@@ -1,6 +1,8 @@
 import React from 'react'
+import parse from 'html-react-parser';
 
-const ActiveSubscription = () => {
+const ActiveSubscription = ({Values}) => {
+  console.log(Values)
   return (
     <div className="preview-changes">
     <p className="preview-changes-text">You’re previewing your changes</p>
@@ -13,11 +15,15 @@ const ActiveSubscription = () => {
           </div>
           <div className="details">
             <div className="contact">
-              <p>Questions? Call Us: +44 1234 5678 9000</p>
+              <p>{parse(Values?.contactBoxContent)}</p>
               <p>Monday - Friday 8:30 - 18:30</p>
             </div>
           </div>
-          <div className="details"><a className="btn-discount" href="#">GET $5 OFF</a></div>
+          {
+            Values?.showPromoButton==='true' && 
+            <div className="details"><a className="btn-discount" href="#">{Values?.promoButtonContent}</a></div>
+          }
+          
         </div>
         <div className="Polaris-Page__Content">
           <div className="Polaris-Layout">
@@ -112,7 +118,7 @@ const ActiveSubscription = () => {
                   </div>
                   <div className="content-wrapper">
                     <div className="display-text">
-                      <p><span>MY &nbsp;</span><span className="active">ACTIVE &nbsp;</span><span>SUBSCRIPTION</span></p><a className="add_weekly_box" href="#"><span>Add one more weekly box</span><svg fill="none" height={12} viewBox="0 0 20 12" width={20} xmlns="http://www.w3.org/2000/svg"><path d="M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z" fill="black" /></svg></a></div>
+                      <p><span>MY &nbsp;</span><span className="active">ACTIVE &nbsp;</span><span>SUBSCRIPTION</span></p><a className="add_weekly_box" href="#"><span >{parse(Values?.promoTagline1Content)}</span><svg fill="none" height={12} viewBox="0 0 20 12" width={20} xmlns="http://www.w3.org/2000/svg"><path d="M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z" fill="black" /></svg></a></div>
                     <div className="subscription-contract-products">
                       <div className="grid">
                         <div className="grid-item">
