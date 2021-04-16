@@ -164,29 +164,72 @@
 .applied-classes {
   font-size: 18px;
   margin-top: 50px;
+  margin-bottom: 12px;
 }
 .control-text {
   font-size: 18px;
 }
-.custom-portal {
-  .Polaris-TextField--multiline>.Polaris-TextField__Input {
-    height: 120px !important;
-    margin-bottom: 30px;
-   &::placeholder {
-     font-size: 18px;
-   } 
+
+.portal-section {
+  // display: grid;
+  // grid-template-columns: 70% auto;
+  // grid-gap: 40px;
+
+  .custom-portal {
+    .account-profile-head {
+      display: grid;
+      grid-template-columns: 70% auto;
+      grid-column-gap: 40px;
+    }
+    .Polaris-TextField--multiline>.Polaris-TextField__Input {
+      height: 120px !important;
+      margin-bottom: 30px;
+     &::placeholder {
+       font-size: 18px;
+     } 
+    }
+    .custom-classes {
+      color:red;
+    }
+    label {
+      margin-bottom: 25px;
+      margin-left: 8px;
+      .Polaris-TextStyle--variationSubdued {
+        font-size: 18px;
+      }
+    }
   }
-  .custom-classes {
-    color:red;
-  }
-  label {
-    margin-bottom: 25px;
-    margin-left: 8px;
-    .Polaris-TextStyle--variationSubdued {
-      font-size: 18px;
+
+  .promo-section {
+    p {
+      margin-bottom: 9px;
+    }
+    .promo-discount {
+      display: grid;
+      grid-template-columns: 30% auto;
+      grid-gap: 15px;
+    }
+
+  .link-searching {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 14px;
+    align-items: center;
+
+    .cross-img {
+      border: 1px solid lightgrey;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      /* border: .1rem solid transparent; */
+      border-radius: 3px;
     }
   }
 }
+
+}
+
+
 .customer-portal {
   .Polaris-FormLayout__Items {
     margin-bottom: 30px;

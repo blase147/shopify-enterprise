@@ -22,19 +22,19 @@ const CustomPortal = (props) => {
   //
   // const handleChangeTheme = useCallback((value) => setSelectedTheme(value), []);
 
-  const [preview,setPreview]=useState(false)
-  const [canPreview,setCanPreview]=useState(false)
+  const [preview, setPreview] = useState(false)
+  const [canPreview, setCanPreview] = useState(false)
 
-  const handleChange=(label,e)=>{
-    setFieldValue(label,e)
+  const handleChange = (label, e) => {
+    setFieldValue(label, e)
     setCanPreview(true)
     console.log(e.target.value);
-    
+
   }
-  const applyStyles= (s) => {
-    document.head.appendChild(document.createElement("style")).innerHTML=s;
+  const applyStyles = (s) => {
+    document.head.appendChild(document.createElement("style")).innerHTML = s;
   }
-  const handleApplyStyles =()=>{
+  const handleApplyStyles = () => {
     const styles = `${values?.styleSubscription || ''} ${values?.styleUpsell || ''} ${values?.styleSidebarPages || ''} ${values?.styleSidebar || ''} ${values?.styleAccountProfile || ''}`;
     applyStyles(styles)
   }
@@ -86,7 +86,9 @@ const CustomPortal = (props) => {
   const AllChargeZenProductsOptions = [
     { label: 'All ChargeZen Products', value: 'AllChargeZenProducts' }
   ];
-
+  const Show = [
+    { label: 'Show', value: 'Show' }
+  ];
   const [selectedFrequency, setSelectedFrequency] = useState(['hidden']);
   const handleChangeFrequency = useCallback(
     (value) => setSelectedFrequency(value),
@@ -176,20 +178,20 @@ const CustomPortal = (props) => {
               <div className="purchase-preview">
                 {
                   !preview &&
-                  <button className={!canPreview ?"preview disabled":"preview"} disabled={!canPreview} onClick={()=>{setPreview(true);handleApplyStyles();}} >PREVIEW</button>
+                  <button className={!canPreview ? "preview disabled" : "preview"} disabled={!canPreview} onClick={() => { setPreview(true); handleApplyStyles(); }} >PREVIEW</button>
                 }
                 {
-                  preview && 
-                  <button className="preview" onClick={()=>setPreview(false)} >CLOSE PREVIEW</button>
+                  preview &&
+                  <button className="preview" onClick={() => setPreview(false)} >CLOSE PREVIEW</button>
                 }
                 <button className="preview">PUBLISH</button>
               </div>
             </div>
 
-            { preview && 
-            <ActiveSubscription />
+            {preview &&
+              <ActiveSubscription />
             }
-            
+
           </Stack.Item>
           {/* <Stack.Item>
             <Stack alignment="center">
@@ -224,78 +226,137 @@ const CustomPortal = (props) => {
             </Stack>
           </Stack.Item> */}
           {
-            !preview && 
-              <>
-          <Stack.Item>
-            <h5 className="customize-text">Customize Styles</h5>
-          </Stack.Item>
-          <Stack.Item>
-            <div className="custom-portal">
-              <FormLayout>
-                <p className="applied-classes">Account Profile, Contact box & promo/contact button & portal background</p>
-                <TextField
-                  label={
-                    <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .info-banner, .profile, .initials,
-                    .full-name, .contact, .btn-discount, .chargezen-proxy</span>   </TextStyle>
-                  }
-                  placeholder=".lorem {font-size: 34px;}"
-                  multiline={10}
-                  value={values.styleAccountProfile ? values.styleAccountProfile : ''}
-                  error={touched.styleAccountProfile && errors.styleAccountProfile}
-                  onChange={(e) => handleChange('styleAccountProfile', e)}
-                />
-                <p className="applied-classes">Sidebar menu, promo tagline I, promo tagline II </p>
-                <TextField
-                  label={
-                    <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .account-sidebar, .active-subscription .cancel-subscription</span> </TextStyle>
-                  }
-                  placeholder="Add Code Here..."
-                  multiline={10}
-                  value={values.styleSidebar ? values.styleSidebar : ''}
-                  error={touched.styleSidebar && errors.styleSidebar}
-                  onChange={(e) => handleChange('styleSidebar', e)}
-                />
-                <p className="applied-classes">Active & canceled subscriptions box</p>
-                <TextField
-                  label={
-                    <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .display-text, .account-img,  .active-text, edit-subscription, delivery-schedule , .action-btn,
-                     , btn-wrapper, .minus-quantity, .plus-quantity, .chevron, .edit-address, .notification-banner, .cancel-text </span></TextStyle>
-                  }
-                  placeholder="Add Code Here..."
-                  multiline={10}
-                  value={values.styleSubscription ? values.styleSubscription : ''}
-                  error={touched.styleSubscription && errors.styleSubscription}
-                  onChange={(e) => handleChange('styleSubscription', e)}
-                />
-                <p className="applied-classes">Delivery schedule, order history, addresses, billings & account pages</p>
+            !preview &&
+            <>
+              <Stack.Item>
+                <h5 className="customize-text">Customize Styles</h5>
+              </Stack.Item>
+              <Stack.Item>
+                <div className="portal-section">
+                  <div className="custom-portal">
+                    <FormLayout>
+                      <div className="account-profile-head">
+                        <div className="account-sec">
+                        <p className="applied-classes">Account Profile, Contact box & promo/contact button & portal background</p>
+                        <TextField
+                          label={
+                            <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .info-banner, .profile, .initials,
+                          .full-name, .contact, .btn-discount, .chargezen-proxy</span>   </TextStyle>
+                          }
+                          placeholder=".lorem {font-size: 34px;}"
+                          multiline={10}
+                          value={values.styleAccountProfile ? values.styleAccountProfile : ''}
+                          error={touched.styleAccountProfile && errors.styleAccountProfile}
+                          onChange={(e) => handleChange('styleAccountProfile', e)}
+                        />
+                        </div>
+                        <div className="promo-section">
+                          <p>Promo button</p>
+                          <div className="promo-discount">
+                            <Select
+                              options={Show}
+                              value={values.navigationDelivery}
+                              error={
+                                touched.navigationDelivery && errors.navigationDelivery
+                              }
+                              onChange={(e) => setFieldValue('navigationDelivery', e)}
+                            />
+                            <TextField
+                              placeholder="Get $5 OFF"
+                              value=""
+                            />
+                          </div>
+                          <div className="link-searching">
+                      <p>Link</p>
+                      <TextField
+                        placeholder="paste a link or search"
+                        value=""
+                      />
+                      <div className="cross-img">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M17.0707 2.92929C15.181 1.03956 12.6726 0 10 0C7.32744 0 4.81902 1.03956 2.92929 2.92929C1.03956 4.81902 0 7.32744 0 10C0 12.6726 1.03956 15.181 2.92929 17.0707C4.81902 18.9604 7.32744 20 10 20C12.6726 20 15.181 18.9604 17.0707 17.0707C18.9604 15.181 20 12.6726 20 10C20 7.32744 18.9604 4.81902 17.0707 2.92929ZM16.2668 16.2668C14.5918 17.9419 12.3653 18.8636 10 18.8636C7.63468 18.8636 5.40825 17.9419 3.73316 16.2668C0.277778 12.8114 0.277778 7.18855 3.73316 3.73316C5.40825 2.05808 7.63468 1.13636 10 1.13636C12.3653 1.13636 14.5918 2.05808 16.2668 3.73316C19.7222 7.18855 19.7222 12.8114 16.2668 16.2668Z" fill="#007EFF" />
+                          <path d="M14.4066 5.59369C14.1835 5.37063 13.8258 5.37063 13.6027 5.59369L10 9.19638L6.39732 5.59369C6.17425 5.37063 5.81651 5.37063 5.59345 5.59369C5.37038 5.81675 5.37038 6.1745 5.59345 6.39756L9.19614 10.0003L5.59345 13.603C5.37038 13.826 5.37038 14.1838 5.59345 14.4068C5.70287 14.5163 5.85018 14.5752 5.99328 14.5752C6.13637 14.5752 6.28368 14.5205 6.39311 14.4068L9.9958 10.8041L13.5985 14.4068C13.7079 14.5163 13.8552 14.5752 13.9983 14.5752C14.1456 14.5752 14.2887 14.5205 14.3982 14.4068C14.6212 14.1838 14.6212 13.826 14.3982 13.603L10.8039 10.0003L14.4066 6.39756C14.6296 6.1745 14.6296 5.81675 14.4066 5.59369Z" fill="#007EFF" />
+                        </svg>
 
-                <TextField
-                  label={
-                    <TextStyle variation="subdued">  CSS classes available for customization: <span className="custom-classes"> .delivery-heading .delivery-text, .delivery-btn, .order-heading, .order-text-heading, .order-text, .btn-view, .btn-invoice, .subscription-text, .edit, .address-text, .address-heading, .main-heading, .card-heading, .payment-img, .card-text, .card-btn, .account-label, .account-input, update-btn </span></TextStyle>
-                  }
-                  placeholder="Add Code Here..."
-                  multiline={10}
-                  value={values.styleSidebarPages ? values.styleSidebarPages : ''}
-                  error={touched.styleSidebarPages && errors.styleSidebarPages}
-                  onChange={(e) => handleChange('styleSidebarPages', e)}
-                />
-                <p className="applied-classes">Upsells Carousel</p>
-                <TextField
-                  label={
-                    <TextStyle variation="subdued">
-                      CSS classes available for customization: <span className="custom-classes"> .offerTitle, .account-carousel, .carousel-img, .carousel-text, .btn-variant</span>
-                    </TextStyle>
-                  }
-                  placeholder="Add Code Here..."
-                  multiline={10}
-                  value={values.styleUpsell ? values.styleUpsell : ''}
-                  error={touched.styleUpsell && errors.styleUpsell}
-                  onChange={(e) => handleChange('styleUpsell', e)}
-                />
-              </FormLayout>
-            </div>
-          </Stack.Item>
-          </>
+                      </div>
+                    </div>
+                    <div className="contact-box" style={{ marginTop: '50px' }}>
+                      <p>Promo tagline I</p>
+                      <TextField
+                        placeholder="No thanks"
+                        value=""
+                      />
+                        <p>Promo tagline II</p>
+                      <TextField
+                        placeholder="No thanks"
+                        value=""
+                      />
+                    </div>
+                        </div>
+                     <div className="sec-sec">
+                      <p className="applied-classes">Sidebar menu, promo tagline I, promo tagline II </p>
+                      <TextField
+                        label={
+                          <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .account-sidebar, .active-subscription .cancel-subscription</span> </TextStyle>
+                        }
+                        placeholder="Add Code Here..."
+                        multiline={10}
+                        value={values.styleSidebar ? values.styleSidebar : ''}
+                        error={touched.styleSidebar && errors.styleSidebar}
+                        onChange={(e) => handleChange('styleSidebar', e)}
+                      />
+                      </div>
+                      <div className="contact-box" style={{ marginTop: '30px' }}>
+                      <p>Contact Box</p>
+                      <TextField
+                        placeholder="No thanks"
+                        value=""
+                      />
+                    </div>
+                       </div>
+                      <p className="applied-classes">Active & canceled subscriptions box</p>
+                      <TextField
+                        label={
+                          <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .display-text, .account-img,  .active-text, edit-subscription, delivery-schedule , .action-btn,
+                     , btn-wrapper, .minus-quantity, .plus-quantity, .chevron, .edit-address, .notification-banner, .cancel-text </span></TextStyle>
+                        }
+                        placeholder="Add Code Here..."
+                        multiline={10}
+                        value={values.styleSubscription ? values.styleSubscription : ''}
+                        error={touched.styleSubscription && errors.styleSubscription}
+                        onChange={(e) => handleChange('styleSubscription', e)}
+                      />
+                      <p className="applied-classes">Delivery schedule, order history, addresses, billings & account pages</p>
+
+                      <TextField
+                        label={
+                          <TextStyle variation="subdued">  CSS classes available for customization: <span className="custom-classes"> .delivery-heading .delivery-text, .delivery-btn, .order-heading, .order-text-heading, .order-text, .btn-view, .btn-invoice, .subscription-text, .edit, .address-text, .address-heading, .main-heading, .card-heading, .payment-img, .card-text, .card-btn, .account-label, .account-input, update-btn </span></TextStyle>
+                        }
+                        placeholder="Add Code Here..."
+                        multiline={10}
+                        value={values.styleSidebarPages ? values.styleSidebarPages : ''}
+                        error={touched.styleSidebarPages && errors.styleSidebarPages}
+                        onChange={(e) => handleChange('styleSidebarPages', e)}
+                      />
+                      <p className="applied-classes">Upsells Carousel</p>
+                      <TextField
+                        label={
+                          <TextStyle variation="subdued">
+                            CSS classes available for customization: <span className="custom-classes"> .offerTitle, .account-carousel, .carousel-img, .carousel-text, .btn-variant</span>
+                          </TextStyle>
+                        }
+                        placeholder="Add Code Here..."
+                        multiline={10}
+                        value={values.styleUpsell ? values.styleUpsell : ''}
+                        error={touched.styleUpsell && errors.styleUpsell}
+                        onChange={(e) => handleChange('styleUpsell', e)}
+                      />
+                    </FormLayout>
+                  </div>
+
+                </div>
+              </Stack.Item>
+            </>
           }
         </Stack>
       </Card.Section>
