@@ -180,6 +180,19 @@
       display: grid;
       grid-template-columns: 70% auto;
       grid-column-gap: 40px;
+      .promo-tag {
+        p {
+          margin-bottom: 9px;
+          &:last-child {
+            margin-top: 25px;
+          }
+        }
+        input {
+          margin-bottom: 25px;
+        }
+
+      }
+      
     }
     .Polaris-TextField--multiline>.Polaris-TextField__Input {
       height: 120px !important;
