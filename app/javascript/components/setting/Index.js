@@ -128,6 +128,12 @@ const Settings = () => {
         checkoutSubscriptionTerms
         emailSubscriptionTerms
         applePaySubscriptionTerms
+        showPromoButton
+        promoButtonContent
+        promoButtonUrl
+        contactBoxContent
+        promoTagline1Content
+        promoTagline2Content
       }
     }
   `;
@@ -211,6 +217,12 @@ const Settings = () => {
           checkoutSubscriptionTerms
           emailSubscriptionTerms
           applePaySubscriptionTerms
+          showPromoButton
+          promoButtonContent
+          promoButtonUrl
+          contactBoxContent
+          promoTagline1Content
+          promoTagline2Content
         }
       }
     }
@@ -291,6 +303,12 @@ const Settings = () => {
     themes: '',
     upcomingOderDate: '',
     upcomingQuantity: '',
+    // showPromoButton: 'true',
+    // promoButtonContent: '',
+    // promoButtonUrl: '',
+    // contactBoxContent: '',
+    // promoTagline1Content: '',
+    // promoTagline2Content: '',
     _destroy: false,
   };
   // form data #####################################################

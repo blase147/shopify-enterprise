@@ -31,6 +31,12 @@ module Types
     field :reactive_subscription, String, null: true
     field :upcoming_quantity, String, null: true
     field :reasons_cancels, [Types::ReasonsCancelType], null: true
+    field :show_promo_button, String, null: true
+    field :promo_button_content, String, null: true
+    field :promo_button_url, String, null: true
+    field :contact_box_content, String, null: true
+    field :promo_tagline1_content, String, null: true
+    field :promo_tagline2_content, String, null: true
 
     #email notification
     field :email_notifications, [Types::EmailNotificationType], null: true

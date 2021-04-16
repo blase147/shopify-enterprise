@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_14_053022) do
+ActiveRecord::Schema.define(version: 2021_04_15_101604) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -207,6 +207,12 @@ ActiveRecord::Schema.define(version: 2021_04_14_053022) do
     t.text "style_subscription"
     t.text "style_sidebar_pages"
     t.text "style_upsell"
+    t.boolean "show_promo_button", default: true
+    t.string "promo_button_content"
+    t.string "promo_button_url"
+    t.string "contact_box_content"
+    t.string "promo_tagline1_content"
+    t.string "promo_tagline2_content"
     t.index ["shop_id"], name: "index_settings_on_shop_id", unique: true
   end
 
