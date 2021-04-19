@@ -1,7 +1,7 @@
 // import RoundCheckbox from 'rn-round-checkbox';
 import {
   Button, Card,
-  ChoiceList,
+
   FormLayout,
   Heading, Layout, Select,
   Stack, TextField,
@@ -388,6 +388,7 @@ const CustomPortal = (props) => {
             <h2 className="portal-heading">Customer Portal Controls</h2>
             <Stack.Item>
               <p className="navigation-text" variation="strong">Navigation</p>
+              <div className="navigation-selectors">
               <FormLayout>
                 <FormLayout.Group>
                   <p>Subscriptions</p>
@@ -450,6 +451,7 @@ const CustomPortal = (props) => {
                   />
                 </FormLayout.Group>
               </FormLayout>
+              </div>
             </Stack.Item>
             <Stack.Item>
               <Stack vertical>

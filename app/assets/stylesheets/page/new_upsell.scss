@@ -160,11 +160,13 @@
   font-size: 20px;
   color: #000000;
   margin-bottom: 0px;
+  font-weight: 600;
 }
 .applied-classes {
   font-size: 18px;
   margin-top: 50px;
   margin-bottom: 12px;
+  font-weight: 500;
 }
 .control-text {
   font-size: 18px;
@@ -244,6 +246,26 @@
 
 
 .customer-portal {
+
+  .navigation-selectors {
+    .Polaris-FormLayout--grouped .Polaris-FormLayout__Item div {
+      width: 68%;
+    }
+    .Polaris-Select__Input {
+      width: 69%;
+    }
+    .Polaris-FormLayout__Items {
+      margin-bottom: 21px;
+    }
+    .Polaris-FormLayout--grouped {
+      margin-bottom: 21px;
+    }
+
+  }
+  .Polaris-FormLayout__Item {
+    margin-top: 0px;
+  }
+
   .Polaris-FormLayout__Items {
     margin-bottom: 30px;
   }
@@ -256,11 +278,12 @@
   }
   .Polaris-Stack__Item .navigation-text  {
     font-size: 18px;
-    font-weight: 900;
-    margin-bottom: 10px;
+    font-weight: 800;
+    margin-bottom: 41px;
   }
   p {
     font-size: 16px;
+    font-weight: 500;
   }
     
    
@@ -305,7 +328,7 @@
     margin: 30px 0px;
   }
   .subscription-contract-products {
-    margin-right: 60px;
+    margin-right: 30px;
   }
   .Polaris-Navigation__Icon img {
     filter: none;

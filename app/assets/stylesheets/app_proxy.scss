@@ -990,14 +990,33 @@ nav.top-nav {
     font-size: 18px;
     color: #212B36;
     font-weight: bold;
-    border-bottom: 2px solid $primary;
+    // border-bottom: 2px solid $primary;
     text-decoration: none;
     display: none;
     padding: 7px 0px;
   }
 
-}
+  
 
+}
+.add_weekly_box {
+  font-size: 18px;
+  color: #212B36;
+  font-weight: bold;
+  text-decoration: none;
+  display: none;
+  padding: 7px 0px;
+  position: relative;
+
+  &::after {
+    position: absolute;
+    content: '';
+    border-bottom: 2px solid $primary;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
+}
 // NOTIFICATION BANNER
 
 div.notification-banner {
@@ -2002,7 +2021,7 @@ body.chargezen-proxy {
 // }
 
 .preview-changes a.add_weekly_box{
-  display: block !important;
+  display: inline-block !important;
 }
 
 
