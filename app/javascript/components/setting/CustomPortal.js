@@ -32,7 +32,13 @@ const CustomPortal = (props) => {
 
   }
   const applyStyles = (s) => {
-    document.head.appendChild(document.createElement("style")).innerHTML = s;
+    let exists = document.querySelector("style.dynamic");
+    if (exists)
+      exists.remove();
+    let elem = document.createElement("style");
+    elem.classList.add("dynamic");
+    elem.innerHTML = s;
+    document.head.appendChild(elem);
   }
   const handleApplyStyles = () => {
     const styles = `${values?.styleSubscription || ''} ${values?.styleUpsell || ''} ${values?.styleSidebarPages || ''} ${values?.styleSidebar || ''} ${values?.styleAccountProfile || ''}`;
@@ -264,12 +270,12 @@ const CustomPortal = (props) => {
                               error={
                                 touched.showPromoButton && errors.showPromoButton
                               }
-                              onChange={(e) => setFieldValue('showPromoButton', e)}
+                              onChange={(e) => handleChange('showPromoButton', e)}
                             />
                             <TextField
                               placeholder="Get $5 OFF"
                               value={values.promoButtonContent}
-                              onChange={(e) => setFieldValue('promoButtonContent', e)}
+                              onChange={(e) => handleChange('promoButtonContent', e)}
                               error={touched.promoButtonContent && errors.promoButtonContent}
                             />
                           </div>
@@ -278,10 +284,10 @@ const CustomPortal = (props) => {
                             <TextField
                               placeholder="paste a link or search"
                               value={values.promoButtonUrl}
-                              onChange={(e) => setFieldValue('promoButtonUrl', e)}
+                              onChange={(e) => handleChange('promoButtonUrl', e)}
                               error={touched.promoButtonUrl && errors.promoButtonUrl}
                             />
-                            <div className="cross-img" onClick={()=>setFieldValue('promoButtonUrl', '')} >
+                            <div className="cross-img" onClick={()=>handleChange('promoButtonUrl', '')} >
                               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M17.0707 2.92929C15.181 1.03956 12.6726 0 10 0C7.32744 0 4.81902 1.03956 2.92929 2.92929C1.03956 4.81902 0 7.32744 0 10C0 12.6726 1.03956 15.181 2.92929 17.0707C4.81902 18.9604 7.32744 20 10 20C12.6726 20 15.181 18.9604 17.0707 17.0707C18.9604 15.181 20 12.6726 20 10C20 7.32744 18.9604 4.81902 17.0707 2.92929ZM16.2668 16.2668C14.5918 17.9419 12.3653 18.8636 10 18.8636C7.63468 18.8636 5.40825 17.9419 3.73316 16.2668C0.277778 12.8114 0.277778 7.18855 3.73316 3.73316C5.40825 2.05808 7.63468 1.13636 10 1.13636C12.3653 1.13636 14.5918 2.05808 16.2668 3.73316C19.7222 7.18855 19.7222 12.8114 16.2668 16.2668Z" fill="#007EFF" />
                                 <path d="M14.4066 5.59369C14.1835 5.37063 13.8258 5.37063 13.6027 5.59369L10 9.19638L6.39732 5.59369C6.17425 5.37063 5.81651 5.37063 5.59345 5.59369C5.37038 5.81675 5.37038 6.1745 5.59345 6.39756L9.19614 10.0003L5.59345 13.603C5.37038 13.826 5.37038 14.1838 5.59345 14.4068C5.70287 14.5163 5.85018 14.5752 5.99328 14.5752C6.13637 14.5752 6.28368 14.5205 6.39311 14.4068L9.9958 10.8041L13.5985 14.4068C13.7079 14.5163 13.8552 14.5752 13.9983 14.5752C14.1456 14.5752 14.2887 14.5205 14.3982 14.4068C14.6212 14.1838 14.6212 13.826 14.3982 13.603L10.8039 10.0003L14.4066 6.39756C14.6296 6.1745 14.6296 5.81675 14.4066 5.59369Z" fill="#007EFF" />
@@ -294,7 +300,7 @@ const CustomPortal = (props) => {
                           <TextField
                             placeholder="No thanks"
                             value={values.contactBoxContent}
-                            onChange={(e) => setFieldValue('contactBoxContent', e)}
+                            onChange={(e) => handleChange('contactBoxContent', e)}
                             error={touched.contactBoxContent && errors.contactBoxContent}
                           />
                         </div>
@@ -317,14 +323,14 @@ const CustomPortal = (props) => {
                             <TextField
                               placeholder="No thanks"
                               value={values.promoTagline1Content}
-                              onChange={(e) => setFieldValue('promoTagline1Content', e)}
+                              onChange={(e) => handleChange('promoTagline1Content', e)}
                               error={touched.promoTagline1Content && errors.promoTagline1Content}
                             />
                             <p>Promo tagline II</p>
                             <TextField
                               placeholder="No thanks"
                               value={values.promoTagline2Content}
-                              onChange={(e) => setFieldValue('promoTagline2Content', e)}
+                              onChange={(e) => handleChange('promoTagline2Content', e)}
                               error={touched.promoTagline2Content && errors.promoTagline2Content}
                             />
                           </div>
@@ -391,7 +397,7 @@ const CustomPortal = (props) => {
                     error={
                       touched.showSubscription && errors.showSubscription
                     }
-                    onChange={(e) => setFieldValue('showSubscription', e)}
+                    onChange={(e) => handleChange('showSubscription', e)}
                   />
                   <p>Delivery Schedule</p>
                   <Select
@@ -400,7 +406,7 @@ const CustomPortal = (props) => {
                     error={
                       touched.showDeliverySchedule && errors.showDeliverySchedule
                     }
-                    onChange={(e) => setFieldValue('showDeliverySchedule', e)}
+                    onChange={(e) => handleChange('showDeliverySchedule', e)}
                   />
                 </FormLayout.Group>
                 <FormLayout.Group>
@@ -411,7 +417,7 @@ const CustomPortal = (props) => {
                     error={
                       touched.showOrderHistory && errors.showOrderHistory
                     }
-                    onChange={(e) => setFieldValue('showOrderHistory', e)}
+                    onChange={(e) => handleChange('showOrderHistory', e)}
                   />
                   <p>Addresses</p>
                   <Select
@@ -420,7 +426,7 @@ const CustomPortal = (props) => {
                     error={
                       touched.showAddress && errors.showAddress
                     }
-                    onChange={(e) => setFieldValue('showAddress', e)}
+                    onChange={(e) => handleChange('showAddress', e)}
                   />
                 </FormLayout.Group>
                 <FormLayout.Group>
@@ -431,7 +437,7 @@ const CustomPortal = (props) => {
                     error={
                       touched.showBilling && errors.showBilling
                     }
-                    onChange={(e) => setFieldValue('showBilling', e)}
+                    onChange={(e) => handleChange('showBilling', e)}
                   />
                   <p>Account</p>
                   <Select
@@ -440,7 +446,7 @@ const CustomPortal = (props) => {
                     error={
                       touched.showAccount && errors.showAccount
                     }
-                    onChange={(e) => setFieldValue('showAccount', e)}
+                    onChange={(e) => handleChange('showAccount', e)}
                   />
                 </FormLayout.Group>
               </FormLayout>

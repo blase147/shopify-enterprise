@@ -52,9 +52,11 @@ const ActiveSubscription = ({Values}) => {
                       <nav className="Polaris-Navigation account">
                         <div className="Polaris-Navigation__PrimaryNavigation Polaris-Scrollable Polaris-Scrollable--vertical" data-polaris-scrollable="true">
                           <ul className="Polaris-Navigation__Section account-sidebar">
+                          {
+                            Values?.showSubscription==="true" &&
                             <li className="Polaris-Navigation__ListItem">
                               <div className="Polaris-Navigation__ItemWrapper">
-                                <a className="Polaris-Navigation__Item Polaris-Navigation__Item--selected"  tabIndex={0}>
+                                <a className="Polaris-Navigation__Item Polaris-Navigation__Item--selected" tabIndex={0}>
                                   <div className="Polaris-Navigation__Icon">
                                     <svg aria-hidden="true" className="Polaris-Icon__Svg" fill="none" focusable="false" viewBox="0 0 20 20">
                                       <path d="M6.63672 1.84473H19.016" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
@@ -67,12 +69,12 @@ const ActiveSubscription = ({Values}) => {
                                   </div><span className="Polaris-Navigation__Text">Subscription</span></a>
                               </div>
                               <div className="Polaris-Navigation__SecondaryNavigation Polaris-Navigation--isExpanded">
-                                <div aria-expanded="true" id="PolarisSecondaryNavigation15" style={{transitionDuration: '0ms', transitionTimingFunction: 'linear', maxHeight: 'none', overflow: 'visible'}}>
+                                <div aria-expanded="true" id="PolarisSecondaryNavigation15" style={{ transitionDuration: '0ms', transitionTimingFunction: 'linear', maxHeight: 'none', overflow: 'visible' }}>
                                   <ul className="Polaris-Navigation__List">
                                     <li className="Polaris-Navigation__ListItem">
                                       <div className="Polaris-Navigation__ItemWrapper active-subscription"><span className="Polaris-Navigation__Text"><a className="Polaris-Navigation__Item" data-polaris-unstyled="true" tab_index={0} aria-disabled="false" ><span className="Polaris-Navigation__Text"><span>Active</span></span>
-                                          </a>
-                                        </span>
+                                      </a>
+                                      </span>
                                       </div>
                                     </li>
                                     <li className="Polaris-Navigation__ListItem">
@@ -81,41 +83,61 @@ const ActiveSubscription = ({Values}) => {
                                 </div>
                               </div>
                             </li>
+                          }
+
+                          {
+                            Values.showDeliverySchedule==="true" && 
                             <li className="Polaris-Navigation__ListItem">
                               <div className="Polaris-Navigation__ItemWrapper">
-                                <a className="Polaris-Navigation__Item"  tabIndex={0}>
+                                <a className="Polaris-Navigation__Item" tabIndex={0}>
                                   <div className="Polaris-Navigation__Icon"><span className="Polaris-Icon"><svg fill="none" height={18} viewBox="0 0 22 18" width={22} xmlns="http://www.w3.org/2000/svg"><g clipPath="url(#clip0)"><path d="M18.8089 1.80762H4.08168C3.17794 1.80762 2.44531 2.59112 2.44531 3.55762V14.0576C2.44531 15.0241 3.17794 15.8076 4.08168 15.8076H18.8089C19.7127 15.8076 20.4453 15.0241 20.4453 14.0576V3.55762C20.4453 2.59112 19.7127 1.80762 18.8089 1.80762Z" fill="#E5E5E5" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} /><path d="M2.44531 6.80762H20.4453" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} /></g><defs><clipPath id="clip0"><rect height={17} transform="translate(0.753906 0.556641)" width={21} /></clipPath></defs></svg></span></div><span className="Polaris-Navigation__Text">Delivery Schedules</span></a>
                               </div>
                             </li>
+                          }
+                          {
+                            Values.showOrderHistory==="true" &&
                             <li className="Polaris-Navigation__ListItem">
                               <div className="Polaris-Navigation__ItemWrapper">
-                                <a className="Polaris-Navigation__Item"  tabIndex={0}>
-                                  <div style={{marginRight: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%'}}><span style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}><svg fill="none" height={19} viewBox="0 0 16 19" width={16} xmlns="http://www.w3.org/2000/svg"><path d="M9.2917 1.24365H2.88608C2.46136 1.24365 2.05403 1.41237 1.75371 1.71269C1.45339 2.01302 1.28467 2.42034 1.28467 2.84506V15.6563C1.28467 16.081 1.45339 16.4884 1.75371 16.7887C2.05403 17.089 2.46136 17.2577 2.88608 17.2577H12.4945C12.9192 17.2577 13.3266 17.089 13.6269 16.7887C13.9272 16.4884 14.0959 16.081 14.0959 15.6563V6.04787L9.2917 1.24365Z" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} /><path d="M9.29199 1.24341V6.04763H14.0962" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} /></svg></span></div><span className="Polaris-Navigation__Text">Order History</span></a>
+                                <a className="Polaris-Navigation__Item" tabIndex={0}>
+                                  <div style={{ marginRight: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}><span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><svg fill="none" height={19} viewBox="0 0 16 19" width={16} xmlns="http://www.w3.org/2000/svg"><path d="M9.2917 1.24365H2.88608C2.46136 1.24365 2.05403 1.41237 1.75371 1.71269C1.45339 2.01302 1.28467 2.42034 1.28467 2.84506V15.6563C1.28467 16.081 1.45339 16.4884 1.75371 16.7887C2.05403 17.089 2.46136 17.2577 2.88608 17.2577H12.4945C12.9192 17.2577 13.3266 17.089 13.6269 16.7887C13.9272 16.4884 14.0959 16.081 14.0959 15.6563V6.04787L9.2917 1.24365Z" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} /><path d="M9.29199 1.24341V6.04763H14.0962" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} /></svg></span></div><span className="Polaris-Navigation__Text">Order History</span></a>
                               </div>
                             </li>
+                          }
+                          {
+                            Values.showAddress==="true" &&
                             <li className="Polaris-Navigation__ListItem">
                               <div className="Polaris-Navigation__ItemWrapper">
-                                <a className="Polaris-Navigation__Item"  tabIndex={0}>
+                                <a className="Polaris-Navigation__Item" tabIndex={0}>
                                   <div className="Polaris-Navigation__Icon"><span className="Polaris-Icon"><img src="https://06c00288a45e.ngrok.io/assets/icons/address-86c025d50add34ce846dc6a61771f3634553c425fd8a7ba2a7bcb81ef4fae0d3.svg" /></span></div><span className="Polaris-Navigation__Text">Addresses</span></a>
                               </div>
                             </li>
+                          }
+                          {
+                            Values.showBilling==="true" &&
                             <li className="Polaris-Navigation__ListItem">
                               <div className="Polaris-Navigation__ItemWrapper">
-                                <a className="Polaris-Navigation__Item"  tabIndex={0}>
+                                <a className="Polaris-Navigation__Item" tabIndex={0}>
                                   <div className="Polaris-Navigation__Icon"><span className="Polaris-Icon"><svg className="Polaris-Icon__Svg" fill="none" height={16} viewBox="0 0 16 16" width={16} xmlns="http://www.w3.org/2000/svg"><path d="M15.5 10C15.224 10 15 10.224 15 10.5V14H1V8H6.5C6.776 8 7 7.776 7 7.5C7 7.224 6.776 7 6.5 7H1V5H6.5C6.776 5 7 4.776 7 4.5C7 4.224 6.776 4 6.5 4H1C0.448 4 0 4.448 0 5V14C0 14.552 0.448 15 1 15H15C15.552 15 16 14.552 16 14V10.5C16 10.224 15.776 10 15.5 10Z" fill="#4D506A" /><path d="M15.5 10C15.224 10 15 10.224 15 10.5V14H1V8H6.5C6.776 8 7 7.776 7 7.5C7 7.224 6.776 7 6.5 7H1V5H6.5C6.776 5 7 4.776 7 4.5C7 4.224 6.776 4 6.5 4H1C0.448 4 0 4.448 0 5V14C0 14.552 0.448 15 1 15H15C15.552 15 16 14.552 16 14V10.5C16 10.224 15.776 10 15.5 10Z" stroke="#4D506A" /><path d="M4.5 10H2.5C2.224 10 2 10.224 2 10.5C2 10.776 2.224 11 2.5 11H4.5C4.776 11 5 10.776 5 10.5C5 10.224 4.776 10 4.5 10Z" fill="#4D506A" /><path d="M15.697 2.53975L12.197 1.03975C12.07 0.98675 11.929 0.98675 11.802 1.03975L8.302 2.53975C8.119 2.61875 8 2.79975 8 2.99975V4.99975C8 7.75075 9.017 9.35875 11.751 10.9338C11.828 10.9777 11.914 10.9998 12 10.9998C12.086 10.9998 12.172 10.9777 12.249 10.9338C14.983 9.36275 16 7.75475 16 4.99975V2.99975C16 2.79975 15.881 2.61875 15.697 2.53975ZM15 4.99975C15 7.30875 14.236 8.57975 12 9.91975C9.764 8.57675 9 7.30575 9 4.99975V3.32975L12 2.04375L15 3.32975V4.99975Z" fill="#4D506A" /><path d="M15.697 2.53975L12.197 1.03975C12.07 0.98675 11.929 0.98675 11.802 1.03975L8.302 2.53975C8.119 2.61875 8 2.79975 8 2.99975V4.99975C8 7.75075 9.017 9.35875 11.751 10.9338C11.828 10.9777 11.914 10.9998 12 10.9998C12.086 10.9998 12.172 10.9777 12.249 10.9338C14.983 9.36275 16 7.75475 16 4.99975V2.99975C16 2.79975 15.881 2.61875 15.697 2.53975ZM15 4.99975C15 7.30875 14.236 8.57975 12 9.91975C9.764 8.57675 9 7.30575 9 4.99975V3.32975L12 2.04375L15 3.32975V4.99975Z" stroke="#4D506A" /><path d="M13.8127 4.10886C13.5977 3.93886 13.2837 3.97186 13.1097 4.18686L11.5377 6.15286L10.9157 5.22286C10.7607 4.99286 10.4497 4.93186 10.2227 5.08386C9.99365 5.23686 9.93065 5.54786 10.0837 5.77686L11.0837 7.27686C11.1727 7.40986 11.3187 7.49186 11.4787 7.49986C11.4857 7.49986 11.4937 7.49986 11.4997 7.49986C11.6507 7.49986 11.7947 7.43186 11.8907 7.31186L13.8907 4.81186C14.0627 4.59586 14.0287 4.28186 13.8127 4.10886Z" fill="#4D506A" /></svg></span></div><span className="Polaris-Navigation__Text">Billings</span></a>
                               </div>
                             </li>
+                          }
+                          {
+                            Values.showAccount==="true" &&
                             <li className="Polaris-Navigation__ListItem">
                               <div className="Polaris-Navigation__ItemWrapper">
                                 <a className="Polaris-Navigation__Item" tabIndex={0}>
                                   <div className="Polaris-Navigation__Icon"><span className="Polaris-Icon"><svg fill="none" height={18} viewBox="0 0 18 18" width={18} xmlns="http://www.w3.org/2000/svg"><path d="M9.74356 17.2167C9.97365 17.1961 10.2008 17.1646 10.4251 17.1254L10.4256 17.1254L10.5096 17.1105L10.512 17.1101C14.7016 16.3283 17.6065 12.4849 17.2146 8.24146C16.8228 3.99801 13.2631 0.751343 9.00116 0.75L9.00108 0.75L8.75108 0.749921V0.753715C4.30986 0.885866 0.75 4.52729 0.75 9C0.75 13.5563 4.44422 17.25 9.00108 17.25C9.24959 17.25 9.49718 17.2389 9.74356 17.2167ZM9.74356 17.2167L9.72123 16.9677L9.74362 17.2167C9.7436 17.2167 9.74358 17.2167 9.74356 17.2167ZM8.36905 16.1884L8.37976 16.1893C8.58462 16.207 8.79252 16.2148 9.00239 16.2148C9.21075 16.2148 9.41702 16.2053 9.62374 16.1875L9.63444 16.1866H9.64518H9.65285C9.84931 16.1688 10.0448 16.1423 10.2391 16.1084L10.2428 16.1078L10.2428 16.1078C10.2578 16.1054 10.2616 16.105 10.2647 16.1045C10.2665 16.1043 10.2681 16.1041 10.2718 16.1034L10.2724 16.1033C10.4649 16.0688 10.6559 16.0257 10.8457 15.9756L10.8491 15.9747L10.8491 15.9747L10.8926 15.9639C11.0756 15.9142 11.2571 15.8562 11.437 15.7918C11.4484 15.7875 11.4596 15.7836 11.4676 15.7809C11.4723 15.7792 11.4763 15.7778 11.4798 15.7766C11.4834 15.7753 11.4866 15.7742 11.4897 15.7731L11.4904 15.7728C11.6671 15.7078 11.8415 15.635 12.0136 15.5557L12.0208 15.5523L12.0209 15.5524C12.0403 15.5442 12.0571 15.5369 12.073 15.5295L12.0731 15.5295C12.2403 15.4514 12.4055 15.3642 12.5695 15.2709C12.5761 15.2671 12.5828 15.2633 12.589 15.2598C12.5942 15.2569 12.599 15.2542 12.6035 15.2517C12.6142 15.2457 12.6229 15.2409 12.6312 15.2361L12.7568 15.4522M8.36905 16.1884L7.7426 16.1069L7.74107 16.1067C7.73517 16.1058 7.73427 16.1057 7.73451 16.1057L7.73452 16.1057L7.73111 16.1051C7.53875 16.0707 7.34798 16.0279 7.15862 15.9778L7.15674 15.9774L7.11117 15.9657C6.92806 15.916 6.74641 15.8582 6.5668 15.7937L6.56667 15.7937C6.54716 15.7867 6.53952 15.7842 6.53347 15.7822C6.52769 15.7803 6.52334 15.7789 6.51151 15.7745L6.51064 15.7742C6.33544 15.7098 6.16266 15.6374 5.99167 15.5587L5.99168 15.5587L5.98902 15.5575C5.98077 15.5538 5.97358 15.5507 5.96705 15.5478C5.95269 15.5414 5.94147 15.5365 5.92896 15.5305L5.92646 15.5294C5.76191 15.4532 5.599 15.3667 5.43696 15.2743L5.43633 15.2739L5.36684 15.2348C5.21001 15.1432 5.05627 15.0448 4.90481 14.9404C4.88606 14.9273 4.87661 14.9209 4.86791 14.915C4.85914 14.909 4.85115 14.9036 4.83516 14.8924C4.70433 14.7996 4.57609 14.7015 4.45043 14.599L4.45043 12.467C4.45043 12.4669 4.45043 12.4668 4.45043 12.4668C4.45232 10.9855 5.65284 9.78512 7.13447 9.78333H10.8677C12.3494 9.78512 13.5499 10.9856 13.5517 12.467V14.5978C13.4251 14.7014 13.2957 14.7999 13.1632 14.8937C13.1508 14.9023 13.1432 14.9075 13.1344 14.9134C13.1262 14.9189 13.117 14.9251 13.1021 14.9354L13.1018 14.9357C12.9485 15.0421 12.7915 15.1423 12.6305 15.2364L12.7568 15.4522M8.36905 16.1884H8.35829H8.35055C8.15445 16.1707 7.95932 16.1443 7.76533 16.1106L8.36905 16.1884ZM12.7568 15.4522C12.9232 15.3548 13.0858 15.2512 13.2444 15.141L12.6939 15.4878C12.7039 15.482 12.7141 15.4763 12.7243 15.4706C12.7352 15.4645 12.7461 15.4585 12.7568 15.4522ZM10.2821 16.3547C10.2864 16.354 10.2907 16.3534 10.295 16.3527C10.3022 16.3517 10.3093 16.3507 10.3165 16.3493L10.2821 16.3547ZM10.2821 16.3547C10.0778 16.3904 9.87164 16.4181 9.66406 16.4366H9.64518M10.2821 16.3547L9.64518 16.4366M9.64518 16.4366C9.43187 16.4549 9.21843 16.4648 9.00239 16.4648C8.78634 16.4648 8.57121 16.4568 8.35829 16.4384L9.64518 16.4366ZM14.5851 12.4667V12.4664C14.5828 10.4148 12.92 8.75237 10.8683 8.75H10.868H7.13416H7.13387C5.08213 8.75237 3.4194 10.4148 3.41703 12.4664V12.4667V13.5681C1.08087 10.7229 1.25346 6.51768 3.91482 3.87465C6.72944 1.07954 11.2727 1.07954 14.0874 3.87466C16.7487 6.51768 16.9213 10.7229 14.5851 13.5681V12.4667Z" fill="#4D506A" stroke="#4D506A" strokeWidth="0.5" /><path d="M9.06424 3.82199H9.06398C7.44134 3.82199 6.12598 5.13735 6.12598 6.75999C6.12598 8.38263 7.44134 9.69799 9.06398 9.69799C10.6866 9.69799 12.002 8.38263 12.002 6.75999V6.75973C12.0003 5.13795 10.686 3.82371 9.06424 3.82199ZM9.0637 8.66039C8.01422 8.66024 7.16358 7.80951 7.16358 6.75999C7.16358 5.71038 8.01437 4.85959 9.06398 4.85959C10.1135 4.85959 10.9642 5.71023 10.9644 6.75971C10.9632 7.80888 10.1129 8.65923 9.0637 8.66039Z" fill="#4D506A" stroke="#4D506A" strokeWidth="0.5" /></svg></span></div><span className="Polaris-Navigation__Text">Account</span></a>
                               </div>
                             </li>
+                          }
+                            
                           </ul>
                         </div>
                       </nav>
                     </div>
                   </div>
+                {
+                  Values?.showSubscription==="true" && 
                   <div className="content-wrapper">
                     <div className="display-text">
                       <p><span>MY &nbsp;</span><span className="active">ACTIVE &nbsp;</span><span>SUBSCRIPTION</span></p><a className="add_weekly_box" href="#"><span >{parse(Values?.promoTagline1Content || '')}</span><svg fill="none" height={12} viewBox="0 0 20 12" width={20} xmlns="http://www.w3.org/2000/svg"><path d="M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z" fill="black" /></svg></a></div>
@@ -132,7 +154,7 @@ const ActiveSubscription = ({Values}) => {
                           <p className="text right active-text">$179.90</p>
                         </div>
                         <div className="grid-item">
-                          <button aria-hidden="true" className="white-btn action-btn"  tabIndex={-1} type="button">SWAP SUBSCRIPTION</button>
+                          <button aria-hidden="true" className="white-btn action-btn" tabIndex={-1} type="button">SWAP SUBSCRIPTION</button>
                           <a >
                             <button className="white-btn action-btn">DELIVERY SCHEDULE</button>
                           </a>
@@ -250,11 +272,11 @@ const ActiveSubscription = ({Values}) => {
                                             <h4>Sat, May 22</h4></div>
                                         </div>
                                         <div className="btn-wrapper">
-                                          <button aria-hidden="true" className="upgrade-subscription"   type="button">UPGRADE SUBSCRIPTION</button>
-                                          <button aria-hidden="true" className="swap-subscription"     type="button">SWAP SUBSCRIPTION</button>
+                                          <button aria-hidden="true" className="upgrade-subscription" type="button">UPGRADE SUBSCRIPTION</button>
+                                          <button aria-hidden="true" className="swap-subscription" type="button">SWAP SUBSCRIPTION</button>
                                           <button className="downgrade-subscription light" type="button">DOWNGRADE SUBSCRIPTION</button>
                                           <button className="ask-questions light" type="button">ASK A QUESTION</button>
-                                          <button aria-hidden="true" className="cancel-subscription"    type="button">CANCEL SUBSCRIPTION</button>
+                                          <button aria-hidden="true" className="cancel-subscription" type="button">CANCEL SUBSCRIPTION</button>
                                         </div>
                                       </div>
                                     </div>
@@ -782,7 +804,7 @@ const ActiveSubscription = ({Values}) => {
                                         <a data-remote="true" rel="nofollow" data-method="post">
                                           <button className="btn-cancel" type="button">CANCEL ANYWAY</button>
                                         </a>
-                                        <button aria-hidden="true" className="btn-keep"  tabIndex={-1} type="button">KEEP SUBSCRIPTION</button>
+                                        <button aria-hidden="true" className="btn-keep" tabIndex={-1} type="button">KEEP SUBSCRIPTION</button>
                                       </div>
                                     </div>
                                   </div>
@@ -808,7 +830,7 @@ const ActiveSubscription = ({Values}) => {
                           </div>
                         </form>
                       </div>
-                      <div className="slide-down" style={{display: 'none'}}>
+                      <div className="slide-down" style={{ display: 'none' }}>
                         <div className="item">
                           <p>start date</p>
                           <p>Fri, March 19</p>
@@ -916,7 +938,7 @@ const ActiveSubscription = ({Values}) => {
                                 <div className="Polaris-Modal-Footer">
                                   <button aria-hidden="true" className="Polaris-Button mr-10" data-action="close" tabIndex={-1} type="button">Cancel</button>
                                   <button className="Polaris-Button Polaris-Button--primary" type="submit"><span className="Polaris-Button__Content"><span className="Polaris-Button__Spinner hide"><span className="Polaris-Spinner Polaris-Spinner--colorWhite Polaris-Spinner--sizeSmall"><svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M7.229 1.173a9.25 9.25 0 1011.655 11.412 1.25 1.25 0 10-2.4-.698 6.75 6.75 0 11-8.506-8.329 1.25 1.25 0 10-.75-2.385z" /></svg></span><span role="status"><span className="Polaris-VisuallyHidden">Loading</span></span>
-                                      </span><span className="Polaris-Button__Text">Update</span></span>
+                                  </span><span className="Polaris-Button__Text">Update</span></span>
                                   </button>
                                 </div>
                               </div>
@@ -958,7 +980,7 @@ const ActiveSubscription = ({Values}) => {
                           </div>
                         </form>
                       </div>
-                      <div className="slide-down" style={{display: 'none'}}>
+                      <div className="slide-down" style={{ display: 'none' }}>
                         <div className="item">
                           <p>start date</p>
                           <p>Tue, April 6</p>
@@ -970,6 +992,7 @@ const ActiveSubscription = ({Values}) => {
                       </div>
                     </div>
                   </div>
+                }
                 </div>
               </div>
             </div>

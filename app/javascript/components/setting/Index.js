@@ -134,6 +134,13 @@ const Settings = () => {
         contactBoxContent
         promoTagline1Content
         promoTagline2Content
+
+        showSubscription
+        showDeliverySchedule
+        showOrderHistory
+        showAddress
+        showBilling
+        showAccount
       }
     }
   `;
@@ -223,6 +230,13 @@ const Settings = () => {
           contactBoxContent
           promoTagline1Content
           promoTagline2Content
+
+          showSubscription
+          showDeliverySchedule
+          showOrderHistory
+          showAddress
+          showBilling
+          showAccount
         }
       }
     }
@@ -310,12 +324,14 @@ const Settings = () => {
     contactBoxContent: '',
     promoTagline1Content: '',
     promoTagline2Content: '',
+
     showSubscription: '',
     showDeliverySchedule: '',
     showOrderHistory: '',
     showAddress: '',
     showBilling: '',
     showAccount: '',
+
     delayOrder: '',
     pauseSubscription: '',
     _destroy: false,
