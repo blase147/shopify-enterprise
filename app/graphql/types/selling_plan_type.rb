@@ -15,12 +15,7 @@ module Types
     field :trial_interval_type, String, null: true
     field :trial_interval_count, String, null: true
 
-    field :trial_adjustment_value, String, null: true
-    field :trial_adjustment_type, String, null: true
-    field :trial_interval_type, String, null: true
-    field :trial_interval_count, String, null: true
-
-    field :box_subscription_type, GraphQL::Types::Int, null: true
+    field :box_subscription_type, Int, null: true
     field :box_is_quantity, GraphQL::Types::Boolean, null: true
     field :box_is_quantity_limited, GraphQL::Types::Boolean, null: true
     field :box_quantity_limit, Int, null: true

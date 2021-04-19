@@ -60,10 +60,10 @@ const BuildABoxPlan = () => {
           trialAdjustmentType
           trialIntervalType
           trialIntervalCount
-          box_subscription_type,
-          box_is_quantity,
-          box_is_quantity_limited,
-          box_quantity_limit,
+          boxSubscriptionType,
+          boxIsQuantity,
+          boxIsQuantityLimited,
+          boxQuantityLimit,
           productImages {
             productId
             image
@@ -103,8 +103,8 @@ const BuildABoxPlan = () => {
     { label: 'Manual price', value: 'PRICE' },
   ];
   const boxQuantityOptions = [
-    { label: 'Yes', value: 'true' },
-    { label: 'No', value: 'false' },
+    { label: 'Yes', value: true },
+    { label: 'No', value: false },
   ];
 
   const [formErrors, setFormErrors] = useState([]);
@@ -144,10 +144,10 @@ const BuildABoxPlan = () => {
     trialIntervalType: 'DAY',
     trialAdjustmentType: '',
     trialAdjustmentValue: '0',
-    box_subscription_type: 0,
-    box_is_quantity: false,
-    box_is_quantity_limited: false,
-    box_quantity_limit: 0
+    boxSubscriptionType: 0,
+    boxIsQuantity: false,
+    boxIsQuantityLimited: false,
+    boxQuantityLimit: 0
   };
 
   const [productImagesFirst, setProductListFirst] = useState([]);
@@ -742,115 +742,137 @@ const BuildABoxPlan = () => {
                           <FormLayout.Group>
                             <Checkbox
                               label="Sort box choices by collection"
-                              checked={plan.box_subscription_type == 1}
+                              checked={plan.boxSubscriptionType === 1}
+                              error={
+                                touched.sellingPlans?.[index]?.boxSubscriptionType &&
+                                errors.sellingPlans?.[index]?.boxSubscriptionType
+                              }
                               onChange={(e) => {
                                 setFieldValue(
-                                  `sellingPlans[${index}].box_subscription_type`,
+                                  `sellingPlans[${index}].boxSubscriptionType`,
                                   (e === true ? 1 : 0)
                                 )}
                               }
                             />
                             <Checkbox
                               label="Display box choices by products"
-                              checked={plan.box_subscription_type === 2}
+                              checked={plan.boxSubscriptionType === 2}
+                              error={
+                                touched.sellingPlans?.[index]?.boxSubscriptionType &&
+                                errors.sellingPlans?.[index]?.boxSubscriptionType
+                              }
                               onChange={(e) => {
                                 setFieldValue(
-                                  `sellingPlans[${index}].box_subscription_type`,
+                                  `sellingPlans[${index}].boxSubscriptionType`,
                                   (e === true ? 2 : 0)
                                 )}
                               }
                             />
-                          </FormLayout.Group>
-                          <FormLayout.Group>
-                            {plan.box_subscription_type === 1 && (
-                              <div className="box-subscription-search">
-                                  <TextContainer>Collection</TextContainer>
-                                  {/* <SearchCollection
-                                    value={plan.selectedCollection}
-                                    setFieldValue={setFieldValue}
-                                    fieldName={`sellingPlans[${index}].selectedCollection`}
-                                  /> */}
-                              </div>
-                            )}
-                            {plan.box_subscription_type === 2 && (
-                              <div className="box-subscription-search">
-                                  <TextContainer>Product</TextContainer>
-                                  <SearchProduct
-                                    selectedOptions={selectedOptions}
-                                    setSelectedOptions={setSelectedOptions}
-                                    selectedProducts={selectedProducts}
-                                    setSelectedProducts={setSelectedProducts}
-                                  />
-                              </div>
-                            )}
-                            { (plan.box_subscription_type !== 0) && (
-                              <div className="box-subscription-detail">
-                                <Select
-                                  className="box-subscription-align"
-                                  label="Display Quantity ?"
-                                  value={plan.box_is_quantity}
-                                  onChange={(e) =>
-                                    setFieldValue(
-                                      `sellingPlans[${index}].box_is_quantity`,
-                                      String(e)
-                                    )
-                                  }
-                                  options={boxQuantityOptions}
-                                />
-                                <TextField
-                                  label={
-                                    <Checkbox
-                                      label="Limit Quantity"
-                                      checked={plan.box_is_quantity_limited}
-                                      onChange={(e) =>
-                                        setFieldValue(
-                                          `sellingPlans[${index}].box_is_quantity_limited`,
-                                          e
-                                        )
-                                      }
+                            </FormLayout.Group>
+                            <FormLayout.Group>
+                              {plan.boxSubscriptionType === 1 && (
+                                <div className="box-subscription-search">
+                                    <TextContainer>Collection</TextContainer>
+                                    {/* <SearchCollection
+                                      value={plan.selectedCollection}
+                                      setFieldValue={setFieldValue}
+                                      fieldName={`sellingPlans[${index}].selectedCollection`}
+                                    /> */}
+                                </div>
+                              )}
+                              {plan.boxSubscriptionType === 2 && (
+                                <div className="box-subscription-search">
+                                    <TextContainer>Product</TextContainer>
+                                    <SearchProduct
+                                      selectedOptions={selectedOptions}
+                                      setSelectedOptions={setSelectedOptions}
+                                      selectedProducts={selectedProducts}
+                                      setSelectedProducts={setSelectedProducts}
                                     />
-                                  }
-                                  value={plan.box_quantity_limit}
-                                  type="number"
-                                  onChange={(e) =>
-                                    setFieldValue(
-                                      `sellingPlans[${index}].box_quantity_limit`,
-                                      e
-                                    )
-                                  }
-                                  placeholder="1"
-                                />
+                                </div>
+                              )}
+                              { (plan.boxSubscriptionType !== 0) && (
+                                <div className="box-subscription-detail">
+                                  <Select
+                                    className="box-subscription-align"
+                                    label="Display Quantity ?"
+                                    value={plan.boxIsQuantity}
+                                    error={
+                                      touched.sellingPlans?.[index]?.boxIsQuantity &&
+                                      errors.sellingPlans?.[index]?.boxIsQuantity
+                                    }
+                                    onChange={(e) => {
+                                      setFieldValue(
+                                        `sellingPlans[${index}].boxIsQuantity`,
+                                        (e === 'true')
+                                      )}
+                                    }
+                                    options={boxQuantityOptions}
+                                  />
+                                  <TextField
+                                    label={
+                                      <Checkbox
+                                        label="Limit Quantity"
+                                        checked={plan.boxIsQuantityLimited}
+                                        disabled={!plan.boxIsQuantity}
+                                        error={
+                                          touched.sellingPlans?.[index]?.boxIsQuantityLimited &&
+                                          errors.sellingPlans?.[index]?.boxIsQuantityLimited
+                                        }
+                                        onChange={(e) =>
+                                          setFieldValue(
+                                            `sellingPlans[${index}].boxIsQuantityLimited`,
+                                            e
+                                          )
+                                        }
+                                      />
+                                    }
+                                    value={plan.boxQuantityLimit.toString()}
+                                    disabled={!plan.boxIsQuantity || !plan.boxIsQuantityLimited}
+                                    error={
+                                      touched.sellingPlans?.[index]?.boxQuantityLimit &&
+                                      errors.sellingPlans?.[index]?.boxQuantityLimit
+                                    }
+                                    type="number"
+                                    onChange={(e) => {
+                                      setFieldValue(
+                                        `sellingPlans[${index}].boxQuantityLimit`,
+                                        parseInt(e)
+                                      )}
+                                    }
+                                    // placeholder="1"
+                                  />
+                                </div>
+                              )}
+                            </FormLayout.Group>
+                            {plan.boxSubscriptionType === 2 && (
+                              <div className="product-stack">
+                                <div>Selected products (subscription box options)</div>
+                                <Stack>
+                                  {selectedProducts.map(
+                                    (product, i) =>
+                                      product._destroy === false && (
+                                        <div
+                                          key={i}
+                                          className="building-box-product"
+                                        >
+                                          <img
+                                            className="product"
+                                            src={product?.image}
+                                          />
+                                          <img
+                                            onClick={() => {
+                                              handleRemoveProduct(i);
+                                            }}
+                                            className="removeIcon"
+                                            src={removeIcon}
+                                          />
+                                        </div>
+                                      )
+                                  )}
+                                </Stack>
                               </div>
                             )}
-                          </FormLayout.Group>
-                          {plan.box_subscription_type === 2 && (
-                            <div className="product-stack">
-                              <div>Selected products (subscription box options)</div>
-                              <Stack>
-                                {selectedProducts.map(
-                                  (product, i) =>
-                                    product._destroy === false && (
-                                      <div
-                                        key={i}
-                                        className="building-box-product"
-                                      >
-                                        <img
-                                          className="product"
-                                          src={product?.image}
-                                        />
-                                        <img
-                                          onClick={() => {
-                                            handleRemoveProduct(i);
-                                          }}
-                                          className="removeIcon"
-                                          src={removeIcon}
-                                        />
-                                      </div>
-                                    )
-                                )}
-                              </Stack>
-                            </div>
-                          )}
                         </FormLayout>
                         <br />
                       </Card>
