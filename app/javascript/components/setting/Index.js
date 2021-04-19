@@ -303,13 +303,21 @@ const Settings = () => {
     themes: '',
     upcomingOderDate: '',
     upcomingQuantity: '',
-    
+
     showPromoButton: 'true',
     promoButtonContent: '',
     promoButtonUrl: '',
     contactBoxContent: '',
     promoTagline1Content: '',
     promoTagline2Content: '',
+    showSubscription: '',
+    showDeliverySchedule: '',
+    showOrderHistory: '',
+    showAddress: '',
+    showBilling: '',
+    showAccount: '',
+    delayOrder: '',
+    pauseSubscription: '',
     _destroy: false,
   };
   // form data #####################################################

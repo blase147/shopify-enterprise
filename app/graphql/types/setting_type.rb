@@ -37,6 +37,14 @@ module Types
     field :contact_box_content, String, null: true
     field :promo_tagline1_content, String, null: true
     field :promo_tagline2_content, String, null: true
+    field :show_subscription, String, null: true
+    field :show_delivery_schedule, String, null: true
+    field :show_order_history, String, null: true
+    field :show_address, String, null: true
+    field :show_billing, String, null: true
+    field :show_account, String, null: true
+    field :delay_order, String, null: true
+    field :pause_subscription, String, null: true
 
     #email notification
     field :email_notifications, [Types::EmailNotificationType], null: true

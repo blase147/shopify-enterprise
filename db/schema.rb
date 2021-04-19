@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_15_101604) do
+ActiveRecord::Schema.define(version: 2021_04_19_042945) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -213,6 +213,14 @@ ActiveRecord::Schema.define(version: 2021_04_15_101604) do
     t.string "contact_box_content"
     t.string "promo_tagline1_content"
     t.string "promo_tagline2_content"
+    t.boolean "show_subscription", default: true
+    t.boolean "show_delivery_schedule", default: true
+    t.boolean "show_order_history", default: true
+    t.boolean "show_address", default: true
+    t.boolean "show_billing", default: true
+    t.boolean "show_account", default: true
+    t.string "delay_order"
+    t.string "pause_subscription"
     t.index ["shop_id"], name: "index_settings_on_shop_id", unique: true
   end
 

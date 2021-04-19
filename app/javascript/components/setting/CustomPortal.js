@@ -32,7 +32,7 @@ const CustomPortal = (props) => {
 
   }
   const applyStyles = (s) => {
-    document.head.appendChild(document.createElement("style")).innerHTML = s; 
+    document.head.appendChild(document.createElement("style")).innerHTML = s;
   }
   const handleApplyStyles = () => {
     const styles = `${values?.styleSubscription || ''} ${values?.styleUpsell || ''} ${values?.styleSidebarPages || ''} ${values?.styleSidebar || ''} ${values?.styleAccountProfile || ''}`;
@@ -69,14 +69,14 @@ const CustomPortal = (props) => {
   );
 
   const [selectedDelivery, setSelectedDelivery] = useState(
-    'Storeowner and Customer'
+    'Admin and Customer'
   );
   const handleSelectChangeDelivery = useCallback(
     (value) => setSelectedDelivery(value),
     []
   );
   const options = [
-    { label: 'Storeowner and Customer', value: 'storeownerAndCustomer' },
+    { label: 'Admin and Customer', value: 'adminAndCustomer' },
     { label: 'Customer', value: 'customer' },
   ];
   const oneTimePurchaseOptions = [
@@ -101,7 +101,7 @@ const CustomPortal = (props) => {
   );
 
   const [delive, setDelive] = useState({
-    deliverySchdule: 'Storeowner and Customer',
+    deliverySchdule: 'Admin and Customer',
     edit: 'tomorrow',
   });
 
@@ -150,9 +150,9 @@ const CustomPortal = (props) => {
       description: 'Returns cancel option and comment field',
     },
   ]);
-  const promoButtonValues = [
-    { label: "show", value: 'true' },
-    { label: "hide", value: 'false' }
+  const showHideValues = [
+    { label: "Show", value: 'true' },
+    { label: "Hide", value: 'false' }
   ]
   const {
     values,
@@ -258,11 +258,11 @@ const CustomPortal = (props) => {
                           <p>Promo button</p>
                           <div className="promo-discount">
                             <Select
-                              options={promoButtonValues}
-                              
+                              options={showHideValues}
+
                               value={values.showPromoButton}
                               error={
-                                touched.navigationDelivery && errors.navigationDelivery
+                                touched.showPromoButton && errors.showPromoButton
                               }
                               onChange={(e) => setFieldValue('showPromoButton', e)}
                             />
@@ -328,7 +328,7 @@ const CustomPortal = (props) => {
                               error={touched.promoTagline2Content && errors.promoTagline2Content}
                             />
                           </div>
-                        
+
                       </div>
                       <p className="applied-classes">Active & canceled subscriptions box</p>
                       <TextField
@@ -384,47 +384,79 @@ const CustomPortal = (props) => {
               <p className="navigation-text" variation="strong">Navigation</p>
               <FormLayout>
                 <FormLayout.Group>
+                  <p>Subscriptions</p>
+                  <Select
+                    options={showHideValues}
+                    value={values.showSubscription}
+                    error={
+                      touched.showSubscription && errors.showSubscription
+                    }
+                    onChange={(e) => setFieldValue('showSubscription', e)}
+                  />
                   <p>Delivery Schedule</p>
                   <Select
-                    options={options}
-                    value={values.navigationDelivery}
+                    options={showHideValues}
+                    value={values.showDeliverySchedule}
                     error={
-                      touched.navigationDelivery && errors.navigationDelivery
+                      touched.showDeliverySchedule && errors.showDeliverySchedule
                     }
-                    onChange={(e) => setFieldValue('navigationDelivery', e)}
+                    onChange={(e) => setFieldValue('showDeliverySchedule', e)}
                   />
-                  <p>&nbsp;</p>
                 </FormLayout.Group>
-              </FormLayout>
-            </Stack.Item>
-            <Stack.Item>
-              <p className="navigation-text" variation="strong">Customer Details</p>
-              <FormLayout>
                 <FormLayout.Group>
-                  <p>Edit Shipping Address</p>
+                  <p>Order History</p>
                   <Select
-                    options={options}
-                    value={values.shipingAddress}
-                    error={touched.shipingAddress && errors.shipingAddress}
-                    onChange={(e) => setFieldValue('shipingAddress', e)}
+                    options={showHideValues}
+                    value={values.showOrderHistory}
+                    error={
+                      touched.showOrderHistory && errors.showOrderHistory
+                    }
+                    onChange={(e) => setFieldValue('showOrderHistory', e)}
                   />
-                  <p>&nbsp;</p>
+                  <p>Addresses</p>
+                  <Select
+                    options={showHideValues}
+                    value={values.showAddress}
+                    error={
+                      touched.showAddress && errors.showAddress
+                    }
+                    onChange={(e) => setFieldValue('showAddress', e)}
+                  />
+                </FormLayout.Group>
+                <FormLayout.Group>
+                  <p>Billing</p>
+                  <Select
+                    options={showHideValues}
+                    value={values.showBilling}
+                    error={
+                      touched.showBilling && errors.showBilling
+                    }
+                    onChange={(e) => setFieldValue('showBilling', e)}
+                  />
+                  <p>Account</p>
+                  <Select
+                    options={showHideValues}
+                    value={values.showAccount}
+                    error={
+                      touched.showAccount && errors.showAccount
+                    }
+                    onChange={(e) => setFieldValue('showAccount', e)}
+                  />
                 </FormLayout.Group>
               </FormLayout>
             </Stack.Item>
             <Stack.Item>
               <Stack vertical>
-                <p className="navigation-text" variation="strong">Subscription Details</p>
+                <p className="navigation-text" variation="strong">Subscription Management</p>
 
                 <FormLayout>
-
                   <FormLayout.Group>
-                    <p>Edit Upcoming Order Date</p>
+                    <p>Swap Subscription</p>
                     <Select
                       options={options}
-                      value={values.upcomingOderDate}
-                      error={touched.upcomingOderDate && errors.upcomingOderDate}
-                      onChange={(e) => setFieldValue('upcomingOderDate', e)}
+                      value={values.swapProduct}
+                      error={touched.swapProduct && errors.swapProduct}
+                      onChange={(e) => setFieldValue('swapProduct', e)}
                     />
                     <p>&nbsp;</p>
                   </FormLayout.Group>
@@ -438,8 +470,18 @@ const CustomPortal = (props) => {
                     />
                     <p>&nbsp;</p>
                   </FormLayout.Group>
-                  <FormLayout.Group>
-                    <p>Add Products to Subscription</p>
+                  {/*<FormLayout.Group>
+                      <p>Edit Upcoming Order Date</p>
+                      <Select
+                        options={options}
+                        value={values.upcomingOderDate}
+                        error={touched.upcomingOderDate && errors.upcomingOderDate}
+                        onChange={(e) => setFieldValue('upcomingOderDate', e)}
+                      />
+                      <p>&nbsp;</p>
+                    </FormLayout.Group>
+                    <FormLayout.Group>
+                    // <p>Add Products to Subscription</p>
                     <Select
                       options={options}
                       value={values.productToSubscription}
@@ -460,14 +502,65 @@ const CustomPortal = (props) => {
                       onChange={(e) => setFieldValue('changeVariant', e)}
                     />
                     <p>&nbsp;</p>
-                  </FormLayout.Group>
+                  </FormLayout.Group>*/}
                   <FormLayout.Group>
-                    <p>Swap Product</p>
+                    <p>Cancel Subscription</p>
                     <Select
                       options={options}
-                      value={values.swapProduct}
-                      error={touched.swapProduct && errors.swapProduct}
-                      onChange={(e) => setFieldValue('swapProduct', e)}
+                      value={values.subscriptionCancellation}
+                      error={
+                        touched.subscriptionCancellation &&
+                        errors.subscriptionCancellation
+                      }
+                      onChange={(e) =>
+                        setFieldValue('subscriptionCancellation', e)
+                      }
+                    />
+                    <p>&nbsp;</p>
+                  </FormLayout.Group>
+                  <FormLayout.Group>
+                    <p>Delivery Schedule</p>
+                    <Select
+                      options={options}
+                      value={values.navigationDelivery}
+                      error={
+                        touched.navigationDelivery && errors.navigationDelivery
+                      }
+                      onChange={(e) => setFieldValue('navigationDelivery', e)}
+                    />
+                    <p>&nbsp;</p>
+                  </FormLayout.Group>
+                  <FormLayout.Group>
+                    <p>Pause Subscription</p>
+                    <Select
+                      options={options}
+                      value={values.pauseSubscription}
+                      error={
+                        touched.pauseSubscription && errors.pauseSubscription
+                      }
+                      onChange={(e) => setFieldValue('pauseSubscription', e)}
+                    />
+                    <p>&nbsp;</p>
+                  </FormLayout.Group>
+                  <FormLayout.Group>
+                    <p>Reactivate Subscription</p>
+                    <Select
+                      options={options}
+                      value={values.reactiveSubscription}
+                      error={
+                        touched.reactiveSubscription && errors.reactiveSubscription
+                      }
+                      onChange={(e) => setFieldValue('reactiveSubscription', e)}
+                    />
+                    <p>&nbsp;</p>
+                  </FormLayout.Group>
+                  <FormLayout.Group>
+                    <p>Edit Delivery Address</p>
+                    <Select
+                      options={options}
+                      value={values.shipingAddress}
+                      error={touched.shipingAddress && errors.shipingAddress}
+                      onChange={(e) => setFieldValue('shipingAddress', e)}
                     />
                     <p>&nbsp;</p>
                   </FormLayout.Group>
@@ -488,13 +581,23 @@ const CustomPortal = (props) => {
                     />
                     <p>&nbsp;</p>
                   </FormLayout.Group>
-                  <FormLayout.Group>
+                  {/*<FormLayout.Group>
                     <p>Edit Frequency</p>
                     <Select
                       options={options}
                       value={values.frequency}
                       error={touched.frequency && errors.frequency}
                       onChange={(e) => setFieldValue('frequency', e)}
+                    />
+                    <p>&nbsp;</p>
+                  </FormLayout.Group>*/}
+                  <FormLayout.Group>
+                    <p>Delay/Speedup order</p>
+                    <Select
+                      options={options}
+                      value={values.delayOrder}
+                      error={touched.delayOrder && errors.delayOrder}
+                      onChange={(e) => setFieldValue('delayOrder', e)}
                     />
                     <p>&nbsp;</p>
                   </FormLayout.Group>
@@ -504,7 +607,7 @@ const CustomPortal = (props) => {
           </div>
         </Stack>
       </Card.Section>
-      <Card.Section>
+      {/*<Card.Section>
         <Stack vertical>
           <div className="frequency-checkbox">
             <p variation="strong">
@@ -677,7 +780,7 @@ const CustomPortal = (props) => {
             </div>
           </Stack.Item>
         </Stack>
-      </Card.Section>
+      </Card.Section>*/}
       <Card.Section>
         <div className="cancelation-section">
           <Stack vertical>
@@ -718,9 +821,9 @@ const CustomPortal = (props) => {
                 </Stack.Item>
               </div>
             ))}
-            <Button loading={isSubmitting} primary onClick={() => handleSubmit()}>
-              Save
-          </Button>
+          {/*   <Button loading={isSubmitting} primary onClick={() => handleSubmit()}>
+               Save
+           </Button>*/}
           </Stack>
         </div>
       </Card.Section>

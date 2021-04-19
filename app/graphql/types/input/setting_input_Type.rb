@@ -33,12 +33,20 @@ module Types
       argument :reactive_subscription, String, required: false
       argument :upcoming_quantity, String, required: false
       argument :reasons_cancels, [Types::Input::ReasonsCancelInputType], required: false
-      argument :show_promo_button, String, required: true
-      argument :promo_button_content, String, required: true
-      argument :promo_button_url, String, required: true
-      argument :contact_box_content, String, required: true
-      argument :promo_tagline1_content, String, required: true
-      argument :promo_tagline2_content, String, required: true
+      argument :show_promo_button, String, required: false
+      argument :promo_button_content, String, required: false
+      argument :promo_button_url, String, required: false
+      argument :contact_box_content, String, required: false
+      argument :promo_tagline1_content, String, required: false
+      argument :promo_tagline2_content, String, required: false
+      argument :show_subscription, String, required: false
+      argument :show_delivery_schedule, String, required: false
+      argument :show_order_history, String, required: false
+      argument :show_address, String, required: false
+      argument :show_billing, String, required: false
+      argument :show_account, String, required: false
+      argument :delay_order, String, required: false
+      argument :pause_subscription, String, required: false
 
       #email notification
       argument :email_notifications, [Types::Input::EmailNotificationInputType], required: false
