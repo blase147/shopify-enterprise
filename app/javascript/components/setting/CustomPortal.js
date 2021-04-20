@@ -3,7 +3,7 @@ import {
   Button, Card,
 
   FormLayout,
-  Heading, Layout, Select,
+  Layout, Select,
   Stack, TextField,
   TextStyle
 } from '@shopify/polaris';
@@ -280,7 +280,7 @@ const CustomPortal = (props) => {
                             />
                           </div>
                           <div className="link-searching">
-                            <p>Link</p>
+                            <p style={{marginBottom:'0px'}}>Link</p>
                             <TextField
                               placeholder="paste a link or search"
                               value={values.promoButtonUrl}
@@ -309,7 +309,7 @@ const CustomPortal = (props) => {
                           <p className="applied-classes">Sidebar menu, promo tagline I, promo tagline II </p>
                           <TextField
                             label={
-                              <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .account-sidebar, .active-subscription .cancel-subscription</span> </TextStyle>
+                              <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .account-sidebar, .promo-tag-I .promo-tag-II</span> </TextStyle>
                             }
                             placeholder="Add Code Here..."
                             multiline={10}
@@ -318,15 +318,16 @@ const CustomPortal = (props) => {
                             onChange={(e) => handleChange('styleSidebar', e)}
                           />
                         </div>
-                        <div className="promo-tag" style={{ marginTop: '87px' }}>
-                            <p>Promo tagline I</p>
+                        <div className="promo-tag" style={{ marginTop: '78px' }}>
+                            <p className="">Promo tagline I</p>
                             <TextField
-                              placeholder="No thanks"
+                              placeholder="No thanks ABCD"
                               value={values.promoTagline1Content}
                               onChange={(e) => handleChange('promoTagline1Content', e)}
                               error={touched.promoTagline1Content && errors.promoTagline1Content}
+                              className="textfield-test"
                             />
-                            <p>Promo tagline II</p>
+                            <p className="">Promo tagline II</p>
                             <TextField
                               placeholder="No thanks"
                               value={values.promoTagline2Content}
@@ -386,11 +387,8 @@ const CustomPortal = (props) => {
         <Stack vertical>
           <div className="customer-portal">
             <h2 className="portal-heading">Customer Portal Controls</h2>
-            <Stack.Item>
               <p className="navigation-text" variation="strong">Navigation</p>
               <div className="navigation-selectors">
-              <FormLayout>
-                <FormLayout.Group>
                   <p>Subscriptions</p>
                   <Select
                     options={showHideValues}
@@ -409,8 +407,7 @@ const CustomPortal = (props) => {
                     }
                     onChange={(e) => handleChange('showDeliverySchedule', e)}
                   />
-                </FormLayout.Group>
-                <FormLayout.Group>
+               
                   <p>Order History</p>
                   <Select
                     options={showHideValues}
@@ -429,8 +426,7 @@ const CustomPortal = (props) => {
                     }
                     onChange={(e) => handleChange('showAddress', e)}
                   />
-                </FormLayout.Group>
-                <FormLayout.Group>
+               
                   <p>Billing</p>
                   <Select
                     options={showHideValues}
@@ -449,10 +445,9 @@ const CustomPortal = (props) => {
                     }
                     onChange={(e) => handleChange('showAccount', e)}
                   />
-                </FormLayout.Group>
-              </FormLayout>
+              
               </div>
-            </Stack.Item>
+         
             <Stack.Item>
               <Stack vertical>
                 <p className="navigation-text" variation="strong">Subscription Management</p>
@@ -793,7 +788,7 @@ const CustomPortal = (props) => {
         <div className="cancelation-section">
           <Stack vertical>
             <Stack.Item>
-              <Heading>Reasons for Cancellation</Heading>
+              <p style={{fontSize:'18px'}}>Reasons for Cancellation</p>
             </Stack.Item>
             {/* {reasonsForCancellationList?.map((item, i) => ( */}
             {values.reasonsCancels?.map((item, i) => (

@@ -153,6 +153,9 @@
     border-radius: 5px;
     border: 0 none;
     font-weight: bold;
+    @media(max-width: 1040px) {
+      padding: 10px 20px;
+    }
   }
 }
 .customize-text {
@@ -180,17 +183,21 @@
   .custom-portal {
     .account-profile-head {
       display: grid;
-      grid-template-columns: 70% auto;
+      grid-template-columns: auto 300px;
       grid-column-gap: 40px;
+      @media(max-width:768px) {
+        grid-template-columns: auto;
+      }
       .promo-tag {
         p {
           margin-bottom: 9px;
+          margin-top: 9px;
           &:last-child {
             margin-top: 25px;
           }
         }
         input {
-          margin-bottom: 25px;
+          // margin-bottom: 25px;
         }
 
       }
@@ -227,12 +234,16 @@
 
   .link-searching {
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
     margin-top: 14px;
     align-items: center;
+    p {
+      margin-right: 17px;
+    }
 
     .cross-img {
       border: 1px solid lightgrey;
+      margin-left: 10px;
       padding: 6px 10px;
       display: flex;
       align-items: center;
@@ -248,11 +259,21 @@
 .customer-portal {
 
   .navigation-selectors {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    align-items: center;
+    grid-row-gap: 21px;
+    margin-bottom: 50px;
+
+    .Polaris-Select {
+      width: 100px;
+
+    }
     .Polaris-FormLayout--grouped .Polaris-FormLayout__Item div {
       width: 68%;
     }
     .Polaris-Select__Input {
-      width: 69%;
+      width: 100%;
     }
     .Polaris-FormLayout__Items {
       margin-bottom: 21px;
@@ -276,7 +297,7 @@
     margin-bottom: 30px;
     font-size: 20px;
   }
-  .Polaris-Stack__Item .navigation-text  {
+  .navigation-text  {
     font-size: 18px;
     font-weight: 800;
     margin-bottom: 41px;
@@ -316,8 +337,12 @@
   color: #004E82;
   margin-bottom: 10px;
   display: inline-block;
+  font-size: 16px;
 }
 .cancelation-section {
+  span {
+    font-size: 16px;
+  }
   .Polaris-Stack.Polaris-Stack--distributionEqualSpacing {
     margin-bottom: 10px;
   }
@@ -335,6 +360,7 @@
   }
   
 }
+
 
 .disabled{
   opacity:0.7;

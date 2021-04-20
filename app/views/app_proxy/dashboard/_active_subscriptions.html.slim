@@ -71,10 +71,11 @@
       .delivery-address
         div
           p.text.active-text DELIVERY ADDRESS
-          h3.active-text
-            = subscription.node.delivery_method.address.address1
-        div
-          button.edit-address data-toggle="modal" data-target="#deliveryEditModal" EDIT
+          div.weekly-account
+          a.add_weekly_box.promo-tag-II href="#"
+            span Add one more weekly box
+            svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg"
+              path d=("M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z") fill="black" /
       = render 'edit_delivery_address_modal', subscription: subscription.node
     - line_products = subscription.node.lines.edges.map{|edge| edge.node.product_id[/\d+/]}
     - selling_plan_ids = subscription.node.lines.edges.map{|edge| edge.node.selling_plan_id}

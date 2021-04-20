@@ -992,7 +992,7 @@ nav.top-nav {
     font-weight: bold;
     // border-bottom: 2px solid $primary;
     text-decoration: none;
-    display: none;
+    // display: none;
     padding: 7px 0px;
   }
 
@@ -2023,7 +2023,12 @@ body.chargezen-proxy {
 .preview-changes a.add_weekly_box{
   display: inline-block !important;
 }
-
+.promo-tag-II {
+  margin-top: 50px;
+}
+.weekly-account {
+  margin-top: 50px;
+}
 
 // Date Picker Styles
 .dp-modal {

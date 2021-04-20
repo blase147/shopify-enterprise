@@ -140,7 +140,7 @@ const ActiveSubscription = ({Values}) => {
                   Values?.showSubscription==="true" && 
                   <div className="content-wrapper">
                     <div className="display-text">
-                      <p><span>MY &nbsp;</span><span className="active">ACTIVE &nbsp;</span><span>SUBSCRIPTION</span></p><a style={{marginRight:'30px'}}className="add_weekly_box" href="#"><span >{parse(Values?.promoTagline1Content || '')}</span><svg fill="none" height={12} viewBox="0 0 20 12" width={20} xmlns="http://www.w3.org/2000/svg"><path d="M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z" fill="black" /></svg></a></div>
+                      <p><span>MY &nbsp;</span><span className="active">ACTIVE &nbsp;</span><span>SUBSCRIPTION</span></p><a style={{marginRight:'30px'}}className="add_weekly_box promo-tag-I" href="#"><span >{parse(Values?.promoTagline1Content || '')}</span><svg fill="none" height={12} viewBox="0 0 20 12" width={20} xmlns="http://www.w3.org/2000/svg"><path d="M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z" fill="black" /></svg></a></div>
                     <div className="subscription-contract-products">
                       <div className="grid">
                         <div className="grid-item">
@@ -857,8 +857,8 @@ const ActiveSubscription = ({Values}) => {
                           <button className="edit-address">EDIT</button>
                         </div>
                       </div>
-                      <div className="" style={{marginTop:'50px'}}>
-                        <a className="add_weekly_box" href="#"><span >{parse(Values?.promoTagline2Content || '')}</span><svg fill="none" height={12} viewBox="0 0 20 12" width={20} xmlns="http://www.w3.org/2000/svg"><path d="M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z" fill="black" /></svg></a>
+                      <div className="" >
+                        <a className="add_weekly_box promo-tag-II" href="#"><span >{parse(Values?.promoTagline2Content || '')}</span><svg fill="none" height={12} viewBox="0 0 20 12" width={20} xmlns="http://www.w3.org/2000/svg"><path d="M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z" fill="black" /></svg></a>
                       </div>
                       <div className="Polaris-Modal" id="deliveryEditModal">
                         <div className="Polaris-Modal-Dialog__Container" data-polaris-layer="true" data-polaris-overlay="true">
