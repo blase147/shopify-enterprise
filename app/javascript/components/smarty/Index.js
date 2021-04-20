@@ -1,23 +1,7 @@
-import React, {useState, useCallback} from 'react';
+import { Frame, Page, Tabs } from '@shopify/polaris';
+import React, { useCallback, useState } from 'react';
 import AppLayout from '../layout/Layout';
-import {
-  Page,
-  EmptyState,
-  Frame,
-  CalloutCard,
-  Card,
-  Icon,
-  Stack,
-  Badge,
-  DisplayText,
-  Tabs,
-  FormLayout,
-  Select,
-  TextStyle,
-  ChoiceList,
-  Checkbox,
-  Button,
-} from '@shopify/polaris';
+import SmartyMessage from './SmartyMessage';
 
 const Smarty = () => {
   const [selectedTitleTab, setSelectedTitleTab] = useState(0);
@@ -29,20 +13,20 @@ const Smarty = () => {
 
   const tabs = [
     {
-      id: 'A',
-      content: 'Tab A',
+      id: 'tab-messages',
+      content: 'Messages',
     },
     {
-      id: 'B',
-      content: 'Tab B',
+      id: 'tab-custom-messages',
+      content: 'Custom Messages',
     },
     {
-      id: 'C',
-      content: 'Tab C',
+      id: 'tab-custom-keywords',
+      content: 'Custom Keywords',
     },
     {
-      id: 'D',
-      content: 'Tab D',
+      id: 'cancellation-reasons',
+      content: 'Cancellation Reasons',
     },
   ];
   return (
@@ -56,19 +40,19 @@ const Smarty = () => {
           >
             {
               selectedTitleTab===0 && 
-              <div>A</div>
+              <SmartyMessage/>
             }
             {
               selectedTitleTab===1 && 
-              <div>B</div>
+              <div>Custom Messages</div>
             }
             {
               selectedTitleTab===2 && 
-              <div>C</div>
+              <div>Custom Keywords</div>
             }
             {
               selectedTitleTab===3 && 
-              <div>D</div>
+              <div>Cancellation Reasons</div>
             }
           </Tabs>
         </Page>

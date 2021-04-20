@@ -1,0 +1,94 @@
+.module-smarty {
+  .Polaris-Layout {
+    display: contents;
+  }
+}
+.customize-text {
+  font-size: 18px;
+  margin-top: 25px;
+  margin-bottom: 15px;
+}
+.message-form {
+  display: flex;
+
+  .order-title {
+    margin-left: 15px;
+    width: 45%;
+    font-size: 14px;
+    padding-left: 10px;
+    height:40px;
+  
+  } 
+  
+}
+
+.example {
+  display: flex;
+  width: 45%;
+  
+	input[type=text] {
+		padding: 10px;
+		font-size: 14px;
+		border: 1px solid grey;
+		float: left;
+		outline: 0;
+    height:40px;
+    width: 80%;
+	}
+	button {
+		float: left;
+		padding: 10px;
+		background: #2196F3;
+		color: white;
+		font-size: 16px;
+		border: 1px solid grey;
+		border-left: none;
+		cursor: pointer;
+    width: 116px;
+    height: 40px;
+		&:hover {
+			background: #0b7dda;
+		}
+	}
+	&::after {
+		content: "";
+		clear: both;
+		display: table;
+	}
+}
+.message-table, td, th {
+  border: 1px solid lightgrey;
+  padding: 10px;
+  text-align: left;
+}
+
+.message-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 28px;
+  .edit-btn {
+    width: 65px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #007EFF;
+    padding: 4px;
+    color:  #007EFF;
+    float: left;
+    margin-right: 8px;
+    svg {
+      margin-right: 7px;
+    }
+  }
+  .duplicate-btn {
+    width: 97px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #007EFF;
+    padding: 4px;
+    color:  #007EFF;
+    svg {
+      margin-right: 7px;
+    }
+  }
+ 
+}
