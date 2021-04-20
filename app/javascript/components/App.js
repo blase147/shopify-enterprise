@@ -1,50 +1,45 @@
 import {
   ApolloClient,
-  ApolloProvider,
+
+
+
+  ApolloLink, ApolloProvider,
   HttpLink,
-  InMemoryCache,
-  ApolloLink,
+  InMemoryCache
 } from '@apollo/client';
-
-import {
-  AppProvider,
-  EmptyState,
-  Page,
-  Frame,
-  FooterHelp,
-  Link,
-  Stack,
-  Tabs,
-  Card,
-} from '@shopify/polaris';
 import { authenticatedFetch } from '@shopify/app-bridge-utils';
-import React, { useState, useEffect, useCallback } from 'react';
+import {
+  AppProvider
+} from '@shopify/polaris';
 import enTranslations from '@shopify/polaris/locales/en.json';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-
-// pages ####
-import Dashboard from './home/Index';
-
-import Integrations from './integration/Index';
-import IntegrationDetail from './integration/Detail';
-
-import Settings from './setting/Index';
-
-import SellingPlans from './plans/Index';
-import FixedPlan from './plans/FixedPlan';
-import TrialPlan from './plans/TrialPlan';
-import BuildABoxPlan from './plans/BuildABoxPlan';
-import MysteryBoxPlan from './plans/MysteryBoxPlan';
-
+import React from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Analytics from './analytics/Index';
 import Customers from './customer/Index';
 import CreateCustomer from './customer/New';
-
+// pages ####
+import Dashboard from './home/Index';
 import Installation from './installation/Index';
-
+import IntegrationDetail from './integration/Detail';
+import Integrations from './integration/Index';
+import BuildABoxPlan from './plans/BuildABoxPlan';
+import FixedPlan from './plans/FixedPlan';
+import SellingPlans from './plans/Index';
+import MysteryBoxPlan from './plans/MysteryBoxPlan';
+import TrialPlan from './plans/TrialPlan';
+import Settings from './setting/Index';
+import Smarty from './smarty/Index';
 import Upsell from './upsell/Index';
 import CreateUpsell from './upsell/New';
 
-import Analytics from './analytics/Index';
+
+
+
+
+
+
+
+
 
 export default function App(props) {
   const mainLink = new HttpLink({
@@ -135,6 +130,7 @@ export default function App(props) {
               path="/integration-detail/:id/:title"
               component={IntegrationDetail}
             />
+            <Route exact path="/smarty" component={Smarty} />
             <Route exact path="/settings" component={Settings} />
             <Route exact path="/customers" component={Customers} />
             <Route exact path="/customers/new" component={CreateCustomer} />

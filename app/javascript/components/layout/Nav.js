@@ -1,24 +1,9 @@
-import { FooterHelp, Link } from '@shopify/polaris';
-import { useHistory } from 'react-router-dom';
-import React, { useState, useCallback } from 'react';
-
 import {
-  Layout,
-  Card,
-  Button,
-  ResourceList,
-  Stack,
-  TextStyle,
-  Thumbnail,
-  DataTable,
-  Page,
-  ButtonGroup,
-  Select,
-  Tabs,
-  Autocomplete,
-  Icon,
-  Badge,
+  Tabs
 } from '@shopify/polaris';
+import React, { useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
+
 
 const Nav = (props) => {
   const history = useHistory();
@@ -57,6 +42,12 @@ const Nav = (props) => {
       id: 'analytics',
       path: '/analytics',
     },
+    {
+      content: 'Smarty SMS',
+      id: 'smarty-sms',
+      path: '/smarty',
+    },
+
     // {
     //   content: 'Integration',
     //   id: 'integrations',
