@@ -379,7 +379,7 @@ const Settings = () => {
   }, [selectedTitleTab]);
 
   return (
-    <AppLayout typePage="settings" tabIndex="6">
+    <AppLayout typePage="settings" tabIndex="7">
       <Frame>
         <Page title="Settings">
           <Tabs
