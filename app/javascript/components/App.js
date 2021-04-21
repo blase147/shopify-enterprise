@@ -29,6 +29,7 @@ import MysteryBoxPlan from './plans/MysteryBoxPlan';
 import TrialPlan from './plans/TrialPlan';
 import Settings from './setting/Index';
 import Smarty from './smarty/Index';
+import EditSmartyMessage from './smarty/SmartyMessage/EditSmartyMessage';
 import Upsell from './upsell/Index';
 import CreateUpsell from './upsell/New';
 
@@ -131,6 +132,7 @@ export default function App(props) {
               component={IntegrationDetail}
             />
             <Route exact path="/smarty" component={Smarty} />
+            <Route exact path="/edit-smarty-message/:id" component={EditSmartyMessage} />
             <Route exact path="/settings" component={Settings} />
             <Route exact path="/customers" component={Customers} />
             <Route exact path="/customers/new" component={CreateCustomer} />
