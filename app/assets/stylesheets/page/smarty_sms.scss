@@ -1,6 +1,12 @@
+$primary: #007EFF;
+
 .module-smarty {
   .Polaris-Layout {
     display: contents;
+  }
+  .Polaris-Card {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
   }
 }
 .customize-text {
@@ -25,6 +31,13 @@
 .example {
   display: flex;
   width: 45%;
+  > div {
+    width: 81%;
+
+    input {
+      border-right: 0;
+    }
+  }
   
 	input[type=text] {
 		padding: 10px;
@@ -36,18 +49,20 @@
     width: 80%;
 	}
 	button {
-		float: left;
-		padding: 10px;
-		background: #2196F3;
-		color: white;
-		font-size: 16px;
-		border: 1px solid grey;
-		border-left: none;
-		cursor: pointer;
+    float: left;
+    padding: 10px;
+    background: #2196F3;
+    color: white;
+    font-size: 16px;
+    border: 0;
+    margin-left: -1px;
+    border-left: none;
+    cursor: pointer;
     width: 116px;
-    height: 40px;
+    height: 36px;
+    border-radius: 3px;
 		&:hover {
-			background: #0b7dda;
+			background: $primary;
 		}
 	}
 	&::after {
@@ -60,6 +75,7 @@
   border: 1px solid lightgrey;
   padding: 10px;
   text-align: left;
+  height: 50px;
 }
 
 .message-table {
@@ -70,9 +86,9 @@
     width: 65px;
     display: flex;
     align-items: center;
-    border: 1px solid #007EFF;
+    border: 1px solid $primary;
     padding: 4px;
-    color:  #007EFF;
+    color:  $primary;
     float: left;
     margin-right: 8px;
     svg {
@@ -83,12 +99,105 @@
     width: 97px;
     display: flex;
     align-items: center;
-    border: 1px solid #007EFF;
+    border: 1px solid $primary;
     padding: 4px;
-    color:  #007EFF;
+    color:  $primary;
     svg {
       margin-right: 7px;
     }
   }
+  .delete-btn {
+    width: 74px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #FF0000;
+    padding: 4px;
+    color: #FF0000;
+    svg {
+      margin-right: 7px;
+    }
+  }
+  button {
+    color: #fff;
+    border: 0;
+    outline: 0;
+    padding: 4px 7px;
+    font-size: 14px;
+    border-radius: 3px;
+  }
+  .keywords-btn {
+    button {
+      background: #637381;
+      margin-right: 10px;
+      
+    }
+  }
+  .active-status-btn {
+    background: #37FB7A;
+  }
+  .skip-order {
+    background: #FC9B09;
+    padding: 11px 8px;
+    font-size: 12px;
+  }
+  .not-defined {
+    background: #4D506A;
+    font-size: 12px;
+    padding: 11px 8px;
+  }
+  .swap-product {
+    background: $primary;
+    padding: 11px 8px;
+    font-size: 12px;
+  }
  
+}
+.message-pagination {
+  margin-top: 50px;
+  text-align: center;
+  ul.pagination {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+  }
+
+  ul.pagination li {display: inline;}
+
+  ul.pagination li a {
+    color: $primary;
+    float: left;
+    padding: 7px 14px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid $primary;
+  }
+
+  ul.pagination li a.active {
+    background-color: $primary;
+    color: white;
+    border: 1px solid $primary;
+  }
+}
+
+
+//cancellation reason //
+
+.cancel-reason-header {
+  // margin-top: 25px;
+  // margin-bottom: 15px;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  p {
+    margin:0;
+  }
+  button {
+    background: $primary;
+    color: #fff;
+    border: 0;
+    padding: 13px 14px;
+    border-radius: 3px;
+    font-size: 16px;
+    outline: 0;
+  }
 }
