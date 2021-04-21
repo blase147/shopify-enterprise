@@ -68,12 +68,16 @@ const BuildABoxPlan = () => {
             image
             _destroy
           }
-          # collectionImages{
-          #   collectionId,
-          #   collectionTitle,
-          #   products,
-          #   _destroy
-          # }
+          collectionImages{
+            collectionId,
+            collectionTitle,
+            products {
+              productId
+              image
+              _destroy
+            },
+            _destroy
+          }
         }
       }
     }
@@ -131,10 +135,15 @@ const BuildABoxPlan = () => {
         );
         return defaultOption;
       });
-      // setSelectedCollectionOptions(() => {
-      //   const defaultOption = [];
-      //   return defaultOption;
-      // });
+      setSelectedCollections(data.fetchPlanGroup.sellingPlans[0].collectionImages);
+      setSelectedCollectionOptions(() => {
+        const defaultOption = [];
+        data.fetchPlanGroup.sellingPlans[0].collectionImages?.map(
+          (image) =>
+            image._destroy == false && defaultOption.push(image.collectionId)
+        );
+        return defaultOption;
+      });
     }
   }, [data]);
 
@@ -240,18 +249,18 @@ const BuildABoxPlan = () => {
     }
   }, [selectedProducts]);
 
-  // useEffect(() => {
-  //   if (
-  //     selectedCollections &&
-  //     formRef.current &&
-  //     formRef.current?.values.sellingPlans[0].collectionImages != selectedCollections
-  //   ) {
-  //     formRef.current.setFieldValue(
-  //       'sellingPlans[0].collectionImages',
-  //       selectedCollections
-  //     );
-  //   }
-  // }, [selectedCollections]);
+  useEffect(() => {
+    if (
+      selectedCollections &&
+      formRef.current &&
+      formRef.current?.values.sellingPlans[0].collectionImages != selectedCollections
+    ) {
+      formRef.current.setFieldValue(
+        'sellingPlans[0].collectionImages',
+        selectedCollections
+      );
+    }
+  }, [selectedCollections]);
 
   return (
     <LayoutIndex typePage="sellingPlanForm" tabIndex={1}>
@@ -937,7 +946,7 @@ const BuildABoxPlan = () => {
                                           />
                                           <img
                                             onClick={() => {
-                                              handleRemoveProduct(i, j);
+                                              handleRemoveProduct(i);
                                             }}
                                             className="removeIcon"
                                             src={removeIcon}

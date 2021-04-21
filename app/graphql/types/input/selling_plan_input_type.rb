@@ -25,7 +25,7 @@ module Types
       argument :mystery_duration_value, String, required: false
 
       argument :product_images, [Types::Input::ProductInputType], required: false
-      # argument :collection_images, [Types::Input::CollectionInputType], required: false
+      argument :collection_images, [Types::Input::CollectionInputType], required: false
 
       argument :description, String, required: false
       argument :selector_label, String, required: false

@@ -60,7 +60,6 @@ const SearchCollection = (props) => {
           collection.node.products.edges.map((product) =>
             productsList.push({
               productId: product.node.id,
-              label: product.node.title,
               image: product.node.featuredImage?.transformedSrc,
               _destroy: false
             })

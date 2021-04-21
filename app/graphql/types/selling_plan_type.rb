@@ -24,7 +24,7 @@ module Types
     field :mystery_duration_value, String, null: true
 
     field :product_images, [Types::ProductType], null: true
-    # field :collection_images, [Types::CollectionType], null: true
+    field :collection_images, [Types::CollectionType], null: true
 
     field :description, String, null: true
     field :selector_label, String, null: true
