@@ -65,6 +65,16 @@
       margin-top: 0rem;
     }
   }
+
+  .collection-stack {
+    .building-box-collection {
+      margin-top: 39px;
+      > .Polaris-Stack {
+        margin-top: 1rem;
+      }
+    }
+  }
+
   label.add-product-label {
     color: #007eff;
     font-weight: var(--p-button-font-weight, 400);

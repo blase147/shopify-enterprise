@@ -10,16 +10,33 @@ import {
 } from '@shopify/polaris';
 
 const SearchCollection = (props) => {
-  const { value, setFieldValue, fieldName, error } = props;
+  const {
+    selectedOptions,
+    setSelectedOptions,
+    selectedCollections,
+    setSelectedCollections,
+  } = props;
 
   // Search collections to add
   const GET_COLLECTION = gql`
     query($query: String!) {
-      collections(first: 10, query: $query) {
+      collections(first: 5, query: $query) {
         edges {
           node {
             id
             title
+            products(first: 20) {
+              edges {
+                node {
+                  id
+                  title
+                  featuredImage {
+                    id
+                    transformedSrc
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -27,7 +44,7 @@ const SearchCollection = (props) => {
   `;
 
   const [collectionList, setCollectionList] = useState([]);
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [inputValue, setInputValue] = useState('');
 
   const [GetCollections, { loading, data, errors }] = useLazyQuery(GET_COLLECTION, {
     fetchPolicy: 'no-cache',
@@ -38,14 +55,22 @@ const SearchCollection = (props) => {
     if (data && data.collections) {
       setCollectionList(() => {
         const result = [];
-        data.collections.edges.map((collection) =>
+        data.collections.edges.map((collection) => {
+          let productsList = [];
+          collection.node.products.edges.map((product) =>
+            productsList.push({
+              productId: product.node.id,
+              label: product.node.title,
+              image: product.node.featuredImage?.transformedSrc,
+              _destroy: false
+            })
+          );
           result.push({
-            value: collection.node.title,
+            value: collection.node.id,
             label: collection.node.title,
-            id: collection.node.id,
+            products: productsList
           })
-        );
-
+        });
         return result;
       });
     }
@@ -53,44 +78,68 @@ const SearchCollection = (props) => {
 
   const updateText = useCallback(
     (value) => {
-      setFieldValue(fieldName, { title: value, collectionId: '' });
+      setInputValue(value);
       if (value) {
         GetCollections({ variables: { query: `title:*${value}*` } });
       }
     },
-    [value]
-  );
-
-  const updateSelection = useCallback(
-    (selected) => {
-      if (selected?.length > 0) {
-        const collection = collectionList.find((item) => item.value === selected[0]);
-        setFieldValue(fieldName, {
-          title: collection.value,
-          collectionId: collection.id,
-        });
-        setSelectedOptions(selected);
-      }
-    },
-    [collectionList, value]
+    [collectionList]
   );
 
   const textField = (
     <Autocomplete.TextField
       onChange={updateText}
-      label=""
-      type="text"
-      value={value.title}
-      prefix={<Icon source={SearchMinor} color="base" />}
-      placeholder="Search for collections to add"
-      error={error}
-      suffix={
-        loading && (
-          <Spinner accessibilityLabel="Loading" size="small" />
-        )
-      }
+      value={inputValue}
+      placeholder="Search for a product(s) to add..."
     />
   );
+
+  const removeTag = (index) => {
+    setSelectedCollections(() => {
+      let newSelectedCollection = [...(selectedCollections || [])];
+      newSelectedCollection[index]._destroy = true;
+      return newSelectedCollection;
+    });
+  };
+
+  const handelSelected = (selected) => {
+    if (
+      selected.length >
+        selectedCollections.filter((item) => item._destroy === false).length &&
+      !selectedCollections.find((collection) => collection.value === selected[0])
+    ) {
+      setSelectedOptions(selected);
+      setSelectedCollections(() => {
+        let newCollectionList = [...selectedCollections];
+        const newItemIndex = collectionList.findIndex(
+          (item) => item.value === selected[0]
+        );
+
+        const isHave = newCollectionList.findIndex(
+          (collection) => collection.collectionId === collectionList[newItemIndex].value
+        );
+
+        if (isHave != -1) {
+          newCollectionList[isHave]._destroy = false;
+        } else {
+          newCollectionList.push({
+            collectionId: collectionList[newItemIndex].value,
+            collectionTitle: collectionList[newItemIndex].label,
+            products: collectionList[newItemIndex].products,
+            _destroy: false,
+          });
+        }
+        return newCollectionList;
+      });
+    } else {
+      for (var i = 0; i < selectedCollections.length; i++) {
+        if (!selected.find((item) => item === selectedCollections[i].collectionId)) {
+          removeTag(i);
+        }
+      }
+      setSelectedOptions(selected);
+    }
+  };
 
   const emptyState = (
     <React.Fragment>
@@ -103,11 +152,15 @@ const SearchCollection = (props) => {
 
   return (
     <Autocomplete
+      allowMultiple
       options={collectionList}
       selected={selectedOptions}
-      onSelect={updateSelection}
       textField={textField}
+      onSelect={(selected) => handelSelected(selected)}
+      listTitle="Suggested Tags"
+      loading={loading}
       emptyState={emptyState}
+      willLoadMoreResults={true}
     />
   );
 };

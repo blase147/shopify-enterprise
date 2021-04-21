@@ -79,6 +79,14 @@ const SearchProduct = (props) => {
     />
   );
 
+  const removeTag = (index) => {
+    setSelectedProducts(() => {
+      let newSelectedProduct = [...(selectedProducts || [])];
+      newSelectedProduct[index]._destroy = true;
+      return newSelectedProduct;
+    });
+  };
+
   const handelSelected = (selected) => {
     if (
       selected.length >

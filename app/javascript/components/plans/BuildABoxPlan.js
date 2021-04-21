@@ -26,7 +26,6 @@ import _ from 'lodash';
 import * as yup from 'yup';
 import { useHistory, useParams } from 'react-router-dom';
 import LayoutIndex from '../layout/Layout';
-import AppendProductsModal from './AppendProductsModal';
 import SearchCollection from './SearchCollection';
 import SearchProduct from './SearchProduct';
 
@@ -69,6 +68,12 @@ const BuildABoxPlan = () => {
             image
             _destroy
           }
+          # collectionImages{
+          #   collectionId,
+          #   collectionTitle,
+          #   products,
+          #   _destroy
+          # }
         }
       }
     }
@@ -118,7 +123,7 @@ const BuildABoxPlan = () => {
       setPlanData(data.fetchPlanGroup);
       setSelectedProducts(data.fetchPlanGroup.sellingPlans[0].productImages);
       setProductListFirst(data.fetchPlanGroup.sellingPlans[0].productImages);
-      setSelectedOptions(() => {
+      setSelectedProductOptions(() => {
         const defaultOption = [];
         data.fetchPlanGroup.sellingPlans[0].productImages?.map(
           (image) =>
@@ -126,6 +131,10 @@ const BuildABoxPlan = () => {
         );
         return defaultOption;
       });
+      // setSelectedCollectionOptions(() => {
+      //   const defaultOption = [];
+      //   return defaultOption;
+      // });
     }
   }, [data]);
 
@@ -192,8 +201,11 @@ const BuildABoxPlan = () => {
 
   // controll product image
   const formRef = useRef(null);
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedProductOptions, setSelectedProductOptions] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
+
+  const [selectedCollectionOptions, setSelectedCollectionOptions] = useState([]);
+  const [selectedCollections, setSelectedCollections] = useState([]);
 
   const handleRemoveProduct = (index) => {
     setSelectedProducts(() => {
@@ -201,10 +213,18 @@ const BuildABoxPlan = () => {
       newSelectedProduct[index]._destroy = true;
       return newSelectedProduct;
     });
-    setSelectedOptions([
-      ...selectedOptions.slice(0, index),
-      ...selectedOptions.slice(index + 1),
+    setSelectedProductOptions([
+      ...selectedProductOptions.slice(0, index),
+      ...selectedProductOptions.slice(index + 1),
     ]);
+  };
+
+  const handleRemoveCollectionProduct = (collectionIndex, productIndex) => {
+    setSelectedCollections(() => {
+      let newSelectedCollection= [...(selectedCollections || [])];
+      newSelectedCollection[collectionIndex].products[productIndex]._destroy = true;
+      return newSelectedCollection;
+    });
   };
 
   useEffect(() => {
@@ -219,6 +239,19 @@ const BuildABoxPlan = () => {
       );
     }
   }, [selectedProducts]);
+
+  // useEffect(() => {
+  //   if (
+  //     selectedCollections &&
+  //     formRef.current &&
+  //     formRef.current?.values.sellingPlans[0].collectionImages != selectedCollections
+  //   ) {
+  //     formRef.current.setFieldValue(
+  //       'sellingPlans[0].collectionImages',
+  //       selectedCollections
+  //     );
+  //   }
+  // }, [selectedCollections]);
 
   return (
     <LayoutIndex typePage="sellingPlanForm" tabIndex={1}>
@@ -260,6 +293,7 @@ const BuildABoxPlan = () => {
                     }
               }
               onSubmit={(values, { setSubmitting, setDirty }) => {
+                console.log(values);
                 if (id) {
                   updateSellingPlan({
                     variables: {
@@ -773,19 +807,20 @@ const BuildABoxPlan = () => {
                               {plan.boxSubscriptionType === 1 && (
                                 <div className="box-subscription-search">
                                     <TextContainer>Collection</TextContainer>
-                                    {/* <SearchCollection
-                                      value={plan.selectedCollection}
-                                      setFieldValue={setFieldValue}
-                                      fieldName={`sellingPlans[${index}].selectedCollection`}
-                                    /> */}
+                                    <SearchCollection
+                                      selectedOptions={selectedCollectionOptions}
+                                      setSelectedOptions={setSelectedCollectionOptions}
+                                      selectedCollections={selectedCollections}
+                                      setSelectedCollections={setSelectedCollections}
+                                    />
                                 </div>
                               )}
                               {plan.boxSubscriptionType === 2 && (
                                 <div className="box-subscription-search">
                                     <TextContainer>Product</TextContainer>
                                     <SearchProduct
-                                      selectedOptions={selectedOptions}
-                                      setSelectedOptions={setSelectedOptions}
+                                      selectedOptions={selectedProductOptions}
+                                      setSelectedOptions={setSelectedProductOptions}
                                       selectedProducts={selectedProducts}
                                       setSelectedProducts={setSelectedProducts}
                                     />
@@ -845,6 +880,46 @@ const BuildABoxPlan = () => {
                                 </div>
                               )}
                             </FormLayout.Group>
+                            {plan.boxSubscriptionType === 1 && (
+                              <div className="collection-stack">
+                                {selectedCollections.map(
+                                  (collection, i) =>
+                                    collection._destroy === false && (
+                                      <div
+                                        key={i}
+                                        className="building-box-collection"
+                                      >
+                                        <div>
+                                          {collection?.collectionTitle}
+                                        </div>
+                                        <Stack>
+                                          {collection.products?.map(
+                                            (product, j) =>
+                                              product._destroy === false && (
+                                                <div
+                                                  key={j}
+                                                  className="building-box-product"
+                                                >
+                                                <img
+                                                  className="product"
+                                                  src={product?.image}
+                                                />
+                                                <img
+                                                  className="removeIcon"
+                                                  onClick={() => {
+                                                    handleRemoveCollectionProduct(i, j);
+                                                  }}
+                                                  src={removeIcon}
+                                                />
+                                                </div>
+                                              )
+                                          )}
+                                        </Stack>
+                                      </div>
+                                    )
+                                )}
+                              </div>
+                            )}
                             {plan.boxSubscriptionType === 2 && (
                               <div className="product-stack">
                                 <div>Selected products (subscription box options)</div>
@@ -862,7 +937,7 @@ const BuildABoxPlan = () => {
                                           />
                                           <img
                                             onClick={() => {
-                                              handleRemoveProduct(i);
+                                              handleRemoveProduct(i, j);
                                             }}
                                             className="removeIcon"
                                             src={removeIcon}
