@@ -10,5 +10,6 @@ module Types
     field :fetch_campaigns, resolver: Queries::FetchUpsellCampaignGroups
     field :fetch_campaign, resolver: Queries::FetchUpsellCampaignGroup
     field :fetch_selling_plan_by_name, resolver: Queries::FetchSellingPlanByName
+    field :fetch_dashboard_report, resolver: Queries::FetchDashboardReport
   end
 end
