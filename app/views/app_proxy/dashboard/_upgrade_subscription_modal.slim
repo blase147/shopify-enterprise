@@ -32,7 +32,6 @@
                         - product.node.variants.edges.each_with_index do |variant, index|
                           label
                             input.hidden name="line_id" type="text" value="#{line_item.id}"
-                            input name="variant_price" type="hidden" value="#{variant.node.price}"
                             - if index.zero?
                               input name="variant_id" type="radio" value="#{variant.node.id}" checked='checked'
                             - else

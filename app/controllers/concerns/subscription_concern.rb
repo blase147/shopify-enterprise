@@ -44,7 +44,8 @@ module SubscriptionConcern
   end
 
   def swap_product
-    result = SubscriptionDraftsService.new.line_update @draft_id, params[:line_id], { 'productVariantId': params[:variant_id], 'quantity': 1, 'currentPrice': params[:variant_price] }
+    variant = ShopifyAPI::Variant.find(params[:variant_id][/\d+/])
+    result = SubscriptionDraftsService.new.line_update @draft_id, params[:line_id], { 'productVariantId': params[:variant_id], 'quantity': 1, 'currentPrice': variant.price }
     SubscriptionDraftsService.new.commit @draft_id
     if result[:error].present?
       flash[:error] = result[:error]
