@@ -11,7 +11,7 @@ module Queries
       subcription_month_revenue = current_month_subscriptions.sum { |subscription| get_orders_total_amount(subscription) }
       active_subscriptions_count = get_subscriptions_count(subscriptions, 'ACTIVE')
       churn_rate = get_churn_rate(subscriptions, range)
-      customer_lifetime = get_customer_lifetime_value(subscriptions_in_period) / churn_rate rescue 0
+      customer_lifetime = (get_customer_lifetime_value(subscriptions_in_period) / churn_rate).to_f.round(2) rescue 0
       revenue_churn = month_graph_data(subscriptions, range, :revenue_churn_by_date)
       arr_data = year_graph_data(subscriptions, range, :arr_data_by_date)
       mrr_data = month_graph_data(subscriptions, range, :mrr_data_by_date)
@@ -46,7 +46,7 @@ module Queries
 
     def get_customer_lifetime_value(subscriptions)
       customer_data = subscriptions.group_by { |subscription| subscription.node.customer.id }
-      customer_data.sum { |data| data[1].sum { |subscription| subscription.node.orders.edges.sum{ |order| order.node.total_price_set.presentment_money.amount.to_f.round(2)} } } / customer_data.size  rescue 0
+      customer_data.sum { |data| data[1].sum { |subscription| subscription.node.orders.edges.sum{ |order| order.node.total_price_set.presentment_money.amount.to_f} } } / customer_data.size  rescue 0
     end
 
     def month_graph_data(subscriptions, range, method)
