@@ -20,7 +20,7 @@ module Queries
       active_customers = month_graph_data(subscriptions, range, :get_customers_by_date)
       renewal_data = month_graph_data(subscriptions, range, :renewal_data_by_date)
       { mrr: subcription_month_revenue, active_subscriptions_count: active_subscriptions_count,
-        churn_rate: churn_rate, active_customers: active_customers, customer_lifetime_value: customer_lifetime,
+        churn_rate: churn_rate, active_customers: active_customers, customer_lifetime_value: customer_lifetime.round(2),
         revenue_churn: revenue_churn, arr_data: arr_data, mrr_data: mrr_data, refund_data: refund_data, sales_data: sales_data, renewal_data: renewal_data }
     end
 
@@ -46,14 +46,14 @@ module Queries
 
     def get_customer_lifetime_value(subscriptions)
       customer_data = subscriptions.group_by { |subscription| subscription.node.customer.id }
-      customer_data.sum { |data| data[1].sum { |subscription| subscription.node.orders.edges.sum{ |order| order.node.total_price_set.presentment_money.amount.to_f} } } / customer_data.size  rescue 0
+      customer_data.sum { |data| data[1].sum { |subscription| subscription.node.orders.edges.sum{ |order| order.node.total_price_set.presentment_money.amount.to_f.round(2)} } } / customer_data.size  rescue 0
     end
 
     def month_graph_data(subscriptions, range, method)
       range.map(&:beginning_of_month).uniq.map do |date|
         {
           date: date.strftime('%b %d'),
-          data: send(method, date, subscriptions)
+          data: send(method, date, subscriptions).to_f.round(2)
         }
       end
     end
@@ -81,12 +81,12 @@ module Queries
 
     def refund_data_by_date(date, subscriptions)
       subscriptions = in_period_subscriptions(subscriptions, date.beginning_of_month..date.end_of_month)
-      subscriptions.sum { |subscription| subscription.node.orders.edges.sum { |order| order.node.total_refunded_set.presentment_money.amount.to_f } }
+      subscriptions.sum { |subscription| subscription.node.orders.edges.sum { |order| order.node.total_refunded_set.presentment_money.amount.to_f.round(2) } }
     end
 
     def arr_data_by_date(date, subscriptions)
       current_year_subscriptions = in_period_subscriptions(subscriptions, date.beginning_of_year..date.end_of_year)
-      current_year_subscriptions.sum { |subscription| get_orders_total_amount(subscription) }
+      current_year_subscriptions.sum { |subscription| get_orders_total_amount(subscription) }.to_f.round(2)
     end
 
     def mrr_data_by_date(date, subscriptions)
@@ -95,7 +95,7 @@ module Queries
     end
 
     def get_orders_total_amount(subscription)
-      subscription.node.orders.edges.sum { |order| order.node.total_price_set.presentment_money.amount.to_f }
+      subscription.node.orders.edges.sum { |order| order.node.total_price_set.presentment_money.amount.to_f.round(2) }
     end
 
     def get_customers_by_date(date, subscriptions)
