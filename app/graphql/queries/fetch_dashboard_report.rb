@@ -17,7 +17,8 @@ module Queries
       mrr_data = month_graph_data(subscriptions, range, :mrr_data_by_date)
       refund_data = month_graph_data(subscriptions, range, :refund_data_by_date)
       sales_data =  month_graph_data(subscriptions, range, :sales_data_by_date)
-      { mrr: subcription_month_revenue, active_subscriptions_count: active_subscriptions_count, churn_rate: churn_rate, active_customers: active_subscriptions_count, customer_lifetime_value: customer_lifetime, revenue_churn: revenue_churn, arr_data: arr_data, mrr_data: mrr_data, refund_data: refund_data, sales_data: sales_data }
+      active_customers = month_graph_data(subscriptions, range, :get_customers_by_date)
+      { mrr: subcription_month_revenue, active_subscriptions_count: active_subscriptions_count, churn_rate: churn_rate, active_customers: active_customers, customer_lifetime_value: customer_lifetime, revenue_churn: revenue_churn, arr_data: arr_data, mrr_data: mrr_data, refund_data: refund_data, sales_data: sales_data }
     end
 
     def get_date_range(duration)
@@ -90,6 +91,11 @@ module Queries
 
     def get_orders_total_amount(subscription)
       subscription.node.orders.edges.sum { |order| order.node.total_price_set.presentment_money.amount.to_f }
+    end
+
+    def get_customers_by_date(date, subscriptions)
+      current_month_subscriptions = subscriptions.select { |subscription| date.beginning_of_month..date.end_of_month.cover?(subscription.node.created_at.to_date) && subscription.node.status == 'ACTIVE' }
+      current_month_subscriptions.group_by { |subscription| subscription.node.customer.id }.count
     end
 
     def in_period_subscriptions(subscriptions, range)
