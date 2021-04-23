@@ -44,7 +44,7 @@ const Dashboard = (props) => {
   const history = useHistory();
 
   const getGraphDataQuery = gql`
-   query($duration: String!) {  
+   query($duration: String!) {
     fetchDashboardReport(duration: $duration) {
         mrr
         activeSubscriptionsCount
@@ -186,7 +186,7 @@ const Dashboard = (props) => {
      const newARR={...arr,series:[{data:fetchDashboardReport.arrData.map(item=> parseInt(item.data))}],xAxis: {...arr.xAxis,categories:fetchDashboardReport.arrData.map(item=>item.date)}}
      const newRefunds={...refunds,series:[{data:fetchDashboardReport.refundData.map(item=> parseInt(item.data))}],xAxis: {...refunds.xAxis,categories:fetchDashboardReport.refundData.map(item=>item.date)}}
      const newCMRR={...cmrr,series:[{data:fetchDashboardReport.salesData.map(item=> parseInt(item.data))}],xAxis: {...cmrr.xAxis,categories:fetchDashboardReport.salesData.map(item=>item.date)}}
-    //  const 
+    //  const
     setChartOptions({
         ...chartOptions,
         sale:newSale,
@@ -201,17 +201,17 @@ const Dashboard = (props) => {
 
       setChartSums({
         ...chartSums,
-        sale:fetchDashboardReport.salesData.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0),
-        customer:fetchDashboardReport.activeCustomers.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0),
-        revenue_churn:fetchDashboardReport.revenueChurn.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0),
-        renewal_rate:fetchDashboardReport.renewalData.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0),
-        mrr:fetchDashboardReport.mrrData.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0),
-        arr:fetchDashboardReport.arrData.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0),
-        refunds:fetchDashboardReport.refundData.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0),
-        cmrr:fetchDashboardReport.salesData.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0)
+        sale: `$${fetchDashboardReport.salesData.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0)}`,
+        customer: `$${fetchDashboardReport.activeCustomers.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0)}`,
+        revenue_churn: `$${fetchDashboardReport.revenueChurn.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0)}`,
+        renewal_rate: `$${fetchDashboardReport.renewalData.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0)}`,
+        mrr: `$${fetchDashboardReport.mrrData.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0)}`,
+        arr: `$${fetchDashboardReport.arrData.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0)}`,
+        refunds: `$${fetchDashboardReport.refundData.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0)}`,
+        cmrr: `$${fetchDashboardReport.salesData.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0)}`
       })
     }
-   
+
   }, [data])
 
 
@@ -230,7 +230,7 @@ const Dashboard = (props) => {
     // { section: 'Net Revenue', percent: '2', up: true, amount: '$500,012' },
     // { section: 'Total Refunds', percent: '2', up: false, amount: '$550.12' },
   ];
-  
+
 
   const [selectedTitleTab_1, setSelectedTitleTab_1] = useState(0);
   const handleTabChange_1 = useCallback(
@@ -400,7 +400,7 @@ const Dashboard = (props) => {
               <Button onClick={() => setIsTimeButton("12 Month")} primary={isTimeButton=="12 Month"}>12 Months</Button>
             </ButtonGroup>
           </Layout.Section>
-          
+
           <Layout.Section>
             <Stack distribution="fill">
               {sectionList?.map((item, i) => (
@@ -459,9 +459,9 @@ const Dashboard = (props) => {
               </Layout.Section>
             ))}
           </Layout.Section>
-            
-          
-          
+
+
+
 
           <Modals active={getStartedModal} setActive={setGetStartedModal} domain={props.domain}/>
         </Layout>
