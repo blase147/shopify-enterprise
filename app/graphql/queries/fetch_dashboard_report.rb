@@ -107,13 +107,6 @@ module Queries
       current_month_subscriptions = in_period_subscriptions(subscriptions, date.beginning_of_month..date.end_of_month, 'ACTIVE')
       renewed_subscriptions = current_month_subscriptions.sum { |subscription| subscription.node.orders.edges.count > 1 && (orders_in_range(subscription).size > 1) ? 1 : 0  }
       renewed_subscriptions / current_month_subscriptions.count rescue 0
-<<<<<<< Updated upstream
-=======
-    end
-
-    def in_period_subscriptions(subscriptions, range)
-      subscriptions.select { |subscription| range.cover?(subscription.node.created_at.to_date) }
->>>>>>> Stashed changes
     end
 
     def in_period_subscriptions(subscriptions, range, status = nil)
