@@ -18,7 +18,8 @@ module Queries
       refund_data = month_graph_data(subscriptions, range, :refund_data_by_date)
       sales_data =  month_graph_data(subscriptions, range, :sales_data_by_date)
       active_customers = month_graph_data(subscriptions, range, :get_customers_by_date)
-      { mrr: subcription_month_revenue, active_subscriptions_count: active_subscriptions_count, churn_rate: churn_rate, active_customers: active_customers, customer_lifetime_value: customer_lifetime, revenue_churn: revenue_churn, arr_data: arr_data, mrr_data: mrr_data, refund_data: refund_data, sales_data: sales_data }
+      renewal_data = month_graph_data(subscriptions, range, :renewal_data_by_date)
+      { mrr: subcription_month_revenue, active_subscriptions_count: active_subscriptions_count, churn_rate: churn_rate, active_customers: active_customers, customer_lifetime_value: customer_lifetime, revenue_churn: revenue_churn, arr_data: arr_data, mrr_data: mrr_data, refund_data: refund_data, sales_data: sales_data, renewel_data: renewal_data }
     end
 
     def get_date_range(duration)
@@ -94,12 +95,26 @@ module Queries
     end
 
     def get_customers_by_date(date, subscriptions)
-      current_month_subscriptions = subscriptions.select { |subscription| date.beginning_of_month..date.end_of_month.cover?(subscription.node.created_at.to_date) && subscription.node.status == 'ACTIVE' }
+      current_month_subscriptions = in_period_active_subscriptions(subscriptions, date.beginning_of_month..date.end_of_month)
       current_month_subscriptions.group_by { |subscription| subscription.node.customer.id }.count
+    end
+
+    def renewal_data_by_date(date, subscriptions)
+      current_month_subscriptions = in_period_active_subscriptions(subscriptions, date.beginning_of_month..date.end_of_month)
+      renewed_subscriptions = current_month_subscriptions.sum { |subscription| subscription.node.orders.edges.count > 1 && (orders_in_range(subscription).size > 1) ? 1 : 0  }
+      renewed_subscriptions / current_month_subscriptions.count
     end
 
     def in_period_subscriptions(subscriptions, range)
       subscriptions.select { |subscription| range.cover?(subscription.node.created_at.to_date) }
+    end
+
+    def in_period_active_subscriptions(subscriptions, range)
+      subscriptions.select { |subscription| range.cover?(subscription.node.created_at.to_date) && subscription.node.status == 'ACTIVE' }
+    end
+
+    def orders_in_range(subscription)
+      subscription.node.orders.edges.select { |order| date.beginning_of_month..date.end_of_month.cover?(order.node.created_at.to_date) }
     end
   end
 end

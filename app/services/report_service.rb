@@ -18,6 +18,7 @@ class ReportService < GraphqlService
             orders(first: 30, reverse: true) {
               edges {
                 node {
+                  createdAt
                   totalPriceSet {
                     presentmentMoney {
                       amount

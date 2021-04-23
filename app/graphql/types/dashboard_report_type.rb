@@ -10,6 +10,7 @@ module Types
     field :mrr_data, [Types::GraphDataType], null: true
     field :refund_data, [Types::GraphDataType], null: true
     field :sales_data, [Types::GraphDataType], null: true
+    field :renewal_data, [Types::GraphDataType], null: true
 
     field :__typename, String, null: true
   end
