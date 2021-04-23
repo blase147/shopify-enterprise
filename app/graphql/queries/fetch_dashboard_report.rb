@@ -110,7 +110,7 @@ module Queries
     end
 
     def in_period_subscriptions(subscriptions, range, status = nil)
-      subscriptions.select { |subscription| range.cover?(subscription.node.created_at.to_date && (status ? subscription.node.status == status : true)) }
+      subscriptions.select { |subscription| range.cover?(subscription.node.created_at.to_date) && (status ? subscription.node.status == status : true) }
     end
 
     def orders_in_range(subscription)
