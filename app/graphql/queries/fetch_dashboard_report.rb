@@ -19,7 +19,7 @@ module Queries
       sales_data =  month_graph_data(subscriptions, range, :sales_data_by_date)
       active_customers = month_graph_data(subscriptions, range, :get_customers_by_date)
       renewal_data = month_graph_data(subscriptions, range, :renewal_data_by_date)
-      { mrr: subcription_month_revenue, active_subscriptions_count: active_subscriptions_count, churn_rate: churn_rate, active_customers: active_customers, customer_lifetime_value: customer_lifetime, revenue_churn: revenue_churn, arr_data: arr_data, mrr_data: mrr_data, refund_data: refund_data, sales_data: sales_data, renewel_data: renewal_data }
+      { mrr: subcription_month_revenue, active_subscriptions_count: active_subscriptions_count, churn_rate: churn_rate, active_customers: active_customers, customer_lifetime_value: customer_lifetime, revenue_churn: revenue_churn, arr_data: arr_data, mrr_data: mrr_data, refund_data: refund_data, sales_data: sales_data, renewal_data: renewal_data }
     end
 
     def get_date_range(duration)
