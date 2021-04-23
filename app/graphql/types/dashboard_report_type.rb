@@ -8,6 +8,8 @@ module Types
     field :revenue_churn, [Types::GraphDataType], null: true
     field :arr_data, [Types::GraphDataType], null: true
     field :mrr_data, [Types::GraphDataType], null: true
+    field :refund_data, [Types::GraphDataType], null: true
+    field :sales_data, [Types::GraphDataType], null: true
 
     field :__typename, String, null: true
   end
