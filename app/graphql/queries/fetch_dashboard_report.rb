@@ -11,7 +11,7 @@ module Queries
       subcription_month_revenue = current_month_subscriptions.sum { |subscription| get_orders_total_amount(subscription) }
       active_subscriptions_count = get_subscriptions_count(subscriptions, 'ACTIVE')
       churn_rate = get_churn_rate(subscriptions, range)
-      customer_lifetime = (get_customer_lifetime_value(subscriptions_in_period) / churn_rate).to_f.round(2) rescue 0
+      customer_lifetime = churn_rate.eql?(0) ? 0 : (get_customer_lifetime_value(subscriptions_in_period) / churn_rate).to_f.round(2)
       revenue_churn = month_graph_data(subscriptions, range, :revenue_churn_by_date)
       arr_data = year_graph_data(subscriptions, range, :arr_data_by_date)
       mrr_data = month_graph_data(subscriptions, range, :mrr_data_by_date)
