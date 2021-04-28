@@ -8,18 +8,32 @@ class ReportService < GraphqlService
           node {
             createdAt
             status
+            nextBillingDate
             customer {
               id
               productSubscriberStatus
             }
-            lines(first: 20) {
+            lines(first: 10) {
               edges
             }
-            orders(first: 30, reverse: true) {
+            orders(first: 10, reverse: true) {
               edges {
                 node {
                   createdAt
+                  transactions {
+                    amountSet {
+                      presentmentMoney {
+                        amount
+                      }
+                    }
+                    status
+                  }
                   totalPriceSet {
+                    presentmentMoney {
+                      amount
+                    }
+                  }
+                  originalTotalPriceSet {
                     presentmentMoney {
                       amount
                     }

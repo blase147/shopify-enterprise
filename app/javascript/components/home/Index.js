@@ -50,33 +50,47 @@ const Dashboard = (props) => {
         activeSubscriptionsCount
         churnRate
         activeCustomers {
-            data
             date
+            data {
+              value
+            }
         }
         customerLifetimeValue
         revenueChurn {
             date
-            data
+            data {
+              value
+            }
         }
         arrData {
             date
-            data
+            data {
+              value
+            }
         }
         mrrData {
             date
-            data
+            data {
+              value
+            }
         }
         refundData {
             date
-            data
+            data {
+              value
+            }
         }
         salesData {
             date
-            data
+            data {
+              value
+            }
         }
         renewalData {
           date
-          data
+          data {
+            value
+          }
       }
     } }`;
 
@@ -174,18 +188,18 @@ const Dashboard = (props) => {
         cl_value:"$"+fetchDashboardReport.customerLifetimeValue
       })
 
-      // fetchDashboardReport.salesData.map(parseFloat(item=>item.data))}
+      // fetchDashboardReport.salesData.map(parseFloat(item=>item.data.value))}
       // fetchDashboardReport.salesData.map(item=>item.date)
       /// Charts Update
      const {sale,customer,revenue_churn,renewal_rate, mrr, arr, refunds, cmrr } =chartOptions;
-     const newSale={...sale,series:[{data:fetchDashboardReport.salesData.map(item=> parseInt(item.data))}],xAxis: {...sale.xAxis,categories:fetchDashboardReport.salesData.map(item=>item.date)}}
-     const newCustomer={...customer,series:[{data:fetchDashboardReport.activeCustomers.map(item=> parseInt(item.data))}],xAxis: {...customer.xAxis,categories:fetchDashboardReport.activeCustomers.map(item=>item.date)}}
-     const newRevenueChurn={...revenue_churn,series:[{data:fetchDashboardReport.revenueChurn.map(item=> parseInt(item.data))}],xAxis: {...revenue_churn.xAxis,categories:fetchDashboardReport.revenueChurn.map(item=>item.date)}}
-     const newRenewal={...renewal_rate,series:[{data:fetchDashboardReport.renewalData.map(item=> parseInt(item.data))}],xAxis: {...renewal_rate.xAxis,categories:fetchDashboardReport.renewalData.map(item=>item.date)}}
-     const newMMR={...mrr,series:[{data:fetchDashboardReport.mrrData.map(item=> parseInt(item.data))}],xAxis: {...mrr.xAxis,categories:fetchDashboardReport.mrrData.map(item=>item.date)}}
-     const newARR={...arr,series:[{data:fetchDashboardReport.arrData.map(item=> parseInt(item.data))}],xAxis: {...arr.xAxis,categories:fetchDashboardReport.arrData.map(item=>item.date)}}
-     const newRefunds={...refunds,series:[{data:fetchDashboardReport.refundData.map(item=> parseInt(item.data))}],xAxis: {...refunds.xAxis,categories:fetchDashboardReport.refundData.map(item=>item.date)}}
-     const newCMRR={...cmrr,series:[{data:fetchDashboardReport.salesData.map(item=> parseInt(item.data))}],xAxis: {...cmrr.xAxis,categories:fetchDashboardReport.salesData.map(item=>item.date)}}
+     const newSale={...sale,series:[{data:fetchDashboardReport.salesData.map(item=> parseInt(item.data.value))}],xAxis: {...sale.xAxis,categories:fetchDashboardReport.salesData.map(item=>item.date)}}
+     const newCustomer={...customer,series:[{data:fetchDashboardReport.activeCustomers.map(item=> parseInt(item.data.value))}],xAxis: {...customer.xAxis,categories:fetchDashboardReport.activeCustomers.map(item=>item.date)}}
+     const newRevenueChurn={...revenue_churn,series:[{data:fetchDashboardReport.revenueChurn.map(item=> parseInt(item.data.value))}],xAxis: {...revenue_churn.xAxis,categories:fetchDashboardReport.revenueChurn.map(item=>item.date)}}
+     const newRenewal={...renewal_rate,series:[{data:fetchDashboardReport.renewalData.map(item=> parseInt(item.data.value))}],xAxis: {...renewal_rate.xAxis,categories:fetchDashboardReport.renewalData.map(item=>item.date)}}
+     const newMMR={...mrr,series:[{data:fetchDashboardReport.mrrData.map(item=> parseInt(item.data.value))}],xAxis: {...mrr.xAxis,categories:fetchDashboardReport.mrrData.map(item=>item.date)}}
+     const newARR={...arr,series:[{data:fetchDashboardReport.arrData.map(item=> parseInt(item.data.value))}],xAxis: {...arr.xAxis,categories:fetchDashboardReport.arrData.map(item=>item.date)}}
+     const newRefunds={...refunds,series:[{data:fetchDashboardReport.refundData.map(item=> parseInt(item.data.value))}],xAxis: {...refunds.xAxis,categories:fetchDashboardReport.refundData.map(item=>item.date)}}
+     const newCMRR={...cmrr,series:[{data:fetchDashboardReport.salesData.map(item=> parseInt(item.data.value))}],xAxis: {...cmrr.xAxis,categories:fetchDashboardReport.salesData.map(item=>item.date)}}
     //  const
     setChartOptions({
         ...chartOptions,
@@ -201,14 +215,14 @@ const Dashboard = (props) => {
 
       setChartSums({
         ...chartSums,
-        sale: `$${fetchDashboardReport.salesData.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0)}`,
-        customer: `$${fetchDashboardReport.activeCustomers.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0)}`,
-        revenue_churn: `$${fetchDashboardReport.revenueChurn.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0)}`,
-        renewal_rate: `$${fetchDashboardReport.renewalData.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0)}`,
-        mrr: `$${fetchDashboardReport.mrrData.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0)}`,
-        arr: `$${fetchDashboardReport.arrData.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0)}`,
-        refunds: `$${fetchDashboardReport.refundData.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0)}`,
-        cmrr: `$${fetchDashboardReport.salesData.map(item=> parseInt(item.data)).reduce((a, b) => a + b, 0)}`
+        sale: `$${fetchDashboardReport.salesData.map(item=> parseInt(item.data.value)).reduce((a, b) => a + b, 0)}`,
+        customer: `${fetchDashboardReport.activeCustomers.map(item=> parseInt(item.data.value)).reduce((a, b) => a + b, 0)}`,
+        revenue_churn: `$${fetchDashboardReport.revenueChurn.map(item=> parseInt(item.data.value)).reduce((a, b) => a + b, 0)}`,
+        renewal_rate: `$${fetchDashboardReport.renewalData.map(item=> parseInt(item.data.value)).reduce((a, b) => a + b, 0)}`,
+        mrr: `$${fetchDashboardReport.mrrData.map(item=> parseInt(item.data.value)).reduce((a, b) => a + b, 0)}`,
+        arr: `$${fetchDashboardReport.arrData.map(item=> parseInt(item.data.value)).reduce((a, b) => a + b, 0)}`,
+        refunds: `$${fetchDashboardReport.refundData.map(item=> parseInt(item.data.value)).reduce((a, b) => a + b, 0)}`,
+        cmrr: `$${fetchDashboardReport.salesData.map(item=> parseInt(item.data.value)).reduce((a, b) => a + b, 0)}`
       })
     }
 
