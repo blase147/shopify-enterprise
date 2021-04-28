@@ -1,3 +1,6 @@
+* {
+  // background-color: red;
+}
 .chargezen {
   .Polaris-CalloutCard__Image {
     min-width: 200px;
@@ -167,4 +170,63 @@
 }
 .Polaris-Stack > .Polaris-Stack__Item {
   margin-top: 1.6rem;
+}
+
+.main-header-dashboard {
+  display: flex;
+  justify-content: space-between;
+  .left-btns {
+    display: flex;
+    .get-started {
+      background: white;
+      height: 54px;
+      width: 124px;
+      border-radius: 10px;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+      display: flex;
+      &:last-child {
+        margin-left: 29px;
+      }
+      a {
+        color: #007EFF;
+        margin-left: 9px;
+      }
+
+    }
+  }
+}
+.dashboard-card-section {
+  .Polaris-Card {
+    border-radius: 20px;
+  }
+}
+.dashboard-bottom-card-section {
+  .Polaris-Card {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+}
+
+.analytic-section {
+  width: 100%;
+  margin-top: 10px;
+
+  .deep-analytics {
+    display: inline-flex;
+    justify-content: flex-end;
+    flex-grow: 0;
+    flex-shrink: 0;
+    float: right;
+    background: #007EFF;
+    padding: 7px 14px 7px 10px;
+    border-radius: 3px;
+    align-items: center;
+    
+    a {
+      margin-left: 5px;
+      color:white;
+    }
+  }
 }
