@@ -17,6 +17,7 @@ module Types
     field :active_customers_data, [Types::GraphDataType], null: true
     field :active_vs_churned_data, [Types::GraphDataType], null: true
     field :new_vs_cancelled_data, [Types::GraphDataType], null: true
+    field :recurring_vs_checkout, [Types::GraphDataType], null: true
     field :estimated_seven_days, String, null: true
     field :estimated_thirty_days, String, null: true
     field :estimated_ninety_days, String, null: true
@@ -29,7 +30,9 @@ module Types
     field :seven_days_upcoming_charge, String, null: true
     field :thirty_days_upcoming_charge, String, null: true
     field :ninety_days_upcoming_charge, String, null: true
-    field :upcoming_error_charges, String, null: true
+    field :seven_days_error_charge, String, null: true
+    field :thirty_days_error_charge, String, null: true
+    field :ninety_days_error_charge, String, null: true
 
     field :__typename, String, null: true
   end

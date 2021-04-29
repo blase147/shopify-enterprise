@@ -109,6 +109,10 @@ class ReportDataService
     @orders.sum { |order| order.current_total_price_set.presentment_money.amount.to_f } + @orders.sum { |order| order.total_shipping_price_set.presentment_money.amount.to_f }.round(2)
   end
 
+  def charge_count(range)
+    @orders.sum {|order| range.cover?(order.created_at.to_date) ? 1 : 0 }
+  end
+
   def recurring_sales
     ((@subscriptions.sum { |subscription| get_orders_total_amount(subscription) } / get_total_sales) * 100).to_f.round(2)
   end
@@ -126,12 +130,14 @@ class ReportDataService
     refunded_amount(@subscriptions)
   end
 
-  def average_checkout_charge
-    @subscriptions.sum{ |subscription| subscription.node.orders.edges.count == 1 ? get_orders_total_amount(subscription) : 0.0 } / orders_count
+  def checkout_charge(range = nil)
+    @subscriptions = range.nil? ? @subscriptions : in_period_subscriptions(@subscriptions, range)
+    @subscriptions.sum{ |subscription| subscription.node.orders.edges.count == 1 ? get_orders_total_amount(subscription) : 0.0 } / orders_count rescue 0
   end
 
-  def average_recurring_charge
-    @subscriptions.sum{ |subscription| subscription.node.orders.edges.count > 1 ? get_orders_total_amount(subscription) : 0.0 } / orders_count
+  def recurring_charge(range = nil)
+    @subscriptions = range.nil? ? @subscriptions : in_period_subscriptions(@subscriptions, range)
+    @subscriptions.sum{ |subscription| subscription.node.orders.edges.count > 1 ? get_orders_total_amount(subscription) : 0.0 } / orders_count rescue 0
   end
 
   def new_customers
@@ -160,7 +166,8 @@ class ReportDataService
 
   def total_sales_data(range)
     {
-      value: get_total_sales(range)
+      value: get_total_sales(range),
+      charge_count: charge_count(range)
     }
   end
 
@@ -204,7 +211,18 @@ class ReportDataService
     @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.node.next_billing_date) ? 1 : 0 }
   end
 
-  def get_upcoming_error_charges
-    @subscriptions.sum { |subscription|  subscription.node.orders.edges.sum { |order| order.node.transactions.sum { |transaction| transaction.status == 'ERROR' ? 1 : 0 } } }
+  def recurring_vs_checkout_data(range)
+    {
+      recurring_sales: recurring_charge(range),
+      one_time_sales: checkout_charge(range)
+    }
+  end
+
+  def get_upcoming_error_charges(day_count)
+    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.node.next_billing_date) ? error_transactions_count(subscription) : 0 }
+  end
+
+  def error_transactions_count
+    subscription.node.orders.edges.sum { |order| order.node.transactions.sum { |transaction| transaction.status == 'ERROR' ? 1 : 0 } }
   end
 end
