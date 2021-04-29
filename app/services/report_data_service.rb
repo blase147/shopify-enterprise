@@ -131,13 +131,13 @@ class ReportDataService
   end
 
   def checkout_charge(range = nil)
-    @subscriptions = range.nil? ? @subscriptions : in_period_subscriptions(@subscriptions, range)
-    @subscriptions.sum{ |subscription| subscription.node.orders.edges.count == 1 ? get_orders_total_amount(subscription) : 0.0 } / orders_count rescue 0
+    subscriptions = range.nil? ? @subscriptions : in_period_subscriptions(@subscriptions, range)
+    subscriptions.sum{ |subscription| subscription.node.orders.edges.count == 1 ? get_orders_total_amount(subscription) : 0.0 } / orders_count rescue 0
   end
 
   def recurring_charge(range = nil)
-    @subscriptions = range.nil? ? @subscriptions : in_period_subscriptions(@subscriptions, range)
-    @subscriptions.sum{ |subscription| subscription.node.orders.edges.count > 1 ? get_orders_total_amount(subscription) : 0.0 } / orders_count rescue 0
+    subscriptions = range.nil? ? @subscriptions : in_period_subscriptions(@subscriptions, range)
+    subscriptions.sum{ |subscription| subscription.node.orders.edges.count > 1 ? get_orders_total_amount(subscription) : 0.0 } / orders_count rescue 0
   end
 
   def new_customers
@@ -214,7 +214,7 @@ class ReportDataService
   def recurring_vs_checkout_data(range)
     {
       recurring_sales: recurring_charge(range),
-      one_time_sales: checkout_charge(range)
+      one_time_sales: checkout_charge(range).to_f.round(2)
     }
   end
 
