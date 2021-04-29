@@ -105,8 +105,8 @@ class ReportDataService
 
   # Revenue Trends
   def get_total_sales(range = nil)
-    @orders = range.nil? ? @orders : @orders.select {|order| range.cover?(order.created_at.to_date) }
-    @orders.sum { |order| order.current_total_price_set.presentment_money.amount.to_f } + @orders.sum { |order| order.total_shipping_price_set.presentment_money.amount.to_f }.round(2)
+    orders = range.nil? ? @orders : @orders.select {|order| range.cover?(order.created_at.to_date) }
+    orders.sum { |order| order.current_total_price_set.presentment_money.amount.to_f } + orders.sum { |order| order.total_shipping_price_set.presentment_money.amount.to_f }.round(2)
   end
 
   def charge_count(range)
@@ -126,18 +126,26 @@ class ReportDataService
   end
 
   def total_refunds(range = nil)
-    @subscriptions = range.nil? ? @subscriptions : in_period_subscriptions(@subscriptions, range)
-    refunded_amount(@subscriptions)
+    subscriptions = range.nil? ? @subscriptions : in_period_subscriptions(@subscriptions, range)
+    refunded_amount(subscriptions)
   end
 
-  def checkout_charge(range = nil)
-    subscriptions = range.nil? ? @subscriptions : in_period_subscriptions(@subscriptions, range)
-    subscriptions.sum{ |subscription| subscription.node.orders.edges.count == 1 ? get_orders_total_amount(subscription) : 0.0 } / orders_count rescue 0
+  def checkout_charge(range)
+    subscriptions = in_period_subscriptions(@subscriptions, range)
+    subscriptions.sum{ |subscription| subscription.node.orders.edges.count == 1 ? get_orders_total_amount(subscription) : 0.0 }
   end
 
-  def recurring_charge(range = nil)
-    subscriptions = range.nil? ? @subscriptions : in_period_subscriptions(@subscriptions, range)
-    subscriptions.sum{ |subscription| subscription.node.orders.edges.count > 1 ? get_orders_total_amount(subscription) : 0.0 } / orders_count rescue 0
+  def recurring_charge(range)
+    subscriptions = in_period_subscriptions(@subscriptions, range)
+    subscriptions.sum{ |subscription| subscription.node.orders.edges.count > 1 ? get_orders_total_amount(subscription) : 0.0 }
+  end
+
+  def average_checkout_charge
+    @subscriptions.sum{ |subscription| subscription.node.orders.edges.count == 1 ? get_orders_total_amount(subscription) : 0.0 } / orders_count rescue 0
+  end
+
+  def average_recurring_charge
+    @subscriptions.sum{ |subscription| subscription.node.orders.edges.count > 1 ? get_orders_total_amount(subscription) : 0.0 } / orders_count rescue 0
   end
 
   def new_customers

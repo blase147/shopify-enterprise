@@ -18,8 +18,8 @@ module Queries
       total_refunds = range_data_service.total_refunds
       new_subscriptions = range_data_service.in_period_subscriptions(subscriptions, Date.today - 1.month..Date.today, 'ACTIVE').count
       cancelled_subscriptions = range_data_service.in_period_subscriptions(subscriptions, Date.today - 1.month..Date.today, 'CANCELLED').count
-      average_checkout_charge = range_data_service.checkout_charge.to_f.round(2)
-      average_recurring_charge = range_data_service.recurring_charge
+      average_checkout_charge = range_data_service.average_checkout_charge.to_f.round(2)
+      average_recurring_charge = range_data_service.average_recurring_charge.to_f.round(2)
       new_customers = range_data_service.new_customers
       active_customers = range_data_service.get_subscriptions_count(in_period_subscriptions, 'ACTIVE')
       churn_rate = range_data_service.churn_rate(range)
