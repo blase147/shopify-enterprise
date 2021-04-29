@@ -1,6 +1,9 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import { gql, useQuery, useLazyQuery } from '@apollo/client';
+import CounterUp from 'react-countup';
+
 import {
   Card,
   FormLayout,
@@ -28,6 +31,735 @@ const RevenueTrends = () => {
   const [selected_1, setSelected_1] = useState('today');
   const handleSelectChange_1 = useCallback((value) => setSelected_1(value), []);
 
+  const [filters,setFilters]=useState({granularity:'day',dataPeriodFor:"30",dataByPeriod:"day"})
+
+  const selectOptions = useMemo(() => ([
+    { label: 'Day', value: 'day' },
+    { label: 'Month', value: 'month' },
+    { label: 'Year', value: 'year' }
+  ]), [])
+
+  useEffect(() => {
+   console.log("FIlters Changes",filters)
+  }, [filters])
+
+  ///Graph Query...
+  const fetchReport = gql`
+  query($granularity: String!, $dataPeriodFor: String!, $dataByPeriod: String!) {  
+    fetchRevenueTrend(granularity: $granularity, dataPeriodFor: $dataPeriodFor, dataByPeriod: $dataByPeriod) {
+      totalSales
+      recurringSales
+      salesPerCharge
+      refunds
+      averageCheckoutCharge
+      averageRecurringCharge
+      churnRate
+      newCustomers
+      activeCustomers
+      newSubscriptions
+      cancelledSubscriptions
+      sameDayCancelled
+      activeVsChurnedData {
+          date
+          data {
+              activeCustomers
+              churnedCustomers
+          }
+      }
+      totalSalesData {
+          date
+          data {
+              value
+              chargeCount
+          }
+      }
+      refundsData {
+          date
+          data {
+              value
+              refundsCount
+          }
+      }
+      activeCustomersData {
+          date
+          data {
+              value
+          }
+      }
+      newVsCancelledData {
+          date
+          data {
+              newSubscriptionsCount
+              cancelledSubscriptionsCount
+          }
+      }
+      recurringVsCheckout {
+        date
+        data {
+            recurringSales
+            oneTimeSales
+        }
+    }
+      estimatedSevenDays
+      estimatedThirtyDays
+      estimatedNinetyDays
+      historicalSevenDaysRevenue
+      historicalThirtyDaysRevenue
+      historicalNinetyDaysRevenue
+      sevenDaysErrorRevenue
+      thirtyDaysErrorRevenue
+      ninetyDaysErrorRevenue
+      sevenDaysUpcomingCharge
+      thirtyDaysUpcomingCharge
+      ninetyDaysUpcomingCharge  
+      sevenDaysErrorCharge
+      thirtyDaysErrorCharge
+      ninetyDaysErrorCharge
+    }
+}
+  `;
+
+// subscriptions chart
+const SubscriptionsChart = {
+  chart: {
+    type: 'column',
+  },
+  title: {
+    text: 'New Subscriptions vs Cancellations',
+  },
+  xAxis: {
+    categories: [],
+  },
+  yAxis: {
+    title: {
+      text: 'Number of Subscription',
+    },
+  },
+  exporting: {
+    enabled: false,
+  },
+  plotOptions: {
+    column: {
+      stacking: 'normal',
+    },
+  },
+  series: [
+    {
+      name: 'New Subscriptions',
+      data: [],
+      color: '#007ffa',
+    },
+    {
+      name: 'Cancellations',
+      data: [],
+      color: '#202b35',
+    },
+  ],
+};
+//active customer chart
+const CustomerChart = {
+  chart: {
+    height: '400px',
+  },
+  title: {
+    text: 'Active Customers',
+  },
+
+  yAxis: {
+    title: {
+      text: 'Active Customers',
+    },
+  },
+
+  xAxis: {
+    categories: [],
+  },
+  exporting: {
+    enabled: false,
+  },
+  legend: {
+    enabled: false,
+  },
+
+  series: [
+    {
+      name: '',
+      data: [],
+      color: '#202b35',
+    },
+  ],
+};
+// Refunds chart
+const RefundChart = {
+  chart: {
+    zoomType: 'xy',
+  },
+  title: {
+    text: 'Refunds',
+  },
+  xAxis: [
+    {
+      categories: categories,
+      crosshair: true,
+    },
+  ],
+  yAxis: [
+    {
+      // Primary yAxis
+      labels: {
+        format: '{value}',
+        style: {
+          color: '#202b35',
+        },
+      },
+      title: {
+        text: 'Refund Amount',
+        style: {
+          color: '#202b35',
+        },
+      },
+    },
+    {
+      // Secondary yAxis
+      title: {
+        text: 'Refund Count',
+        style: {
+          color: '#202b35',
+        },
+      },
+      labels: {
+        format: '{value}',
+        style: {
+          color: '#202b35',
+        },
+      },
+      opposite: true,
+    },
+  ],
+  exporting: {
+    enabled: false,
+  },
+  tooltip: {
+    shared: true,
+  },
+  series: [
+    {
+      name: 'Refund Count',
+      type: 'column',
+      yAxis: 1,
+      data: [],
+      color: '#959595',
+    },
+    {
+      name: 'Refund amount',
+      type: 'spline',
+      data: [],
+      color: '#202b35',
+    },
+  ],
+};
+//Sales Chart 
+const SaleChart = {
+  chart: {
+    zoomType: 'xy',
+  },
+  title: {
+    text: 'Total Sales (Inc.Refunds)',
+  },
+  xAxis: [
+    {
+      categories: [],
+      crosshair: true,
+      angle: 90,
+    },
+  ],
+  yAxis: [
+    {
+      // Primary yAxis
+      labels: {
+        format: '{value}',
+        style: {
+          color: '#202b35',
+        },
+      },
+      title: {
+        text: 'Total Sales',
+        style: {
+          color: '#202b35',
+        },
+      },
+    },
+    {
+      // Secondary yAxis
+      title: {
+        text: 'Charge Count',
+        style: {
+          color: '#202b35',
+        },
+      },
+      labels: {
+        format: '{value}',
+        style: {
+          color: '#202b35',
+        },
+      },
+      opposite: true,
+    },
+  ],
+  exporting: {
+    enabled: false,
+  },
+  tooltip: {
+    shared: true,
+  },
+  series: [
+    {
+      name: 'Charge Count',
+      type: 'column',
+      yAxis: 1,
+      data: [],
+      color: '#007ffa',
+    },
+    {
+      name: 'Total Sales',
+      type: 'spline',
+      data: [],
+      color: '#00a030',
+    },
+  ],
+};
+//ActiveVsChurnedChart
+const Active_Churned_CustomerChart = {
+  chart: {
+    type: 'area',
+  },
+  title: {
+    text: 'Active Customers vs Churned Customers',
+  },
+
+  xAxis: {
+    categories: [],
+    tickmarkPlacement: 'on',
+    title: {
+      enabled: false,
+    },
+  },
+  yAxis: {
+    labels: {
+      format: '{value}',
+    },
+    title: {
+      text: 'Number of Customers',
+    },
+  },
+  exporting: {
+    enabled: false,
+  },
+  plotOptions: {
+    area: {
+      stacking: 'percent',
+      lineColor: '#ffffff',
+      lineWidth: 1,
+      marker: {
+        lineWidth: 1,
+        lineColor: '#ffffff',
+      },
+      accessibility: {
+        pointDescriptionFormatter: function (point) {
+          function round(x) {
+            return Math.round(x * 100) / 100;
+          }
+          return (
+            point.index +
+            1 +
+            ', ' +
+            point.category +
+            ', ' +
+            point.y +
+            ' millions, ' +
+            round(point.percentage) +
+            '%, ' +
+            point.series.name
+          );
+        },
+      },
+    },
+  },
+  series: [
+    {
+      name: 'Charge Count',
+      data: [],
+    },
+    {
+      name: 'Total Sales',
+      data: [],
+    },
+  ],
+};
+// estimated chart
+const EstimatedChart = {
+  chart: {
+    type: 'column',
+  },
+  title: {
+    text: 'Total Estimated Revenue vs Total Historical Revenue',
+  },
+  xAxis: {
+    categories: ['7 Days', '30 Days', '90 Days'],
+  },
+  exporting: {
+    enabled: false,
+  },
+  series: [
+    {
+      name: 'Total Estimated Revenue',
+      data: [],
+      color: '#007ffa',
+    },
+    {
+      name: 'Total Historical Revenue',
+      data: [],
+      color: '#202b35',
+    },
+  ],
+};
+// Checkout Chart
+const CheckoutChart = {
+  chart: {
+    type: 'area',
+    height: '260px',
+  },
+  // chartHeight: '300px',
+  title: {
+    text: 'Total Sales(Inc. Refunds) Recurring vs Checkout',
+  },
+  xAxis: {
+    allowDecimals: false,
+    labels: {
+      formatter: function () {
+        return this.value; // clean, unformatted number for year
+      },
+    },
+    accessibility: {
+      rangeDescription: '',
+    },
+  },
+  yAxis: {
+    title: {
+      text: 'Total Sales',
+    },
+    labels: {
+      formatter: function () {
+        return this.value / 1000 + 'k';
+      },
+    },
+  },
+  exporting: {
+    enabled: false,
+  },
+  tooltip: {
+    pointFormat:
+      '{series.name} had stockpiled <b>{point.y:,.0f}</b><br/>warheads in {point.x}',
+  },
+  plotOptions: {
+    area: {
+      // pointStart: 1940,
+      marker: {
+        enabled: false,
+        symbol: 'circle',
+        radius: 1,
+        states: {
+          hover: {
+            enabled: true,
+          },
+        },
+      },
+    },
+  },
+  series: [
+    {
+      name: 'Recurring',
+      data: [],
+    },
+    {
+      name: 'Checkout',
+      data: [],
+    },
+  ],
+};
+// Estimated Recurring Revenue Table
+const rows_Revenue = [
+  ['Estimated Revenue', '7', '30', '90'],
+  ['Queued Revenue', '$0', '$0', '$0'],
+  ['Error Revenue', '$0', '$0', '$0'],
+  ['Total Revenue', '$0', '$0', '$0'],
+];
+//Estimated Recurring Charges Table
+const rows_Charges = [
+  ['Estimated Revenue', '7', '30', '90'],
+  ['Queued Charges', '$0', '$0', '$0'],
+  ['Error Charges', '$0', '$0', '$0'],
+  ['Total Charges', '$0', '$0', '$0'],
+];
+/// Functionality
+  const [cardData, setCardData] = useState({
+    totalSales: "0", recurringSales: "0", salesPerCharge: "0", refunds: "0",
+    averageCheckoutCharge: "0", averageRecurringCharge: "0",
+    churnRate: "0", activeCustomers: "0", newCustomers: "0",
+    newSubscriptions: "0", cancelledSubscriptions: "0", sameDayCancelled: "0",
+    estimatedNinetyDays: "0", estimatedSevenDays: "0", estimatedThirtyDays: "0",
+  })
+
+  const [chartOptions,setChartOptions]=useState({
+    subscriptionsChart:SubscriptionsChart,
+    activeCustomerChart:CustomerChart,
+    refundChart:RefundChart,
+    saleChart:SaleChart,
+    activeChurnedCustomerChart:Active_Churned_CustomerChart,
+    estimatedChart:EstimatedChart,
+    checkoutChart:CheckoutChart
+    
+  })
+
+  const [tableData,setTableData]=useState({
+    revenueTable:rows_Revenue,
+    chargesTable:rows_Charges
+  })
+
+// const {loading,data, refetch}=useQuery(fetchReport,{
+//   variables:{granularity:filters.granularity,dataPeriodFor:filters.dataPeriodFor,dataByPeriod:filters.dataByPeriod}
+// })
+  const [getReport, { loading, data }] = useLazyQuery(fetchReport);
+
+  const getReportData = useCallback(() => {
+    getReport({
+      variables: { granularity: filters.granularity, dataPeriodFor: filters.dataPeriodFor, dataByPeriod: filters.dataByPeriod }
+    })
+  }, [filters, getReport])
+
+  useEffect(() => {
+    getReportData()
+  }, [])
+
+  useEffect(() => {
+  
+    if(data){
+      console.log(data,"Data")
+      const {
+        totalSales,
+        recurringSales,
+        salesPerCharge,
+        refunds,
+        averageCheckoutCharge,
+        averageRecurringCharge,
+        churnRate,
+        activeCustomers,
+        newCustomers,
+        newSubscriptions,
+        cancelledSubscriptions,
+        sameDayCancelled,
+
+        estimatedNinetyDays,
+        estimatedSevenDays,
+        estimatedThirtyDays,
+        historicalNinetyDaysRevenue,
+        historicalSevenDaysRevenue,
+        historicalThirtyDaysRevenue,
+        //charts Data
+        newVsCancelledData,
+        activeCustomersData,
+        refundsData,
+        totalSalesData,
+        activeVsChurnedData,
+        recurringVsCheckout,
+        ////tablesData
+        //Revenue table
+        sevenDaysErrorRevenue,
+        thirtyDaysErrorRevenue,
+        ninetyDaysErrorRevenue,
+        //Charges Table
+        sevenDaysUpcomingCharge,
+        thirtyDaysUpcomingCharge,
+        ninetyDaysUpcomingCharge,
+        sevenDaysErrorCharge,
+        thirtyDaysErrorCharge,
+        ninetyDaysErrorCharge
+      }=data.fetchRevenueTrend;
+
+      //setting cards data ....
+      setCardData({
+        ...cardData,
+        totalSales:totalSales,
+        recurringSales:recurringSales,
+        salesPerCharge:salesPerCharge,
+        refunds:refunds,
+        averageCheckoutCharge:averageCheckoutCharge,
+        averageRecurringCharge:averageRecurringCharge,
+        churnRate,
+        activeCustomers,
+        newCustomers,
+        newSubscriptions,
+        cancelledSubscriptions,
+        sameDayCancelled,
+        estimatedNinetyDays,
+        estimatedSevenDays,
+        estimatedThirtyDays
+      })
+
+      // setting chart Options
+
+      const newvsCalcelledSubscription={
+        ...chartOptions.subscriptionsChart,
+        xAxis: {categories: newVsCancelledData.map(data=>data.date),},
+        series: [
+          {
+            name: 'New Subscriptions',
+            data: newVsCancelledData.map(data=>parseInt(data.date.newSubscriptionsCount || 0)),
+            color: '#007ffa',
+          },
+          {
+            name: 'Cancellations',
+            data: newVsCancelledData.map(data=>-Math.abs(parseInt(data.date.cancelledSubscriptionsCount || 0))),
+            color: '#202b35',
+          },
+        ]
+      }
+
+      const newActiveCustomers={
+        ...chartOptions.activeCustomerChart,
+        xAxis: {categories: activeCustomersData.map(data=>data.date),},
+        series: [
+          {
+            name: '',
+            data: activeCustomersData.map(data=>parseInt(data.date.value || 0)),
+            color: '#202b35',
+          }
+        ]
+      }
+
+      const newRefundsData={
+        ...chartOptions.refundChart,
+        xAxis: {categories: refundsData.map(data=>data.date),},
+        series: [
+          {
+            name: 'Refund Count',
+            type: 'column',
+            yAxis: 1,
+            data: refundsData.map(data=>parseInt(data.data.refundsCount)),
+            color: '#959595',
+          },
+          {
+            name: 'Refund amount',
+            type: 'spline',
+            data: refundsData.map(data=>parseInt(data.data.value)),
+            color: '#202b35',
+          },
+        ]
+      }
+      
+      const newSalesData={
+        ...chartOptions.saleChart,
+        xAxis: {categories: totalSalesData.map(data=>data.date),crosshair: true, angle: 90,},
+        series: [
+          {
+            name: 'Charge Count',
+            type: 'column',
+            yAxis: 1,
+            data: totalSalesData.map(data=>parseInt(data.data?.chargeCount || "0")),
+            color: '#007ffa',
+          },
+          {
+            name: 'Total Sales',
+            type: 'spline',
+            data: totalSalesData.map(data=>parseInt(data.data.value)),
+            color: '#00a030',
+          },
+        ]
+      }
+
+      const newActiveVsChurnedData={
+        ...chartOptions.activeChurnedCustomerChart,
+       xAxis: {
+          ...chartOptions.activeChurnedCustomerChart.xAxis,
+          categories: activeVsChurnedData.map(data=>data.date)
+        },
+        series: [
+          {
+            name: 'Charge Count',
+            data: activeVsChurnedData.map(data=>parseInt(data.date.activeCustomers)),
+          },
+          {
+            name: 'Total Sales',
+            data: activeVsChurnedData.map(data=>parseInt(data.date.churnedCustomers)),
+          },
+        ]
+      }
+
+      const newEstimatedData={
+        ...chartOptions.estimatedChart,
+        series: [
+          {
+            name: 'Total Estimated Revenue',
+            data: [estimatedNinetyDays,estimatedSevenDays,estimatedThirtyDays],
+            color: '#007ffa',
+          },
+          {
+            name: 'Total Historical Revenue',
+            data: [historicalNinetyDaysRevenue,historicalSevenDaysRevenue,historicalThirtyDaysRevenue,],
+            color: '#202b35',
+          },
+        ]
+      }
+
+      const newCheckoutChartData={
+        ...chartOptions.checkoutChart,
+        xAxis: {...chartOptions.checkoutChart.xAxis,categories: recurringVsCheckout.map(data=>data.date)},
+        series: [
+          {
+            name: 'Recurring',
+            data: recurringVsCheckout.map(data=>parseInt(data.data.recurringSales)),
+          },
+          {
+            name: 'Checkout',
+            data: recurringVsCheckout.map(data=>parseInt(data.data.oneTimeSales)),
+          },
+        ]
+      }
+      //// set New Chart Options
+      setChartOptions({
+        ...chartOptions,
+        subscriptionsChart:newvsCalcelledSubscription,
+        activeCustomerChart:newActiveCustomers,
+        refundChart:newRefundsData,
+        saleChart:newSalesData,
+        activeChurnedCustomerChart:newActiveVsChurnedData,
+        estimatedChart:newEstimatedData,
+        checkoutChart:newCheckoutChartData
+      });
+      // tables Data
+      const newRevenueTable=[
+        ['Estimated Revenue', '7', '30', '90'],
+        ['Queued Revenue',`$${estimatedSevenDays}`, `$${estimatedThirtyDays}`, `$${estimatedNinetyDays}`],
+        ['Error Revenue', `$${sevenDaysErrorRevenue}`, `$${thirtyDaysErrorRevenue}`, `$${ninetyDaysErrorRevenue}`],
+        ['Total Revenue', `$${parseInt(estimatedSevenDays)+parseInt(sevenDaysErrorRevenue)}`,
+                          `$${parseInt(estimatedThirtyDays)+parseInt(thirtyDaysErrorRevenue)}`,
+                          `$${parseInt(estimatedNinetyDays)+parseInt(ninetyDaysErrorRevenue)}`],
+      ]
+      const newChargesTable=[
+        ['Estimated Revenue', '7', '30', '90'],
+        ['Queued Charges', `$${sevenDaysUpcomingCharge}`, `$${thirtyDaysUpcomingCharge}`, `$${ninetyDaysUpcomingCharge}`],
+        ['Error Charges', `$${sevenDaysErrorCharge}`, `$${thirtyDaysErrorCharge}`, `$${ninetyDaysErrorCharge}`],
+        ['Total Charges', `$${parseInt(sevenDaysUpcomingCharge)+parseInt(sevenDaysErrorCharge)}`,
+                          `$${parseInt(thirtyDaysUpcomingCharge)+parseInt(thirtyDaysErrorCharge)}`,
+                          `$${parseInt(ninetyDaysUpcomingCharge)+parseInt(ninetyDaysErrorCharge)}`],
+      ]
+
+      setTableData({...tableData,revenueTable:newRevenueTable,chargesTable:newChargesTable})
+
+    }
+  }, [data,loading])
+
+
   const options_1 = [
     { label: 'Today', value: 'today' },
     { label: 'Yesterday', value: 'yesterday' },
@@ -35,16 +767,18 @@ const RevenueTrends = () => {
   ];
 
   const sectionRevenueList = [
-    { section: 'Total Sales', percent: '24', up: true, amount: '$47,433' },
+    { section: 'Total Sales', percent: '24', up: true,key:"totalSales" ,type:"currency" },
     {
       section: 'Recurring Sales',
       percent: '1',
       up: false,
-      amount: '67%',
+      key:"recurringSales",
+      type:"percent"
     },
-    { section: 'Sales Per Charge', percent: '2', up: true, amount: '$50.12' },
-    { section: 'Total Refunds', percent: '2', up: false, amount: '$50.12' },
+    { section: 'Sales Per Charge', percent: '2', up: true,key:"salesPerCharge", type:"currency" },
+    { section: 'Total Refunds', percent: '2', up: false, key:"refunds", type:"currency"},
   ];
+
   const sectionSummaryList = [
     {
       section: 'Total MRR',
@@ -110,13 +844,13 @@ const RevenueTrends = () => {
       section: 'Avg. Checkout Charge',
       percent: '24',
       up: true,
-      amount: '$55.00',
+      key:"averageCheckoutCharge"
     },
     {
       section: 'Avg. Recurring Charge',
       percent: '24',
       up: true,
-      amount: '$11,680',
+      key: 'averageRecurringCharge',
     },
   ];
   const sectionActiveCustomerList = [
@@ -124,19 +858,20 @@ const RevenueTrends = () => {
       section: 'Churn Rate',
       percent: '4',
       up: true,
-      amount: '$55.00',
+      key: 'churnRate',
+      type:"currency"
     },
     {
       section: 'New Customers',
       percent: '17',
       up: true,
-      amount: '300',
+      key: 'newCustomers',
     },
     {
       section: 'Active Customers',
       percent: '5',
       up: true,
-      amount: '500',
+      key: 'activeCustomers',
     },
   ];
   const sectionSubscriptionList = [
@@ -144,19 +879,20 @@ const RevenueTrends = () => {
       section: 'New Subs',
       percent: '4',
       up: true,
-      amount: '$55.00',
+      key: 'newSubscriptions',
+      type:"currency"
     },
     {
       section: 'New Cancel',
       percent: '17',
       up: true,
-      amount: '15',
+      key: 'cancelledSubscriptions',
     },
     {
       section: 'Same Day Cancel',
       percent: '5',
       up: true,
-      amount: '5',
+      key: 'sameDayCancelled',
     },
   ];
   const sectionFutureRevenuePlanningList = [
@@ -164,19 +900,19 @@ const RevenueTrends = () => {
       section: 'Est. Revenue',
       percent: '7',
       up: true,
-      amount: '$15,500',
+      key: 'estimatedSevenDays',
     },
     {
       section: 'Est. Revenue',
       percent: '30',
       up: true,
-      amount: '$47,500',
+      key: 'estimatedThirtyDays',
     },
     {
       section: 'Est. Revenue',
       percent: '90',
       up: true,
-      amount: '$125,200',
+      key: 'estimatedNinetyDays',
     },
   ];
 
@@ -209,678 +945,7 @@ const RevenueTrends = () => {
     '2020-11-14',
     '2020-11-15',
   ];
-  let sales = [
-    2000,
-    2000,
-    2100,
-    1500,
-    1700,
-    2400,
-    2300,
-    2400,
-    1800,
-    1700,
-    1500,
-    2300,
-    1800,
-    1780,
-    1800,
-    2100,
-    1900,
-    1000,
-    1900,
-    2300,
-    1800,
-    1900,
-    1900,
-    2100,
-    1800,
-    2000,
-  ];
-  let orders = [
-    45,
-    45,
-    50,
-    30,
-    33,
-    55,
-    20,
-    55,
-    33,
-    32,
-    29,
-    50,
-    40,
-    38,
-    40,
-    45,
-    43,
-    22,
-    35,
-    53,
-    25,
-    27,
-    27,
-    50,
-    25,
-    50,
-  ];
-  const SaleChart = {
-    chart: {
-      zoomType: 'xy',
-    },
-    title: {
-      text: 'Total Sales (Inc.Refunds)',
-    },
-    xAxis: [
-      {
-        categories: categories,
-        crosshair: true,
-        angle: 90,
-      },
-    ],
-    yAxis: [
-      {
-        // Primary yAxis
-        labels: {
-          format: '{value}',
-          style: {
-            color: '#202b35',
-          },
-        },
-        title: {
-          text: 'Total Sales',
-          style: {
-            color: '#202b35',
-          },
-        },
-      },
-      {
-        // Secondary yAxis
-        title: {
-          text: 'Charge Count',
-          style: {
-            color: '#202b35',
-          },
-        },
-        labels: {
-          format: '{value}',
-          style: {
-            color: '#202b35',
-          },
-        },
-        opposite: true,
-      },
-    ],
-    exporting: {
-      enabled: false,
-    },
-    tooltip: {
-      shared: true,
-    },
-    series: [
-      {
-        name: 'Charge Count',
-        type: 'column',
-        yAxis: 1,
-        data: orders,
-        color: '#007ffa',
-      },
-      {
-        name: 'Total Sales',
-        type: 'spline',
-        data: sales,
-        color: '#00a030',
-      },
-    ],
-  };
-
-  // Refund chart
-  let refunds = [
-    2000,
-    0,
-    0,
-    1500,
-    0,
-    2400,
-    0,
-    0,
-    0,
-    0,
-    1500,
-    0,
-    1800,
-    0,
-    0,
-    0,
-    0,
-    1000,
-    0,
-    0,
-    0,
-    0,
-    1900,
-    2100,
-    1800,
-    2000,
-  ];
-  let refund_counts = [
-    45,
-    0,
-    0,
-    30,
-    0,
-    55,
-    0,
-    0,
-    0,
-    0,
-    29,
-    0,
-    40,
-    0,
-    0,
-    0,
-    0,
-    22,
-    0,
-    53,
-    0,
-    0,
-    0,
-    0,
-    25,
-    50,
-  ];
-  const RefundChart = {
-    chart: {
-      zoomType: 'xy',
-    },
-    title: {
-      text: 'Refunds',
-    },
-    xAxis: [
-      {
-        categories: categories,
-        crosshair: true,
-      },
-    ],
-    yAxis: [
-      {
-        // Primary yAxis
-        labels: {
-          format: '{value}',
-          style: {
-            color: '#202b35',
-          },
-        },
-        title: {
-          text: 'Refund Amount',
-          style: {
-            color: '#202b35',
-          },
-        },
-      },
-      {
-        // Secondary yAxis
-        title: {
-          text: 'Refund Count',
-          style: {
-            color: '#202b35',
-          },
-        },
-        labels: {
-          format: '{value}',
-          style: {
-            color: '#202b35',
-          },
-        },
-        opposite: true,
-      },
-    ],
-    exporting: {
-      enabled: false,
-    },
-    tooltip: {
-      shared: true,
-    },
-    series: [
-      {
-        name: 'Refund Count',
-        type: 'column',
-        yAxis: 1,
-        data: refund_counts,
-        color: '#959595',
-      },
-      {
-        name: 'Refund amount',
-        type: 'spline',
-        data: refunds,
-        color: '#202b35',
-      },
-    ],
-  };
-
-  //checkout chart
-  let recurringOrders = [
-    900,
-    1500,
-    1300,
-    1800,
-    1100,
-    400,
-    1300,
-    1200,
-    1800,
-    2100,
-    1200,
-    1100,
-    1250,
-    1600,
-    1400,
-    1080,
-    1100,
-  ];
-  let checkoutOrders = [
-    700,
-    700,
-    400,
-    800,
-    400,
-    900,
-    930,
-    500,
-    700,
-    712,
-    780,
-    740,
-    600,
-    620,
-    800,
-    200,
-    800,
-  ];
-  const CheckoutChart = {
-    chart: {
-      type: 'area',
-      height: '260px',
-    },
-    // chartHeight: '300px',
-    title: {
-      text: 'Total Sales(Inc. Refunds) Recurring vs Checkout',
-    },
-    xAxis: {
-      allowDecimals: false,
-      labels: {
-        formatter: function () {
-          return this.value; // clean, unformatted number for year
-        },
-      },
-      accessibility: {
-        rangeDescription: '',
-      },
-    },
-    yAxis: {
-      title: {
-        text: 'Total Sales',
-      },
-      labels: {
-        formatter: function () {
-          return this.value / 1000 + 'k';
-        },
-      },
-    },
-    exporting: {
-      enabled: false,
-    },
-    tooltip: {
-      pointFormat:
-        '{series.name} had stockpiled <b>{point.y:,.0f}</b><br/>warheads in {point.x}',
-    },
-    plotOptions: {
-      area: {
-        // pointStart: 1940,
-        marker: {
-          enabled: false,
-          symbol: 'circle',
-          radius: 1,
-          states: {
-            hover: {
-              enabled: true,
-            },
-          },
-        },
-      },
-    },
-    series: [
-      {
-        name: 'Recurring',
-        data: recurringOrders,
-      },
-      {
-        name: 'Checkout',
-        data: checkoutOrders,
-      },
-    ],
-  };
-
-  // customer chart
-  let categories_2 = [
-    '2020-10-11',
-    '2020-10-12',
-    '2020-10-13',
-    '2020-10-14',
-    '2020-10-15',
-    '2020-10-16',
-    '2020-10-17',
-    '2020-10-18',
-    '2020-10-19',
-    '2020-10-20',
-    '2020-10-21',
-    '2020-10-22',
-    '2020-10-23',
-    '2020-10-24',
-    '2020-10-25',
-    '2020-10-26',
-    '2020-10-27',
-    '2020-10-28',
-    '2020-10-29',
-    '2020-10-30',
-  ];
-  let customers = [
-    2000,
-    0,
-    0,
-    1500,
-    0,
-    2500,
-    0,
-    0,
-    0,
-    0,
-    1100,
-    0,
-    1700,
-    0,
-    0,
-    0,
-    0,
-    1000,
-    0,
-    0,
-  ];
-  const CustomerChart = {
-    // chartHeight: '600px',
-    chart: {
-      height: '400px',
-    },
-    title: {
-      text: 'Active Customers',
-    },
-
-    yAxis: {
-      title: {
-        text: 'Active Customers',
-      },
-    },
-
-    xAxis: {
-      categories: categories_2,
-    },
-    exporting: {
-      enabled: false,
-    },
-    legend: {
-      enabled: false,
-    },
-
-    series: [
-      {
-        name: '',
-        data: customers,
-        color: '#202b35',
-      },
-    ],
-  };
-
-  // chart-active-churned-customers
-  let activeCustomers = [
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-    2000,
-  ];
-  let churnCustomers = [
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-    1000,
-  ];
-  const Active_Churned_CustomerChart = {
-    chart: {
-      type: 'area',
-    },
-    title: {
-      text: 'Active Customers vs Churned Customers',
-    },
-
-    xAxis: {
-      categories: categories,
-      tickmarkPlacement: 'on',
-      title: {
-        enabled: false,
-      },
-    },
-    yAxis: {
-      labels: {
-        format: '{value}',
-      },
-      title: {
-        text: 'Number of Customers',
-      },
-    },
-    exporting: {
-      enabled: false,
-    },
-    plotOptions: {
-      area: {
-        stacking: 'percent',
-        lineColor: '#ffffff',
-        lineWidth: 1,
-        marker: {
-          lineWidth: 1,
-          lineColor: '#ffffff',
-        },
-        accessibility: {
-          pointDescriptionFormatter: function (point) {
-            function round(x) {
-              return Math.round(x * 100) / 100;
-            }
-            return (
-              point.index +
-              1 +
-              ', ' +
-              point.category +
-              ', ' +
-              point.y +
-              ' millions, ' +
-              round(point.percentage) +
-              '%, ' +
-              point.series.name
-            );
-          },
-        },
-      },
-    },
-    series: [
-      {
-        name: 'Charge Count',
-        data: activeCustomers,
-      },
-      {
-        name: 'Total Sales',
-        data: churnCustomers,
-      },
-    ],
-  };
-  // subscriptions chart
-  const SubscriptionsChart = {
-    chart: {
-      type: 'column',
-    },
-    title: {
-      text: 'New Subscriptions vs Cancellations',
-    },
-    xAxis: {
-      categories: [
-        '2020-10-11',
-        '2020-10-12',
-        '2020-10-13',
-        '2020-10-14',
-        '2020-10-15',
-        '2020-10-16',
-        '2020-10-17',
-        '2020-10-18',
-        '2020-10-19',
-        '2020-10-20',
-        '2020-10-21',
-        '2020-10-22',
-        '2020-10-23',
-        '2020-10-24',
-        '2020-10-25',
-        '2020-10-26',
-        '2020-10-27',
-        '2020-10-28',
-      ],
-    },
-    yAxis: {
-      title: {
-        text: 'Number of Subscription',
-      },
-    },
-    exporting: {
-      enabled: false,
-    },
-    plotOptions: {
-      column: {
-        stacking: 'normal',
-      },
-    },
-    series: [
-      {
-        name: 'New Subscriptions',
-        data: [5, 3, 4, 7, 2, 3, 4, 5, 6, 1, 4, 4, 2, 5, 6, 1, 7, 4],
-        color: '#007ffa',
-      },
-      {
-        name: 'Cancellations',
-        data: [
-          -2,
-          -2,
-          -3,
-          -2,
-          -1,
-          -1,
-          -3,
-          -5,
-          -7,
-          -8,
-          -9,
-          -4,
-          -1,
-          -2,
-          -4,
-          -4,
-          -1,
-          -2,
-        ],
-        color: '#202b35',
-      },
-    ],
-  };
-  // estimated chart
-  const EstimatedChart = {
-    chart: {
-      type: 'column',
-    },
-    title: {
-      text: 'Total Estimated Revenue vs Total Historical Revenue',
-    },
-    xAxis: {
-      categories: ['7 Days', '30 Days', '90 Days'],
-    },
-    exporting: {
-      enabled: false,
-    },
-    series: [
-      {
-        name: 'Total Estimated Revenue',
-        data: [15500, 47500, 125200],
-        color: '#007ffa',
-      },
-      {
-        name: 'Total Historical Revenue',
-        data: [11500, 44500, 101800],
-        color: '#202b35',
-      },
-    ],
-  };
-  // Estimated Recurring Revenue Table
-  const rows_Revenue = [
-    ['Estimated Revenue', '7', '30', '90'],
-    ['Queued Revenue', '$15,500', '$47,500', '$125,200'],
-    ['Error Revenue', '0', '$250', '$500'],
-    ['Total Revenue', '$125,200', '$47,750', '$125,700'],
-  ];
-  //Estimated Recurring Charges Table
-  const rows_Charges = [
-    ['Estimated Revenue', '7', '30', '90'],
-    ['Queued Revenue', '212', '946', '3050'],
-    ['Error Revenue', '0', '2', '12'],
-    ['Total Revenue', '212', '948', '3062'],
-  ];
+  
   return (
     <FormLayout>
       <Layout>
@@ -906,40 +971,43 @@ const RevenueTrends = () => {
                         <p>Date Granularity</p>
                         <div className="select">
                           <Select
-                            options={options_1}
-                            onChange={handleSelectChange_1}
-                            value={selected_1}
+                            options={selectOptions}
+                            onChange={value=>setFilters({...filters,granularity:value})}
+                            value={filters.granularity}
                           />
                         </div>
-                        <div className="select">
+                        {/* <div className="select">
                           <Select
                             options={options_1}
                             onChange={handleSelectChange_1}
                             value={selected_1}
                           />
-                        </div>
+                        </div> */}
                       </div>
                       <div className="form-inline-child">
                         <p>Date Range</p>
-                        <div className="select">
+                        {/* <div className="select">
                           <Select
                             options={options_1}
                             onChange={handleSelectChange_1}
                             value={selected_1}
                           />
-                        </div>
+                        </div> */}
                         <div className="textfield">
-                          <TextField value="30"></TextField>
+                          <TextField 
+                          value={filters.dataPeriodFor}
+                          onChange={value=>setFilters({...filters,dataPeriodFor:value})}
+                          ></TextField>
                         </div>
                         <div className="select">
                           <Select
-                            options={options_1}
-                            onChange={handleSelectChange_1}
-                            value={selected_1}
+                            options={selectOptions}
+                            onChange={value=>setFilters({...filters,dataByPeriod:value})}
+                            value={filters.dataByPeriod}
                           />
                         </div>
                       </div>
-                      <Button primary>
+                      <Button primary onClick={()=>getReportData()} >
                         {'   '}Run{'   '}
                       </Button>
                     </form>
@@ -963,8 +1031,7 @@ const RevenueTrends = () => {
                             {item.section}
                           </TextStyle>
                         </Stack.Item>
-
-                        <Stack.Item>
+                        {/* <Stack.Item>
                           <TextStyle
                             variation={item.up ? 'positive' : 'negative'}
                           >
@@ -974,14 +1041,15 @@ const RevenueTrends = () => {
                             />
                             {item.percent}%
                           </TextStyle>
-                        </Stack.Item>
+                        </Stack.Item> */}
                       </Stack>
 
                       <Stack>
                         <Stack.Item>
                           <DisplayText size="medium">
                             <TextStyle variation="strong">
-                              {item.amount}
+                             <CounterUp prefix={item.type=="currency"?"$":""} suffix={item.type=="percent"?"%":""} start={0} end={Number.parseFloat(cardData[item.key]).toFixed(2)} duration={1.5} decimals={2} />
+                              {/* {`${item.type=="currency"?"$":""}${Number.parseFloat(cardData[item.key]).toFixed(2)}${item.type=="percent"?"%":""}`} */}
                             </TextStyle>
                           </DisplayText>
                         </Stack.Item>
@@ -992,7 +1060,7 @@ const RevenueTrends = () => {
               </Stack>
             </Layout.Section>
           </Layout>
-          <Layout>
+          {/* <Layout>
             <Layout.Section>
               <DisplayText size="medium">Summary</DisplayText>
 
@@ -1043,8 +1111,8 @@ const RevenueTrends = () => {
                 ))}
               </Stack>
             </Layout.Section>
-          </Layout>
-          <Layout>
+          </Layout> */}
+          {/* <Layout>
             <Layout.Section>
               <TextStyle variation="strong">
                 Metrics indicate changes of this month vs last month, on a
@@ -1097,17 +1165,17 @@ const RevenueTrends = () => {
                 ))}
               </Stack>
             </Layout.Section>
-          </Layout>
+          </Layout> */}
           <Layout>
             <Layout.Section>
               <Heading>{'  '}</Heading>
-              <HighchartsReact highcharts={Highcharts} options={SaleChart} />
+              <HighchartsReact highcharts={Highcharts} options={chartOptions.saleChart} />
             </Layout.Section>
           </Layout>
           <Layout>
             <Layout.Section>
               <Heading>{'  '}</Heading>
-              <HighchartsReact highcharts={Highcharts} options={RefundChart} />
+              <HighchartsReact highcharts={Highcharts} options={chartOptions.refundChart} />
             </Layout.Section>
           </Layout>
           <Layout>
@@ -1122,7 +1190,7 @@ const RevenueTrends = () => {
                             {item.section}
                           </TextStyle>
                         </Stack.Item>
-                        <Stack.Item>
+                        {/* <Stack.Item>
                           <TextStyle
                             variation={item.up ? 'positive' : 'negative'}
                           >
@@ -1132,13 +1200,14 @@ const RevenueTrends = () => {
                             />
                             {item.percent}%
                           </TextStyle>
-                        </Stack.Item>
+                        </Stack.Item> */}
                       </Stack>
                       <Stack>
                         <Stack.Item>
                           <DisplayText size="medium">
                             <TextStyle variation="strong">
-                              {item.amount}
+                            <CounterUp prefix="$"  start={0} end={Number.parseFloat(cardData[item.key]).toFixed(2)} duration={1.5} decimals={2} />
+                              {/* {`$${Number.parseFloat(cardData[item.key]).toFixed(2)}`} */}
                             </TextStyle>
                           </DisplayText>
                         </Stack.Item>
@@ -1151,17 +1220,15 @@ const RevenueTrends = () => {
             <Layout.Section>
               <HighchartsReact
                 highcharts={Highcharts}
-                options={CheckoutChart}
+                options={chartOptions.checkoutChart}
               />
             </Layout.Section>
           </Layout>
-          <Stack.Item>
             <Layout>
               <Layout.Section>
                 <DisplayText size="medium">Active Customers</DisplayText>
               </Layout.Section>
             </Layout>
-            <br />
             <Layout>
               <Layout.Section secondary>
                 <Stack vertical distribution="equalSpacing">
@@ -1177,7 +1244,7 @@ const RevenueTrends = () => {
                               {item.section}
                             </TextStyle>
                           </Stack.Item>
-                          <Stack.Item>
+                          {/* <Stack.Item>
                             <TextStyle
                               variation={item.up ? 'positive' : 'negative'}
                             >
@@ -1187,13 +1254,14 @@ const RevenueTrends = () => {
                               />
                               {item.percent}%
                             </TextStyle>
-                          </Stack.Item>
+                          </Stack.Item> */}
                         </Stack>
                         <Stack>
                           <Stack.Item>
                             <DisplayText size="medium">
                               <TextStyle variation="strong">
-                                {item.amount}
+                              <CounterUp prefix={item.type=="currency"?"$":""}  start={0} end={Number.parseFloat(cardData[item.key]).toFixed(2)} duration={1.5} decimals={2} />
+                              {/* {`${item.type=="currency"?"$":""}${Number.parseFloat(cardData[item.key] || 0.0).toFixed(2)}`} */}
                               </TextStyle>
                             </DisplayText>
                           </Stack.Item>
@@ -1206,17 +1274,16 @@ const RevenueTrends = () => {
               <Layout.Section>
                 <HighchartsReact
                   highcharts={Highcharts}
-                  options={CustomerChart}
+                  options={chartOptions.activeCustomerChart}
                 />
               </Layout.Section>
             </Layout>
-          </Stack.Item>
           <Layout>
             <Layout.Section>
               <Heading>{'  '}</Heading>
               <HighchartsReact
                 highcharts={Highcharts}
-                options={Active_Churned_CustomerChart}
+                options={chartOptions.activeChurnedCustomerChart}
               />
             </Layout.Section>
           </Layout>
@@ -1239,7 +1306,7 @@ const RevenueTrends = () => {
                               {item.section}
                             </TextStyle>
                           </Stack.Item>
-                          <Stack.Item>
+                          {/* <Stack.Item>
                             <TextStyle
                               variation={item.up ? 'positive' : 'negative'}
                             >
@@ -1249,13 +1316,14 @@ const RevenueTrends = () => {
                               />
                               {item.percent}%
                             </TextStyle>
-                          </Stack.Item>
+                          </Stack.Item> */}
                         </Stack>
                         <Stack>
                           <Stack.Item>
                             <DisplayText size="medium">
                               <TextStyle variation="strong">
-                                {item.amount}
+                              <CounterUp prefix={item.type=="currency"?"$":""} start={0} end={Number.parseFloat(cardData[item.key] || 0.0).toFixed(2)} duration={1.5} decimals={2} />
+                              {/* {`${item.type=="currency"?"$":""}${Number.parseFloat(cardData[item.key] || 0.0).toFixed(2)}`} */}
                               </TextStyle>
                             </DisplayText>
                           </Stack.Item>
@@ -1268,7 +1336,7 @@ const RevenueTrends = () => {
               <Layout.Section>
                 <HighchartsReact
                   highcharts={Highcharts}
-                  options={SubscriptionsChart}
+                  options={chartOptions.subscriptionsChart}
                 />
               </Layout.Section>
             </Layout>
@@ -1314,7 +1382,8 @@ const RevenueTrends = () => {
                           <Stack.Item>
                             <DisplayText size="medium">
                               <TextStyle variation="strong">
-                                {item.amount}
+                              <CounterUp prefix="$" start={0} end={Number.parseFloat(cardData[item.key] || 0.0).toFixed(2)} duration={1.5} decimals={2} />
+                              {/* {`$${Number.parseFloat(cardData[item.key] || 0.0).toFixed(2)}`} */}
                               </TextStyle>
                             </DisplayText>
                           </Stack.Item>
@@ -1327,7 +1396,7 @@ const RevenueTrends = () => {
               <Layout.Section>
                 <HighchartsReact
                   highcharts={Highcharts}
-                  options={EstimatedChart}
+                  options={chartOptions.estimatedChart}
                 />
               </Layout.Section>
             </Layout>
@@ -1340,15 +1409,15 @@ const RevenueTrends = () => {
                     showTotalsInFooter
                     columnContentTypes={['text', 'text', 'text', 'text']}
                     headings={[' ', ' ', ' ', ' ']}
-                    rows={rows_Revenue}
+                    rows={tableData.revenueTable}
                   />
                 </Card>
-                <Card title="Estimated Recurring Revenue Table">
+                <Card title="Estimated Recurring Charges Table">
                   <DataTable
                     showTotalsInFooter
                     columnContentTypes={['text', 'text', 'text', 'text']}
                     headings={[' ', ' ', ' ', ' ']}
-                    rows={rows_Charges}
+                    rows={tableData.chargesTable}
                   />
                 </Card>
               </Stack>
