@@ -338,11 +338,7 @@ const Active_Churned_CustomerChart = {
   },
 
   xAxis: {
-    categories: [],
-    tickmarkPlacement: 'on',
-    title: {
-      enabled: false,
-    },
+    categories: []
   },
   yAxis: {
     labels: {
@@ -387,12 +383,18 @@ const Active_Churned_CustomerChart = {
   },
   series: [
     {
-      name: 'Charge Count',
+      name: 'Active Customers',
       data: [],
+      marker: {
+        enabled: false
+      }
     },
     {
-      name: 'Total Sales',
+      name: 'Churned Customers',
       data: [],
+      marker: {
+        enabled: false
+      }
     },
   ],
 };
@@ -614,12 +616,12 @@ const rows_Charges = [
         series: [
           {
             name: 'New Subscriptions',
-            data: newVsCancelledData.map(data=>parseInt(data.date.newSubscriptionsCount || 0)),
+            data: newVsCancelledData.map(data=>parseInt(data.data.newSubscriptionsCount || 0)),
             color: '#007ffa',
           },
           {
             name: 'Cancellations',
-            data: newVsCancelledData.map(data=>-Math.abs(parseInt(data.date.cancelledSubscriptionsCount || 0))),
+            data: newVsCancelledData.map(data=>-Math.abs(parseInt(data.data.cancelledSubscriptionsCount || 0))),
             color: '#202b35',
           },
         ]
@@ -631,7 +633,7 @@ const rows_Charges = [
         series: [
           {
             name: '',
-            data: activeCustomersData.map(data=>parseInt(data.date.value || 0)),
+            data: activeCustomersData.map(data=>parseInt(data.data.value || 0)),
             color: '#202b35',
           }
         ]
@@ -685,12 +687,18 @@ const rows_Charges = [
         },
         series: [
           {
-            name: 'Charge Count',
-            data: activeVsChurnedData.map(data=>parseInt(data.date.activeCustomers)),
+            name: 'Active Customers',
+            data: activeVsChurnedData.map(data=>parseInt(data.data.activeCustomers)),
+            marker: {
+              enabled: false
+            }
           },
           {
-            name: 'Total Sales',
-            data: activeVsChurnedData.map(data=>parseInt(data.date.churnedCustomers)),
+            name: 'Churned Customers',
+            data: activeVsChurnedData.map(data=>parseInt(data.data.churnedCustomers)),
+            marker: {
+              enabled: false
+            }
           },
         ]
       }
@@ -739,19 +747,19 @@ const rows_Charges = [
       // tables Data
       const newRevenueTable=[
         ['Estimated Revenue', '7', '30', '90'],
-        ['Queued Revenue',`$${estimatedSevenDays}`, `$${estimatedThirtyDays}`, `$${estimatedNinetyDays}`],
-        ['Error Revenue', `$${sevenDaysErrorRevenue}`, `$${thirtyDaysErrorRevenue}`, `$${ninetyDaysErrorRevenue}`],
-        ['Total Revenue', `$${parseInt(estimatedSevenDays)+parseInt(sevenDaysErrorRevenue)}`,
-                          `$${parseInt(estimatedThirtyDays)+parseInt(thirtyDaysErrorRevenue)}`,
-                          `$${parseInt(estimatedNinetyDays)+parseInt(ninetyDaysErrorRevenue)}`],
+        ['Queued Revenue',estimatedSevenDays, estimatedThirtyDays, estimatedNinetyDays],
+        ['Error Revenue', sevenDaysErrorRevenue,thirtyDaysErrorRevenue, ninetyDaysErrorRevenue],
+        ['Total Revenue', parseInt(estimatedSevenDays)+parseInt(sevenDaysErrorRevenue),
+                          parseInt(estimatedThirtyDays)+parseInt(thirtyDaysErrorRevenue),
+                          parseInt(estimatedNinetyDays)+parseInt(ninetyDaysErrorRevenue)],
       ]
       const newChargesTable=[
         ['Estimated Revenue', '7', '30', '90'],
-        ['Queued Charges', `$${sevenDaysUpcomingCharge}`, `$${thirtyDaysUpcomingCharge}`, `$${ninetyDaysUpcomingCharge}`],
-        ['Error Charges', `$${sevenDaysErrorCharge}`, `$${thirtyDaysErrorCharge}`, `$${ninetyDaysErrorCharge}`],
-        ['Total Charges', `$${parseInt(sevenDaysUpcomingCharge)+parseInt(sevenDaysErrorCharge)}`,
-                          `$${parseInt(thirtyDaysUpcomingCharge)+parseInt(thirtyDaysErrorCharge)}`,
-                          `$${parseInt(ninetyDaysUpcomingCharge)+parseInt(ninetyDaysErrorCharge)}`],
+        ['Queued Charges', sevenDaysUpcomingCharge, thirtyDaysUpcomingCharge,ninetyDaysUpcomingCharge],
+        ['Error Charges', sevenDaysErrorCharge,thirtyDaysErrorCharge,ninetyDaysErrorCharge],
+        ['Total Charges', parseInt(sevenDaysUpcomingCharge)+parseInt(sevenDaysErrorCharge),
+                         parseInt(thirtyDaysUpcomingCharge)+parseInt(thirtyDaysErrorCharge),
+                          parseInt(ninetyDaysUpcomingCharge)+parseInt(ninetyDaysErrorCharge)],
       ]
 
       setTableData({...tableData,revenueTable:newRevenueTable,chargesTable:newChargesTable})
@@ -1049,7 +1057,6 @@ const rows_Charges = [
                           <DisplayText size="medium">
                             <TextStyle variation="strong">
                              <CounterUp prefix={item.type=="currency"?"$":""} suffix={item.type=="percent"?"%":""} start={0} end={Number.parseFloat(cardData[item.key]).toFixed(2)} duration={1.5} decimals={2} />
-                              {/* {`${item.type=="currency"?"$":""}${Number.parseFloat(cardData[item.key]).toFixed(2)}${item.type=="percent"?"%":""}`} */}
                             </TextStyle>
                           </DisplayText>
                         </Stack.Item>
@@ -1207,7 +1214,6 @@ const rows_Charges = [
                           <DisplayText size="medium">
                             <TextStyle variation="strong">
                             <CounterUp prefix="$"  start={0} end={Number.parseFloat(cardData[item.key]).toFixed(2)} duration={1.5} decimals={2} />
-                              {/* {`$${Number.parseFloat(cardData[item.key]).toFixed(2)}`} */}
                             </TextStyle>
                           </DisplayText>
                         </Stack.Item>
@@ -1260,8 +1266,7 @@ const rows_Charges = [
                           <Stack.Item>
                             <DisplayText size="medium">
                               <TextStyle variation="strong">
-                              <CounterUp prefix={item.type=="currency"?"$":""}  start={0} end={Number.parseFloat(cardData[item.key]).toFixed(2)} duration={1.5} decimals={2} />
-                              {/* {`${item.type=="currency"?"$":""}${Number.parseFloat(cardData[item.key] || 0.0).toFixed(2)}`} */}
+                              <CounterUp prefix={item.type=="currency"?"$":""}  start={0} end={Number.parseFloat(cardData[item.key]).toFixed(2)} duration={1.5} decimals={item.type=="currency"?2:0} />
                               </TextStyle>
                             </DisplayText>
                           </Stack.Item>
@@ -1322,8 +1327,7 @@ const rows_Charges = [
                           <Stack.Item>
                             <DisplayText size="medium">
                               <TextStyle variation="strong">
-                              <CounterUp prefix={item.type=="currency"?"$":""} start={0} end={Number.parseFloat(cardData[item.key] || 0.0).toFixed(2)} duration={1.5} decimals={2} />
-                              {/* {`${item.type=="currency"?"$":""}${Number.parseFloat(cardData[item.key] || 0.0).toFixed(2)}`} */}
+                              <CounterUp  start={0} end={Number.parseFloat(cardData[item.key] || 0.0).toFixed(2)} duration={1.5}  />
                               </TextStyle>
                             </DisplayText>
                           </Stack.Item>
@@ -1383,7 +1387,6 @@ const rows_Charges = [
                             <DisplayText size="medium">
                               <TextStyle variation="strong">
                               <CounterUp prefix="$" start={0} end={Number.parseFloat(cardData[item.key] || 0.0).toFixed(2)} duration={1.5} decimals={2} />
-                              {/* {`$${Number.parseFloat(cardData[item.key] || 0.0).toFixed(2)}`} */}
                               </TextStyle>
                             </DisplayText>
                           </Stack.Item>
