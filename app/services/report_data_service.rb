@@ -225,4 +225,9 @@ class ReportDataService
   def error_transactions_count
     subscription.node.orders.edges.sum { |order| order.node.transactions.sum { |transaction| transaction.status == 'ERROR' ? 1 : 0 } }
   end
+
+  def same_day_cancelled
+    subscription_ids = @subscriptions.map{ |subscription| subscription.node.id }
+    SubscriptionContract.where.not(shopify_id: subscription_ids, status: 'CANCELLED').where('shopify_created_at::date = cancelled_at::date').count
+  end
 end

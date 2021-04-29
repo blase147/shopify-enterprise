@@ -76,6 +76,8 @@ class SubscriptionDraftsService < GraphqlService
       subscriptionDraftCommit(draftId: $draftId) {
         contract {
           id
+          status
+          createdAt
         }
         userErrors {
           code

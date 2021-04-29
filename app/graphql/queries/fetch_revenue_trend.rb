@@ -12,13 +12,13 @@ module Queries
       range = Date.today - data_period_for.to_i.send(data_by_period)..Date.today
       in_period_subscriptions = data_service.in_period_subscriptions(subscriptions, range)
       range_data_service = ReportDataService.new(in_period_subscriptions, orders, granularity, range)
-      total_sales = data_service.get_total_sales
+      total_sales = data_service.get_total_sales.to_f.round(2)
       recurring_sales = data_service.recurring_sales
       sales_per_charge = data_service.sales_per_charge
       total_refunds = range_data_service.total_refunds
       new_subscriptions = range_data_service.in_period_subscriptions(subscriptions, Date.today - 1.month..Date.today, 'ACTIVE').count
       cancelled_subscriptions = range_data_service.in_period_subscriptions(subscriptions, Date.today - 1.month..Date.today, 'CANCELLED').count
-      average_checkout_charge = range_data_service.checkout_charge
+      average_checkout_charge = range_data_service.checkout_charge.to_f.round(2)
       average_recurring_charge = range_data_service.recurring_charge
       new_customers = range_data_service.new_customers
       active_customers = range_data_service.get_subscriptions_count(in_period_subscriptions, 'ACTIVE')
@@ -28,6 +28,7 @@ module Queries
       refunds_data = range_data_service.graph_data_by_granularity(:refunds_data)
       active_customers_data = range_data_service.graph_data_by_granularity(:active_customers_data)
       new_vs_cancelled_data = range_data_service.graph_data_by_granularity(:new_vs_cancelled_data)
+      same_day_cancelled = range_data_service.same_day_cancelled
       estimated_seven_days = data_service.get_upcoming_revenue(7)
       estimated_thirty_days = data_service.get_upcoming_revenue(30)
       estimated_ninety_days = data_service.get_upcoming_revenue(90)
@@ -53,7 +54,8 @@ module Queries
         historical_seven_days_revenue: historical_seven_days_revenue, historical_thirty_days_revenue: historical_thirty_days_revenue, historical_ninety_days_revenue: historical_ninety_days_revenue,
         seven_days_error_revenue: seven_days_error_revenue, thirty_days_error_revenue: thirty_days_error_revenue, ninety_days_error_revenue: ninety_days_error_revenue,
         seven_days_upcoming_charge: seven_days_upcoming_charge, thirty_days_upcoming_charge: thirty_days_upcoming_charge, ninety_days_upcoming_charge: ninety_days_upcoming_charge,
-        seven_days_error_charge: seven_days_error_charge, thirty_days_error_charge: thirty_days_error_charge, ninety_days_error_charge: ninety_days_error_charge, recurring_vs_checkout: recurring_vs_checkout }
+        seven_days_error_charge: seven_days_error_charge, thirty_days_error_charge: thirty_days_error_charge, ninety_days_error_charge: ninety_days_error_charge, recurring_vs_checkout: recurring_vs_checkout,
+        same_day_cancelled: same_day_cancelled }
     end
   end
 end

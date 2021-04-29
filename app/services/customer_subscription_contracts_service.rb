@@ -78,6 +78,23 @@ class CustomerSubscriptionContractsService < GraphqlService
     }
   GRAPHQL
 
+  CREATE_QUERY = <<-GRAPHQL
+    query($id: ID!){
+      customer(id: $id) {
+        id
+        subscriptionContracts(first: #{PAGE}, reverse: true) {
+          edges {
+            node {
+              id
+              status
+              createdAt
+            }
+          }
+        }
+      }
+    }
+  GRAPHQL
+
   def initialize customer_id
     @customer_id = customer_id
   end
@@ -105,5 +122,15 @@ class CustomerSubscriptionContractsService < GraphqlService
   # rescue Exception => ex
   #   p ex.message
   #   { error: ex.message }
+  end
+
+  def create_contracts
+    result = client.query(client.parse(CREATE_QUERY), variables: { id: @customer_id })
+    data = result.data.customer
+    data.subscription_contracts.edges.each do |subscription|
+      node = subscription.node
+      contract = SubscriptionContract.find_or_create_by(shopify_id: node.id, customer_shopify_id: data.id)
+      contract.update(status: node.status, shopify_created_at: node.created_at)
+    end
   end
 end

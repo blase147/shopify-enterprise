@@ -6,6 +6,7 @@ class ReportService < GraphqlService
       subscriptionContracts(first: #{PAGE}, reverse: true) {
         edges {
           node {
+            id
             createdAt
             status
             nextBillingDate
