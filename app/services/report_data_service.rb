@@ -200,15 +200,15 @@ class ReportDataService
   end
 
   def get_upcoming_revenue(day_count)
-    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.node.next_billing_date) ? get_orders_total_amount(subscription) : 0 }.to_f.round(2)
+    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.node.next_billing_date.to_date) ? get_orders_total_amount(subscription) : 0 }.to_f.round(2)
   end
 
   def get_upcoming_historical_revenue(day_count)
-    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.node.next_billing_date) ? subscription.node.orders.edges.sum { |order| order.node.original_total_price_set.presentment_money.amount.to_f } : 0 }.to_f.round(2)
+    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.node.next_billing_date.to_date) ? subscription.node.orders.edges.sum { |order| order.node.original_total_price_set.presentment_money.amount.to_f } : 0 }.to_f.round(2)
   end
 
   def get_upcoming_error_revenue(day_count)
-    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.node.next_billing_date) ? subscription.node.orders.edges.sum { |order| calculated_error_revenue(order) } : 0}.to_f.round(2)
+    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.node.next_billing_date.to_date) ? subscription.node.orders.edges.sum { |order| calculated_error_revenue(order) } : 0}.to_f.round(2)
   end
 
   def calculated_error_revenue(order)
@@ -216,7 +216,7 @@ class ReportDataService
   end
 
   def get_upcoming_charge(day_count)
-    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.node.next_billing_date) ? 1 : 0 }
+    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.node.next_billing_date.to_date) ? 1 : 0 }
   end
 
   def recurring_vs_checkout_data(range)
@@ -227,7 +227,7 @@ class ReportDataService
   end
 
   def get_upcoming_error_charges(day_count)
-    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.node.next_billing_date) ? error_transactions_count(subscription) : 0 }
+    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.node.next_billing_date.to_date) ? error_transactions_count(subscription) : 0 }
   end
 
   def error_transactions_count
