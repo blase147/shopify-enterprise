@@ -230,7 +230,7 @@ class ReportDataService
     @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.node.next_billing_date.to_date) ? error_transactions_count(subscription) : 0 }
   end
 
-  def error_transactions_count
+  def error_transactions_count(subscription)
     subscription.node.orders.edges.sum { |order| order.node.transactions.sum { |transaction| transaction.status == 'ERROR' ? 1 : 0 } }
   end
 
