@@ -237,7 +237,7 @@ const Dashboard = (props) => {
 
   const sectionList = [
     { section: 'MRR', amount: '0', key: "mrr" ,type:"currency" },
-    { section: 'Active Subscriptions', amount: '00', key: "subscriptions",type:"currency" },
+    { section: 'Active Subscriptions', amount: '00', key: "subscriptions"},
     { section: 'Churn Rate', amount: '0', key: "churn_rate",type:"percent" },
     { section: 'Customer Lifetime Value', amount: '0', key: "cl_value" ,type:"percent"},
     // { section: 'MBR', percent: '24', up: true, amount: '$47,433' },

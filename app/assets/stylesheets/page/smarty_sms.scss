@@ -23,9 +23,9 @@ $primary: #007EFF;
     font-size: 14px;
     padding-left: 10px;
     height:40px;
-  
-  } 
-  
+
+  }
+
 }
 
 .example {
@@ -38,7 +38,7 @@ $primary: #007EFF;
       border-right: 0;
     }
   }
-  
+
 	input[type=text] {
 		padding: 10px;
 		font-size: 14px;
@@ -71,7 +71,8 @@ $primary: #007EFF;
 		display: table;
 	}
 }
-.message-table, td, th {
+
+.message-table, .message-table td, .message-table th {
   border: 1px solid lightgrey;
   padding: 10px;
   text-align: left;
@@ -129,7 +130,7 @@ $primary: #007EFF;
     button {
       background: #637381;
       margin-right: 10px;
-      
+
     }
   }
   .active-status-btn {
@@ -150,7 +151,7 @@ $primary: #007EFF;
     padding: 11px 8px;
     font-size: 12px;
   }
- 
+
 }
 .message-pagination {
   margin-top: 50px;
@@ -209,7 +210,7 @@ $primary: #007EFF;
   flex-basis: 100%;
   gap: 20px;
   margin-top: 15px;
-  
+
   > * {
     flex-basis: 100%;
   }
@@ -252,7 +253,7 @@ $primary: #007EFF;
   p {
     color:#000000;
   }
- 
+
   .available-variables {
     margin-top: 47px;
     button {
