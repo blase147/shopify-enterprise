@@ -1,29 +1,46 @@
-import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
-import { gql, useQuery, useLazyQuery } from '@apollo/client';
-import CounterUp from 'react-countup';
-
+import { gql, useLazyQuery } from '@apollo/client';
 import {
-  Card,
-  FormLayout,
-  Icon,
-  Layout,
-  Page,
-  Stack,
-  Button,
-  Select,
+  Button, Card,
+
+
+
+
+
+
+
+
+
+
+
+  DataTable, DisplayText, FormLayout,
+
+
+
+
+
+
+
+
+
+  Heading, Layout,
+
+
+
+  Select, Stack,
+
+
   TextField,
-  DisplayText,
-  TextStyle,
-  Heading,
-  DataTable,
+
+  TextStyle
 } from '@shopify/polaris';
 import {
-  DropdownMinor,
-  CaretUpMinor,
-  CaretDownMinor,
+  DropdownMinor
 } from '@shopify/polaris-icons';
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import CounterUp from 'react-countup';
+
 
 const RevenueTrends = () => {
   const [expandedFilter, setExpandedFilter] = useState(false);
@@ -956,6 +973,7 @@ const rows_Charges = [
   
   return (
     <FormLayout>
+      <div className="analytics-page-layout">
       <Layout>
         <Stack vertical spacing="extraLoose">
           <Layout>
@@ -1405,6 +1423,7 @@ const rows_Charges = [
             </Layout>
           </Stack.Item>
           <Layout>
+            <div className="data-tabels">
             <Layout.Section>
               <Stack distribution="equalSpacing">
                 <Card title="Estimated Recurring Revenue Table">
@@ -1425,9 +1444,11 @@ const rows_Charges = [
                 </Card>
               </Stack>
             </Layout.Section>
+            </div>
           </Layout>
         </Stack>
       </Layout>
+      </div>
     </FormLayout>
   );
 };

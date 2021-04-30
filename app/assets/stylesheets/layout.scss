@@ -230,3 +230,28 @@
     }
   }
 }
+.module-Analytics {
+  .analytics-page-layout {
+    > .Polaris-Layout {
+      flex-wrap: nowrap;
+      >
+      .Polaris-Stack {
+        width: 97% !important;
+      }
+    }
+    
+    .data-tabels {
+      .Polaris-Stack__Item {
+        flex: 1;
+      }
+    }
+    
+  }
+  .Polaris-Tabs__TabContainer {
+    button {
+      &:first-child {
+        padding-left: 0px;
+      }
+    }
+  }
+}
