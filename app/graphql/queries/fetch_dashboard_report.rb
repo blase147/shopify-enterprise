@@ -4,7 +4,7 @@ module Queries
     argument :duration, String, required: true
 
     def resolve(duration:)
-      subscriptions = ReportService.new.get_subscriptions
+      subscriptions = ReportService.new.all_subscriptions
       data_service = ReportDataService.new(subscriptions)
       range = data_service.get_date_range(duration)
       subscriptions_in_period = data_service.in_period_subscriptions(subscriptions, range)

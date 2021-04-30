@@ -4,7 +4,12 @@ class ReportService < GraphqlService
   GET_SUBSCRIPTIONS = <<-GRAPHQL
    {
       subscriptionContracts(first: #{PAGE}, reverse: true) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+        }
         edges {
+          cursor
           node {
             id
             createdAt
@@ -53,11 +58,27 @@ class ReportService < GraphqlService
     }
   GRAPHQL
 
-  def get_subscriptions
-    result = client.query(client.parse(GET_SUBSCRIPTIONS))
-    result&.data&.subscription_contracts&.edges
+  def get_subscriptions cursor=nil
+    query = GET_SUBSCRIPTIONS
+    query = query.gsub("first: #{PAGE}", "first: #{PAGE} after: \"#{cursor}\"") if cursor.present?
+    result = client.query(client.parse(query))
+    result&.data&.subscription_contracts
   rescue Exception => ex
     p ex.message
     { error: ex.message }
+  end
+
+  def all_subscriptions
+    has_next_page = true
+    next_cursor = nil
+    subscriptions = []
+
+    while has_next_page
+      data = get_subscriptions next_cursor
+      subscriptions.push(data.edges || [])
+      has_next_page = data.page_info.has_next_page
+      next_cursor = data.edges.last.cursor
+    end
+    subscriptions.flatten
   end
 end

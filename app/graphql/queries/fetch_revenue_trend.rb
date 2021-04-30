@@ -7,7 +7,7 @@ module Queries
 
     def resolve(granularity: , data_period_for: , data_by_period:)
       orders = ShopifyAPI::Order.find(:all)
-      subscriptions = ReportService.new.get_subscriptions
+      subscriptions = ReportService.new.all_subscriptions
       data_service = ReportDataService.new(subscriptions, orders)
       range = Date.today - data_period_for.to_i.send(data_by_period)..Date.today
       in_period_subscriptions = data_service.in_period_subscriptions(subscriptions, range)
