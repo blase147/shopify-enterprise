@@ -526,7 +526,7 @@ const NewUpSell = () => {
                         }
                       >
                         <FormLayout>
-                          <FormLayout.Group>
+                          {/*<FormLayout.Group>
                             <TextField
                               value={campaign.name}
                               label="Name"
@@ -597,7 +597,7 @@ const NewUpSell = () => {
                               }
                             />
                             <p> </p>
-                          </FormLayout.Group>
+                          </FormLayout.Group>*/}
                           <TextContainer>
                             <Subheading>DISPLAY RULES</Subheading>
                             <TextStyle variation="subdued">

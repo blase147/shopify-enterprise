@@ -54,7 +54,7 @@ const Nav = (props) => {
     //   path: '/integrations',
     // },
     {
-      content: 'Setting',
+      content: 'Settings',
       id: 'settings',
       path: '/settings',
     },

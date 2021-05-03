@@ -16,7 +16,7 @@
                   path d=("M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z") fill="#DDDDDD" /
             .warning
               h2 Are you sure you want to cancel?
-              h3 IF you cancel, you won't get upcomming deliveries
+              h3 If you cancel, you won't get upcoming deliveries
               p You get always reactive anytime
             .btn-wrapper
               = link_to action_subscription_contract_path(:remove_line, subscription.id[/\d+/], "line_id=#{line_item.id}&lines_count=#{lines_count}&quantity=#{line_item.quantity}&variant_id=#{line_item.variant_id}"), remote: true, method: :post do

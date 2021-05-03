@@ -6,7 +6,7 @@ class SubscriptionsController < AuthenticatedController
   def index
     redirect_to subscription_path(id: params[:id]) if params[:id].present?
 
-    @data = SubscriptionContractsService.new.run params[:cursor]
+    @data = SubscriptionContractsService.new.all_subscriptions # params[:cursor]
     @subscription_contracts = @data[:subscriptions] || []
   end
 

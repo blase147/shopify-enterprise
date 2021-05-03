@@ -86,7 +86,7 @@ const ActiveSubscription = ({Values}) => {
                           }
 
                           {
-                            Values.showDeliverySchedule==="true" && 
+                            Values.showDeliverySchedule==="true" &&
                             <li className="Polaris-Navigation__ListItem">
                               <div className="Polaris-Navigation__ItemWrapper">
                                 <a className="Polaris-Navigation__Item" tabIndex={0}>
@@ -130,14 +130,14 @@ const ActiveSubscription = ({Values}) => {
                               </div>
                             </li>
                           }
-                            
+
                           </ul>
                         </div>
                       </nav>
                     </div>
                   </div>
                 {
-                  Values?.showSubscription==="true" && 
+                  Values?.showSubscription==="true" &&
                   <div className="content-wrapper">
                     <div className="display-text">
                       <p><span>MY &nbsp;</span><span className="active">ACTIVE &nbsp;</span><span>SUBSCRIPTION</span></p><a style={{marginRight:'30px'}}className="add_weekly_box promo-tag-I" href="#"><span >{parse(Values?.promoTagline1Content || '')}</span><svg fill="none" height={12} viewBox="0 0 20 12" width={20} xmlns="http://www.w3.org/2000/svg"><path d="M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z" fill="black" /></svg></a></div>
@@ -797,7 +797,7 @@ const ActiveSubscription = ({Values}) => {
                                       </div>
                                       <div className="warning">
                                         <h2>Are you sure you want to cancel?</h2>
-                                        <h3>IF you cancel, you won't get upcomming deliveries</h3>
+                                        <h3>If you cancel, you won't get upcoming deliveries</h3>
                                         <p>You get always reactive anytime</p>
                                       </div>
                                       <div className="btn-wrapper">

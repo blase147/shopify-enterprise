@@ -52,7 +52,7 @@ class SubscriptionContractsService < GraphqlService
       }
     }
   GRAPHQL
-  
+
   def run cursor=nil
     query = LIST_QUERY
     query = query.gsub("first: #{PAGE}", "first: #{PAGE} after: \"#{cursor}\"") if cursor.present?
@@ -74,6 +74,22 @@ class SubscriptionContractsService < GraphqlService
       prev_cursort: subscriptions.first.cursor
     }
 
+  rescue Exception => ex
+    p ex.message
+    { error: ex.message }
+  end
+
+  def all_subscriptions
+    has_next_page = true
+    next_cursor = nil
+    subscriptions = []
+    while has_next_page
+      data = run(next_cursor)
+      subscriptions.push(data[:subscriptions] || [])
+      has_next_page = data[:has_next_page]
+      next_cursor = data[:next_cursor]
+    end
+    { subscriptions: subscriptions.flatten }
   rescue Exception => ex
     p ex.message
     { error: ex.message }
