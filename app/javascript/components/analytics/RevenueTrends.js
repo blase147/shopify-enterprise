@@ -725,12 +725,12 @@ const rows_Charges = [
         series: [
           {
             name: 'Total Estimated Revenue',
-            data: [estimatedNinetyDays,estimatedSevenDays,estimatedThirtyDays],
+            data: [parseInt(estimatedSevenDays),parseInt(estimatedThirtyDays),parseInt(estimatedNinetyDays)],
             color: '#007ffa',
           },
           {
             name: 'Total Historical Revenue',
-            data: [historicalNinetyDaysRevenue,historicalSevenDaysRevenue,historicalThirtyDaysRevenue,],
+            data: [parseInt(historicalSevenDaysRevenue),parseInt(historicalThirtyDaysRevenue),parseInt(historicalNinetyDaysRevenue)],
             color: '#202b35',
           },
         ]
@@ -884,7 +884,7 @@ const rows_Charges = [
       percent: '4',
       up: true,
       key: 'churnRate',
-      type:"currency"
+      type:"percent"
     },
     {
       section: 'New Customers',
@@ -1284,7 +1284,7 @@ const rows_Charges = [
                           <Stack.Item>
                             <DisplayText size="medium">
                               <TextStyle variation="strong">
-                              <CounterUp prefix={item.type=="currency"?"$":""}  start={0} end={Number.parseFloat(cardData[item.key]).toFixed(2)} duration={1.5} decimals={item.type=="currency"?2:0} />
+                              <CounterUp prefix={item.type=="currency"?"$":""} suffix={item.type=="percent"?"%":""}  start={0} end={Number.parseFloat(cardData[item.key]).toFixed(2)} duration={1.5} decimals={item.type=="currency"?2:0} />
                               </TextStyle>
                             </DisplayText>
                           </Stack.Item>
