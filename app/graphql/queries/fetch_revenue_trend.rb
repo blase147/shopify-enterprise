@@ -21,8 +21,8 @@ module Queries
       average_checkout_charge = range_data_service.average_checkout_charge.to_f.round(2)
       average_recurring_charge = range_data_service.average_recurring_charge.to_f.round(2)
       new_customers = range_data_service.new_customers
-      active_customers = range_data_service.get_subscriptions_count(in_period_subscriptions, 'ACTIVE')
-      churn_rate = range_data_service.churn_rate(range)
+      active_customers = range_data_service.customers_in_range(range)
+      churn_rate = range_data_service.get_churn_rate(subscriptions, range)
       active_vs_churned_data = range_data_service.graph_data_by_granularity(:active_vs_churned_data)
       total_sales_data = range_data_service.graph_data_by_granularity(:total_sales_data)
       refunds_data = range_data_service.graph_data_by_granularity(:refunds_data)

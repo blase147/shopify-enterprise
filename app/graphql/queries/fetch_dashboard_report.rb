@@ -8,9 +8,8 @@ module Queries
       data_service = ReportDataService.new(subscriptions)
       range = data_service.get_date_range(duration)
       subscriptions_in_period = data_service.in_period_subscriptions(subscriptions, range)
-      current_month_subscriptions = data_service.in_period_subscriptions(subscriptions, (Date.today - 1.month..Date.today))
-      subcription_month_revenue = current_month_subscriptions.sum { |subscription| data_service.get_orders_total_amount(subscription) }
-      active_subscriptions_count = data_service.get_subscriptions_count(subscriptions, 'ACTIVE')
+      subcription_month_revenue = subscriptions_in_period.sum { |subscription| data_service.get_orders_total_amount(subscription) }
+      active_subscriptions_count = data_service.get_subscriptions_count(subscriptions_in_period, 'ACTIVE')
       churn_rate = data_service.get_churn_rate(subscriptions, range)
       customer_lifetime = churn_rate.eql?(0) ? 0 : (data_service.get_customer_lifetime_value(subscriptions_in_period) / churn_rate).to_f.round(2)
       revenue_churn = data_service.month_graph_data(subscriptions, range, :revenue_churn_by_date)

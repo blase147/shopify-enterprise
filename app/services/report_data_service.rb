@@ -20,8 +20,8 @@ class ReportDataService
   end
 
   def get_churn_rate(subscriptions, range)
-    customer_at_period_start = in_period_subscriptions(subscriptions, range.first - 1.year..range.first - 1.day, 'ACTIVE')
-    cancelled_customer_in_period = in_period_subscriptions(subscriptions, range, 'CANCELLED')
+    customer_at_period_start = in_period_subscriptions(subscriptions, range.first - 1.year..range.first - 1.day, 'ACTIVE').count
+    cancelled_customer_in_period = in_period_subscriptions(subscriptions, range, 'CANCELLED').count
     (cancelled_customer_in_period * 100) / customer_at_period_start rescue 0
     # (get_subscriptions_count(subscriptions_in_period, 'ACTIVE') * 100) / subscriptions.count
   end
@@ -150,10 +150,6 @@ class ReportDataService
 
   def new_customers
     @subscriptions.group_by{ |subscription| subscription.node.customer.id }.sum { |data| data[1].count == 1 ? 1 : 0 }
-  end
-
-  def churn_rate(range)
-    range.count * get_churn_rate(@subscriptions, range)
   end
 
   def graph_data_by_granularity(method)
