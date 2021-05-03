@@ -9,7 +9,7 @@ class Shop < ActiveRecord::Base
   has_many :selling_plan_groups
   has_one :setting
   has_many :customers
-  
+
   has_many :upsell_campaign_groups
 
   def api_version
@@ -33,7 +33,7 @@ class Shop < ActiveRecord::Base
       cus.update_columns shopify_id: cus.shopify_id[/\d+/]
     end
 
-    items = SubscriptionContractsService.new.run
+    items = SubscriptionContractsService.new.all_subscriptions
     items[:subscriptions].each do |item|
       billing_policy = item.node.billing_policy
 
