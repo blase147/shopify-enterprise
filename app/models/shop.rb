@@ -44,8 +44,8 @@ class Shop < ActiveRecord::Base
         email: item.node.customer.email,
         shopify_at: item.node.created_at.to_date,
         status: item.node.status,
-        subscription: item.node.lines.edges.first.node.title,
-        language: "$#{item.node.lines.edges.first.node.current_price.amount} / #{billing_policy.interval.pluralize}",
+        subscription: item.node.lines.edges.first&.node&.title,
+        language: "$#{item.node.lines.edges.first&.node&.current_price&.amount} / #{billing_policy.interval.pluralize}",
         communication: "#{billing_policy.interval_count} #{billing_policy.interval} Pack".titleize
       )
     end
