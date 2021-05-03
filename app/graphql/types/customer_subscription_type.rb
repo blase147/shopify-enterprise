@@ -16,7 +16,7 @@ module Types
     field :billing_address, Types::BillingAddressType, null: true
     field :pack, String, null: true
     field :frequency, String, null: true
-    
+
     field :created_at, String, null: true
     field :updated_at, String, null: true
     field :__typename , String, null: true
@@ -25,10 +25,14 @@ module Types
       object.shopify_at&.strftime('%b %d %Y, %I:%M %p')
     end
 
+    def updated_at
+      object.shopify_updated_at&.strftime('%b %d %Y, %I:%M %p')
+    end
+
     def subscription
       object.subscription.truncate(30) rescue nil
     end
-    
+
     # def status
     #   object.status&.capitalize
     # end
@@ -36,7 +40,7 @@ module Types
     # def subscription
     #   object.subscription&.capitalize
     # end
-    
+
     def name
       "#{object.first_name} #{object.last_name}"
     end

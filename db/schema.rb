@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_29_090935) do
+ActiveRecord::Schema.define(version: 2021_05_03_075233) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 2021_04_29_090935) do
     t.string "province"
     t.string "zip"
     t.string "company"
+    t.datetime "shopify_updated_at"
   end
 
   create_table "email_notifications", force: :cascade do |t|

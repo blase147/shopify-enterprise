@@ -13,6 +13,7 @@ class SubscriptionContractsService < GraphqlService
           node {
             id
             createdAt
+            updatedAt
             status
             nextBillingDate
             appAdminUrl

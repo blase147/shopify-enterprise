@@ -43,6 +43,7 @@ class Shop < ActiveRecord::Base
         last_name: item.node.customer.last_name,
         email: item.node.customer.email,
         shopify_at: item.node.created_at.to_date,
+        shopify_updated_at: item.node.updated_at&.to_date,
         status: item.node.status,
         subscription: item.node.lines.edges.first&.node&.title,
         language: "$#{item.node.lines.edges.first&.node&.current_price&.amount} / #{billing_policy.interval.pluralize}",
