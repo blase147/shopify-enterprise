@@ -83,4 +83,5 @@ Rails.application.routes.draw do
   end
 
   get '*path' => 'home#index'
+  post 'twilio/sms', 'twilio#sms'
 end

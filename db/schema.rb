@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_03_075233) do
+ActiveRecord::Schema.define(version: 2021_05_04_050204) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,16 @@ ActiveRecord::Schema.define(version: 2021_05_03_075233) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "phone"
+  end
+
+  create_table "custom_keywords", force: :cascade do |t|
+    t.text "response"
+    t.text "keywords", default: [], array: true
+    t.integer "status", default: 0
+    t.bigint "shop_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["shop_id"], name: "index_custom_keywords_on_shop_id"
   end
 
   create_table "customers", force: :cascade do |t|
@@ -231,6 +241,41 @@ ActiveRecord::Schema.define(version: 2021_05_03_075233) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true
+  end
+
+  create_table "smarty_cancellation_reasons", force: :cascade do |t|
+    t.string "name"
+    t.integer "winback", default: 0
+    t.bigint "shop_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["shop_id"], name: "index_smarty_cancellation_reasons_on_shop_id"
+  end
+
+  create_table "sms_conversations", force: :cascade do |t|
+    t.bigint "customer_id"
+    t.integer "status", default: 0
+    t.datetime "last_activity_at"
+    t.string "command"
+    t.integer "command_step", default: 0
+    t.json "command_data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["customer_id"], name: "index_sms_conversations_on_customer_id"
+  end
+
+  create_table "sms_messages", force: :cascade do |t|
+    t.bigint "sms_conversation_id"
+    t.string "from_number"
+    t.string "to_number"
+    t.boolean "comes_from_customer"
+    t.text "content"
+    t.string "command"
+    t.integer "command_step", default: 0
+    t.json "command_data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["sms_conversation_id"], name: "index_sms_messages_on_sms_conversation_id"
   end
 
   create_table "subscription_contracts", force: :cascade do |t|

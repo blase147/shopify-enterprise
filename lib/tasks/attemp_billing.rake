@@ -2,14 +2,14 @@ namespace :subscriptions do
   task :attemp_billing => :environment do
     Shop.find_each do |shop|
       shop.connect
-      
+
       has_next_page = true
       next_cursor = nil
 
       while has_next_page
         data = SubscriptionContractsService.new.run next_cursor
         subscriptions = data[:subscriptions] || []
-        
+
         subscriptions.each do |subscription|
           process_subscription(subscription.node)
         end
@@ -18,6 +18,10 @@ namespace :subscriptions do
         next_cursor = data[:next_cursor]
       end
     end
+  end
+
+  task :expire_conversation => :environment do
+    SmsConversation.where('last_activity_at < ?', Time.current - 10.minutes).update_all(status: :expired)
   end
 
   def process_subscription subscription

@@ -23,7 +23,7 @@ class SubscriptionBillingAttempService < GraphqlService
   end
 
   def run
-    result = client.query(client.parse(CREATE_QUERY), variables: { 
+    result = client.query(client.parse(CREATE_QUERY), variables: {
       subscription_contract_id: @subscription_id,
       key: Time.current.to_i.to_s
     })

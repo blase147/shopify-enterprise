@@ -71,7 +71,9 @@ module SubscriptionConcern
   end
 
   def skip_schedule
-    result = ScheduleSkipService.new(params[:id]).run params
+    billing_date = DateTime.parse(params[:billing_date])
+    skip_billing_offset = params[:billing_interval_count].to_i.send(params[:billing_interval].downcase)
+    result = ScheduleSkipService.new(params[:id]).run({ billing_date: billing_date + skip_billing_offset })
     if result[:error].present?
       render js: "alert('#{result[:error]}'); hideLoading()"
     else

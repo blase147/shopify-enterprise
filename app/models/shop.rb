@@ -9,6 +9,8 @@ class Shop < ActiveRecord::Base
   has_many :selling_plan_groups
   has_one :setting
   has_many :customers
+  has_many :smarty_cancellation_reasons
+  has_many :custom_keywords
 
   has_many :upsell_campaign_groups
 

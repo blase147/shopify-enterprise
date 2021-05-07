@@ -93,12 +93,16 @@ class CustomerService < GraphqlService
   end
 
   def update_address params
-    address_attr = params[:address].permit!.to_h.deep_transform_keys! { |key| key.camelize(:lower) }
+    if params[:address].is_a?(Hash)
+      address_attr = params[:address].deep_transform_keys { |key| key.to_s.camelize(:lower) }
+    else
+      address_attr = params[:address].permit!.to_h.deep_transform_keys { |key| key.camelize(:lower) }
+    end
     result = client.query(client.parse(UPDATE_QUERY), variables: { input: {id: params[:id], "addresses": address_attr} })
     errors = result.data.customer_update.user_errors
     raise errors.first.message if errors.present?
-    db_customer = Customer.find_or_initialize_by(shopify_id: params[:id])
-    db_params = params[:address].permit!
+    db_customer = Customer.find_or_initialize_by(shopify_id: params[:id][/\d+/])
+    db_params = params[:address].is_a?(Hash) ? params[:address] : params[:address].permit!
     db_customer.shop_id = @shop.id
     db_customer.assign_attributes(db_params)
     db_customer.save

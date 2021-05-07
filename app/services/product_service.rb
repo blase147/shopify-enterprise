@@ -43,6 +43,7 @@ class ProductService < GraphqlService
       products (first: 85, query: "status:active") {
         edges {
           node {
+            id
             title
             sellingPlanGroupCount
             images (first: 1) {
