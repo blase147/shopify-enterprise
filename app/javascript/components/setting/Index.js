@@ -1,47 +1,21 @@
-import ReactDOM from 'react-dom';
+import { gql, useMutation, useQuery } from '@apollo/client';
+import { Banner, Card, ContextualSaveBar, Form, Frame, List, Page, Spinner, Tabs, Toast } from '@shopify/polaris';
+import { Formik } from 'formik';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import * as yup from 'yup';
 import AppLayout from '../layout/Layout';
 import Billing from './Billing';
 import CustomPortal from './CustomPortal';
-import EmailNotification from './EmailNotification';
 import Dunning from './Dunning';
-import StoreInfomation from './StoreInformation';
+import EmailNotification from './EmailNotification';
+import HouseKeeping from './HouseKeeping';
 import Legal from './Legal';
+import StoreInfomation from './StoreInformation';
 
-import {
-  Page,
-  EmptyState,
-  Frame,
-  CalloutCard,
-  Card,
-  Icon,
-  Stack,
-  Badge,
-  DisplayText,
-  Tabs,
-  FormLayout,
-  Select,
-  TextStyle,
-  ChoiceList,
-  Checkbox,
-  Button,
-} from '@shopify/polaris';
 
-import {
-  Form,
-  ContextualSaveBar,
-  Toast,
-  Banner,
-  List,
-  Spinner,
-} from '@shopify/polaris';
 
-import React, { useState, useCallback, useEffect } from 'react';
-import { Formik } from 'formik';
-import _ from 'lodash';
-import * as yup from 'yup';
 
-import { gql, useMutation, useQuery } from '@apollo/client';
-import { Link, useHistory, useParams } from 'react-router-dom';
 
 const Settings = () => {
   // form data ########################################################
@@ -347,6 +321,10 @@ const Settings = () => {
 
   const tabs = [
     {
+      id: 'house',
+      content: 'House keeping',
+    },
+    {
       id: 'billing',
       content: 'Billing',
     },
@@ -481,13 +459,17 @@ const Settings = () => {
                     )}
 
                     {selectedTitleTab === 0 ? (
+                      <HouseKeeping
+                        
+                      />):
+                    selectedTitleTab === 1 ? (
                       <Billing
                         values={values}
                         touched={touched}
                         errors={errors}
                         setFieldValue={setFieldValue}
                       />
-                    ) : selectedTitleTab === 1 ? (
+                    ) : selectedTitleTab === 2 ? (
                       <CustomPortal
                         values={values}
                         touched={touched}
@@ -497,7 +479,7 @@ const Settings = () => {
                         refetch={refetch}
                         isSubmitting={isSubmitting}
                       />
-                    ) : selectedTitleTab === 2 ? (
+                    ) : selectedTitleTab === 3 ? (
                       <div className="EmailNotification">
                         <EmailNotification
                           values={values}
@@ -507,7 +489,7 @@ const Settings = () => {
                           handleSubmit={handleSubmit}
                         />
                       </div>
-                    ) : selectedTitleTab === 3 ? (
+                    ) : selectedTitleTab === 4 ? (
                       <Dunning
                         values={values}
                         touched={touched}
@@ -515,7 +497,7 @@ const Settings = () => {
                         setFieldValue={setFieldValue}
                         handleSubmit={handleSubmit}
                       />
-                    ) : selectedTitleTab === 4 ? (
+                    ) : selectedTitleTab === 5 ? (
                       <div className="storeInfomation">
                         <StoreInfomation
                           values={values}
