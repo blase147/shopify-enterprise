@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_04_050204) do
+ActiveRecord::Schema.define(version: 2021_05_07_080112) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -240,6 +240,7 @@ ActiveRecord::Schema.define(version: 2021_05_04_050204) do
     t.string "shopify_token", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "phone"
     t.index ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true
   end
 
@@ -250,6 +251,27 @@ ActiveRecord::Schema.define(version: 2021_05_04_050204) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["shop_id"], name: "index_smarty_cancellation_reasons_on_shop_id"
+  end
+
+  create_table "smarty_messages", force: :cascade do |t|
+    t.bigint "shop_id"
+    t.string "title"
+    t.text "description"
+    t.text "body"
+    t.boolean "custom", default: false
+    t.integer "usage_count", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["shop_id"], name: "index_smarty_messages_on_shop_id"
+  end
+
+  create_table "smarty_variables", force: :cascade do |t|
+    t.bigint "shop_id"
+    t.integer "name"
+    t.text "response"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["shop_id"], name: "index_smarty_variables_on_shop_id"
   end
 
   create_table "sms_conversations", force: :cascade do |t|
@@ -276,6 +298,29 @@ ActiveRecord::Schema.define(version: 2021_05_04_050204) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["sms_conversation_id"], name: "index_sms_messages_on_sms_conversation_id"
+  end
+
+  create_table "sms_settings", force: :cascade do |t|
+    t.bigint "shop_id"
+    t.integer "status", default: 0
+    t.boolean "delay_order", default: false
+    t.boolean "edit_delivery_schedule", default: false
+    t.boolean "order_tracking", default: false
+    t.boolean "renewal_reminder", default: false
+    t.boolean "skip_upcoming_order", default: false
+    t.boolean "skip_update_next_charge", default: false
+    t.boolean "one_time_upsells", default: false
+    t.boolean "failed_renewal", default: false
+    t.boolean "cancel_reactivate_subscription", default: false
+    t.boolean "edit_quantity", default: false
+    t.boolean "cancel_subscription", default: false
+    t.boolean "winback_flow", default: false
+    t.time "delivery_start_time"
+    t.time "delivery_end_time"
+    t.string "renewal_duration"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["shop_id"], name: "index_sms_settings_on_shop_id"
   end
 
   create_table "subscription_contracts", force: :cascade do |t|

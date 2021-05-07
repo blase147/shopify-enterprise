@@ -4,7 +4,7 @@ module Queries
     argument :search_key, String, required: false
 
     def resolve(**args)
-      current_shop.smarty_cancellation_reasons.all.where(args[:search_key].present? ? "name ILIKE '%#{args[:search_key]}%'" : '')
+      current_shop.smarty_cancellation_reasons.all.where(args[:search_key].present? ? "name ILIKE '%#{args[:search_key]}%'" : '').order(created_at: :desc)
     end
   end
 end
