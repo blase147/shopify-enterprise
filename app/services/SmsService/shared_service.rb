@@ -5,12 +5,12 @@ class SmsService::SharedService
   end
 
   def create_sms_message(message, step, comes_from_customer: false)
-    @conversation.sms_messages.create(from_number: ENV['TWILIO_PHONE_NUMBER'], to_number: @params['From'], content: message, comes_from_customer: comes_from_customer, command: @conversation.command, command_step: step)
+    @conversation.sms_messages.create(from_number: @conversation.customer.shop.phone, to_number: @params['From'], content: message, comes_from_customer: comes_from_customer, command: @conversation.command, command_step: step)
   end
 
   def send_message(content)
     puts "############################ #{content} ##############################"
-    TwilioServices::SendSms.call(to: @params['From'], message: content)
+    TwilioServices::SendSms.call(from: @conversation.customer.shop.phone, to: @params['From'], message: content)
   rescue Exception => ex
     { error_message: ex.message }
   end

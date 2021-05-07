@@ -11,6 +11,9 @@ class Shop < ActiveRecord::Base
   has_many :customers
   has_many :smarty_cancellation_reasons
   has_many :custom_keywords
+  has_one :sms_setting
+  has_many :smarty_messages
+  has_many :smarty_variables
 
   has_many :upsell_campaign_groups
 

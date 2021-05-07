@@ -24,5 +24,8 @@ module Types
     field :add_custom_keyword, mutation: Mutations::AddCustomKeyword
     field :update_custom_keyword, mutation: Mutations::UpdateCustomKeyword
     field :delete_custom_keyword, mutation: Mutations::DeleteCustomKeyword
+
+    field :update_sms_setting, mutation: Mutations::UpdateSmsSetting
+    field :update_smarty_message, mutation: Mutations::UpdateSmartyMessage
   end
 end

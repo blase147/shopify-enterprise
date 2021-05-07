@@ -28,12 +28,12 @@ class TwilioServices::SmsCallback < ApplicationService
     @params['Body'] = @params['Body'].strip
     upcase_body = @params['Body'].upcase
     if SmsConversation.commands.keys.include?(upcase_body.to_sym)
-      conversation.sms_messages.create(from_number: @params['From'], to_number: ENV['TWILIO_PHONE_NUMBER'], content: @params['Body'], comes_from_customer: true, command: upcase_body, command_step: 1)
+      conversation.sms_messages.create(from_number: @params['From'], to_number: conversation.customer.shop.phone, content: @params['Body'], comes_from_customer: true, command: upcase_body, command_step: 1)
       conversation.update(command: upcase_body, command_step: 1)
     elsif conversation.command.nil? && conversation.command_step.zero?
       shared_service.send_message('Invalid Command, Please try again.') and return
     else
-      conversation.sms_messages.create(from_number: @params['From'], to_number: ENV['TWILIO_PHONE_NUMBER'], content: @params['Body'], comes_from_customer: true, command: conversation.command, command_step: conversation.command_step + 1)
+      conversation.sms_messages.create(from_number: @params['From'], to_number: conversation.customer.shop.phone, content: @params['Body'], comes_from_customer: true, command: conversation.command, command_step: conversation.command_step + 1)
       conversation.update(command_step: conversation.command_step + 1)
     end
     response = sms_service.process

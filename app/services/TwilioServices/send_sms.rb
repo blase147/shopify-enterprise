@@ -11,7 +11,7 @@ class TwilioServices::SendSms < ApplicationService
 
   def send_message
     message = twilio_client.messages.create(
-      from: ENV['TWILIO_PHONE_NUMBER'],
+      from: @params[:from],
       to: @params[:to],
       body: @params[:message]
     )

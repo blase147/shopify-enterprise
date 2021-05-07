@@ -1,0 +1,2 @@
+class SmartyMessage < ApplicationRecord
+end
