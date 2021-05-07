@@ -4,7 +4,7 @@ class TwilioServices::SmsCallback < ApplicationService
   end
 
   def call
-    @customer = Customer.last
+    @customer = Customer.where(phone: @params['From']).last
     if @customer.present?
       process_callback
     else
