@@ -18,8 +18,8 @@ const HouseKeeping = () => {
       content: 'Export',
     },
     {
-      id: 'taxes',
-      content: 'Taxes',
+      id: 'sms',
+      content: 'SMS',
     },
     {
       id: 'legal',
