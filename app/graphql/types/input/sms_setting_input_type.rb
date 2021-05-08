@@ -7,7 +7,9 @@ module Types
       argument :edit_delivery_schedule, String, required: false
       argument :order_tracking, String, required: false
       argument :renewal_reminder, String, required: false
-      argument :skip_upcoming_order, String, required: false
+      argument :swap_product, String, required: false
+      argument :update_billing_detail, String, required: false
+      argument :update_shipping_detail, String, required: false
       argument :skip_update_next_charge, String, required: false
       argument :one_time_upsells, String, required: false
       argument :failed_renewal, String, required: false

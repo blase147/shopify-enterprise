@@ -6,10 +6,11 @@ module Types
     field :edit_delivery_schedule, String, null: true
     field :order_tracking, String, null: true
     field :renewal_reminder, String, null: true
-    field :skip_upcoming_order, String, null: true
+    field :swap_product, String, null: true
+    field :update_billing_detail, String, null: true
+    field :update_shipping_detail, String, null: true
     field :skip_update_next_charge, String, null: true
     field :one_time_upsells, String, null: true
-    field :failed_renewal, String, null: true
     field :cancel_reactivate_subscription, String, null: true
     field :edit_quantity, String, null: true
     field :cancel_subscription, String, null: true

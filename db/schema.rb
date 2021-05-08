@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_07_080112) do
+ActiveRecord::Schema.define(version: 2021_05_08_120602) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -307,10 +307,8 @@ ActiveRecord::Schema.define(version: 2021_05_07_080112) do
     t.boolean "edit_delivery_schedule", default: false
     t.boolean "order_tracking", default: false
     t.boolean "renewal_reminder", default: false
-    t.boolean "skip_upcoming_order", default: false
     t.boolean "skip_update_next_charge", default: false
     t.boolean "one_time_upsells", default: false
-    t.boolean "failed_renewal", default: false
     t.boolean "cancel_reactivate_subscription", default: false
     t.boolean "edit_quantity", default: false
     t.boolean "cancel_subscription", default: false
@@ -320,6 +318,9 @@ ActiveRecord::Schema.define(version: 2021_05_07_080112) do
     t.string "renewal_duration"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "swap_product", default: false
+    t.boolean "update_billing_detail", default: false
+    t.boolean "update_shipping_detail", default: false
     t.index ["shop_id"], name: "index_sms_settings_on_shop_id"
   end
 
