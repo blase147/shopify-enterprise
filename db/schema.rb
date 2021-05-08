@@ -304,7 +304,6 @@ ActiveRecord::Schema.define(version: 2021_05_08_120602) do
     t.bigint "shop_id"
     t.integer "status", default: 0
     t.boolean "delay_order", default: false
-    t.boolean "edit_delivery_schedule", default: false
     t.boolean "order_tracking", default: false
     t.boolean "renewal_reminder", default: false
     t.boolean "skip_update_next_charge", default: false

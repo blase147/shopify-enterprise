@@ -3,7 +3,6 @@ module Types
     field :id, ID, null: false
     field :status, String, null: true
     field :delay_order, String, null: true
-    field :edit_delivery_schedule, String, null: true
     field :order_tracking, String, null: true
     field :renewal_reminder, String, null: true
     field :swap_product, String, null: true
