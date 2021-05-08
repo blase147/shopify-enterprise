@@ -6,5 +6,6 @@ module Types
     field :body, String, null: true
     field :updated_at, String, null: true
     field :custom, String, null: true
+    field :total_count, Integer, null: true
   end
 end

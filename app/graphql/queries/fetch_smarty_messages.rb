@@ -1,13 +1,16 @@
 module Queries
   class FetchSmartyMessages < Queries::BaseQuery
-    type Types::SmartyMessageType.connection_type, null: false
+    type Types::SmartyMessageCollectionType, null: false
     argument :search_key, String, required: false
     argument :sort_column, String, required: false
     argument :sort_direction, String, required: false
     argument :custom, String, required: false
+    argument :offset_attributes, Types::Input::OffsetAttributes, required: false
 
     def resolve(**args)
-      current_shop.smarty_messages.where(where_data(args)).order(order_by(args))
+      offset_params = args[:offset_attributes].to_h
+      smarty_messages = current_shop.smarty_messages.where(where_data(args)).order(order_by(args)).limit(offset_params[:limit]).offset(offset_params[:offset])
+      { smarty_messages: smarty_messages, total_count: current_shop.smarty_messages.where(where_data(args)).count }
     end
 
     def order_by(params)
