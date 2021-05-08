@@ -1,6 +1,6 @@
 module Queries
   class FetchSmartyMessages < Queries::BaseQuery
-    type [Types::SmartyMessageType], null: false
+    type Types::SmartyMessageType.connection_type, null: false
     argument :search_key, String, required: false
     argument :sort_column, String, required: false
     argument :sort_direction, String, required: false

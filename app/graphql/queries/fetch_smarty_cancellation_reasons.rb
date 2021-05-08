@@ -1,6 +1,6 @@
 module Queries
   class FetchSmartyCancellationReasons < Queries::BaseQuery
-    type [Types::SmartyCancellationReasonType], null: false
+    type Types::SmartyCancellationReasonType.connection_type, null: false
     argument :search_key, String, required: false
 
     def resolve(**args)

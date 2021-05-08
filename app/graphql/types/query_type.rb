@@ -1,5 +1,6 @@
 module Types
   class QueryType < Types::BaseObject
+    add_field(GraphQL::Types::Relay::NodeField)
     field :fetch_plan_groups, resolver: Queries::FetchSellingPlanGroups
     field :fetch_plan_group, resolver: Queries::FetchSellingPlanGroup
     field :fetch_setting, resolver: Queries::FetchSetting

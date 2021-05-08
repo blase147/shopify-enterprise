@@ -1,6 +1,6 @@
 module Queries
   class FetchCustomKeywords < Queries::BaseQuery
-    type [Types::CustomKeywordType], null: false
+    type Types::CustomKeywordType.connection_type, null: false
     argument :search_key, String, required: false
 
     def resolve(**args)
