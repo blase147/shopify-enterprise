@@ -317,9 +317,10 @@ ActiveRecord::Schema.define(version: 2021_05_08_120602) do
     t.string "renewal_duration"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "failed_renewal"
+    t.boolean "opt_in", default: false
     t.boolean "swap_product", default: false
-    t.boolean "update_billing_detail", default: false
-    t.boolean "update_shipping_detail", default: false
+    t.boolean "update_billing", default: false
     t.index ["shop_id"], name: "index_sms_settings_on_shop_id"
   end
 
