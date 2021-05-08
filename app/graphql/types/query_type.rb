@@ -18,6 +18,7 @@ module Types
     field :fetch_custom_keyword, resolver: Queries::FetchCustomKeyword
     field :fetch_sms_setting, resolver: Queries::FetchSmsSetting
     field :fetch_smarty_messages, resolver: Queries::FetchSmartyMessages
+    field :fetch_smarty_message, resolver: Queries::FetchSmartyMessage
     field :fetch_smarty_variables, resolver: Queries::FetchSmartyVariables
   end
 end
