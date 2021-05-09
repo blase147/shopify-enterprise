@@ -6,7 +6,8 @@ import {
   Layout,
   Select,
   TextField,
-  Spinner
+  Spinner,
+  SkeletonDisplayText
 } from '@shopify/polaris';
 import dayjs from 'dayjs';
 import { useHistory } from 'react-router';
@@ -35,8 +36,6 @@ const SmartyMessage = ({ handleEditSmartyMessage }) => {
   ]
   const history=useHistory();
   const [searchValue, setSearchValue] = useState("");
-  const [order, setOrder] = useState("title")
-
   const [filters,setFilters]=useState({searchValue:"",order:"updated_at",type:"DESC",limit:5,offset:0})
 
   const [getMessages, { loading, data, error }] = useLazyQuery(fetchQuery);
@@ -76,20 +75,21 @@ const SmartyMessage = ({ handleEditSmartyMessage }) => {
                     placeholder="Message’s Title"
                     value={searchValue}
                     // error={}
+                    autoFocus={false}
                     onChange={(value) => setSearchValue(value)}
                   />
-                  <button className="btn btn-primary" type="submit">Search</button>
+                  <button className="btn btn-primary" onClick={()=>setFilters({...filters,searchValue:searchValue})} type="submit">Search</button>
                 </div>
 
                 {/* <input className="" placeholder="order by title"type="number"/> */}
                 <div class="Polaris-Select order-title">
                   <Select
                     options={orderOptions}
-                    value={order}
+                    value={filters.order}
                     // error={
                     //   touched.showOrderHistory && errors.showOrderHistory
                     // }
-                    onChange={(value) => setOrder(value)}
+                    onChange={(value) => setFilters({...filters,order:value})}
                   />
                 </div>
               </div>
@@ -103,15 +103,13 @@ const SmartyMessage = ({ handleEditSmartyMessage }) => {
               </tr>
               {
                 loading && (
-                  <tr>
-                  <Card>
-                    <Spinner
-                      accessibilityLabel="Spinner example"
-                      size="large"
-                      color="teal"
-                    />
-                  </Card>
-                  </tr>
+                  [...Array(5).keys()].map(val=>(
+                    <tr>
+                      <td><SkeletonDisplayText size="small" /></td>
+                      <td><SkeletonDisplayText size="small" /></td>
+                      <td><SkeletonDisplayText size="small" /></td>
+                    </tr>
+                  ))
                 )
               }
               {
@@ -149,6 +147,8 @@ const SmartyMessage = ({ handleEditSmartyMessage }) => {
                 <li><a href="#">Next {'>>'}</a></li>
                 <li><a href="#">Last {'>>'}</a></li>
               </ul> */}
+              {
+                (data && count>filters.limit) &&
               <ReactPaginate
                 previousLabel={'<< Previous'}
                 nextLabel={'Next >>'}
@@ -165,6 +165,7 @@ const SmartyMessage = ({ handleEditSmartyMessage }) => {
                 activeClassName={'active'}
                 forcePage={pageToBeSelected}
               />
+              }
             </div>
           </div>
         </Card.Section>
