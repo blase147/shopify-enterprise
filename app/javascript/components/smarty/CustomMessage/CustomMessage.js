@@ -7,6 +7,7 @@ import {
   TextField
 } from '@shopify/polaris';
 import dayjs from 'dayjs';
+import ReactPaginate from 'react-paginate';
 
 
 const CustomMessage = () => {
@@ -32,20 +33,6 @@ const CustomMessage = () => {
     const [searchValue, setSearchValue] = useState("");
     const [order, setOrder] = useState("title");
 
-    const [getMessages, { loading, data, error }] = useLazyQuery(fetchQuery);
-
-  useEffect(() => {
-   getMessages({
-     variables:{
-       offsetAttributes:{limit:5,offset:0},
-       custom:"true",
-       searchKey:"",
-       sortColumn:"updated_at",
-       sortDirection:"DESC"
-     }
-   })
-  }, [])
-
   const [filters,setFilters]=useState({searchValue:"",order:"updated_at",type:"DESC",limit:5,offset:0})
 
   const [getMessages, { loading, data, error }] = useLazyQuery(fetchQuery);
@@ -54,7 +41,7 @@ const CustomMessage = () => {
    getMessages({
      variables:{
        offsetAttributes:{limit:filters.limit,offset:filters.offset},
-       custom:"false",
+       custom:"true",
        searchKey:filters.searchValue,
        sortColumn:filters.order,
        sortDirection:filters.type
