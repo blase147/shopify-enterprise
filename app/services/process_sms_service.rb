@@ -8,7 +8,9 @@ class ProcessSmsService
   end
 
   def process
-    if %w[SWAP SKIP QUANTITY BILLING SHIPPING PRODUCT CANCEL PAUSE RESUME].include?(@conversation.command)
+    return if !processing_allowed?(@customer) || !command_allowed?(@conversation)
+
+    if %w[SWAP SKIP QUANTITY BILLING SHIPPING PRODUCT CANCEL PAUSE RESUME DELAY].include?(@conversation.command)
       @data = @shared_service.customer_subscriptions(@customer.shopify_id)
       if @conversation.command != 'PAUSE' && @data[:active_subscriptions].count.zero?
         @shared_service.send_message('You have no active subscriptions.')
@@ -20,6 +22,8 @@ class ProcessSmsService
       stop_conversation
     when 'SWAP'
       SmsService::SwapService.new(@conversation, @params, @data).process
+    when 'DELAY'
+      SmsService::DelayService.new(@conversation, @params, @data).process
     when 'SKIP'
       SmsService::SkipService.new(@conversation, @params, @data).process
     when 'QUANTITY'
@@ -58,5 +62,52 @@ class ProcessSmsService
   def set_shopify_session
     session = ShopifyAPI::Session.new(domain: @customer.shop.shopify_domain, token: @customer.shop.shopify_token, api_version: "2021-01")
     ShopifyAPI::Base.activate_session(session)
+  end
+
+  def processing_allowed?(customer)
+    sms_setting = customer.shop.sms_setting
+    return false if !sms_setting.present? || sms_setting&.disable?
+
+    process = false
+    if sms_setting.delivery_start_time.present? && sms_setting.delivery_end_time.present?
+      start_time = formatted_datetime(sms_setting.delivery_start_time)
+      end_time = formatted_datetime(sms_setting.delivery_end_time)
+      process = (start_time..end_time).cover?(Time.current.in_time_zone('Pacific Time (US & Canada)'))
+    end
+    process
+  end
+
+  def command_allowed?(conversation)
+    sms_setting = conversation.customer.shop.sms_setting
+    return false unless sms_setting.present?
+
+    process = false
+    case conversation.command
+    when 'SWAP'
+      process = sms_setting.swap_product
+    when 'DELAY'
+      process = sms_setting.delay_order
+    when 'SKIP'
+      process = sms_setting.skip_update_next_charge
+    when 'QUANTITY'
+      process = sms_setting.edit_quantity
+    when 'BILLING'
+      process = sms_setting.billing_update
+    when 'SHIPPING'
+      process = sms_setting.order_tracking
+    when 'PRODUCT'
+      process = sms_setting.one_time_upsells
+    when 'CANCEL'
+      process = sms_setting.cancel_subscription
+    when 'PAUSE'
+      process = sms_setting.pause_subscription
+    when 'RESUME'
+      process = sms_setting.cancel_reactivate_subscription
+    end
+    process
+  end
+
+  def formatted_datetime(time)
+    DateTime.parse(Time.current.in_time_zone('Pacific Time (US & Canada)').strftime('%Y-%m-%d ') + time.strftime('%H:%M:00 ') + '-7:00')
   end
 end

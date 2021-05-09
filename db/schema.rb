@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_08_120602) do
+ActiveRecord::Schema.define(version: 2021_05_09_084112) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -267,7 +267,7 @@ ActiveRecord::Schema.define(version: 2021_05_08_120602) do
 
   create_table "smarty_variables", force: :cascade do |t|
     t.bigint "shop_id"
-    t.integer "name"
+    t.string "name"
     t.text "response"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

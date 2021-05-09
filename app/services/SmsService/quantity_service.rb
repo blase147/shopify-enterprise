@@ -91,17 +91,4 @@ class SmsService::QuantityService < SmsService::ProcessService
   rescue Exception => ex
     { error: true, message: error_message }
   end
-
-  def get_next_date(option, date)
-    case option.downcase
-    when '2w'
-      date + 2.weeks
-    when '1m'
-      date + 1.month
-    when '6w'
-      date + 6.weeks
-    else
-      false
-    end
-  end
 end

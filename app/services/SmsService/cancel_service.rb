@@ -32,7 +32,7 @@ class SmsService::CancelService < SmsService::ProcessService
     when 3
       reason = @params['Body'].downcase
       smarty_cancellation_reason = @customer.shop.smarty_cancellation_reasons.where('name ILIKE ?', reason).last
-      if smarty_cancellation_reason.present? && !smarty_cancellation_reason.not_defined?
+      if smarty_cancellation_reason.present? && !smarty_cancellation_reason.not_defined? && @customer.shop.sms_setting&.winback_flow
         message = "Do you want to #{smarty_cancellation_reason.winback.upcase} a product for your current subscription (#{smarty_cancellation_reason.winback.upcase}) or continue with the cancellation of your subscription (CONTINUE) ?"
       else
         subscription_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 2).last

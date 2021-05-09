@@ -8,7 +8,8 @@ class SmsConversation < ApplicationRecord
     {
       'STOP': 'Stops the current conversation.',
       'SWAP': 'Enables you the change your subscription product for another one.',
-      'SKIP': 'Enables you to delay your next shipment.',
+      'SKIP': 'Enables you to skip your next shipment.',
+      'DELAY': 'Enables you to delay your next shipment.',
       'QUANTITY': 'Enables you to change the quantity of products you are currently receiving.',
       'BILLING': 'Enables you to change your billing information.',
       'SHIPPING': 'Enables you to change your shipping information.',

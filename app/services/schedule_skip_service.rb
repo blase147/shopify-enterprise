@@ -19,7 +19,7 @@ class ScheduleSkipService < GraphqlService
   end
 
   def run(params = nil)
-    if params[:billing_date].present?
+    if params.present? && params[:billing_date].present?
       skip_billing_date = params[:billing_date].to_date
     else
       subscription = SubscriptionContractService.new(@id).run
