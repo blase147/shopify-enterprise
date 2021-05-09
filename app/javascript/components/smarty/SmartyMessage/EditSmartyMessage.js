@@ -4,16 +4,25 @@ import {
 
   TextField
 } from '@shopify/polaris';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
+import { useParams } from 'react-router';
 
-const EditSmartyMessage = ({id,handleClose}) => {
+const EditSmartyMessage = ({}) => {
 
     const orderOptions = [
         { label: "Order By Title", value: 'title' },
         { label: "Order By Name", value: 'name' }
     ]
+    const {id}=useParams()
+
     const [searchValue, setSearchValue] = useState("");
     const [order, setOrder] = useState("title");
+
+    useEffect(() => {
+     if(id){
+       console.log("ID....",id)
+     }
+    }, [id])
     return (
         <Layout>
         <Card>
