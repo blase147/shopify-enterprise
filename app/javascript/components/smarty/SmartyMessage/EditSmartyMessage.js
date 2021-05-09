@@ -6,8 +6,21 @@ import {
 } from '@shopify/polaris';
 import React, { useState,useEffect } from 'react';
 import { useParams } from 'react-router';
+import Tags from "@yaireo/tagify/dist/react.tagify" // React-wrapper file
+import "@yaireo/tagify/dist/tagify.css" // Tagify CSS
+import { gql, useLazyQuery } from '@apollo/client';
 
 const EditSmartyMessage = ({}) => {
+
+  const variablesQuery=gql`
+  query{
+      fetchSmartyVariables {
+              id
+              name
+              response
+      }
+  }
+  `;
 
     const orderOptions = [
         { label: "Order By Title", value: 'title' },
@@ -17,12 +30,26 @@ const EditSmartyMessage = ({}) => {
 
     const [searchValue, setSearchValue] = useState("");
     const [order, setOrder] = useState("title");
+    const [formData,setFormData]=useState({title:"",description:"",body:""})
 
     useEffect(() => {
      if(id){
        console.log("ID....",id)
      }
     }, [id])
+    useEffect(()=>{
+      console.log("FormData",formData)
+    },[formData])
+
+    const [getVariables, { loading, data }] = useLazyQuery(variablesQuery);
+    useEffect(()=>{
+      getVariables();
+    },[])
+
+    useEffect(()=>{
+      if(loading) console.log("Fetching Variables");
+      if(data) console.log("Variables",data)
+    },[data,loading])
     return (
         <Layout>
         <Card>
@@ -37,9 +64,9 @@ const EditSmartyMessage = ({}) => {
                       <p>Title *</p>
                       <TextField
                           placeholder="Account Settings - Options"
-                          value={searchValue}
+                          value={formData.title}
                           // error={}
-                          onChange={(value) => setSearchValue(value)}
+                          // onChange={(value) => setFormData({...formData,title}value)}
                       />
                       <div className="tick-icon">
                         <svg width="15" height="13" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -52,9 +79,9 @@ const EditSmartyMessage = ({}) => {
                       <p>Description</p>
                       <TextField
                           // placeholder="Message’s Keyword"
-                          value={searchValue}
+                          value={formData.description}
                           // error={}
-                          onChange={(value) => setSearchValue(value)}
+                          onChange={(value) => setFormData({...formData,description:value})}
                       />
                     </div>
                   </div>
@@ -95,6 +122,27 @@ const EditSmartyMessage = ({}) => {
                   placeholder="Hi please reply with a number to modify your account."
                   value={searchValue}
                   // error={}
+                />
+                <Tags
+                  InputMode="textarea"
+                  multiline={4}
+                  settings={{
+                    // mixTagsInterpolator: ["{{", "}}"],  // optional: interpolation before & after string
+                    mode: 'mix',    // <--  Enable mixed-content
+                    pattern: /@/,  // <--  Text starting with @ or # (if single, String can be used here instead of Regex)
+                    whitelist:[{value:"abc"},{value:"def"},{value:"ghi"}],
+                    // tagTextProp:"text",
+                    dropdown:{
+                      enabled:0,
+                      fuzzySearch:true,
+                      position:"text",
+                    },
+                    originalInputValueFormat:val=>console.log(val),
+                  }}
+                  
+                  value={formData.body}
+                  placeholder="hahahah write something yooo"
+                  onChange={val=>setFormData({...formData,body:val.detail.value})}
                 />
                 <p>Type @ to have the variables auto-completion.</p>
 

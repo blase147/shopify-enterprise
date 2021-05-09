@@ -155,8 +155,11 @@ const SmartyMessage = ({ handleEditSmartyMessage }) => {
                 breakLabel={'...'}
                 breakClassName={'break-me'}
                 pageCount={totalPages}
-                // marginPagesDisplayed={2}
-                // pageRangeDisplayed={5}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={2}
+                previousClassName={'page-item'}
+                nextClassName={'page-item'}
+                pageClassName={'page-item'}
                 onPageChange={handlePageClick}
                 containerClassName={'pagination'}
                 activeClassName={'active'}

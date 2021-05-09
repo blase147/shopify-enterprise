@@ -10,6 +10,7 @@
     "@rails/webpacker": "4.3.0",
     "@shopify/app-bridge-utils": "1.26.0",
     "@shopify/polaris": "^5.11.0",
+    "@yaireo/tagify": "4.1.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "dayjs": "1.10.4",
     "dotenv": "^8.2.0",

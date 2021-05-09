@@ -1,3 +1,4 @@
+import { useLazyQuery, gql } from "@apollo/client";
 import {
     Button,
     Card,
@@ -9,8 +10,35 @@ import {
     TextField,
     TextStyle
   } from "@shopify/polaris";
+import gql from "graphql-tag";
   import React from "react";
+
   const Taxes = () => {
+  const fetchSetting=gql`
+  query{
+    fetchSmsSetting {
+            status
+            delayOrder
+            editDeliverySchedule
+            orderTracking
+            renewalReminder
+            skipUpcomingOrder
+            skipUpdateNextCharge
+            oneTimeUpsells
+            failedRenewal
+            cancelReactivateSubscription
+            editQuantity
+            cancelSubscription
+            winbackFlow
+            deliveryStartTime
+            deliveryEndTime
+            renewalDuration
+            updatedAt
+            shopPhone
+            smsCount
+            smsChargeAmount
+    }
+}`;
     return (
       <React.Fragment>
             <div className="sms-tab">
