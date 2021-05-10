@@ -96,7 +96,7 @@ class ProcessSmsService
     when 'CANCEL'
       process = sms_setting.cancel_subscription
     when 'PAUSE'
-      process = sms_setting.pause_subscription
+      process = true
     when 'RESUME'
       process = sms_setting.cancel_reactivate_subscription
     end
