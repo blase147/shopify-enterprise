@@ -18,8 +18,8 @@ class SmsService::ShippingService < SmsService::ProcessService
         message = @shared_service.get_all_subscriptions(@data)
       else
         address = @data[:active_subscriptions].first.node.delivery_method.address
-        customer_detail = "Name: #{address.first_name} #{address.last_name}/nAddress: #{address.address1.present? ? address.address1 : '-'}"
-        message = customer_detail + '/nDo you want to change your shipping informations?'
+        customer_detail = "Name: #{address.first_name} #{address.last_name}\nAddress: #{address.address1.present? ? address.address1 : '-'}"
+        message = customer_detail + '\nDo you want to change your shipping informations?'
         increase_step = step + 1
         @shared_service.create_sms_message(@data[:active_subscriptions].first.node.id[/\d+/], 2, comes_from_customer: true)
       end
@@ -30,8 +30,8 @@ class SmsService::ShippingService < SmsService::ProcessService
       else
         customer_subscription = @data[:active_subscriptions].select{ |sub| sub.node.id == subscription.id }
         address = customer_subscription.first.node.delivery_method.address
-        customer_detail = "Name: #{address.first_name} #{address.last_name}/nAddress: #{address.address1.present? ? address.address1 : '-'}"
-        message = customer_detail + '/nDo you want to change your billing informations?'
+        customer_detail = "Name: #{address.first_name} #{address.last_name}\nAddress: #{address.address1.present? ? address.address1 : '-'}"
+        message = customer_detail + '\nDo you want to change your billing informations?'
       end
     when 3
       if @params['Body'].downcase == 'yes'
@@ -45,8 +45,8 @@ class SmsService::ShippingService < SmsService::ProcessService
     when 5
       name_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 4).last
       address_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 5).last
-      customer_data = "Name: #{name_message.content}/nAddress: #{address_message.content}"
-      message = customer_data + '/nAre you sure you want to apply those changes?'
+      customer_data = "Name: #{name_message.content}\nAddress: #{address_message.content}"
+      message = customer_data + '\nAre you sure you want to apply those changes?'
     when 6
       if @params['Body'].downcase == 'yes'
         subscription_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 2).last

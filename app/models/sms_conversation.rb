@@ -14,7 +14,7 @@ class SmsConversation < ApplicationRecord
       'BILLING': 'Enables you to change your billing information.',
       'SHIPPING': 'Enables you to change your shipping information.',
       'PRODUCT': 'Enables you to add a product to your next shipment.',
-      'CANCEL': 'Enables you to cancel your subscription at any time.',
+      'CLOSE': 'Enables you to cancel your subscription at any time.',
       'PAUSE': 'Enables you to pause your subscription.',
       'RESUME': 'Enables you to resume your paused subscription.',
       'HEY': 'List all available commands.',

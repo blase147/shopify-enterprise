@@ -23,11 +23,11 @@ class SmsService::SharedService
   end
 
   def get_all_subscriptions(data)
-    data[:active_subscriptions].each_with_index.map{ |subscription, i| "#{i+1}. #{subscription.node.id[/\d+/]} #{subscription.node.next_billing_date.to_date.strftime("%a, %B %e")} #{subscription.node.status}" }.join('/n')
+    data[:active_subscriptions].each_with_index.map{ |subscription, i| "#{i+1}. #{subscription.node.id[/\d+/]} #{subscription.node.next_billing_date.to_date.strftime("%a, %B %e")} #{subscription.node.status}" }.join('\n')
   end
 
   def get_all_paused_subscriptions(data)
-    data[:subscriptions].each_with_index.map{ |subscription, i| subscription.status == 'PAUSED' ? "#{i+1}. #{subscription.id[/\d+/]} #{subscription.next_billing_date.to_date.strftime("%a, %B %e")} #{subscription.status}" : nil }.compact.join('/n')
+    data[:subscriptions].each_with_index.map{ |subscription, i| subscription.status == 'PAUSED' ? "#{i+1}. #{subscription.id[/\d+/]} #{subscription.next_billing_date.to_date.strftime("%a, %B %e")} #{subscription.status}" : nil }.compact.join('\n')
   end
 
   def subscription_shopify_id(id)
@@ -35,7 +35,7 @@ class SmsService::SharedService
   end
 
   def get_all_products(products)
-    products.each_with_index.map{ |product, i| "#{i+1}. #{product.node.id[/\d+/]} #{product.node.title}" }.join('/n')
+    products.each_with_index.map{ |product, i| "#{i+1}. #{product.node.id[/\d+/]} #{product.node.title}" }.join('\n')
   end
 
   def valid_subscription(data, id)

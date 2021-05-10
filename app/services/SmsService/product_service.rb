@@ -16,11 +16,11 @@ class SmsService::ProductService < SmsService::ProcessService
     increase_step = step
     case step
     when 1
-      message = 'Please reply with product ID/n' + @shared_service.get_all_products(products)
+      message = 'Please reply with product ID\n' + @shared_service.get_all_products(products)
     when 2
       product = ShopifyAPI::Product.find(@params['Body']) rescue nil
       if product.present?
-        message = 'Please select the product variant ID:/n' + product.variants.each_with_index.map{|variant, i| "#{i+1}. #{variant.id} #{variant.title} $#{variant.price}"}.join('/n')
+        message = 'Please select the product variant ID:\n' + product.variants.each_with_index.map{|variant, i| "#{i+1}. #{variant.id} #{variant.title} $#{variant.price}"}.join('\n')
       else
         error = true
       end

@@ -10,6 +10,7 @@ class SmsService::ProcessService
         @conversation.update(command_step: payload[:increase_step])
       end
     else
+      @conversation.update(command_step: @conversation.command_step - 1)
       puts "######### ERROR: #{@response[:error_message]} #########"
     end
   end

@@ -36,7 +36,7 @@ class SmsService::MessageGenerateService
       when 'line_item_qty'
         message = message.gsub("{{#{variable.name}}}", @custom_data[:line_item_qty].to_s) if @custom_data.present?
       when 'line_item_list'
-        message = message.gsub("{{#{variable.name}}}", @subscription.lines.edges.each_with_index.map{|line, i| "#{i+1}. #{line.node.id.split("gid://shopify/SubscriptionLine/")[1]} #{line.node.title}"}.join('/n')) if @subscription.present?
+        message = message.gsub("{{#{variable.name}}}", @subscription.lines.edges.each_with_index.map{|line, i| "#{i+1}. #{line.node.id.split("gid://shopify/SubscriptionLine/")[1]} #{line.node.title}"}.join('\n')) if @subscription.present?
       when 'line_item_name'
         message = message.gsub("{{#{variable.name}}}", @custom_data[:line_item_name].to_s) if @custom_data.present?
       when 'card_brand - card_last4'
@@ -52,7 +52,7 @@ class SmsService::MessageGenerateService
           message = message.gsub("{{#{variable.name}}}", card.respond_to?(:credit_card_expiration_month) ? "#{card.credit_card_expiration_month}/#{card.credit_card_expiration_year}" : '-')
         end
       when 'cancellation_reasons'
-        message = message.gsub("{{#{variable.name}}}", @customer.shop.smarty_cancellation_reasons.map{|reason| "#{reason.name}"}.join('/n')) if @customer.present?
+        message = message.gsub("{{#{variable.name}}}", @customer.shop.smarty_cancellation_reasons.map{|reason| "#{reason.name}"}.join('\n')) if @customer.present?
       end
     end
     message
