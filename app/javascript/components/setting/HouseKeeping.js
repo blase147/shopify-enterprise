@@ -1,5 +1,5 @@
 import React,{useMemo,useCallback,useState,useEffect} from 'react'
-import { Banner, Card, ContextualSaveBar, Form, Frame, Layout, List, Page, Spinner, Tabs, Toast, RadioButton } from '@shopify/polaris';
+import { Banner, Card, ContextualSaveBar, Form, Frame, Layout, List, Page, Spinner, Tabs, Toast, RadioButton,Button } from '@shopify/polaris';
 import Discount from './HouseKeepingComponents/Discount';
 import Export from './HouseKeepingComponents/Export';
 import Taxes from './HouseKeepingComponents/Taxes';
@@ -73,7 +73,7 @@ const HouseKeeping = () => {
     (selectedTabIndex) => setSelectedTitleTab(selectedTabIndex),
     [setSelectedTitleTab])
 
-  const [updateSmsSettings,{data ,error}]=useMutation(updateSmsSettingQuery);
+  const [updateSmsSettings,{data ,error,loading}]=useMutation(updateSmsSettingQuery);
   useEffect(() => {
     if(data && !error)
       console.log("Data.. Updated",data)
@@ -147,11 +147,17 @@ const HouseKeeping = () => {
         <div class="tab-parent">
           <div class="tabs">
             <input type="radio" name="tab-btn" id="tab-btn-1" value=""  />
-            <label for="tab-btn-1">Tab 1</label>
+            <label for="tab-btn-1">Discount</label>
             <input type="radio" name="tab-btn" id="tab-btn-2" value="" />
-            <label for="tab-btn-2">Tab 2</label>
+            <label for="tab-btn-2">Export</label>
             <input type="radio" name="tab-btn" id="tab-btn-3" value="" checked />
             <label for="tab-btn-3">SMS</label>
+            <input type="radio" name="tab-btn" id="tab-btn-4" value=""  />
+            <label for="tab-btn-4">Legal</label>
+            <input type="radio" name="tab-btn" id="tab-btn-5" value=""  />
+            <label for="tab-btn-5">Translation</label>
+            <input type="radio" name="tab-btn" id="tab-btn-6" value=""  />
+            <label for="tab-btn-6">Password</label>
             <div id="content-1">
               Content 1...
           </div>
@@ -163,8 +169,8 @@ const HouseKeeping = () => {
               <Layout>
                 <Layout.Section>
                   <div class="tabs-btn">
-                    <button class="save-btn" onClick={handleSmsSettingSubmit} type="button">Save</button>
-                    <button class="cancel-btn" type="button">Cancel</button>
+                    <Button primary loading={loading} onClick={handleSmsSettingSubmit} >Save</Button>
+                    <Button type="button">Cancel</Button>
                   </div>
                   <div className="smarty-sms-number">
                     <div className="action-smarty">
@@ -179,8 +185,17 @@ const HouseKeeping = () => {
                   </div>
                 </Layout.Section>
               </Layout>
-              <Taxes  setSmsData={handleSmsChange} handleSmsSettingSubmit={handleSmsSettingSubmit} />
+              <Taxes submitting={loading} setSmsData={handleSmsChange} handleSmsSettingSubmit={handleSmsSettingSubmit} />
             </div>
+            <div id="content-4">
+              Content 3...
+          </div>
+          <div id="content-5">
+              Content 4...
+          </div>
+          <div id="content-6">
+              Content 5...
+          </div>
           </div>
          
         </div>
