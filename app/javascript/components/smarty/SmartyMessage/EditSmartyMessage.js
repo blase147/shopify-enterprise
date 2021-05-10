@@ -7,7 +7,7 @@ import {
   Frame
 } from '@shopify/polaris';
 import React, { useState,useEffect,useRef,useCallback } from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useLocation, useParams } from 'react-router';
 import Tags from "@yaireo/tagify/dist/react.tagify" // React-wrapper file
 import "@yaireo/tagify/dist/tagify.css" // Tagify CSS
 import { gql, useLazyQuery, useMutation } from '@apollo/client';
@@ -48,12 +48,14 @@ const EditSmartyMessage = ({}) => {
     ]
     const {id}=useParams()
     const history=useHistory();
+    const location=useLocation();
+    console.log("state,",location.state)
     const [saveSuccess, setSaveSuccess] = useState(false);
     const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
     const [formData,setFormData]=useState({title:"",description:"",body:""})
     const [variables,setVariables]=useState([])
 
-    const [getSmartySms, { loading, data }] = useLazyQuery(getSmartySmsQuery);
+    const [getSmartySms, { loading, data }] = useLazyQuery(getSmartySmsQuery,{fetchPolicy:"no-cache"});
     const [updateSetting]=useMutation(updateSmsSettings)
     useEffect(()=>{
       if(id){
@@ -169,7 +171,6 @@ const EditSmartyMessage = ({}) => {
                 <Tags
                   tagifyRef={tagRef}
                   InputMode="textarea"
-                  multiline={4}
                   settings={{
                      mixTagsInterpolator: ["{{", "}}"],
                      mode: 'mix',
@@ -193,7 +194,7 @@ const EditSmartyMessage = ({}) => {
               </div>
             </div>
           </Card.Section>
-          <Button onClick={()=>history.push('/smarty')}>Cancel</Button>
+          <Button onClick={()=>history.push('/smarty',{...location.state})}>Cancel</Button>
           <Button primary onClick={handleSubmit} >Update</Button>
         </Card>
         <Frame>

@@ -1,5 +1,6 @@
 import { Frame, Page, Tabs } from '@shopify/polaris';
 import React, { useCallback, useState, useEffect } from 'react';
+import { useHistory, useLocation } from 'react-router';
 import AppLayout from '../layout/Layout';
 import CancellationReasons from './CancellationReasons/CancellationReasons';
 import CustomKeywords from './CustomKeywords/CustomKeywords';
@@ -8,8 +9,14 @@ import EditSmartyMessage from './SmartyMessage/EditSmartyMessage';
 import SmartyMessage from './SmartyMessage/SmartyMessage';
 
 const Smarty = () => {
-  const [selectedTitleTab, setSelectedTitleTab] = useState(0);
+  const location=useLocation();
+  const [selectedTitleTab, setSelectedTitleTab] = useState(location.state?.tabIndex || 0);
 
+  useEffect(() => {
+   if(location?.state?.tabIndex && selectedTitleTab!==location?.state?.tabIndex){
+    setSelectedTitleTab(location.state.tabIndex)
+   }
+  }, [location?.state])
   const handleTabChange = useCallback(
     (selectedTabIndex) => 
     {
