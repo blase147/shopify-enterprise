@@ -1,4 +1,4 @@
-import React,{useMemo,useCallback,useState} from 'react'
+import React,{useMemo,useCallback,useState,useEffect} from 'react'
 import { Banner, Card, ContextualSaveBar, Form, Frame, Layout, List, Page, Spinner, Tabs, Toast, RadioButton } from '@shopify/polaris';
 import Discount from './HouseKeepingComponents/Discount';
 import Export from './HouseKeepingComponents/Export';
@@ -6,8 +6,37 @@ import Taxes from './HouseKeepingComponents/Taxes';
 import Legal from './Legal';
 import Translation from './HouseKeepingComponents/Translation';
 import Password from './HouseKeepingComponents/Password';
+import {gql,useLazyQuery,useMutation} from '@apollo/client'
 const HouseKeeping = () => {
 
+  const updateSmsSettingQuery=gql`
+  mutation ($input: UpdateSmsSettingInput!) {
+    updateSmsSetting(input: $input) {
+        smsSetting {
+          status
+          delayOrder
+          swapProduct
+          orderTracking
+          renewalReminder
+          updateBilling
+          skipUpdateNextCharge
+          oneTimeUpsells
+          failedRenewal
+          cancelReactivateSubscription
+          editQuantity
+          cancelSubscription
+          winbackFlow
+          deliveryStartTime
+          deliveryEndTime
+          renewalDuration
+          updatedAt
+          shopPhone
+          smsCount
+          smsChargeAmount
+        }
+    }
+}
+  `;
   const tabs = useMemo(()=>([
     {
       id: 'discount',
@@ -35,12 +64,69 @@ const HouseKeeping = () => {
     }
   ]),[])
 
+  const [formErrors, setFormErrors] = useState([]);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
   const [selectedTitleTab, setSelectedTitleTab] = useState(0);
 
   const handleTabChange = useCallback(
     (selectedTabIndex) => setSelectedTitleTab(selectedTabIndex),
     [setSelectedTitleTab])
 
+  const [updateSmsSettings,{data ,error}]=useMutation(updateSmsSettingQuery);
+  useEffect(() => {
+    if(data && !error)
+      console.log("Data.. Updated",data)
+  }, [data])
+  const [smsData, setSmsData] = useState({
+    status: "",
+    shopPhone: "",
+    smsCount: "",
+    smsChargeAmount: "",
+    delayOrder: "",
+    swapProduct: "",
+    orderTracking: "",
+    renewalReminder: "",
+    updateBilling: "",
+    skipUpdateNextCharge: "",
+    oneTimeUpsells: "",
+    failedRenewal: "",
+    cancelReactivateSubscription: "",
+    editQuantity: "",
+    cancelSubscription: "",
+    winbackFlow: "",
+    deliveryStartTime: "",
+    deliveryEndTime: "",
+    renewalDuration: "",
+  })
+    const handleSmsChange=(updated)=>{
+      setSmsData({...smsData,...updated})
+    }
+  const handleSmsSettingSubmit = () => {
+    const { status, delayOrder, swapProduct, orderTracking, renewalReminder, updateBilling,
+      skipUpdateNextCharge, oneTimeUpsells, failedRenewal, cancelReactivateSubscriptioneditQuantity, cancelSubscription,
+      winbackFlow, deliveryStartTime, deliveryEndTime, renewalDuration } = smsData;
+    updateSmsSettings({
+      variables: {
+        input: {
+          params: {
+            status, delayOrder, swapProduct, orderTracking, renewalReminder, updateBilling,
+            skipUpdateNextCharge, oneTimeUpsells, failedRenewal, cancelReactivateSubscriptioneditQuantity, cancelSubscription,
+            winbackFlow, deliveryStartTime, deliveryEndTime, renewalDuration
+          }
+        }
+      }
+    }).then(res => {
+      if (!res.data.errors) {
+        setSaveSuccess(true);
+      }
+      else{
+        setFormErrors(res.data.errors);
+      }
+    }).catch((error) => {
+      setFormErrors(error);
+    });
+  }
   return (
       // <Tabs
       //   tabs={tabs}
@@ -60,11 +146,11 @@ const HouseKeeping = () => {
       <div className="tab-section">
         <div class="tab-parent">
           <div class="tabs">
-            <input type="radio" name="tab-btn" id="tab-btn-1" value="" checked />
+            <input type="radio" name="tab-btn" id="tab-btn-1" value=""  />
             <label for="tab-btn-1">Tab 1</label>
             <input type="radio" name="tab-btn" id="tab-btn-2" value="" />
             <label for="tab-btn-2">Tab 2</label>
-            <input type="radio" name="tab-btn" id="tab-btn-3" value="" />
+            <input type="radio" name="tab-btn" id="tab-btn-3" value="" checked />
             <label for="tab-btn-3">SMS</label>
             <div id="content-1">
               Content 1...
@@ -77,32 +163,46 @@ const HouseKeeping = () => {
               <Layout>
                 <Layout.Section>
                   <div class="tabs-btn">
-                    <button class="save-btn" type="button">Save</button>
+                    <button class="save-btn" onClick={handleSmsSettingSubmit} type="button">Save</button>
                     <button class="cancel-btn" type="button">Cancel</button>
                   </div>
                   <div className="smarty-sms-number">
                     <div className="action-smarty">
-                      <p>Your SmartySMS Number is 345 567 4564</p>
-                      <RadioButton label="Activate SmartySMS" id="active-sms" name="accounts" />
-                      <RadioButton
-                        label="Disable SmartySMS"
-                        id="diable-sms"
-                        name="accounts"
-                      />
+                      <p>Your SmartySMS Number is {smsData.shopPhone}</p>
+                      <RadioButton label="Activate SmartySMS"  onChange={val=>setSmsData({...smsData,status:"active"})} checked={smsData.status=="active"} name="status" value="active" />
+                      <RadioButton label="Disable SmartySMS"   onChange={val=>setSmsData({...smsData,status:"disable"})}  name="status" checked={smsData.status=="disable"} value="disable" />
                     </div>
                     <div className="sms-usage">
                       <p> SmartySMS Usage:</p>
-                      <p>2345 SMS  <span>$35.45</span></p>
+                      <p>{smsData.smsCount} SMS  <span>${smsData.smsChargeAmount}</span></p>
                     </div>
                   </div>
                 </Layout.Section>
               </Layout>
-              <Taxes />
+              <Taxes  setSmsData={handleSmsChange} handleSmsSettingSubmit={handleSmsSettingSubmit} />
             </div>
           </div>
          
         </div>
       </div>
+      {saveSuccess && (
+        <Toast
+          content="Setting is saved"
+          onDismiss={hideSaveSuccess}
+        />
+      )}
+      {formErrors.length > 0 && (
+              <>
+                <Banner title="Setting could not be saved" status="critical">
+                  <List type="bullet">
+                    {formErrors.map((message, index) => (
+                      <List.Item key={index}>{message.message}</List.Item>
+                    ))}
+                  </List>
+                </Banner>
+                <br />
+              </>
+            )}
       </>
   )
 }

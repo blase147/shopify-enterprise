@@ -1,55 +1,110 @@
 import {
+  Button,
   Card,
   Layout,
-
-  TextField
+  Toast,
+  TextField,
+  Frame
 } from '@shopify/polaris';
-import React, { useState,useEffect } from 'react';
-import { useParams } from 'react-router';
+import React, { useState,useEffect,useRef,useCallback } from 'react';
+import { useHistory, useLocation, useParams } from 'react-router';
 import Tags from "@yaireo/tagify/dist/react.tagify" // React-wrapper file
 import "@yaireo/tagify/dist/tagify.css" // Tagify CSS
-import { gql, useLazyQuery } from '@apollo/client';
+import { gql, useLazyQuery, useMutation } from '@apollo/client';
 
 const EditSmartyMessage = ({}) => {
 
-  const variablesQuery=gql`
-  query{
-      fetchSmartyVariables {
-              id
-              name
-              response
-      }
-  }
-  `;
-
+  const getSmartySmsQuery = gql`
+  query($id:String!){
+    fetchSmartyMessage(id: $id) {
+       id
+       title
+       description
+       body
+       updatedAt
+    }
+    fetchSmartyVariables {
+      id
+      name
+      response
+}
+}`;
+  const updateSmsSettings=gql`
+  mutation ($input: UpdateSmartyMessageInput!) {
+    updateSmartyMessage(input: $input) {
+        smartyMessage {
+            id
+            title
+            description
+            body
+            custom
+        }
+    }
+}
+  `
     const orderOptions = [
         { label: "Order By Title", value: 'title' },
         { label: "Order By Name", value: 'name' }
     ]
     const {id}=useParams()
-
-    const [searchValue, setSearchValue] = useState("");
-    const [order, setOrder] = useState("title");
+    const history=useHistory();
+    const location=useLocation();
+    console.log("state,",location.state)
+    const [saveSuccess, setSaveSuccess] = useState(false);
+    const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
     const [formData,setFormData]=useState({title:"",description:"",body:""})
+    const [variables,setVariables]=useState([])
 
-    useEffect(() => {
-     if(id){
-       console.log("ID....",id)
-     }
-    }, [id])
+    const [getSmartySms, { loading, data }] = useLazyQuery(getSmartySmsQuery,{fetchPolicy:"no-cache"});
+    const [updateSetting]=useMutation(updateSmsSettings)
     useEffect(()=>{
-      console.log("FormData",formData)
-    },[formData])
-
-    const [getVariables, { loading, data }] = useLazyQuery(variablesQuery);
-    useEffect(()=>{
-      getVariables();
+      if(id){
+        getSmartySms({
+          variables:{id:id}
+        });
+      }
     },[])
 
     useEffect(()=>{
-      if(loading) console.log("Fetching Variables");
-      if(data) console.log("Variables",data)
-    },[data,loading])
+      if(data){
+        const variables=data?.fetchSmartyVariables?.map(variable=>(variable.response));
+        const {title,description,body}=data?.fetchSmartyMessage;
+        setFormData({title,description,body})
+        setVariables(variables);
+      }
+    },[data])
+
+    const tagRef=useRef();
+
+  const handleSubmit = () => {
+    console.log(tagRef);
+    let val = tagRef.current.DOM.originalInput.value;
+    let updatedval = val.split(" ").map(value => {
+      if (value[4] === 'v') {
+        let newL = value.substr(value.indexOf(':"') + 2);
+        let newR = newL.substr(0, newL.indexOf('"'))
+        return `{{${newR}}}`;
+      }
+      return value;
+    }).join(" ")
+
+    updateSetting({
+      variables:{
+        input: {
+          params: {
+              id:id,
+              description:formData.description,
+              title:formData.title,
+              body:updatedval
+          }
+      }
+      }
+    }).then(res => {
+      if (!res.data.errors) {
+        setSaveSuccess(true);
+      }
+    })
+  }
     return (
         <Layout>
         <Card>
@@ -65,6 +120,7 @@ const EditSmartyMessage = ({}) => {
                       <TextField
                           placeholder="Account Settings - Options"
                           value={formData.title}
+                          readOnly={true}
                           // error={}
                           // onChange={(value) => setFormData({...formData,title}value)}
                       />
@@ -104,53 +160,51 @@ const EditSmartyMessage = ({}) => {
 
                 <div className="available-variables">
                   <p className="">Available variables</p>
-                  <button>shop_name</button>
-                  <button>shop_domain</button>
-                  <button>shop_email</button>
-                  <button>shop_phone</button>
-                  <button>first_name</button>
-                  <button>last_name</button>
-                  <br></br>
-                  <button>email</button>
-                  <button>phone</button>
-                  <button>features_options</button>
+                  {
+                    data && data?.fetchSmartyVariables?.map(variable=>(
+                      <button>{variable.response}</button>
+                    ))
+                  }
                 </div>
               </div>
               <div className="var-auto-complition">
-                <TextField
-                  multiline={4}
-                  placeholder="Hi please reply with a number to modify your account."
-                  value={searchValue}
-                  // error={}
-                />
                 <Tags
+                  tagifyRef={tagRef}
                   InputMode="textarea"
-                  multiline={4}
                   settings={{
-                    // mixTagsInterpolator: ["{{", "}}"],  // optional: interpolation before & after string
-                    mode: 'mix',    // <--  Enable mixed-content
-                    pattern: /@/,  // <--  Text starting with @ or # (if single, String can be used here instead of Regex)
-                    whitelist:[{value:"abc"},{value:"def"},{value:"ghi"}],
-                    // tagTextProp:"text",
-                    dropdown:{
-                      enabled:0,
+                     mixTagsInterpolator: ["{{", "}}"],
+                     mode: 'mix',
+                     pattern: /@/,
+                     dropdown : {
+                      enabled: 0,
                       fuzzySearch:true,
-                      position:"text",
-                    },
-                    originalInputValueFormat:val=>console.log(val),
+                      position:"text"
+                     },
+                     enforceWhitelist: true,
                   }}
-                  
+                  whitelist={variables}
                   value={formData.body}
-                  placeholder="hahahah write something yooo"
-                  onChange={val=>setFormData({...formData,body:val.detail.value})}
+                  placeholder="add variables"
+                  // onChange={val=>{setFormData({...formData,body:val.detail.value});console.log("changed--",val)}}
+                  //  onKeydown={(e)=>setFormData({...formData,body:e.detail.tagify.DOM.originalInput.value})}
+                  // onChange={e => (setFormData({...formData,body:e.target.value}))}
                 />
                 <p>Type @ to have the variables auto-completion.</p>
 
               </div>
             </div>
           </Card.Section>
+          <Button onClick={()=>history.push('/smarty',{...location.state})}>Cancel</Button>
+          <Button primary onClick={handleSubmit} >Update</Button>
         </Card>
-
+        <Frame>
+          {saveSuccess && (
+            <Toast
+              content="Setting is saved"
+              onDismiss={hideSaveSuccess}
+            />
+          )}
+        </Frame>
       </Layout>
     )
 }
