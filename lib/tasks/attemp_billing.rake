@@ -32,10 +32,13 @@ namespace :subscriptions do
       if customer.shopify_id.present?
         subscription = SubscriptionContractService.new(customer.shopify_id).run
         unless subscription.is_a?(Hash)
-          message_service = SmsService::MessageGenerateService.new(customer.shop, customer, subscription)
-          message = message_service.content('Opt-in - success')
-          p message
-          TwilioServices::SendSms.call(from: shop.phone, to: customer.phone, message: message)
+          conversation = customer.sms_conversations.order(created_at: :asc).first
+          if conversation.present? && conversation.sms_messages.present? && conversation.sms_messages.order(created_at: :asc).first.command == 'STOP'
+            message_service = SmsService::MessageGenerateService.new(customer.shop, customer, subscription)
+            message = message_service.content('Opt-in - success')
+            p message
+            TwilioServices::SendSms.call(from: shop.phone, to: customer.phone, message: message)
+          end
         end
       end
     end
