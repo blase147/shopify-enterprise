@@ -17,7 +17,7 @@ class CardUpdateService < GraphqlService
   def initialize id
     @id = id
   end
-  
+
   def run
     subscription = SubscriptionContractService.new(@id).run
     id = subscription.customer_payment_method.id

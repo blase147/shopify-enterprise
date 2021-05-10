@@ -4,7 +4,7 @@ class ProcessSmsService
     @params = params
     @customer = customer
     @shared_service = SmsService::SharedService.new(conversation, params)
-    set_shopify_session
+    @customer.shop.connect
   end
 
   def process
@@ -48,6 +48,7 @@ class ProcessSmsService
       @shared_service.send_message('Invalid Command')
     end
   rescue Exception => ex
+    p ex.message
     { error: true, message: 'Invalid Request' }
   end
 
@@ -57,11 +58,6 @@ class ProcessSmsService
 
   def end_conversation
     @conversation.update(command: @params['Body'], status: :stoped)
-  end
-
-  def set_shopify_session
-    session = ShopifyAPI::Session.new(domain: @customer.shop.shopify_domain, token: @customer.shop.shopify_token, api_version: "2021-01")
-    ShopifyAPI::Base.activate_session(session)
   end
 
   def processing_allowed?(customer)
@@ -92,7 +88,7 @@ class ProcessSmsService
     when 'QUANTITY'
       process = sms_setting.edit_quantity
     when 'BILLING'
-      process = sms_setting.billing_update
+      process = sms_setting.update_billing
     when 'SHIPPING'
       process = sms_setting.order_tracking
     when 'PRODUCT'

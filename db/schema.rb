@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_09_084112) do
+ActiveRecord::Schema.define(version: 2021_05_10_111832) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,6 +80,8 @@ ActiveRecord::Schema.define(version: 2021_05_09_084112) do
     t.string "zip"
     t.string "company"
     t.datetime "shopify_updated_at"
+    t.boolean "opt_in_sent", default: false
+    t.datetime "opt_in_reminder_at"
   end
 
   create_table "email_notifications", force: :cascade do |t|

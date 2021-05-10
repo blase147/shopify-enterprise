@@ -24,6 +24,23 @@ namespace :subscriptions do
     SmsConversation.where('last_activity_at < ?', Time.current - 10.minutes).update_all(status: :expired)
   end
 
+  task :opt_in_success => :environment do
+    customers = Customer.where(opt_in_reminder_at: (Time.current - 10.minutes)..Time.current)
+    customers.each do |customer|
+      shop = customer.shop
+      shop.connect
+      if customer.shopify_id.present?
+        subscription = SubscriptionContractService.new(customer.shopify_id).run
+        unless subscription.is_a?(Hash)
+          message_service = SmsService::MessageGenerateService.new(customer.shop, customer, subscription)
+          message = message_service.content('Opt-in - success')
+          p message
+          TwilioServices::SendSms.call(from: shop.phone, to: customer.phone, message: message)
+        end
+      end
+    end
+  end
+
   def process_subscription subscription
     return unless subscription.status == 'ACTIVE'
 

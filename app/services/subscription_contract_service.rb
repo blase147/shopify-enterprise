@@ -57,7 +57,7 @@ class SubscriptionContractService < GraphqlService
           lastName
           email
           phone
-          paymentMethods(first: 10) {
+          paymentMethods(first: 5) {
             edges {
               node {
                 id
@@ -107,7 +107,6 @@ class SubscriptionContractService < GraphqlService
 
   def run
     id = "gid://shopify/SubscriptionContract/#{@id}"
-
     result = client.query(client.parse(GET_QUERY), variables: { id: id} )
     return result.data.subscription_contract
   rescue Exception => ex

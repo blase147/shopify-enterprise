@@ -16,6 +16,11 @@ class Shop < ActiveRecord::Base
   has_many :smarty_variables
 
   has_many :upsell_campaign_groups
+  after_create :build_sms_setting
+
+  def build_sms_setting
+    SmsSetting.find_or_create_by(shop_id: id)
+  end
 
   def api_version
     ShopifyApp.configuration.api_version
@@ -47,6 +52,7 @@ class Shop < ActiveRecord::Base
         first_name: item.node.customer.first_name,
         last_name: item.node.customer.last_name,
         email: item.node.customer.email,
+        phone: item.node.customer.phone,
         shopify_at: item.node.created_at.to_date,
         shopify_updated_at: item.node.updated_at&.to_date,
         status: item.node.status,

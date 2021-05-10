@@ -51,6 +51,9 @@ class CustomerSubscriptionContractsService < GraphqlService
                   }
                 }
               }
+              originOrder {
+                id
+              }
               billingPolicy {
                 interval
                 intervalCount

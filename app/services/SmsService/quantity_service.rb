@@ -20,9 +20,11 @@ class SmsService::QuantityService < SmsService::ProcessService
         @shared_service.create_sms_message(@data[:active_subscriptions].first.node.id[/\d+/], 2, comes_from_customer: true)
         if subscription.lines.edges.count > 1
           increase_step = step + 1
-          message = subscription.lines.edges.each_with_index.map{|line, i| "#{i+1}. #{line.node.id.split("gid://shopify/SubscriptionLine/")[1]} #{line.node.title}"}.join('/n')
+          message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription)
+          message = message_service.content(messages[:conditional])
         else
-          message = 'Please Reply with required quantity'
+          message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription, {line_item_name: subscription.lines.edges.first.node.title})
+          message = message_service.content(messages[:conditional_response])
           increase_step = step + 2
           @shared_service.create_sms_message(subscription.lines.edges.first&.node&.id&.split("gid://shopify/SubscriptionLine/")[1], increase_step, comes_from_customer: true)
         end
@@ -33,15 +35,28 @@ class SmsService::QuantityService < SmsService::ProcessService
         error = true
       else
         if subscription.lines.edges.count > 1
-          message = subscription.lines.edges.each_with_index.map{|line, i| "#{i+1}. #{line.node.id.split("gid://shopify/SubscriptionLine/")[1]} #{line.node.title}"}.join('/n')
+          message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription)
+          message = message_service.content(messages[:conditional])
         else
-          message = 'Please Reply with required quantity'
+          message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription, {line_item_name: subscription.lines.edges.first.node.title})
+          message = message_service.content(messages[:conditional_response])
           increase_step = step + 1
           @shared_service.create_sms_message(subscription.lines.edges.first&.node&.id&.split("gid://shopify/SubscriptionLine/")[1], increase_step, comes_from_customer: true)
         end
       end
     when 3
-      message = 'Please Reply with required quantity'
+      subscription_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 2).last
+      lines_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 3).last
+      subscription = SubscriptionContractService.new(subscription_message.content).run
+      line = subscription.lines.edges.select{ |line| line.node.id == "gid://shopify/SubscriptionLine/#{lines_message.content.downcase}" }
+      if line.present?
+        message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription, {line_item_name: line.first.node.title})
+        message = message_service.content(messages[:conditional_response])
+      else
+        error = true
+        message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription)
+        error_message = message_service.content(messages[:conditional_response_failure])
+      end
     when 4
       subscription_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 2).last
       lines_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 3).last
@@ -51,13 +66,14 @@ class SmsService::QuantityService < SmsService::ProcessService
       else
         line = subscription.lines.edges.select{ |line| line.node.id == "gid://shopify/SubscriptionLine/#{lines_message.content.downcase}" }
         if @params['Body'].to_i > 0 && @params['Body'].to_i < 10000
-          message = "You would receive #{@params['Body'].to_i} #{line.first.node.title} on every order for a total of #{(line.first.node.current_price.amount.to_f * @params['Body'].to_i).round(2)}$, do you confirm the new total?"
+          message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription, {line_item_name: line.first.node.title, line_item_qty: @params['Body'].to_i})
+          message = message_service.content(messages[:confirm])
         else
           error = true
         end
       end
     when 5
-      if @params['Body'].downcase == 'yes'
+      if @params['Body'].downcase == 'yes' || @params['Body'].downcase == 'y'
         subscription_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 2).last
         lines_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 3).last
         quantity_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 4).last
@@ -67,21 +83,33 @@ class SmsService::QuantityService < SmsService::ProcessService
             error = true
             message = 'Invalid ID, Please Try Again'
           else
+            line = subscription.lines.edges.select{ |line| line.node.id == "gid://shopify/SubscriptionLine/#{lines_message.content.downcase}" }
             draft_id = @shared_service.subscription_draft(subscription.id)
             SubscriptionDraftsService.new.line_update(draft_id, "gid://shopify/SubscriptionLine/#{lines_message.content.downcase}", { quantity: quantity_message.content.to_i })
             result = SubscriptionDraftsService.new.commit draft_id
             if result[:error].present?
               error = true
+              message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription, {line_item_qty: quantity_message.content.to_i})
+              error_message = message_service.content(messages[:failure])
             else
-              message = "Product quantity updated successfully."
+              message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription, {line_item_name: line.first.node.title, line_item_qty: quantity_message.content.to_i})
+              message = message_service.content(messages[:success])
             end
           end
         else
           error = true
         end
+      elsif @params['Body'].downcase == 'no' || @params['Body'].downcase == 'n'
+        subscription_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 2).last
+        subscription = SubscriptionContractService.new(subscription_message.content[/\d+/]).run
+        lines_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 3).last
+        line = subscription.lines.edges.select{ |line| line.node.id == "gid://shopify/SubscriptionLine/#{lines_message.content.downcase}" }
+        message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription, {line_item_name: line.first.node.title, line_item_qty: line.first.node.quantity})
+        message = message_service.content(messages[:cancel])
       else
-        message = @shared_service.get_all_subscriptions(@data)
-        increase_step = 1
+        message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, nil)
+        error_message = message_service.content(messages[:invalid_options])
+        error = true
       end
     else
       message = @shared_service.get_all_subscriptions(@data)
@@ -90,5 +118,18 @@ class SmsService::QuantityService < SmsService::ProcessService
     { error: error, message: error ? error_message : message, increase_step: increase_step }
   rescue Exception => ex
     { error: true, message: error_message }
+  end
+
+  def messages
+    {
+      cancel: 'Edit quantity - Cancel',
+      confirm: 'Edit quantity - Confirm',
+      conditional: 'Edit quantity - Conditional',
+      conditional_response: 'Edit quantity - conditional_response',
+      conditional_response_failure: 'Edit quantity - conditional_response_failure',
+      success: 'Edit quantity - Success',
+      failure: 'Edit quantity - failure',
+      invalid_options: 'Edit quantity- Invalid Option'
+    }
   end
 end

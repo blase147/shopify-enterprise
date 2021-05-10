@@ -12,13 +12,13 @@ class SmsService::CancelService < SmsService::ProcessService
     error = false
     error_message = 'Invalid Command, Please try again.'
     increase_step = step
-    smarty_cancellation_reasons = @customer.shop.smarty_cancellation_reasons
     case step
     when 1
       if @data[:active_subscriptions].count > 1
         message = @shared_service.get_all_subscriptions(@data)
       else
-        message = "Can you tell why you're cancelling?/n" + smarty_cancellation_reasons.map{|reason| "#{reason.name}"}.join('/n')
+        message_service = SmsService::MessageGenerateService.new(@customer.shop, @customer, @data[:active_subscriptions].first.node)
+        message = message_service.content(messages[:cancellation_reasons])
         increase_step = step + 1
         @shared_service.create_sms_message(@data[:active_subscriptions].first.node.id[/\d+/], 2, comes_from_customer: true)
       end
@@ -27,20 +27,23 @@ class SmsService::CancelService < SmsService::ProcessService
       if subscription.is_a?(Hash)
         error = true
       else
-        message = "Can you tell why you're cancelling?/n" + smarty_cancellation_reasons.map{|reason| "#{reason.name}"}.join('/n')
+        message_service = SmsService::MessageGenerateService.new(@customer.shop, @customer, subscription)
+        message = message_service.content(messages[:cancellation_reasons])
       end
     when 3
       reason = @params['Body'].downcase
       smarty_cancellation_reason = @customer.shop.smarty_cancellation_reasons.where('name ILIKE ?', reason).last
       if smarty_cancellation_reason.present? && !smarty_cancellation_reason.not_defined? && @customer.shop.sms_setting&.winback_flow
-        message = "Do you want to #{smarty_cancellation_reason.winback.upcase} a product for your current subscription (#{smarty_cancellation_reason.winback.upcase}) or continue with the cancellation of your subscription (CONTINUE) ?"
+        message_service = SmsService::MessageGenerateService.new(@customer.shop, @customer, nil)
+        message = message_service.content(messages["#{smarty_cancellation_reason.winback}_winback".to_sym])
       else
         subscription_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 2).last
         subscription = SubscriptionContractService.new(subscription_message.content).run
         if subscription.is_a?(Hash)
           error = true
         else
-          message = "Are you sure you want to cancel your subscription for #{subscription.lines.edges.map{|edge| edge.node.title}.join(', ')} with a next scheduled delivery on the #{subscription.next_billing_date.to_date.strftime("%a, %B %e")}?"
+          message_service = SmsService::MessageGenerateService.new(@customer.shop, @customer, subscription)
+          message = message_service.content(messages[:confirmation])
           increase_step = step + 1
         end
       end
@@ -51,27 +54,36 @@ class SmsService::CancelService < SmsService::ProcessService
         if subscription.is_a?(Hash)
           error = true
         else
-          message = "Are you sure you want to cancel your subscription for #{subscription.lines.edges.map{|edge| edge.node.title}.join(', ')} with a next scheduled delivery on the #{subscription.next_billing_date.to_date.strftime("%a, %B %e")}?"
+          message_service = SmsService::MessageGenerateService.new(@customer.shop, @customer, subscription)
+          message = message_service.content(messages[:confirmation])
         end
       else
         error = true
       end
     when 5
-      if @params['Body'].downcase == 'yes'
+      if @params['Body'].downcase == 'yes' || @params['Body'].downcase == 'y'
         subscription_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 2).last
         if subscription_message.present?
+          subscription = SubscriptionContractService.new(subscription_message.content).run
           result = SubscriptionContractDeleteService.new(subscription_message.content).run 'CANCELLED'
           if result[:error].present?
             error = true
+            message_service = SmsService::MessageGenerateService.new(@customer.shop, @customer, subscription)
+            error_message = message_service.content(messages[:failure])
           else
-            message = 'Thank you, your subscription has been successfully cancelled'
+            message_service = SmsService::MessageGenerateService.new(@customer.shop, @customer, subscription)
+            message = message_service.content(messages[:success])
           end
         else
           error = true
         end
+      elsif @params['Body'].downcase == 'no' || @params['Body'].downcase == 'n'
+        message_service = SmsService::MessageGenerateService.new(@customer.shop, @customer, nil)
+        message = message_service.content(messages[:cancel])
       else
-        message = @shared_service.get_all_subscriptions(@data)
-        increase_step = 1
+        message_service = SmsService::MessageGenerateService.new(@customer.shop, @customer, nil)
+        error_message = message_service.content(messages[:invalid_options])
+        error = true
       end
     else
       error = true
@@ -79,5 +91,19 @@ class SmsService::CancelService < SmsService::ProcessService
     { error: error, message: error ? error_message : message, increase_step: increase_step }
   rescue Exception => ex
     { error: true, message: error_message }
+  end
+
+  def messages
+    {
+      confirmation: 'End Subscription - confirmation',
+      cancel: 'End Subscription - Cancel',
+      cancellation_reasons: 'End Subscription - Cancellation Reason',
+      invalid_options: 'End Subscription - invalid option',
+      swap_winback: 'End Subscription - Winback Swap',
+      skip_winback: 'End Subscription - Winback Skip',
+      success: 'End Subscription - Success',
+      failure: 'End Subscription - Failure',
+      contact: 'End Subscription - Contact' #not using for now
+    }
   end
 end

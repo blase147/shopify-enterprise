@@ -16,7 +16,9 @@ class SmsService::SkipService < SmsService::ProcessService
       if @data[:active_subscriptions].count > 1
         message = @shared_service.get_all_subscriptions(@data)
       else
-        message = "Your next delivery date is #{DateTime.parse(@data[:active_subscriptions].first.node.next_billing_date).strftime("%a, %B %e")}, Reply with 'yes' if you want to skip?"
+        message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, @data[:active_subscriptions].first.node,
+                          { subscription_charge_date: DateTime.parse(@data[:active_subscriptions].first.node.next_billing_date).strftime("%a, %B %e") })
+        message = message_service.content(messages[:confirm])
         increase_step = step + 1
         @shared_service.create_sms_message(@data[:active_subscriptions].first.node.id[/\d+/], 2, comes_from_customer: true)
       end
@@ -25,30 +27,66 @@ class SmsService::SkipService < SmsService::ProcessService
       if subscription.is_a?(Hash)
         error = true
       else
-        message = "Your next delivery date is #{DateTime.parse(subscription.next_billing_date).strftime("%a, %B %e")}, Reply with 'yes' if you want to skip?"
+        message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription,
+                          { subscription_charge_date: subscription.next_billing_date.strftime("%a, %B %e") })
+        message = message_service.content(messages[:confirm])
       end
     when 3
-      if @params['Body'].downcase == 'yes'
+      if @params['Body'].downcase == 'yes' || @params['Body'].downcase == 'y'
         subscription_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 2).last
         if subscription_message.present?
+          subscription = SubscriptionContractService.new(subscription_message.content).run
           result = ScheduleSkipService.new(subscription_message.content).run
           if result[:error].present?
+            message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription,
+                              { subscription_charge_date: subscription.next_billing_date.to_date.strftime("%a, %B %e") })
+            message = message_service.content(messages[:failure])
             error = true
           else
-            message = 'Subscription is skiped.'
+            message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription,
+                              { old_charge_date: subscription.next_billing_date.to_date.strftime("%a, %B %e"), subscription_charge_date: next_charge_date(subscription).strftime("%a, %B %e") })
+            message = message_service.content(messages[:success])
           end
         else
           error = true
         end
+      elsif @params['Body'].downcase == 'no' || @params['Body'].downcase == 'n'
+        subscription_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 2).last
+        if subscription_message.present?
+          subscription = SubscriptionContractService.new(subscription_message.content).run
+          message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription,
+                            { subscription_charge_date: subscription.next_billing_date.to_date.strftime("%a, %B %e") })
+          message = message_service.content(messages[:cancel])
+        else
+          error = true
+        end
       else
-        message = @shared_service.get_all_subscriptions(@data)
-        increase_step = 1
+        message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, nil)
+        error_message = message_service.content(messages[:invalid_options])
+        error = true
       end
     else
       error = true
     end
     { error: error, message: error ? error_message : message, increase_step: increase_step }
   rescue Exception => ex
+    puts ex.message
     { error: true, message: error_message }
+  end
+
+  def messages
+    {
+      cancel: 'Skip Order - Cancel',
+      failure: 'Skip Order - Failure',
+      invalid_options: 'Skip Order - Invalid Option',
+      success: 'Skip Order - Success',
+      confirm: 'Skip Order - Confirm'
+    }
+  end
+
+  def next_charge_date(subscription)
+    billing_date = DateTime.parse(subscription.next_billing_date)
+    skip_billing_offset = subscription.billing_policy.interval_count.send(subscription.billing_policy.interval.downcase)
+    billing_date + skip_billing_offset
   end
 end
