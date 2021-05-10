@@ -20,7 +20,7 @@ module Queries
     def where_data(args)
       where = ''
       where += "title ILIKE '%#{args[:search_key]}%'" if args[:search_key].present?
-      where += where == '' ? '' : 'AND' +  " custom = '#{args[:custom]}'" if args[:custom].present?
+      where += where == '' ? "custom = '#{args[:custom]}'" : 'AND' +  " custom = '#{args[:custom]}'" if args[:custom].present?
     end
   end
 end

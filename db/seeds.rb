@@ -9,7 +9,9 @@
 # For development
 shop = Shop.find_by(shopify_domain: 'aroma360-staging.myshopify.com')
 
-
+shop.smarty_messages.delete_all
+shop.smarty_cancellation_reasons.delete_all
+shop.smarty_variables.delete_all
 # Billing Update
 shop.smarty_messages.create(title: 'Modify Order - Billing Info', body: 'Your current preferred payment method is:/n{{card_brand - card_last4}}/nExpiration {{card_exp_month/card_exp_year}}/nTo update your payment info, please check the email we just sent to your email address on file.')
 
