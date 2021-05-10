@@ -22,7 +22,6 @@ const HouseKeeping = () => {
           skipUpdateNextCharge
           oneTimeUpsells
           failedRenewal
-          cancelReactivateSubscription
           editQuantity
           cancelSubscription
           winbackFlow
@@ -33,6 +32,7 @@ const HouseKeeping = () => {
           shopPhone
           smsCount
           smsChargeAmount
+          optIn
         }
     }
 }
@@ -91,7 +91,7 @@ const HouseKeeping = () => {
     skipUpdateNextCharge: "",
     oneTimeUpsells: "",
     failedRenewal: "",
-    cancelReactivateSubscription: "",
+    optIn: "",
     editQuantity: "",
     cancelSubscription: "",
     winbackFlow: "",
@@ -104,14 +104,14 @@ const HouseKeeping = () => {
     }
   const handleSmsSettingSubmit = () => {
     const { status, delayOrder, swapProduct, orderTracking, renewalReminder, updateBilling,
-      skipUpdateNextCharge, oneTimeUpsells, failedRenewal, cancelReactivateSubscriptioneditQuantity, cancelSubscription,
+      skipUpdateNextCharge, oneTimeUpsells, failedRenewal, optIn, cancelSubscription,
       winbackFlow, deliveryStartTime, deliveryEndTime, renewalDuration } = smsData;
     updateSmsSettings({
       variables: {
         input: {
           params: {
             status, delayOrder, swapProduct, orderTracking, renewalReminder, updateBilling,
-            skipUpdateNextCharge, oneTimeUpsells, failedRenewal, cancelReactivateSubscriptioneditQuantity, cancelSubscription,
+            skipUpdateNextCharge, oneTimeUpsells, failedRenewal, optIn, cancelSubscription,
             winbackFlow, deliveryStartTime, deliveryEndTime, renewalDuration
           }
         }

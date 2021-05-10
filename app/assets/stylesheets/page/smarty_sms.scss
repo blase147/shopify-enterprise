@@ -1,5 +1,11 @@
 $primary: #007EFF;
 
+.cursor-pointer{
+  cursor: pointer !important;
+}
+.upper{
+  text-transform: uppercase !important;
+}
 .module-smarty {
   .Polaris-Layout {
     display: contents;
@@ -135,6 +141,9 @@ $primary: #007EFF;
   }
   .active-status-btn {
     background: #37FB7A;
+  }
+  .inactive-status-btn {
+    background: #68756d;
   }
   .skip-order {
     background: #FC9B09;

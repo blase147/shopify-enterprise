@@ -37,6 +37,7 @@ import {
             shopPhone
             smsCount
             smsChargeAmount
+            optIn
     }
 }`;
 const [formData,setFormData]=useState({
@@ -48,7 +49,7 @@ const [formData,setFormData]=useState({
     skipUpdateNextCharge:"",
     oneTimeUpsells:"",
     failedRenewal:"",
-    cancelReactivateSubscription:"",
+    optIn:"",
     editQuantity:"",
     cancelSubscription:"",
     winbackFlow:"",
@@ -59,7 +60,6 @@ const [formData,setFormData]=useState({
 
   useEffect(() => {
       setSmsData(formData)
-      console.log("changes---",formData)
   }, [formData])
 
 const [getSetting, { loading, data }] = useLazyQuery(fetchSetting);
@@ -68,22 +68,21 @@ const [getSetting, { loading, data }] = useLazyQuery(fetchSetting);
     },[])
 
       useEffect(() => {
-          console.log("Data Settings:", data)
           if (data && !loading) {
               const { fetchSmsSetting } = data;
               const { status, delayOrder, swapProduct, orderTracking, renewalReminder, updateBilling,
-                  skipUpdateNextCharge, oneTimeUpsells, failedRenewal, cancelReactivateSubscription,
+                  skipUpdateNextCharge, oneTimeUpsells, failedRenewal, optIn,
                   editQuantity, cancelSubscription, winbackFlow, deliveryStartTime, deliveryEndTime,
                   renewalDuration, shopPhone, smsCount, smsChargeAmount } = fetchSmsSetting;
               setFormData({
                   ...formData, delayOrder, swapProduct, orderTracking, renewalReminder, updateBilling,
-                  skipUpdateNextCharge, oneTimeUpsells, failedRenewal, cancelReactivateSubscription,
+                  skipUpdateNextCharge, oneTimeUpsells, failedRenewal, optIn,
                   editQuantity, cancelSubscription, winbackFlow, deliveryStartTime, deliveryEndTime,
                   renewalDuration
               });
               setSmsData({
                   status, delayOrder, swapProduct, orderTracking, renewalReminder, updateBilling,
-                  skipUpdateNextCharge, oneTimeUpsells, failedRenewal, cancelReactivateSubscription,
+                  skipUpdateNextCharge, oneTimeUpsells, failedRenewal, optIn,
                   editQuantity, cancelSubscription, winbackFlow, deliveryStartTime, deliveryEndTime,
                   renewalDuration, shopPhone, smsCount, smsChargeAmount
               });
@@ -105,9 +104,9 @@ const [getSetting, { loading, data }] = useLazyQuery(fetchSetting);
           <Checkbox name="updateBilling" label="Update Billing"  checked={formData.updateBilling=="true"} onChange={val=>setFormData({...formData,updateBilling:val?"true":"false"})} />
           <Checkbox name="skipUpdateNextCharge" label="Skip/Update next charge"  checked={formData.skipUpdateNextCharge=="true"} onChange={val=>setFormData({...formData,skipUpdateNextCharge:val?"true":"false"})} />
           <Checkbox name="oneTimeUpsells" label="One-time upsells"  checked={formData.oneTimeUpsells=="true"} onChange={val=>setFormData({...formDataata,oneTimeUpsells:val?"true":"false"})} />
-          <Checkbox name="failedRenewal" label="Failed Renewal"  checked={formData.failedRenewal=="true"} onChange={val=>setFormData({...formData,failedRenewal:val?"true":"false"})} />
+          <Checkbox name="failedRenewal" label="Renewal Failure "  checked={formData.failedRenewal=="true"} onChange={val=>setFormData({...formData,failedRenewal:val?"true":"false"})} />
 
-          <Checkbox name="cancelReactivateSubscription" label="Cancel/Reactive subscription"  checked={formData.cancelReactivateSubscription=="true"} onChange={val=>setFormData({...formData,cancelReactivateSubscription:val?"true":"false"})} />
+          <Checkbox name="optIn" label="opt-in"  checked={formData.optIn=="true"} onChange={val=>setFormData({...formData,optIn:val?"true":"false"})} />
           <Checkbox name="editQuantity" label="Edit quantity"  checked={formData.editQuantity=="true"} onChange={val=>setFormData({...formData,editQuantity:val?"true":"false"})} />
           <Checkbox name="cancelSubscription" label="Cancel subscrition"  checked={formData.cancelSubscription=="true"} onChange={val=>setFormData({...formData,cancelSubscription:val?"true":"false"})} />
           <Checkbox name="winbackFlow" label="Windback flow"  checked={formData.winbackFlow=="true"} onChange={val=>setFormData({...formData,winbackFlow:val?"true":"false"})} />
