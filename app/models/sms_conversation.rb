@@ -17,7 +17,7 @@ class SmsConversation < ApplicationRecord
       'CANCEL': 'Enables you to cancel your subscription at any time.',
       'PAUSE': 'Enables you to pause your subscription.',
       'RESUME': 'Enables you to resume your paused subscription.',
-      'INFO': 'List all available commands.',
+      'HEY': 'List all available commands.',
       'END': 'Stops the current conversation.'
     }
   end

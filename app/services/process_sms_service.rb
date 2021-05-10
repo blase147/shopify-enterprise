@@ -40,7 +40,7 @@ class ProcessSmsService
       SmsService::PauseService.new(@conversation, @params, @data).process
     when 'RESUME'
       SmsService::ResumeService.new(@conversation, @params, @data).process
-    when 'INFO'
+    when 'HEY'
       SmsService::InfoService.new(@conversation, @params).info_data
     when 'END'
       end_conversation
@@ -77,7 +77,7 @@ class ProcessSmsService
     sms_setting = conversation.customer.shop.sms_setting
     return false unless sms_setting.present?
 
-    process = false
+    process = true
     case conversation.command
     when 'SWAP'
       process = sms_setting.swap_product

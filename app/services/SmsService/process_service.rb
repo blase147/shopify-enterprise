@@ -2,7 +2,7 @@ class SmsService::ProcessService
   def process
     payload = process_message(@conversation.command_step)
     @response = @shared_service.send_message(payload[:message])
-    if @response[:error_message].present?
+    if @response[:error_message].nil?
       if payload[:error].present?
         @conversation.update(command_step: @conversation.command_step - 1)
       else

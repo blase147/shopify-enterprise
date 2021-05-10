@@ -11,8 +11,6 @@ class SmsService::SharedService
   def send_message(content)
     puts "############################ #{content} ##############################"
     TwilioServices::SendSms.call(from: @conversation.customer.shop.phone, to: @params['From'], message: content)
-  rescue Exception => ex
-    { error_message: ex.message }
   end
 
   def customer_subscriptions(shopify_id)
