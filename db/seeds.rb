@@ -13,15 +13,15 @@ shop.smarty_messages.delete_all
 shop.smarty_cancellation_reasons.delete_all
 shop.smarty_variables.delete_all
 # Billing Update
-shop.smarty_messages.create(title: 'Modify Order - Billing Info', body: 'Your current preferred payment method is:\n{{card_brand - card_last4}}\nExpiration {{card_exp_month/card_exp_year}}\nTo update your payment info, please check the email we just sent to your email address on file.')
+shop.smarty_messages.create(title: 'Modify Order - Billing Info', body: "Your current preferred payment method is:\n{{card_brand - card_last4}}\nExpiration {{card_exp_month/card_exp_year}}\nTo update your payment info, please check the email we just sent to your email address on file.")
 
 # Delay Order
-shop.smarty_messages.create(title: 'Delay Order - Invalid Option', body: 'Oops, it seems you entered an incorrect answer, please choose a valid option:\n1. 1w (Delay 1 week)\n2. 2w (Delay 2 weeks)\n3. 3w (Delay 3 weeks)')
+shop.smarty_messages.create(title: 'Delay Order - Invalid Option', body: "Oops, it seems you entered an incorrect answer, please choose a valid option:\n1. 1w (Delay 1 week)\n2. 2w (Delay 2 weeks)\n3. 3w (Delay 3 weeks)")
 
-shop.smarty_messages.create(title: 'Delay Order - Failure', body: 'We were unable to delay your upcoming order of {{subscription_title}} scheduled for
-{{subscription_charge_date}} . Please try again or contact support at {{shop_email}}')
+shop.smarty_messages.create(title: 'Delay Order - Failure', body: "We were unable to delay your upcoming order of {{subscription_title}} scheduled for
+{{subscription_charge_date}} . Please try again or contact support at {{shop_email}}")
 
-shop.smarty_messages.create(title: 'Delay Order - Options', body: 'Please choose from the following options to delay your upcoming order:\n1. 1w (Delay 1 week)\n2. 2w (Delay 2 weeks)\n3. 3w (Delay 3 weeks)')
+shop.smarty_messages.create(title: 'Delay Order - Options', body: "Please choose from the following options to delay your upcoming order:\n1. 1w (Delay 1 week)\n2. 2w (Delay 2 weeks)\n3. 3w (Delay 3 weeks)")
 
 shop.smarty_messages.create(title: 'Delay Order - Success', body: "Awesome!, you've pushed back this order by {{delay_weeks}} week(s). It will process on
 {{subscription_charge_date}}")

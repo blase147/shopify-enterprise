@@ -3,6 +3,6 @@ class TwilioController < ActionController::Base
 
   def sms
     TwilioServices::SmsCallback.call(params)
-    render status: 200, json: { success: true }
+    render status: 200, xml: { success: true }.to_xml
   end
 end
