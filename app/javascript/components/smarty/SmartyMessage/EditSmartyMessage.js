@@ -26,7 +26,6 @@ const EditSmartyMessage = ({}) => {
     fetchSmartyVariables {
       id
       name
-      response
 }
 }`;
   const updateSmsSettings=gql`
@@ -67,7 +66,7 @@ const EditSmartyMessage = ({}) => {
 
     useEffect(()=>{
       if(data){
-        const variables=data?.fetchSmartyVariables?.map(variable=>(variable.response));
+        const variables=data?.fetchSmartyVariables?.map(variable=>(variable.name));
         const {title,description,body}=data?.fetchSmartyMessage;
         setFormData({title,description,body})
         setVariables(variables);
@@ -77,7 +76,6 @@ const EditSmartyMessage = ({}) => {
     const tagRef=useRef();
 
   const handleSubmit = () => {
-    console.log(tagRef);
     let val = tagRef.current.DOM.originalInput.value;
     let updatedval = val.split(" ").map(value => {
       if (value[4] === 'v') {
@@ -162,7 +160,7 @@ const EditSmartyMessage = ({}) => {
                   <p className="">Available variables</p>
                   {
                     data && data?.fetchSmartyVariables?.map(variable=>(
-                      <button>{variable.response}</button>
+                      <button>{variable.name}</button>
                     ))
                   }
                 </div>
@@ -172,22 +170,19 @@ const EditSmartyMessage = ({}) => {
                   tagifyRef={tagRef}
                   InputMode="textarea"
                   settings={{
-                     mixTagsInterpolator: ["{{", "}}"],
-                     mode: 'mix',
-                     pattern: /@/,
-                     dropdown : {
-                      enabled: 0,
-                      fuzzySearch:true,
+                    mixTagsInterpolator: ["{{", "}}"],
+                    mode: "mix",
+                    pattern: /@/,
+                    dropdown: {
+                      enabled: true,
+                      fuzzySearch: true,
                       position:"text"
-                     },
+                    },
                      enforceWhitelist: true,
                   }}
                   whitelist={variables}
                   value={formData.body}
                   placeholder="add variables"
-                  // onChange={val=>{setFormData({...formData,body:val.detail.value});console.log("changed--",val)}}
-                  //  onKeydown={(e)=>setFormData({...formData,body:e.detail.tagify.DOM.originalInput.value})}
-                  // onChange={e => (setFormData({...formData,body:e.target.value}))}
                 />
                 <p>Type @ to have the variables auto-completion.</p>
 

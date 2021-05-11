@@ -13,7 +13,7 @@ import {
   } from "@shopify/polaris";
   import React,{useState,useEffect,handleSmsSettingSubmit} from "react";
 
-  const Taxes = ({setSmsData,smsData,handleSmsSettingSubmit}) => {
+  const Taxes = ({setSmsData,smsData,handleSmsSettingSubmit,submitting}) => {
   const fetchSetting=gql`
   query{
     fetchSmsSetting {
@@ -103,7 +103,7 @@ const [getSetting, { loading, data }] = useLazyQuery(fetchSetting);
 
           <Checkbox name="updateBilling" label="Update Billing"  checked={formData.updateBilling=="true"} onChange={val=>setFormData({...formData,updateBilling:val?"true":"false"})} />
           <Checkbox name="skipUpdateNextCharge" label="Skip/Update next charge"  checked={formData.skipUpdateNextCharge=="true"} onChange={val=>setFormData({...formData,skipUpdateNextCharge:val?"true":"false"})} />
-          <Checkbox name="oneTimeUpsells" label="One-time upsells"  checked={formData.oneTimeUpsells=="true"} onChange={val=>setFormData({...formDataata,oneTimeUpsells:val?"true":"false"})} />
+          <Checkbox name="oneTimeUpsells" label="One-time upsells"  checked={formData.oneTimeUpsells=="true"} onChange={val=>setFormData({...formData,oneTimeUpsells:val?"true":"false"})} />
           <Checkbox name="failedRenewal" label="Renewal Failure "  checked={formData.failedRenewal=="true"} onChange={val=>setFormData({...formData,failedRenewal:val?"true":"false"})} />
 
           <Checkbox name="optIn" label="opt-in"  checked={formData.optIn=="true"} onChange={val=>setFormData({...formData,optIn:val?"true":"false"})} />
@@ -122,13 +122,13 @@ const [getSetting, { loading, data }] = useLazyQuery(fetchSetting);
                     <Stack.Item>
                       <Stack>
                         <TextField name="deliveryStartTime" value={formData.deliveryStartTime} onChange={val=>setFormData({...formData,deliveryStartTime:val})} placeholder="09:00" />
-                        <Button onClick={handleSmsSettingSubmit} >Start</Button>
+                        <Button >Start</Button>
                       </Stack>
                     </Stack.Item>
                     <Stack.Item>
                       <Stack>
                         <TextField name="deliveryEndTime" value={formData.deliveryEndTime} onChange={val=>setFormData({...formData,deliveryEndTime:val})} placeholder="20:00" />
-                        <Button onClick={handleSmsSettingSubmit} >End</Button>
+                        <Button >End</Button>
                       </Stack>
                     </Stack.Item>
                   </Stack>
@@ -139,7 +139,7 @@ const [getSetting, { loading, data }] = useLazyQuery(fetchSetting);
                       <DisplayText size="small">New Renewel</DisplayText>
                       <Stack>
                         <TextField name="renewalDuration" value={formData.renewalDuration} onChange={val=>setFormData({...formData,renewalDuration:val})} placeholder="3 days" />
-                        <Button onClick={handleSmsSettingSubmit} >Save</Button>
+                        <Button loading={submitting} onClick={handleSmsSettingSubmit} >Save</Button>
                       </Stack>
                     </Stack.Item>
                   </Stack>

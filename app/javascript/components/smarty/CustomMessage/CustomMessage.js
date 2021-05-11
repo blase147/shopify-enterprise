@@ -37,7 +37,7 @@ const CustomMessage = () => {
     ]
   const history=useHistory()
   const [searchValue, setSearchValue] = useState("");
-  const [filters,setFilters]=useState({searchValue:"",order:"updated_at",type:"DESC",limit:5,offset:0})
+  const [filters,setFilters]=useState({searchValue:"",order:"updated_at",type:"DESC",limit:25,offset:0})
 
   const [getMessages, { loading, data, error }] = useLazyQuery(fetchQuery,{fetchPolicy:"cache-and-network"});
 

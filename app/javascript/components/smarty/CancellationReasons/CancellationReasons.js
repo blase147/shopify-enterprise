@@ -39,7 +39,7 @@ const CancellationReasons = () => {
   `;
   const history=useHistory();
   const [searchValue, setSearchValue] = useState("");
-  const [filters,setFilters]=useState({searchValue:"",limit:5,offset:0})
+  const [filters,setFilters]=useState({searchValue:"",limit:25,offset:0})
   const [getCancelReasons, { loading, data, error }] = useLazyQuery(fetchQuery,{fetchPolicy:"cache-and-network"});
   const [deleteCancelReasons] = useMutation(deleteQuery);
 
