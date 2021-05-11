@@ -31,7 +31,7 @@ module Queries
       same_day_cancelled = range_data_service.same_day_cancelled
       estimated_seven_days = data_service.get_upcoming_revenue(7)
       estimated_thirty_days = data_service.get_upcoming_revenue(30)
-      estimated_ninety_days = data_service.get_upcoming_revenue(90)
+      estimated_ninety_days = data_service.get_upcoming_revenue(30) * 3
       historical_seven_days_revenue = data_service.get_upcoming_historical_revenue(7)
       historical_thirty_days_revenue = data_service.get_upcoming_historical_revenue(30)
       historical_ninety_days_revenue = data_service.get_upcoming_historical_revenue(30) * 3
