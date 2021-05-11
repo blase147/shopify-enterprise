@@ -12,7 +12,7 @@ import Tags from "@yaireo/tagify/dist/react.tagify" // React-wrapper file
 import "@yaireo/tagify/dist/tagify.css" // Tagify CSS
 import { gql, useLazyQuery, useMutation } from '@apollo/client';
 
-const EditSmartyMessage = ({}) => {
+const EditSmartyMessage = ({id,handleClose}) => {
 
   const getSmartySmsQuery = gql`
   query($id:String!){
@@ -41,21 +41,14 @@ const EditSmartyMessage = ({}) => {
     }
 }
   `
-    const orderOptions = [
-        { label: "Order By Title", value: 'title' },
-        { label: "Order By Name", value: 'name' }
-    ]
-    const {id}=useParams()
-    const history=useHistory();
-    const location=useLocation();
-    console.log("state,",location.state)
+
     const [saveSuccess, setSaveSuccess] = useState(false);
     const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
     const [formData,setFormData]=useState({title:"",description:"",body:""})
     const [variables,setVariables]=useState([])
 
-    const [getSmartySms, { loading, data }] = useLazyQuery(getSmartySmsQuery,{fetchPolicy:"no-cache"});
-    const [updateSetting]=useMutation(updateSmsSettings)
+    const [getSmartySms, { data }] = useLazyQuery(getSmartySmsQuery,{fetchPolicy:"no-cache"});
+    const [updateSetting,{loading}]=useMutation(updateSmsSettings)
     useEffect(()=>{
       if(id){
         getSmartySms({
@@ -189,8 +182,8 @@ const EditSmartyMessage = ({}) => {
               </div>
             </div>
           </Card.Section>
-          <Button onClick={()=>history.push('/smarty',{...location.state})}>Cancel</Button>
-          <Button primary onClick={handleSubmit} >Update</Button>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button primary loading={loading} onClick={handleSubmit} >Update</Button>
         </Card>
         <Frame>
           {saveSuccess && (

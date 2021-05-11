@@ -2,8 +2,10 @@ import { Frame, Page, Tabs } from '@shopify/polaris';
 import React, { useCallback, useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import AppLayout from '../layout/Layout';
+import CancellationReasonForm from './CancellationReasons/CancellationReasonForm';
 import CancellationReasons from './CancellationReasons/CancellationReasons';
 import CustomKeywords from './CustomKeywords/CustomKeywords';
+import CustomKeywordsForm from './CustomKeywords/CustomKeywordsForm';
 import CustomMessage from './CustomMessage/CustomMessage';
 import EditSmartyMessage from './SmartyMessage/EditSmartyMessage';
 import SmartyMessage from './SmartyMessage/SmartyMessage';
@@ -46,22 +48,22 @@ const Smarty = () => {
 
   
 
-  const [smartySMSID, setsmartySMSID] = useState("")
+  const [editId, setEditId] = useState("")
   const [showEditPage, setShowEditPage] = useState(false)
 
-  const handleCloseSmartyMessage = useCallback(() => {
+  const handleCloseEditPage = useCallback(() => {
     setShowEditPage(false);
-    setsmartySMSID("")
-  }, [setShowEditPage, smartySMSID])
+    setEditId("")
+  }, [setShowEditPage, editId])
 
-  const handleEditSmartyMessage = useCallback(ID => {
-    setsmartySMSID(ID)
+  const handleEditPage = useCallback(ID => {
+    setEditId(ID)
     setShowEditPage(true)
-  }, [setsmartySMSID, setShowEditPage])
+  }, [setEditId, setShowEditPage])
 
   useEffect(() => {
     setShowEditPage(false);
-    setsmartySMSID("")
+    setEditId("")
   }, [selectedTitleTab])
 
   return (
@@ -79,11 +81,11 @@ const Smarty = () => {
               {
                   showEditPage ?
                     <EditSmartyMessage
-                      id={smartySMSID}
-                      handleClose={handleCloseSmartyMessage}
+                      id={editId}
+                      handleClose={handleCloseEditPage}
                     /> :
                     <SmartyMessage
-                      handleEditSmartyMessage={handleEditSmartyMessage}
+                      handleEditSmartyMessage={handleEditPage}
                     />
               }
                 
@@ -98,13 +100,31 @@ const Smarty = () => {
             {
               selectedTitleTab===2 && 
               <>
-              <CustomKeywords />
+              {
+                 showEditPage ?
+                 <CustomKeywordsForm
+                 id={editId}
+                 handleClose={handleCloseEditPage}
+                 /> :
+                 <CustomKeywords handleEditCustomKewords={handleEditPage}/>
+                
+              }
+              
               </>
             }
             {
               selectedTitleTab===3 && 
               <>
-              <CancellationReasons />
+              {
+                  showEditPage ?
+                    <CancellationReasonForm
+                      id={editId}
+                      handleClose={handleCloseEditPage}
+                    /> :
+                    <CancellationReasons 
+                      handleEditCancellation={handleEditPage}
+              />
+              }
               </>
             }
           </Tabs>

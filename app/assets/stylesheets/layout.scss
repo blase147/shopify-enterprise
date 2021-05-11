@@ -248,10 +248,12 @@
     }
     
   }
-  .Polaris-Tabs__TabContainer {
-    button {
-      &:first-child {
-        padding-left: 0px;
+  .Polaris-Page {
+    .Polaris-Tabs__TabContainer {
+      button {
+        &:first-child {
+          padding-left: 0px;
+        }
       }
     }
   }
