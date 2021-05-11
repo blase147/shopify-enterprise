@@ -44,10 +44,15 @@ const CancellationReasonForm = ({id,handleClose}) => {
         { label: "swap_product", value: 'swap' }
       ]
 
-    const [formData,setFormData]=useState({name:"",winback:""});
+    const [errors,setErrors]=useState({})
+    const [formData,setFormData]=useState({name:"",winback:"skip"});
     const [getSingleReason,{data}]=useLazyQuery(fetchQuery,{fetchPolicy:"cache-and-network"})
     const [addReason,{loading:addLoading}]=useMutation(addQuery);
     const [updateReason,{loading:updateLoading}]=useMutation(updateQuery);
+
+    const validate=()=>{
+
+    }
     
     useEffect(()=>{
         if(id){
@@ -110,7 +115,7 @@ const CancellationReasonForm = ({id,handleClose}) => {
             <Card.Section >
               <Layout>
                 <Layout.Section >
-                <TextField label="name*"  value={formData.name} onChange={value=>setFormData({...formData,name:value})} />
+                <TextField label="Name"  value={formData.name} onChange={value=>setFormData({...formData,name:value})} />
                 </Layout.Section>
                 <Layout.Section oneThird>
                 <Select

@@ -94,7 +94,15 @@ const Smarty = () => {
             {
               selectedTitleTab===1 && 
               <>
-              <CustomMessage />
+                {showEditPage ?
+                  <EditSmartyMessage
+                    id={editId}
+                    handleClose={handleCloseEditPage}
+                  /> :
+                  <CustomMessage
+                    handleEditSmartyMessage={handleEditPage}
+                  />
+                }
               </>
             }
             {

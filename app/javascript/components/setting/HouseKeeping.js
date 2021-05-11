@@ -145,7 +145,7 @@ const HouseKeeping = () => {
       <>
       <div className="tab-section">
         <div class="tab-parent">
-          <div class="tabs">
+          <div class="tabs-sms">
             <input type="radio" name="tab-btn" id="tab-btn-1" value=""  />
             <label for="tab-btn-1">Discount</label>
             <input type="radio" name="tab-btn" id="tab-btn-2" value="" />

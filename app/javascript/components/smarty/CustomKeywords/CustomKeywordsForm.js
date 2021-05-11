@@ -1,7 +1,101 @@
-import React from 'react';
+import React ,{useEffect,useState,useCallback,useRef} from 'react';
 import {Checkbox,DisplayText,ButtonGroup,TextField, Button, Stack, Card, Layout, Subheading} from '@shopify/polaris';
+import Tags from "@yaireo/tagify/dist/react.tagify" // React-wrapper file
+import "@yaireo/tagify/dist/tagify.css" // Tagify CSS
+import {gql,useLazyQuery,useMutation} from '@apollo/client';
 
 const CustomKeywordsForm = ({id,handleClose}) => {
+
+    const fetchQuery=gql`
+    query($id:String!){
+        fetchCustomKeyword(id: $id) {
+            id
+            response
+            keywords
+            status
+    }
+    }
+    `;
+
+    const addQuery=gql`
+    mutation ($input: AddCustomKeywordInput!) {
+        addCustomKeyword(input: $input) {
+            customKeyword {
+                id
+                response
+                keywords
+                status
+            }
+        }
+    }
+    `;
+
+    const updateQuery=gql`
+    mutation ($input: UpdateCustomKeywordInput!) {
+        updateCustomKeyword(input: $input) {
+            customKeyword {
+                id
+                response
+                status
+                keywords
+            }
+        }
+    }
+    `;
+    const tagRef=useRef();
+    const [formData,setFormData]=useState({response:"",keywords:[],status:'inactive'});
+    const [getSingleKeyword,{data}]=useLazyQuery(fetchQuery,{fetchPolicy:"cache-and-network"})
+    const [addKeyword,{loading:addLoading}]=useMutation(addQuery);
+    const [updateKeyword,{loading:updateLoading}]=useMutation(updateQuery);
+
+    useEffect(()=>{
+        if(id){
+            getSingleKeyword({
+                variables:{
+                    id:id
+                }
+            })
+        }
+    },[id])
+
+    useEffect(()=>{
+        if(data){
+            const {response,keywords,status}=data?.fetchCustomKeyword;
+            setFormData({response,keywords,status})
+        }
+    },[data])
+
+    const handleSubmit=()=>{
+        const {response,status}=formData;
+        const keywords=tagRef.current.value?.map(val=>val.value);
+        console.log(tagRef,keywords,response,status)
+        if(id){
+            updateKeyword({
+                variables:{
+                    input:{
+                        params:{
+                            id:id,
+                            keywords:keywords,
+                            response:response,
+                            status:status
+                        }
+                    }
+                }
+            })
+        }else{
+            addKeyword({
+                variables:{
+                    input:{
+                        params:{
+                            response:response,
+                            keywords:keywords,
+                            status:status
+                        }
+                    }
+                }
+            })
+        }
+    }
     return (
         <React.Fragment>
         <Layout>
@@ -26,20 +120,27 @@ const CustomKeywordsForm = ({id,handleClose}) => {
                   </DisplayText>
                 </Layout.Section>
                 <Layout.Section >
-                <TextField label="name*"  />
+                <Tags 
+                tagifyRef={tagRef}
+                settings={{
+                        duplicates:false,
+                        trim:true
+                    }}
+                    value={formData.keywords}
+                 />
                 </Layout.Section>
                 <Layout.Section >
-                <TextField multiline={3} label="response" />
+                <TextField multiline={3} label="response" value={formData.response} onChange={val=>setFormData({...formData,response:val})} />
                 </Layout.Section>
               </Layout>
-              <Checkbox label="Basic checkbox"  />
+              <Checkbox label="Activate response to custom keyword(s)" checked={formData.status=='active'} onChange={val=>setFormData({...formData,status:val?'active':'inactive'})} />
            
             </Card.Section>
             <Card.Section subdued  >
             <Stack distribution="trailing">
           <ButtonGroup>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button primary>Save</Button>
+            <Button primary onClick={handleSubmit} loading={addLoading || updateLoading}>Save</Button>
             </ButtonGroup>
           </Stack>
             </Card.Section>

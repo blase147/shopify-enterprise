@@ -238,7 +238,7 @@ div#sms-panel {
       padding: 13px 30px;
       width: 127px;
       border: 0;
-      border-radius: 4px;
+      border-radius: 4px !important;
       &:hover {
         background: #007EFF;
         color: white;
@@ -277,14 +277,14 @@ div#sms-panel {
 	}
 }
 
-.tabs {
+.tabs-sms {
   font-size: 0;
   // max-width:100%;
 }
-.tabs > input[type="radio"] {
+.tabs-sms > input[type="radio"] {
   display: none;
 }
-.tabs > div {
+.tabs-sms > div {
   display: none;
   padding: 10px 15px;
   font-size: 16px;
@@ -294,7 +294,7 @@ div#sms-panel {
 #tab-btn-3:checked ~ #content-3 {
   display: block;
 }
-.tabs > label {
+.tabs-sms > label {
   border-radius: 5px 5px 0px 0px;
   display: inline-block;
   text-align: center;
@@ -311,10 +311,10 @@ div#sms-panel {
   position: relative;
   top: 1px;
 }
-.tabs > label:not(:first-of-type) {
+.tabs-sms > label:not(:first-of-type) {
   border-left: none;
 }
-.tabs > input[type="radio"]:checked + label {
+.tabs-sms > input[type="radio"]:checked + label {
   background-color: #fff;
   border-bottom: 1px solid #fff;
 }
