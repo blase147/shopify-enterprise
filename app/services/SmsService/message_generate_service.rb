@@ -52,7 +52,7 @@ class SmsService::MessageGenerateService
           message = message.gsub("{{#{variable.name}}}", card.respond_to?(:credit_card_expiration_month) ? "#{card.credit_card_expiration_month}/#{card.credit_card_expiration_year}" : '-')
         end
       when 'cancellation_reasons'
-        message = message.gsub("{{#{variable.name}}}", @customer.shop.smarty_cancellation_reasons.map{|reason| "#{reason.name}"}.join("\n")) if @customer.present?
+        message = message.gsub("{{#{variable.name}}}", @customer.shop.smarty_cancellation_reasons.each_with_index.map{|reason, i| "#{i+1}. #{reason.name}"}.join("\n")) if @customer.present?
       end
     end
     message
