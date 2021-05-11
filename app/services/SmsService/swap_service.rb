@@ -24,7 +24,7 @@ class SmsService::SwapService < SmsService::ProcessService
         else
           swap_products = products_list.select{ |p| p.node.selling_plan_group_count > 0 }
           if swap_products.present?
-            message = "Please select product ID you want to swap with:\n" + swap_products.each_with_index.map{ |product, i| "#{i+1}. #{product.node.id[/\d+/]} #{product.node.title}" }.join('\n')
+            message = "Please select product ID you want to swap with:\n" + swap_products.each_with_index.map{ |product, i| "#{i+1}. #{product.node.id[/\d+/]} #{product.node.title}" }.join("\n")
             increase_step = step + 1
             @shared_service.create_sms_message(@data[:active_subscriptions].first.node.id[/\d+/], 2, comes_from_customer: true)
           else
@@ -40,12 +40,12 @@ class SmsService::SwapService < SmsService::ProcessService
         error = true
       else
         swap_products = products_list.select{ |p| p.node.selling_plan_group_count > 0 }
-        message = swap_products.each_with_index.map{ |product, i| "#{i+1}. #{product.node.id[/\d+/]} #{product.node.title}" }.join('\n')
+        message = swap_products.each_with_index.map{ |product, i| "#{i+1}. #{product.node.id[/\d+/]} #{product.node.title}" }.join("\n")
       end
     when 3
       product = ShopifyAPI::Product.find(@params['Body']) rescue nil
       if product.present?
-        message = "Please select the product variant ID:\n" + product.variants.each_with_index.map{|variant, i| "#{i+1}. #{variant.id} #{variant.title} $#{variant.price}"}.join('\n')
+        message = "Please select the product variant ID:\n" + product.variants.each_with_index.map{|variant, i| "#{i+1}. #{variant.id} #{variant.title} $#{variant.price}"}.join("\n")
       else
         error = true
       end
@@ -59,7 +59,7 @@ class SmsService::SwapService < SmsService::ProcessService
             error = true
           else
             if subscription.lines.edges.count > 1
-              message = 'Please select the item you want to swap:\n' + subscription.lines.edges.each_with_index.map{|line, i| "#{i+1}. #{line.node.id.split("gid://shopify/SubscriptionLine/")[1]} #{line.node.title}"}.join('\n')
+              message = 'Please select the item you want to swap:\n' + subscription.lines.edges.each_with_index.map{|line, i| "#{i+1}. #{line.node.id.split("gid://shopify/SubscriptionLine/")[1]} #{line.node.title}"}.join("\n")
             else
               message = "You will switch to the #{variant.title} subscription at $#{variant.price} per month, Do you confirm?"
               increase_step = step + 1
