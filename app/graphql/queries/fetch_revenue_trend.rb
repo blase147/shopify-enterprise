@@ -31,20 +31,20 @@ module Queries
       same_day_cancelled = range_data_service.same_day_cancelled
       estimated_seven_days = data_service.get_upcoming_revenue(7)
       estimated_thirty_days = data_service.get_upcoming_revenue(30)
-      estimated_ninety_days = data_service.get_upcoming_revenue(30) * 3
+      estimated_ninety_days = (data_service.get_upcoming_revenue(30) * 3).to_f.round(2)
       historical_seven_days_revenue = data_service.get_upcoming_historical_revenue(7)
       historical_thirty_days_revenue = data_service.get_upcoming_historical_revenue(30)
-      historical_ninety_days_revenue = data_service.get_upcoming_historical_revenue(30) * 3
+      historical_ninety_days_revenue = (data_service.get_upcoming_historical_revenue(30) * 3).to_f.round(2)
       recurring_vs_checkout = range_data_service.graph_data_by_granularity(:recurring_vs_checkout_data)
       seven_days_error_revenue = data_service.get_upcoming_error_revenue(7)
       thirty_days_error_revenue = data_service.get_upcoming_error_revenue(30)
-      ninety_days_error_revenue = data_service.get_upcoming_error_revenue(30) * 3
+      ninety_days_error_revenue = (data_service.get_upcoming_error_revenue(30) * 3).to_f.round(2)
       seven_days_upcoming_charge = data_service.get_upcoming_charge(7)
       thirty_days_upcoming_charge = data_service.get_upcoming_charge(30)
-      ninety_days_upcoming_charge = data_service.get_upcoming_charge(30) * 3
+      ninety_days_upcoming_charge = (data_service.get_upcoming_charge(30) * 3).to_f.round(2)
       seven_days_error_charge = data_service.get_upcoming_error_charges(7)
       thirty_days_error_charge = data_service.get_upcoming_error_charges(30)
-      ninety_days_error_charge = data_service.get_upcoming_error_charges(30) * 3
+      ninety_days_error_charge = (data_service.get_upcoming_error_charges(30) * 3).to_f.round(2)
 
       { total_sales: total_sales, recurring_sales: recurring_sales, sales_per_charge: sales_per_charge, refunds: total_refunds,
         new_subscriptions: new_subscriptions, cancelled_subscriptions: cancelled_subscriptions, average_checkout_charge: average_checkout_charge,
