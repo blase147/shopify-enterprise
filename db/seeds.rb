@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 # For development
-shop = Shop.find_by(shopify_domain: 'aroma360-staging.myshopify.com')
+shop = Shop.find_by(shopify_domain: ENV['SHOP'])
 
 shop.smarty_messages.delete_all
 shop.smarty_cancellation_reasons.delete_all
