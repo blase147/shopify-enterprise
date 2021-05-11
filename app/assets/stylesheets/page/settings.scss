@@ -230,33 +230,34 @@ div#sms-panel {
 	}
 }
 .tabs-btn {
-	
   margin-bottom: 20px;
-	.save-btn {
-		background: #007EFF;
-		color: white;
-		padding: 13px 30px;
-		width: 127px;
-    border: 0;
-    border-radius: 4px;
-		&:hover {
-			background: #007EFF;
-			color: white;
-		}
-	}
-	.cancel-btn {
-		background: #4D506A;
-		color: white;
-		padding: 13px 30px;
-		width: 114px;
-    margin-left: 14px;
-    border: 0;
-    border-radius: 4px;
-		&:hover {
-			background: #4D506A;
-			color: white;
-		}
-	}
+  button {
+    &:first-child {
+      background: #007EFF;
+      color: white;
+      padding: 13px 30px;
+      width: 127px;
+      border: 0;
+      border-radius: 4px;
+      &:hover {
+        background: #007EFF;
+        color: white;
+      }
+    }
+    &:nth-child(2) {
+      background: #4D506A;
+      color: white;
+      padding: 13px 30px;
+      width: 114px;
+      margin-left: 14px;
+      border: 0;
+      border-radius: 4px;
+      &:hover {
+        background: #4D506A;
+        color: white;
+      }
+    }
+  }
 }
 .smarty-sms-number {
 	display: grid;
@@ -319,7 +320,4 @@ div#sms-panel {
 }
 .tab-parent {
   display: flex;
-}
-.tabs-btn {
-  // margin-left: 14px;
 }
