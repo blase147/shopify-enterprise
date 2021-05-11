@@ -42,6 +42,7 @@ const EditSmartyMessage = ({id,handleClose}) => {
 }
   `
 
+    const [formChanged,setFormChanged]=useState(false);
     const [saveSuccess, setSaveSuccess] = useState(false);
     const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
     const [formData,setFormData]=useState({title:"",description:"",body:""})
@@ -61,7 +62,8 @@ const EditSmartyMessage = ({id,handleClose}) => {
       if(data){
         const variables=data?.fetchSmartyVariables?.map(variable=>(variable.name));
         const {title,description,body}=data?.fetchSmartyMessage;
-        setFormData({title,description,body})
+        let modifiedBody=body.replaceAll("\n","</br>")
+        setFormData({title,description,body:modifiedBody})
         setVariables(variables);
       }
     },[data])
@@ -128,7 +130,7 @@ const EditSmartyMessage = ({id,handleClose}) => {
                           // placeholder="Message’s Keyword"
                           value={formData.description}
                           // error={}
-                          onChange={(value) => setFormData({...formData,description:value})}
+                          onChange={(value) => {setFormData({...formData,description:value});setFormChanged(true)}}
                       />
                     </div>
                   </div>
@@ -176,6 +178,7 @@ const EditSmartyMessage = ({id,handleClose}) => {
                   whitelist={variables}
                   value={formData.body}
                   placeholder="add variables"
+                  onChange={()=>setFormChanged(true)}
                 />
                 <p>Type @ to have the variables auto-completion.</p>
 
@@ -183,7 +186,7 @@ const EditSmartyMessage = ({id,handleClose}) => {
             </div>
           </Card.Section>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button primary loading={loading} onClick={handleSubmit} >Update</Button>
+          <Button primary disabled={!formChanged} loading={loading} onClick={handleSubmit} >Update</Button>
         </Card>
         <Frame>
           {saveSuccess && (
