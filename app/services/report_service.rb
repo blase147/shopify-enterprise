@@ -25,6 +25,7 @@ class ReportService < GraphqlService
             orders(first: 10, reverse: true) {
               edges {
                 node {
+                  id
                   createdAt
                   transactions {
                     amountSet {

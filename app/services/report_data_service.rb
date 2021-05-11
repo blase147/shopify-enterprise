@@ -91,7 +91,7 @@ class ReportDataService
 
   def renewal_data_by_date(date, subscriptions)
     current_month_subscriptions = in_period_subscriptions(subscriptions, date.beginning_of_month..date.end_of_month, 'ACTIVE')
-    renewed_subscriptions = current_month_subscriptions.sum { |subscription| subscription.node.orders.edges.count > 1 && (orders_in_range(subscription).size > 1) ? 1 : 0  }
+    renewed_subscriptions = current_month_subscriptions.sum { |subscription| subscription.node.orders.edges.count > 1 && (subscription_orders_in_range(subscription).size > 1) ? 1 : 0  }
     renewed_subscriptions / current_month_subscriptions.count rescue 0
   end
 
@@ -99,7 +99,7 @@ class ReportDataService
     subscriptions.select { |subscription| range.cover?(subscription.node.created_at.to_date) && (status ? subscription.node.status == status : true) }
   end
 
-  def orders_in_range(subscription)
+  def subscription_orders_in_range(subscription)
     subscription.node.orders.edges.select { |order| date.beginning_of_month..date.end_of_month.cover?(order.node.created_at.to_date) }
   end
 
@@ -131,21 +131,37 @@ class ReportDataService
   end
 
   def checkout_charge(range)
-    subscriptions = in_period_subscriptions(@subscriptions, range)
-    subscriptions.sum{ |subscription| subscription.node.orders.edges.count == 1 ? get_orders_total_amount(subscription) : 0.0 }
+    orders = one_time_orders(range)
+    orders_calculate_amount(orders)
   end
 
   def recurring_charge(range)
     subscriptions = in_period_subscriptions(@subscriptions, range)
-    subscriptions.sum{ |subscription| subscription.node.orders.edges.count > 1 ? get_orders_total_amount(subscription) : 0.0 }
+    subscriptions.sum{ |subscription| get_orders_total_amount(subscription) }
   end
 
   def average_checkout_charge
-    @subscriptions.sum{ |subscription| subscription.node.orders.edges.count == 1 ? get_orders_total_amount(subscription) : 0.0 } / orders_count rescue 0
+    orders = one_time_orders(@range)
+    orders_calculate_amount(orders) / orders.count
+  end
+
+  def one_time_orders(range)
+    orders = @orders.select { |order| order if range.cover?(order.created_at.to_date) }
+    subscription_order_ids = []
+    @subscriptions.each do |subscription|
+      subscription.node.orders.edges.each do |order|
+        subscription_order_ids.push(order.node.id[/\d+/])
+      end
+    end
+    orders.delete_if { |order| subscription_order_ids.include?(order.id) }
+  end
+
+  def orders_calculate_amount(orders)
+    orders.sum { |order| order.current_total_price_set.presentment_money.amount.to_f } + orders.sum { |order| order.total_shipping_price_set.presentment_money.amount.to_f }.round(2)
   end
 
   def average_recurring_charge
-    @subscriptions.sum{ |subscription| subscription.node.orders.edges.count > 1 ? get_orders_total_amount(subscription) : 0.0 } / orders_count rescue 0
+    @subscriptions.sum{ |subscription| get_orders_total_amount(subscription) } / orders_count rescue 0
   end
 
   def new_customers
