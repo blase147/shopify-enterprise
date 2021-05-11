@@ -9,7 +9,7 @@ class ReportDataService
   def get_date_range(duration)
     case duration
     when 'daily'
-      Date.today..Date.today
+      (Date.today - 1.day)..Date.today
     else
       Date.today - instance_eval(duration.downcase.split(' ').join('.'))..Date.today
     end
