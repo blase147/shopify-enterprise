@@ -10,9 +10,15 @@ module Mutations
         if smarty_message.present? && smarty_message.custom
           smarty_message.update!(smarty_message_params.except(:id))
         else
-          smarty_message = smarty_message.dup
-          smarty_message.assign_attributes(smarty_message_params.except(:id).merge(custom: true))
-          smarty_message.save
+          custom_message = current_shop.smarty_messages.where(title: smarty_message.title, custom: true).last
+          if custom_message.present?
+            custom_message.update!(smarty_message_params.except(:id))
+            smarty_message = custom_message
+          else
+            smarty_message = smarty_message.dup
+            smarty_message.assign_attributes(smarty_message_params.except(:id).merge(custom: true))
+            smarty_message.save!
+          end
         end
         { smarty_message: smarty_message }
       rescue ActiveRecord::RecordInvalid => e
