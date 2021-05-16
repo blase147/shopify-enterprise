@@ -1,5 +1,5 @@
 ShopifyApp.configure do |config|
-  config.application_name = "Hotel Collection"
+  config.application_name = ENV["SHOPIFY_APP_NAME"]
 
   config.api_key = ENV['SHOPIFY_API_KEY']
   config.secret = ENV['SHOPIFY_API_SECRET']
