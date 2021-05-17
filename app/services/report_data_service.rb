@@ -15,10 +15,10 @@ class ReportDataService
     end
   end
 
-  # def calculate_percentage(past_data, new_data, original_data)
-  #   percent = Percentage.change(past_data.to_f, new_data.to_f).to_i rescue 0
-  #   { value: original_data.to_f.round(2), percent: percent, up: percent.positive? }
-  # end
+  def calculate_percentage(past_data, new_data, original_data)
+    percent = Percentage.change(past_data.to_f, new_data.to_f).to_i rescue 0
+    { value: original_data.to_f.round(2), percent: percent, up: percent.positive? }
+  end
 
   def mrr(subscriptions)
     subscriptions.sum { |subscription| get_orders_total_amount(subscription) }
@@ -71,13 +71,13 @@ class ReportDataService
     subscriptions.sum { |subscription| get_orders_total_amount(subscription) }
   end
 
-  def refund_data_by_date(date, subscriptions)
-    subscriptions = in_period_subscriptions(subscriptions, date.beginning_of_month..date.end_of_month)
-    refunded_amount(subscriptions)
+  def refund_data_by_date(date, _subscriptions)
+    orders = ShopifyAPI::Order.find(:all, params: { limit: 250, created_at_min: date.beginning_of_month, created_at_max: date.end_of_month })
+    refunded_amount(orders)
   end
 
-  def refunded_amount(subscriptions)
-    subscriptions.sum { |subscription| subscription.node.orders.edges.sum { |order| order.node.total_refunded_set.presentment_money.amount.to_f.round(2) } }
+  def refunded_amount(orders)
+    orders.sum { |order| order.refunds.sum { |refund| refund.transactions.sum {|t| t.amount.to_f} } }
   end
 
   def arr_data_by_date(date, subscriptions)
@@ -109,9 +109,9 @@ class ReportDataService
     subscriptions.select { |subscription| range.cover?(subscription.node.created_at.to_date) && (status ? subscription.node.status == status : true) }
   end
 
-  # def in_period_hourly_subscriptions(subscriptions, range, status = nil)
-  #   subscriptions.select { |subscription| subscription.node.created_at.to_datetime.between?(range.first, range.last) && (status ? subscription.node.status == status : true) }
-  # end
+  def in_period_hourly_subscriptions(subscriptions, range, status = nil)
+    subscriptions.select { |subscription| subscription.node.created_at.to_datetime.between?(range.first, range.last) && (status ? subscription.node.status == status : true) }
+  end
 
   def subscription_orders_in_range(subscription)
     subscription.node.orders.edges.select { |order| date.beginning_of_month..date.end_of_month.cover?(order.node.created_at.to_date) }
@@ -139,9 +139,9 @@ class ReportDataService
     @subscriptions.sum { |subscription| subscription.node.orders.edges.count }
   end
 
-  def total_refunds(range = nil)
-    subscriptions = range.nil? ? @subscriptions : in_period_subscriptions(@subscriptions, range)
-    refunded_amount(subscriptions)
+  def total_refunds(range)
+    orders = ShopifyAPI::Order.find(:all, params: {limit: 250, created_at_min: range.first, created_at_max: range.last})
+    refunded_amount(orders)
   end
 
   def checkout_charge(range)

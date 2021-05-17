@@ -9,6 +9,8 @@ module Types
     field :cancelled_subscriptions_count, String, null: true
     field :recurring_sales, String, null: true
     field :one_time_sales, String, null: true
+    field :up, String, null: true
+    field :percent, String, null: true
     field :__typename, String, null: true
   end
 end

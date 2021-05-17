@@ -55,13 +55,13 @@ const Dashboard = (props) => {
         mrr
         activeSubscriptionsCount
         churnRate
+        customerLifetimeValue
         activeCustomers {
             date
             data {
               value
             }
         }
-        customerLifetimeValue
         revenueChurn {
             date
             data {

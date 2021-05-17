@@ -15,7 +15,7 @@ module Queries
       total_sales = data_service.get_total_sales.to_f.round(2)
       recurring_sales = data_service.recurring_sales
       sales_per_charge = data_service.sales_per_charge
-      total_refunds = range_data_service.total_refunds
+      total_refunds = range_data_service.total_refunds(range)
       new_subscriptions = range_data_service.in_period_subscriptions(subscriptions, range, 'ACTIVE').count
       cancelled_subscriptions = range_data_service.in_period_subscriptions(subscriptions, range, 'CANCELLED').count
       average_checkout_charge = range_data_service.average_checkout_charge.to_f.round(2)
