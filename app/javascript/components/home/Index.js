@@ -3,33 +3,9 @@ import { gql, useQuery } from '@apollo/client';
 // polaris ##
 import {
   Button, ButtonGroup, Card,
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   DisplayText, Heading,
-
   Layout, Page, Stack,
-
   Tabs,
-
-
-
-
-
-
   TextStyle
 } from '@shopify/polaris';
 // chart ##
@@ -40,10 +16,6 @@ import { Link, NavLink, useHistory } from 'react-router-dom';
 import AppLayout from '../layout/Layout';
 import Modals from './Modals';
 import CounterUp from 'react-countup';
-
-
-
-
 
 
 const Dashboard = (props) => {
@@ -433,7 +405,7 @@ const Dashboard = (props) => {
                     <path d="M11.5495 24.618L11.5495 27.7043C11.5495 28.0734 11.8488 28.3727 12.2179 28.3727C12.4025 28.3727 12.5696 28.2979 12.6906 28.177C12.8115 28.056 12.8864 27.8889 12.8863 27.7043L12.8863 24.618C12.8863 24.2489 12.5871 23.9496 12.2179 23.9496C11.8488 23.9496 11.5495 24.2489 11.5495 24.618Z" fill="#007EFF" />
                   </svg>
 
-                  <a>Get Started</a>
+                  <NavLink style={{textDecoration:"none",cursor:"pointer"}} to={'/installation'}>Installation</NavLink>
                 </div>
               </div>
 
