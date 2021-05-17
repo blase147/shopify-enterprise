@@ -1,6 +1,7 @@
 import React,{useState,useEffect,useMemo} from 'react'
 import {DisplayText,ButtonGroup,Select,TextField, Button, Stack, Card, Layout, Subheading} from '@shopify/polaris';
 import {gql,useLazyQuery,useMutation} from '@apollo/client';
+import { isEmpty } from 'lodash';
 
 const CancellationReasonForm = ({id,handleClose}) => {
 
@@ -51,7 +52,15 @@ const CancellationReasonForm = ({id,handleClose}) => {
     const [updateReason,{loading:updateLoading}]=useMutation(updateQuery);
 
     const validate=()=>{
-
+        
+            const {name}=formData;
+            const errors={};
+            if(!name)
+            {
+                errors.name="Please enter a name"
+            }
+             setErrors(errors);
+            return !isEmpty(errors) ? true : false;
     }
     
     useEffect(()=>{
@@ -73,6 +82,7 @@ const CancellationReasonForm = ({id,handleClose}) => {
 
     const handleSubmit=()=>{
         const {name,winback}=formData;
+        if(!validate()){
         if(id){
             updateReason({
                 variables:{
@@ -98,6 +108,7 @@ const CancellationReasonForm = ({id,handleClose}) => {
             })
         }
     }
+    }
 
     return (
         <React.Fragment>
@@ -115,7 +126,12 @@ const CancellationReasonForm = ({id,handleClose}) => {
             <Card.Section >
               <Layout>
                 <Layout.Section >
-                <TextField label="Name"  value={formData.name} onChange={value=>setFormData({...formData,name:value})} />
+                <TextField 
+                label="Name"  
+                value={formData.name} 
+                onChange={value=>setFormData({...formData,name:value})}
+                error={errors.name}
+                />
                 </Layout.Section>
                 <Layout.Section oneThird>
                 <Select

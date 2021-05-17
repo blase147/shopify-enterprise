@@ -3,6 +3,7 @@ import {Checkbox,DisplayText,ButtonGroup,TextField, Button, Stack, Card, Layout,
 import Tags from "@yaireo/tagify/dist/react.tagify" // React-wrapper file
 import "@yaireo/tagify/dist/tagify.css" // Tagify CSS
 import {gql,useLazyQuery,useMutation} from '@apollo/client';
+import { isEmpty } from 'lodash';
 
 const CustomKeywordsForm = ({id,handleClose}) => {
 
@@ -43,10 +44,26 @@ const CustomKeywordsForm = ({id,handleClose}) => {
     }
     `;
     const tagRef=useRef();
+    const [errors,setErrors]=useState({})
     const [formData,setFormData]=useState({response:"",keywords:[],status:'inactive'});
     const [getSingleKeyword,{data}]=useLazyQuery(fetchQuery,{fetchPolicy:"cache-and-network"})
     const [addKeyword,{loading:addLoading}]=useMutation(addQuery);
     const [updateKeyword,{loading:updateLoading}]=useMutation(updateQuery);
+
+    const validate=()=>{
+        
+        const {response}=formData;
+        const errors={};
+        if(!response)
+        {
+            errors.response="Please enter response"
+        }
+        if(tagRef?.current?.value?.length<=0){
+            errors.tag="Please add some tags"
+        }
+         setErrors(errors);
+        return !isEmpty(errors) ? true : false;
+}
 
     useEffect(()=>{
         if(id){
@@ -68,7 +85,7 @@ const CustomKeywordsForm = ({id,handleClose}) => {
     const handleSubmit=()=>{
         const {response,status}=formData;
         const keywords=tagRef.current.value?.map(val=>val.value);
-        console.log(tagRef,keywords,response,status)
+        if(!validate()){
         if(id){
             updateKeyword({
                 variables:{
@@ -95,6 +112,7 @@ const CustomKeywordsForm = ({id,handleClose}) => {
                 }
             })
         }
+    }
     }
     return (
         <React.Fragment>
@@ -128,9 +146,10 @@ const CustomKeywordsForm = ({id,handleClose}) => {
                     }}
                     value={formData.keywords}
                  />
+                 <span style={{color:"red"}}>{errors?.tag}</span>
                 </Layout.Section>
                 <Layout.Section >
-                <TextField multiline={3} label="response" value={formData.response} onChange={val=>setFormData({...formData,response:val})} />
+                <TextField error={errors?.response} multiline={3} label="response" value={formData.response} onChange={val=>setFormData({...formData,response:val})} />
                 </Layout.Section>
               </Layout>
               <Checkbox label="Activate response to custom keyword(s)" checked={formData.status=='active'} onChange={val=>setFormData({...formData,status:val?'active':'inactive'})} />
