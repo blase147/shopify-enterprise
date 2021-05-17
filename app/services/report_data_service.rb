@@ -15,6 +15,16 @@ class ReportDataService
     end
   end
 
+  # def calculate_percentage(past_data, new_data, original_data)
+  #   percent = Percentage.change(past_data.to_f, new_data.to_f).to_i rescue 0
+  #   { value: original_data.to_f.round(2), percent: percent, up: percent.positive? }
+  # end
+
+  def mrr(subscriptions)
+    subscriptions.sum { |subscription| get_orders_total_amount(subscription) }
+  end
+
+
   def get_subscriptions_count(subscriptions, status)
     subscriptions.sum { |subscription| subscription.node.status == status ? subscription.node.lines.edges.count : 0 }
   end
@@ -71,7 +81,7 @@ class ReportDataService
   end
 
   def arr_data_by_date(date, subscriptions)
-    current_year_subscriptions = in_period_subscriptions(subscriptions, date.beginning_of_year..date.end_of_year)
+    current_year_subscriptions = in_period_subscriptions(subscriptions, date.beginning_of_year..date.end_of_year, 'ACTIVE')
     current_year_subscriptions.sum { |subscription| get_orders_total_amount(subscription) }.to_f.round(2)
   end
 
@@ -98,6 +108,10 @@ class ReportDataService
   def in_period_subscriptions(subscriptions, range, status = nil)
     subscriptions.select { |subscription| range.cover?(subscription.node.created_at.to_date) && (status ? subscription.node.status == status : true) }
   end
+
+  # def in_period_hourly_subscriptions(subscriptions, range, status = nil)
+  #   subscriptions.select { |subscription| subscription.node.created_at.to_datetime.between?(range.first, range.last) && (status ? subscription.node.status == status : true) }
+  # end
 
   def subscription_orders_in_range(subscription)
     subscription.node.orders.edges.select { |order| date.beginning_of_month..date.end_of_month.cover?(order.node.created_at.to_date) }
