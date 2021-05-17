@@ -20,7 +20,7 @@ module Queries
       last_hour_churn_rate = data_service.get_churn_rate(past_hour_subscriptions, last_hour_range)
       current_year_churn_rate = data_service.get_churn_rate(current_year_subscriptions, current_year_range)
       churn_rate = data_service.calculate_percentage(past_churn_rate, last_hour_churn_rate, current_year_churn_rate)
-      customer_lifetime = current_year_churn_rate.eql?(0) ? 0 : data_service.calculate_percentage((data_service.get_customer_lifetime_value(current_year_subscriptions) / past_churn_rate),
+      customer_lifetime = current_year_churn_rate.eql?(0) ? {value: 0, percent: 0, up: false} : data_service.calculate_percentage((data_service.get_customer_lifetime_value(current_year_subscriptions) / past_churn_rate),
                           (data_service.get_customer_lifetime_value(past_hour_subscriptions) / last_hour_churn_rate),
                           (data_service.get_customer_lifetime_value(current_year_subscriptions) / current_year_churn_rate))
       revenue_churn = data_service.month_graph_data(subscriptions, range, :revenue_churn_by_date)
@@ -31,7 +31,7 @@ module Queries
       active_customers = data_service.month_graph_data(subscriptions, range, :get_customers_by_date)
       renewal_data = data_service.month_graph_data(subscriptions, range, :renewal_data_by_date)
       { mrr: subcription_month_revenue, active_subscriptions_count: active_subscriptions_count,
-        churn_rate: churn_rate, active_customers: active_customers, customer_lifetime_value: customer_lifetime.round(2),
+        churn_rate: churn_rate, active_customers: active_customers, customer_lifetime_value: customer_lifetime,
         revenue_churn: revenue_churn, arr_data: arr_data, mrr_data: mrr_data, refund_data: refund_data, sales_data: sales_data, renewal_data: renewal_data }
     end
   end

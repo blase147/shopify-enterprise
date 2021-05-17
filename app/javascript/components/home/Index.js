@@ -24,10 +24,26 @@ const Dashboard = (props) => {
   const getGraphDataQuery = gql`
    query($duration: String!) {
     fetchDashboardReport(duration: $duration) {
-        mrr
-        activeSubscriptionsCount
-        churnRate
-        customerLifetimeValue
+        mrr {
+            value
+            percent
+            up
+        }
+        activeSubscriptionsCount {
+            value
+            percent
+            up
+        }
+        churnRate {
+            value
+            percent
+            up
+        }
+        customerLifetimeValue {
+           value
+            percent
+            up
+        }
         activeCustomers {
             date
             data {
