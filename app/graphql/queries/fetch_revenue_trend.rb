@@ -6,16 +6,17 @@ module Queries
     argument :data_by_period, String, required: true
 
     def resolve(granularity: , data_period_for: , data_by_period:)
-      orders = ShopifyAPI::Order.find(:all)
+      orders_service = OrdersService.new(current_shop)
       subscriptions = ReportService.new.all_subscriptions
-      data_service = ReportDataService.new(subscriptions, orders)
+      data_service = ReportDataService.new(subscriptions)
       range = Date.today - data_period_for.to_i.send(data_by_period)..Date.today
+      orders = orders_service.orders_in_range(range.first, range.last, 'id,refunds,created_at,current_total_price_set,total_shipping_price_set,source_name')
       in_period_subscriptions = data_service.in_period_subscriptions(subscriptions, range)
       range_data_service = ReportDataService.new(in_period_subscriptions, orders, granularity, range)
-      total_sales = data_service.get_total_sales.to_f.round(2)
-      recurring_sales = data_service.recurring_sales
-      sales_per_charge = data_service.sales_per_charge
-      total_refunds = range_data_service.total_refunds(range)
+      total_sales = range_data_service.get_total_sales.to_f.round(2)
+      recurring_sales = range_data_service.recurring_sales
+      sales_per_charge = range_data_service.sales_per_charge
+      total_refunds = range_data_service.refunded_amount(orders)
       new_subscriptions = range_data_service.in_period_subscriptions(subscriptions, range, 'ACTIVE').count
       cancelled_subscriptions = range_data_service.in_period_subscriptions(subscriptions, range, 'CANCELLED').count
       average_checkout_charge = range_data_service.average_checkout_charge.to_f.round(2)

@@ -5,8 +5,9 @@ module Queries
 
     def resolve(duration:)
       subscriptions = ReportService.new.all_subscriptions
-      data_service = ReportDataService.new(subscriptions)
       range = data_service.get_date_range(duration)
+      orders = orders_service.orders_in_range(range.first, range.last, 'id,refunds,created_at')
+      data_service = ReportDataService.new(subscriptions, orders)
       current_year_range = Time.current.beginning_of_year.to_date..Date.today
       last_hour_range = Time.current.beginning_of_year..Time.current - 1.hour
       last_24_hours_range = Time.current.beginning_of_year..Time.current - 24.hours

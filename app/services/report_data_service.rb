@@ -72,7 +72,7 @@ class ReportDataService
   end
 
   def refund_data_by_date(date, _subscriptions)
-    orders = ShopifyAPI::Order.find(:all, params: { limit: 250, created_at_min: date.beginning_of_month, created_at_max: date.end_of_month })
+    orders = @orders.select { |order| order if (date.beginning_of_month..date.end_of_month).cover?(order.created_at.to_date) }
     refunded_amount(orders)
   end
 
@@ -139,11 +139,6 @@ class ReportDataService
     @subscriptions.sum { |subscription| subscription.node.orders.edges.count }
   end
 
-  def total_refunds(range)
-    orders = ShopifyAPI::Order.find(:all, params: {limit: 250, created_at_min: range.first, created_at_max: range.last})
-    refunded_amount(orders)
-  end
-
   def checkout_charge(range)
     orders = one_time_orders(range)
     orders_calculate_amount(orders)
@@ -167,7 +162,7 @@ class ReportDataService
         subscription_order_ids.push(order.node.id[/\d+/])
       end
     end
-    orders.delete_if { |order| subscription_order_ids.include?(order.id) }
+    orders.delete_if { |order| subscription_order_ids.include?(order.id) || order.source_name == 'subscription_contract' }
   end
 
   def orders_calculate_amount(orders)
@@ -206,9 +201,10 @@ class ReportDataService
   end
 
   def refunds_data(range)
+    orders = @orders.select { |order| order if range.cover?(order.created_at.to_date) }
     {
-      value: total_refunds(range),
-      refunds_count: @subscriptions.sum { |subscription| subscription.node.orders.edges.sum { |order| order.node.total_refunded_set.presentment_money.amount.to_f > 0 ? 1 : 0  } }
+      value: refunded_amount(orders),
+      refunds_count: orders.sum { |order| order.refunds.count.positive? ? 1 : 0 }
     }
   end
 
