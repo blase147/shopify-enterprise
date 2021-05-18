@@ -14,6 +14,13 @@ $primary: #007EFF;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
   }
+  .custom-key-forms {
+    margin-top: 30px;
+    .Polaris-Card {
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+  }
 }
 .customize-text {
   font-size: 18px;
@@ -288,4 +295,106 @@ $primary: #007EFF;
       }
     }
   }
+}
+
+// keyword forms //
+
+.keyword-forms {
+
+  .cancel-reason-inputs {
+    display: flex;
+    grid-column-gap: 15px;
+  }
+  
+  .new-custom-text {
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 35px;
+    margin-bottom: 15px;
+  }
+  .response-text {
+    font-size: 14px;
+  }
+  .custom-key-forms {
+    .Polaris-Layout__Section {
+      margin-left: 0;
+
+      
+    }
+  }
+  .Polaris-Button {
+    border-radius: 4px;
+    background: white;
+    &.Polaris-Button--primary {
+      border: none;
+      background: #007eff;
+      border-radius: 4px;;
+    }
+  
+  }
+
+  .switch-section {
+    display: flex;
+  }
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 45px;
+    height: 23px;
+    margin-right: 10px;
+    input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+    &:before {
+      position: absolute;
+      content: "";
+      height: 19px;
+      width: 19px;
+      left: -2px;
+      bottom: 2px;
+      background-color: white;
+      transition: .4s;
+    }
+  }
+  .switch-input {
+    &:checked {
+      + {
+        .slider {
+          background-color: #2196F3;
+          &:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+          }
+        }
+      }
+    }
+    &:focus {
+      + {
+        .slider {
+          box-shadow: 0 0 1px #2196F3;
+        }
+      }
+    }
+  }
+  .slider.round {
+    border-radius: 34px;
+    &:before {
+      border-radius: 50%;
+    }
+  }
+  
 }
