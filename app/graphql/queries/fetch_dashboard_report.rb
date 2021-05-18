@@ -6,6 +6,7 @@ module Queries
     def resolve(duration:)
       subscriptions = ReportService.new.all_subscriptions
       range = get_date_range(duration)
+      orders_service = OrdersService.new(current_shop)
       orders = orders_service.orders_in_range(range.first, range.last, 'id,refunds,created_at')
       data_service = ReportDataService.new(subscriptions, orders)
       current_year_range = Time.current.beginning_of_year.to_date..Date.today
