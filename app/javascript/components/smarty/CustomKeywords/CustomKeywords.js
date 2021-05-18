@@ -26,7 +26,7 @@ const CustomKeywords = ({handleEditCustomKewords}) => {
                       status
                       updatedAt
                   }
-      
+
   }
 }
   `
@@ -48,7 +48,7 @@ const CustomKeywords = ({handleEditCustomKewords}) => {
 
    const count =data?.fetchCustomKeywords?.totalCount;
    const totalPages=Math.ceil(count / filters.limit);
-   
+
    const handlePageClick = useCallback(data => {
      let selected = data && data.selected;
      let _offset = Math.ceil(selected * filters.limit);
@@ -60,11 +60,11 @@ const CustomKeywords = ({handleEditCustomKewords}) => {
         <Card>
           <Card.Section>
             <div className="smarty-sms">
-              <div>
+            <div className="cancel-reason-header">
               <p className="customize-text">Message Custom Keywords</p>
+              <Button primary className="cancelation-reason" onClick={()=>handleEditCustomKewords("")} >+ Add New Custom Keywords</Button>
               </div>
               <p className="customize-text" style={{ fontWeight: 'normal' }}>Add your own responses to customer messages.</p>
-              <Button className="cancelation-reason" onClick={()=>handleEditCustomKewords("")} >+ Add New Custom Keywords</Button>
               <form class="">
                 <div className="message-form">
                   <div class="example">

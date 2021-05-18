@@ -16,6 +16,7 @@ class SmsConversation < ApplicationRecord
       'PRODUCT': 'Enables you to add a product to your next shipment.',
       'CLOSE': 'Enables you to cancel your subscription at any time.',
       'PAUSE': 'Enables you to pause your subscription.',
+      'RESTART': 'Enables you to pause your subscription.',
       'RESUME': 'Enables you to resume your paused subscription.',
       'HEY': 'List all available commands.',
       'END': 'Stops the current conversation.'

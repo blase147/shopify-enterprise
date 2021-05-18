@@ -42,14 +42,14 @@ class SmsService::MessageGenerateService
       when 'card_brand - card_last4'
         if @subscription.present?
           order = ShopifyAPI::Order.find(@subscription.origin_order.id[/\d+/]) rescue nil
-          card = order.payment_details
-          message = message.gsub("{{#{variable.name}}}", "#{card.credit_card_company} - #{card.credit_card_number}")
+          card = order&.payment_details
+          message = message.gsub("{{#{variable.name}}}", "#{card&.credit_card_company} - #{card&.credit_card_number}")
         end
       when 'card_exp_month/card_exp_year'
         if @subscription.present?
           order = ShopifyAPI::Order.find(@subscription.origin_order.id[/\d+/]) rescue nil
-          card = order.payment_details
-          message = message.gsub("{{#{variable.name}}}", card.respond_to?(:credit_card_expiration_month) ? "#{card.credit_card_expiration_month}/#{card.credit_card_expiration_year}" : '-')
+          card = order&.payment_details
+          message = message.gsub("{{#{variable.name}}}", card.respond_to?(:credit_card_expiration_month) ? "#{card&.credit_card_expiration_month}/#{card&.credit_card_expiration_year}" : '-')
         end
       when 'cancellation_reasons'
         message = message.gsub("{{#{variable.name}}}", @customer.shop.smarty_cancellation_reasons.each_with_index.map{|reason, i| "#{i+1}. #{reason.name}"}.join("\n")) if @customer.present?

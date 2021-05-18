@@ -112,35 +112,38 @@ const CancellationReasonForm = ({id,handleClose}) => {
 
     return (
         <React.Fragment>
+          <div className="keyword-forms">
          <Layout>
-          <Layout.Section>
-           <DisplayText size="large">
+         
+          <p className="new-custom-text">
              New Cancellation Reason
-           </DisplayText>
-           <Subheading>
+          </p>
+          <p className="response-text">
              Create a new cancellation reason.
-           </Subheading>
-          </Layout.Section>
-          <Layout.Section>
+           </p>
+          
+           <div className="custom-key-forms">
           <Card>
             <Card.Section >
               <Layout>
-                <Layout.Section >
-                <TextField 
-                label="Name"  
-                value={formData.name} 
-                onChange={value=>setFormData({...formData,name:value})}
-                error={errors.name}
-                />
-                </Layout.Section>
-                <Layout.Section oneThird>
-                <Select
-                    label="Winback"
-                    options={winbackOptions}
-                    value={formData.winback}
-                    onChange={value=>setFormData({...formData,winback:value})}
-              />
-                </Layout.Section>
+                <div className="cancel-reason-inputs">
+                  <Layout.Section >
+                    <TextField 
+                    label="Name"  
+                    value={formData.name} 
+                    onChange={value=>setFormData({...formData,name:value})}
+                    error={errors.name}
+                    />
+                    </Layout.Section>
+                    <Layout.Section oneThird>
+                    <Select
+                        label="Winback"
+                        options={winbackOptions}
+                        value={formData.winback}
+                        onChange={value=>setFormData({...formData,winback:value})}
+                    />
+                  </Layout.Section>
+                </div>
               </Layout>
             </Card.Section>
             <Card.Section subdued  >
@@ -152,8 +155,9 @@ const CancellationReasonForm = ({id,handleClose}) => {
           </Stack>
             </Card.Section>
           </Card>
-          </Layout.Section>
+          </div>
         </Layout>
+        </div>
       </React.Fragment>
     )
 }

@@ -48,7 +48,7 @@ shop.smarty_messages.create(title: 'Edit quantity- Invalid Option', body: "Oops,
 
 # Cancelation
 shop.smarty_messages.create(title: 'End Subscription - confirmation', body: "Confirm you want to cancel your subscription to order {{subscription_title}}? If so, please reply 'Y' to confirm or 'N' to ignore")
-shop.smarty_messages.create(title: 'End Subscription - Cancel', body: "OK, ignored.If you need anything else, let us know. You can reply with 'INFO' or email us at {{shop_email}}")
+shop.smarty_messages.create(title: 'End Subscription - Cancel', body: "OK, ignored.If you need anything else, let us know. You can reply with 'HEY' or email us at {{shop_email}}")
 shop.smarty_messages.create(title: 'End Subscription - Cancellation Reason', body: "Ok {{first_name}} - before we end your subscription, which of the following best describes why you'd like to cancel? \n{{cancellation_reasons}}")
 shop.smarty_messages.create(title: 'End Subscription - invalid option', body: "Oops, it seems you entered an incorrect answer, please choose a valid option. Reply 'Y' to confirm or 'N' to ignore")
 shop.smarty_messages.create(title: 'End Subscription - Winback Swap', body: "Do you want to swap a product for your current subscription (SWAP) or continue with the cancellation of your subscription (CONTINUE) ?")
@@ -57,10 +57,14 @@ shop.smarty_messages.create(title: 'End Subscription - Success', body: "Sad to s
 shop.smarty_messages.create(title: 'End Subscription - Failure', body: "Hey {{first_name}}!, it looks like your subscription for {{subscription_title}} is already cancelled! For more information, go to: {{manage_subscriptions_url}} or contact us at {{shop_email}}")
 shop.smarty_messages.create(title: 'End Subscription - Contact', body: "Someone from our support team will be in touch with you soon & they'll assist you with your request.")
 
-
 #Opt In
-shop.smarty_messages.create(title: 'Opt-in', body: "Hey {{first_name}}! Welcome to the {{shop_name}} SMS service! You can manage your subscription via sms without having to log into the customer portal or contacting support.. Just reply 'INFO' to this number at any time.  To opt-out of this service, reply with 'STOP'")
-shop.smarty_messages.create(title: 'Opt-in - success', body: "Hey {{first_name}}! We are preparing to ship your order of {{subscription_title}}. To manage your future orders via SMS, save this number and reply with 'INFO' at any time.")
+shop.smarty_messages.create(title: 'Opt-in', body: "Hey {{first_name}}! Welcome to the {{shop_name}} SMS service! You can manage your subscription via sms without having to log into the customer portal or contacting support.. Just reply 'HEY' to this number at any time.  To opt-out of this service, reply with 'STOP'")
+shop.smarty_messages.create(title: 'Opt-in - success', body: "Hey {{first_name}}! We are preparing to ship your order of {{subscription_title}}. To manage your future orders via SMS, save this number and reply with 'HEY' at any time.")
+
+# Charge Faillure
+shop.smarty_messages.create(title: 'Charge - Failure', body: "Hey {{first_name}}!, we are unable to charge your order, someone from our support team will be in touch with you soon.")
+
+shop.smarty_messages.create(title: 'Charge - Reminder', body: "Hey {{first_name}}! We are preparing to ship your order of {{subscription_title}}. To manage your future orders via SMS, save this number and reply with 'HEY' at any time")
 
 #Cancellation Reasons
 shop.smarty_cancellation_reasons.create(name: 'I want a different product or variety', winback: :swap)
