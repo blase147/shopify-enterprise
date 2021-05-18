@@ -20,6 +20,7 @@ import { Link, NavLink, useHistory } from 'react-router-dom';
 import AppLayout from '../layout/Layout';
 import Modals from './Modals';
 import CounterUp from 'react-countup';
+import { isEmpty } from 'lodash';
 
 
 const Dashboard = (props) => {
@@ -176,29 +177,28 @@ const Dashboard = (props) => {
   }, [isTimeButton])
 
   useEffect(() => {
-    if (data) {
+    if (!isEmpty(data?.fetchDashboardReport)) {
       const { fetchDashboardReport } = data;
-      console.log(fetchDashboardReport,"dashboard Data---")
       // Section List Update
-      setSectionListData({
-        mrr: fetchDashboardReport.mrr,
-        subscriptions: fetchDashboardReport.activeSubscriptionsCount,
-        churn_rate: fetchDashboardReport.churnRate ,
-        cl_value: fetchDashboardReport.customerLifetimeValue
-      })
+      setSectionListData(prevSecList=>({
+        mrr: fetchDashboardReport.mrr || prevSecList.mrr,
+        subscriptions: fetchDashboardReport.activeSubscriptionsCount || prevSecList.subscriptions,
+        churn_rate: fetchDashboardReport.churnRate || prevSecList.churn_rate,
+        cl_value: fetchDashboardReport.customerLifetimeValue || prevSecList.cl_value
+      }))
 
       // fetchDashboardReport.salesData.map(parseFloat(item=>item.data.value.value))}
       // fetchDashboardReport.salesData.map(item=>item.date)
       /// Charts Update
       const { sale, customer, revenue_churn, renewal_rate, mrr, arr, refunds, cmrr } = chartOptions;
-      const newSale = { ...sale, series: [{ data: fetchDashboardReport.salesData.map(item => parseInt(item.data.value)) }], xAxis: { ...sale.xAxis, categories: fetchDashboardReport.salesData.map(item => item.date) } }
-      const newCustomer = { ...customer, series: [{ data: fetchDashboardReport.activeCustomers.map(item => parseInt(item.data.value)) }], xAxis: { ...customer.xAxis, categories: fetchDashboardReport.activeCustomers.map(item => item.date) } }
-      const newRevenueChurn = { ...revenue_churn, series: [{ data: fetchDashboardReport.revenueChurn.map(item => parseInt(item.data.value)) }], xAxis: { ...revenue_churn.xAxis, categories: fetchDashboardReport.revenueChurn.map(item => item.date) } }
-      const newRenewal = { ...renewal_rate, series: [{ data: fetchDashboardReport.renewalData.map(item => parseInt(item.data.value)) }], xAxis: { ...renewal_rate.xAxis, categories: fetchDashboardReport.renewalData.map(item => item.date) } }
-      const newMMR = { ...mrr, series: [{ data: fetchDashboardReport.mrrData.map(item => parseInt(item.data.value)) }], xAxis: { ...mrr.xAxis, categories: fetchDashboardReport.mrrData.map(item => item.date) } }
-      const newARR = { ...arr, series: [{ data: fetchDashboardReport.arrData.map(item => parseInt(item.data.value)) }], xAxis: { ...arr.xAxis, categories: fetchDashboardReport.arrData.map(item => item.date) } }
-      const newRefunds = { ...refunds, series: [{ data: fetchDashboardReport.refundData.map(item => parseInt(item.data.value)) }], xAxis: { ...refunds.xAxis, categories: fetchDashboardReport.refundData.map(item => item.date) } }
-      const newCMRR = { ...cmrr, series: [{ data: fetchDashboardReport.salesData.map(item => parseInt(item.data.value)) }], xAxis: { ...cmrr.xAxis, categories: fetchDashboardReport.salesData.map(item => item.date) } }
+      const newSale = { ...sale, series: [{ data: fetchDashboardReport?.salesData.map(item => parseInt(item.data.value)) || [] }], xAxis: { ...sale.xAxis, categories: fetchDashboardReport?.salesData.map(item => item.date) } || [] }
+      const newCustomer = { ...customer, series: [{ data: fetchDashboardReport?.activeCustomers.map(item => parseInt(item.data.value)) || [] }], xAxis: { ...customer.xAxis, categories: fetchDashboardReport?.activeCustomers.map(item => item.date) || [] } }
+      const newRevenueChurn = { ...revenue_churn, series: [{ data: fetchDashboardReport?.revenueChurn.map(item => parseInt(item.data.value)) || [] }], xAxis: { ...revenue_churn.xAxis, categories: fetchDashboardReport?.revenueChurn.map(item => item.date) || [] } }
+      const newRenewal = { ...renewal_rate, series: [{ data: fetchDashboardReport?.renewalData.map(item => parseInt(item.data.value)) || [] }], xAxis: { ...renewal_rate.xAxis, categories: fetchDashboardReport?.renewalData.map(item => item.date) || [] } }
+      const newMMR = { ...mrr, series: [{ data: fetchDashboardReport?.mrrData.map(item => parseInt(item.data.value)) || [] }], xAxis: { ...mrr.xAxis, categories: fetchDashboardReport?.mrrData.map(item => item.date) || [] } }
+      const newARR = { ...arr, series: [{ data: fetchDashboardReport?.arrData.map(item => parseInt(item.data.value)) || [] }], xAxis: { ...arr.xAxis, categories: fetchDashboardReport?.arrData.map(item => item.date) || [] } }
+      const newRefunds = { ...refunds, series: [{ data: fetchDashboardReport?.refundData.map(item => parseInt(item.data.value)) || [] }], xAxis: { ...refunds.xAxis, categories: fetchDashboardReport?.refundData.map(item => item.date) || [] } }
+      const newCMRR = { ...cmrr, series: [{ data: fetchDashboardReport?.salesData.map(item => parseInt(item.data.value)) || [] }], xAxis: { ...cmrr.xAxis, categories: fetchDashboardReport?.salesData.map(item => item.date) || [] } }
       //  const
       setChartOptions({
         ...chartOptions,
