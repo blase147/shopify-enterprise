@@ -23,7 +23,7 @@ namespace :subscriptions do
         subscription = SubscriptionContractService.new(customer.shopify_id).run
         unless subscription.is_a?(Hash)
           conversation = customer.sms_conversations.order(created_at: :asc).first
-          if conversation.present? && conversation.sms_messages.present? && conversation.sms_messages.order(created_at: :asc).first.command == 'STOP'
+          if conversation.present? && conversation.sms_messages.present? && conversation.sms_messages.order(created_at: :asc).first.command != 'STOP'
             message_service = SmsService::MessageGenerateService.new(customer.shop, customer, subscription)
             message = message_service.content('Opt-in - success')
             p message
