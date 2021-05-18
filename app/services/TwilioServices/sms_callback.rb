@@ -28,7 +28,7 @@ class TwilioServices::SmsCallback < ApplicationService
     shared_service = SmsService::SharedService.new(conversation, @params)
     @params['Body'] = @params['Body'].strip
     upcase_body = @params['Body'].upcase
-    keyword = @customer.shop.custom_keywords.where("ARRAY[keywords] @> ARRAY['#{@params['Body'].downcase}']")
+    keyword = @customer.shop.custom_keywords.active.where("ARRAY[keywords] @> ARRAY['#{@params['Body'].downcase}']")
     if keyword.present?
       sms_service.process_keyword(keyword.last.response)
       return
