@@ -1,5 +1,5 @@
 // reactjs ##
-import { gql, useQuery } from '@apollo/client';
+import { gql, useLazyQuery } from '@apollo/client';
 // polaris ##
 import {
   Button, ButtonGroup, Card,
@@ -21,8 +21,10 @@ import CounterUp from 'react-countup';
 const Dashboard = (props) => {
   const history = useHistory();
 
+ 
+
   const getGraphDataQuery = gql`
-   query($duration: String!) {
+  query($duration: String!) {  
     fetchDashboardReport(duration: $duration) {
         mrr {
             value
@@ -40,53 +42,54 @@ const Dashboard = (props) => {
             up
         }
         customerLifetimeValue {
-           value
+            value
             percent
             up
         }
         activeCustomers {
-            date
             data {
-              value
+                value
             }
+            date
         }
         revenueChurn {
             date
             data {
-              value
+                value
             }
         }
         arrData {
             date
             data {
-              value
+                value
             }
         }
         mrrData {
             date
             data {
-              value
+                value
             }
         }
         refundData {
             date
             data {
-              value
+                value
             }
         }
         salesData {
             date
             data {
-              value
+                value
             }
         }
         renewalData {
-          date
-          data {
-            value
-          }
-      }
-    } }`;
+            date
+            data {
+                value
+            }
+        }
+    }
+}`;
 
   const chartCustomDaily = {
     chart: {
@@ -163,17 +166,17 @@ const Dashboard = (props) => {
     refunds: "$0",
     cmrr: "$0"
   })
-  const { loading, error, data, refetch } = useQuery(getGraphDataQuery, {
-    variables: { "duration": isTimeButton }
-  });
+  const [getReport,{ loading, error, data }] = useLazyQuery(getGraphDataQuery, {fetchPolicy:"network-only"});
 
   useEffect(() => {
+    getReport({variables:{duration:isTimeButton}})
     refetch();
   }, [isTimeButton])
 
   useEffect(() => {
     if (data) {
       const { fetchDashboardReport } = data;
+      console.log(fetchDashboardReport,"dashboard Data---")
       // Section List Update
       setSectionListData({
         mrr: fetchDashboardReport.mrr,
@@ -425,14 +428,7 @@ const Dashboard = (props) => {
                 </div>
               </div>
 
-              <ButtonGroup segmented>
-                <Button onClick={() => setIsTimeButton("daily")} primary={isTimeButton == "daily"}>
-                  Daily
-              </Button>
-                <Button onClick={() => setIsTimeButton("3 Month")} primary={isTimeButton == "3 Month"}>3 Months</Button>
-                <Button onClick={() => setIsTimeButton("6 Month")} primary={isTimeButton == "6 Month"}>6 Months</Button>
-                <Button onClick={() => setIsTimeButton("12 Month")} primary={isTimeButton == "12 Month"}>12 Months</Button>
-              </ButtonGroup>
+              
             </div>
           </Layout.Section>
 
@@ -485,6 +481,14 @@ const Dashboard = (props) => {
                   <NavLink style={{textDecoration:"none",cursor:"pointer"}} to={'/analytics'}>Dive Deep Analytics</NavLink>
                 </div>
               </Layout.Section>
+              <ButtonGroup segmented>
+                <Button onClick={() => setIsTimeButton("daily")} primary={isTimeButton == "daily"}>
+                  Daily
+              </Button>
+                <Button onClick={() => setIsTimeButton("3 Month")} primary={isTimeButton == "3 Month"}>3 Months</Button>
+                <Button onClick={() => setIsTimeButton("6 Month")} primary={isTimeButton == "6 Month"}>6 Months</Button>
+                <Button onClick={() => setIsTimeButton("12 Month")} primary={isTimeButton == "12 Month"}>12 Months</Button>
+              </ButtonGroup>
             </div>
             {listContainerChart?.map((item, i) => (
               <Layout.Section oneHalf key={i}>
