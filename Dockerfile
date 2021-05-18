@@ -34,5 +34,6 @@ COPY --from=base /app /app
 
 # copy gems that already build
 COPY --from=base /usr/local/bundle/ /usr/local/bundle/
-CMD ["RAILS_ENV=production", "rails", "db:migrate"]
+CMD ["bundle", "exec", "rails", "db:migrate", "-e", "production"]
+CMD ["bundle", "exec", "whenever", "--update-crontab", "-i", "aroma_production", "--set", "environment=production"]
 CMD ["bundle", "exec", "rails", "s", "-e", "production", "-b", "0.0.0.0"]
