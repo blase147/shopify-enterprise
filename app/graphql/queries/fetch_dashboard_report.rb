@@ -35,14 +35,14 @@ module Queries
         churn_rate: churn_rate, active_customers: active_customers, customer_lifetime_value: customer_lifetime,
         revenue_churn: revenue_churn, arr_data: arr_data, mrr_data: mrr_data, refund_data: refund_data, sales_data: sales_data, renewal_data: renewal_data }
     end
-  end
 
-  def get_date_range(duration)
-    case duration
-    when 'daily'
-      (Date.today - 1.day)..(Date.today - 1.day)
-    else
-      Date.today - instance_eval(duration.downcase.split(' ').join('.'))..Date.today
+    def get_date_range(duration)
+      case duration
+      when 'daily'
+        (Date.today - 1.day)..(Date.today - 1.day)
+      else
+        Date.today - instance_eval(duration.downcase.split(' ').join('.'))..Date.today
+      end
     end
   end
 end
