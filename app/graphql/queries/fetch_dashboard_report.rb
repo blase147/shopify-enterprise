@@ -5,7 +5,7 @@ module Queries
 
     def resolve(duration:)
       subscriptions = ReportService.new.all_subscriptions
-      range = data_service.get_date_range(duration)
+      range = get_date_range(duration)
       orders = orders_service.orders_in_range(range.first, range.last, 'id,refunds,created_at')
       data_service = ReportDataService.new(subscriptions, orders)
       current_year_range = Time.current.beginning_of_year.to_date..Date.today
@@ -34,6 +34,15 @@ module Queries
       { mrr: subcription_month_revenue, active_subscriptions_count: active_subscriptions_count,
         churn_rate: churn_rate, active_customers: active_customers, customer_lifetime_value: customer_lifetime,
         revenue_churn: revenue_churn, arr_data: arr_data, mrr_data: mrr_data, refund_data: refund_data, sales_data: sales_data, renewal_data: renewal_data }
+    end
+  end
+
+  def get_date_range(duration)
+    case duration
+    when 'daily'
+      (Date.today - 1.day)..(Date.today - 1.day)
+    else
+      Date.today - instance_eval(duration.downcase.split(' ').join('.'))..Date.today
     end
   end
 end

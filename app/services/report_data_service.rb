@@ -6,15 +6,6 @@ class ReportDataService
     @range = range
   end
 
-  def get_date_range(duration)
-    case duration
-    when 'daily'
-      (Date.today - 1.day)..(Date.today - 1.day)
-    else
-      Date.today - instance_eval(duration.downcase.split(' ').join('.'))..Date.today
-    end
-  end
-
   def calculate_percentage(past_data, new_data, original_data)
     percent = Percentage.change(past_data.to_f, new_data.to_f).to_i rescue 0
     { value: original_data.to_f.round(2), percent: percent, up: percent.positive? }
