@@ -1,13 +1,17 @@
 // reactjs ##
-import { gql, useQuery } from '@apollo/client';
+import { gql, useLazyQuery } from '@apollo/client';
 // polaris ##
 import {
   Button, ButtonGroup, Card,
   DisplayText, Heading,
   Layout, Page, Stack,
   Tabs,
-  TextStyle
+  TextStyle,Icon
 } from '@shopify/polaris';
+import {
+  CaretUpMinor,
+  CaretDownMinor,
+} from '@shopify/polaris-icons';
 // chart ##
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
@@ -21,8 +25,10 @@ import CounterUp from 'react-countup';
 const Dashboard = (props) => {
   const history = useHistory();
 
+ 
+
   const getGraphDataQuery = gql`
-   query($duration: String!) {
+  query($duration: String!) {  
     fetchDashboardReport(duration: $duration) {
         mrr {
             value
@@ -40,53 +46,54 @@ const Dashboard = (props) => {
             up
         }
         customerLifetimeValue {
-           value
+            value
             percent
             up
         }
         activeCustomers {
-            date
             data {
-              value
+                value
             }
+            date
         }
         revenueChurn {
             date
             data {
-              value
+                value
             }
         }
         arrData {
             date
             data {
-              value
+                value
             }
         }
         mrrData {
             date
             data {
-              value
+                value
             }
         }
         refundData {
             date
             data {
-              value
+                value
             }
         }
         salesData {
             date
             data {
-              value
+                value
             }
         }
         renewalData {
-          date
-          data {
-            value
-          }
-      }
-    } }`;
+            date
+            data {
+                value
+            }
+        }
+    }
+}`;
 
   const chartCustomDaily = {
     chart: {
@@ -138,10 +145,10 @@ const Dashboard = (props) => {
 
   const [isTimeButton, setIsTimeButton] = useState("daily");
   const [sectionListData, setSectionListData] = useState({
-    mrr: "0",
-    subscriptions: "0",
-    churn_rate: "0",
-    cl_value: "0"
+    mrr: {value:"0",up:true,percent:0},
+    subscriptions: {value:"0",up:true,percent:0},
+    churn_rate: {value:"0",up:true,percent:0},
+    cl_value: {value:"0",up:true,percent:0}
   })
   const [chartOptions, setChartOptions] = useState({
     sale: chartCustomDaily,
@@ -163,17 +170,15 @@ const Dashboard = (props) => {
     refunds: "$0",
     cmrr: "$0"
   })
-  const { loading, error, data, refetch } = useQuery(getGraphDataQuery, {
-    variables: { "duration": isTimeButton }
-  });
-
+  const [getReport,{ loading, error, data }] = useLazyQuery(getGraphDataQuery, {fetchPolicy:"network-only"});
   useEffect(() => {
-    refetch();
+     getReport({variables:{duration:isTimeButton}})
   }, [isTimeButton])
 
   useEffect(() => {
     if (data) {
       const { fetchDashboardReport } = data;
+      console.log(fetchDashboardReport,"dashboard Data---")
       // Section List Update
       setSectionListData({
         mrr: fetchDashboardReport.mrr,
@@ -289,8 +294,9 @@ const Dashboard = (props) => {
     },
     {
       tabs: [
-        { id: 'mrr', content: 'MRR' },
         { id: 'arr', content: 'ARR' },
+        { id: 'mrr', content: 'MRR' }
+        
       ],
       number: '$20.24K',
       number_small: 'Jan $83.98K',
@@ -425,14 +431,7 @@ const Dashboard = (props) => {
                 </div>
               </div>
 
-              <ButtonGroup segmented>
-                <Button onClick={() => setIsTimeButton("daily")} primary={isTimeButton == "daily"}>
-                  Daily
-              </Button>
-                <Button onClick={() => setIsTimeButton("3 Month")} primary={isTimeButton == "3 Month"}>3 Months</Button>
-                <Button onClick={() => setIsTimeButton("6 Month")} primary={isTimeButton == "6 Month"}>6 Months</Button>
-                <Button onClick={() => setIsTimeButton("12 Month")} primary={isTimeButton == "12 Month"}>12 Months</Button>
-              </ButtonGroup>
+              
             </div>
           </Layout.Section>
 
@@ -448,15 +447,15 @@ const Dashboard = (props) => {
                         </Stack.Item>
 
                         <Stack.Item>
-                          {/* <TextStyle
-                          variation={item.up ? 'positive' : 'negative'}
+                          <TextStyle
+                          variation={sectionListData[item.key]?.up ? 'positive' : 'negative'}
                         >
                           <Icon
-                            source={item.up ? CaretUpMinor : CaretDownMinor}
-                            color={item.up ? 'green' : 'red'}
+                            source={sectionListData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                            color={sectionListData[item.key]?.up ? 'green' : 'red'}
                           />
-                          {item.percent}%
-                        </TextStyle> */}
+                          {(sectionListData[item.key]?.percent==0 && !sectionListData[item.key]?.up)?100:Math.abs(sectionListData[item.key]?.percent)}%
+                        </TextStyle>
                         </Stack.Item>
                       </Stack>
 
@@ -465,7 +464,7 @@ const Dashboard = (props) => {
                         <DisplayText size="medium">
                             <TextStyle variation="strong">
                           {/* <DisplayText size="medium">{sectionListData[item.key] || item?.amount}</DisplayText> */}
-                          <CounterUp prefix={item.type=="currency"?"$":""} suffix={item.type=="percent"?"%":""} start={0} end={Number.parseFloat(sectionListData[item.key] || item?.amount).toFixed(2)} duration={1.5} decimals={item.type=="currency"?2:0} />
+                          <CounterUp prefix={item.type=="currency"?"$":""} suffix={item.type=="percent"?"%":""} start={0} end={Number.parseFloat(sectionListData[item.key]?.value || item?.amount).toFixed(2)} duration={1.5} decimals={item.type=="currency"?2:0} />
                        </TextStyle>
                        </DisplayText>
                         </Stack.Item>
@@ -485,6 +484,14 @@ const Dashboard = (props) => {
                   <NavLink style={{textDecoration:"none",cursor:"pointer"}} to={'/analytics'}>Dive Deep Analytics</NavLink>
                 </div>
               </Layout.Section>
+              <ButtonGroup segmented>
+                <Button onClick={() => setIsTimeButton("daily")} primary={isTimeButton == "daily"}>
+                  Daily
+              </Button>
+                <Button onClick={() => setIsTimeButton("3 Month")} primary={isTimeButton == "3 Month"}>3 Months</Button>
+                <Button onClick={() => setIsTimeButton("6 Month")} primary={isTimeButton == "6 Month"}>6 Months</Button>
+                <Button onClick={() => setIsTimeButton("12 Month")} primary={isTimeButton == "12 Month"}>12 Months</Button>
+              </ButtonGroup>
             </div>
             {listContainerChart?.map((item, i) => (
               <Layout.Section oneHalf key={i}>
