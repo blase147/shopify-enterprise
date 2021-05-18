@@ -9,11 +9,13 @@ class ProcessSmsService
 
   def process
     return if !processing_allowed?(@customer) || !command_allowed?(@conversation)
-
-    if %w[SWAP SKIP QUANTITY BILLING SHIPPING PRODUCT CLOSE PAUSE RESUME DELAY].include?(@conversation.command)
+    if %w[SWAP SKIP QUANTITY BILLING SHIPPING PRODUCT CLOSE RESTART PAUSE RESUME DELAY].include?(@conversation.command)
       @data = @shared_service.customer_subscriptions(@customer.shopify_id)
-      if @conversation.command != 'PAUSE' && @data[:active_subscriptions].count.zero?
-        @shared_service.send_message('You have no active subscriptions.')
+      if @conversation.command == 'PAUSE' && @data[:active_subscriptions].count.zero?
+        @shared_service.send_message('You have no active subscription.')
+        return
+      elsif @conversation.command == 'RESTART' && @data[:cancelled_subscriptions].count.zero?
+        @shared_service.send_message('You have no cancelled subscription.')
         return
       end
     end
@@ -36,6 +38,8 @@ class ProcessSmsService
       SmsService::ProductService.new(@conversation, @params, @data, @customer).process
     when 'CLOSE'
       SmsService::CancelService.new(@conversation, @params, @data, @customer).process
+    when 'RESTART'
+      SmsService::RestartService.new(@conversation, @params, @data).process
     when 'PAUSE'
       SmsService::PauseService.new(@conversation, @params, @data).process
     when 'RESUME'

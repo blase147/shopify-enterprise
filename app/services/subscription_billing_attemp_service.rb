@@ -29,5 +29,8 @@ class SubscriptionBillingAttempService < GraphqlService
     })
 
     p result
+  rescue Exception => ex
+    p ex.message
+    { error: ex.message }
   end
 end

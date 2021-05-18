@@ -26,8 +26,8 @@ class SmsService::SharedService
     data[:active_subscriptions].each_with_index.map{ |subscription, i| "#{i+1}. #{subscription.node.id[/\d+/]} #{subscription.node.next_billing_date.to_date.strftime("%a, %B %e")} #{subscription.node.status}" }.join("\n")
   end
 
-  def get_all_paused_subscriptions(data)
-    data[:subscriptions].each_with_index.map{ |subscription, i| subscription.status == 'PAUSED' ? "#{i+1}. #{subscription.id[/\d+/]} #{subscription.next_billing_date.to_date.strftime("%a, %B %e")} #{subscription.status}" : nil }.compact.join("\n")
+  def all_subscriptions_by_status(data, status)
+    data[:subscriptions].each_with_index.map { |subscription, i| subscription.status == status ? "#{i+1}. #{subscription.id[/\d+/]} #{subscription.next_billing_date.to_date.strftime("%a, %B %e")} #{subscription.status}" : nil }.compact.join("\n")
   end
 
   def subscription_shopify_id(id)
