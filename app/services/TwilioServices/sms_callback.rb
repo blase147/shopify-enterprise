@@ -28,7 +28,11 @@ class TwilioServices::SmsCallback < ApplicationService
     shared_service = SmsService::SharedService.new(conversation, @params)
     @params['Body'] = @params['Body'].strip
     upcase_body = @params['Body'].upcase
-    if SmsConversation.commands.keys.include?(upcase_body.to_sym)
+    keyword = @customer.shop.custom_keywords.where("ARRAY[keywords] @> ARRAY['#{@params['Body'].downcase}']")
+    if keyword.present?
+      sms_service.process_keyword(keyword.last.response)
+      return
+    elsif SmsConversation.commands.keys.include?(upcase_body.to_sym)
       conversation.sms_messages.create(from_number: @params['From'], to_number: conversation.customer.shop.phone, content: @params['Body'], comes_from_customer: true, command: upcase_body, command_step: 1)
       conversation.update(command: upcase_body, command_step: 1)
     elsif conversation.command.nil? && conversation.command_step.zero?

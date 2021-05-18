@@ -56,6 +56,10 @@ class ProcessSmsService
     { error: true, message: 'Invalid Request' }
   end
 
+  def process_keyword(response)
+    @shared_service.send_message(response)
+  end
+
   def stop_conversation
     @conversation.update(command: 'STOP', status: :stoped)
   end

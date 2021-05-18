@@ -2,20 +2,10 @@ namespace :subscriptions do
   task :attemp_billing => :environment do
     Shop.find_each do |shop|
       shop.connect
-
-      has_next_page = true
-      next_cursor = nil
-
-      while has_next_page
-        data = SubscriptionContractsService.new.run next_cursor
-        subscriptions = data[:subscriptions] || []
-
-        subscriptions.each do |subscription|
-          process_subscription(subscription.node)
-        end
-
-        has_next_page = data[:has_next_page]
-        next_cursor = data[:next_cursor]
+      result = SubscriptionContractsService.new.all_subscriptions
+      subscriptions = result[:subscriptions] || []
+      subscriptions.each do |subscription|
+        process_subscription(subscription.node)
       end
     end
   end
@@ -47,16 +37,10 @@ namespace :subscriptions do
   task :renewal_reminder => :environment do
     Shop.find_each do |shop|
       shop.connect
-      has_next_page = true
-      next_cursor = nil
-      while has_next_page
-        data = SubscriptionContractsService.new.run next_cursor
-        subscriptions = data[:subscriptions] || []
-        subscriptions.each do |subscription|
-          check_for_renewal(subscription.node)
-        end
-        has_next_page = data[:has_next_page]
-        next_cursor = data[:next_cursor]
+      result = SubscriptionContractsService.new.all_subscriptions
+      subscriptions = result[:subscriptions] || []
+      subscriptions.each do |subscription|
+        check_for_renewal(subscription.node)
       end
     end
   end
@@ -64,7 +48,6 @@ namespace :subscriptions do
   def process_subscription(subscription)
     return unless subscription.status == 'ACTIVE'
 
-    id = subscription.id
     billing_date = DateTime.parse subscription.next_billing_date
     customer = Customer.find_by(shopify_id: subscription.id[/\d+/])
     if billing_date.utc.beginning_of_day == Time.current.utc.beginning_of_day
@@ -76,14 +59,14 @@ namespace :subscriptions do
           TwilioServices::SendSms.call(from: shop.phone, to: customer.phone, message: message)
         end
       else
-        ScheduleSkipService.new(id[/\d+/]).run
+        ScheduleSkipService.new(subscription.id[/\d+/]).run
       end
     end
   rescue StabdardError => e
     p e.message
   end
 
-  def check_for_renewal
+  def check_for_renewal(subscription)
     return unless subscription.status == 'ACTIVE'
 
     billing_date = DateTime.parse subscription.next_billing_date
