@@ -6,8 +6,12 @@ import {
   DisplayText, Heading,
   Layout, Page, Stack,
   Tabs,
-  TextStyle
+  TextStyle,Icon
 } from '@shopify/polaris';
+import {
+  CaretUpMinor,
+  CaretDownMinor,
+} from '@shopify/polaris-icons';
 // chart ##
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
@@ -141,10 +145,10 @@ const Dashboard = (props) => {
 
   const [isTimeButton, setIsTimeButton] = useState("daily");
   const [sectionListData, setSectionListData] = useState({
-    mrr: "0",
-    subscriptions: "0",
-    churn_rate: "0",
-    cl_value: "0"
+    mrr: {value:"0",up:true,percent:0},
+    subscriptions: {value:"0",up:true,percent:0},
+    churn_rate: {value:"0",up:true,percent:0},
+    cl_value: {value:"0",up:true,percent:0}
   })
   const [chartOptions, setChartOptions] = useState({
     sale: chartCustomDaily,
@@ -167,10 +171,8 @@ const Dashboard = (props) => {
     cmrr: "$0"
   })
   const [getReport,{ loading, error, data }] = useLazyQuery(getGraphDataQuery, {fetchPolicy:"network-only"});
-
   useEffect(() => {
-    getReport({variables:{duration:isTimeButton}})
-    refetch();
+     getReport({variables:{duration:isTimeButton}})
   }, [isTimeButton])
 
   useEffect(() => {
@@ -292,8 +294,9 @@ const Dashboard = (props) => {
     },
     {
       tabs: [
-        { id: 'mrr', content: 'MRR' },
         { id: 'arr', content: 'ARR' },
+        { id: 'mrr', content: 'MRR' }
+        
       ],
       number: '$20.24K',
       number_small: 'Jan $83.98K',
@@ -444,15 +447,15 @@ const Dashboard = (props) => {
                         </Stack.Item>
 
                         <Stack.Item>
-                          {/* <TextStyle
-                          variation={item.up ? 'positive' : 'negative'}
+                          <TextStyle
+                          variation={sectionListData[item.key]?.up ? 'positive' : 'negative'}
                         >
                           <Icon
-                            source={item.up ? CaretUpMinor : CaretDownMinor}
-                            color={item.up ? 'green' : 'red'}
+                            source={sectionListData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                            color={sectionListData[item.key]?.up ? 'green' : 'red'}
                           />
-                          {item.percent}%
-                        </TextStyle> */}
+                          {(sectionListData[item.key]?.percent==0 && !sectionListData[item.key]?.up)?100:Math.abs(sectionListData[item.key]?.percent)}%
+                        </TextStyle>
                         </Stack.Item>
                       </Stack>
 
@@ -461,7 +464,7 @@ const Dashboard = (props) => {
                         <DisplayText size="medium">
                             <TextStyle variation="strong">
                           {/* <DisplayText size="medium">{sectionListData[item.key] || item?.amount}</DisplayText> */}
-                          <CounterUp prefix={item.type=="currency"?"$":""} suffix={item.type=="percent"?"%":""} start={0} end={Number.parseFloat(sectionListData[item.key] || item?.amount).toFixed(2)} duration={1.5} decimals={item.type=="currency"?2:0} />
+                          <CounterUp prefix={item.type=="currency"?"$":""} suffix={item.type=="percent"?"%":""} start={0} end={Number.parseFloat(sectionListData[item.key]?.value || item?.amount).toFixed(2)} duration={1.5} decimals={item.type=="currency"?2:0} />
                        </TextStyle>
                        </DisplayText>
                         </Stack.Item>
