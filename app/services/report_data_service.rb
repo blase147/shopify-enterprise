@@ -123,7 +123,7 @@ class ReportDataService
   end
 
   def sales_per_charge
-    @subscriptions.sum { |subscription| get_orders_total_amount(subscription) } / orders_count
+    @subscriptions.sum { |subscription| get_orders_total_amount(subscription) } / orders_count rescue 0
   end
 
   def orders_count
