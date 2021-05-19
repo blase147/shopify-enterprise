@@ -55,6 +55,7 @@ gem 'shopify_cli', '1.0.5'
 gem 'whenever'
 gem 'mina'
 gem 'twilio-ruby', '~> 5.52.0'
+gem 'percentage', '~> 1.4', '>= 1.4.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -212,13 +212,15 @@
 .analytic-section {
   width: 100%;
   margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
 
   .deep-analytics {
     display: inline-flex;
     justify-content: flex-end;
     flex-grow: 0;
     flex-shrink: 0;
-    float: right;
+    // float: right;
     background: #007EFF;
     padding: 7px 14px 7px 10px;
     border-radius: 3px;

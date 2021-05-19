@@ -26,7 +26,7 @@ const CustomKeywords = ({handleEditCustomKewords}) => {
                       status
                       updatedAt
                   }
-      
+
   }
 }
   `
@@ -48,7 +48,7 @@ const CustomKeywords = ({handleEditCustomKewords}) => {
 
    const count =data?.fetchCustomKeywords?.totalCount;
    const totalPages=Math.ceil(count / filters.limit);
-   
+
    const handlePageClick = useCallback(data => {
      let selected = data && data.selected;
      let _offset = Math.ceil(selected * filters.limit);
