@@ -5,14 +5,20 @@
   background-color: #007EFF;
   border-radius: 3px;
 }
-.button-bar{
+.button-bar-dis{
   padding: 10px;
-  display: flex !important;
-  justify-content: space-between !important;
-  background-color:#E2F5FF !important;
+  display: flex ;
+  align-items: center;
+  justify-content: space-between ;
+  background-color:#E2F5FF ;
+  margin-top: 14px;
 }
+.button-bar-dis button {
+  padding: 14px 18px;
+}
+
 .wrapper > .search-bar{
-  margin: 30px 0px;
+  margin: 25px 0px;
   max-width:453px;
 }
 .table-bar{
@@ -28,6 +34,7 @@ table {
 th, td {
   text-align: left;
   padding: 8px;
+  font-size: 16px;
 }
 tr{
   border-bottom: 1px solid #E6E6E7;
@@ -44,21 +51,26 @@ tr{
 }
 .tag-section > *{
   margin: 0px 7px;
-  padding: 4px 10px;
+  padding: 2px 10px;
   border-radius: 10px !important;
 }
 .text-section{
   max-width: 300px;;
+  font-size: 14px;
+  color: #777777;
 }
 .active{
   color:#63AB48;
   background-color:#E0FDD6;
+  font-size: 12px;
 }
 .in-active{
   color:#696969;
   background-color:#E7E7E7;
+  font-size: 12px;
 }
 .expired{
   color:#AB4848;
   background-color:#FDC9D0;
+  font-size: 12px;
 }

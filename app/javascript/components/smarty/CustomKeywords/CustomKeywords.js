@@ -62,7 +62,7 @@ const CustomKeywords = ({handleEditCustomKewords}) => {
             <div className="smarty-sms">
             <div className="cancel-reason-header">
               <p className="customize-text">Message Custom Keywords</p>
-              <Button primary className="cancelation-reason" onClick={()=>handleEditCustomKewords("")} >+ Add New Custom Keywords</Button>
+              <button  className="cancelation-reason" onClick={()=>handleEditCustomKewords("")} >+ Add New Custom Keywords</button>
               </div>
               <p className="customize-text" style={{ fontWeight: 'normal' }}>Add your own responses to customer messages.</p>
               <form class="">

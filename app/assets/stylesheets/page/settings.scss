@@ -225,9 +225,18 @@ div#sms-panel {
 	}
 }
 .tab-section {
+  background-color: white;
+  padding-top:42px;
+  padding-left: 15px;
 	.Polaris-Tabs__Wrapper {
 		display: inline-block;
 	}
+
+  button {
+    span {
+      font-size: 16px;
+    }
+  }
 }
 .tabs-btn {
   margin-bottom: 20px;
@@ -238,7 +247,7 @@ div#sms-panel {
       padding: 13px 30px;
       width: 127px;
       border: 0;
-      border-radius: 4px !important;
+      border-radius: 3px !important;
       &:hover {
         background: #007EFF;
         color: white;
@@ -251,12 +260,14 @@ div#sms-panel {
       width: 114px;
       margin-left: 14px;
       border: 0;
-      border-radius: 4px;
+      border-radius: 3px;
       &:hover {
         background: #4D506A;
         color: white;
       }
     }
+
+    
   }
 }
 .smarty-sms-number {

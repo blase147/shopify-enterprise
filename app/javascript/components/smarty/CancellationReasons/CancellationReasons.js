@@ -102,7 +102,7 @@ const CancellationReasons = ({handleEditCancellation}) => {
                 <p className="customize-text">Message Custom Keywords</p>
                 <button className="cancelation-reason" onClick={()=>handleEditCancellation("")} >+ Add New Cancellation Reason</button>
               </div>
-              <p className="customize-text" style={{ fontWeight: 'normal',marginTop:'10px' }}>Add your own responses to customer messages.</p>
+              <p className="customize-text" style={{ fontWeight: 'normal'}}>Add your own responses to customer messages.</p>
   
               <form class="">
                 <div className="message-form">

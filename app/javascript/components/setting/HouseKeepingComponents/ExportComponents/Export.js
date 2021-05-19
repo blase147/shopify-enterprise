@@ -13,7 +13,7 @@ const Export = ({handleCreateExport}) => {
         <p> Displaying the most recent available exports (less than 2 hours old).</p>
         </div>
         <div className="export-wrapper">
-          <DisplayText size="medium"><strong>No Exports</strong></DisplayText>
+          <strong>No Exports</strong>
           <p>You haven't made any exports yet. Click the "create export" button below to get started.</p>
           <Button primary onClick={handleCreateExport}>Create Export</Button>
         </div>

@@ -114,12 +114,12 @@
   }
 
   .Polaris-Button {
-    border-radius: 4px;
+    border-radius: 3px;
     background: white;
     &.Polaris-Button--primary {
       border: none;
       background: #007eff;
-      border-radius: 0.188rem;
+      border-radius: 3px;
     }
     &.Polaris-Button--destructive {
       background: linear-gradient(180deg, #e6391a, #d53417);

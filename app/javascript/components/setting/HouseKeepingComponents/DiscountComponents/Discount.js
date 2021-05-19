@@ -14,9 +14,9 @@ const Discount = ({handleDiscountCodeForm}) => {
       );
 
     return (
-        <Layout sectioned>
+        <Layout >
         <div className="wrapper">
-          <div className="button-bar">
+          <div className="button-bar-dis">
             <p>Create discount coupon codes for your customers to apply to their order.</p>
             <Button onClick={handleDiscountCodeForm} primary>Create Discount Code</Button>
           </div>
@@ -56,7 +56,7 @@ const Discount = ({handleDiscountCodeForm}) => {
                     </td>
                     <td>Jun 20, 2021</td>
                     <td>Jun 20, 2021</td>
-                    <td>12 of oo</td>
+                    <td>12 of ∞ </td>
                     <td><Button primary>Settings</Button></td>
                   </tr>
 
@@ -75,12 +75,12 @@ const Discount = ({handleDiscountCodeForm}) => {
                       </div>
                       </div>
                       <div className="text-section">
-                      16.66 off recurring orders and all products · applies to 4 charges · new subscribers only
+                      115.0% off all orders and all products · applies to one charge only
                       </div>
                     </td>
                     <td>Jun 20, 2021</td>
                     <td>Jun 20, 2021</td>
-                    <td>12 of oo</td>
+                    <td>12 of ∞ </td>
                     <td><Button primary>Settings</Button></td>
                   </tr>
 
@@ -99,12 +99,12 @@ const Discount = ({handleDiscountCodeForm}) => {
                       </div>
                       </div>
                       <div className="text-section">
-                      16.66 off recurring orders and all products · applies to 4 charges · new subscribers only
+                      15.0% off all orders and all products · applies to one charge only
                       </div>
                     </td>
                     <td>Jun 20, 2021</td>
                     <td>Jun 20, 2021</td>
-                    <td>12 of oo</td>
+                    <td>12 of ∞ </td>
                     <td><Button primary>Settings</Button></td>
                   </tr>
                 </tbody>

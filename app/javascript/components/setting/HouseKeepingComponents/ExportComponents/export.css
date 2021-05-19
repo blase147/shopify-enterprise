@@ -27,6 +27,44 @@
 	align-items: center;
 	
 }
+
 .export-wrapper >* {
 	margin: 20px 0px;
 }
+
+.export-wrapper strong {
+	margin: 0;
+}
+
+/* for password page */
+.default-pass {
+	margin-bottom: 57px;
+	margin-bottom: 51px;
+	font-size: 25px;
+}
+
+
+.default-pass strong {
+  font-size: 18px;
+	margin-left: 42px;
+}
+
+.password-btn {
+	padding-bottom: 55px;
+	/* margin-top: 30px; */
+}
+.password-btn button {
+  padding: 14px 39px;
+}
+.password-btn button:last-child {
+  background-color: #4D506A;
+	color: white;
+	border: 0;
+	padding: 14px 32px;
+}
+
+.password-fields .Polaris-Connected {
+	max-width: 616px;
+	margin-bottom: 30px;
+}
+

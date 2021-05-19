@@ -3,7 +3,7 @@ import './translation.css'
 const Translation = () => {
     return (
         <>
-        <div className="demo-block">
+        {/* <div className="demo-block">
         <div id="accordionGroup" className="Accordion" data-allow-toggle>
           <h3>
             <button aria-expanded="false" className="Accordion-trigger" aria-controls="sect1" id="accordion1id">
@@ -62,7 +62,7 @@ const Translation = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
         </>
     )
 }

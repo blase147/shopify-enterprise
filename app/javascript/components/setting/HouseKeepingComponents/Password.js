@@ -1,23 +1,27 @@
 import React from 'react'
 import {Layout, DisplayText, TextField, Button, Stack} from '@shopify/polaris';
+import './ExportComponents/export.css'
 const Password = () => {
     return (
         <Layout >
           <Layout.Section>
-            <DisplayText >
+            <p className="default-pass">
               Default Password: <strong>Admin Alaska777</strong>
-            </DisplayText>
+            </p>
           </Layout.Section>
-          <Layout.Section >
-            <TextField
-              label="Password"
-            />
-          </Layout.Section>
-          <Layout.Section >
-            <TextField
-              label="Confirm Password"
-            />
-          </Layout.Section>
+          <div className="password-fields">
+            <Layout.Section >
+              <TextField
+                label="Password"
+              />
+            </Layout.Section>
+            <Layout.Section >
+              <TextField
+                label="Confirm Password"
+              />
+            </Layout.Section>
+          </div>
+          <div className="password-btn">
           <Layout.Section>
             <Stack>
               <Stack.Item>
@@ -28,6 +32,7 @@ const Password = () => {
               </Stack.Item>
             </Stack>
           </Layout.Section>
+          </div>
         </Layout>
     )
 }
