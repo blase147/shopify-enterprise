@@ -1,0 +1,32 @@
+.wrapper {
+	padding: 10px;
+	
+}
+.wrapper button {
+	background-color: #007EFF;
+	border-radius: 3px;
+}
+.button-bar {
+	padding: 10px;
+	display: flex;
+	justify-content: flex-end;
+	background-color: #E2F5FF !important;
+}
+.text-wrapper {
+	margin: 20px 0px;
+	font-size: 16px;
+	line-height: 24px;
+}
+.export-wrapper {
+	padding: 30px;
+	border: 1px solid #C4CDD5;
+	box-sizing: border-box;
+	border-radius: 4px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	
+}
+.export-wrapper >* {
+	margin: 20px 0px;
+}

@@ -156,7 +156,7 @@ const CustomKeywordsForm = ({ id, handleClose }) => {
                   {/* <Checkbox label="Activate response to custom keyword(s)" checked={formData.status == 'active'} onChange={val => setFormData({ ...formData, status: val ? 'active' : 'inactive' })} /> */}
                   <div className="switch-section">
                     <label class="switch">
-                      <input className="switch-input" type="checkbox" checked/>
+                      <input className="switch-input" type="checkbox" checked={formData.status == 'active'} onChange={e => {setFormData({ ...formData, status: e.target.checked ? 'active' : 'inactive' });console.log(e,formData)}} />
                       <span class="slider round"></span>
                     </label>
                     <p>Activate response to custom keyword(s)</p>

@@ -1,0 +1,63 @@
+.accordion {
+    /* box-sizing: border-box; */
+    font-family: 'Montserrat';
+    font-weight: 300;
+    /* Space section box from left margin*/
+    padding: 0;
+    /* Hide bullets to the left of section box */
+    list-style: none;
+}
+/* Indent submenus */
+ul .accordion-inner {
+    padding-left: 1em;
+    overflow: hidden;
+    display: none;
+      /* Space section box from left margin*/
+    padding: 5;
+    /* Hide bullets to the left of section box */
+    list-style: none;
+}
+/* Spacing between sections */
+li {
+    margin: .7em 0;
+}
+/* Box arround each section */
+li a.accordion-toggle {
+    text-decoration: none;
+    color: inherit;
+    width: 50%;
+    display: block;
+    background: rgba(0,0,0,0.78);
+    color: #FEFEFE;
+    padding: .45em;
+    transition: background .3s ease;
+     -webkit-border-radius: 7px;
+     -moz-border-radius: 7px;
+     border-radius: 7px;
+}
+/* Hover effect on a sections */
+li a.accordion-toggle:hover {
+    background: rgba(0, 0, 0, 0.9);
+ }
+.accordion a .fa-chevron-down {
+  position: relative;
+	color: #29D909;
+	-webkit-transition: all 0.4s ease;
+	-o-transition: all 0.4s ease;
+	transition: all 0.4s ease;
+  float:right;
+}
+.accordion a.chev .fa-chevron-down {
+	color: #C63B4D;
+}
+ .accordion a .fa-chevron-down {
+  margin-left: 5px;
+  margin-right: 15px;
+  font-size: 18px;
+}
+.accordion a.chev .fa-chevron-down {
+	-webkit-transform: rotate(0deg);
+	-ms-transform: rotate(0deg);
+	-o-transform: rotate(0deg);
+	transform: rotate(180deg);
+}

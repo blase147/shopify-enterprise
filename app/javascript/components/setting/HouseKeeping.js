@@ -1,12 +1,14 @@
 import React,{useMemo,useCallback,useState,useEffect} from 'react'
 import { Banner, Card, ContextualSaveBar, Form, Frame, Layout, List, Page, Spinner, Tabs, Toast, RadioButton,Button } from '@shopify/polaris';
-import Discount from './HouseKeepingComponents/Discount';
-import Export from './HouseKeepingComponents/Export';
+import Discount from './HouseKeepingComponents/DiscountComponents/Discount';
 import Taxes from './HouseKeepingComponents/Taxes';
-import Legal from './Legal';
+import Legal from './HouseKeepingComponents/Legal';
 import Translation from './HouseKeepingComponents/Translation';
 import Password from './HouseKeepingComponents/Password';
 import {gql,useLazyQuery,useMutation} from '@apollo/client'
+import DiscountForm from './HouseKeepingComponents/DiscountComponents/DiscountForm';
+import Export from './HouseKeepingComponents/ExportComponents/Export';
+import ExportForm from './HouseKeepingComponents/ExportComponents/ExportForm';
 const HouseKeeping = () => {
 
   const updateSmsSettingQuery=gql`
@@ -67,17 +69,28 @@ const HouseKeeping = () => {
   const [formErrors, setFormErrors] = useState([]);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
-  const [selectedTitleTab, setSelectedTitleTab] = useState(0);
+  
+  const [selectedTab, setSelectedTab] = useState(0);
+  const [showForm,setShowForm]=useState(false)
 
-  const handleTabChange = useCallback(
-    (selectedTabIndex) => setSelectedTitleTab(selectedTabIndex),
-    [setSelectedTitleTab])
+  const handleShowForm=useCallback(
+    () => {
+     setShowForm(true)
+    },
+    [setShowForm]
+  )
+  const handleCloseForm=useCallback(
+    () => {
+     setShowForm(false)
+    },
+    [setShowForm]
+  )
+  // const handleTabChange = useCallback(
+  //   (selectedTabIndex) => setSelectedTitleTab(selectedTabIndex),
+  //   [setSelectedTitleTab])
 
   const [updateSmsSettings,{data ,error,loading}]=useMutation(updateSmsSettingQuery);
-  useEffect(() => {
-    if(data && !error)
-      console.log("Data.. Updated",data)
-  }, [data])
+  
   const [smsData, setSmsData] = useState({
     status: "",
     shopPhone: "",
@@ -102,6 +115,7 @@ const HouseKeeping = () => {
     const handleSmsChange=(updated)=>{
       setSmsData({...smsData,...updated})
     }
+
   const handleSmsSettingSubmit = () => {
     const { status, delayOrder, swapProduct, orderTracking, renewalReminder, updateBilling,
       skipUpdateNextCharge, oneTimeUpsells, failedRenewal, optIn, cancelSubscription,
@@ -128,45 +142,46 @@ const HouseKeeping = () => {
     });
   }
   return (
-      // <Tabs
-      //   tabs={tabs}
-      //   selected={selectedTitleTab}
-      //   onSelect={handleTabChange}
-      // >
-      //   {
-      //     selectedTitleTab === 0 ? <Discount /> :
-      //       selectedTitleTab === 1 ? <Export /> :
-      //         selectedTitleTab === 2 ? <Taxes /> :
-      //           selectedTitleTab === 3 ? <Legal /> :
-      //             selectedTitleTab === 4 ? <Translation /> :
-      //               selectedTitleTab === 5 ? <Password /> : ""
-      //   }
-      // </Tabs>
       <>
       <div className="tab-section">
         <div class="tab-parent">
           <div class="tabs-sms">
-            <input type="radio" name="tab-btn" id="tab-btn-1" value=""  />
+            <input type="radio" name="tab-btn" id="tab-btn-1" value="" onChange={e=>setSelectedTab(0)} checked={selectedTab==0}  />
             <label for="tab-btn-1">Discount</label>
-            <input type="radio" name="tab-btn" id="tab-btn-2" value="" />
+            <input type="radio" name="tab-btn" id="tab-btn-2" value="" onChange={e=>setSelectedTab(1)} checked={selectedTab==1} />
             <label for="tab-btn-2">Export</label>
-            <input type="radio" name="tab-btn" id="tab-btn-3" value="" checked />
+            <input type="radio" name="tab-btn" id="tab-btn-3" value="" onChange={e=>setSelectedTab(2)} checked={selectedTab==2} />
             <label for="tab-btn-3">SMS</label>
-            <input type="radio" name="tab-btn" id="tab-btn-4" value=""  />
+            <input type="radio" name="tab-btn" id="tab-btn-4" value="" onChange={e=>setSelectedTab(3)} checked={selectedTab==3} />
             <label for="tab-btn-4">Legal</label>
-            <input type="radio" name="tab-btn" id="tab-btn-5" value=""  />
+            <input type="radio" name="tab-btn" id="tab-btn-5" value="" onChange={e=>setSelectedTab(4)} checked={selectedTab==4} />
             <label for="tab-btn-5">Translation</label>
-            <input type="radio" name="tab-btn" id="tab-btn-6" value=""  />
+            <input type="radio" name="tab-btn" id="tab-btn-6" value="" onChange={e=>setSelectedTab(5)} checked={selectedTab==5} />
             <label for="tab-btn-6">Password</label>
-            <div id="content-1">
-              Content 1...
           </div>
-            <div id="content-2">
-              Content 2...
-          </div>
-            <div id="content-3">
-
-              <Layout>
+        </div>
+        <div className="content">
+              {
+                selectedTab==0 ?
+                <>
+                {
+                  showForm ?
+                  <DiscountForm handleCloseForm={handleCloseForm} />:
+                  <Discount handleDiscountCodeForm={handleShowForm}  />
+                }
+                </>
+                :
+                selectedTab==1?
+                <>
+                {
+                  showForm ?
+                  <ExportForm handleCloseForm={handleCloseForm}/>:
+                  <Export handleCreateExport={handleShowForm}/>
+                }
+                </>:
+                selectedTab==2?
+                <>
+                <Layout>
                 <Layout.Section>
                   <div class="tabs-btn">
                     <Button primary loading={loading} onClick={handleSmsSettingSubmit} >Save</Button>
@@ -186,19 +201,15 @@ const HouseKeeping = () => {
                 </Layout.Section>
               </Layout>
               <Taxes submitting={loading} setSmsData={handleSmsChange} handleSmsSettingSubmit={handleSmsSettingSubmit} />
+                </>:
+                selectedTab==3?
+                <Legal/>:
+                selectedTab==4?
+                <Translation/>:
+                selectedTab==5?
+                <Password/>:""
+              }
             </div>
-            <div id="content-4">
-              Content 3...
-          </div>
-          <div id="content-5">
-              Content 4...
-          </div>
-          <div id="content-6">
-              Content 5...
-          </div>
-          </div>
-         
-        </div>
       </div>
       {saveSuccess && (
         <Toast
