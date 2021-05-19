@@ -1,0 +1,64 @@
+.wrapper{
+  padding: 10px;
+}
+.wrapper button {
+  background-color: #007EFF;
+  border-radius: 3px;
+}
+.button-bar{
+  padding: 10px;
+  display: flex !important;
+  justify-content: space-between !important;
+  background-color:#E2F5FF !important;
+}
+.wrapper > .search-bar{
+  margin: 30px 0px;
+  max-width:453px;
+}
+.table-bar{
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+tr{
+  border-bottom: 1px solid #E6E6E7;
+}
+.title-section{
+  display: flex;
+  align-items: center;
+}
+.title-section > *{
+  padding: 5px;
+}
+.tag-section{
+  display: flex;
+}
+.tag-section > *{
+  margin: 0px 7px;
+  padding: 4px 10px;
+  border-radius: 10px !important;
+}
+.text-section{
+  max-width: 300px;;
+}
+.active{
+  color:#63AB48;
+  background-color:#E0FDD6;
+}
+.in-active{
+  color:#696969;
+  background-color:#E7E7E7;
+}
+.expired{
+  color:#AB4848;
+  background-color:#FDC9D0;
+}
