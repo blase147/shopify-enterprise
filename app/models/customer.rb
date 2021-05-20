@@ -3,9 +3,8 @@ class Customer < ApplicationRecord
   belongs_to :shop, foreign_key: :shop_id
   mount_uploader :avatar, AvatarUploader
   has_many :additional_contacts, dependent: :destroy
-  has_one :billing_address, dependent: :destroy
-  has_many :sms_conversations, dependent: :destroy
-  has_many :sms_logs, dependent: :destroy
+  has_one :billing_address
+  has_many :sms_conversations
 
   # validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   # validates :email, presence: true
@@ -19,15 +18,14 @@ class Customer < ApplicationRecord
   # default_scope { order(created_at: :asc) }
 
   def send_opt_in_sms
-    return if !shop.sms_setting.present? && !shop.sms_setting&.opt_in
-
-    shop.connect
-    message_service = SmsService::MessageGenerateService.new(shop, self, nil)
-    message = message_service.content('Opt-in')
-    if phone.present? && shop.phone.present?
-      TwilioServices::SendSms.call(from: shop.phone, to: phone, message: message)
-      shop.sms_logs.opt_in.create(customer_id: id)
-      update(opt_in_sent: true, opt_in_reminder_at: Time.current + 12.hours)
+    if shop.sms_setting.present? && shop.sms_setting&.opt_in
+      shop.connect
+      message_service = SmsService::MessageGenerateService.new(shop, self, nil)
+      message = message_service.content('Opt-in')
+      if phone.present? && shop.phone.present?
+        TwilioServices::SendSms.call(from: shop.phone, to: phone, message: message)
+        self.update(opt_in_sent: true, opt_in_reminder_at: Time.current + 12.hours)
+      end
     end
   end
 
