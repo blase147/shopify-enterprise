@@ -5,6 +5,8 @@ class SmsService::DelayService < SmsService::ProcessService
     @params = params
     @shared_service = SmsService::SharedService.new(conversation, params)
     @data = subscriptions_data
+    @customer = customer
+    @shop = @customer.shop
   end
 
   def process_message(step)
@@ -16,7 +18,7 @@ class SmsService::DelayService < SmsService::ProcessService
       if @data[:active_subscriptions].count > 1
         message = @shared_service.get_all_subscriptions(@data)
       else
-        message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, @data[:active_subscriptions].first.node)
+        message_service = SmsService::MessageGenerateService.new(@shop, @customer, @data[:active_subscriptions].first.node)
         message = message_service.content(messages[:options])
         increase_step = step + 1
         @shared_service.create_sms_message(@data[:active_subscriptions].first.node.id[/\d+/], 2, comes_from_customer: true)
@@ -26,7 +28,7 @@ class SmsService::DelayService < SmsService::ProcessService
       if subscription.is_a?(Hash)
         error = true
       else
-        message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription)
+        message_service = SmsService::MessageGenerateService.new(@shop, @customer, subscription)
         message = message_service.content(messages[:options])
       end
     when 3
@@ -39,10 +41,10 @@ class SmsService::DelayService < SmsService::ProcessService
           next_schedule_date = get_next_date(@params['Body'], subscription.next_billing_date.to_date)
           if next_schedule_date == false
             error = true
-            message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription)
+            message_service = SmsService::MessageGenerateService.new(@shop, @customer, subscription)
             error_message = message_service.content(messages[:invalid_options])
           else
-            message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription,
+            message_service = SmsService::MessageGenerateService.new(@shop, @customer, subscription,
                               { subscription_charge_date: next_schedule_date.to_date.strftime("%a, %B %e") })
             message = message_service.content(messages[:confirm])
           end
@@ -62,10 +64,12 @@ class SmsService::DelayService < SmsService::ProcessService
             next_schedule_date = get_next_date(next_schedule_date_message.content, subscription.next_billing_date.to_date)
             result = ScheduleSkipService.new(subscription.id[/\d+/]).run({ billing_date: next_schedule_date })
             if result[:error].present?
-              message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription, { subscription_charge_date: next_schedule_date.to_date.strftime("%a, %B %e") })
+              message_service = SmsService::MessageGenerateService.new(@shop, @customer, subscription, { subscription_charge_date: next_schedule_date.to_date.strftime("%a, %B %e") })
               message = message_service.content(messages[:failure])
             else
-              message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription,
+              product_id = subscription.lines.edges.first.node.variant_id[/\d+/]
+              @shop.sms_logs.delay.create(product_id: product_id, customer_id: @customer.id)
+              message_service = SmsService::MessageGenerateService.new(@shop, @customer, subscription,
                                 { delay_weeks: no_of_weeks[next_schedule_date_message.content], subscription_charge_date: next_schedule_date.to_date.strftime("%a, %B %e") })
               message = message_service.content(messages[:success])
             end

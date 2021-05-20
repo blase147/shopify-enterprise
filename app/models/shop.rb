@@ -6,14 +6,15 @@ class Shop < ActiveRecord::Base
     ShopifyApp.configuration.api_version
   end
 
-  has_many :selling_plan_groups
-  has_one :setting
-  has_many :customers
-  has_many :smarty_cancellation_reasons
-  has_many :custom_keywords
-  has_one :sms_setting
-  has_many :smarty_messages
-  has_many :smarty_variables
+  has_many :selling_plan_groups, dependent: :destroy
+  has_one :setting, dependent: :destroy
+  has_many :customers, dependent: :destroy
+  has_many :smarty_cancellation_reasons, dependent: :destroy
+  has_many :custom_keywords, dependent: :destroy
+  has_one :sms_setting, dependent: :destroy
+  has_many :smarty_messages, dependent: :destroy
+  has_many :smarty_variables, dependent: :destroy
+  has_many :sms_logs, dependent: :destroy
 
   has_many :upsell_campaign_groups
   after_create :build_sms_setting
