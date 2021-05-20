@@ -42,7 +42,7 @@ module Queries
       when 'daily'
         (Date.today - 1.day)..(Date.today - 1.day)
       else
-        Date.today - instance_eval(duration.downcase.split(' ').join('.'))..Date.today - 1.day
+        Date.today - instance_eval(duration.downcase.split(' ').join('.'))..Date.today
       end
     end
   end
