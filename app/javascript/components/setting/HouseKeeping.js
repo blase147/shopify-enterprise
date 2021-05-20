@@ -85,6 +85,10 @@ const HouseKeeping = () => {
     },
     [setShowForm]
   )
+
+  useEffect (( ) =>{
+    setShowForm(false)
+  },[selectedTab])
   // const handleTabChange = useCallback(
   //   (selectedTabIndex) => setSelectedTitleTab(selectedTabIndex),
   //   [setSelectedTitleTab])

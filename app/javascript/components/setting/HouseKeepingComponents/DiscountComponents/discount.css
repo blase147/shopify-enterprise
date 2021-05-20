@@ -74,3 +74,132 @@ tr{
   background-color:#FDC9D0;
   font-size: 12px;
 }
+
+/* next page */
+
+
+.wrapper > *{
+  margin-bottom: 20px;
+}
+.bread-bar{
+  padding: 16px;
+  display: flex;
+  background-color:#E2F5FF !important;
+  grid-column-gap: 5px;
+}
+.bread-bar > a{
+  cursor: pointer;
+  margin :0px 4px;
+}
+.Polaris-Card__Section{
+  padding-top: 2px !important;
+}
+.Polaris-Card__Section > *{
+margin: 10px 0px !important;
+} 
+.Polaris-Card__Section > p{
+  /* margin-top:25px !important; */
+}
+.discount-type-group {
+  display: flex;
+}
+.discount-type-group > *{
+  margin: 0px 10px;
+  width: 300px;
+}
+.type-group{
+  width:595px;
+}
+.min-radio-group{
+  display: flex;
+  flex-direction: column;
+}
+.switch-wrapper > *{
+  margin: 10px 0px;
+}
+.switch-group{
+  display: flex;
+  max-width: 70%;
+  justify-content: space-between;
+}
+/* Switch Code start */
+.switch-section {
+  display: flex;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 45px;
+  height: 23px;
+  margin-right: 10px;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 19px;
+  width: 19px;
+  left: -2px;
+  bottom: 2px;
+  background-color: white;
+  transition: 0.4s;
+}
+.switch-input:checked + .slider {
+  background-color: #2196f3;
+}
+.switch-input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+.switch-input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+.slider.round {
+  border-radius: 34px;
+}
+.slider.round:before {
+  border-radius: 50%;
+}
+/* Switch Code ends */
+.limit-group-radio {
+ display: flex;
+ flex-direction: column;
+}
+.btn-group > *{
+  margin: 0px 10px !important;
+  /* padding: 15px 40px !important; */
+}
+.check-group{
+  display: flex;
+  justify-content: flex-start !important;
+}
+.check-group > *{
+  margin:5px 6px !important;
+}
+.promo{
+margin: 20px 20px;
+}
+.promo > .discount-group{
+  margin-top:15px;
+  width: 70% !important;
+}
+.sec-5 .Polaris-Icon--colorBase svg {
+  font-size: 26px !important;
+  fill: rgb(17 139 18);
+}

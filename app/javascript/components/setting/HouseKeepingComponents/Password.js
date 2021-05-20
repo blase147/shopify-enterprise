@@ -27,9 +27,11 @@ const Password = () => {
               <Stack.Item>
                 <Button primary>Save</Button>
               </Stack.Item>
+              <div className="cancel-pass-btn">
               <Stack.Item>
                 <Button >Cancel</Button>
               </Stack.Item>
+              </div>
             </Stack>
           </Layout.Section>
           </div>
