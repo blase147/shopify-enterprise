@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_10_111832) do
+ActiveRecord::Schema.define(version: 2021_05_19_110621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -288,6 +288,19 @@ ActiveRecord::Schema.define(version: 2021_05_10_111832) do
     t.index ["customer_id"], name: "index_sms_conversations_on_customer_id"
   end
 
+  create_table "sms_logs", force: :cascade do |t|
+    t.bigint "shop_id"
+    t.bigint "customer_id"
+    t.integer "action", default: 0
+    t.decimal "revenue", precision: 5, scale: 2
+    t.string "product_id"
+    t.string "swaped_product_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["customer_id"], name: "index_sms_logs_on_customer_id"
+    t.index ["shop_id"], name: "index_sms_logs_on_shop_id"
+  end
+
   create_table "sms_messages", force: :cascade do |t|
     t.bigint "sms_conversation_id"
     t.string "from_number"
@@ -310,7 +323,6 @@ ActiveRecord::Schema.define(version: 2021_05_10_111832) do
     t.boolean "renewal_reminder", default: false
     t.boolean "skip_update_next_charge", default: false
     t.boolean "one_time_upsells", default: false
-    t.boolean "failed_renewal", default: false
     t.boolean "cancel_reactivate_subscription", default: false
     t.boolean "edit_quantity", default: false
     t.boolean "cancel_subscription", default: false
@@ -320,6 +332,7 @@ ActiveRecord::Schema.define(version: 2021_05_10_111832) do
     t.string "renewal_duration"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "failed_renewal"
     t.boolean "opt_in", default: false
     t.boolean "swap_product", default: false
     t.boolean "update_billing", default: false
