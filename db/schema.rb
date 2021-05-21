@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_10_111832) do
+ActiveRecord::Schema.define(version: 2021_05_20_184132) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,6 +96,13 @@ ActiveRecord::Schema.define(version: 2021_05_10_111832) do
     t.boolean "status"
     t.integer "setting_id"
     t.string "slug"
+  end
+
+  create_table "lock_passwords", force: :cascade do |t|
+    t.integer "shop_id"
+    t.string "encrypted_password", null: false
+    t.datetime "created_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
   end
 
   create_table "reasons_cancels", force: :cascade do |t|

@@ -1,5 +1,5 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
-import { Banner, Card, ContextualSaveBar, Form, Frame, List, Page, Spinner, Tabs, Toast } from '@shopify/polaris';
+import { Banner, Card, ContextualSaveBar, Form, Frame, List, Page, Spinner, Tabs, Toast, Layout, FormLayout, TextField, Button } from '@shopify/polaris';
 import { Formik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
@@ -10,6 +10,7 @@ import CustomPortal from './CustomPortal';
 import Dunning from './Dunning';
 import EmailNotification from './EmailNotification';
 import HouseKeeping from './HouseKeeping';
+import Password from './HouseKeepingComponents/Password';
 import Legal from './Legal';
 import StoreInfomation from './StoreInformation';
 
@@ -23,6 +24,7 @@ const Settings = () => {
   const [formErrors, setFormErrors] = useState([]);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
+  
 
   const validationSchema = yup.object().shape({
     // internalName: yup.string().required().label('Internal name'),
@@ -314,6 +316,10 @@ const Settings = () => {
 
   const [selectedTitleTab, setSelectedTitleTab] = useState(0);
 
+  // Password confirmation
+  const [passwordConfirmed, setPasswordConfirmed] = useState(false)
+  const [password, setPassword] = useState("")
+
   const handleTabChange = useCallback(
     (selectedTabIndex) => setSelectedTitleTab(selectedTabIndex),
     []
@@ -359,171 +365,193 @@ const Settings = () => {
   return (
     <AppLayout typePage="settings" tabIndex="7">
       <Frame>
-        <Page title="Settings">
-          <Tabs
-            tabs={tabs}
-            selected={selectedTitleTab}
-            onSelect={handleTabChange}
-          >
-            {loading && (
-              <Card>
-                <Spinner
-                  accessibilityLabel="Spinner example"
-                  size="large"
-                  color="teal"
-                />
-              </Card>
-            )}
-            {formErrors.length > 0 && (
-              <>
-                <Banner title="Setting could not be saved" status="critical">
-                  <List type="bullet">
-                    {formErrors.map((message, index) => (
-                      <List.Item key={index}>{message.message}</List.Item>
-                    ))}
-                  </List>
-                </Banner>
-                <br />
-              </>
-            )}
-
-            {formData && (
-              <Formik
-                validationSchema={validationSchema}
-                initialValues={formData ? formData : initialValues}
-                enableReinitialize
-                onSubmit={(
-                  values,
-                  { setSubmitting, setDirty, resetForm, touched }
-                ) => {
-                  updateSetting({ variables: { input: { params: values } } })
-                    .then((resp) => {
-                      const data = resp.data;
-                      const errors = data.errors;
-
-                      if (errors) {
-                        setFormErrors(errors);
-                      } else {
-                        setSaveSuccess(true);
-                        console.log('oke');
-                        refetch();
-                        setDirty(false);
-                        // resetForm({});
-                        console.log('kxjckxjck');
-                      }
-
-                      setSubmitting(false);
-                    })
-                    .catch((error) => {
-                      setSubmitting(false);
-                      setFormErrors(error);
-                    });
-                }}
+        { passwordConfirmed
+          ? (
+            <Page title="Settings">
+              <Tabs
+                tabs={tabs}
+                selected={selectedTitleTab}
+                onSelect={handleTabChange}
               >
-                {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  isSubmitting,
-                  setFieldValue,
-                  resetForm,
-                  dirty,
-                  setDirty,
-                  formik,
-                  /* and other goodies */
-                }) => (
-                  <Form onSubmit={handleSubmit}>
-                    {dirty && (
-                      <ContextualSaveBar
-                        alignContentFlush={true}
-                        message="Unsaved changes"
-                        saveAction={{
-                          onAction: () => handleSubmit(),
-                          loading: isSubmitting,
-                          disabled: false,
-                        }}
-                        discardAction={{
-                          onAction: resetForm,
-                        }}
-                      />
-                    )}
-
-                    {saveSuccess && (
-                      <Toast
-                        content="Setting is saved"
-                        onDismiss={hideSaveSuccess}
-                      />
-                    )}
-
-                    {selectedTitleTab === 0 ? (
-                      <HouseKeeping
-                        
-                      />):
-                    selectedTitleTab === 1 ? (
-                      <Billing
-                        values={values}
-                        touched={touched}
-                        errors={errors}
-                        setFieldValue={setFieldValue}
-                      />
-                    ) : selectedTitleTab === 2 ? (
-                      <CustomPortal
-                        values={values}
-                        touched={touched}
-                        errors={errors}
-                        setFieldValue={setFieldValue}
-                        handleSubmit={handleSubmit}
-                        refetch={refetch}
-                        isSubmitting={isSubmitting}
-                      />
-                    ) : selectedTitleTab === 3 ? (
-                      <div className="EmailNotification">
-                        <EmailNotification
-                          values={values}
-                          touched={touched}
-                          errors={errors}
-                          setFieldValue={setFieldValue}
-                          handleSubmit={handleSubmit}
-                        />
-                      </div>
-                    ) : selectedTitleTab === 4 ? (
-                      <Dunning
-                        values={values}
-                        touched={touched}
-                        errors={errors}
-                        setFieldValue={setFieldValue}
-                        handleSubmit={handleSubmit}
-                      />
-                    ) : selectedTitleTab === 5 ? (
-                      <div className="storeInfomation">
-                        <StoreInfomation
-                          values={values}
-                          touched={touched}
-                          errors={errors}
-                          setFieldValue={setFieldValue}
-                          handleSubmit={handleSubmit}
-                        />
-                      </div>
-                    ) : (
-                      <div className="storeInfomation">
-                        <Legal
-                          values={values}
-                          touched={touched}
-                          errors={errors}
-                          setFieldValue={setFieldValue}
-                          handleSubmit={handleSubmit}
-                        />
-                      </div>
-                    )}
-                  </Form>
+                {loading && (
+                  <Card>
+                    <Spinner
+                      accessibilityLabel="Spinner example"
+                      size="large"
+                      color="teal"
+                    />
+                  </Card>
                 )}
-              </Formik>
-            )}
-          </Tabs>
-        </Page>
+                {formErrors.length > 0 && (
+                  <>
+                    <Banner title="Setting could not be saved" status="critical">
+                      <List type="bullet">
+                        {formErrors.map((message, index) => (
+                          <List.Item key={index}>{message.message}</List.Item>
+                        ))}
+                      </List>
+                    </Banner>
+                    <br />
+                  </>
+                )}
+
+                {formData && (
+                  <Formik
+                    validationSchema={validationSchema}
+                    initialValues={formData ? formData : initialValues}
+                    enableReinitialize
+                    onSubmit={(
+                      values,
+                      { setSubmitting, setDirty, resetForm, touched }
+                    ) => {
+                      updateSetting({ variables: { input: { params: values } } })
+                        .then((resp) => {
+                          const data = resp.data;
+                          const errors = data.errors;
+
+                          if (errors) {
+                            setFormErrors(errors);
+                          } else {
+                            setSaveSuccess(true);
+                            console.log('oke');
+                            refetch();
+                            setDirty(false);
+                            // resetForm({});
+                            console.log('kxjckxjck');
+                          }
+
+                          setSubmitting(false);
+                        })
+                        .catch((error) => {
+                          setSubmitting(false);
+                          setFormErrors(error);
+                        });
+                    }}
+                  >
+                    {({
+                      values,
+                      errors,
+                      touched,
+                      handleChange,
+                      handleBlur,
+                      handleSubmit,
+                      isSubmitting,
+                      setFieldValue,
+                      resetForm,
+                      dirty,
+                      setDirty,
+                      formik,
+                      /* and other goodies */
+                    }) => (
+                      <Form onSubmit={handleSubmit}>
+                        {dirty && (
+                          <ContextualSaveBar
+                            alignContentFlush={true}
+                            message="Unsaved changes"
+                            saveAction={{
+                              onAction: () => handleSubmit(),
+                              loading: isSubmitting,
+                              disabled: false,
+                            }}
+                            discardAction={{
+                              onAction: resetForm,
+                            }}
+                          />
+                        )}
+
+                        {saveSuccess && (
+                          <Toast
+                            content="Setting is saved"
+                            onDismiss={hideSaveSuccess}
+                          />
+                        )}
+
+                        {selectedTitleTab === 0 ? (
+                          <HouseKeeping
+                            
+                          />):
+                        selectedTitleTab === 1 ? (
+                          <Billing
+                            values={values}
+                            touched={touched}
+                            errors={errors}
+                            setFieldValue={setFieldValue}
+                          />
+                        ) : selectedTitleTab === 2 ? (
+                          <CustomPortal
+                            values={values}
+                            touched={touched}
+                            errors={errors}
+                            setFieldValue={setFieldValue}
+                            handleSubmit={handleSubmit}
+                            refetch={refetch}
+                            isSubmitting={isSubmitting}
+                          />
+                        ) : selectedTitleTab === 3 ? (
+                          <div className="EmailNotification">
+                            <EmailNotification
+                              values={values}
+                              touched={touched}
+                              errors={errors}
+                              setFieldValue={setFieldValue}
+                              handleSubmit={handleSubmit}
+                            />
+                          </div>
+                        ) : selectedTitleTab === 4 ? (
+                          <Dunning
+                            values={values}
+                            touched={touched}
+                            errors={errors}
+                            setFieldValue={setFieldValue}
+                            handleSubmit={handleSubmit}
+                          />
+                        ) : selectedTitleTab === 5 ? (
+                          <div className="storeInfomation">
+                            <StoreInfomation
+                              values={values}
+                              touched={touched}
+                              errors={errors}
+                              setFieldValue={setFieldValue}
+                              handleSubmit={handleSubmit}
+                            />
+                          </div>
+                        ) : (
+                          <div className="storeInfomation">
+                            <Legal
+                              values={values}
+                              touched={touched}
+                              errors={errors}
+                              setFieldValue={setFieldValue}
+                              handleSubmit={handleSubmit}
+                            />
+                          </div>
+                        )}
+                      </Form>
+                    )}
+                  </Formik>
+                )}
+              </Tabs>
+            </Page>
+          ): (
+            <Page title="Password confirmation">
+              <Layout>
+                <Layout.Section>
+                  <Card sectioned>
+                    <FormLayout>
+                      <TextField
+                        value={password}
+                        onChange={value => setPassword(value)}
+                        label="Password"
+                        type="password"
+                      />
+                      <Button primary>Confirm</Button>
+                    </FormLayout>
+                  </Card>
+                </Layout.Section>
+              </Layout>
+            </Page>
+          )
+        }
       </Frame>
     </AppLayout>
   );

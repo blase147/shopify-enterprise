@@ -1,5 +1,5 @@
 import React,{useMemo,useCallback,useState,useEffect} from 'react'
-import { Banner, Card, ContextualSaveBar, Form, Frame, Layout, List, Page, Spinner, Tabs, Toast, RadioButton,Button } from '@shopify/polaris';
+import { Banner, Card, ContextualSaveBar, Form, Frame, Layout, List, Page, Spinner, Tabs, Toast, RadioButton,Button, TextField } from '@shopify/polaris';
 import Discount from './HouseKeepingComponents/DiscountComponents/Discount';
 import Taxes from './HouseKeepingComponents/Taxes';
 import Legal from './HouseKeepingComponents/Legal';
@@ -11,61 +11,49 @@ import Export from './HouseKeepingComponents/ExportComponents/Export';
 import ExportForm from './HouseKeepingComponents/ExportComponents/ExportForm';
 const HouseKeeping = () => {
 
-  const updateSmsSettingQuery=gql`
+// Mutations
+const updateSmsSettingQuery = gql`
   mutation ($input: UpdateSmsSettingInput!) {
     updateSmsSetting(input: $input) {
-        smsSetting {
-          status
-          delayOrder
-          swapProduct
-          orderTracking
-          renewalReminder
-          updateBilling
-          skipUpdateNextCharge
-          oneTimeUpsells
-          failedRenewal
-          editQuantity
-          cancelSubscription
-          winbackFlow
-          deliveryStartTime
-          deliveryEndTime
-          renewalDuration
-          updatedAt
-          shopPhone
-          smsCount
-          smsChargeAmount
-          optIn
-        }
+      smsSetting {
+        status
+        delayOrder
+        swapProduct
+        orderTracking
+        renewalReminder
+        updateBilling
+        skipUpdateNextCharge
+        oneTimeUpsells
+        failedRenewal
+        editQuantity
+        cancelSubscription
+        winbackFlow
+        deliveryStartTime
+        deliveryEndTime
+        renewalDuration
+        updatedAt
+        shopPhone
+        smsCount
+        smsChargeAmount
+        optIn
+      }
     }
-}
-  `;
-  const tabs = useMemo(()=>([
-    {
-      id: 'discount',
-      content: 'Discount',
-    },
-    {
-      id: 'export',
-      content: 'Export',
-    },
-    {
-      id: 'sms',
-      content: 'SMS',
-    },
-    {
-      id: 'legal',
-      content: 'Legal',
-    },
-    {
-      id: 'translation',
-      content: 'Translation',
-    },
-    {
-      id: 'password',
-      content: 'Password',
-    }
-  ]),[])
+  }
+`;
 
+const updatePasswordMutation = gql`
+  mutation ($input: UpdatePasswordInput!) {
+    updatePassword(input: $input) {
+      lockPassword {
+        password
+        passwordConfirmation
+      }
+    }
+  }
+`;
+
+
+const HouseKeeping = () => {
   const [formErrors, setFormErrors] = useState([]);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
@@ -116,10 +104,16 @@ const HouseKeeping = () => {
     deliveryEndTime: "",
     renewalDuration: "",
   })
-    const handleSmsChange=(updated)=>{
-      setSmsData({...smsData,...updated})
-    }
-
+  const [password, setPassword] = useState("")
+  const [passwordConfirmation, setPasswordConfirmation] = useState("")
+  const [updatePassword, {data1, error1, loading1}] = useMutation(updatePasswordMutation)
+  useEffect(() => {
+    if(data1 && !error1)
+      console.log("Data.. Updated",data1)
+  }, [data1])
+  const handleSmsChange=(updated)=>{
+    setSmsData({...smsData,...updated})
+  }
   const handleSmsSettingSubmit = () => {
     const { status, delayOrder, swapProduct, orderTracking, renewalReminder, updateBilling,
       skipUpdateNextCharge, oneTimeUpsells, failedRenewal, optIn, cancelSubscription,
@@ -145,8 +139,31 @@ const HouseKeeping = () => {
       setFormErrors(error);
     });
   }
+  
+  // Change pasword
+  const handleChangePassword = () => {
+    updatePassword({
+      variables: {
+        input: {
+          params: {
+            password, passwordConfirmation
+          }
+        }
+      }
+    }).then(res => {
+      if (!res.data.errors) {
+        setSaveSuccess(true);
+      }
+      else{
+        setFormErrors(res.data.errors);
+      }
+    }).catch((error) => {
+      setFormErrors(error);
+    });
+  }
+
   return (
-      <>
+    <>
       <div className="tab-section">
         <div class="tab-parent">
           <div class="tabs-sms">
@@ -165,55 +182,77 @@ const HouseKeeping = () => {
           </div>
         </div>
         <div className="content">
-              {
-                selectedTab==0 ?
-                <>
-                {
-                  showForm ?
-                  <DiscountForm handleCloseForm={handleCloseForm} />:
-                  <Discount handleDiscountCodeForm={handleShowForm}  />
-                }
-                </>
-                :
-                selectedTab==1?
-                <>
-                {
-                  showForm ?
-                  <ExportForm handleCloseForm={handleCloseForm}/>:
-                  <Export handleCreateExport={handleShowForm}/>
-                }
-                </>:
-                selectedTab==2?
-                <>
-                <Layout>
-                <Layout.Section>
-                  <div class="tabs-btn">
-                    <Button primary loading={loading} onClick={handleSmsSettingSubmit} >Save</Button>
-                    <Button type="button">Cancel</Button>
+          {
+            selectedTab==0 ?
+            <>
+            {
+              showForm ?
+              <DiscountForm handleCloseForm={handleCloseForm} />:
+              <Discount handleDiscountCodeForm={handleShowForm}  />
+            }
+            </>
+            :
+            selectedTab==1?
+            <>
+            {
+              showForm ?
+              <ExportForm handleCloseForm={handleCloseForm}/>:
+              <Export handleCreateExport={handleShowForm}/>
+            }
+            </>:
+            selectedTab==2?
+            <>
+              <Layout>
+              <Layout.Section>
+                <div class="tabs-btn">
+                  <Button primary loading={loading} onClick={handleSmsSettingSubmit} >Save</Button>
+                  <Button type="button">Cancel</Button>
+                </div>
+                <div className="smarty-sms-number">
+                  <div className="action-smarty">
+                    <p>Your SmartySMS Number is {smsData.shopPhone}</p>
+                    <RadioButton label="Activate SmartySMS"  onChange={val=>setSmsData({...smsData,status:"active"})} checked={smsData.status=="active"} name="status" value="active" />
+                    <RadioButton label="Disable SmartySMS"   onChange={val=>setSmsData({...smsData,status:"disable"})}  name="status" checked={smsData.status=="disable"} value="disable" />
                   </div>
-                  <div className="smarty-sms-number">
-                    <div className="action-smarty">
-                      <p>Your SmartySMS Number is {smsData.shopPhone}</p>
-                      <RadioButton label="Activate SmartySMS"  onChange={val=>setSmsData({...smsData,status:"active"})} checked={smsData.status=="active"} name="status" value="active" />
-                      <RadioButton label="Disable SmartySMS"   onChange={val=>setSmsData({...smsData,status:"disable"})}  name="status" checked={smsData.status=="disable"} value="disable" />
-                    </div>
-                    <div className="sms-usage">
-                      <p> SmartySMS Usage:</p>
-                      <p>{smsData.smsCount} SMS  <span>${smsData.smsChargeAmount}</span></p>
-                    </div>
+                  <div className="sms-usage">
+                    <p> SmartySMS Usage:</p>
+                    <p>{smsData.smsCount} SMS  <span>${smsData.smsChargeAmount}</span></p>
+                  </div>
+                </div>
+              </Layout.Section>
+            </Layout>
+            <Taxes submitting={loading} setSmsData={handleSmsChange} handleSmsSettingSubmit={handleSmsSettingSubmit} />
+            </>:
+            selectedTab==3?
+            <Legal/>:
+            selectedTab==4?
+            <Translation/>:
+            selectedTab==5?
+            <>
+              <Layout>
+                <Layout.Section>
+                  <p>Default password: AdminAlaska777</p>
+                  <TextField
+                    value={password}
+                    onChange={value => setPassword(value)}
+                    label="Password"
+                    type="password"
+                  />
+                  <TextField
+                    value={passwordConfirmation}
+                    onChange={value => setPasswordConfirmation(value)}
+                    label="Confirm Password"
+                    type="password"
+                  />
+                  <div class="tabs-btn">
+                    <Button primary loading={loading} onClick={handleChangePassword}>Save</Button>
+                    <Button type="button">Cancel</Button>
                   </div>
                 </Layout.Section>
               </Layout>
-              <Taxes submitting={loading} setSmsData={handleSmsChange} handleSmsSettingSubmit={handleSmsSettingSubmit} />
-                </>:
-                selectedTab==3?
-                <Legal/>:
-                selectedTab==4?
-                <Translation/>:
-                selectedTab==5?
-                <Password/>:""
-              }
-            </div>
+            </>:""
+          }
+        </div>
       </div>
       {saveSuccess && (
         <Toast
@@ -222,18 +261,18 @@ const HouseKeeping = () => {
         />
       )}
       {formErrors.length > 0 && (
-              <>
-                <Banner title="Setting could not be saved" status="critical">
-                  <List type="bullet">
-                    {formErrors.map((message, index) => (
-                      <List.Item key={index}>{message.message}</List.Item>
-                    ))}
-                  </List>
-                </Banner>
-                <br />
-              </>
-            )}
-      </>
+        <>
+          <Banner title="Setting could not be saved" status="critical">
+            <List type="bullet">
+              {formErrors.map((message, index) => (
+                <List.Item key={index}>{message.message}</List.Item>
+              ))}
+            </List>
+          </Banner>
+          <br />
+        </>
+      )}
+    </>
   )
 }
 
