@@ -5,6 +5,7 @@ class SmsService::RestartService < SmsService::ProcessService
     @params = params
     @shared_service = SmsService::SharedService.new(conversation, params)
     @data = subscriptions_data
+    @shop = @conversation.customer.shop
   end
 
   def process_message(step)
@@ -39,6 +40,7 @@ class SmsService::RestartService < SmsService::ProcessService
           if result[:error].present?
             error = true
           else
+            @shop.subscription_logs.restart.create(subscription_id: subscription_message.content)
             message = 'Thank you, your subscription has been successfully active, you can cancel your subscription at any time by texting the keyword CLOSE.'
           end
         else

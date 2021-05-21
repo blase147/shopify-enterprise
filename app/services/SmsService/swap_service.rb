@@ -5,6 +5,7 @@ class SmsService::SwapService < SmsService::ProcessService
     @params = params
     @data = subscriptions_data
     @shared_service = SmsService::SharedService.new(conversation, params)
+    @shop = @conversation.customer.shop
   end
 
   def process_message(step)
@@ -99,6 +100,7 @@ class SmsService::SwapService < SmsService::ProcessService
               if result[:error].present?
                 error = true
               else
+                @shop.subscription_logs.swap.create(subscription_id: subscription_message.content)
                 message = 'Subscription swaped succesfully.'
               end
             else
