@@ -8,20 +8,24 @@ const ExportForm = ({handleCloseForm}) => {
         {label: 'Select a type', value: 'fixed'}
       ];
     return (
-        <Layout sectioned>
+        <Layout >
 
         <div className='wrapper'>
           <div className='bread-bar'>
             <a>Export</a>
-            <span>{''>''}</span>
+            <span>{">"}</span>
             <a>Export Builder</a>
           </div>
+          <div className="input-section">
           <DisplayText size='medium'><strong>Select Export Type</strong></DisplayText>
-          <Select
-                 options={options}
-                // onChange={handleSelectChange}
-                // value={selected}
-                />
+          <div className="create-input">
+            <Select
+                    options={options}
+                    // onChange={handleSelectChange}
+                    // value={selected}
+                    />
+            </div>
+            </div>
           </div>
           <div className ='faq-sms'>
             <Card sectioned>

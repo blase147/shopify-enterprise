@@ -1,5 +1,5 @@
 .wrapper{
-  padding: 10px;
+  /* padding: 10px; */
 }
 .wrapper button {
   background-color: #007EFF;
@@ -86,36 +86,54 @@ tr{
   display: flex;
   background-color:#E2F5FF !important;
   grid-column-gap: 5px;
+  align-items: center;
 }
+
+
 .bread-bar > a{
   cursor: pointer;
   margin :0px 4px;
 }
 .Polaris-Card__Section{
-  padding-top: 2px !important;
+  /* padding-top: 2px !important; */
 }
 .Polaris-Card__Section > *{
-margin: 10px 0px !important;
+/* margin: 10px 0px !important; */
 } 
 .Polaris-Card__Section > p{
   /* margin-top:25px !important; */
 }
 .discount-type-group {
   display: flex;
+  margin-bottom: 30px;
 }
 .discount-type-group > *{
-  margin: 0px 10px;
+  margin-right: 10px;
   width: 300px;
 }
 .type-group{
   width:595px;
+  margin-bottom: 30px;
+}
+.type-group + p {
+  font-weight: bold;
+  margin-bottom: 25px;
+  font-size: 16px;
 }
 .min-radio-group{
   display: flex;
   flex-direction: column;
 }
+
+.min-radio-group > div {
+  margin-bottom: 15px;
+}
+
+.switch-wrapper {
+  margin-top: 25px;
+}
 .switch-wrapper > *{
-  margin: 10px 0px;
+  margin: 16px 0px;
 }
 .switch-group{
   display: flex;
@@ -180,21 +198,58 @@ margin: 10px 0px !important;
 .limit-group-radio {
  display: flex;
  flex-direction: column;
+ margin-bottom: 25px;
 }
+
+.limit-group-radio .Polaris-Choice {
+  margin-bottom: 5px;
+}
+
 .btn-group > *{
   margin: 0px 10px !important;
   /* padding: 15px 40px !important; */
+}
+.limit-group-radio + p {
+  margin-bottom: 15px;
 }
 .check-group{
   display: flex;
   justify-content: flex-start !important;
 }
 .check-group > *{
-  margin:5px 6px !important;
+  margin: 5px 6px !important;
+}
+
+.check-group span {
+  margin-left: 0px !important;
 }
 .promo{
 margin: 20px 20px;
 }
+.promo p {
+  font-size: 16px;
+}
+.promo p:first-child {
+  font-weight: 900;
+  margin-bottom: 7px;
+  font-size: 2rem;
+}
+
+.discount-group  p {
+  font-weight: 900;
+  margin-bottom: 5px;
+  font-size: 18px;
+
+}
+.discount-type-group + p {
+  font-weight: 900;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+.discount-group .Polaris-Connected {
+  max-width: 595px;
+}
+
 .promo > .discount-group{
   margin-top:15px;
   width: 70% !important;
@@ -202,4 +257,54 @@ margin: 20px 20px;
 .sec-5 .Polaris-Icon--colorBase svg {
   font-size: 26px !important;
   fill: rgb(17 139 18);
+}
+
+.sec-1 .Polaris-Card__Section {
+  padding-top: 8px;
+}
+
+.sec-2 .Polaris-Card__Section {
+  padding-top: 8px;
+}
+
+.content .wrapper span {
+  font-size: 16px;
+}
+.sec-3 .Polaris-Card__Section p {
+  font-size: 16px;
+}
+
+.sec-4 .btn-group {
+  display: flex;
+}
+
+.sec-4  p {
+  font-size: 16px;
+}
+.sec-4 .bottom-bread {
+  margin: 20px 0px !important;
+
+}
+
+.sec-4 .bottom-bread + div{
+  margin-bottom: 20px;
+}
+
+.sec-4 h2  {
+  font-size: 18px;
+}
+
+.sec-4 label {
+  font-size: 18px;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.sec-5 h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.sec-5 h3 + p {
+  font-size: 16px;
 }

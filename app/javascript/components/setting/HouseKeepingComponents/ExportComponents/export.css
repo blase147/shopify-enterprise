@@ -1,5 +1,5 @@
 .wrapper {
-	padding: 10px;
+	/* padding: 10px; */
 	
 }
 .wrapper button {
@@ -86,7 +86,7 @@
 /* next form */
 
 .bread-bar{
-  padding: 10px;
+  padding: 16px;
   display: flex;
   background-color:#E2F5FF !important;
 }
@@ -94,9 +94,22 @@
   cursor: pointer;
   margin :0px 4px;
 }
+
+.input-section {
+  margin-left: 16px;
+	margin-bottom: 30px;
+}
+.input-section  p {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
 .Polaris-Card__Section{
-  padding-top: 2px !important;
+  /* padding-top: 2px !important; */
 }
 .Polaris-Card__Section > *{
-	margin: 10px 0px !important;
+	/* margin: 10px 0px !important; */
 } 
+
+.create-input .Polaris-Select {
+	max-width: 595px;
+}
