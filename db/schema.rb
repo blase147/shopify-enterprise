@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_10_111832) do
+ActiveRecord::Schema.define(version: 2021_05_21_043347) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,7 +86,7 @@ ActiveRecord::Schema.define(version: 2021_05_10_111832) do
 
   create_table "email_notifications", force: :cascade do |t|
     t.string "name"
-    t.string "descripton"
+    t.string "description"
     t.string "from_name"
     t.string "from_email"
     t.string "email_subject"
@@ -310,7 +310,6 @@ ActiveRecord::Schema.define(version: 2021_05_10_111832) do
     t.boolean "renewal_reminder", default: false
     t.boolean "skip_update_next_charge", default: false
     t.boolean "one_time_upsells", default: false
-    t.boolean "failed_renewal", default: false
     t.boolean "cancel_reactivate_subscription", default: false
     t.boolean "edit_quantity", default: false
     t.boolean "cancel_subscription", default: false
@@ -320,6 +319,7 @@ ActiveRecord::Schema.define(version: 2021_05_10_111832) do
     t.string "renewal_duration"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "failed_renewal"
     t.boolean "opt_in", default: false
     t.boolean "swap_product", default: false
     t.boolean "update_billing", default: false

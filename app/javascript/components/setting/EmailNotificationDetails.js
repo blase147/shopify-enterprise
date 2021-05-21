@@ -58,7 +58,7 @@ const emailNotificationsDetails = (props) => {
             </Stack.Item>
             <Stack.Item>
               <TextStyle variation="subdued">
-                {values.emailNotifications[index]?.descripton}
+                {values.emailNotifications[index]?.description}
               </TextStyle>
             </Stack.Item>
             <Stack.Item>

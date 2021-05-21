@@ -72,7 +72,7 @@ const Settings = () => {
           emailSubject
           emailMessage
           slug
-          descripton
+          description
         }
         additionalSendAccountAfterCheckout
         bbcStoreowner
@@ -166,7 +166,7 @@ const Settings = () => {
             emailSubject
             emailMessage
             slug
-            descripton
+            description
           }
           additionalSendAccountAfterCheckout
           bbcStoreowner
