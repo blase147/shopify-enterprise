@@ -35,7 +35,7 @@ class SubscriptionContractDeleteService < GraphqlService
     end
     if status == 'ACTIVE'
       customer = Customer.find_by(shopify_id: @id)
-      customer.shop.subscription_logs.restart.create(subscription_id: @id)
+      customer.shop.subscription_logs.restart.create(subscription_id: @id, customer_id: customer.id)
     end
     p result
   rescue Exception => ex

@@ -40,7 +40,7 @@ class ScheduleSkipService < GraphqlService
     p result
     result = SubscriptionDraftsService.new.commit draft_id
     customer = Customer.find_by(shopify_id: @id)
-    customer.shop.subscription_logs.skip.create(subscription_id: @id)
+    customer.shop.subscription_logs.skip.create(subscription_id: @id, customer_id: customer.id)
     p result
   rescue Exception => ex
     p ex.message

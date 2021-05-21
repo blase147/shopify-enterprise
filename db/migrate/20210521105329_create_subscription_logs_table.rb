@@ -5,6 +5,7 @@ class CreateSubscriptionLogsTable < ActiveRecord::Migration[6.0]
       t.integer :action_type, default: 0
       t.string :subscription_id
       t.references :shop
+      t.references :customer
       t.timestamps
     end
   end

@@ -51,7 +51,8 @@ module SubscriptionConcern
       flash[:error] = result[:error]
       render js: "alert('#{result[:error]}'); hideLoading()"
     else
-      current_shop.subscription_logs.swap.create(subscription_id: params[:id])
+      customer = Customer.find_by(shopify_id: params[:id])
+      current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: customer.id)
       render js: 'location.reload()'
     end
   end
