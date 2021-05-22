@@ -52,8 +52,6 @@ const updatePasswordMutation = gql`
   }
 `;
 
-
-const HouseKeeping = () => {
   const [formErrors, setFormErrors] = useState([]);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
