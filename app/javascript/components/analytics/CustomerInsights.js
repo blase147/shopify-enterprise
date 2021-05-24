@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import { gql, useLazyQuery } from '@apollo/client';
+import CounterUp from 'react-countup';
+
 import {
   Card,
   FormLayout,
@@ -23,34 +26,100 @@ import {
   CaretDownMinor,
 } from '@shopify/polaris-icons';
 import { Form } from 'formik';
+import { isEmpty } from 'lodash';
+import { data } from 'jquery';
 
 const CustomerInsights = () => {
-  const sectionCustomerList = [
-    {
-      section: 'Customer Count',
-      percent: '24',
-      up: true,
-      amount: '7,443',
-    },
-    {
-      section: 'Sales Per Charge',
-      percent: '2',
-      up: false,
-      amount: '$57.12',
-    },
-    {
-      section: 'Charges Per Customer',
-      // percent: '',
-      // up: '',
-      amount: '1.17',
-    },
-    {
-      section: 'Total Churn %',
-      percent: '1',
-      up: false,
-      amount: '37%',
-    },
-  ];
+
+  const fetchReport = gql`
+  query {  
+    fetchCustomerInsights {
+        customersCount {
+          value
+          percent
+          up
+        }
+        salesPerCharge {
+          value
+          percent
+          up
+        }
+        totalChurn {
+          value
+          percent
+          up
+        }
+        chargePerCustomer {
+          value
+          percent
+          up 
+        }
+        skipCount {
+          value
+          percent
+          up 
+        }
+        swapCount {
+          value
+          percent
+          up 
+        }
+        restartCount {
+          value
+          percent
+          up 
+        }
+        upsellCount {
+          value
+          percent
+          up 
+        }
+        dunningCount {
+          value
+          percent
+          up 
+        }
+        recovered {
+          value
+          percent
+          up 
+        }
+        churned {
+          value
+          percent
+          up 
+        }
+        dunned {
+          value
+          percent
+          up 
+        }
+        skipCustomers {
+            data {
+                activeCustomers
+                churnedCustomers
+            }
+            date
+        }
+        swapCustomers {
+            data {
+                activeCustomers
+                churnedCustomers
+            }
+            date
+        }
+        upsellCustomers {
+            data {
+                activeCustomers
+                churnedCustomers
+            }
+            date
+        }
+    }
+}
+  `;
+
+
   //insight Chart
   const insightChart = {
     chart: {
@@ -94,6 +163,7 @@ const CustomerInsights = () => {
         type: 'pie',
         // name: 'Browser share',
         innerSize: '50%',
+        showInLegend: true,
         data: [
           ['60%', 60],
           ['18%', 18],
@@ -103,258 +173,13 @@ const CustomerInsights = () => {
           //   // name: 'Other',
           //   y: 7.61,
           //   dataLabels: {
-          //     enabled: false,
+          //     enabled: true,
           //   },
           // },
         ],
       },
     ],
   };
-  const rows_Customer = [
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-    [
-      1,
-      'Active Customers - 0015',
-      'SUCCESS',
-      'MAX_RETRIES',
-      'CARD_ERROR_GENE...',
-      '2,609',
-      '47.54%',
-    ],
-  ];
-  //Purchase Items (Subscriptions)
-  const sectionPurchaseItemList = [
-    {
-      section: 'Total Dunning & Dunned Subs',
-      percent: '24',
-      up: true,
-      amount: '443',
-    },
-    {
-      section: '% Dunning',
-      percent: '2',
-      up: true,
-      amount: '17%',
-    },
-    {
-      section: '% Recovered',
-      percent: 2,
-      up: true,
-      amount: '12%',
-    },
-    {
-      section: '% Churn',
-      percent: '1',
-      up: false,
-      amount: '7%',
-    },
-  ];
   // Subscriptions Chart
   const DunningChart = {
     chart: {
@@ -437,27 +262,6 @@ const CustomerInsights = () => {
       },
     ],
   };
-  //Customer Actions
-  const sectionCustomerActionList = [
-    {
-      section: 'Skips',
-      percent: '24',
-      up: true,
-      amount: '57',
-    },
-    {
-      section: 'Swaps',
-      percent: '2',
-      up: true,
-      amount: '12',
-    },
-    {
-      section: 'Reactivations',
-      percent: '2',
-      up: true,
-      amount: '45',
-    },
-  ];
   //customer Action chart
   const CustomerActionChart_1 = {
     chart: {
@@ -545,12 +349,184 @@ const CustomerInsights = () => {
       },
     ],
   };
+
+  const rows_Customer = [
+    []
+    // [
+    //   1,
+    //   'Active Customers - 0015',
+    //   'SUCCESS',
+    //   'MAX_RETRIES',
+    //   'CARD_ERROR_GENE...',
+    //   '2,609',
+    //   '47.54%',
+    // ]
+  ];
+
+  const customerListKeys=[
+    {section:"Customer Count",key:"customerCount"},
+    {section:"Sales Per Charge",key:"salesPerCharge",prefix:"$"},
+    {section:"Charges Per Customer",key:"chargePerCustomer"},
+    {section:"Total Churn %",key:"totalChurn",suffix:"%"}
+  ]
+  const [sectionCustomerList,setSectionCustomerList] = useState({
+    customerCount:{
+      section: 'Customer Count',
+      percent: 0,
+      up: true,
+      value: '0',
+    },
+    salesPerCharge:{
+      section: 'Sales Per Charge',
+      percent: 0,
+      up: true,
+      value: '0'
+    },
+    chargePerCustomer:{
+      section: 'Charges Per Customer',
+      percent: 0,
+      up: true,
+      value: '0',
+    },
+    totalChurn:{
+      section: 'Total Churn %',
+      percent: 0,
+      up: true,
+      value: '0'
+    }
+  });
+  const purchaseListKeys=[
+    {section:"Total Dunning & Dunned Subs",key:"dunned",suffix:"%"},
+    {section:"% Dunning",key:"dunningCount",suffix:"%"},
+    {section:"% Recovered",key:"recovered",suffix:"%"},
+    {section:"% Churn",key:"churned",suffix:"%"}
+  ]
+  //Purchase Items (Subscriptions)
+  const [sectionPurchaseItemList,setSectionPurchaseItemList] = useState({
+    dunned:{
+      section: 'Total Dunning & Dunned Subs',
+      percent: 0,
+      up: true,
+      amount: '0'
+    },
+    dunningCount:{
+      section: '% Dunning',
+      percent: 0,
+      up: true,
+      amount: '0'
+    },
+    recovered:{
+      section: '% Recovered',
+      percent: 0,
+      up: true,
+      amount: '0'
+    },
+    churned:{
+      section: '% Churn',
+      percent: 0,
+      up: true,
+      amount: '0'
+    },
+  });
+  //Customer Actions
+  const customerActionListKeys=[
+    {section:"Skips",key:"skipCount"},
+    {section:"Swaps",key:"swapCount"},
+    {section:"Upsells",key:"upsellCount"},
+    {section:"Reactivations",key:"restartCount"},
+    
+  ]
+  const [sectionCustomerActionList,setSectionCustomerActionList] = useState({
+    skipCount:{
+      percent: 0,
+      up: true,
+      amount: '0',
+    },
+    swapCount:{
+      section: 'Swaps',
+      percent: 0,
+      up: true,
+      amount: '0',
+    },
+    upsellCount:{
+      section: 'Upsells',
+      percent: 0,
+      up: true,
+      amount: '0',
+    },
+    restartCount:{
+      section: 'Reactivations',
+      percent: 0,
+      up: true,
+      amount: '0',
+    },
+  });
+
   const rows_Churn = [
     [' ', 'At Least One Swap', 'Y', 'N'],
     [' ', 'At Least One Skip', '-', '-'],
     ['1', 'Y', '0', '250'],
     ['2', 'N', '$125,200', '2'],
   ];
+
+  const [getReport, { loading, data:reportData }] = useLazyQuery(fetchReport,{fetchPolicy:"network-only"});
+
+  const getReportData = useCallback(() => {
+    getReport()
+  }, [getReport])
+
+  useEffect(() => {
+    getReportData()
+  }, [])
+
+  useEffect(()=>{
+    if(!isEmpty(reportData)){
+      const {
+        customersCount,
+        salesPerCharge,
+        chargePerCustomer,
+        totalChurn,
+        dunned,
+        dunningCount,
+        recovered,
+        churned,
+        skipCount,
+        swapCount,
+        upsellCount,
+        restartCount
+
+      }=reportData.fetchCustomerInsights;
+      //Set Sections Data
+      setSectionCustomerList(prevData=>(
+        {
+          customerCount:customersCount || prevData.customerCount,
+          salesPerCharge:salesPerCharge || prevData.salesPerCharge,
+          chargePerCustomer:chargePerCustomer || prevData.chargePerCustomer,
+          totalChurn:totalChurn || prevData.totalChurn
+        }
+      ))
+      setSectionPurchaseItemList(prevData=>(
+        {
+          dunned:dunned || prevData.dunned,
+          dunningCount:dunningCount || prevData.dunningCount,
+          recovered:recovered || prevData.recovered,
+          churned:churned || prevData.churned
+        }
+      ))
+      setSectionCustomerActionList(prevData=>(
+        {
+          skipCount:skipCount || prevData.skipCount,
+          swapCount:swapCount || prevData.swapCount,
+          upsellCount:upsellCount || prevData.upsellCount,
+          restartCount:restartCount || prevData.restartCount
+        }
+      ))
+      
+      ///
+    }
+  },[reportData])
+
+
   return (
     <FormLayout>
       <Stack vertical spacing="extraLoose">
@@ -560,7 +536,7 @@ const CustomerInsights = () => {
           <div className="container-left">
             <Layout.Section>
               <Stack vertical distribution="equalSpacing">
-                {sectionCustomerList?.map((item, i) => (
+                {customerListKeys?.map((item, i) => (
                   <Stack.Item key={i}>
                     <Card sectioned>
                       <Stack
@@ -574,13 +550,13 @@ const CustomerInsights = () => {
                         </Stack.Item>
                         <Stack.Item>
                           <TextStyle
-                            variation={item.up ? 'positive' : 'negative'}
+                            variation={sectionCustomerList[item.key]?.up ? 'positive' : 'negative'}
                           >
                             <Icon
-                              source={item.up ? CaretUpMinor : CaretDownMinor}
-                              color={item.up ? 'green' : 'red'}
+                              source={sectionCustomerList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                              color={sectionCustomerList[item.key]?.up ? 'green' : 'red'}
                             />
-                            {item?.percent}%
+                            {(sectionCustomerList[item.key]?.up===false && sectionCustomerList[item.key]?.percent==0)?100:sectionCustomerList[item.key].percent}%
                           </TextStyle>
                         </Stack.Item>
                       </Stack>
@@ -588,7 +564,7 @@ const CustomerInsights = () => {
                         <Stack.Item>
                           <DisplayText size="medium">
                             <TextStyle variation="strong">
-                              {item.amount}
+                            <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionCustomerList[item.key]?.value).toFixed(2)} duration={1.5} decimals={2} />
                             </TextStyle>
                           </DisplayText>
                         </Stack.Item>
@@ -650,7 +626,7 @@ const CustomerInsights = () => {
             </DisplayText>
 
             <Stack distribution="fill" wrap={false}>
-              {sectionPurchaseItemList?.map((item, i) => (
+              {purchaseListKeys?.map((item, i) => (
                 <Stack.Item key={i}>
                   <Card sectioned>
                     <Stack>
@@ -660,13 +636,13 @@ const CustomerInsights = () => {
 
                       <Stack.Item>
                         <TextStyle
-                          variation={item.up ? 'positive' : 'negative'}
+                          variation={sectionPurchaseItemList[item.key]?.up ? 'positive' : 'negative'}
                         >
                           <Icon
-                            source={item.up ? CaretUpMinor : CaretDownMinor}
-                            color={item.up ? 'green' : 'red'}
+                            source={sectionPurchaseItemList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                            color={sectionPurchaseItemList[item.key]?.up ? 'green' : 'red'}
                           />
-                          {item.percent}%
+                          {(sectionPurchaseItemList[item.key]?.up===false && sectionPurchaseItemList[item.key]?.percent==0)?100:sectionPurchaseItemList[item.key].percent}%
                         </TextStyle>
                       </Stack.Item>
                     </Stack>
@@ -675,7 +651,7 @@ const CustomerInsights = () => {
                       <Stack.Item>
                         <DisplayText size="medium">
                           <TextStyle variation="strong">
-                            {item.amount}
+                          <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionPurchaseItemList[item.key]?.value).toFixed(2)} duration={1.5} decimals={2} />
                           </TextStyle>
                         </DisplayText>
                       </Stack.Item>
@@ -719,7 +695,7 @@ const CustomerInsights = () => {
             <div className="container-left">
               <Layout.Section>
                 <Stack vertical distribution="equalSpacing">
-                  {sectionCustomerActionList?.map((item, i) => (
+                  {customerActionListKeys?.map((item, i) => (
                     <Stack.Item key={i}>
                       <Card sectioned>
                         <Stack
@@ -733,13 +709,13 @@ const CustomerInsights = () => {
                           </Stack.Item>
                           <Stack.Item>
                             <TextStyle
-                              variation={item.up ? 'positive' : 'negative'}
+                              variation={sectionCustomerActionList[item.key]?.up ? 'positive' : 'negative'}
                             >
                               <Icon
-                                source={item.up ? CaretUpMinor : CaretDownMinor}
-                                color={item.up ? 'green' : 'red'}
+                                source={sectionCustomerActionList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                                color={sectionCustomerActionList[item.key]?.up ? 'green' : 'red'}
                               />
-                              {item?.percent}%
+                              {(sectionCustomerActionList[item.key]?.up===false && sectionCustomerActionList[item.key]?.percent==0)?100:sectionCustomerActionList[item.key].percent}%
                             </TextStyle>
                           </Stack.Item>
                         </Stack>
@@ -747,7 +723,7 @@ const CustomerInsights = () => {
                           <Stack.Item>
                             <DisplayText size="medium">
                               <TextStyle variation="strong">
-                                {item.amount}
+                              <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionCustomerActionList[item.key]?.value).toFixed(2)} duration={1.5} decimals={2} />
                               </TextStyle>
                             </DisplayText>
                           </Stack.Item>

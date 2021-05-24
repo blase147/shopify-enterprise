@@ -56,9 +56,6 @@ const RevenueTrends = () => {
     { label: 'Year', value: 'year' }
   ]), [])
 
-  useEffect(() => {
-   console.log("FIlters Changes",filters)
-  }, [filters])
 
   ///Graph Query...
   const fetchReport = gql`
@@ -563,7 +560,6 @@ const rows_Charges = [
   useEffect(() => {
   
     if(data){
-      console.log(data,"Data")
       const {
         totalSales,
         recurringSales,
