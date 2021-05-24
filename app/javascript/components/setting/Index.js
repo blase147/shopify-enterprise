@@ -221,7 +221,6 @@ const Settings = () => {
 
   useEffect(() => {
     if (data) {
-      console.log('mnmnmnmnm', data.fetchSetting);
       setFormData(data.fetchSetting);
     }
   }, [data]);
@@ -317,7 +316,7 @@ const Settings = () => {
   const [selectedTitleTab, setSelectedTitleTab] = useState(0);
 
   // Password confirmation
-  const [passwordConfirmed, setPasswordConfirmed] = useState(false)
+  const [passwordConfirmed, setPasswordConfirmed] = useState(true)
   const [password, setPassword] = useState("")
 
   const handleTabChange = useCallback(

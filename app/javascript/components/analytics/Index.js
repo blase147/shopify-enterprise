@@ -35,10 +35,10 @@ const Analytics = () => {
       id: 'customer-insights',
       content: 'Customer Insights',
     },
-    {
-      id: 'retention',
-      content: 'Retention',
-    },
+    // {
+    //   id: 'retention',
+    //   content: 'Retention',
+    // },
     {
       id: 'product',
       content: 'Product',
@@ -58,15 +58,17 @@ const Analytics = () => {
             <div className="customer-insight">
               <CustomerInsights />
             </div>
-          ) : selectedTitleTab === 2 ? (
-            <div className="retention">
-              <Retention />
-            </div>
-          ) : (
+          ) 
+          // : selectedTitleTab === 2 ? (
+          //   <div className="retention">
+          //     <Retention />
+          //   </div>
+          // ) 
+          : selectedTitleTab === 2 ?(
             <div className="product">
               <Product />
             </div>
-          )}
+          ):""}
         </Tabs>
       </Page>
     </AppLayout>
