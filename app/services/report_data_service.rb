@@ -1,8 +1,7 @@
 class ReportDataService
-  def initialize(subscriptions, orders = nil, granularity = nil, range = nil)
+  def initialize(subscriptions, orders = nil, range = nil)
     @subscriptions = subscriptions
     @orders = orders
-    @granularity = granularity
     @range = range
   end
 
@@ -92,7 +91,7 @@ class ReportDataService
 
   def renewal_data_by_date(date, subscriptions)
     current_month_subscriptions = in_period_subscriptions(subscriptions, date.beginning_of_month..date.end_of_month, 'ACTIVE')
-    renewed_subscriptions = current_month_subscriptions.sum { |subscription| subscription.node.orders.edges.count > 1 && (subscription_orders_in_range(subscription).size > 1) ? 1 : 0  }
+    renewed_subscriptions = current_month_subscriptions.sum { |subscription| subscription.node.orders.edges.count > 1 && (subscription_orders_in_range(subscription, date).size > 1) ? 1 : 0  }
     renewed_subscriptions / current_month_subscriptions.count rescue 0
   end
 
@@ -104,7 +103,7 @@ class ReportDataService
     subscriptions.select { |subscription| subscription.node.created_at.to_datetime.between?(range.first, range.last) && (status ? subscription.node.status == status : true) }
   end
 
-  def subscription_orders_in_range(subscription)
+  def subscription_orders_in_range(subscription, date)
     subscription.node.orders.edges.select { |order| date.beginning_of_month..date.end_of_month.cover?(order.node.created_at.to_date) }
   end
 
@@ -169,12 +168,22 @@ class ReportDataService
   end
 
   def graph_data_by_granularity(method)
-    @range.map(&"beginning_of_#{@granularity.downcase}".to_sym).uniq.map do |date|
+    @range.map(&"beginning_of_#{granularity}".to_sym).uniq.map do |date|
       {
-        date: date.strftime(@granularity == 'year' ? '%Y' : '%b %d'),
-        data: send(method, date.instance_eval("beginning_of_#{@granularity}")..date.instance_eval("end_of_#{@granularity}"))
+        date: date.strftime(granularity == 'year' ? '%Y' : '%b %d'),
+        data: send(method, date.instance_eval("beginning_of_#{granularity}")..date.instance_eval("end_of_#{granularity}"))
       }
     end
+  end
+
+  def granularity
+    range = 'day'
+    if @range.count > 30
+      range = 'month'
+    elsif @range.count > 365
+      range = 'year'
+    end
+    range
   end
 
   def active_vs_churned_data(range)
