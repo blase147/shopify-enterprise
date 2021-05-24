@@ -1,18 +1,17 @@
 module Queries
   class FetchRevenueTrend < Queries::BaseQuery
     type Types::RevenueTrendType, null: false
-    argument :granularity, String, required: true
-    argument :data_period_for, String, required: true
-    argument :data_by_period, String, required: true
+    argument :start_date, String, required: true
+    argument :end_date, String, required: true
 
-    def resolve(granularity: , data_period_for: , data_by_period:)
+    def resolve(start_date:, end_date:)
       orders_service = OrdersService.new(current_shop)
       subscriptions = ReportService.new.all_subscriptions
       data_service = ReportDataService.new(subscriptions)
-      range = Date.today - data_period_for.to_i.send(data_by_period)..Date.today
+      range = start_date.to_date..end_date.to_date
       orders = orders_service.orders_in_range(range.first, range.last, 'id,refunds,created_at,current_total_price_set,total_shipping_price_set,source_name')
       in_period_subscriptions = data_service.in_period_subscriptions(subscriptions, range)
-      range_data_service = ReportDataService.new(in_period_subscriptions, orders, granularity, range)
+      range_data_service = ReportDataService.new(in_period_subscriptions, orders, range)
       total_sales = range_data_service.get_total_sales.to_f.round(2)
       recurring_sales = range_data_service.recurring_sales
       sales_per_charge = range_data_service.sales_per_charge

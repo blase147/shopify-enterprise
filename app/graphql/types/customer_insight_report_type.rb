@@ -12,11 +12,19 @@ module Types
     field :recovered, Types::GraphValueType, null: true
     field :churned, Types::GraphValueType, null: true
     field :dunned, Types::GraphValueType, null: true
+    field :dunning_data, [Types::GraphDataType], null: true
+    field :dunning_recovered_data, [Types::GraphDataType], null: true
+    field :dunning_churn_data, [Types::GraphDataType], null: true
+    field :active_customers_percentage, String, null: true
+    field :dunned_customers_percentage, String, null: true
+    field :cancelled_customers_percentage, String, null: true
     field :skip_customers, [Types::GraphDataType], null: true
     field :swap_customers, [Types::GraphDataType], null: true
     field :swap_customers, [Types::GraphDataType], null: true
     field :restart_customers, [Types::GraphDataType], null: true
     field :upsell_customers, [Types::GraphDataType], null: true
+    field :sku_by_customers, [Types::GraphValueType], null: true
+    field :billing_frequency, [Types::GraphValueType], null: true
 
     field :__typename, String, null: true
   end

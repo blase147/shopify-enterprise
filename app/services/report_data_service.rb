@@ -1,8 +1,7 @@
 class ReportDataService
-  def initialize(subscriptions, orders = nil, granularity = nil, range = nil)
+  def initialize(subscriptions, orders = nil, range = nil)
     @subscriptions = subscriptions
     @orders = orders
-    @granularity = granularity
     @range = range
   end
 
@@ -169,12 +168,22 @@ class ReportDataService
   end
 
   def graph_data_by_granularity(method)
-    @range.map(&"beginning_of_#{@granularity.downcase}".to_sym).uniq.map do |date|
+    @range.map(&"beginning_of_#{granularity}".to_sym).uniq.map do |date|
       {
-        date: date.strftime(@granularity == 'year' ? '%Y' : '%b %d'),
-        data: send(method, date.instance_eval("beginning_of_#{@granularity}")..date.instance_eval("end_of_#{@granularity}"))
+        date: date.strftime(granularity == 'year' ? '%Y' : '%b %d'),
+        data: send(method, date.instance_eval("beginning_of_#{granularity}")..date.instance_eval("end_of_#{granularity}"))
       }
     end
+  end
+
+  def granularity
+    range = 'day'
+    if @range.count > 30
+      range = 'month'
+    elsif @range.count > 365
+      range = 'year'
+    end
+    range
   end
 
   def active_vs_churned_data(range)

@@ -15,12 +15,20 @@ class ReportService < GraphqlService
             createdAt
             status
             nextBillingDate
+            billingPolicy {
+              interval
+              intervalCount
+            }
             customer {
               id
               productSubscriberStatus
             }
             lines(first: 10) {
-              edges
+              edges {
+                node {
+                  sku
+                }
+              }
             }
             orders(first: 10, reverse: true) {
               edges {
