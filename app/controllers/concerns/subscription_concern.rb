@@ -3,6 +3,7 @@ module SubscriptionConcern
 
   included do
     before_action :set_draft_contract, only: [:add_product, :update_quantity, :update_shiping_detail, :swap_product, :remove_line]
+    before_action :set_customer, only: %i[add_product swap_product]
   end
 
   def add_product
@@ -17,6 +18,7 @@ module SubscriptionConcern
     else
       render js: "window.top.location.href = '/cart/#{variant.id}:1';"
     end
+    current_shop.subscription_logs.upsell.create(subscription_id: params[:id], customer_id: @customer.id)
   end
 
   def update_quantity
@@ -51,8 +53,7 @@ module SubscriptionConcern
       flash[:error] = result[:error]
       render js: "alert('#{result[:error]}'); hideLoading()"
     else
-      customer = Customer.find_by(shopify_id: params[:id])
-      current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: customer.id)
+      current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id)
       render js: 'location.reload()'
     end
   end
@@ -113,5 +114,9 @@ module SubscriptionConcern
     else
       @draft_id = result[:draft_id]
     end
+  end
+
+  def set_customer
+    @customer = Customer.find_by(shopify_id: params[:id])
   end
 end

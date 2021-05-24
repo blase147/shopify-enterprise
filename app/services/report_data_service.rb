@@ -92,7 +92,7 @@ class ReportDataService
 
   def renewal_data_by_date(date, subscriptions)
     current_month_subscriptions = in_period_subscriptions(subscriptions, date.beginning_of_month..date.end_of_month, 'ACTIVE')
-    renewed_subscriptions = current_month_subscriptions.sum { |subscription| subscription.node.orders.edges.count > 1 && (subscription_orders_in_range(subscription).size > 1) ? 1 : 0  }
+    renewed_subscriptions = current_month_subscriptions.sum { |subscription| subscription.node.orders.edges.count > 1 && (subscription_orders_in_range(subscription, date).size > 1) ? 1 : 0  }
     renewed_subscriptions / current_month_subscriptions.count rescue 0
   end
 
@@ -104,7 +104,7 @@ class ReportDataService
     subscriptions.select { |subscription| subscription.node.created_at.to_datetime.between?(range.first, range.last) && (status ? subscription.node.status == status : true) }
   end
 
-  def subscription_orders_in_range(subscription)
+  def subscription_orders_in_range(subscription, date)
     subscription.node.orders.edges.select { |order| date.beginning_of_month..date.end_of_month.cover?(order.node.created_at.to_date) }
   end
 
