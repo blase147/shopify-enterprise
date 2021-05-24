@@ -4,7 +4,8 @@ import {
   Layout,
   Toast,
   TextField,
-  Frame
+  Frame,
+  Stack
 } from '@shopify/polaris';
 import React, { useState,useEffect,useRef,useCallback } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router';
@@ -103,13 +104,12 @@ const EditSmartyMessage = ({id,handleClose}) => {
         <Card>
           <Card.Section>
             <div className="smarty-sms">
-              <p className="customize-text">Message Custom Keywords</p>
-              <p className="customize-text" style={{ fontWeight: 'normal' }}>Edit the SMS message body to your own style.</p>
+              <p className="customize-text">Customize your SMS Messages</p>
               <form class="">
-                <div className="message-form">
+                <div className="message-form edit-from">
                   <div class="edit-example" >
                     <div className="title-input">
-                      <p>Title *</p>
+                      {/* <p>Title *</p> */}
                       <TextField
                           placeholder="Account Settings - Options"
                           value={formData.title}
@@ -124,7 +124,7 @@ const EditSmartyMessage = ({id,handleClose}) => {
                       </div>
 
                     </div>
-                    <div className="discription-input">
+                    {/* <div className="discription-input">
                       <p>Description</p>
                       <TextField
                           // placeholder="Message’s Keyword"
@@ -132,7 +132,7 @@ const EditSmartyMessage = ({id,handleClose}) => {
                           // error={}
                           onChange={(value) => {setFormData({...formData,description:value});setFormChanged(true)}}
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </form>
@@ -143,24 +143,7 @@ const EditSmartyMessage = ({id,handleClose}) => {
         
         <Card>
           <Card.Section>
-            <p className="variable-text">Variables</p>
-            <div className="variable-section">
-              <div className="variables">
-                <p>A set of custom variables is provided to make your message more personal and informative for your customers. 
-                  To use variables is quite simple, you need to select from the available variables set and include it to your 
-                  message body using double brackets: <span style={{color:"red"}}>{'{{variable_goes_here}}'} </span>.
-                </p>
-
-                <div className="available-variables">
-                  <p className="">Available variables</p>
-                  {
-                    data && data?.fetchSmartyVariables?.map(variable=>(
-                      <button>{variable.name}</button>
-                    ))
-                  }
-                </div>
-              </div>
-              <div className="var-auto-complition">
+          <div className="var-auto-complition">
                 <Tags
                   tagifyRef={tagRef}
                   InputMode="textarea"
@@ -183,10 +166,30 @@ const EditSmartyMessage = ({id,handleClose}) => {
                 <p>Type @ to have the variables auto-completion.</p>
 
               </div>
+            <div className="variable-section">
+              <div className="variables">
+              <p className="variable-text">Keywords</p>
+                <p>A set of custom keywords is provided to make your message more personal and informative for your customers. 
+                  To use keywords is quite simple, you need to select from the available keywords set and include it to your 
+                  message body using double brackets: <span style={{color:"red"}}>{'{{variable_goes_here}}'} </span>.
+                </p>
+              </div>
+              <div className="available-variables">
+                  <p className="">Available Keywords</p>
+                  {
+                    data && data?.fetchSmartyVariables?.map(variable=>(
+                      <button>{variable.name}</button>
+                    ))
+                  }
+                </div>
             </div>
           </Card.Section>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button primary disabled={!formChanged} loading={loading} onClick={handleSubmit} >Update</Button>
+          <div className="buttons-wrapper">
+          <Stack>
+            <Stack.Item><Button onClick={handleClose}>Cancel</Button></Stack.Item>
+            <Stack.Item><Button primary disabled={!formChanged} loading={loading} onClick={handleSubmit} >Update</Button></Stack.Item>
+          </Stack>
+          </div>
         </Card>
         <Frame>
           {saveSuccess && (
