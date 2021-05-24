@@ -105,7 +105,7 @@ const Installation = () => {
 
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
-  const [passwordConfirmed, setPasswordConfirmed] = useState(false)
+  const [passwordConfirmed, setPasswordConfirmed] = useState(true)
   const [password, setPassword] = useState("")
 
   return (
