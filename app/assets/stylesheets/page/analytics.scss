@@ -1,7 +1,32 @@
+.Polaris-Popover__Section {
+  .Polaris-DatePicker {
+    
+    .Polaris-DatePicker__Header {
+      position: static !important;
+    }
+
+    table {
+      .Polaris-DatePicker__Weekday {
+        display: revert !important;
+
+      }
+      .Polaris-DatePicker__Day {
+        width: 100% ;
+      }
+      .Polaris-DatePicker__Week, .Polaris-DatePicker__WeekHeadings {
+        display: table-row;
+      }
+    }
+    
+  }
+  
+}
 .module-Analytics {
   .highcharts-credits {
     display: none;
   }
+
+  
   .Polaris-Page__Content {
     .Polaris-Tabs__Wrapper {
       background: unset;
@@ -60,16 +85,16 @@
   }
   // customer insight
   .customer-insight {
-    thead {
-      background: #258aff;
-      .Polaris-DataTable__Cell {
-        &.Polaris-DataTable__Cell--verticalAlignTop {
-          &.Polaris-DataTable__Cell--header {
-            color: rgba(255, 255, 255, 0.87);
-          }
-        }
-      }
-    }
+    // thead {
+    //   background: #258aff;
+    //   .Polaris-DataTable__Cell {
+    //     &.Polaris-DataTable__Cell--verticalAlignTop {
+    //       &.Polaris-DataTable__Cell--header {
+    //         color: rgba(255, 255, 255, 0.87);
+    //       }
+    //     }
+    //   }
+    // }
     .container-left {
       width: 28%;
     }
@@ -91,62 +116,62 @@
       }
     }
 
-    tbody {
-      .Polaris-DataTable__Cell--verticalAlignTop {
-        border: 1.0624px solid #cecece;
-        box-sizing: border-box;
-      }
-    }
+    // tbody {
+    //   .Polaris-DataTable__Cell--verticalAlignTop {
+    //     border: 1.0624px solid #cecece;
+    //     box-sizing: border-box;
+    //   }
+    // }
     .subscription-chart {
       display: flex;
       flex-flow: row wrap;
       justify-content: space-between;
     }
-    .Polaris-Stack {
-      &.Polaris-Stack--distributionTrailing {
-        .Polaris-DataTable {
-          thead {
-            display: none;
-          }
-        }
-        tbody {
-          th.Polaris-DataTable__Cell {
-            border-top: none;
-            border-left: none;
-          }
-          .Polaris-DataTable__TableRow td:last-child {
-            border-right: none;
-            border-top: none;
-          }
-        }
-        tbody tr:first-child {
-          td {
-            border-top: none;
-          }
-        }
-        tbody tr:last-child {
-          th.Polaris-DataTable__Cell {
-            border-bottom: none;
-          }
-          td {
-            border-bottom: none;
-          }
-        }
-      }
-    }
+    // .Polaris-Stack {
+    //   // &.Polaris-Stack--distributionTrailing {
+    //   //   .Polaris-DataTable {
+    //   //     thead {
+    //   //       display: none;
+    //   //     }
+    //   //   }
+    //   //   tbody {
+    //   //     th.Polaris-DataTable__Cell {
+    //   //       border-top: none;
+    //   //       border-left: none;
+    //   //     }
+    //   //     .Polaris-DataTable__TableRow td:last-child {
+    //   //       border-right: none;
+    //   //       border-top: none;
+    //   //     }
+    //   //   }
+    //   //   tbody tr:first-child {
+    //   //     td {
+    //   //       border-top: none;
+    //   //     }
+    //   //   }
+    //   //   tbody tr:last-child {
+    //   //     th.Polaris-DataTable__Cell {
+    //   //       border-bottom: none;
+    //   //     }
+    //   //     td {
+    //   //       border-bottom: none;
+    //   //     }
+    //   //   }
+    //   // }
+    // }
   }
-  .product {
-    thead {
-      background: #258aff;
-      .Polaris-DataTable__Cell {
-        &.Polaris-DataTable__Cell--verticalAlignTop {
-          &.Polaris-DataTable__Cell--header {
-            color: rgba(255, 255, 255, 0.87);
-          }
-        }
-      }
-    }
-  }
+  // .product {
+  //   // thead {
+  //   //   background: #258aff;
+  //   //   .Polaris-DataTable__Cell {
+  //   //     &.Polaris-DataTable__Cell--verticalAlignTop {
+  //   //       &.Polaris-DataTable__Cell--header {
+  //   //         color: rgba(255, 255, 255, 0.87);
+  //   //       }
+  //   //     }
+  //   //   }
+  //   // }
+  // }
 }
 
 .data-tabels {
