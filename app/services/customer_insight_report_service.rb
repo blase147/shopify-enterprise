@@ -156,13 +156,15 @@ class CustomerInsightReportService
   end
 
   def sku_by_customers
+    customers = []
     products = Hash.new(0)
     @subscriptions.each do |sub|
       next unless sub.node.lines.edges.present?
 
       sub.node.lines.edges.each do |line|
-        products[line.node.sku] = products[line.node.sku] + 1
+        products[line.node.sku] = products[line.node.sku] + 1 unless customers.include?(sub.node.customer.id)
       end
+      customers.push(sub.node.customer.id)
     end
     products.sort_by { |_key, val| val }.reverse.to_h.first(14).map { |key, val| { sku: key, value: val } }
   end
@@ -175,6 +177,11 @@ class CustomerInsightReportService
     end
     subscriptions_count = frequency.inject(0) { |sum, hash| sum + hash[1] }
     subscriptions_count.zero? ? 0 : frequency.map { |key, val| { billing_policy: key, value: ((val.to_f / subscriptions_count) * 100).round(2) } }
+  end
+
+  def cancellation_reasons
+    @shop.customers.joins(:reasons_cancel).select('COUNT(*) AS value, reasons_cancels.title AS cancellation_reason')
+         .group('reasons_cancels.title').order('COUNT(*) DESC')
   end
 
   def granularity
