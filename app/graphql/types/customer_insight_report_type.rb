@@ -25,6 +25,7 @@ module Types
     field :upsell_customers, [Types::GraphDataType], null: true
     field :sku_by_customers, [Types::GraphValueType], null: true
     field :billing_frequency, [Types::GraphValueType], null: true
+    field :cancellation_reasons, [Types::GraphValueType], null: true
 
     field :__typename, String, null: true
   end

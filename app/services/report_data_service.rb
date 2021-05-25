@@ -109,12 +109,12 @@ class ReportDataService
 
   # Revenue Trends
   def get_total_sales(range = nil)
-    orders = range.nil? ? @orders : @orders.select {|order| range.cover?(order.created_at.to_date) }
+    orders = range.nil? ? @orders : @orders.select { |order| range.cover?(order.created_at.to_date) }
     orders.sum { |order| order.current_total_price_set.presentment_money.amount.to_f } + orders.sum { |order| order.total_shipping_price_set.presentment_money.amount.to_f }.round(2)
   end
 
   def charge_count(range)
-    @orders.sum {|order| range.cover?(order.created_at.to_date) ? 1 : 0 }
+    @orders.sum { |order| range.cover?(order.created_at.to_date) ? 1 : 0 }
   end
 
   def recurring_sales
@@ -218,7 +218,7 @@ class ReportDataService
   end
 
   def new_vs_cancelled_data(range)
-    { active_subscriptions_count: in_period_subscriptions(@subscriptions, range, 'ACTIVE').count, cancelled_subscriptions_count: in_period_subscriptions(@subscriptions, range, 'CANCELLED').count }
+    { new_subscriptions_count: in_period_subscriptions(@subscriptions, range, 'ACTIVE').count, cancelled_subscriptions_count: in_period_subscriptions(@subscriptions, range, 'CANCELLED').count }
   end
 
   def get_upcoming_revenue(day_count)
@@ -234,7 +234,7 @@ class ReportDataService
   end
 
   def calculated_error_revenue(order)
-    order.node.transactions.sum{ |transaction| transaction.status == 'ERROR' ? transaction.amount_set.presentment_money.amount.to_f : 0 }
+    order.node.transactions.sum { |transaction| transaction.status == 'ERROR' ? transaction.amount_set.presentment_money.amount.to_f : 0 }
   end
 
   def get_upcoming_charge(day_count)
@@ -259,5 +259,53 @@ class ReportDataService
   def same_day_cancelled
     subscription_ids = @subscriptions.map{ |subscription| subscription.node.id }
     SubscriptionContract.where.not(shopify_id: subscription_ids, status: 'CANCELLED').where('shopify_created_at::date = cancelled_at::date').count
+  end
+
+  def sku_by_revenue
+    products = Hash.new(0)
+    @subscriptions.each do |sub|
+      next unless sub.node.lines.edges.present?
+
+      sub.node.lines.edges.each do |line|
+        products[line.node.sku] += get_orders_total_amount(sub)
+      end
+    end
+    products.sort_by { |_key, val| val }.reverse.to_h.first(14).map { |key, val| { sku: key, value: val } }
+  end
+
+  def sku_by_subscriptions
+    products = Hash.new(0)
+    @subscriptions.each do |sub|
+      next unless sub.node.lines.edges.present?
+
+      sub.node.lines.edges.each do |line|
+        products[line.node.sku] += 1
+      end
+    end
+    products.sort_by { |_key, val| val }.reverse.to_h.first(14).map { |key, val| { sku: key, value: val } }
+  end
+
+  def sku_by_customers
+    customers = []
+    products = Hash.new(0)
+    @subscriptions.each do |sub|
+      next unless sub.node.lines.edges.present?
+
+      sub.node.lines.edges.each do |line|
+        products[line.node.sku] += 1 unless customers.include?(sub.node.customer.id)
+      end
+      customers.push(sub.node.customer.id)
+    end
+    products.sort_by { |_key, val| val }.reverse.to_h.first(14).map { |key, val| { sku: key, value: val } }
+  end
+
+  def billing_frequency_revenue
+    frequency = Hash.new(0)
+    @subscriptions.each do |sub|
+      interval = "#{sub.node.billing_policy.interval_count} #{sub.node.billing_policy.interval.capitalize}"
+      frequency[interval] += get_orders_total_amount(sub)
+    end
+    subscriptions_revenue_total = frequency.inject(0) { |sum, hash| sum + hash[1] }
+    subscriptions_revenue_total.zero? ? 0 : frequency.map { |key, val| { billing_policy: key, value: ((val.to_f / subscriptions_revenue_total) * 100).round(2) } }
   end
 end
