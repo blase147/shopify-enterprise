@@ -1,6 +1,7 @@
 class Customer < ApplicationRecord
   enum gender: [:male, :female]
   belongs_to :shop, foreign_key: :shop_id
+  belongs_to :reasons_cancel, optional: true
   mount_uploader :avatar, AvatarUploader
   has_many :additional_contacts, dependent: :destroy
   has_one :billing_address, dependent: :destroy

@@ -21,7 +21,7 @@
   margin: 25px 0px;
   max-width:453px;
 }
-.table-bar{
+/* .table-bar{
   width: 100%;
   display: block;
   overflow-x: auto;
@@ -38,7 +38,7 @@ th, td {
 }
 tr{
   border-bottom: 1px solid #E6E6E7;
-}
+} */
 .title-section{
   display: flex;
   align-items: center;

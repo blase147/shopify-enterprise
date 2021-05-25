@@ -13,6 +13,7 @@ module Types
     field :percent, Integer, null: true
     field :sku, String, null: true
     field :billing_policy, String, null: true
+    field :cancellation_reason, String, null: true
     field :__typename, String, null: true
   end
 end

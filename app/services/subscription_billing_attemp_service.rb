@@ -31,7 +31,7 @@ class SubscriptionBillingAttempService < GraphqlService
     p result
     errors = result.data.subscription_billing_attempt_create.nil? ? result.original_hash["errors"][0]["message"] : nil
     raise errors if errors.present?
-    return result
+    return { error: nil }
   rescue Exception => ex
     p ex.message
     { error: ex.message }

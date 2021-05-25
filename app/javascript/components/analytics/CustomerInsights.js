@@ -19,6 +19,7 @@ import {
   Heading,
   DataTable,
   TextContainer,
+  DatePicker,
 } from '@shopify/polaris';
 import {
   DropdownMinor,
@@ -28,93 +29,128 @@ import {
 import { Form } from 'formik';
 import { isEmpty } from 'lodash';
 import { data } from 'jquery';
+import DateRangePicker from '../common/DatePicker/DateRangePicker';
+import dayjs from 'dayjs';
 
 const CustomerInsights = () => {
 
   const fetchReport = gql`
-  query {  
-    fetchCustomerInsights {
-        customersCount {
+  query($startDate:String!,$endDate:String!) {  
+    fetchCustomerInsights(startDate:$startDate,endDate:$endDate) {
+      activeCustomersPercentage
+      cancelledCustomersPercentage
+      dunnedCustomersPercentage
+      customersCount {
+        value
+        percent
+        up
+      }
+      salesPerCharge {
+        value
+        percent
+        up
+      }
+      totalChurn {
+        value
+        percent
+        up
+      }
+      chargePerCustomer {
+        value
+        percent
+        up 
+      }
+      skipCount {
+        value
+        percent
+        up 
+      }
+      swapCount {
+        value
+        percent
+        up 
+      }
+      restartCount {
+        value
+        percent
+        up 
+      }
+      upsellCount {
+        value
+        percent
+        up 
+      }
+      dunningCount {
+        value
+        percent
+        up 
+      }
+      recovered {
+        value
+        percent
+        up 
+      }
+      churned {
+        value
+        percent
+        up 
+      }
+      dunned {
+        value
+        percent
+        up 
+      }
+      dunningData {
+          date
+          data {
+              value
+          }
+      }
+      dunningRecoveredData {
+          date
+          data {
+              value
+          }
+      }
+      dunningChurnData {
+          date
+          data {
+              value
+          }
+      }
+      skipCustomers {
+          data {
+              activeCustomers
+              churnedCustomers
+          }
+          date
+      }
+      swapCustomers {
+          data {
+              activeCustomers
+              churnedCustomers
+          }
+          date
+      }
+      upsellCustomers {
+          data {
+              activeCustomers
+              churnedCustomers
+          }
+          date
+      }
+      skuByCustomers {
+          sku
           value
-          percent
-          up
-        }
-        salesPerCharge {
+      }
+      billingFrequency {
+          billingPolicy
           value
-          percent
-          up
-        }
-        totalChurn {
+      }
+      cancellationReasons {
+          cancellationReason
           value
-          percent
-          up
-        }
-        chargePerCustomer {
-          value
-          percent
-          up 
-        }
-        skipCount {
-          value
-          percent
-          up 
-        }
-        swapCount {
-          value
-          percent
-          up 
-        }
-        restartCount {
-          value
-          percent
-          up 
-        }
-        upsellCount {
-          value
-          percent
-          up 
-        }
-        dunningCount {
-          value
-          percent
-          up 
-        }
-        recovered {
-          value
-          percent
-          up 
-        }
-        churned {
-          value
-          percent
-          up 
-        }
-        dunned {
-          value
-          percent
-          up 
-        }
-        skipCustomers {
-            data {
-                activeCustomers
-                churnedCustomers
-            }
-            date
-        }
-        swapCustomers {
-            data {
-                activeCustomers
-                churnedCustomers
-            }
-            date
-        }
-        upsellCustomers {
-            data {
-                activeCustomers
-                churnedCustomers
-            }
-            date
-        }
+      }
     }
 }
   `;
@@ -129,6 +165,7 @@ const CustomerInsights = () => {
       height: '400px',
       // width: '720px',
     },
+    colors:['#0D91AE','#6B97C5','#FFF500','#FFCC00','#E77320','#FF0000','#FF5C00','#212B36','#979797','#007EFF','#00A023','#8000A0','#A0007D','#F4EC19'],
     title: {
       text: '2021-02-09',
       align: 'center',
@@ -165,10 +202,9 @@ const CustomerInsights = () => {
         innerSize: '50%',
         showInLegend: true,
         data: [
-          ['60%', 60],
-          ['18%', 18],
-          ['19%', 19],
-          ['2%', 2],
+          ['Active customers', 60],
+          ['customers in dunning', 18],
+          ['Cancelled', 19],
           // {
           //   // name: 'Other',
           //   y: 7.61,
@@ -469,15 +505,27 @@ const CustomerInsights = () => {
     ['2', 'N', '$125,200', '2'],
   ];
 
+  const [filters,setFilters]=useState({startDate:dayjs(new Date()).subtract(30,'days').format("YYYY-MM-DD"),endDate:dayjs(new Date()).format("YYYY-MM-DD")})
+  const handleFiltersDates=(dates)=>{
+    if(!isEmpty(dates)){
+      const {start,end}=dates;
+      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD")});
+    }
+  }
   const [getReport, { loading, data:reportData }] = useLazyQuery(fetchReport,{fetchPolicy:"network-only"});
 
   const getReportData = useCallback(() => {
-    getReport()
-  }, [getReport])
+    getReport({
+      variables:{
+        startDate:filters.startDate,
+        endDate:filters.endDate
+      }
+    })
+  }, [filters,getReport])
 
   useEffect(() => {
     getReportData()
-  }, [])
+  }, [filters])
 
   useEffect(()=>{
     if(!isEmpty(reportData)){
@@ -529,10 +577,21 @@ const CustomerInsights = () => {
 
   return (
     <FormLayout>
+      
+      <Layout>
+        <Layout.Section>
+        </Layout.Section>
+        <Layout.Section>
+          <DateRangePicker
+            start={filters.startDate}
+            endDate={filters.endDate}
+            handleDates={handleFiltersDates}
+          />
+        </Layout.Section>
+      </Layout>
       <Stack vertical spacing="extraLoose">
         <Layout>
           {/* <Layout.Section secondary> */}
-
           <div className="container-left">
             <Layout.Section>
               <Stack vertical distribution="equalSpacing">
