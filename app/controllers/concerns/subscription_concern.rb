@@ -68,6 +68,8 @@ module SubscriptionConcern
     if result[:error].present?
       render js: "alert('#{result[:error]}'); hideLoading()"
     else
+      customer = Customer.find_by_shopify_id params[:customer_id]
+      customer.update(reasons_cancel_id: params[:reasons_cancel_id]) if !customer.nil? && params[:reasons_cancel_id].present?
       SubscriptionDraftsService.new.commit @draft_id
       render js: 'location.reload()'
     end

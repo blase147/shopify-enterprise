@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_24_100146) do
+ActiveRecord::Schema.define(version: 2021_05_25_054106) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,8 @@ ActiveRecord::Schema.define(version: 2021_05_24_100146) do
     t.datetime "opt_in_reminder_at"
     t.datetime "failed_at"
     t.integer "retry_count", default: 0
+    t.bigint "reasons_cancel_id"
+    t.index ["reasons_cancel_id"], name: "index_customers_on_reasons_cancel_id"
   end
 
   create_table "email_notifications", force: :cascade do |t|
@@ -411,4 +413,5 @@ ActiveRecord::Schema.define(version: 2021_05_24_100146) do
     t.json "rule_customer_value"
   end
 
+  add_foreign_key "customers", "reasons_cancels"
 end

@@ -1036,6 +1036,26 @@ div.notification-banner {
   border-radius: 5px;
   padding: 35px;
   margin: 30px 0;
+  .Polaris-Modal-Dialog__Modal.Polaris-Modal-Dialog--sizeLarge {
+    @media (min-width: 65.25em) {
+      max-width: 65rem;
+    }
+
+    h3 {
+      text-align: center;
+      margin-top: 40px;
+      margin-bottom: 40px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    form {
+      .variants-wrapper {
+        padding-left: 19%;
+        padding-right: 19%;
+      }
+    }
+  }
   > .grid {
     display: grid;
     grid-template-columns: 3fr 2fr 1fr;
