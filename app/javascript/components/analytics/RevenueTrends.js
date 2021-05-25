@@ -36,11 +36,14 @@ import {
 import {
   DropdownMinor
 } from '@shopify/polaris-icons';
+import dayjs from 'dayjs';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { isEmpty } from 'lodash';
+import React, { useCallback, useEffect, useMemo, useState, useContext } from 'react';
 import CounterUp from 'react-countup';
-
+import DateRangePicker from '../common/DatePicker/DateRangePicker';
+import { FilterContext } from './../common/Contexts/AnalyticsFilterContext';
 
 const RevenueTrends = () => {
   const [expandedFilter, setExpandedFilter] = useState(false);
@@ -48,7 +51,13 @@ const RevenueTrends = () => {
   const [selected_1, setSelected_1] = useState('today');
   const handleSelectChange_1 = useCallback((value) => setSelected_1(value), []);
 
-  const [filters,setFilters]=useState({granularity:'day',dataPeriodFor:"30",dataByPeriod:"day"})
+  const [filters,setFilters]=useContext(FilterContext)
+  const handleFiltersDates=(dates)=>{
+    if(!isEmpty(dates)){
+      const {start,end}=dates;
+      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD")});
+    }
+  }
 
   const selectOptions = useMemo(() => ([
     { label: 'Day', value: 'day' },
@@ -59,76 +68,96 @@ const RevenueTrends = () => {
 
   ///Graph Query...
   const fetchReport = gql`
-  query($granularity: String!, $dataPeriodFor: String!, $dataByPeriod: String!) {  
-    fetchRevenueTrend(granularity: $granularity, dataPeriodFor: $dataPeriodFor, dataByPeriod: $dataByPeriod) {
-      totalSales
-      recurringSales
-      salesPerCharge
-      refunds
-      averageCheckoutCharge
-      averageRecurringCharge
-      churnRate
-      newCustomers
-      activeCustomers
-      newSubscriptions
-      cancelledSubscriptions
-      sameDayCancelled
-      activeVsChurnedData {
-          date
-          data {
-              activeCustomers
-              churnedCustomers
-          }
-      }
-      totalSalesData {
-          date
-          data {
-              value
-              chargeCount
-          }
-      }
-      refundsData {
-          date
-          data {
-              value
-              refundsCount
-          }
-      }
-      activeCustomersData {
-          date
-          data {
-              value
-          }
-      }
-      newVsCancelledData {
-          date
-          data {
-              newSubscriptionsCount
-              cancelledSubscriptionsCount
-          }
-      }
-      recurringVsCheckout {
-        date
-        data {
-            recurringSales
-            oneTimeSales
+  query($startDate: String!, $endDate: String!) {  
+    fetchRevenueTrend(startDate: $startDate, endDate: $endDate) {
+        totalSales
+        recurringSales
+        salesPerCharge
+        mrr
+        refunds
+        averageCheckoutCharge
+        averageRecurringCharge
+        churnRate
+        newCustomers
+        activeCustomers
+        newSubscriptions
+        cancelledSubscriptions
+        sameDayCancelled
+        activeVsChurnedData {
+            date
+            data {
+                activeCustomers
+                churnedCustomers
+            }
         }
-    }
-      estimatedSevenDays
-      estimatedThirtyDays
-      estimatedNinetyDays
-      historicalSevenDaysRevenue
-      historicalThirtyDaysRevenue
-      historicalNinetyDaysRevenue
-      sevenDaysErrorRevenue
-      thirtyDaysErrorRevenue
-      ninetyDaysErrorRevenue
-      sevenDaysUpcomingCharge
-      thirtyDaysUpcomingCharge
-      ninetyDaysUpcomingCharge  
-      sevenDaysErrorCharge
-      thirtyDaysErrorCharge
-      ninetyDaysErrorCharge
+        totalSalesData {
+            date
+            data {
+                value
+                chargeCount
+            }
+        }
+        refundsData {
+            date
+            data {
+                value
+                refundsCount
+            }
+        }
+        activeCustomersData {
+            date
+            data {
+                value
+            }
+        }
+        newVsCancelledData {
+            date
+            data {
+                newSubscriptionsCount
+                cancelledSubscriptionsCount
+            }
+        }
+        recurringVsCheckout {
+            date
+            data {
+                recurringSales
+                oneTimeSales
+            }
+        }
+        skuBySubscriptions {
+            sku
+            value
+        }
+        skuByRevenue {
+            sku
+            value
+        }
+        billingFrequencyRevenue {
+            billingPolicy
+            value
+        }
+        skuByFrequency {
+            billingPolicy
+            skus {
+                sku
+                value
+            }
+        }
+        estimatedSevenDays
+        estimatedThirtyDays
+        estimatedNinetyDays
+        historicalSevenDaysRevenue
+        historicalThirtyDaysRevenue
+        historicalNinetyDaysRevenue
+        sevenDaysErrorRevenue
+        thirtyDaysErrorRevenue
+        ninetyDaysErrorRevenue
+        sevenDaysUpcomingCharge
+        thirtyDaysUpcomingCharge
+        ninetyDaysUpcomingCharge
+        sevenDaysErrorCharge
+        thirtyDaysErrorCharge
+        ninetyDaysErrorCharge
     }
 }
   `;
@@ -200,6 +229,108 @@ const CustomerChart = {
       name: '',
       data: [],
       color: '#202b35',
+    },
+  ],
+};
+const skuRevenue = {
+  colors: ["#0D91AE", "#6B97C5", "#FFF500", "#FFCC00", "#E77320", "#FF0000", "#FF5C00", "#979797", "#007EFF", "#00A023", "#8000A0", "#A0007D", "#F4EC19"],
+  title: {
+    text: 'Top 14 SKUs by Recurring Revenue (Subscriptions)'
+  },
+  xAxis: {
+    categories: []
+  },
+  yAxis: {
+    title: {
+      text: 'Recurring Revenue ($)'
+    },
+    labels: {
+      formatter: function () {
+        return this.value;
+      }
+    },
+  },
+  series: [{
+    type: 'column',
+    colorByPoint: true,
+    data: [],
+    showInLegend: false
+  }]
+}
+const skuSubscriptions = {
+  colors: ["#0D91AE", "#6B97C5", "#FFF500", "#FFCC00", "#E77320", "#FF0000", "#FF5C00", "#979797", "#007EFF", "#00A023", "#8000A0", "#A0007D", "#F4EC19"],
+  title: {
+    text: 'Top 14 SKUs by Subscriptions'
+  },
+  xAxis: {
+    categories: []
+  },
+  yAxis: {
+    title: {
+      text: 'Subscriptions'
+    },
+    labels: {
+      formatter: function () {
+        return this.value;
+      }
+    },
+  },
+  series: [{
+    type: 'column',
+    colorByPoint: true,
+    data: [],
+    showInLegend: false
+  }]
+}
+const insightChart = {
+  chart: {
+    plotBackgroundColor: null,
+    plotBorderWidth: 0,
+    plotShadow: false,
+    height: '400px',
+    // width: '720px',
+  },
+  colors: ['#007EFF', '#57AAFF', '#979797', '#FFCC00', '#E77320', '#FF0000', '#FF5C00', '#212B36', '#979797', '#007EFF', '#00A023', '#8000A0', '#A0007D', '#F4EC19'],
+  title: {
+    text: 'Revenue by Subscription Frequency',
+    // align: 'center',
+    // verticalAlign: 'middle',
+    // // y: 60,
+  },
+  tooltip: {
+    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+  },
+  accessibility: {
+    point: {
+      valueSuffix: '%',
+    },
+  },
+  plotOptions: {
+    pie: {
+      dataLabels: {
+        enabled: true,
+        distance: -50,
+        style: {
+          fontWeight: 'bold',
+          color: 'white',
+        },
+      },
+
+      center: ['50%', '50%'],
+      size: '110%',
+    },
+  },
+  series: [
+    {
+      type: 'pie',
+      // name: 'Browser share',
+      innerSize: '50%',
+      showInLegend: true,
+      data: [
+        ['60%', 60],
+        ['18%', 18],
+        ['19%', 19],
+      ],
     },
   ],
 };
@@ -533,8 +664,11 @@ const rows_Charges = [
     saleChart:SaleChart,
     activeChurnedCustomerChart:Active_Churned_CustomerChart,
     estimatedChart:EstimatedChart,
-    checkoutChart:CheckoutChart
+    checkoutChart:CheckoutChart,
     
+    skuRevenueChart:skuRevenue,
+    skuSubscriptionsChart:skuSubscriptions,
+    insightChart:insightChart
   })
 
   const [tableData,setTableData]=useState({
@@ -549,13 +683,16 @@ const rows_Charges = [
 
   const getReportData = useCallback(() => {
     getReport({
-      variables: { granularity: filters.granularity, dataPeriodFor: filters.dataPeriodFor, dataByPeriod: filters.dataByPeriod }
+      variables:{
+        startDate:filters.startDate,
+        endDate:filters.endDate
+      }
     })
   }, [filters, getReport])
 
   useEffect(() => {
     getReportData()
-  }, [])
+  }, [filters])
 
   useEffect(() => {
   
@@ -587,6 +724,9 @@ const rows_Charges = [
         totalSalesData,
         activeVsChurnedData,
         recurringVsCheckout,
+
+        skuByRevenue,
+        skuBySubscriptions,
         ////tablesData
         //Revenue table
         sevenDaysErrorRevenue,
@@ -746,6 +886,20 @@ const rows_Charges = [
           },
         ]
       }
+      const newSkuRevenue={...chartOptions.skuRevenueChart,xAxis: {categories: skuByRevenue.map(sku=>sku.sku) || []},
+      series: [{
+        type: 'column',
+        colorByPoint: true,
+        data: skuByRevenue.map(sku=>parseInt(sku.value ||0)) || [],
+        showInLegend: false
+    }] }
+      const newSkuSubscriptions={...chartOptions.skuSubscriptionsChart,xAxis: {categories: skuBySubscriptions.map(sku=>sku.sku) || []},
+      series: [{
+        type: 'column',
+        colorByPoint: true,
+        data: skuBySubscriptions.map(sku=>parseInt(sku.value ||0)) || [],
+        showInLegend: false
+    }] }
       //// set New Chart Options
       setChartOptions({
         ...chartOptions,
@@ -755,7 +909,9 @@ const rows_Charges = [
         saleChart:newSalesData,
         activeChurnedCustomerChart:newActiveVsChurnedData,
         estimatedChart:newEstimatedData,
-        checkoutChart:newCheckoutChartData
+        checkoutChart:newCheckoutChartData,
+        skuRevenueChart:newSkuRevenue,
+        skuSubscriptionsChart:newSkuSubscriptions
       });
       // tables Data
       const newRevenueTable=[
@@ -988,51 +1144,58 @@ const rows_Charges = [
                   </Button>
                   <br />
                   {expandedFilter ? (
-                    <form className="form-inline">
-                      <div className="form-inline-child">
-                        <p>Date Granularity</p>
-                        <div className="select">
-                          <Select
-                            options={selectOptions}
-                            onChange={value=>setFilters({...filters,granularity:value})}
-                            value={filters.granularity}
-                          />
-                        </div>
-                        {/* <div className="select">
-                          <Select
-                            options={options_1}
-                            onChange={handleSelectChange_1}
-                            value={selected_1}
-                          />
-                        </div> */}
-                      </div>
-                      <div className="form-inline-child">
-                        <p>Date Range</p>
-                        {/* <div className="select">
-                          <Select
-                            options={options_1}
-                            onChange={handleSelectChange_1}
-                            value={selected_1}
-                          />
-                        </div> */}
-                        <div className="textfield">
-                          <TextField 
-                          value={filters.dataPeriodFor}
-                          onChange={value=>setFilters({...filters,dataPeriodFor:value})}
-                          ></TextField>
-                        </div>
-                        <div className="select">
-                          <Select
-                            options={selectOptions}
-                            onChange={value=>setFilters({...filters,dataByPeriod:value})}
-                            value={filters.dataByPeriod}
-                          />
-                        </div>
-                      </div>
-                      <Button primary onClick={()=>getReportData()} >
-                        {'   '}Run{'   '}
-                      </Button>
-                    </form>
+                    // <form className="form-inline">
+                    //   <div className="form-inline-child">
+                    //     <p>Date Granularity</p>
+                    //     <div className="select">
+                    //       <Select
+                    //         options={selectOptions}
+                    //         onChange={value=>setFilters({...filters,granularity:value})}
+                    //         value={filters.granularity}
+                    //       />
+                    //     </div>
+                    //     {/* <div className="select">
+                    //       <Select
+                    //         options={options_1}
+                    //         onChange={handleSelectChange_1}
+                    //         value={selected_1}
+                    //       />
+                    //     </div> */}
+                    //   </div>
+                    //   <div className="form-inline-child">
+                    //     <p>Date Range</p>
+                    //     {/* <div className="select">
+                    //       <Select
+                    //         options={options_1}
+                    //         onChange={handleSelectChange_1}
+                    //         value={selected_1}
+                    //       />
+                    //     </div> */}
+                    //     <div className="textfield">
+                    //       <TextField 
+                    //       value={filters.dataPeriodFor}
+                    //       onChange={value=>setFilters({...filters,dataPeriodFor:value})}
+                    //       ></TextField>
+                    //     </div>
+                    //     <div className="select">
+                    //       <Select
+                    //         options={selectOptions}
+                    //         onChange={value=>setFilters({...filters,dataByPeriod:value})}
+                    //         value={filters.dataByPeriod}
+                    //       />
+                    //     </div>
+                    //   </div>
+                    //   <Button primary onClick={()=>getReportData()} >
+                    //     {'   '}Run{'   '}
+                    //   </Button>
+                    // </form>
+                    <>
+                        <DateRangePicker
+                          start={filters.startDate}
+                          endDate={filters.endDate}
+                          handleDates={handleFiltersDates}
+                        />
+                    </>
                   ) : // </div>
                   null}
                 </Card.Section>
@@ -1191,6 +1354,24 @@ const rows_Charges = [
             <Layout.Section>
               <Heading>{'  '}</Heading>
               <HighchartsReact highcharts={Highcharts} options={chartOptions.saleChart} />
+            </Layout.Section>
+          </Layout>
+          <Layout>
+            <Layout.Section>
+              <Heading>{'  '}</Heading>
+              <HighchartsReact highcharts={Highcharts} options={chartOptions.skuRevenueChart} />
+            </Layout.Section>
+          </Layout>
+          <Layout>
+            <Layout.Section>
+              <Heading>{'  '}</Heading>
+              <HighchartsReact highcharts={Highcharts} options={chartOptions.skuSubscriptionsChart} />
+            </Layout.Section>
+          </Layout>
+          <Layout>
+            <Layout.Section>
+              <Heading>{'  '}</Heading>
+              <HighchartsReact highcharts={Highcharts} options={chartOptions.insightChart} />
             </Layout.Section>
           </Layout>
           <Layout>

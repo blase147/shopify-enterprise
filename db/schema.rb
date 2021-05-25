@@ -102,13 +102,6 @@ ActiveRecord::Schema.define(version: 2021_05_25_054106) do
     t.string "slug"
   end
 
-  create_table "lock_passwords", force: :cascade do |t|
-    t.integer "shop_id"
-    t.string "encrypted_password", null: false
-    t.datetime "created_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
-  end
-
   create_table "reasons_cancels", force: :cascade do |t|
     t.string "title"
     t.string "return_content"
