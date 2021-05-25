@@ -176,7 +176,7 @@ class CustomerInsightReportService
       frequency[interval] = frequency[interval] + 1
     end
     subscriptions_count = frequency.inject(0) { |sum, hash| sum + hash[1] }
-    subscriptions_count.zero? ? 0 : frequency.map { |key, val| { billing_policy: key, value: ((val.to_f / subscriptions_count) * 100).round(2) } }
+    subscriptions_count.zero? ? {} : frequency.map { |key, val| { billing_policy: key, value: ((val.to_f / subscriptions_count) * 100).round(2) } }
   end
 
   def cancellation_reasons
