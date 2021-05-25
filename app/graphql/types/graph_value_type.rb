@@ -14,6 +14,7 @@ module Types
     field :sku, String, null: true
     field :billing_policy, String, null: true
     field :cancellation_reason, String, null: true
+    field :skus, [Types::SkuType], null: true
     field :__typename, String, null: true
   end
 end

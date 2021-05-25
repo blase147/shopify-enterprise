@@ -141,7 +141,7 @@ class ReportDataService
 
   def average_checkout_charge
     orders = one_time_orders(@range)
-    orders_calculate_amount(orders) / orders.count
+    orders.count.zero? ? 0 : orders_calculate_amount(orders) / orders.count
   end
 
   def one_time_orders(range)
@@ -273,9 +273,10 @@ class ReportDataService
     products.sort_by { |_key, val| val }.reverse.to_h.first(14).map { |key, val| { sku: key, value: val } }
   end
 
-  def sku_by_subscriptions
+  def sku_by_subscriptions(subscriptions = nil)
+    subscriptions = subscriptions.present? ? subscriptions : @subscriptions
     products = Hash.new(0)
-    @subscriptions.each do |sub|
+    subscriptions.each do |sub|
       next unless sub.node.lines.edges.present?
 
       sub.node.lines.edges.each do |line|
@@ -306,6 +307,20 @@ class ReportDataService
       frequency[interval] += get_orders_total_amount(sub)
     end
     subscriptions_revenue_total = frequency.inject(0) { |sum, hash| sum + hash[1] }
-    subscriptions_revenue_total.zero? ? 0 : frequency.map { |key, val| { billing_policy: key, value: ((val.to_f / subscriptions_revenue_total) * 100).round(2) } }
+    subscriptions_revenue_total.zero? ? {} : frequency.map { |key, val| { billing_policy: key, value: ((val.to_f / subscriptions_revenue_total) * 100).round(2) } }
+  end
+
+  def sku_by_frequency
+    data = []
+    sub_by_frequency = @subscriptions&.group_by{ |sub| "#{sub.node.billing_policy.interval_count} #{sub.node.billing_policy.interval.capitalize}"}
+    sub_by_frequency&.each do |billing_frequecny, subscriptions|
+      sku_by_subscriptions = sku_by_subscriptions(subscriptions).first(5)
+      if sku_by_subscriptions.present?
+        skus_total_count = sku_by_subscriptions.inject(0) { |sum, hash| sum + hash[:value] }
+        skus = sku_by_subscriptions(@subscriptions).first(5).map { |sku| { sku: sku[:sku], value: skus_total_count.zero? ? 0 : ((sku[:value].to_f / skus_total_count) * 100).round(2) } }
+        data.push({ billing_policy: billing_frequecny, skus: skus })
+      end
+    end
+    data.empty? ? {} : data
   end
 end

@@ -18,10 +18,10 @@ module Queries
       skip_count = report.percentage(previous_day.skip_count, current_day.skip_count, report.skip_count)
       restart_count = report.percentage(previous_day.restart_count, current_day.restart_count, report.restart_count)
       upsell_count = report.percentage(previous_day.upsell_count, current_day.upsell_count, report.upsell_count)
-      skip_customers = report.graph_data_by_granularity(:active_vs_churned_skip_data)
-      swap_customers = report.graph_data_by_granularity(:active_vs_churned_swap_data)
-      restart_customers = report.graph_data_by_granularity(:active_vs_churned_restart_data)
-      upsell_customers = report.graph_data_by_granularity(:active_vs_churned_upsell_data)
+      skip_customers = report.active_vs_churned_skip_data
+      swap_customers = report.active_vs_churned_swap_data
+      restart_customers = report.active_vs_churned_restart_data
+      upsell_customers = report.active_vs_churned_upsell_data
       sales_per_charge = report.percentage(previous_day.sales_per_charge, current_day.sales_per_charge, report.sales_per_charge)
       customers_count = report.percentage(previous_day.sub_customers_count, current_day.sub_customers_count, report.sub_customers_count)
       charge_per_customer = report.percentage(previous_day.charge_per_customer, current_day.charge_per_customer, report.charge_per_customer)

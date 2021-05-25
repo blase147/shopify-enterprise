@@ -18,11 +18,10 @@ module Types
     field :active_customers_percentage, String, null: true
     field :dunned_customers_percentage, String, null: true
     field :cancelled_customers_percentage, String, null: true
-    field :skip_customers, [Types::GraphDataType], null: true
-    field :swap_customers, [Types::GraphDataType], null: true
-    field :swap_customers, [Types::GraphDataType], null: true
-    field :restart_customers, [Types::GraphDataType], null: true
-    field :upsell_customers, [Types::GraphDataType], null: true
+    field :skip_customers, Types::GraphValueType, null: true
+    field :swap_customers, Types::GraphValueType, null: true
+    field :restart_customers, Types::GraphValueType, null: true
+    field :upsell_customers, Types::GraphValueType, null: true
     field :sku_by_customers, [Types::GraphValueType], null: true
     field :billing_frequency, [Types::GraphValueType], null: true
     field :cancellation_reasons, [Types::GraphValueType], null: true

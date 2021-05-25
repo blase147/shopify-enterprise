@@ -35,31 +35,31 @@ class CustomerInsightReportService
     end
   end
 
-  def active_vs_churned_skip_data(range)
+  def active_vs_churned_skip_data
     {
-      active_customers: logs_customer_count('ACTIVE', :skip, range),
-      churned_customers: logs_customer_count('CANCELLED', :skip, range)
+      active_customers: logs_customer_count('ACTIVE', :skip, @range),
+      churned_customers: logs_customer_count('CANCELLED', :skip, @range)
     }
   end
 
-  def active_vs_churned_swap_data(range)
+  def active_vs_churned_swap_data
     {
-      active_customers: logs_customer_count('ACTIVE', :swap, range),
-      churned_customers: logs_customer_count('CANCELLED', :swap, range)
+      active_customers: logs_customer_count('ACTIVE', :swap, @range),
+      churned_customers: logs_customer_count('CANCELLED', :swap, @range)
     }
   end
 
-  def active_vs_churned_restart_data(range)
+  def active_vs_churned_restart_data
     {
-      active_customers: logs_customer_count('ACTIVE', :restart, range),
-      churned_customers: logs_customer_count('CANCELLED', :restart, range)
+      active_customers: logs_customer_count('ACTIVE', :restart, @range),
+      churned_customers: logs_customer_count('CANCELLED', :restart, @range)
     }
   end
 
-  def active_vs_churned_upsell_data(range)
+  def active_vs_churned_upsell_data
     {
-      active_customers: logs_customer_count('ACTIVE', :upsell, range),
-      churned_customers: logs_customer_count('CANCELLED', :upsell, range)
+      active_customers: logs_customer_count('ACTIVE', :upsell, @range),
+      churned_customers: logs_customer_count('CANCELLED', :upsell, @range)
     }
   end
 

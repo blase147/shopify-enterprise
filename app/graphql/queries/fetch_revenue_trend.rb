@@ -50,6 +50,7 @@ module Queries
       sku_by_subscriptions = range_data_service.sku_by_subscriptions
       sku_by_customers = range_data_service.sku_by_customers
       billing_frequency_revenue = range_data_service.billing_frequency_revenue
+      sku_by_frequency = range_data_service.sku_by_frequency
       { total_sales: total_sales, recurring_sales: recurring_sales, mrr: mrr, sales_per_charge: sales_per_charge, refunds: total_refunds,
         new_subscriptions: new_subscriptions, cancelled_subscriptions: cancelled_subscriptions, average_checkout_charge: average_checkout_charge,
         average_recurring_charge: average_recurring_charge, new_customers: new_customers, active_customers: active_customers, churn_rate: churn_rate,
@@ -60,7 +61,7 @@ module Queries
         seven_days_upcoming_charge: seven_days_upcoming_charge, thirty_days_upcoming_charge: thirty_days_upcoming_charge, ninety_days_upcoming_charge: ninety_days_upcoming_charge,
         seven_days_error_charge: seven_days_error_charge, thirty_days_error_charge: thirty_days_error_charge, ninety_days_error_charge: ninety_days_error_charge, recurring_vs_checkout: recurring_vs_checkout,
         same_day_cancelled: same_day_cancelled, sku_by_subscriptions: sku_by_subscriptions, sku_by_revenue: sku_by_revenue,
-        billing_frequency_revenue: billing_frequency_revenue, sku_by_customers: sku_by_customers }
+        billing_frequency_revenue: billing_frequency_revenue, sku_by_customers: sku_by_customers, sku_by_frequency: sku_by_frequency }
     end
   end
 end

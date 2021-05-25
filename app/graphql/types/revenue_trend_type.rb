@@ -38,7 +38,7 @@ module Types
     field :sku_by_subscriptions, [Types::GraphValueType], null: true
     field :sku_by_customers, [Types::GraphValueType], null: true
     field :billing_frequency_revenue, [Types::GraphValueType], null: true
-
+    field :sku_by_frequency, [Types::GraphValueType], null: true
     field :__typename, String, null: true
   end
 end
