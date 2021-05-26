@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useContext } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { gql, useLazyQuery } from '@apollo/client';
 import CounterUp from 'react-countup';
-
+import { FilterContext } from './../common/Contexts/AnalyticsFilterContext';
 import {
   Card,
   FormLayout,
@@ -35,8 +35,8 @@ import dayjs from 'dayjs';
 const CustomerInsights = () => {
 
   const fetchReport = gql`
-  query($startDate:String!,$endDate:String!) {  
-    fetchCustomerInsights(startDate:$startDate,endDate:$endDate) {
+  query($startDate: String!, $endDate: String!) {  
+    fetchCustomerInsights(startDate: $startDate, endDate: $endDate) {
       activeCustomersPercentage
       cancelledCustomersPercentage
       dunnedCustomersPercentage
@@ -119,25 +119,20 @@ const CustomerInsights = () => {
           }
       }
       skipCustomers {
-          data {
-              activeCustomers
-              churnedCustomers
-          }
-          date
+          activeCustomers
+          churnedCustomers
       }
       swapCustomers {
-          data {
-              activeCustomers
-              churnedCustomers
-          }
-          date
+          activeCustomers
+          churnedCustomers
+      }
+      restartCustomers {
+          activeCustomers
+          churnedCustomers
       }
       upsellCustomers {
-          data {
-              activeCustomers
-              churnedCustomers
-          }
-          date
+          activeCustomers
+          churnedCustomers
       }
       skuByCustomers {
           sku
@@ -165,9 +160,9 @@ const CustomerInsights = () => {
       height: '400px',
       // width: '720px',
     },
-    colors:['#0D91AE','#6B97C5','#FFF500','#FFCC00','#E77320','#FF0000','#FF5C00','#212B36','#979797','#007EFF','#00A023','#8000A0','#A0007D','#F4EC19'],
+    colors: ['#007EFF', '#57AAFF', '#979797', '#FFCC00', '#E77320', '#FF0000', '#FF5C00', '#212B36', '#979797', '#007EFF', '#00A023', '#8000A0', '#A0007D', '#F4EC19'],
     title: {
-      text: '2021-02-09',
+      // text: '2021-02-09',
       align: 'center',
       verticalAlign: 'middle',
       // y: 60,
@@ -202,20 +197,113 @@ const CustomerInsights = () => {
         innerSize: '50%',
         showInLegend: true,
         data: [
-          ['Active customers', 60],
-          ['customers in dunning', 18],
-          ['Cancelled', 19],
-          // {
-          //   // name: 'Other',
-          //   y: 7.61,
-          //   dataLabels: {
-          //     enabled: true,
-          //   },
-          // },
+          ['60%', 60],
+          ['18%', 18],
+          ['19%', 19],
         ],
       },
     ],
   };
+  const skuCustomersChart = {
+    colors: ["#0D91AE", "#6B97C5", "#FFF500", "#FFCC00", "#E77320", "#FF0000", "#FF5C00", "#979797", "#007EFF", "#00A023", "#8000A0", "#A0007D", "#F4EC19"],
+    title: {
+      text: 'Top SKUs by Customer Count'
+    },
+    xAxis: {
+      categories: ['SKU 001', 'SKU 002', 'SKU 003', 'SKU 004', 'SKU 005', 'SKU 006', 'SKU 007', 'SKU 008', 'SKU 009', 'SKU 010', 'SKU 011', 'SKU 012', 'SKU 013', 'SKU 014']
+    },
+    yAxis: {
+      title: {
+        text: 'Number of Customers'
+      },
+      labels: {
+        formatter: function () {
+          return this.value;
+        }
+      },
+    },
+    series: [{
+      type: 'column',
+      colorByPoint: true,
+      data: [2078, 44000, 12333, 5666, 9000, 2333, 1111, 23333, 45555, 2222, 2211, 11111, 7999, { y: 123216.4, marker: { fillColor: '#000', radius: 10 } }],
+      showInLegend: false
+    }]
+  }
+  const customerSubscriptionsChart = {
+    colors: ["#007EFF","#007EFF","#007EFF","#007EFF","#212B36","#212B36","#212B36","#212B36" ],
+    chart: {
+      type: 'column',
+    },
+    title: {
+      text: 'Active Subscriptions vs Churned Subscriptions',
+    },
+    xAxis: {
+      categories: ['SKips', 'Swaps', 'Upsells', 'Reactivations','SKips', 'Swaps', 'Upsells', 'Reactivations'],
+    },
+    yAxis: {
+      min: 0,
+      title: {
+        text: 'Number of Customers',
+      },
+    },
+    legend: {
+      align: 'center',
+      alignColumns: true,
+      verticalAlign: 'bottom',
+      shadow: false,
+      squareSymbol: true,
+      symbolRadius: 0
+    },
+    tooltip: {
+      headerFormat: '<b>{point.x}</b><br/>',
+      pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
+    },
+    plotOptions: {
+      column: {
+        stacking: 'normal',
+        // dataLabels: {
+        //   enabled: true,
+        // },
+      },
+    },
+    series: [
+      {
+        color:"#fff",
+        name: 'Active Subscriptions',
+        data: [0, 0, 0, 0, 0, 0, 0, 0],
+      },
+      {
+        color:"#000",
+        name: 'Churned Subscriptions',
+        data: [0, 0, 0, 0, 0, 0, 0, 0],
+      },
+    ],
+  };
+  const cancellationReasonsChart={
+		colors:["#979797"],
+    title: {
+        text: 'Top Cancellation Reasons'
+    },
+    xAxis: {
+        categories: []
+    },
+    yAxis: {
+    title: {
+        text: 'Customers'
+    		},
+    labels: {
+        formatter: function() {
+            return this.value;
+        }
+    	},
+		},
+     series: [{
+        type: 'column',
+        colorByPoint: true,
+        data: [],
+        showInLegend: false
+    }] 
+}
   // Subscriptions Chart
   const DunningChart = {
     chart: {
@@ -249,7 +337,7 @@ const CustomerInsights = () => {
       type: 'column',
     },
     title: {
-      text: 'Dunned Subscription - Active',
+      text: 'Dunned Subscription - Recovered',
     },
     xAxis: {
       categories: ['1', '2', '3'],
@@ -257,7 +345,7 @@ const CustomerInsights = () => {
     yAxis: {
       allowDecimals: false,
       title: {
-        text: 'Subscription Dunned  No Credit Card Risk',
+        text: 'Subscription Dunned No Credit Card Risk',
       },
     },
     exporting: {
@@ -284,7 +372,7 @@ const CustomerInsights = () => {
     yAxis: {
       allowDecimals: false,
       title: {
-        text: 'Subscription Dunned  Passive Churn',
+        text: 'Subscription Dunned Passive Churn',
       },
     },
     exporting: {
@@ -338,66 +426,7 @@ const CustomerInsights = () => {
       },
     ],
   };
-  const CustomerActionChart_2 = {
-    chart: {
-      type: 'column',
-    },
-    title: {
-      text: 'Customers by Skip Count -Active vs Churned',
-    },
-    xAxis: {
-      categories: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10+'],
-    },
-    yAxis: {
-      min: 0,
-      title: {
-        text: 'Number of Customers',
-      },
-    },
-    legend: {
-      align: 'center',
-      alignColumns: true,
-      verticalAlign: 'bottom',
-      shadow: false,
-      squareSymbol: true,
-      symbolRadius: 0,
-    },
-    tooltip: {
-      headerFormat: '<b>{point.x}</b><br/>',
-      pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
-    },
-    plotOptions: {
-      column: {
-        stacking: 'normal',
-        // dataLabels: {
-        //   enabled: true,
-        // },
-      },
-    },
-    series: [
-      {
-        name: 'Active Customers',
-        data: [2600, 300, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      },
-      {
-        name: 'Churned Customers',
-        data: [2600, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      },
-    ],
-  };
-
-  const rows_Customer = [
-    []
-    // [
-    //   1,
-    //   'Active Customers - 0015',
-    //   'SUCCESS',
-    //   'MAX_RETRIES',
-    //   'CARD_ERROR_GENE...',
-    //   '2,609',
-    //   '47.54%',
-    // ]
-  ];
+  
 
   const customerListKeys=[
     {section:"Customer Count",key:"customerCount"},
@@ -505,13 +534,24 @@ const CustomerInsights = () => {
     ['2', 'N', '$125,200', '2'],
   ];
 
-  const [filters,setFilters]=useState({startDate:dayjs(new Date()).subtract(30,'days').format("YYYY-MM-DD"),endDate:dayjs(new Date()).format("YYYY-MM-DD")})
-  const handleFiltersDates=(dates)=>{
-    if(!isEmpty(dates)){
-      const {start,end}=dates;
-      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD")});
-    }
-  }
+  const [chartOptions,setChartOptions]=useState({
+    insightsChart:insightChart,
+    skuCustomersChart:skuCustomersChart,
+    customerSubscriptionsChart:customerSubscriptionsChart,
+    cancellationReasonsChart:cancellationReasonsChart,
+    dunningChart:DunningChart,
+    dunningRecovered:ActiveChart,
+    dunningChurn:ChurnChart
+  })
+
+  const [filters]=useContext(FilterContext)
+  // const [filters,setFilters]=useState({startDate:dayjs(new Date()).subtract(30,'days').format("YYYY-MM-DD"),endDate:dayjs(new Date()).format("YYYY-MM-DD")})
+  // const handleFiltersDates=(dates)=>{
+  //   if(!isEmpty(dates)){
+  //     const {start,end}=dates;
+  //     setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD")});
+  //   }
+  // }
   const [getReport, { loading, data:reportData }] = useLazyQuery(fetchReport,{fetchPolicy:"network-only"});
 
   const getReportData = useCallback(() => {
@@ -541,8 +581,24 @@ const CustomerInsights = () => {
         skipCount,
         swapCount,
         upsellCount,
-        restartCount
+        restartCount,
+        
+        //Pie Data
+        activeCustomersPercentage,
+        cancelledCustomersPercentage,
+        dunnedCustomersPercentage,
 
+        //Charts Data
+        skuByCustomers,
+        cancellationReasons,
+        dunningData,
+        dunningRecoveredData,
+        dunningChurnData,
+        //
+        skipCustomers,
+        swapCustomers,
+        upsellCustomers,
+        restartCustomers
       }=reportData.fetchCustomerInsights;
       //Set Sections Data
       setSectionCustomerList(prevData=>(
@@ -569,16 +625,101 @@ const CustomerInsights = () => {
           restartCount:restartCount || prevData.restartCount
         }
       ))
-      
-      ///
+
+      //Charts Data
+      const { insightsChart, skuCustomersChart, customerSubscriptionsChart, cancellationReasonsChart, dunningChart, dunningRecovered, dunningChurn } = chartOptions;
+
+      const insightChartOptions = {
+        ...insightsChart, series: [{
+          type: 'pie', innerSize: '50%', showInLegend: true, data: [
+            [`${activeCustomersPercentage || '0'}%`, parseInt(activeCustomersPercentage) || 0],
+            [`${dunnedCustomersPercentage || '0'}%`, parseInt(dunnedCustomersPercentage) || 0],
+            [`${cancelledCustomersPercentage || '0'}%`, parseInt(cancelledCustomersPercentage) || 0],],
+        }]
+      }
+
+      const newSkuCustomersChart = {
+        ...skuCustomersChart, xAxis: { categories: skuByCustomers.map(sku => sku.sku) || [] },
+        series: [{
+          type: 'column',
+          colorByPoint: true,
+          data: skuByCustomers.map(sku => parseInt(sku.value || 0)) || [],
+          showInLegend: false
+        }]
+      }
+
+      const newCustomerSubscriptionsChart = {
+        ...customerSubscriptionsChart,
+        series: [{
+          type: 'column',
+          colorByPoint: true,
+          data: [skipCustomers.activeCustomers, swapCustomers.activeCustomers, upsellCustomers.activeCustomers, restartCustomers.activeCustomers, skipCustomers.churnedCustomers, swapCustomers.churnedCustomers, upsellCustomers.churnedCustomers, restartCustomers.churnedCustomers],
+          showInLegend: false
+        }]
+      };
+
+      const newCancellationReasonsChart = {
+        ...cancellationReasonsChart, xAxis: { categories: cancellationReasons.map(val => val.cancellationReason) || [] },
+        series: [{
+          type: 'column',
+          colorByPoint: true,
+          data: cancellationReasons.map(val => parseInt(val.value || 0)) || [],
+          showInLegend: false
+        }]
+      };
+
+      const newDunningChart = {
+        ...dunningChart, xAxis: { categories: dunningData.map(data => data.date) || [], },
+        series: [
+          {
+            name: 'Charge Attempts',
+            data: dunningData.map(data => parseInt(data.data.value) || 0) || [],
+            color: '#258AFF',
+          },
+        ],
+      }
+
+      const newDunningRecovered = {
+        ...dunningRecovered, xAxis: { categories: dunningRecoveredData.map(data => data.date) || [], },
+        series: [
+          {
+            name: 'Charge Attempts',
+            data: dunningRecoveredData.map(data => parseInt(data.data.value) || 0) || [],
+            color: '#258AFF',
+          },
+        ],
+      }
+      const newDunningChurn = {
+        ...dunningChurn, xAxis: { categories: dunningChurnData.map(data => data.date) || [], },
+        series: [
+          {
+            name: 'Charge Attempts',
+            data: dunningChurnData.map(data => parseInt(data.data.value) || 0) || [],
+            color: '#258AFF',
+          },
+        ],
+      }
+
+      setChartOptions({
+        ...chartOptions,
+        insightsChart:insightChartOptions,
+        skuCustomersChart:newSkuCustomersChart,
+        customerSubscriptionsChart:newCustomerSubscriptionsChart,
+        cancellationReasonsChart:newCancellationReasonsChart,
+        dunningChart:newDunningChart,
+        dunningRecovered:newDunningRecovered,
+        dunningChurn:newDunningChurn
+      })
+
     }
+
   },[reportData])
 
 
   return (
     <FormLayout>
       
-      <Layout>
+      {/* <Layout>
         <Layout.Section>
         </Layout.Section>
         <Layout.Section>
@@ -588,7 +729,7 @@ const CustomerInsights = () => {
             handleDates={handleFiltersDates}
           />
         </Layout.Section>
-      </Layout>
+      </Layout> */}
       <Stack vertical spacing="extraLoose">
         <Layout>
           {/* <Layout.Section secondary> */}
@@ -641,7 +782,7 @@ const CustomerInsights = () => {
                 <Card>
                   <HighchartsReact
                     highcharts={Highcharts}
-                    options={insightChart}
+                    options={chartOptions.insightsChart}
                   />
                 </Card>
               </div>
@@ -651,28 +792,32 @@ const CustomerInsights = () => {
         <Layout>
           <Layout.Section>
             <Card>
+              <HighchartsReact
+                highcharts={Highcharts}
+                options={chartOptions.skuCustomersChart}
+              />
+            </Card>
+          </Layout.Section>
+        </Layout>
+        <Layout>
+          <Layout.Section>
+            <Card>
               <Card.Section>
-                <DataTable
-                  columnContentTypes={[
-                    'numeric',
-                    'text',
-                    'text',
-                    'text',
-                    'text',
-                    'text',
-                    'text',
-                  ]}
-                  headings={[
-                    ' ',
-                    'Churn Category',
-                    'Status',
-                    'Parent Error Category',
-                    'Error Type',
-                    'Total Customers',
-                    '%',
-                  ]}
-                  rows={rows_Customer}
-                  hideScrollIndicator={true}
+                <HighchartsReact
+                  highcharts={Highcharts}
+                  options={chartOptions.insightsChart}
+                />
+              </Card.Section>
+            </Card>
+          </Layout.Section>
+        </Layout>
+        <Layout>
+          <Layout.Section>
+            <Card>
+              <Card.Section>
+                <HighchartsReact
+                  highcharts={Highcharts}
+                  options={chartOptions.customerSubscriptionsChart}
                 />
               </Card.Section>
             </Card>
@@ -726,23 +871,31 @@ const CustomerInsights = () => {
                 <FormLayout.Group>
                   <HighchartsReact
                     highcharts={Highcharts}
-                    options={DunningChart}
+                    options={chartOptions.dunningChart}
                   />
                 </FormLayout.Group>
                 <FormLayout.Group>
                   <HighchartsReact
                     highcharts={Highcharts}
-                    options={ActiveChart}
+                    options={chartOptions.dunningRecovered}
                   />
                 </FormLayout.Group>
                 <FormLayout.Group>
                   <HighchartsReact
                     highcharts={Highcharts}
-                    options={ChurnChart}
+                    options={chartOptions.dunningChurn}
                   />
                 </FormLayout.Group>
               </div>
             </Card>
+          </Layout.Section>
+        </Layout>
+        <Layout>
+          <Layout.Section>
+            <HighchartsReact
+              highcharts={Highcharts}
+              options={chartOptions.cancellationReasonsChart}
+            />
           </Layout.Section>
         </Layout>
         <Layout>
@@ -794,7 +947,7 @@ const CustomerInsights = () => {
               </Layout.Section>
             </div>
             {/* </Layout.Section> */}
-            <div className="container-right">
+            {/* <div className="container-right">
               <Layout.Section>
                 <Card>
                   <HighchartsReact
@@ -807,7 +960,7 @@ const CustomerInsights = () => {
                   />
                 </Card>
               </Layout.Section>
-            </div>
+            </div> */}
           </div>
         </Layout>
         <Layout>
