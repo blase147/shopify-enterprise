@@ -27,7 +27,7 @@ module Queries
       total_sales = data_service.calculate_percentage(yesterday_range_data_service.get_total_sales, today_range_data_service.get_total_sales, range_data_service.get_total_sales)
       recurring_sales = data_service.calculate_percentage(yesterday_range_data_service.recurring_sales, today_range_data_service.recurring_sales, range_data_service.recurring_sales)
       mrr = data_service.calculate_percentage(yesterday_range_data_service.mrr(yesterday_subscriptions), today_range_data_service.mrr(today_subscriptions), range_data_service.mrr(in_period_subscriptions))
-      sales_per_charge = range_data_service.sales_per_charge
+      sales_per_charge = data_service.calculate_percentage(yesterday_range_data_service.sales_per_charge, today_range_data_service.sales_per_charge, range_data_service.sales_per_charge)
       total_refunds = data_service.calculate_percentage(yesterday_range_data_service.refunded_amount(yesterday_orders), today_range_data_service.refunded_amount(today_orders), range_data_service.refunded_amount(orders))
       new_subscriptions = data_service.calculate_percentage(yesterday_range_data_service.in_period_subscriptions(yesterday_subscriptions, yesterday_range, 'ACTIVE').count, today_range_data_service.in_period_subscriptions(today_subscriptions, today_range, 'ACTIVE').count, range_data_service.in_period_subscriptions(subscriptions, range, 'ACTIVE').count)
       cancelled_subscriptions = data_service.calculate_percentage(yesterday_range_data_service.in_period_subscriptions(yesterday_subscriptions, yesterday_range, 'CANCELLED').count, today_range_data_service.in_period_subscriptions(today_subscriptions, today_range, 'CANCELLED').count, range_data_service.in_period_subscriptions(subscriptions, range, 'CANCELLED').count)

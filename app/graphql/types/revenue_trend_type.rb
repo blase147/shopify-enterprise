@@ -3,7 +3,7 @@ module Types
     field :total_sales, Types::GraphValueType, null: true
     field :recurring_sales, Types::GraphValueType, null: true
     field :mrr, Types::GraphValueType, null: true
-    field :sales_per_charge, String, null: true
+    field :sales_per_charge, Types::GraphValueType, null: true
     field :refunds, Types::GraphValueType, null: true
     field :average_checkout_charge, Types::GraphValueType, null: true
     field :average_recurring_charge, Types::GraphValueType, null: true

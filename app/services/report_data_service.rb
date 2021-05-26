@@ -21,7 +21,7 @@ class ReportDataService
 
   def get_churn_rate(subscriptions, range)
     customer_at_period_start = in_period_subscriptions(subscriptions, range.first - 1.year..range.first - 1.day, 'ACTIVE').count
-    cancelled_customer_in_period = in_period_subscriptions(subscriptions, range, 'CANCELLED').count
+    cancelled_customer_in_period = in_period_cancelled_subscriptions(subscriptions, range, 'CANCELLED').count
     (cancelled_customer_in_period * 100) / customer_at_period_start rescue 0
     # (get_subscriptions_count(subscriptions_in_period, 'ACTIVE') * 100) / subscriptions.count
   end
@@ -97,6 +97,10 @@ class ReportDataService
 
   def in_period_subscriptions(subscriptions, range, status = nil)
     subscriptions.select { |subscription| range.cover?(subscription.node.created_at.to_date) && (status ? subscription.node.status == status : true) }
+  end
+
+  def in_period_cancelled_subscriptions(subscriptions, range, status = nil)
+    subscriptions.select { |subscription| range.cover?(SubscriptionContract.find_by(:status=>"CANCELLED", :shopify_id=>subscription.node.id)&.cancelled_at) && (status ? subscription.node.status == status : true) }
   end
 
   def in_period_hourly_subscriptions(subscriptions, range, status = nil)
