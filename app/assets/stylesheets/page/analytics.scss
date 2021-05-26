@@ -83,6 +83,41 @@
   .Polaris-Layout__Section--secondary {
     margin-top: -0.1rem;
   }
+
+  .frequency-graph-revenue {
+    .Polaris-Card__Section {
+      display: flex;
+      align-items: center;
+    }
+  }
+  .frequency-graph-parameters {
+    display: grid;
+    justify-content: space-between;
+    padding: 0px 18px;
+    flex-direction: column;
+    > div {
+      display: flex;
+      margin-top: 26px;
+      grid-template-columns: auto auto;
+      div {
+        width: 41px;
+        height: 17px;
+      }
+      p {
+        margin-left: 28px;
+        white-space: nowrap;
+      }
+    }
+    .active-color {
+      background-color: #007EFF;
+    }
+    .dunning-color {
+      background-color: #57AAFF;
+    }
+    .cancel-color {
+      background-color: #979797;
+    }
+  }
   // customer insight
   .customer-insight {
     // thead {
@@ -98,8 +133,69 @@
     .container-left {
       width: 28%;
     }
+    .frequency-graph {
+      .Polaris-Card__Section {
+        display: grid;
+        grid-template-columns: 20% 80%;
+        align-items: center;
+      }
+    }
+
     .container-right {
       width: 72%;
+      .card-chart {
+       
+        .Polaris-Card {
+          justify-content: center;
+          flex-direction: column;
+          overflow: hidden;
+          .card-graph-parameters {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            padding: 0px 18px;
+            > div {
+              display: flex;
+              div {
+                width: 41px;
+                height: 17px;
+              }
+              p {
+                margin-left: 28px;
+              }
+            }
+            .active-color {
+              background-color: #007EFF;
+            }
+            .dunning-color {
+              background-color: #57AAFF;
+            }
+            .cancel-color {
+              background-color: #979797;
+            }
+          }
+        }
+      }
+    }
+    .customer-count {
+      .count-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 25px;
+        margin-top: 7px;
+      }
+      .Polaris-Layout__Section {
+        .Polaris-Stack {
+          > .Polaris-Stack__Item:first-child {
+            margin-top: 0px;
+          }
+        }
+      }
+     
+      
     }
 
     .last {
