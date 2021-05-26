@@ -12,8 +12,8 @@ module Types
     field :active_customers, Types::GraphValueType, null: true
     field :new_subscriptions, Types::GraphValueType, null: true
     field :cancelled_subscriptions, Types::GraphValueType, null: true
+    field :same_day_cancelled, Types::GraphValueType, null: true
 
-    field :same_day_cancelled, String, null: true
     field :total_sales_data, [Types::GraphDataType], null: true
     field :refunds_data, [Types::GraphDataType], null: true
     field :active_customers_data, [Types::GraphDataType], null: true

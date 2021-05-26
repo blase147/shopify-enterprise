@@ -36,13 +36,13 @@ module Queries
       new_customers = data_service.calculate_percentage(yesterday_range_data_service.new_customers, today_range_data_service.new_customers, range_data_service.new_customers)
       active_customers = data_service.calculate_percentage(yesterday_range_data_service.customers_in_range(yesterday_range), today_range_data_service.customers_in_range(today_range), range_data_service.customers_in_range(range))
       churn_rate = data_service.calculate_percentage(yesterday_range_data_service.get_churn_rate(yesterday_subscriptions, yesterday_range), today_range_data_service.get_churn_rate(today_subscriptions, today_range), range_data_service.get_churn_rate(subscriptions, range))
+      same_day_cancelled = data_service.calculate_percentage(yesterday_range_data_service.same_day_cancelled, today_range_data_service.same_day_cancelled, range_data_service.same_day_cancelled)
 
       active_vs_churned_data = range_data_service.graph_data_by_granularity(:active_vs_churned_data)
       total_sales_data = range_data_service.graph_data_by_granularity(:total_sales_data)
       refunds_data = range_data_service.graph_data_by_granularity(:refunds_data)
       active_customers_data = range_data_service.graph_data_by_granularity(:active_customers_data)
       new_vs_cancelled_data = range_data_service.graph_data_by_granularity(:new_vs_cancelled_data)
-      same_day_cancelled = range_data_service.same_day_cancelled
       estimated_seven_days = data_service.get_upcoming_revenue(7)
       estimated_thirty_days = data_service.get_upcoming_revenue(30)
       estimated_ninety_days = (data_service.get_upcoming_revenue(30) * 3).to_f.round(2)
