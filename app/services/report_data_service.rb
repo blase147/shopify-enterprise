@@ -53,7 +53,7 @@ class ReportDataService
     subscriptions_in_period = in_period_subscriptions(subscriptions, date.beginning_of_month..date.end_of_month)
     cancelled_subscriptions_revenue = subscriptions_in_period.sum { |subscription| subscription.node.status == 'CANCELLED' ? get_orders_total_amount(subscription) : 0 }
     order_total = subscriptions_in_period.sum { |subscription| get_orders_total_amount(subscription) }
-    (order_total - (order_total - cancelled_subscriptions_revenue)) / order_total rescue 0
+    ((order_total - (order_total - cancelled_subscriptions_revenue)) / order_total) * 100 rescue 0
   end
 
   def sales_data_by_date(date, subscriptions)
@@ -90,9 +90,9 @@ class ReportDataService
   end
 
   def renewal_data_by_date(date, subscriptions)
-    current_month_subscriptions = in_period_subscriptions(subscriptions, date.beginning_of_month..date.end_of_month, 'ACTIVE')
-    renewed_subscriptions = current_month_subscriptions.sum { |subscription| subscription.node.orders.edges.count > 1 && (subscription_orders_in_range(subscription, date).size > 1) ? 1 : 0  }
-    renewed_subscriptions / current_month_subscriptions.count rescue 0
+    pending_for_renewal = subscriptions.count { |subscription| subscription.node.next_billing_date.to_date.between?(date.beginning_of_month, date.end_of_month) }
+    renewed_subscriptions = subscriptions.count { |subscription| subscription.node.orders.edges.count > 1 && (subscription_orders_in_range(subscription, date) > 1)  }
+    (renewed_subscriptions / pending_for_renewal) * 100 rescue 0
   end
 
   def in_period_subscriptions(subscriptions, range, status = nil)
@@ -104,7 +104,7 @@ class ReportDataService
   end
 
   def subscription_orders_in_range(subscription, date)
-    subscription.node.orders.edges.select { |order| date.beginning_of_month..date.end_of_month.cover?(order.node.created_at.to_date) }
+    subscription.node.orders.edges.count { |order| order.node.created_at.to_date.between?(date.beginning_of_month, date.end_of_month) }
   end
 
   # Revenue Trends
@@ -118,7 +118,7 @@ class ReportDataService
   end
 
   def recurring_sales
-    ((@subscriptions.sum { |subscription| get_orders_total_amount(subscription) } / get_total_sales) * 100).to_f.round(2)
+    get_total_sales.zero? ? 0 : ((@subscriptions.sum { |subscription| get_orders_total_amount(subscription) } / get_total_sales) * 100).to_f.round(2)
   end
 
   def sales_per_charge
