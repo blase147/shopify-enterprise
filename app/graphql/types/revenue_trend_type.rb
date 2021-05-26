@@ -1,17 +1,18 @@
 module Types
   class RevenueTrendType < Types::BaseObject
-    field :total_sales, String, null: true
-    field :recurring_sales, String, null: true
-    field :mrr, String, null: true
+    field :total_sales, Types::GraphValueType, null: true
+    field :recurring_sales, Types::GraphValueType, null: true
+    field :mrr, Types::GraphValueType, null: true
     field :sales_per_charge, String, null: true
-    field :refunds, String, null: true
-    field :average_checkout_charge, String, null: true
-    field :average_recurring_charge, String, null: true
-    field :churn_rate, String, null: true
-    field :new_customers, String, null: true
-    field :active_customers, String, null: true
-    field :new_subscriptions, String, null: true
-    field :cancelled_subscriptions, String, null: true
+    field :refunds, Types::GraphValueType, null: true
+    field :average_checkout_charge, Types::GraphValueType, null: true
+    field :average_recurring_charge, Types::GraphValueType, null: true
+    field :churn_rate, Types::GraphValueType, null: true
+    field :new_customers, Types::GraphValueType, null: true
+    field :active_customers, Types::GraphValueType, null: true
+    field :new_subscriptions, Types::GraphValueType, null: true
+    field :cancelled_subscriptions, Types::GraphValueType, null: true
+
     field :same_day_cancelled, String, null: true
     field :total_sales_data, [Types::GraphDataType], null: true
     field :refunds_data, [Types::GraphDataType], null: true

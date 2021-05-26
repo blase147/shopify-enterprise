@@ -8,22 +8,35 @@ module Queries
       orders_service = OrdersService.new(current_shop)
       subscriptions = ReportService.new.all_subscriptions
       data_service = ReportDataService.new(subscriptions)
+
       range = start_date.to_date..end_date.to_date
       orders = orders_service.orders_in_range(range.first, range.last, 'id,refunds,created_at,current_total_price_set,total_shipping_price_set,source_name')
       in_period_subscriptions = data_service.in_period_subscriptions(subscriptions, range)
       range_data_service = ReportDataService.new(in_period_subscriptions, orders, range)
-      total_sales = range_data_service.get_total_sales.to_f.round(2)
-      recurring_sales = range_data_service.recurring_sales
-      mrr = range_data_service.mrr(in_period_subscriptions)
+
+      today_range = Time.current.beginning_of_day..Date.today
+      today_orders = orders_service.orders_in_range(today_range.first, today_range.last, 'id,refunds,created_at,current_total_price_set,total_shipping_price_set,source_name')
+      today_subscriptions = data_service.in_period_hourly_subscriptions(subscriptions, today_range)
+      today_range_data_service = ReportDataService.new(today_subscriptions, today_orders, today_range)
+
+      yesterday_range = Time.current.yesterday.beginning_of_day..Time.current.yesterday.end_of_day
+      yesterday_orders = orders_service.orders_in_range(yesterday_range.first, yesterday_range.last, 'id,refunds,created_at,current_total_price_set,total_shipping_price_set,source_name')
+      yesterday_subscriptions = data_service.in_period_hourly_subscriptions(subscriptions, yesterday_range)
+      yesterday_range_data_service = ReportDataService.new(yesterday_subscriptions, yesterday_orders, yesterday_range)
+
+      total_sales = data_service.calculate_percentage(yesterday_range_data_service.get_total_sales, today_range_data_service.get_total_sales, range_data_service.get_total_sales)
+      recurring_sales = data_service.calculate_percentage(yesterday_range_data_service.recurring_sales, today_range_data_service.recurring_sales, range_data_service.recurring_sales)
+      mrr = data_service.calculate_percentage(yesterday_range_data_service.mrr(yesterday_subscriptions), today_range_data_service.mrr(today_subscriptions), range_data_service.mrr(in_period_subscriptions))
       sales_per_charge = range_data_service.sales_per_charge
-      total_refunds = range_data_service.refunded_amount(orders)
-      new_subscriptions = range_data_service.in_period_subscriptions(subscriptions, range, 'ACTIVE').count
-      cancelled_subscriptions = range_data_service.in_period_subscriptions(subscriptions, range, 'CANCELLED').count
-      average_checkout_charge = range_data_service.average_checkout_charge.to_f.round(2)
-      average_recurring_charge = range_data_service.average_recurring_charge.to_f.round(2)
-      new_customers = range_data_service.new_customers
-      active_customers = range_data_service.customers_in_range(range)
-      churn_rate = range_data_service.get_churn_rate(subscriptions, range)
+      total_refunds = data_service.calculate_percentage(yesterday_range_data_service.refunded_amount(yesterday_orders), today_range_data_service.refunded_amount(today_orders), range_data_service.refunded_amount(orders))
+      new_subscriptions = data_service.calculate_percentage(yesterday_range_data_service.in_period_subscriptions(yesterday_subscriptions, yesterday_range, 'ACTIVE').count, today_range_data_service.in_period_subscriptions(today_subscriptions, today_range, 'ACTIVE').count, range_data_service.in_period_subscriptions(subscriptions, range, 'ACTIVE').count)
+      cancelled_subscriptions = data_service.calculate_percentage(yesterday_range_data_service.in_period_subscriptions(yesterday_subscriptions, yesterday_range, 'CANCELLED').count, today_range_data_service.in_period_subscriptions(today_subscriptions, today_range, 'CANCELLED').count, range_data_service.in_period_subscriptions(subscriptions, range, 'CANCELLED').count)
+      average_checkout_charge = data_service.calculate_percentage(yesterday_range_data_service.average_checkout_charge, today_range_data_service.average_checkout_charge, range_data_service.average_checkout_charge)
+      average_recurring_charge = data_service.calculate_percentage(yesterday_range_data_service.average_recurring_charge, today_range_data_service.average_recurring_charge, range_data_service.average_recurring_charge)
+      new_customers = data_service.calculate_percentage(yesterday_range_data_service.new_customers, today_range_data_service.new_customers, range_data_service.new_customers)
+      active_customers = data_service.calculate_percentage(yesterday_range_data_service.customers_in_range(yesterday_range), today_range_data_service.customers_in_range(today_range), range_data_service.customers_in_range(range))
+      churn_rate = data_service.calculate_percentage(yesterday_range_data_service.get_churn_rate(yesterday_subscriptions, yesterday_range), today_range_data_service.get_churn_rate(today_subscriptions, today_range), range_data_service.get_churn_rate(subscriptions, range))
+
       active_vs_churned_data = range_data_service.graph_data_by_granularity(:active_vs_churned_data)
       total_sales_data = range_data_service.graph_data_by_granularity(:total_sales_data)
       refunds_data = range_data_service.graph_data_by_granularity(:refunds_data)
