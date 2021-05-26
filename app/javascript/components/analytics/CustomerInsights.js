@@ -162,7 +162,7 @@ const CustomerInsights = () => {
     },
     colors: ['#007EFF', '#57AAFF', '#979797', '#FFCC00', '#E77320', '#FF0000', '#FF5C00', '#212B36', '#979797', '#007EFF', '#00A023', '#8000A0', '#A0007D', '#F4EC19'],
     title: {
-      // text: '2021-02-09',
+       text: '',
       align: 'center',
       verticalAlign: 'middle',
       // y: 60,
@@ -229,6 +229,58 @@ const CustomerInsights = () => {
       showInLegend: false
     }]
   }
+  const customersFrequency = {
+    chart: {
+      plotBackgroundColor: null,
+      plotBorderWidth: 0,
+      plotShadow: false,
+      height: '400px',
+      // width: '720px',
+    },
+    colors: ['#007EFF', '#57AAFF', '#979797', '#FFCC00', '#E77320', '#FF0000', '#FF5C00', '#212B36', '#979797', '#007EFF', '#00A023', '#8000A0', '#A0007D', '#F4EC19'],
+    title: {
+       text: 'Customers by Subscription Frequency',
+      // align: 'center',
+      // verticalAlign: 'middle',
+      // y: 60,
+    },
+    tooltip: {
+      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+    },
+    accessibility: {
+      point: {
+        valueSuffix: '%',
+      },
+    },
+    plotOptions: {
+      pie: {
+        dataLabels: {
+          enabled: true,
+          distance: -50,
+          style: {
+            fontWeight: 'bold',
+            color: 'white',
+          },
+        },
+
+        center: ['50%', '50%'],
+        size: '110%',
+      },
+    },
+    series: [
+      {
+        type: 'pie',
+        name: 'Frequency',
+        innerSize: '50%',
+        showInLegend: true,
+        data: [
+          ['1 week', 60],
+          ['12 weeks', 18],
+          ['4 weeks', 19],
+        ],
+      },
+    ],
+  };
   const customerSubscriptionsChart = {
     colors: ["#007EFF","#007EFF","#007EFF","#007EFF","#212B36","#212B36","#212B36","#212B36" ],
     chart: {
@@ -541,7 +593,8 @@ const CustomerInsights = () => {
     cancellationReasonsChart:cancellationReasonsChart,
     dunningChart:DunningChart,
     dunningRecovered:ActiveChart,
-    dunningChurn:ChurnChart
+    dunningChurn:ChurnChart,
+    customersFrequencyChart:customersFrequency
   })
 
   const [filters]=useContext(FilterContext)
@@ -587,7 +640,7 @@ const CustomerInsights = () => {
         activeCustomersPercentage,
         cancelledCustomersPercentage,
         dunnedCustomersPercentage,
-
+        billingFrequency,
         //Charts Data
         skuByCustomers,
         cancellationReasons,
@@ -627,17 +680,21 @@ const CustomerInsights = () => {
       ))
 
       //Charts Data
-      const { insightsChart, skuCustomersChart, customerSubscriptionsChart, cancellationReasonsChart, dunningChart, dunningRecovered, dunningChurn } = chartOptions;
+      const { insightsChart, skuCustomersChart,customersFrequencyChart, customerSubscriptionsChart, cancellationReasonsChart, dunningChart, dunningRecovered, dunningChurn } = chartOptions;
 
       const insightChartOptions = {
         ...insightsChart, series: [{
           type: 'pie', innerSize: '50%', showInLegend: true, data: [
-            [`${activeCustomersPercentage || '0'}%`, parseInt(activeCustomersPercentage) || 0],
-            [`${dunnedCustomersPercentage || '0'}%`, parseInt(dunnedCustomersPercentage) || 0],
-            [`${cancelledCustomersPercentage || '0'}%`, parseInt(cancelledCustomersPercentage) || 0],],
+            [`active`, parseInt(activeCustomersPercentage) || 0],
+            [`dunned`, parseInt(dunnedCustomersPercentage) || 0],
+            [`cancelled`, parseInt(cancelledCustomersPercentage) || 0],],
         }]
       }
 
+      const newcustomersFrequency={...customersFrequencyChart,series: [{
+        type: 'pie', innerSize: '50%', showInLegend: true, data: billingFrequency.map(f=>[f.billingPolicy,parseInt(f.value) || 0])
+      }]
+    }
       const newSkuCustomersChart = {
         ...skuCustomersChart, xAxis: { categories: skuByCustomers.map(sku => sku.sku) || [] },
         series: [{
@@ -704,6 +761,7 @@ const CustomerInsights = () => {
         ...chartOptions,
         insightsChart:insightChartOptions,
         skuCustomersChart:newSkuCustomersChart,
+        customersFrequencyChart:newcustomersFrequency,
         customerSubscriptionsChart:newCustomerSubscriptionsChart,
         cancellationReasonsChart:newCancellationReasonsChart,
         dunningChart:newDunningChart,
@@ -805,7 +863,7 @@ const CustomerInsights = () => {
               <Card.Section>
                 <HighchartsReact
                   highcharts={Highcharts}
-                  options={chartOptions.insightsChart}
+                  options={chartOptions.customersFrequencyChart}
                 />
               </Card.Section>
             </Card>
@@ -963,7 +1021,7 @@ const CustomerInsights = () => {
             </div> */}
           </div>
         </Layout>
-        <Layout>
+        {/* <Layout>
           <Layout.Section>
             <Stack wrap={false} distribution="trailing">
               <Layout.Section>
@@ -990,7 +1048,7 @@ const CustomerInsights = () => {
               </Layout.Section>
             </Stack>
           </Layout.Section>
-        </Layout>
+        </Layout> */}
       </Stack>
     </FormLayout>
   );

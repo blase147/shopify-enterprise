@@ -1,40 +1,17 @@
 import { gql, useLazyQuery } from '@apollo/client';
 import {
   Button, Card,
-
-
-
-
-
-
-
-
-
-
-
   DataTable, DisplayText, FormLayout,
-
-
-
-
-
-
-
-
-
   Heading, Layout,
-
-
-
   Select, Stack,
-
-
   TextField,
-
-  TextStyle
+  TextStyle,
+  Icon
 } from '@shopify/polaris';
 import {
-  DropdownMinor
+  DropdownMinor,
+  CaretUpMinor,
+  CaretDownMinor,
 } from '@shopify/polaris-icons';
 import dayjs from 'dayjs';
 import Highcharts from 'highcharts';
@@ -51,7 +28,7 @@ const RevenueTrends = () => {
   const [selected_1, setSelected_1] = useState('today');
   const handleSelectChange_1 = useCallback((value) => setSelected_1(value), []);
 
-  const [filters,setFilters]=useContext(FilterContext)
+  const [filters,setFilters,productCharts,setProductCharts]=useContext(FilterContext)
   const handleFiltersDates=(dates)=>{
     if(!isEmpty(dates)){
       const {start,end}=dates;
@@ -70,19 +47,71 @@ const RevenueTrends = () => {
   const fetchReport = gql`
   query($startDate: String!, $endDate: String!) {  
     fetchRevenueTrend(startDate: $startDate, endDate: $endDate) {
-        totalSales
-        recurringSales
-        salesPerCharge
-        mrr
-        refunds
-        averageCheckoutCharge
-        averageRecurringCharge
-        churnRate
-        newCustomers
-        activeCustomers
-        newSubscriptions
-        cancelledSubscriptions
-        sameDayCancelled
+        totalSales {
+          value
+          percent
+          up
+        }
+        recurringSales {
+          value
+          percent
+          up
+        }
+        salesPerCharge {
+          value
+          percent
+          up
+        }
+        mrr {
+          value
+          percent
+          up
+        }
+        refunds {
+          value
+          percent
+          up
+        }
+        averageCheckoutCharge {
+          value
+          percent
+          up
+        }
+        averageRecurringCharge {
+          value
+          percent
+          up
+        }
+        churnRate {
+          value
+          percent
+          up
+        }
+        newCustomers {
+          value
+          percent
+          up
+        }
+        activeCustomers {
+          value
+          percent
+          up
+        }
+        newSubscriptions {
+          value
+          percent
+          up
+        }
+        cancelledSubscriptions {
+          value
+          percent
+          up
+        }
+        sameDayCancelled {
+          value
+          percent
+          up
+        }
         activeVsChurnedData {
             date
             data {
@@ -131,6 +160,10 @@ const RevenueTrends = () => {
         skuByRevenue {
             sku
             value
+        }
+        skuByCustomers {
+          sku
+          value
         }
         billingFrequencyRevenue {
             billingPolicy
@@ -428,7 +461,7 @@ const SaleChart = {
         },
       },
       title: {
-        text: 'Total Sales',
+        text: 'Charge Count',
         style: {
           color: '#202b35',
         },
@@ -437,7 +470,7 @@ const SaleChart = {
     {
       // Secondary yAxis
       title: {
-        text: 'Charge Count',
+        text: 'Total Sales',
         style: {
           color: '#202b35',
         },
@@ -460,16 +493,16 @@ const SaleChart = {
   series: [
     {
       name: 'Charge Count',
-      type: 'column',
+      type: 'spline',
       yAxis: 1,
       data: [],
-      color: '#007ffa',
+      color: '#00a030',
     },
     {
       name: 'Total Sales',
-      type: 'spline',
+      type: 'column',
       data: [],
-      color: '#00a030',
+      color: '#007ffa',
     },
   ],
 };
@@ -650,11 +683,21 @@ const rows_Charges = [
 ];
 /// Functionality
   const [cardData, setCardData] = useState({
-    totalSales: "0", recurringSales: "0", salesPerCharge: "0", refunds: "0",
-    averageCheckoutCharge: "0", averageRecurringCharge: "0",
-    churnRate: "0", activeCustomers: "0", newCustomers: "0",
-    newSubscriptions: "0", cancelledSubscriptions: "0", sameDayCancelled: "0",
-    estimatedNinetyDays: "0", estimatedSevenDays: "0", estimatedThirtyDays: "0",
+    totalSales: {value:"0",up:true,percent:0},
+    recurringSales: {value:"0",up:true,percent:0},
+    mrr: {value:"0",up:true,percent:0},
+    refunds: {value:"0",up:true,percent:0},
+    averageCheckoutCharge: {value:"0",up:true,percent:0},
+    averageRecurringCharge: {value:"0",up:true,percent:0},
+    churnRate: {value:"0",up:true,percent:0},
+    activeCustomers: {value:"0",up:true,percent:0},
+    newCustomers: {value:"0",up:true,percent:0},
+    newSubscriptions: {value:"0",up:true,percent:0},
+    cancelledSubscriptions: {value:"0",up:true,percent:0},
+    sameDayCancelled: {value:"0",up:true,percent:0},
+    estimatedNinetyDays: "0",
+    estimatedSevenDays: "0", 
+    estimatedThirtyDays: "0",
   })
 
   const [chartOptions,setChartOptions]=useState({
@@ -701,6 +744,7 @@ const rows_Charges = [
         totalSales,
         recurringSales,
         salesPerCharge,
+        mrr,
         refunds,
         averageCheckoutCharge,
         averageRecurringCharge,
@@ -727,6 +771,9 @@ const rows_Charges = [
 
         skuByRevenue,
         skuBySubscriptions,
+        skuByCustomers,
+        skuByFrequency,
+        billingFrequencyRevenue,
         ////tablesData
         //Revenue table
         sevenDaysErrorRevenue,
@@ -741,12 +788,19 @@ const rows_Charges = [
         ninetyDaysErrorCharge
       }=data.fetchRevenueTrend;
 
+      //Setting charts for product page
+      setProductCharts({
+        skuByRevenue,
+        skuBySubscriptions,
+        skuByCustomers,
+        skuByFrequency,
+      })
       //setting cards data ....
       setCardData({
         ...cardData,
         totalSales:totalSales,
         recurringSales:recurringSales,
-        salesPerCharge:salesPerCharge,
+        mrr:mrr,
         refunds:refunds,
         averageCheckoutCharge:averageCheckoutCharge,
         averageRecurringCharge:averageRecurringCharge,
@@ -815,20 +869,34 @@ const rows_Charges = [
       const newSalesData={
         ...chartOptions.saleChart,
         xAxis: {categories: totalSalesData.map(data=>data.date),crosshair: true, angle: 90,},
+        
         series: [
           {
             name: 'Charge Count',
-            type: 'column',
+            type: 'spline',
             yAxis: 1,
             data: totalSalesData.map(data=>parseInt(data.data?.chargeCount || "0")),
-            color: '#007ffa',
+            color: '#00a030',
           },
           {
             name: 'Total Sales',
-            type: 'spline',
+            type: 'column',
             data: totalSalesData.map(data=>parseInt(data.data.value)),
-            color: '#00a030',
+            color: '#007ffa',
           },
+          // {
+          //   name: 'Charge Count',
+          //   type: 'column',
+          //   yAxis: 1,
+          //   data: totalSalesData.map(data=>parseInt(data.data?.chargeCount || "0")),
+          //   color: '#007ffa',
+          // },
+          // {
+          //   name: 'Total Sales',
+          //   type: 'spline',
+          //   data: totalSalesData.map(data=>parseInt(data.data.value)),
+          //   color: '#00a030',
+          // },
         ]
       }
 
@@ -900,6 +968,10 @@ const rows_Charges = [
         data: skuBySubscriptions.map(sku=>parseInt(sku.value ||0)) || [],
         showInLegend: false
     }] }
+    const insightChartOptions = {
+      ...chartOptions.insightsChart, series: [{
+        type: 'pie', innerSize: '50%', showInLegend: true, data:billingFrequencyRevenue.map(f=>[f.billingPolicy,parseInt(f.value) || 0])}]
+    }
       //// set New Chart Options
       setChartOptions({
         ...chartOptions,
@@ -911,7 +983,8 @@ const rows_Charges = [
         estimatedChart:newEstimatedData,
         checkoutChart:newCheckoutChartData,
         skuRevenueChart:newSkuRevenue,
-        skuSubscriptionsChart:newSkuSubscriptions
+        skuSubscriptionsChart:newSkuSubscriptions,
+        insightChart:insightChartOptions
       });
       // tables Data
       const newRevenueTable=[
@@ -944,16 +1017,16 @@ const rows_Charges = [
   ];
 
   const sectionRevenueList = [
-    { section: 'Total Sales', percent: '24', up: true,key:"totalSales" ,type:"currency" },
+    { section: 'Total Sales', percent: '24', up: true,key:"totalSales" ,prefix:"$"},
     {
       section: 'Recurring Sales',
       percent: '1',
       up: false,
       key:"recurringSales",
-      type:"percent"
+      suffix:"%"
     },
-    { section: 'Sales Per Charge', percent: '2', up: true,key:"salesPerCharge", type:"currency" },
-    { section: 'Total Refunds', percent: '2', up: false, key:"refunds", type:"currency"},
+    { section: 'MRR', percent: '2', up: true,key:"mrr", prefix:"$" },
+    { section: 'Total Refunds', percent: '2', up: false, key:"refunds", prefix:"$"},
   ];
 
   const sectionSummaryList = [
@@ -1192,7 +1265,7 @@ const rows_Charges = [
                     <>
                         <DateRangePicker
                           start={filters.startDate}
-                          endDate={filters.endDate}
+                          end={filters.endDate}
                           handleDates={handleFiltersDates}
                         />
                     </>
@@ -1216,24 +1289,24 @@ const rows_Charges = [
                             {item.section}
                           </TextStyle>
                         </Stack.Item>
-                        {/* <Stack.Item>
+                        <Stack.Item>
                           <TextStyle
-                            variation={item.up ? 'positive' : 'negative'}
+                            variation={cardData[item.key]?.up ? 'positive' : 'negative'}
                           >
                             <Icon
-                              source={item.up ? CaretUpMinor : CaretDownMinor}
-                              color={item.up ? 'green' : 'red'}
+                              source={cardData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                              color={cardData[item.key]?.up ? 'green' : 'red'}
                             />
-                            {item.percent}%
+                            {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}%
                           </TextStyle>
-                        </Stack.Item> */}
+                        </Stack.Item>
                       </Stack>
 
                       <Stack>
                         <Stack.Item>
                           <DisplayText size="medium">
                             <TextStyle variation="strong">
-                             <CounterUp prefix={item.type=="currency"?"$":""} suffix={item.type=="percent"?"%":""} start={0} end={Number.parseFloat(cardData[item.key]).toFixed(2)} duration={1.5} decimals={2} />
+                             <CounterUp prefix={item.prefix || ''} suffix={item.suffix || ''} start={0} end={Number.parseFloat(cardData[item.key]?.value || 0).toFixed(2)} duration={1.5} decimals={2} />
                             </TextStyle>
                           </DisplayText>
                         </Stack.Item>
@@ -1392,23 +1465,23 @@ const rows_Charges = [
                             {item.section}
                           </TextStyle>
                         </Stack.Item>
-                        {/* <Stack.Item>
+                        <Stack.Item>
                           <TextStyle
-                            variation={item.up ? 'positive' : 'negative'}
+                            variation={cardData[item.key]?.up  ? 'positive' : 'negative'}
                           >
                             <Icon
-                              source={item.up ? CaretUpMinor : CaretDownMinor}
-                              color={item.up ? 'green' : 'red'}
+                              source={cardData[item.key]?.up  ? CaretUpMinor : CaretDownMinor}
+                              color={cardData[item.key]?.up  ? 'green' : 'red'}
                             />
-                            {item.percent}%
+                            {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}%
                           </TextStyle>
-                        </Stack.Item> */}
+                        </Stack.Item>
                       </Stack>
                       <Stack>
                         <Stack.Item>
                           <DisplayText size="medium">
                             <TextStyle variation="strong">
-                            <CounterUp prefix="$"  start={0} end={Number.parseFloat(cardData[item.key]).toFixed(2)} duration={1.5} decimals={2} />
+                            <CounterUp prefix="$"  start={0} end={Number.parseFloat(cardData[item.key]?.value || 0).toFixed(2)} duration={1.5} decimals={2} />
                             </TextStyle>
                           </DisplayText>
                         </Stack.Item>
@@ -1427,7 +1500,7 @@ const rows_Charges = [
           </Layout>
             <Layout>
               <Layout.Section>
-                <DisplayText size="medium">Active Customers</DisplayText>
+                <DisplayText size="medium">Customers</DisplayText>
               </Layout.Section>
             </Layout>
             <Layout>
@@ -1445,23 +1518,23 @@ const rows_Charges = [
                               {item.section}
                             </TextStyle>
                           </Stack.Item>
-                          {/* <Stack.Item>
+                          <Stack.Item>
                             <TextStyle
-                              variation={item.up ? 'positive' : 'negative'}
+                              variation={cardData[item.key]?.up  ? 'positive' : 'negative'}
                             >
                               <Icon
-                                source={item.up ? CaretUpMinor : CaretDownMinor}
-                                color={item.up ? 'green' : 'red'}
+                                source={cardData[item.key]?.up  ? CaretUpMinor : CaretDownMinor}
+                                color={cardData[item.key]?.up  ? 'green' : 'red'}
                               />
-                              {item.percent}%
+                              {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}%
                             </TextStyle>
-                          </Stack.Item> */}
+                          </Stack.Item>
                         </Stack>
                         <Stack>
                           <Stack.Item>
                             <DisplayText size="medium">
                               <TextStyle variation="strong">
-                              <CounterUp prefix={item.type=="currency"?"$":""} suffix={item.type=="percent"?"%":""}  start={0} end={Number.parseFloat(cardData[item.key]).toFixed(2)} duration={1.5} decimals={item.type=="currency"?2:0} />
+                              <CounterUp prefix={item.type=="currency"?"$":""} suffix={item.type=="percent"?"%":""}  start={0} end={Number.parseFloat(cardData[item.key]?.value || 0).toFixed(2)} duration={1.5} decimals={item.type=="currency"?2:0} />
                               </TextStyle>
                             </DisplayText>
                           </Stack.Item>
@@ -1490,7 +1563,7 @@ const rows_Charges = [
           <Stack.Item>
             <Layout>
               <Layout.Section>
-                <DisplayText size="medium">Subscription</DisplayText>
+                <DisplayText size="medium">Revenue Forecast</DisplayText>
               </Layout.Section>
             </Layout>
             <br />
@@ -1506,23 +1579,23 @@ const rows_Charges = [
                               {item.section}
                             </TextStyle>
                           </Stack.Item>
-                          {/* <Stack.Item>
+                          <Stack.Item>
                             <TextStyle
-                              variation={item.up ? 'positive' : 'negative'}
+                              variation={cardData[item.key]?.up ? 'positive' : 'negative'}
                             >
                               <Icon
-                                source={item.up ? CaretUpMinor : CaretDownMinor}
-                                color={item.up ? 'green' : 'red'}
+                                source={cardData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                                color={cardData[item.key]?.up ? 'green' : 'red'}
                               />
-                              {item.percent}%
+                              {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}%
                             </TextStyle>
-                          </Stack.Item> */}
+                          </Stack.Item>
                         </Stack>
                         <Stack>
                           <Stack.Item>
                             <DisplayText size="medium">
                               <TextStyle variation="strong">
-                              <CounterUp  start={0} end={Number.parseFloat(cardData[item.key] || 0.0).toFixed(2)} duration={1.5}  />
+                              <CounterUp  start={0} end={Number.parseFloat(cardData[item.key]?.value || 0.0).toFixed(2)} duration={1.5}  />
                               </TextStyle>
                             </DisplayText>
                           </Stack.Item>
