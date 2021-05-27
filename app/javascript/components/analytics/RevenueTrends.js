@@ -1224,11 +1224,13 @@ const rows_Charges = [
             <Layout.Section>
               <Card title="">
                 <Card.Section>
+                  <div className="rev-date-picker">
                     <DateRangePicker
                       start={filters.startDate}
                       end={filters.endDate}
                       handleDates={handleFiltersDates}
                     />
+                    </div>
                   {/* <Button
                     plain
                     monochrome
