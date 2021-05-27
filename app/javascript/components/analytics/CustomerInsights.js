@@ -507,7 +507,7 @@ const CustomerInsights = () => {
     }
   });
   const purchaseListKeys=[
-    {section:"Total Dunning & Dunned Subs",key:"dunned",suffix:"%"},
+    {section:"Total Dunning & Dunned Subs",key:"dunned"},
     {section:"% Dunning",key:"dunningCount",suffix:"%"},
     {section:"% Recovered",key:"recovered",suffix:"%"},
     {section:"% Churn",key:"churned",suffix:"%"}
