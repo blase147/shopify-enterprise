@@ -197,11 +197,7 @@ const CustomerInsights = () => {
         // name: 'Browser share',
         innerSize: '50%',
         showInLegend: true,
-        data: [
-          ['60%', 60],
-          ['18%', 18],
-          ['19%', 19],
-        ],
+        data: [],
       },
     ],
   };
@@ -275,11 +271,7 @@ const CustomerInsights = () => {
         name: 'Frequency',
         innerSize: '50%',
         showInLegend: true,
-        data: [
-          ['1 week', 60],
-          ['12 weeks', 18],
-          ['4 weeks', 19],
-        ],
+        data: [],
       },
     ],
   };
