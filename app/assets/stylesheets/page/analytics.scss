@@ -21,7 +21,57 @@
   }
   
 }
+.Polaris-DatePicker__Day.Polaris-DatePicker__Day--selected.Polaris-DatePicker__Day--firstInRange.Polaris-DatePicker__Day--hoverRight {
+  border-radius: 3rem 0 0 3rem !important;
+}
+.Polaris-DatePicker__MonthContainer {
+  margin-left: 1.6rem !important;
+}
+.Polaris-DatePicker__Day.Polaris-DatePicker__Day--selected.Polaris-DatePicker__Day--lastInRange.Polaris-DatePicker__Day--hoverRight.Polaris-DatePicker__Day--hasRange {
+  border-radius: 0 3rem 3rem 0;
+}
+.Polaris-DatePicker__Day--selected {
+  background-color: #306ecb !important;
+  
+  &:focus {
+    box-shadow: none !important;
+  }
+}
+
+.Polaris-DatePicker__MonthLayout {
+  table {
+    tr {
+      border: 0;
+      .Polaris-DatePicker__EmptyDayCell {
+        border: 0;
+      }
+      .Polaris-DatePicker__DayCell {
+        border: 0;
+        button {
+          &:hover {
+            // background-color: rgba(31, 81, 153, 1);
+          }
+        }
+      }
+      .Polaris-DatePicker__Day {
+        border: 0;
+      }
+      .Polaris-DatePicker__Day--inRange {
+        background-color: rgba(242, 247, 254, 1);
+      }
+      
+      td {
+        .Polaris-DatePicker__Day.Polaris-DatePicker__Day--hasRange {
+          border: 0;
+         
+        }
+      }
+    }
+  }
+}
+
 .module-Analytics {
+ 
   .Polaris-Popover.Polaris-Popover--fullWidth {
     width: 700px !important;
   }
@@ -48,11 +98,9 @@
   }
   //revenue trends
 
-  .rev-date-picker {
-    .Polaris-DatePicker__Day.Polaris-DatePicker__Day--selected.Polaris-DatePicker__Day--firstInRange.Polaris-DatePicker__Day--hoverRight {
-      border-radius: 3rem 0 0 3rem;
-    }
-  }
+
+    
+  
   .form-inline {
     display: flex;
     flex-flow: row wrap;
