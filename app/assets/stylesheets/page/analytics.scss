@@ -47,6 +47,12 @@
     }
   }
   //revenue trends
+
+  .rev-date-picker {
+    .Polaris-DatePicker__Day.Polaris-DatePicker__Day--selected.Polaris-DatePicker__Day--firstInRange.Polaris-DatePicker__Day--hoverRight {
+      border-radius: 3rem 0 0 3rem;
+    }
+  }
   .form-inline {
     display: flex;
     flex-flow: row wrap;

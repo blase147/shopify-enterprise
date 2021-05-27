@@ -6,7 +6,8 @@ import {
   Select, Stack,
   TextField,
   TextStyle,
-  Icon
+  Icon,
+  Spinner
 } from '@shopify/polaris';
 import {
   DropdownMinor,
@@ -270,6 +271,9 @@ const skuRevenue = {
   title: {
     text: 'Top 14 SKUs by Recurring Revenue (Subscriptions)'
   },
+  tooltip: {
+    pointFormat: '<b>{point.y}</b>',
+  },
   xAxis: {
     categories: []
   },
@@ -294,6 +298,9 @@ const skuSubscriptions = {
   colors: ["#0D91AE", "#6B97C5", "#FFF500", "#FFCC00", "#E77320", "#FF0000", "#FF5C00", "#979797", "#007EFF", "#00A023", "#8000A0", "#A0007D", "#F4EC19"],
   title: {
     text: 'Top 14 SKUs by Subscriptions'
+  },
+  tooltip: {
+    pointFormat: '<b>{point.y}</b>',
   },
   xAxis: {
     categories: []
@@ -795,6 +802,7 @@ const rows_Charges = [
         skuBySubscriptions,
         skuByCustomers,
         skuByFrequency,
+        hasData:true
       })
       //setting cards data ....
       setCardData({
@@ -971,7 +979,7 @@ const rows_Charges = [
     }] }
     const insightChartOptions = {
       ...chartOptions.insightsChart, series: [{
-        type: 'pie', innerSize: '50%', showInLegend: true, data:billingFrequencyRevenue.map(f=>[f.billingPolicy,parseInt(f.value) || 0])}]
+        type: 'pie', innerSize: '50%', showInLegend: true, data:billingFrequencyRevenue.map(f=>[f.billingPolicy,parseFloat(f.value) || 0])}]
     }
       //// set New Chart Options
       setChartOptions({
@@ -1008,7 +1016,7 @@ const rows_Charges = [
       setTableData({...tableData,revenueTable:newRevenueTable,chargesTable:newChargesTable})
 
     }
-  }, [data,loading])
+  }, [data])
 
 
   const options_1 = [
@@ -1198,19 +1206,31 @@ const rows_Charges = [
   ];
   
   return (
+    <>
+      {loading ? (
+        <Card>
+          <Spinner
+            accessibilityLabel="Spinner example"
+            size="large"
+            color="teal"
+          />
+        </Card>
+      ) :
     <FormLayout>
-      <div className="analytics-page-layout">
+    <div className="analytics-page-layout">
       <Layout>
         <Stack vertical spacing="extraLoose">
           <Layout>
             <Layout.Section>
-              <Card title="Revenue Trends - Basic">
+              <Card title="">
                 <Card.Section>
+                  <div className="rev-date-picker">
                     <DateRangePicker
                       start={filters.startDate}
                       end={filters.endDate}
                       handleDates={handleFiltersDates}
                     />
+                    </div>
                   {/* <Button
                     plain
                     monochrome
@@ -1738,6 +1758,8 @@ const rows_Charges = [
       </Layout>
       </div>
     </FormLayout>
+    }
+    </>
   );
 };
 export default RevenueTrends;
