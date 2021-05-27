@@ -1205,7 +1205,12 @@ const rows_Charges = [
             <Layout.Section>
               <Card title="Revenue Trends - Basic">
                 <Card.Section>
-                  <Button
+                    <DateRangePicker
+                      start={filters.startDate}
+                      end={filters.endDate}
+                      handleDates={handleFiltersDates}
+                    />
+                  {/* <Button
                     plain
                     monochrome
                     onClick={() => {
@@ -1214,7 +1219,7 @@ const rows_Charges = [
                     icon={DropdownMinor}
                   >
                     Filter
-                  </Button>
+                  </Button> */}
                   <br />
                   {expandedFilter ? (
                     // <form className="form-inline">

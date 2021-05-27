@@ -25,8 +25,8 @@ export default class DateRangePicker extends React.Component {
   render() {
     const { month, year, selected } = this.state;
     const activator = (
-      <Button fullWidth onClick={this.togglePopover}>
-        Date picker
+      <Button onClick={this.togglePopover}>
+        Filter
       </Button>
     );
 

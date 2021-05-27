@@ -182,25 +182,25 @@ const CustomerInsights = () => {
     insightsChart:PercentVerticalChart
   })
 
+ const insightsOptions = [
+    {label: '1 Day', value: '1 Day'},
+    {label: '1 Month', value: '1 Month'}
+  ];
   const [insightsData,setInsightsData]=useState({})
+  const [selectedInsight, setSelectedInsight] = useState('1 Month');
+  const handleSelectChange = (value) => setSelectedInsight(value);
+ 
   useEffect(()=>{
     const {insightsChart}=chartOptions;
     if(!isEmpty(insightsData)){
       const selectedData=insightsData.find(data=>data.billingPolicy===selectedInsight);
       const insightChartOptions = {
         ...insightsChart, series: [{
-          type: 'pie', innerSize: '50%', showInLegend: true, data:selectedData.skus.map(f=>[f.sku,parseInt(f.value) || 0])}]
+          type: 'pie', innerSize: '50%', showInLegend: true, data:selectedData.skus.map(f=>[f.sku,parseFloat(f.value) || 0])}]
       }
       setChartOptions({...chartOptions,insightsChart:insightChartOptions})
     }
-  },[insightsData])
-  const [selectedInsight, setSelectedInsight] = useState('1 Day');
-  const handleSelectChange = useCallback((value) => setSelectedInsight(value), []);
-  const insightsOptions = [
-    {label: '1 Day', value: '1 Day'},
-    {label: '1 Month', value: '1 Month'}
-  ];
-
+  },[insightsData,selectedInsight])
   // const [getReport, { loading, data:reportData }] = useLazyQuery(fetchReport);
 
   // const getReportData = useCallback(() => {
@@ -300,11 +300,13 @@ const CustomerInsights = () => {
         <Layout>
           <Layout.Section>
             <Card>
+              <div className="insight-chart-select">
               <Select
                 options={insightsOptions}
                 onChange={handleSelectChange}
                 value={selectedInsight}
               />
+              </div>
               <HighchartsReact
                 highcharts={Highcharts}
                 options={chartOptions.insightsChart}
