@@ -362,7 +362,7 @@ const Settings = () => {
   }, [selectedTitleTab]);
 
   return (
-    <AppLayout typePage="settings" tabIndex="7">
+    <AppLayout typePage="settings" tabIndex="8">
       <Frame>
         { passwordConfirmed
           ? (

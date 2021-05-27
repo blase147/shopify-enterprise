@@ -32,14 +32,14 @@ const Smarty = () => {
       id: 'tab-messages',
       content: 'Messages',
     },
-    // {
-    //   id: 'tab-custom-messages',
-    //   content: 'Custom Messages',
-    // },
-    // {
-    //   id: 'tab-custom-keywords',
-    //   content: 'Custom Keywords',
-    // },
+    {
+      id: 'tab-custom-messages',
+      content: 'Custom Messages',
+    },
+    {
+      id: 'tab-custom-keywords',
+      content: 'Custom Keywords',
+    },
     {
       id: 'cancellation-reasons',
       content: 'Cancellation Reasons',
@@ -92,7 +92,7 @@ const Smarty = () => {
               </>
             }
             {
-              selectedTitleTab===2 && 
+              selectedTitleTab===1 && 
               <>
                 {showEditPage ?
                   <EditSmartyMessage
@@ -106,7 +106,7 @@ const Smarty = () => {
               </>
             }
             {
-              selectedTitleTab===3 && 
+              selectedTitleTab===2 && 
               <>
               {
                  showEditPage ?
@@ -121,7 +121,7 @@ const Smarty = () => {
               </>
             }
             {
-              selectedTitleTab===1 && 
+              selectedTitleTab===3 && 
               <>
               {
                   showEditPage ?
