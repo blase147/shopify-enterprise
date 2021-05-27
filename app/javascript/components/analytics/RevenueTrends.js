@@ -462,7 +462,7 @@ const SaleChart = {
         },
       },
       title: {
-        text: 'Charge Count',
+        text: 'Total Sales',
         style: {
           color: '#202b35',
         },
@@ -471,7 +471,7 @@ const SaleChart = {
     {
       // Secondary yAxis
       title: {
-        text: 'Total Sales',
+        text: 'Charge Count',
         style: {
           color: '#202b35',
         },
