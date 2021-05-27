@@ -48,11 +48,11 @@ const Nav = (props) => {
       path: '/smarty',
     },
 
-    // {
-    //   content: 'Integration',
-    //   id: 'integrations',
-    //   path: '/integrations',
-    // },
+    {
+      content: 'Integration',
+      id: 'integrations',
+      path: '/integrations',
+    },
     {
       content: 'Settings',
       id: 'settings',

@@ -39,7 +39,7 @@ const Integrations = () => {
   }, []);
 
   return (
-    <AppLayout typePage="integrations" tabIndex="6">
+    <AppLayout typePage="integrations" tabIndex="7">
       <Button>
         <img src={getStart} width="20" />
         <span>Get Started</span>
