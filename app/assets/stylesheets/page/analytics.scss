@@ -22,6 +22,9 @@
   
 }
 .module-Analytics {
+  .Polaris-Popover.Polaris-Popover--fullWidth {
+    width: 700px !important;
+  }
   .highcharts-credits {
     display: none;
   }
@@ -60,6 +63,15 @@
       .textfield {
         width: 15%;
       }
+    }
+  }
+  .sales-section {
+    .Polaris-Layout__Section--secondary {
+      margin-top: 0.4rem;
+      .Polaris-Stack>.Polaris-Stack__Item {
+        margin-top: 1.6rem; 
+        
+    }
     }
   }
   .Polaris-TextStyle--variationPositive {

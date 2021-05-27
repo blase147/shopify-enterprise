@@ -840,7 +840,7 @@ const CustomerInsights = () => {
                     options={chartOptions.insightsChart}
                   />
 
-                  <div className="card-graph-parameters">
+                  {/* <div className="card-graph-parameters">
                     <div className="active-customers">
                       <div className="active-color"></div>
                       <p>Active customers</p>
@@ -856,7 +856,7 @@ const CustomerInsights = () => {
                       <p>Cancelled</p>
                     </div>
 
-                  </div>
+                  </div> */}
                 </Card>
               </div>
             </Layout.Section>
@@ -874,10 +874,10 @@ const CustomerInsights = () => {
         </Layout>
         <Layout>
           <Layout.Section>
-            <div className="frequency-graph">
+            {/* <div className="frequency-graph"> */}
             <Card>
               <Card.Section>
-                <div className="frequency-graph-parameters">
+                {/* <div className="frequency-graph-parameters">
                     <div className="weeks">
                       <div className="cancel-color"></div>
                       <p>1 week</p>
@@ -893,14 +893,14 @@ const CustomerInsights = () => {
                       <p>4 weeks</p>
                     </div>
 
-                  </div>
+                  </div> */}
                 <HighchartsReact
                   highcharts={Highcharts}
                   options={chartOptions.customersFrequencyChart}
                 />
               </Card.Section>
             </Card>
-            </div>
+            {/* </div> */}
           </Layout.Section>
         </Layout>
         <Layout>
