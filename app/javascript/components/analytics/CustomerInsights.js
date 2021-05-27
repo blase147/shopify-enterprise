@@ -20,6 +20,7 @@ import {
   DataTable,
   TextContainer,
   DatePicker,
+  Spinner
 } from '@shopify/polaris';
 import {
   DropdownMinor,
@@ -206,6 +207,9 @@ const CustomerInsights = () => {
     title: {
       text: 'Top SKUs by Customer Count'
     },
+    tooltip: {
+      pointFormat: '<b>{point.y}</b>',
+    },
     xAxis: {
       categories: []
     },
@@ -242,7 +246,7 @@ const CustomerInsights = () => {
       // y: 60,
     },
     tooltip: {
-      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+      pointFormat: '<b>{point.percentage:.1f}%</b>',
     },
     accessibility: {
       point: {
@@ -302,7 +306,7 @@ const CustomerInsights = () => {
     },
     tooltip: {
       headerFormat: '<b>{point.x}</b><br/>',
-      pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
+      pointFormat: '{point.y}<br/>Total: {point.stackTotal}',
     },
     plotOptions: {
       column: {
@@ -679,14 +683,14 @@ const CustomerInsights = () => {
       const insightChartOptions = {
         ...insightsChart, series: [{
           type: 'pie', innerSize: '50%', showInLegend: true, data: [
-            [`active`, parseInt(activeCustomersPercentage) || 0],
-            [`dunned`, parseInt(dunnedCustomersPercentage) || 0],
-            [`cancelled`, parseInt(cancelledCustomersPercentage) || 0],],
+            [`Active`, parseFloat(activeCustomersPercentage) || 0],
+            [`Dunned`, parseFloat(dunnedCustomersPercentage) || 0],
+            [`Cancelled`, parseFloat(cancelledCustomersPercentage) || 0],],
         }]
       }
 
       const newcustomersFrequency={...customersFrequencyChart,series: [{
-        type: 'pie', innerSize: '50%', showInLegend: true, data: billingFrequency.map(f=>[f.billingPolicy,parseInt(f.value) || 0])
+        type: 'pie', innerSize: '50%', showInLegend: true, data: billingFrequency.map(f=>[f.billingPolicy,parseFloat(f.value) || 0])
       }]
     }
       const newSkuCustomersChart = {
@@ -769,19 +773,17 @@ const CustomerInsights = () => {
 
 
   return (
-    <FormLayout>
-      
-      {/* <Layout>
-        <Layout.Section>
-        </Layout.Section>
-        <Layout.Section>
-          <DateRangePicker
-            start={filters.startDate}
-            endDate={filters.endDate}
-            handleDates={handleFiltersDates}
+    <>
+    {loading ? (
+        <Card>
+          <Spinner
+            accessibilityLabel="Spinner example"
+            size="large"
+            color="teal"
           />
-        </Layout.Section>
-      </Layout> */}
+        </Card>
+      ) :
+    <FormLayout>
       <Stack vertical spacing="extraLoose">
         <Layout>
           {/* <Layout.Section secondary> */}
@@ -796,8 +798,6 @@ const CustomerInsights = () => {
                           <TextStyle variation="strong">
                             {item.section}
                           </TextStyle>
-                     
-                       
                           <TextStyle
                             variation={sectionCustomerList[item.key]?.up ? 'positive' : 'negative'}
                           >
@@ -938,7 +938,7 @@ const CustomerInsights = () => {
                       <Stack.Item>
                         <DisplayText size="medium">
                           <TextStyle variation="strong">
-                          <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionCustomerActionList[item.key]?.value).toFixed(2)} duration={1.5} decimals={2} />
+                          <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionCustomerActionList[item.key]?.value)} duration={1.5} />
                           </TextStyle>
                         </DisplayText>
                       </Stack.Item>
@@ -1055,6 +1055,8 @@ const CustomerInsights = () => {
         </Layout> */}
       </Stack>
     </FormLayout>
+  }
+  </>
   );
 };
 
