@@ -28,5 +28,6 @@ module Types
     field :update_sms_setting, mutation: Mutations::UpdateSmsSetting
     field :update_smarty_message, mutation: Mutations::UpdateSmartyMessage
     field :delete_smarty_message, mutation: Mutations::DeleteSmartyMessage
+    field :update_password, mutation: Mutations::UpdatePassword
   end
 end
