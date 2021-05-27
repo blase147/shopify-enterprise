@@ -191,6 +191,40 @@ const Translation = () => {
                     <TextField label="Address Title" placeholder ="Address " />
                 </div>
             </div>   
+
+            <button className="collapsible-translatoin">Discount Section</button>
+            <div className="content-forms">
+                <div className="content-collapse">
+                    <TextField label="Show discount form link label" placeholder ="Have a discount code? Enter it here " />
+                    <TextField label="Discount Label" placeholder ="Discount - code promo" />
+                    <TextField label="Discount placeholder" placeholder ="Discount " />
+                    <TextField label="Apply Discount Button Label" placeholder ="OK" />
+                    <TextField label="Discount Error Message" placeholder ="Unable to find a valid discount matching the code entered" />
+                    <TextField label="Discount Error Message: Email Required" placeholder ="The discount code provided requires an email address" />
+                    <TextField label="After $(DISCOUNT AMOUNT)" placeholder ="After" />
+                    <TextField label="In Discounts" placeholder ="In Discounts" />
+                    <TextField label="Please sign into PayPal by clicking blue PayPal button or use credit card to complete transaction" placeholder ="Please sign into PayPal by clicking the blue PayPal button, or use credit card to complete transaction" />
+                </div>
+            </div>
+
+            <button className="collapsible-translatoin">Shipment Orders</button>
+             <div className="content-forms">
+                <div className="content-collapse">
+                    <TextField label="Ships Every x Frequency" placeholder ="(Ships Every {{frequency}} {{unit_type}})" />
+                </div>
+            </div>
+
+            <button className="collapsible-translatoin">Checkout Thanks Page</button>
+             <div className="content-forms">
+                <div className="content-collapse">
+                    <TextField label="Page Name" placeholder ="Chargezen - Thank you" />
+                    <TextField label="Title" placeholder ="Thank you for your purchase!" />
+                    <TextField label="Confirmation Emails sent text" placeholder ="A confirmation email has been sent to " />
+                    <TextField label="Order #" placeholder ="Order #" />
+                    <TextField label="Return to store link label" placeholder ="Continue Shopping" />
+                    <TextField label="Print Link Label" placeholder ="Print Receipt" />
+                </div>
+            </div>
             <div className="translation-btn">
 
 

@@ -1,0 +1,2 @@
+class LockPassword < ApplicationRecord
+end
