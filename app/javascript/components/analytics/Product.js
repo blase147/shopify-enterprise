@@ -11,6 +11,7 @@ import {
   DisplayText,
   TextStyle,
   Heading,
+  Select,
   DataTable,
   TextContainer,
 } from '@shopify/polaris';
@@ -18,33 +19,33 @@ import { isEmpty } from 'lodash';
 
 const CustomerInsights = () => {
 
-  const fetchReport = gql`
-  query($startDate: String!, $endDate: String!) {  
-    fetchCustomerInsights(startDate: $startDate, endDate: $endDate) {
-      skuByCustomers {
-          sku
-          value
-      }
-    }
-    fetchRevenueTrend(startDate: $startDate, endDate: $endDate) {
-      skuBySubscriptions {
-          sku
-          value
-      }
-      skuByRevenue {
-          sku
-          value
-      }
-      skuByFrequency {
-          billingPolicy
-          skus {
-              sku
-              value
-          }
-      }
-    }
-  }
-    `;
+  // const fetchReport = gql`
+  // query($startDate: String!, $endDate: String!) {  
+  //   fetchCustomerInsights(startDate: $startDate, endDate: $endDate) {
+  //     skuByCustomers {
+  //         sku
+  //         value
+  //     }
+  //   }
+  //   fetchRevenueTrend(startDate: $startDate, endDate: $endDate) {
+  //     skuBySubscriptions {
+  //         sku
+  //         value
+  //     }
+  //     skuByRevenue {
+  //         sku
+  //         value
+  //     }
+  //     skuByFrequency {
+  //         billingPolicy
+  //         skus {
+  //             sku
+  //             value
+  //         }
+  //     }
+  //   }
+  // }
+  //   `;
 
   const skuRevenue = {
     colors: ["#0D91AE", "#6B97C5", "#FFF500", "#FFCC00", "#E77320", "#FF0000", "#FF5C00", "#979797", "#007EFF", "#00A023", "#8000A0", "#A0007D", "#F4EC19"],
@@ -131,7 +132,7 @@ const CustomerInsights = () => {
       // width: '720px',
     },
     title: {
-      text: '2021-02-09',
+      text: '',
       align: 'center',
       verticalAlign: 'middle',
       // y: 60,
@@ -173,7 +174,7 @@ const CustomerInsights = () => {
     ],
   };
 
-  const [filters]=useContext(FilterContext)
+  const [filters,setFilters,productCharts]=useContext(FilterContext)
   const [chartOptions,setChartOptions]=useState({
     skuRevenueChart:skuRevenue,
     skuCustomersChart:skuCustomersChart,
@@ -181,30 +182,50 @@ const CustomerInsights = () => {
     insightsChart:PercentVerticalChart
   })
 
-  const [getReport, { loading, data:reportData }] = useLazyQuery(fetchReport,{fetchPolicy:"network-only"});
-
-  const getReportData = useCallback(() => {
-    getReport({
-      variables:{
-        startDate:filters.startDate,
-        endDate:filters.endDate
+  const [insightsData,setInsightsData]=useState({})
+  useEffect(()=>{
+    const {insightsChart}=chartOptions;
+    if(!isEmpty(insightsData)){
+      const selectedData=insightsData.find(data=>data.billingPolicy===selectedInsight);
+      const insightChartOptions = {
+        ...insightsChart, series: [{
+          type: 'pie', innerSize: '50%', showInLegend: true, data:selectedData.skus.map(f=>[f.sku,parseInt(f.value) || 0])}]
       }
-    })
-  }, [filters,getReport])
+      setChartOptions({...chartOptions,insightsChart:insightChartOptions})
+    }
+  },[insightsData])
+  const [selectedInsight, setSelectedInsight] = useState('1 Day');
+  const handleSelectChange = useCallback((value) => setSelectedInsight(value), []);
+  const insightsOptions = [
+    {label: '1 Day', value: '1 Day'},
+    {label: '1 Month', value: '1 Month'}
+  ];
 
-  useEffect(() => {
-    getReportData()
-  }, [filters])
+  // const [getReport, { loading, data:reportData }] = useLazyQuery(fetchReport);
+
+  // const getReportData = useCallback(() => {
+  //   getReport({
+  //     variables:{
+  //       startDate:filters.startDate,
+  //       endDate:filters.endDate
+  //     }
+  //   })
+  // }, [filters,getReport])
+
+  // useEffect(() => {
+  //   getReportData()
+  // }, [filters])
 
   useEffect(()=>{
-    if(!isEmpty(reportData)){
-      const {skuByCustomers}=reportData.fetchCustomerInsights;
+    if(!isEmpty(productCharts)){
       const {
         skuByFrequency,
         skuByRevenue,
-        skuBySubscriptions
-      }=reportData.fetchRevenueTrend;
- 
+        skuBySubscriptions,
+        skuByCustomers
+      }=productCharts;
+      
+      setInsightsData(skuByFrequency)
 
       //Charts Data
       const { insightsChart, skuCustomersChart, skuRevenueChart, skuSubscriptionsChart } = chartOptions;
@@ -249,7 +270,7 @@ const CustomerInsights = () => {
 
     }
 
-  },[reportData])
+  },[productCharts])
 
   return (
     <FormLayout>
@@ -279,6 +300,11 @@ const CustomerInsights = () => {
         <Layout>
           <Layout.Section>
             <Card>
+              <Select
+                options={insightsOptions}
+                onChange={handleSelectChange}
+                value={selectedInsight}
+              />
               <HighchartsReact
                 highcharts={Highcharts}
                 options={chartOptions.insightsChart}
