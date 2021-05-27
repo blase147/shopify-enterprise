@@ -343,6 +343,7 @@ const insightChart = {
       dataLabels: {
         enabled: true,
         distance: -50,
+        format: '{point.y} %',
         style: {
           fontWeight: 'bold',
           color: 'white',
