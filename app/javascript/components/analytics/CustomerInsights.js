@@ -207,7 +207,7 @@ const CustomerInsights = () => {
       text: 'Top SKUs by Customer Count'
     },
     xAxis: {
-      categories: ['SKU 001', 'SKU 002', 'SKU 003', 'SKU 004', 'SKU 005', 'SKU 006', 'SKU 007', 'SKU 008', 'SKU 009', 'SKU 010', 'SKU 011', 'SKU 012', 'SKU 013', 'SKU 014']
+      categories: []
     },
     yAxis: {
       title: {
@@ -222,7 +222,7 @@ const CustomerInsights = () => {
     series: [{
       type: 'column',
       colorByPoint: true,
-      data: [2078, 44000, 12333, 5666, 9000, 2333, 1111, 23333, 45555, 2222, 2211, 11111, 7999, { y: 123216.4, marker: { fillColor: '#000', radius: 10 } }],
+      data: [],
       showInLegend: false
     }]
   }
