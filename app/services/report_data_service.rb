@@ -321,7 +321,7 @@ class ReportDataService
       sku_by_subscriptions = sku_by_subscriptions(subscriptions).first(5)
       if sku_by_subscriptions.present?
         skus_total_count = sku_by_subscriptions.inject(0) { |sum, hash| sum + hash[:value] }
-        skus = sku_by_subscriptions(@subscriptions).first(5).map { |sku| { sku: sku[:sku], value: skus_total_count.zero? ? 0 : ((sku[:value].to_f / skus_total_count) * 100).round(2) } }
+        skus = sku_by_subscriptions.map { |sku| { sku: sku[:sku], value: skus_total_count.zero? ? 0 : ((sku[:value].to_f / skus_total_count) * 100).round(2) } }
         data.push({ billing_policy: billing_frequecny, skus: skus })
       end
     end

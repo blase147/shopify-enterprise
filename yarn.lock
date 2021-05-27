@@ -1024,25 +1024,24 @@
   resolved "https://registry.yarnpkg.com/@shopify/polaris-icons/-/polaris-icons-4.1.0.tgz#296ff47d22b52cb1592e2fa81a609f8f3c912eb0"
   integrity sha512-U5ODhOJtfYHJskYUknceIjpF+EhHdMQJ54HSWsjuHAapCWbmA8ROVonAnDEM+cWeEVinpPZzQd2nE/DVJUmKkw==
 
-"@shopify/polaris-tokens@^3.0.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@shopify/polaris-tokens/-/polaris-tokens-3.1.0.tgz#1e02974e8640b49678ca88ac0dae1de89ed706d9"
-  integrity sha512-SQPNtoevLxD3y1/nhXkthzhEyWAdi1+muxBn/DCHir1/+R/+1v/hkXDLG5o2X3jxqpnxd1R/rJVh9fMKmfWTyw==
+"@shopify/polaris-tokens@^2.16.0":
+  version "2.21.1"
+  resolved "https://registry.yarnpkg.com/@shopify/polaris-tokens/-/polaris-tokens-2.21.1.tgz#d4f2a53edac57505b5ebcaf46b3e278653e10b19"
+  integrity sha512-v4gQQashbv+3bUZ14wPVyomUhdmDDhhyx0BJKagQUC6vu1KWWnrXKC3Li2VgPHYTN5v+B+/0vAfNvSIxR+FArw==
   dependencies:
     hsluv "^0.1.0"
     tslib "^1.14.1"
 
-"@shopify/polaris@^6.4.0":
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/@shopify/polaris/-/polaris-6.4.0.tgz#53ddf68ce1f9557f1d0654d23b2bab09d54c7e5a"
-  integrity sha512-qNSfort7DCqfpRv0ieUx8i/V4IOOOzf2G5VZAOiGeOezhboMu8WYqkME3dDnl+jujU3aC7YXbFQriQp/mnSiaQ==
+"@shopify/polaris@^5.10.1":
+  version "5.15.1"
+  resolved "https://registry.yarnpkg.com/@shopify/polaris/-/polaris-5.15.1.tgz#4ec76ed51f6a481a35130067d2b1ba1c461fa9f3"
+  integrity sha512-01Fc6QEv1Q+5rYEHf++mvJuDiKSo2Zo2wImXmbsi7NtlSP3atZ+cKvTsaG0MUX56Soxs1Ns+k2y6os2TGHBeOg==
   dependencies:
     "@shopify/polaris-icons" "^4.1.0"
-    "@shopify/polaris-tokens" "^3.0.0"
+    "@shopify/polaris-tokens" "^2.16.0"
     "@types/react" "^16.9.12"
     "@types/react-dom" "^16.9.4"
     "@types/react-transition-group" "^4.4.0"
-    focus-visible "^5.2.0"
     lodash "^4.17.4"
     react-transition-group "^4.4.1"
 
@@ -3446,11 +3445,6 @@ flush-write-stream@^1.0.0:
   dependencies:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
-
-focus-visible@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/focus-visible/-/focus-visible-5.2.0.tgz#3a9e41fccf587bd25dcc2ef045508284f0a4d6b3"
-  integrity sha512-Rwix9pBtC1Nuy5wysTmKy+UjbDJpIfg8eHjw0rjZ1mX4GNLz1Bmd16uDpI3Gk1i70Fgcs8Csg2lPm8HULFg9DQ==
 
 follow-redirects@^1.0.0:
   version "1.13.0"
