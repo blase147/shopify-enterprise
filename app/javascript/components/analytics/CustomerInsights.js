@@ -518,25 +518,25 @@ const CustomerInsights = () => {
       section: 'Total Dunning & Dunned Subs',
       percent: 0,
       up: true,
-      amount: '0'
+      value: '0'
     },
     dunningCount:{
       section: '% Dunning',
       percent: 0,
       up: true,
-      amount: '0'
+      value: '0'
     },
     recovered:{
       section: '% Recovered',
       percent: 0,
       up: true,
-      amount: '0'
+      value: '0'
     },
     churned:{
       section: '% Churn',
       percent: 0,
       up: true,
-      amount: '0'
+      value: '0'
     },
   });
   //Customer Actions
@@ -551,25 +551,25 @@ const CustomerInsights = () => {
     skipCount:{
       percent: 0,
       up: true,
-      amount: '0',
+      value: '0',
     },
     swapCount:{
       section: 'Swaps',
       percent: 0,
       up: true,
-      amount: '0',
+      value: '0',
     },
     upsellCount:{
       section: 'Upsells',
       percent: 0,
       up: true,
-      amount: '0',
+      value: '0',
     },
     restartCount:{
       section: 'Reactivations',
       percent: 0,
       up: true,
-      amount: '0',
+      value: '0',
     },
   });
 
