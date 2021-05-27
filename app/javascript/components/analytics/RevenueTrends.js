@@ -1443,14 +1443,41 @@ const rows_Charges = [
           </Layout>
           <Layout>
             <Layout.Section>
+            <div className="frequency-graph-revenue">
+            <Card>
+              <Card.Section>
+                <div className="frequency-graph-parameters">
+                  <div className="weeks">
+                    <div className="cancel-color"></div>
+                    <p>1 week</p>
+                  </div>
+                  <div className="weeks">
+                    <div className="dunning-color">
+                    </div>
+                    <p>12 Weeks</p>
+                  </div>
+                  <div className="weeks">
+                    <div className=" active-color">
+                    </div>
+                    <p>4 weeks</p>
+                  </div>
+
+                </div>
               <Heading>{'  '}</Heading>
               <HighchartsReact highcharts={Highcharts} options={chartOptions.insightChart} />
+              </Card.Section>
+              </Card>
+              </div>
             </Layout.Section>
           </Layout>
           <Layout>
             <Layout.Section>
+         
               <Heading>{'  '}</Heading>
+
               <HighchartsReact highcharts={Highcharts} options={chartOptions.refundChart} />
+              
+              
             </Layout.Section>
           </Layout>
           <Layout>

@@ -621,7 +621,7 @@ const CustomerInsights = () => {
   }, [filters])
 
   useEffect(()=>{
-    if(!isEmpty(reportData)){
+    if(!isEmpty(reportData?.fetchCustomerInsights)){
       const {
         customersCount,
         salesPerCharge,
@@ -791,22 +791,19 @@ const CustomerInsights = () => {
       <Stack vertical spacing="extraLoose">
         <Layout>
           {/* <Layout.Section secondary> */}
-          <div className="container-left">
+          <div className="container-left customer-count">
             <Layout.Section>
               <Stack vertical distribution="equalSpacing">
                 {customerListKeys?.map((item, i) => (
-                  <Stack.Item key={i}>
+                  <Stack.Item key={i} >
                     <Card sectioned>
-                      <Stack
-                        distribution="equalSpacing"
-                        // spacing="extraTight"
-                      >
-                        <Stack.Item>
+                    <div className="count-section">
+                       
                           <TextStyle variation="strong">
                             {item.section}
                           </TextStyle>
-                        </Stack.Item>
-                        <Stack.Item>
+                     
+                       
                           <TextStyle
                             variation={sectionCustomerList[item.key]?.up ? 'positive' : 'negative'}
                           >
@@ -816,8 +813,8 @@ const CustomerInsights = () => {
                             />
                             {(sectionCustomerList[item.key]?.up===false && sectionCustomerList[item.key]?.percent==0)?100:sectionCustomerList[item.key].percent}%
                           </TextStyle>
-                        </Stack.Item>
-                      </Stack>
+                        
+                        </div>
                       <Stack>
                         <Stack.Item>
                           <DisplayText size="medium">
@@ -842,6 +839,24 @@ const CustomerInsights = () => {
                     highcharts={Highcharts}
                     options={chartOptions.insightsChart}
                   />
+
+                  <div className="card-graph-parameters">
+                    <div className="active-customers">
+                      <div className="active-color"></div>
+                      <p>Active customers</p>
+                    </div>
+                    <div className="customer-dunning">
+                      <div className="dunning-color">
+                      </div>
+                      <p>customers in dunning</p>
+                    </div>
+                    <div className="customer-canceled">
+                      <div className="cancel-color">
+                      </div>
+                      <p>Cancelled</p>
+                    </div>
+
+                  </div>
                 </Card>
               </div>
             </Layout.Section>
@@ -859,14 +874,33 @@ const CustomerInsights = () => {
         </Layout>
         <Layout>
           <Layout.Section>
+            <div className="frequency-graph">
             <Card>
               <Card.Section>
+                <div className="frequency-graph-parameters">
+                    <div className="weeks">
+                      <div className="cancel-color"></div>
+                      <p>1 week</p>
+                    </div>
+                    <div className="weeks">
+                      <div className="dunning-color">
+                      </div>
+                      <p>12 Weeks</p>
+                    </div>
+                    <div className="weeks">
+                      <div className=" active-color">
+                      </div>
+                      <p>4 weeks</p>
+                    </div>
+
+                  </div>
                 <HighchartsReact
                   highcharts={Highcharts}
                   options={chartOptions.customersFrequencyChart}
                 />
               </Card.Section>
             </Card>
+            </div>
           </Layout.Section>
         </Layout>
         <Layout>
@@ -880,6 +914,71 @@ const CustomerInsights = () => {
               </Card.Section>
             </Card>
           </Layout.Section>
+        </Layout>
+        <Layout>
+          <Layout.Section>
+            <DisplayText>Customer Actions</DisplayText>
+          </Layout.Section>
+          <div className="last">
+            {/* <Layout.Section secondary> */}
+            
+              <Layout.Section>
+                <Stack  distribution="equalSpacing">
+                  {customerActionListKeys?.map((item, i) => (
+                    <Stack.Item key={i}>
+                      <Card sectioned>
+                        <Stack
+                          distribution="equalSpacing"
+                          // spacing="extraTight"
+                        >
+                          <Stack.Item>
+                            <TextStyle variation="strong">
+                              {item.section}
+                            </TextStyle>
+                          </Stack.Item>
+                          <Stack.Item>
+                            <TextStyle
+                              variation={sectionCustomerActionList[item.key]?.up ? 'positive' : 'negative'}
+                            >
+                              <Icon
+                                source={sectionCustomerActionList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                                color={sectionCustomerActionList[item.key]?.up ? 'green' : 'red'}
+                              />
+                              {(sectionCustomerActionList[item.key]?.up===false && sectionCustomerActionList[item.key]?.percent==0)?100:sectionCustomerActionList[item.key].percent}%
+                            </TextStyle>
+                          </Stack.Item>
+                        </Stack>
+                        <Stack>
+                          <Stack.Item>
+                            <DisplayText size="medium">
+                              <TextStyle variation="strong">
+                              <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionCustomerActionList[item.key]?.value).toFixed(2)} duration={1.5} decimals={2} />
+                              </TextStyle>
+                            </DisplayText>
+                          </Stack.Item>
+                        </Stack>
+                      </Card>
+                    </Stack.Item>
+                  ))}
+                </Stack>
+              </Layout.Section>
+            
+            {/* </Layout.Section> */}
+            {/* <div className="container-right">
+              <Layout.Section>
+                <Card>
+                  <HighchartsReact
+                    highcharts={Highcharts}
+                    options={CustomerActionChart_1}
+                  />
+                  <HighchartsReact
+                    highcharts={Highcharts}
+                    options={CustomerActionChart_2}
+                  />
+                </Card>
+              </Layout.Section>
+            </div> */}
+          </div>
         </Layout>
         <Layout>
           <Layout.Section>
@@ -956,71 +1055,7 @@ const CustomerInsights = () => {
             />
           </Layout.Section>
         </Layout>
-        <Layout>
-          <Layout.Section>
-            <DisplayText>Customer Actions</DisplayText>
-          </Layout.Section>
-          <div className="last">
-            {/* <Layout.Section secondary> */}
-            <div className="container-left">
-              <Layout.Section>
-                <Stack vertical distribution="equalSpacing">
-                  {customerActionListKeys?.map((item, i) => (
-                    <Stack.Item key={i}>
-                      <Card sectioned>
-                        <Stack
-                          distribution="equalSpacing"
-                          // spacing="extraTight"
-                        >
-                          <Stack.Item>
-                            <TextStyle variation="strong">
-                              {item.section}
-                            </TextStyle>
-                          </Stack.Item>
-                          <Stack.Item>
-                            <TextStyle
-                              variation={sectionCustomerActionList[item.key]?.up ? 'positive' : 'negative'}
-                            >
-                              <Icon
-                                source={sectionCustomerActionList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
-                                color={sectionCustomerActionList[item.key]?.up ? 'green' : 'red'}
-                              />
-                              {(sectionCustomerActionList[item.key]?.up===false && sectionCustomerActionList[item.key]?.percent==0)?100:sectionCustomerActionList[item.key].percent}%
-                            </TextStyle>
-                          </Stack.Item>
-                        </Stack>
-                        <Stack>
-                          <Stack.Item>
-                            <DisplayText size="medium">
-                              <TextStyle variation="strong">
-                              <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionCustomerActionList[item.key]?.value).toFixed(2)} duration={1.5} decimals={2} />
-                              </TextStyle>
-                            </DisplayText>
-                          </Stack.Item>
-                        </Stack>
-                      </Card>
-                    </Stack.Item>
-                  ))}
-                </Stack>
-              </Layout.Section>
-            </div>
-            {/* </Layout.Section> */}
-            {/* <div className="container-right">
-              <Layout.Section>
-                <Card>
-                  <HighchartsReact
-                    highcharts={Highcharts}
-                    options={CustomerActionChart_1}
-                  />
-                  <HighchartsReact
-                    highcharts={Highcharts}
-                    options={CustomerActionChart_2}
-                  />
-                </Card>
-              </Layout.Section>
-            </div> */}
-          </div>
-        </Layout>
+        
         {/* <Layout>
           <Layout.Section>
             <Stack wrap={false} distribution="trailing">
