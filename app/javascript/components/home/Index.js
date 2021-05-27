@@ -164,8 +164,8 @@ const Dashboard = (props) => {
   const [chartSums, setChartSums] = useState({
     sale: "$0",
     customer: "$0",
-    revenue_churn: "$0",
-    renewal_rate: "$0",
+    revenue_churn: "0",
+    renewal_rate: "0",
     mrr: "$0",
     arr: "$0",
     refunds: "$0",

@@ -165,12 +165,7 @@ const CustomerInsights = () => {
       {
         type: 'pie',
         innerSize: '50%',
-        data: [
-          ['60%', 60],
-          ['18%', 18],
-          ['19%', 19],
-          ['2%', 2],
-        ],
+        data: [],
       },
     ],
   };

@@ -197,11 +197,7 @@ const CustomerInsights = () => {
         // name: 'Browser share',
         innerSize: '50%',
         showInLegend: true,
-        data: [
-          ['60%', 60],
-          ['18%', 18],
-          ['19%', 19],
-        ],
+        data: [],
       },
     ],
   };
@@ -275,11 +271,7 @@ const CustomerInsights = () => {
         name: 'Frequency',
         innerSize: '50%',
         showInLegend: true,
-        data: [
-          ['1 week', 60],
-          ['12 weeks', 18],
-          ['4 weeks', 19],
-        ],
+        data: [],
       },
     ],
   };
@@ -842,7 +834,7 @@ const CustomerInsights = () => {
                     options={chartOptions.insightsChart}
                   />
 
-                  <div className="card-graph-parameters">
+                  {/* <div className="card-graph-parameters">
                     <div className="active-customers">
                       <div className="active-color"></div>
                       <p>Active customers</p>
@@ -857,8 +849,7 @@ const CustomerInsights = () => {
                       </div>
                       <p>Cancelled</p>
                     </div>
-
-                  </div>
+                  </div> */}
                 </Card>
               </div>
             </Layout.Section>
@@ -876,10 +867,10 @@ const CustomerInsights = () => {
         </Layout>
         <Layout>
           <Layout.Section>
-            <div className="frequency-graph">
+            {/* <div className="frequency-graph"> */}
             <Card>
               <Card.Section>
-                <div className="frequency-graph-parameters">
+                {/* <div className="frequency-graph-parameters">
                     <div className="weeks">
                       <div className="cancel-color"></div>
                       <p>1 week</p>
@@ -895,14 +886,14 @@ const CustomerInsights = () => {
                       <p>4 weeks</p>
                     </div>
 
-                  </div>
+                  </div> */}
                 <HighchartsReact
                   highcharts={Highcharts}
                   options={chartOptions.customersFrequencyChart}
                 />
               </Card.Section>
             </Card>
-            </div>
+            {/* </div> */}
           </Layout.Section>
         </Layout>
         <Layout>
@@ -919,73 +910,49 @@ const CustomerInsights = () => {
         </Layout>
         <Layout>
           <Layout.Section>
-            <DisplayText>Customer Actions</DisplayText>
-          </Layout.Section>
-          <div className="last">
-            {/* <Layout.Section secondary> */}
-            
-              <Layout.Section>
-                <Stack  distribution="equalSpacing">
-                  {customerActionListKeys?.map((item, i) => (
-                    <Stack.Item key={i}>
-                      <Card sectioned>
-                        <Stack
-                          distribution="equalSpacing"
-                          // spacing="extraTight"
+          <DisplayText>Customer Actions</DisplayText>
+
+            <Stack distribution="fill" wrap={false}>
+              {customerActionListKeys?.map((item, i) => (
+                <Stack.Item key={i}>
+                  <Card sectioned>
+                    <Stack>
+                      <Stack.Item fill>
+                        <TextStyle variation="strong">{item.section}</TextStyle>
+                      </Stack.Item>
+
+                      <Stack.Item>
+                        <TextStyle
+                          variation={sectionCustomerActionList[item.key]?.up ? 'positive' : 'negative'}
                         >
-                          <Stack.Item>
-                            <TextStyle variation="strong">
-                              {item.section}
-                            </TextStyle>
-                          </Stack.Item>
-                          <Stack.Item>
-                            <TextStyle
-                              variation={sectionCustomerActionList[item.key]?.up ? 'positive' : 'negative'}
-                            >
-                              <Icon
-                                source={sectionCustomerActionList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
-                                color={sectionCustomerActionList[item.key]?.up ? 'green' : 'red'}
-                              />
-                              {(sectionCustomerActionList[item.key]?.up===false && sectionCustomerActionList[item.key]?.percent==0)?100:sectionCustomerActionList[item.key].percent}%
-                            </TextStyle>
-                          </Stack.Item>
-                        </Stack>
-                        <Stack>
-                          <Stack.Item>
-                            <DisplayText size="medium">
-                              <TextStyle variation="strong">
-                              <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionCustomerActionList[item.key]?.value).toFixed(2)} duration={1.5} decimals={2} />
-                              </TextStyle>
-                            </DisplayText>
-                          </Stack.Item>
-                        </Stack>
-                      </Card>
-                    </Stack.Item>
-                  ))}
-                </Stack>
-              </Layout.Section>
-            
-            {/* </Layout.Section> */}
-            {/* <div className="container-right">
-              <Layout.Section>
-                <Card>
-                  <HighchartsReact
-                    highcharts={Highcharts}
-                    options={CustomerActionChart_1}
-                  />
-                  <HighchartsReact
-                    highcharts={Highcharts}
-                    options={CustomerActionChart_2}
-                  />
-                </Card>
-              </Layout.Section>
-            </div> */}
-          </div>
+                          <Icon
+                            source={sectionCustomerActionList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                            color={sectionCustomerActionList[item.key]?.up ? 'green' : 'red'}
+                          />
+                          {(sectionCustomerActionList[item.key]?.up===false && sectionCustomerActionList[item.key]?.percent==0)?100:sectionCustomerActionList[item.key]?.percent}%
+                        </TextStyle>
+                      </Stack.Item>
+                    </Stack>
+
+                    <Stack>
+                      <Stack.Item>
+                        <DisplayText size="medium">
+                          <TextStyle variation="strong">
+                          <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionCustomerActionList[item.key]?.value).toFixed(2)} duration={1.5} decimals={2} />
+                          </TextStyle>
+                        </DisplayText>
+                      </Stack.Item>
+                    </Stack>
+                  </Card>
+                </Stack.Item>
+              ))}
+            </Stack>
+          </Layout.Section>
         </Layout>
         <Layout>
           <Layout.Section>
             <DisplayText size="medium">
-              Purchase Items (Subscriptions)
+              {"Dunning & Churn"}
             </DisplayText>
 
             <Stack distribution="fill" wrap={false}>
