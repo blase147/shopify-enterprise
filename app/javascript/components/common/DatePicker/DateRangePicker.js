@@ -1,5 +1,8 @@
 import React from "react";
 import { Button, DatePicker, Popover } from "@shopify/polaris";
+import {
+  DropdownMinor
+} from '@shopify/polaris-icons';
 import '@shopify/polaris/dist/styles.css'
 import './DatePicker.css'
 import dayjs from "dayjs";
@@ -25,10 +28,19 @@ export default class DateRangePicker extends React.Component {
   render() {
     const { month, year, selected } = this.state;
     const activator = (
-      <Button fullWidth onClick={this.togglePopover}>
-        Date picker
-      </Button>
-    );
+      <>
+      <div className="filter-parent" style={{width:'100%'}}>
+        <Button
+          
+          monochrome
+          onClick={this.togglePopover}
+          disclosure={'down'}
+          textAlign='left'
+            >
+            Choose date range
+        </Button>
+      </div>
+      </>)
 
     return (
       <Popover

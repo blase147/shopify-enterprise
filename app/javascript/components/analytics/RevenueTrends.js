@@ -6,7 +6,9 @@ import {
   Select, Stack,
   TextField,
   TextStyle,
-  Icon
+  Icon,
+  Spinner,
+  ButtonGroup
 } from '@shopify/polaris';
 import {
   DropdownMinor,
@@ -270,6 +272,9 @@ const skuRevenue = {
   title: {
     text: 'Top 14 SKUs by Recurring Revenue (Subscriptions)'
   },
+  tooltip: {
+    pointFormat: '<b>{point.y}</b>',
+  },
   xAxis: {
     categories: []
   },
@@ -294,6 +299,9 @@ const skuSubscriptions = {
   colors: ["#0D91AE", "#6B97C5", "#FFF500", "#FFCC00", "#E77320", "#FF0000", "#FF5C00", "#979797", "#007EFF", "#00A023", "#8000A0", "#A0007D", "#F4EC19"],
   title: {
     text: 'Top 14 SKUs by Subscriptions'
+  },
+  tooltip: {
+    pointFormat: '<b>{point.y}</b>',
   },
   xAxis: {
     categories: []
@@ -343,6 +351,7 @@ const insightChart = {
       dataLabels: {
         enabled: true,
         distance: -50,
+        format: '{point.y} %',
         style: {
           fontWeight: 'bold',
           color: 'white',
@@ -461,7 +470,7 @@ const SaleChart = {
         },
       },
       title: {
-        text: 'Charge Count',
+        text: 'Total Sales',
         style: {
           color: '#202b35',
         },
@@ -470,7 +479,7 @@ const SaleChart = {
     {
       // Secondary yAxis
       title: {
-        text: 'Total Sales',
+        text: 'Charge Count',
         style: {
           color: '#202b35',
         },
@@ -794,6 +803,7 @@ const rows_Charges = [
         skuBySubscriptions,
         skuByCustomers,
         skuByFrequency,
+        hasData:true
       })
       //setting cards data ....
       setCardData({
@@ -970,7 +980,7 @@ const rows_Charges = [
     }] }
     const insightChartOptions = {
       ...chartOptions.insightsChart, series: [{
-        type: 'pie', innerSize: '50%', showInLegend: true, data:billingFrequencyRevenue.map(f=>[f.billingPolicy,parseInt(f.value) || 0])}]
+        type: 'pie', innerSize: '50%', showInLegend: true, data:billingFrequencyRevenue.map(f=>[f.billingPolicy,parseFloat(f.value) || 0])}]
     }
       //// set New Chart Options
       setChartOptions({
@@ -1007,7 +1017,7 @@ const rows_Charges = [
       setTableData({...tableData,revenueTable:newRevenueTable,chargesTable:newChargesTable})
 
     }
-  }, [data,loading])
+  }, [data])
 
 
   const options_1 = [
@@ -1197,84 +1207,48 @@ const rows_Charges = [
   ];
   
   return (
+    <>
+      {loading ? (
+        <Card>
+          <Spinner
+            accessibilityLabel="Spinner example"
+            size="large"
+            color="teal"
+          />
+        </Card>
+      ) :
     <FormLayout>
-      <div className="analytics-page-layout">
+    <div className="analytics-page-layout">
       <Layout>
         <Stack vertical spacing="extraLoose">
           <Layout>
             <Layout.Section>
-              <Card title="Revenue Trends - Basic">
+              <Card title="">
                 <Card.Section>
-                  <Button
-                    plain
-                    monochrome
-                    onClick={() => {
-                      setExpandedFilter(!expandedFilter);
-                    }}
-                    icon={DropdownMinor}
-                  >
-                    Filter
-                  </Button>
-                  <br />
-                  {expandedFilter ? (
-                    // <form className="form-inline">
-                    //   <div className="form-inline-child">
-                    //     <p>Date Granularity</p>
-                    //     <div className="select">
-                    //       <Select
-                    //         options={selectOptions}
-                    //         onChange={value=>setFilters({...filters,granularity:value})}
-                    //         value={filters.granularity}
-                    //       />
-                    //     </div>
-                    //     {/* <div className="select">
-                    //       <Select
-                    //         options={options_1}
-                    //         onChange={handleSelectChange_1}
-                    //         value={selected_1}
-                    //       />
-                    //     </div> */}
-                    //   </div>
-                    //   <div className="form-inline-child">
-                    //     <p>Date Range</p>
-                    //     {/* <div className="select">
-                    //       <Select
-                    //         options={options_1}
-                    //         onChange={handleSelectChange_1}
-                    //         value={selected_1}
-                    //       />
-                    //     </div> */}
-                    //     <div className="textfield">
-                    //       <TextField 
-                    //       value={filters.dataPeriodFor}
-                    //       onChange={value=>setFilters({...filters,dataPeriodFor:value})}
-                    //       ></TextField>
-                    //     </div>
-                    //     <div className="select">
-                    //       <Select
-                    //         options={selectOptions}
-                    //         onChange={value=>setFilters({...filters,dataByPeriod:value})}
-                    //         value={filters.dataByPeriod}
-                    //       />
-                    //     </div>
-                    //   </div>
-                    //   <Button primary onClick={()=>getReportData()} >
-                    //     {'   '}Run{'   '}
-                    //   </Button>
-                    // </form>
-                    <>
-                        <DateRangePicker
-                          start={filters.startDate}
-                          end={filters.endDate}
-                          handleDates={handleFiltersDates}
-                        />
-                    </>
-                  ) : // </div>
-                  null}
+                  <div className="rev-date-picker">
+                    <DateRangePicker
+                      start={filters.startDate}
+                      end={filters.endDate}
+                      handleDates={handleFiltersDates}
+                    />
+                    <div className="analytics-btn-group">
+                      <ButtonGroup segmented>
+                        <Button  primary>
+                          Daily
+                        </Button>
+                        <Button  >3 Months</Button>
+                        <Button  >6 Months</Button>
+                        <Button  >12 Months</Button>
+                      </ButtonGroup>
+                      <Button primary type="button">Run</Button>
+                    </div>
+                  </div>
+                  
                 </Card.Section>
               </Card>
             </Layout.Section>
           </Layout>
+
           <Layout>
             <Layout.Section>
               <DisplayText size="medium">Revenue</DisplayText>
@@ -1429,58 +1403,9 @@ const rows_Charges = [
               <HighchartsReact highcharts={Highcharts} options={chartOptions.saleChart} />
             </Layout.Section>
           </Layout>
-          <Layout>
-            <Layout.Section>
-              <Heading>{'  '}</Heading>
-              <HighchartsReact highcharts={Highcharts} options={chartOptions.skuRevenueChart} />
-            </Layout.Section>
-          </Layout>
-          <Layout>
-            <Layout.Section>
-              <Heading>{'  '}</Heading>
-              <HighchartsReact highcharts={Highcharts} options={chartOptions.skuSubscriptionsChart} />
-            </Layout.Section>
-          </Layout>
-          <Layout>
-            <Layout.Section>
-            <div className="frequency-graph-revenue">
-            <Card>
-              <Card.Section>
-                <div className="frequency-graph-parameters">
-                  <div className="weeks">
-                    <div className="cancel-color"></div>
-                    <p>1 week</p>
-                  </div>
-                  <div className="weeks">
-                    <div className="dunning-color">
-                    </div>
-                    <p>12 Weeks</p>
-                  </div>
-                  <div className="weeks">
-                    <div className=" active-color">
-                    </div>
-                    <p>4 weeks</p>
-                  </div>
 
-                </div>
-              <Heading>{'  '}</Heading>
-              <HighchartsReact highcharts={Highcharts} options={chartOptions.insightChart} />
-              </Card.Section>
-              </Card>
-              </div>
-            </Layout.Section>
-          </Layout>
           <Layout>
-            <Layout.Section>
-         
-              <Heading>{'  '}</Heading>
-
-              <HighchartsReact highcharts={Highcharts} options={chartOptions.refundChart} />
-              
-              
-            </Layout.Section>
-          </Layout>
-          <Layout>
+            <div className="sales-section">
             <Layout.Section secondary>
               <Stack vertical distribution="equalSpacing">
                 {sectionAvgList?.map((item, i) => (
@@ -1518,6 +1443,7 @@ const rows_Charges = [
                 ))}
               </Stack>
             </Layout.Section>
+            </div>
             <Layout.Section>
               <HighchartsReact
                 highcharts={Highcharts}
@@ -1525,6 +1451,58 @@ const rows_Charges = [
               />
             </Layout.Section>
           </Layout>
+          <Layout>
+            <Layout.Section>
+              <Heading>{'  '}</Heading>
+              <HighchartsReact highcharts={Highcharts} options={chartOptions.skuRevenueChart} />
+            </Layout.Section>
+          </Layout>
+          <Layout>
+            <Layout.Section>
+              <Heading>{'  '}</Heading>
+              <HighchartsReact highcharts={Highcharts} options={chartOptions.skuSubscriptionsChart} />
+            </Layout.Section>
+          </Layout>
+          <Layout>
+            <Layout.Section>
+            {/* <div className="frequency-graph-revenue"> */}
+            <Card>
+              <Card.Section>
+                {/* <div className="frequency-graph-parameters">
+                  <div className="weeks">
+                    <div className="cancel-color"></div>
+                    <p>1 week</p>
+                  </div>
+                  <div className="weeks">
+                    <div className="dunning-color">
+                    </div>
+                    <p>12 Weeks</p>
+                  </div>
+                  <div className="weeks">
+                    <div className=" active-color">
+                    </div>
+                    <p>4 weeks</p>
+                  </div>
+
+                </div> */}
+              <Heading>{'  '}</Heading>
+              <HighchartsReact highcharts={Highcharts} options={chartOptions.insightChart} />
+              </Card.Section>
+              </Card>
+              {/* </div> */}
+            </Layout.Section>
+          </Layout>
+          <Layout>
+            <Layout.Section>
+         
+              <Heading>{'  '}</Heading>
+
+              <HighchartsReact highcharts={Highcharts} options={chartOptions.refundChart} />
+              
+              
+            </Layout.Section>
+          </Layout>
+
             <Layout>
               <Layout.Section>
                 <DisplayText size="medium">Customers</DisplayText>
@@ -1727,6 +1705,8 @@ const rows_Charges = [
       </Layout>
       </div>
     </FormLayout>
+    }
+    </>
   );
 };
 export default RevenueTrends;
