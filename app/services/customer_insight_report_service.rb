@@ -82,15 +82,15 @@ class CustomerInsightReportService
   end
 
   def sales_per_charge
-    orders_count.zero? ? 0 : @subscriptions.sum { |subscription| get_orders_total_amount(subscription) } / orders_count
+    orders_count(@range).zero? ? 0 : @subscriptions.sum { |subscription| get_orders_total_amount(subscription, @range) } / orders_count(@range)
   end
 
   def charge_per_customer
-    sub_customers_count.zero? ? 0 : @subscriptions.sum { |subscription| get_orders_total_amount(subscription) } / sub_customers_count
+    sub_customers_count.zero? ? 0 : @subscriptions.sum { |subscription| get_orders_total_amount(subscription, @range) } / sub_customers_count
   end
 
-  def orders_count
-    @subscriptions.sum { |subscription| subscription.node.orders.edges.count }
+  def orders_count(range = nil)
+    @subscriptions.sum { |subscription| subscription.node.orders.edges.count { |order| range.cover?(order.node.created_at.to_date)} }
   end
 
   def sub_customers_count
@@ -107,8 +107,8 @@ class CustomerInsightReportService
     subscriptions.select { |subscription| range.cover?(subscription.node.created_at.to_date) && (status ? subscription.node.status == status : true) }
   end
 
-  def get_orders_total_amount(subscription)
-    subscription.node.orders.edges.sum { |order| order.node.total_price_set.presentment_money.amount.to_f.round(2) }
+  def get_orders_total_amount(subscription, range = nil)
+    subscription.node.orders.edges.sum { |order| range.nil? || range.present? && (range.cover?(order.node.created_at.to_date)) ? order.node.total_price_set.presentment_money.amount.to_f.round(2) : 0 }
   end
 
   def dunning_count(range = nil)
@@ -156,9 +156,10 @@ class CustomerInsightReportService
   end
 
   def sku_by_customers
+    subscriptions = subscriptions_by_order_period(@subscriptions, @range)
     customers = []
     products = Hash.new(0)
-    @subscriptions.each do |sub|
+    subscriptions.each do |sub|
       next unless sub.node.lines.edges.present?
 
       sub.node.lines.edges.each do |line|
@@ -170,8 +171,9 @@ class CustomerInsightReportService
   end
 
   def billing_frequency
+    subscriptions = subscriptions_by_order_period(@subscriptions, @range)
     frequency = Hash.new(0)
-    @subscriptions.each do |sub|
+    subscriptions.each do |sub|
       interval = "#{sub.node.billing_policy.interval_count} #{sub.node.billing_policy.interval.capitalize}"
       frequency[interval] = frequency[interval] + 1
     end
@@ -192,5 +194,9 @@ class CustomerInsightReportService
       range = 'year'
     end
     range
+  end
+
+  def subscriptions_by_order_period(subscriptions, range)
+    subscriptions.select { |subscription| subscription if subscription.node.orders.edges.count { |order| range.cover?(order.node.created_at.to_date) }.positive? }
   end
 end

@@ -98,8 +98,28 @@
   }
   //revenue trends
 
-
-    
+    .filter-parent {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .rev-date-picker {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      width: 100%;
+      > div {
+        width: 100%;
+      }
+      .analytics-btn-group {
+        display: flex;
+        > button {
+          margin-left: 50px;
+          padding: 10px 50px;
+        }
+      }
+    }
   
   .form-inline {
     display: flex;
@@ -136,6 +156,7 @@
   }
   .Polaris-Stack {
     margin-top: unset;
+    flex-wrap: wrap;
     .Polaris-Stack--vertical {
       width: 100%;
     }

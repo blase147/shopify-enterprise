@@ -10,8 +10,8 @@ class ReportDataService
     { value: original_data.to_f.round(2), percent: percent, up: percent.positive? }
   end
 
-  def mrr(subscriptions)
-    subscriptions.sum { |subscription| get_orders_total_amount(subscription) }
+  def mrr(subscriptions, range)
+    subscriptions.sum { |subscription| get_orders_total_amount(subscription, range) }
   end
 
 
@@ -50,15 +50,17 @@ class ReportDataService
   end
 
   def revenue_churn_by_date(date, subscriptions)
-    subscriptions_in_period = in_period_subscriptions(subscriptions, date.beginning_of_month..date.end_of_month)
-    cancelled_subscriptions_revenue = subscriptions_in_period.sum { |subscription| subscription.node.status == 'CANCELLED' ? get_orders_total_amount(subscription) : 0 }
-    order_total = subscriptions_in_period.sum { |subscription| get_orders_total_amount(subscription) }
+    range = date.beginning_of_month..date.end_of_month
+    subscriptions_in_period = in_period_subscriptions(subscriptions, range)
+    cancelled_subscriptions_revenue = subscriptions_in_period.sum { |subscription| subscription.node.status == 'CANCELLED' ? get_orders_total_amount(subscription, range) : 0 }
+    order_total = subscriptions_in_period.sum { |subscription| get_orders_total_amount(subscription, range) }
     ((order_total - (order_total - cancelled_subscriptions_revenue)) / order_total) * 100 rescue 0
   end
 
   def sales_data_by_date(date, subscriptions)
-    subscriptions = in_period_subscriptions(subscriptions, date.beginning_of_month..date.end_of_month)
-    subscriptions.sum { |subscription| get_orders_total_amount(subscription) }
+    range = date.beginning_of_month..date.end_of_month
+    subscriptions = in_period_subscriptions(subscriptions, range)
+    subscriptions.sum { |subscription| get_orders_total_amount(subscription, range) }
   end
 
   def refund_data_by_date(date, _subscriptions)
@@ -71,17 +73,19 @@ class ReportDataService
   end
 
   def arr_data_by_date(date, subscriptions)
-    current_year_subscriptions = in_period_subscriptions(subscriptions, date.beginning_of_year..date.end_of_year, 'ACTIVE')
-    current_year_subscriptions.sum { |subscription| get_orders_total_amount(subscription) }.to_f.round(2)
+    range = date.beginning_of_year..date.end_of_year
+    current_year_subscriptions = in_period_subscriptions(subscriptions, range, 'ACTIVE')
+    current_year_subscriptions.sum { |subscription| get_orders_total_amount(subscription, range) }.to_f.round(2)
   end
 
   def mrr_data_by_date(date, subscriptions)
-    current_month_subscriptions = in_period_subscriptions(subscriptions, date.beginning_of_month..date.end_of_month)
-    current_month_subscriptions.sum { |subscription| get_orders_total_amount(subscription) }
+    range = date.beginning_of_month..date.end_of_month
+    current_month_subscriptions = in_period_subscriptions(subscriptions, range)
+    current_month_subscriptions.sum { |subscription| get_orders_total_amount(subscription, range) }
   end
 
-  def get_orders_total_amount(subscription)
-    subscription.node.orders.edges.sum { |order| order.node.total_price_set.presentment_money.amount.to_f.round(2) }
+  def get_orders_total_amount(subscription, range = nil)
+    subscription.node.orders.edges.sum { |order| range.nil? || range.present? && (range.cover?(order.node.created_at.to_date)) ? order.node.total_price_set.presentment_money.amount.to_f.round(2) : 0 }
   end
 
   def get_customers_by_date(date, subscriptions)
@@ -122,15 +126,16 @@ class ReportDataService
   end
 
   def recurring_sales
-    get_total_sales.zero? ? 0 : ((@subscriptions.sum { |subscription| get_orders_total_amount(subscription) } / get_total_sales) * 100).to_f.round(2)
+    get_total_sales.zero? ? 0 : ((@subscriptions.sum { |subscription| get_orders_total_amount(subscription, @range) } / get_total_sales) * 100).to_f.round(2)
   end
 
   def sales_per_charge
-    @subscriptions.sum { |subscription| get_orders_total_amount(subscription) } / orders_count rescue 0
+    @subscriptions.sum { |subscription| get_orders_total_amount(subscription, @range) } / orders_count(@range) rescue 0
   end
 
-  def orders_count
-    @subscriptions.sum { |subscription| subscription.node.orders.edges.count }
+  def orders_count(range = nil)
+    # subscriptions = range.present? ? in_period_subscriptions(@subscriptions, range) : @subscriptions
+    @subscriptions.sum { |subscription| subscription.node.orders.edges.count { |order| range.cover?(order.node.created_at.to_date)} }
   end
 
   def checkout_charge(range)
@@ -139,8 +144,8 @@ class ReportDataService
   end
 
   def recurring_charge(range)
-    subscriptions = in_period_subscriptions(@subscriptions, range)
-    subscriptions.sum{ |subscription| get_orders_total_amount(subscription) }
+    # subscriptions = in_period_subscriptions(@subscriptions, range)
+    @subscriptions.sum{ |subscription| get_orders_total_amount(subscription, range) }
   end
 
   def average_checkout_charge
@@ -164,7 +169,7 @@ class ReportDataService
   end
 
   def average_recurring_charge
-    @subscriptions.sum{ |subscription| get_orders_total_amount(subscription) } / orders_count rescue 0
+    @subscriptions.sum{ |subscription| get_orders_total_amount(subscription, @range) } / orders_count(@range) rescue 0
   end
 
   def new_customers
@@ -199,8 +204,8 @@ class ReportDataService
 
   def total_sales_data(range)
     {
-      value: get_total_sales(range),
-      charge_count: charge_count(range)
+      value: recurring_charge(range),
+      charge_count: orders_count(range)
     }
   end
 
@@ -266,19 +271,20 @@ class ReportDataService
   end
 
   def sku_by_revenue
+    subscriptions = subscriptions_by_order_period(@subscriptions, @range)
     products = Hash.new(0)
-    @subscriptions.each do |sub|
+    subscriptions.each do |sub|
       next unless sub.node.lines.edges.present?
 
       sub.node.lines.edges.each do |line|
-        products[line.node.sku] += get_orders_total_amount(sub)
+        products[line.node.sku] += get_orders_total_amount(sub, @range)
       end
     end
     products.sort_by { |_key, val| val }.reverse.to_h.first(14).map { |key, val| { sku: key, value: val } }
   end
 
   def sku_by_subscriptions(subscriptions = nil)
-    subscriptions = subscriptions.present? ? subscriptions : @subscriptions
+    subscriptions = subscriptions.present? ? subscriptions : subscriptions_by_order_period(@subscriptions, @range)
     products = Hash.new(0)
     subscriptions.each do |sub|
       next unless sub.node.lines.edges.present?
@@ -291,9 +297,10 @@ class ReportDataService
   end
 
   def sku_by_customers
+    subscriptions = subscriptions_by_order_period(@subscriptions, @range)
     customers = []
     products = Hash.new(0)
-    @subscriptions.each do |sub|
+    subscriptions.each do |sub|
       next unless sub.node.lines.edges.present?
 
       sub.node.lines.edges.each do |line|
@@ -305,18 +312,20 @@ class ReportDataService
   end
 
   def billing_frequency_revenue
+    subscriptions = subscriptions_by_order_period(@subscriptions, @range)
     frequency = Hash.new(0)
-    @subscriptions.each do |sub|
+    subscriptions.each do |sub|
       interval = "#{sub.node.billing_policy.interval_count} #{sub.node.billing_policy.interval.capitalize}"
-      frequency[interval] += get_orders_total_amount(sub)
+      frequency[interval] += get_orders_total_amount(sub, @range)
     end
     subscriptions_revenue_total = frequency.inject(0) { |sum, hash| sum + hash[1] }
     subscriptions_revenue_total.zero? ? {} : frequency.map { |key, val| { billing_policy: key, value: ((val.to_f / subscriptions_revenue_total) * 100).round(2) } }
   end
 
   def sku_by_frequency
+    subscriptions = subscriptions_by_order_period(@subscriptions, @range)
     data = []
-    sub_by_frequency = @subscriptions&.group_by{ |sub| "#{sub.node.billing_policy.interval_count} #{sub.node.billing_policy.interval.capitalize}"}
+    sub_by_frequency = subscriptions&.group_by{ |sub| "#{sub.node.billing_policy.interval_count} #{sub.node.billing_policy.interval.capitalize}"}
     sub_by_frequency&.each do |billing_frequecny, subscriptions|
       sku_by_subscriptions = sku_by_subscriptions(subscriptions).first(5)
       if sku_by_subscriptions.present?
@@ -326,5 +335,9 @@ class ReportDataService
       end
     end
     data.empty? ? {} : data
+  end
+
+  def subscriptions_by_order_period(subscriptions, range)
+    subscriptions.select { |subscription| subscription if subscription.node.orders.edges.count { |order| range.cover?(order.node.created_at.to_date) }.positive? }
   end
 end
