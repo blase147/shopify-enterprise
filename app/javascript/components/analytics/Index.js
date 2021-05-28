@@ -4,6 +4,7 @@ import RevenueTrends from './RevenueTrends';
 import CustomerInsights from './CustomerInsights';
 import Retention from './Retention';
 import Product from './Product';
+import {FilterContextProvider} from './../common/Contexts/AnalyticsFilterContext';
 import {
   Card,
   Select,
@@ -47,6 +48,7 @@ const Analytics = () => {
   return (
     <AppLayout typePage="Analytics" tabIndex="5">
       <Page title="Analytics">
+        <FilterContextProvider>
         <Tabs
           tabs={tabAnalytics}
           selected={selectedTitleTab}
@@ -70,6 +72,7 @@ const Analytics = () => {
             </div>
           ):""}
         </Tabs>
+        </FilterContextProvider>
       </Page>
     </AppLayout>
   );

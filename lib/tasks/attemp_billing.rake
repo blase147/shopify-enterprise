@@ -10,6 +10,16 @@ namespace :subscriptions do
     end
   end
 
+  task :retries_attemp_billing => :environment do
+    Shop.find_each do |shop|
+      shop.connect
+      shop.subscription_logs.pending_executions.each do |subs_log|
+        subscription = SubscriptionContractService.new(subs_log.subscription_id).run
+        reprocess_subscription(subscription, subs_log)
+      end
+    end
+  end
+
   task :expire_conversation => :environment do
     SmsConversation.where('last_activity_at < ?', Time.current - 10.minutes).update_all(status: :expired)
   end
@@ -47,19 +57,51 @@ namespace :subscriptions do
 
   def process_subscription(subscription)
     return unless subscription.status == 'ACTIVE'
-
     billing_date = DateTime.parse subscription.next_billing_date
-    customer = Customer.find_by(shopify_id: subscription.id[/\d+/])
+    subscription_id = subscription.id[/\d+/]
+    customer = Customer.find_by(shopify_id: subscription_id)
     if billing_date.utc.beginning_of_day == Time.current.utc.beginning_of_day
-      result = SubscriptionBillingAttempService.new(id).run
+      result = SubscriptionBillingAttempService.new(subscription.id).run
       if result[:error].present?
         if customer.present? && customer.shop.sms_setting.present? && customer.shop.sms_setting.failed_renewal.present?
           message_service = SmsService::MessageGenerateService.new(shop, customer, subscription)
           message = message_service.content('Charge - Failure')
           TwilioServices::SendSms.call(from: shop.phone, to: customer.phone, message: message)
+          customer.update_columns(failed_at: Time.current)
+          SubscriptionLog.create(billing_status: :failure, executions: (customer.shop.setting.payment_retries.to_i>0 ? true : false), customer_id: customer.id, shop_id: customer.shop_id, subscription_id: subscription_id)
         end
       else
-        ScheduleSkipService.new(subscription.id[/\d+/]).run
+        ScheduleSkipService.new(subscription_id).run
+        SubscriptionLog.create(billing_status: :success, customer_id: customer.id, shop_id: customer.shop_id, subscription_id: subscription_id)
+      end
+    end
+  rescue StabdardError => e
+    p e.message
+  end
+
+  def reprocess_subscription(subscription, subs_log)
+    return unless subscription.status == 'ACTIVE'
+    billing_date = DateTime.parse subscription.next_billing_date
+    subscription_id = subscription.id[/\d+/]
+    customer = Customer.find_by(shopify_id: subscription_id)
+    if customer.present? && customer.shop.sms_setting.present? && customer.shop.sms_setting.failed_renewal.present? && customer.retry_count<=customer.shop.setting.payment_retries
+      if billing_date.utc.beginning_of_day == Time.current.utc.beginning_of_day
+        result = SubscriptionBillingAttempService.new(subscription.id).run
+        if result[:error].present?
+          message_service = SmsService::MessageGenerateService.new(shop, customer, subscription)
+          message = message_service.content('Charge - Failure')
+          TwilioServices::SendSms.call(from: shop.phone, to: customer.phone, message: message)
+          customer.update_columns(failed_at: Time.current, retry_count: customer.retry_count.succ)
+          if customer.retry_count>=customer.shop.setting.payment_retries
+            subs_log.update(billing_status: :churn, executions: false)
+          end
+          # subscription = SubscriptionContractService.new(id).run
+        else
+          next_schedule_date = (Time.current+subscription.billing_policy.interval_count.days).to_date
+          ScheduleSkipService.new(subscription_id).run({ billing_date: next_schedule_date })
+          customer.update_columns(failed_at: nil, retry_count: 0)
+          subs_log.update(billing_status: :retry_success, executions: false)
+        end
       end
     end
   rescue StabdardError => e

@@ -20,5 +20,6 @@ module Types
     field :fetch_smarty_messages, resolver: Queries::FetchSmartyMessages
     field :fetch_smarty_message, resolver: Queries::FetchSmartyMessage
     field :fetch_smarty_variables, resolver: Queries::FetchSmartyVariables
+    field :fetch_customer_insights, resolver: Queries::FetchCustomerInsights
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_21_043347) do
+ActiveRecord::Schema.define(version: 2021_05_25_054106) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,10 @@ ActiveRecord::Schema.define(version: 2021_05_21_043347) do
     t.datetime "shopify_updated_at"
     t.boolean "opt_in_sent", default: false
     t.datetime "opt_in_reminder_at"
+    t.datetime "failed_at"
+    t.integer "retry_count", default: 0
+    t.bigint "reasons_cancel_id"
+    t.index ["reasons_cancel_id"], name: "index_customers_on_reasons_cancel_id"
   end
 
   create_table "email_notifications", force: :cascade do |t|
@@ -351,6 +355,19 @@ ActiveRecord::Schema.define(version: 2021_05_21_043347) do
     t.string "status"
   end
 
+  create_table "subscription_logs", force: :cascade do |t|
+    t.integer "billing_status", default: 0
+    t.integer "action_type", default: 0
+    t.string "subscription_id"
+    t.bigint "shop_id"
+    t.bigint "customer_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "executions", default: false
+    t.index ["customer_id"], name: "index_subscription_logs_on_customer_id"
+    t.index ["shop_id"], name: "index_subscription_logs_on_shop_id"
+  end
+
   create_table "upsell_campaign_groups", force: :cascade do |t|
     t.string "internal_name"
     t.string "selector_title"
@@ -396,4 +413,5 @@ ActiveRecord::Schema.define(version: 2021_05_21_043347) do
     t.json "rule_customer_value"
   end
 
+  add_foreign_key "customers", "reasons_cancels"
 end

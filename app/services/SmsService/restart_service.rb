@@ -5,6 +5,8 @@ class SmsService::RestartService < SmsService::ProcessService
     @params = params
     @shared_service = SmsService::SharedService.new(conversation, params)
     @data = subscriptions_data
+    @shop = @conversation.customer.shop
+    @customer = @conversation.customer
   end
 
   def process_message(step)

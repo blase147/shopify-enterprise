@@ -1,46 +1,27 @@
 import { gql, useLazyQuery } from '@apollo/client';
 import {
   Button, Card,
-
-
-
-
-
-
-
-
-
-
-
   DataTable, DisplayText, FormLayout,
-
-
-
-
-
-
-
-
-
   Heading, Layout,
-
-
-
   Select, Stack,
-
-
   TextField,
-
-  TextStyle
+  TextStyle,
+  Icon,
+  Spinner
 } from '@shopify/polaris';
 import {
-  DropdownMinor
+  DropdownMinor,
+  CaretUpMinor,
+  CaretDownMinor,
 } from '@shopify/polaris-icons';
+import dayjs from 'dayjs';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { isEmpty } from 'lodash';
+import React, { useCallback, useEffect, useMemo, useState, useContext } from 'react';
 import CounterUp from 'react-countup';
-
+import DateRangePicker from '../common/DatePicker/DateRangePicker';
+import { FilterContext } from './../common/Contexts/AnalyticsFilterContext';
 
 const RevenueTrends = () => {
   const [expandedFilter, setExpandedFilter] = useState(false);
@@ -48,7 +29,13 @@ const RevenueTrends = () => {
   const [selected_1, setSelected_1] = useState('today');
   const handleSelectChange_1 = useCallback((value) => setSelected_1(value), []);
 
-  const [filters,setFilters]=useState({granularity:'day',dataPeriodFor:"30",dataByPeriod:"day"})
+  const [filters,setFilters,productCharts,setProductCharts]=useContext(FilterContext)
+  const handleFiltersDates=(dates)=>{
+    if(!isEmpty(dates)){
+      const {start,end}=dates;
+      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD")});
+    }
+  }
 
   const selectOptions = useMemo(() => ([
     { label: 'Day', value: 'day' },
@@ -56,82 +43,155 @@ const RevenueTrends = () => {
     { label: 'Year', value: 'year' }
   ]), [])
 
-  useEffect(() => {
-   console.log("FIlters Changes",filters)
-  }, [filters])
 
   ///Graph Query...
   const fetchReport = gql`
-  query($granularity: String!, $dataPeriodFor: String!, $dataByPeriod: String!) {  
-    fetchRevenueTrend(granularity: $granularity, dataPeriodFor: $dataPeriodFor, dataByPeriod: $dataByPeriod) {
-      totalSales
-      recurringSales
-      salesPerCharge
-      refunds
-      averageCheckoutCharge
-      averageRecurringCharge
-      churnRate
-      newCustomers
-      activeCustomers
-      newSubscriptions
-      cancelledSubscriptions
-      sameDayCancelled
-      activeVsChurnedData {
-          date
-          data {
-              activeCustomers
-              churnedCustomers
-          }
-      }
-      totalSalesData {
-          date
-          data {
-              value
-              chargeCount
-          }
-      }
-      refundsData {
-          date
-          data {
-              value
-              refundsCount
-          }
-      }
-      activeCustomersData {
-          date
-          data {
-              value
-          }
-      }
-      newVsCancelledData {
-          date
-          data {
-              newSubscriptionsCount
-              cancelledSubscriptionsCount
-          }
-      }
-      recurringVsCheckout {
-        date
-        data {
-            recurringSales
-            oneTimeSales
+  query($startDate: String!, $endDate: String!) {  
+    fetchRevenueTrend(startDate: $startDate, endDate: $endDate) {
+        totalSales {
+          value
+          percent
+          up
         }
-    }
-      estimatedSevenDays
-      estimatedThirtyDays
-      estimatedNinetyDays
-      historicalSevenDaysRevenue
-      historicalThirtyDaysRevenue
-      historicalNinetyDaysRevenue
-      sevenDaysErrorRevenue
-      thirtyDaysErrorRevenue
-      ninetyDaysErrorRevenue
-      sevenDaysUpcomingCharge
-      thirtyDaysUpcomingCharge
-      ninetyDaysUpcomingCharge  
-      sevenDaysErrorCharge
-      thirtyDaysErrorCharge
-      ninetyDaysErrorCharge
+        recurringSales {
+          value
+          percent
+          up
+        }
+        salesPerCharge {
+          value
+          percent
+          up
+        }
+        mrr {
+          value
+          percent
+          up
+        }
+        refunds {
+          value
+          percent
+          up
+        }
+        averageCheckoutCharge {
+          value
+          percent
+          up
+        }
+        averageRecurringCharge {
+          value
+          percent
+          up
+        }
+        churnRate {
+          value
+          percent
+          up
+        }
+        newCustomers {
+          value
+          percent
+          up
+        }
+        activeCustomers {
+          value
+          percent
+          up
+        }
+        newSubscriptions {
+          value
+          percent
+          up
+        }
+        cancelledSubscriptions {
+          value
+          percent
+          up
+        }
+        sameDayCancelled {
+          value
+          percent
+          up
+        }
+        activeVsChurnedData {
+            date
+            data {
+                activeCustomers
+                churnedCustomers
+            }
+        }
+        totalSalesData {
+            date
+            data {
+                value
+                chargeCount
+            }
+        }
+        refundsData {
+            date
+            data {
+                value
+                refundsCount
+            }
+        }
+        activeCustomersData {
+            date
+            data {
+                value
+            }
+        }
+        newVsCancelledData {
+            date
+            data {
+                newSubscriptionsCount
+                cancelledSubscriptionsCount
+            }
+        }
+        recurringVsCheckout {
+            date
+            data {
+                recurringSales
+                oneTimeSales
+            }
+        }
+        skuBySubscriptions {
+            sku
+            value
+        }
+        skuByRevenue {
+            sku
+            value
+        }
+        skuByCustomers {
+          sku
+          value
+        }
+        billingFrequencyRevenue {
+            billingPolicy
+            value
+        }
+        skuByFrequency {
+            billingPolicy
+            skus {
+                sku
+                value
+            }
+        }
+        estimatedSevenDays
+        estimatedThirtyDays
+        estimatedNinetyDays
+        historicalSevenDaysRevenue
+        historicalThirtyDaysRevenue
+        historicalNinetyDaysRevenue
+        sevenDaysErrorRevenue
+        thirtyDaysErrorRevenue
+        ninetyDaysErrorRevenue
+        sevenDaysUpcomingCharge
+        thirtyDaysUpcomingCharge
+        ninetyDaysUpcomingCharge
+        sevenDaysErrorCharge
+        thirtyDaysErrorCharge
+        ninetyDaysErrorCharge
     }
 }
   `;
@@ -203,6 +263,115 @@ const CustomerChart = {
       name: '',
       data: [],
       color: '#202b35',
+    },
+  ],
+};
+const skuRevenue = {
+  colors: ["#0D91AE", "#6B97C5", "#FFF500", "#FFCC00", "#E77320", "#FF0000", "#FF5C00", "#979797", "#007EFF", "#00A023", "#8000A0", "#A0007D", "#F4EC19"],
+  title: {
+    text: 'Top 14 SKUs by Recurring Revenue (Subscriptions)'
+  },
+  tooltip: {
+    pointFormat: '<b>{point.y}</b>',
+  },
+  xAxis: {
+    categories: []
+  },
+  yAxis: {
+    title: {
+      text: 'Recurring Revenue ($)'
+    },
+    labels: {
+      formatter: function () {
+        return this.value;
+      }
+    },
+  },
+  series: [{
+    type: 'column',
+    colorByPoint: true,
+    data: [],
+    showInLegend: false
+  }]
+}
+const skuSubscriptions = {
+  colors: ["#0D91AE", "#6B97C5", "#FFF500", "#FFCC00", "#E77320", "#FF0000", "#FF5C00", "#979797", "#007EFF", "#00A023", "#8000A0", "#A0007D", "#F4EC19"],
+  title: {
+    text: 'Top 14 SKUs by Subscriptions'
+  },
+  tooltip: {
+    pointFormat: '<b>{point.y}</b>',
+  },
+  xAxis: {
+    categories: []
+  },
+  yAxis: {
+    title: {
+      text: 'Subscriptions'
+    },
+    labels: {
+      formatter: function () {
+        return this.value;
+      }
+    },
+  },
+  series: [{
+    type: 'column',
+    colorByPoint: true,
+    data: [],
+    showInLegend: false
+  }]
+}
+const insightChart = {
+  chart: {
+    plotBackgroundColor: null,
+    plotBorderWidth: 0,
+    plotShadow: false,
+    height: '400px',
+    // width: '720px',
+  },
+  colors: ['#007EFF', '#57AAFF', '#979797', '#FFCC00', '#E77320', '#FF0000', '#FF5C00', '#212B36', '#979797', '#007EFF', '#00A023', '#8000A0', '#A0007D', '#F4EC19'],
+  title: {
+    text: 'Revenue by Subscription Frequency',
+    // align: 'center',
+    // verticalAlign: 'middle',
+    // // y: 60,
+  },
+  tooltip: {
+    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+  },
+  accessibility: {
+    point: {
+      valueSuffix: '%',
+    },
+  },
+  plotOptions: {
+    pie: {
+      dataLabels: {
+        enabled: true,
+        distance: -50,
+        format: '{point.y} %',
+        style: {
+          fontWeight: 'bold',
+          color: 'white',
+        },
+      },
+
+      center: ['50%', '50%'],
+      size: '110%',
+    },
+  },
+  series: [
+    {
+      type: 'pie',
+      // name: 'Browser share',
+      innerSize: '50%',
+      showInLegend: true,
+      data: [
+        ['60%', 60],
+        ['18%', 18],
+        ['19%', 19],
+      ],
     },
   ],
 };
@@ -332,16 +501,16 @@ const SaleChart = {
   series: [
     {
       name: 'Charge Count',
-      type: 'column',
+      type: 'spline',
       yAxis: 1,
       data: [],
-      color: '#007ffa',
+      color: '#00a030',
     },
     {
       name: 'Total Sales',
-      type: 'spline',
+      type: 'column',
       data: [],
-      color: '#00a030',
+      color: '#007ffa',
     },
   ],
 };
@@ -522,11 +691,21 @@ const rows_Charges = [
 ];
 /// Functionality
   const [cardData, setCardData] = useState({
-    totalSales: "0", recurringSales: "0", salesPerCharge: "0", refunds: "0",
-    averageCheckoutCharge: "0", averageRecurringCharge: "0",
-    churnRate: "0", activeCustomers: "0", newCustomers: "0",
-    newSubscriptions: "0", cancelledSubscriptions: "0", sameDayCancelled: "0",
-    estimatedNinetyDays: "0", estimatedSevenDays: "0", estimatedThirtyDays: "0",
+    totalSales: {value:"0",up:true,percent:0},
+    recurringSales: {value:"0",up:true,percent:0},
+    mrr: {value:"0",up:true,percent:0},
+    refunds: {value:"0",up:true,percent:0},
+    averageCheckoutCharge: {value:"0",up:true,percent:0},
+    averageRecurringCharge: {value:"0",up:true,percent:0},
+    churnRate: {value:"0",up:true,percent:0},
+    activeCustomers: {value:"0",up:true,percent:0},
+    newCustomers: {value:"0",up:true,percent:0},
+    newSubscriptions: {value:"0",up:true,percent:0},
+    cancelledSubscriptions: {value:"0",up:true,percent:0},
+    sameDayCancelled: {value:"0",up:true,percent:0},
+    estimatedNinetyDays: "0",
+    estimatedSevenDays: "0", 
+    estimatedThirtyDays: "0",
   })
 
   const [chartOptions,setChartOptions]=useState({
@@ -536,8 +715,11 @@ const rows_Charges = [
     saleChart:SaleChart,
     activeChurnedCustomerChart:Active_Churned_CustomerChart,
     estimatedChart:EstimatedChart,
-    checkoutChart:CheckoutChart
+    checkoutChart:CheckoutChart,
     
+    skuRevenueChart:skuRevenue,
+    skuSubscriptionsChart:skuSubscriptions,
+    insightChart:insightChart
   })
 
   const [tableData,setTableData]=useState({
@@ -552,22 +734,25 @@ const rows_Charges = [
 
   const getReportData = useCallback(() => {
     getReport({
-      variables: { granularity: filters.granularity, dataPeriodFor: filters.dataPeriodFor, dataByPeriod: filters.dataByPeriod }
+      variables:{
+        startDate:filters.startDate,
+        endDate:filters.endDate
+      }
     })
   }, [filters, getReport])
 
   useEffect(() => {
     getReportData()
-  }, [])
+  }, [filters])
 
   useEffect(() => {
   
     if(data){
-      console.log(data,"Data")
       const {
         totalSales,
         recurringSales,
         salesPerCharge,
+        mrr,
         refunds,
         averageCheckoutCharge,
         averageRecurringCharge,
@@ -591,6 +776,12 @@ const rows_Charges = [
         totalSalesData,
         activeVsChurnedData,
         recurringVsCheckout,
+
+        skuByRevenue,
+        skuBySubscriptions,
+        skuByCustomers,
+        skuByFrequency,
+        billingFrequencyRevenue,
         ////tablesData
         //Revenue table
         sevenDaysErrorRevenue,
@@ -605,12 +796,20 @@ const rows_Charges = [
         ninetyDaysErrorCharge
       }=data.fetchRevenueTrend;
 
+      //Setting charts for product page
+      setProductCharts({
+        skuByRevenue,
+        skuBySubscriptions,
+        skuByCustomers,
+        skuByFrequency,
+        hasData:true
+      })
       //setting cards data ....
       setCardData({
         ...cardData,
         totalSales:totalSales,
         recurringSales:recurringSales,
-        salesPerCharge:salesPerCharge,
+        mrr:mrr,
         refunds:refunds,
         averageCheckoutCharge:averageCheckoutCharge,
         averageRecurringCharge:averageRecurringCharge,
@@ -679,20 +878,34 @@ const rows_Charges = [
       const newSalesData={
         ...chartOptions.saleChart,
         xAxis: {categories: totalSalesData.map(data=>data.date),crosshair: true, angle: 90,},
+        
         series: [
           {
             name: 'Charge Count',
-            type: 'column',
+            type: 'spline',
             yAxis: 1,
             data: totalSalesData.map(data=>parseInt(data.data?.chargeCount || "0")),
-            color: '#007ffa',
+            color: '#00a030',
           },
           {
             name: 'Total Sales',
-            type: 'spline',
+            type: 'column',
             data: totalSalesData.map(data=>parseInt(data.data.value)),
-            color: '#00a030',
+            color: '#007ffa',
           },
+          // {
+          //   name: 'Charge Count',
+          //   type: 'column',
+          //   yAxis: 1,
+          //   data: totalSalesData.map(data=>parseInt(data.data?.chargeCount || "0")),
+          //   color: '#007ffa',
+          // },
+          // {
+          //   name: 'Total Sales',
+          //   type: 'spline',
+          //   data: totalSalesData.map(data=>parseInt(data.data.value)),
+          //   color: '#00a030',
+          // },
         ]
       }
 
@@ -750,6 +963,24 @@ const rows_Charges = [
           },
         ]
       }
+      const newSkuRevenue={...chartOptions.skuRevenueChart,xAxis: {categories: skuByRevenue.map(sku=>sku.sku) || []},
+      series: [{
+        type: 'column',
+        colorByPoint: true,
+        data: skuByRevenue.map(sku=>parseInt(sku.value ||0)) || [],
+        showInLegend: false
+    }] }
+      const newSkuSubscriptions={...chartOptions.skuSubscriptionsChart,xAxis: {categories: skuBySubscriptions.map(sku=>sku.sku) || []},
+      series: [{
+        type: 'column',
+        colorByPoint: true,
+        data: skuBySubscriptions.map(sku=>parseInt(sku.value ||0)) || [],
+        showInLegend: false
+    }] }
+    const insightChartOptions = {
+      ...chartOptions.insightsChart, series: [{
+        type: 'pie', innerSize: '50%', showInLegend: true, data:billingFrequencyRevenue.map(f=>[f.billingPolicy,parseFloat(f.value) || 0])}]
+    }
       //// set New Chart Options
       setChartOptions({
         ...chartOptions,
@@ -759,7 +990,10 @@ const rows_Charges = [
         saleChart:newSalesData,
         activeChurnedCustomerChart:newActiveVsChurnedData,
         estimatedChart:newEstimatedData,
-        checkoutChart:newCheckoutChartData
+        checkoutChart:newCheckoutChartData,
+        skuRevenueChart:newSkuRevenue,
+        skuSubscriptionsChart:newSkuSubscriptions,
+        insightChart:insightChartOptions
       });
       // tables Data
       const newRevenueTable=[
@@ -782,7 +1016,7 @@ const rows_Charges = [
       setTableData({...tableData,revenueTable:newRevenueTable,chargesTable:newChargesTable})
 
     }
-  }, [data,loading])
+  }, [data])
 
 
   const options_1 = [
@@ -792,16 +1026,16 @@ const rows_Charges = [
   ];
 
   const sectionRevenueList = [
-    { section: 'Total Sales', percent: '24', up: true,key:"totalSales" ,type:"currency" },
+    { section: 'Total Sales', percent: '24', up: true,key:"totalSales" ,prefix:"$"},
     {
       section: 'Recurring Sales',
       percent: '1',
       up: false,
       key:"recurringSales",
-      type:"percent"
+      suffix:"%"
     },
-    { section: 'Sales Per Charge', percent: '2', up: true,key:"salesPerCharge", type:"currency" },
-    { section: 'Total Refunds', percent: '2', up: false, key:"refunds", type:"currency"},
+    { section: 'MRR', percent: '2', up: true,key:"mrr", prefix:"$" },
+    { section: 'Total Refunds', percent: '2', up: false, key:"refunds", prefix:"$"},
   ];
 
   const sectionSummaryList = [
@@ -972,15 +1206,32 @@ const rows_Charges = [
   ];
   
   return (
+    <>
+      {loading ? (
+        <Card>
+          <Spinner
+            accessibilityLabel="Spinner example"
+            size="large"
+            color="teal"
+          />
+        </Card>
+      ) :
     <FormLayout>
-      <div className="analytics-page-layout">
+    <div className="analytics-page-layout">
       <Layout>
         <Stack vertical spacing="extraLoose">
           <Layout>
             <Layout.Section>
-              <Card title="Revenue Trends - Basic">
+              <Card title="">
                 <Card.Section>
-                  <Button
+                  <div className="rev-date-picker">
+                    <DateRangePicker
+                      start={filters.startDate}
+                      end={filters.endDate}
+                      handleDates={handleFiltersDates}
+                    />
+                    </div>
+                  {/* <Button
                     plain
                     monochrome
                     onClick={() => {
@@ -989,60 +1240,68 @@ const rows_Charges = [
                     icon={DropdownMinor}
                   >
                     Filter
-                  </Button>
+                  </Button> */}
                   <br />
                   {expandedFilter ? (
-                    <form className="form-inline">
-                      <div className="form-inline-child">
-                        <p>Date Granularity</p>
-                        <div className="select">
-                          <Select
-                            options={selectOptions}
-                            onChange={value=>setFilters({...filters,granularity:value})}
-                            value={filters.granularity}
-                          />
-                        </div>
-                        {/* <div className="select">
-                          <Select
-                            options={options_1}
-                            onChange={handleSelectChange_1}
-                            value={selected_1}
-                          />
-                        </div> */}
-                      </div>
-                      <div className="form-inline-child">
-                        <p>Date Range</p>
-                        {/* <div className="select">
-                          <Select
-                            options={options_1}
-                            onChange={handleSelectChange_1}
-                            value={selected_1}
-                          />
-                        </div> */}
-                        <div className="textfield">
-                          <TextField 
-                          value={filters.dataPeriodFor}
-                          onChange={value=>setFilters({...filters,dataPeriodFor:value})}
-                          ></TextField>
-                        </div>
-                        <div className="select">
-                          <Select
-                            options={selectOptions}
-                            onChange={value=>setFilters({...filters,dataByPeriod:value})}
-                            value={filters.dataByPeriod}
-                          />
-                        </div>
-                      </div>
-                      <Button primary onClick={()=>getReportData()} >
-                        {'   '}Run{'   '}
-                      </Button>
-                    </form>
+                    // <form className="form-inline">
+                    //   <div className="form-inline-child">
+                    //     <p>Date Granularity</p>
+                    //     <div className="select">
+                    //       <Select
+                    //         options={selectOptions}
+                    //         onChange={value=>setFilters({...filters,granularity:value})}
+                    //         value={filters.granularity}
+                    //       />
+                    //     </div>
+                    //     {/* <div className="select">
+                    //       <Select
+                    //         options={options_1}
+                    //         onChange={handleSelectChange_1}
+                    //         value={selected_1}
+                    //       />
+                    //     </div> */}
+                    //   </div>
+                    //   <div className="form-inline-child">
+                    //     <p>Date Range</p>
+                    //     {/* <div className="select">
+                    //       <Select
+                    //         options={options_1}
+                    //         onChange={handleSelectChange_1}
+                    //         value={selected_1}
+                    //       />
+                    //     </div> */}
+                    //     <div className="textfield">
+                    //       <TextField 
+                    //       value={filters.dataPeriodFor}
+                    //       onChange={value=>setFilters({...filters,dataPeriodFor:value})}
+                    //       ></TextField>
+                    //     </div>
+                    //     <div className="select">
+                    //       <Select
+                    //         options={selectOptions}
+                    //         onChange={value=>setFilters({...filters,dataByPeriod:value})}
+                    //         value={filters.dataByPeriod}
+                    //       />
+                    //     </div>
+                    //   </div>
+                    //   <Button primary onClick={()=>getReportData()} >
+                    //     {'   '}Run{'   '}
+                    //   </Button>
+                    // </form>
+                    <>
+                        <DateRangePicker
+                          start={filters.startDate}
+                          end={filters.endDate}
+                          handleDates={handleFiltersDates}
+                        />
+                    </>
                   ) : // </div>
                   null}
                 </Card.Section>
               </Card>
             </Layout.Section>
           </Layout>
+
           <Layout>
             <Layout.Section>
               <DisplayText size="medium">Revenue</DisplayText>
@@ -1057,24 +1316,24 @@ const rows_Charges = [
                             {item.section}
                           </TextStyle>
                         </Stack.Item>
-                        {/* <Stack.Item>
+                        <Stack.Item>
                           <TextStyle
-                            variation={item.up ? 'positive' : 'negative'}
+                            variation={cardData[item.key]?.up ? 'positive' : 'negative'}
                           >
                             <Icon
-                              source={item.up ? CaretUpMinor : CaretDownMinor}
-                              color={item.up ? 'green' : 'red'}
+                              source={cardData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                              color={cardData[item.key]?.up ? 'green' : 'red'}
                             />
-                            {item.percent}%
+                            {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}%
                           </TextStyle>
-                        </Stack.Item> */}
+                        </Stack.Item>
                       </Stack>
 
                       <Stack>
                         <Stack.Item>
                           <DisplayText size="medium">
                             <TextStyle variation="strong">
-                             <CounterUp prefix={item.type=="currency"?"$":""} suffix={item.type=="percent"?"%":""} start={0} end={Number.parseFloat(cardData[item.key]).toFixed(2)} duration={1.5} decimals={2} />
+                             <CounterUp prefix={item.prefix || ''} suffix={item.suffix || ''} start={0} end={Number.parseFloat(cardData[item.key]?.value || 0).toFixed(2)} duration={1.5} decimals={2} />
                             </TextStyle>
                           </DisplayText>
                         </Stack.Item>
@@ -1197,13 +1456,9 @@ const rows_Charges = [
               <HighchartsReact highcharts={Highcharts} options={chartOptions.saleChart} />
             </Layout.Section>
           </Layout>
+
           <Layout>
-            <Layout.Section>
-              <Heading>{'  '}</Heading>
-              <HighchartsReact highcharts={Highcharts} options={chartOptions.refundChart} />
-            </Layout.Section>
-          </Layout>
-          <Layout>
+            <div className="sales-section">
             <Layout.Section secondary>
               <Stack vertical distribution="equalSpacing">
                 {sectionAvgList?.map((item, i) => (
@@ -1215,23 +1470,23 @@ const rows_Charges = [
                             {item.section}
                           </TextStyle>
                         </Stack.Item>
-                        {/* <Stack.Item>
+                        <Stack.Item>
                           <TextStyle
-                            variation={item.up ? 'positive' : 'negative'}
+                            variation={cardData[item.key]?.up  ? 'positive' : 'negative'}
                           >
                             <Icon
-                              source={item.up ? CaretUpMinor : CaretDownMinor}
-                              color={item.up ? 'green' : 'red'}
+                              source={cardData[item.key]?.up  ? CaretUpMinor : CaretDownMinor}
+                              color={cardData[item.key]?.up  ? 'green' : 'red'}
                             />
-                            {item.percent}%
+                            {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}%
                           </TextStyle>
-                        </Stack.Item> */}
+                        </Stack.Item>
                       </Stack>
                       <Stack>
                         <Stack.Item>
                           <DisplayText size="medium">
                             <TextStyle variation="strong">
-                            <CounterUp prefix="$"  start={0} end={Number.parseFloat(cardData[item.key]).toFixed(2)} duration={1.5} decimals={2} />
+                            <CounterUp prefix="$"  start={0} end={Number.parseFloat(cardData[item.key]?.value || 0).toFixed(2)} duration={1.5} decimals={2} />
                             </TextStyle>
                           </DisplayText>
                         </Stack.Item>
@@ -1241,6 +1496,7 @@ const rows_Charges = [
                 ))}
               </Stack>
             </Layout.Section>
+            </div>
             <Layout.Section>
               <HighchartsReact
                 highcharts={Highcharts}
@@ -1248,9 +1504,61 @@ const rows_Charges = [
               />
             </Layout.Section>
           </Layout>
+          <Layout>
+            <Layout.Section>
+              <Heading>{'  '}</Heading>
+              <HighchartsReact highcharts={Highcharts} options={chartOptions.skuRevenueChart} />
+            </Layout.Section>
+          </Layout>
+          <Layout>
+            <Layout.Section>
+              <Heading>{'  '}</Heading>
+              <HighchartsReact highcharts={Highcharts} options={chartOptions.skuSubscriptionsChart} />
+            </Layout.Section>
+          </Layout>
+          <Layout>
+            <Layout.Section>
+            {/* <div className="frequency-graph-revenue"> */}
+            <Card>
+              <Card.Section>
+                {/* <div className="frequency-graph-parameters">
+                  <div className="weeks">
+                    <div className="cancel-color"></div>
+                    <p>1 week</p>
+                  </div>
+                  <div className="weeks">
+                    <div className="dunning-color">
+                    </div>
+                    <p>12 Weeks</p>
+                  </div>
+                  <div className="weeks">
+                    <div className=" active-color">
+                    </div>
+                    <p>4 weeks</p>
+                  </div>
+
+                </div> */}
+              <Heading>{'  '}</Heading>
+              <HighchartsReact highcharts={Highcharts} options={chartOptions.insightChart} />
+              </Card.Section>
+              </Card>
+              {/* </div> */}
+            </Layout.Section>
+          </Layout>
+          <Layout>
+            <Layout.Section>
+         
+              <Heading>{'  '}</Heading>
+
+              <HighchartsReact highcharts={Highcharts} options={chartOptions.refundChart} />
+              
+              
+            </Layout.Section>
+          </Layout>
+
             <Layout>
               <Layout.Section>
-                <DisplayText size="medium">Active Customers</DisplayText>
+                <DisplayText size="medium">Customers</DisplayText>
               </Layout.Section>
             </Layout>
             <Layout>
@@ -1268,23 +1576,23 @@ const rows_Charges = [
                               {item.section}
                             </TextStyle>
                           </Stack.Item>
-                          {/* <Stack.Item>
+                          <Stack.Item>
                             <TextStyle
-                              variation={item.up ? 'positive' : 'negative'}
+                              variation={cardData[item.key]?.up  ? 'positive' : 'negative'}
                             >
                               <Icon
-                                source={item.up ? CaretUpMinor : CaretDownMinor}
-                                color={item.up ? 'green' : 'red'}
+                                source={cardData[item.key]?.up  ? CaretUpMinor : CaretDownMinor}
+                                color={cardData[item.key]?.up  ? 'green' : 'red'}
                               />
-                              {item.percent}%
+                              {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}%
                             </TextStyle>
-                          </Stack.Item> */}
+                          </Stack.Item>
                         </Stack>
                         <Stack>
                           <Stack.Item>
                             <DisplayText size="medium">
                               <TextStyle variation="strong">
-                              <CounterUp prefix={item.type=="currency"?"$":""} suffix={item.type=="percent"?"%":""}  start={0} end={Number.parseFloat(cardData[item.key]).toFixed(2)} duration={1.5} decimals={item.type=="currency"?2:0} />
+                              <CounterUp prefix={item.type=="currency"?"$":""} suffix={item.type=="percent"?"%":""}  start={0} end={Number.parseFloat(cardData[item.key]?.value || 0).toFixed(2)} duration={1.5} decimals={item.type=="currency"?2:0} />
                               </TextStyle>
                             </DisplayText>
                           </Stack.Item>
@@ -1313,7 +1621,7 @@ const rows_Charges = [
           <Stack.Item>
             <Layout>
               <Layout.Section>
-                <DisplayText size="medium">Subscription</DisplayText>
+                <DisplayText size="medium">Revenue Forecast</DisplayText>
               </Layout.Section>
             </Layout>
             <br />
@@ -1329,23 +1637,23 @@ const rows_Charges = [
                               {item.section}
                             </TextStyle>
                           </Stack.Item>
-                          {/* <Stack.Item>
+                          <Stack.Item>
                             <TextStyle
-                              variation={item.up ? 'positive' : 'negative'}
+                              variation={cardData[item.key]?.up ? 'positive' : 'negative'}
                             >
                               <Icon
-                                source={item.up ? CaretUpMinor : CaretDownMinor}
-                                color={item.up ? 'green' : 'red'}
+                                source={cardData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                                color={cardData[item.key]?.up ? 'green' : 'red'}
                               />
-                              {item.percent}%
+                              {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}%
                             </TextStyle>
-                          </Stack.Item> */}
+                          </Stack.Item>
                         </Stack>
                         <Stack>
                           <Stack.Item>
                             <DisplayText size="medium">
                               <TextStyle variation="strong">
-                              <CounterUp  start={0} end={Number.parseFloat(cardData[item.key] || 0.0).toFixed(2)} duration={1.5}  />
+                              <CounterUp  start={0} end={Number.parseFloat(cardData[item.key]?.value || 0.0).toFixed(2)} duration={1.5}  />
                               </TextStyle>
                             </DisplayText>
                           </Stack.Item>
@@ -1450,6 +1758,8 @@ const rows_Charges = [
       </Layout>
       </div>
     </FormLayout>
+    }
+    </>
   );
 };
 export default RevenueTrends;

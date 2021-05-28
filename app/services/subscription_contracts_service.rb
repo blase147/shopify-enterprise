@@ -96,4 +96,5 @@ class SubscriptionContractsService < GraphqlService
     p ex.message
     { error: ex.message }
   end
+
 end
