@@ -22,7 +22,7 @@ class Shop < ActiveRecord::Base
   after_create :setup_default_lock_password
 
   def setup_default_lock_password
-    LockPassword.create(encrypted_password: ENV['DEFAULT_LOCK_PASSWORD'], shop_id: id)
+    LockPassword.create(password: ENV['DEFAULT_LOCK_PASSWORD'], shop_id: id)
   end
 
   def build_sms_setting
