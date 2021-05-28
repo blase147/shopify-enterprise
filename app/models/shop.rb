@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Shop < ActiveRecord::Base
   include ShopifyApp::ShopSessionStorage
-  has_secure_password :encrypted_password
 
   def api_version
     ShopifyApp.configuration.api_version
