@@ -16,6 +16,7 @@ import {
   TextContainer,
   Spinner
 } from '@shopify/polaris';
+import dayjs from 'dayjs'
 import { isEmpty } from 'lodash';
 import DateRangePicker from '../common/DatePicker/DateRangePicker';
 
@@ -184,16 +185,15 @@ const CustomerInsights = () => {
     ],
   };
 
-  const [filters,setFilters,productCharts,setProductCharts]=useContext(FilterContext)
-  const handleFiltersDates=(dates)=>{
+  // const [filters,setFilters,productCharts,setProductCharts]=useContext(FilterContext)
+  const [filters,setFilters]=useState({startDate:dayjs(new Date()).subtract(30,'days').format("YYYY-MM-DD"),endDate:dayjs(new Date()).format("YYYY-MM-DD"),span:"30 days"})
+  const handleFiltersDates=(dates,span)=>{
     if(!isEmpty(dates)){
       const {start,end}=dates;
-      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD")});
-      console.log("product Charts")
-      setProductCharts({hasData:false});
+      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD"),span:span});
     }
   }
-  const [getReport, { loading, data }] = useLazyQuery(fetchReport);
+  const [getReport, { loading, data }] = useLazyQuery(fetchReport,{fetchPolicy:"network-only"});
 
   const getReportData = useCallback(() => {
     getReport({
@@ -204,14 +204,10 @@ const CustomerInsights = () => {
     })
   }, [filters, getReport])
 
-  useEffect(()=>{
-    console.log(productCharts,"Changed---")
-  },[productCharts])
-  useEffect(() => {
-    if(!productCharts.hasData){
+
+  useEffect(() => { 
       getReportData()
-    }
-  }, [filters,productCharts])
+  }, [filters])
 
   const [chartOptions,setChartOptions]=useState({
     skuRevenueChart:skuRevenue,
@@ -222,7 +218,7 @@ const CustomerInsights = () => {
 
  const [insightsOptions,setInsightOptions] = useState([])
   const [insightsData,setInsightsData]=useState({})
-  const [selectedInsight, setSelectedInsight] = useState(productCharts.hasData ? productCharts?.skuByFrequency[0]?.billingPolicy : '');
+  const [selectedInsight, setSelectedInsight] = useState('');
   const handleSelectChange = (value) => setSelectedInsight(value);
  
   useEffect(()=>{
@@ -232,68 +228,69 @@ const CustomerInsights = () => {
       const insightOptions=insightsData.map(data=>({label:data.billingPolicy,value:data.billingPolicy}))
       setInsightOptions(insightOptions);
       const selectedData=insightsData.find(data=>data.billingPolicy===selectedInsight);
+      console.log(selectedData,"--",selectedInsight,"--",insightsOptions)
       const insightChartOptions = {
         ...insightsChart, series: [{
           type: 'pie', innerSize: '50%', showInLegend: true, data:selectedData.skus.map(f=>[f.sku,parseFloat(f.value) || 0])}]
       }
       setChartOptions({...chartOptions,insightsChart:insightChartOptions})
     }
-  },[insightsData,selectedInsight])
+  },[selectedInsight])
 
-  useEffect(()=>{
-    if(productCharts.hasData){
-      const {
-        skuByFrequency,
-        skuByRevenue,
-        skuBySubscriptions,
-        skuByCustomers
-      }=productCharts;
-      setInsightsData(skuByFrequency)
+  // useEffect(()=>{
+  //   if(productCharts.hasData){
+  //     const {
+  //       skuByFrequency,
+  //       skuByRevenue,
+  //       skuBySubscriptions,
+  //       skuByCustomers
+  //     }=productCharts;
+  //     setInsightsData(skuByFrequency)
 
-      //Charts Data
-      const { insightsChart, skuCustomersChart, skuRevenueChart, skuSubscriptionsChart } = chartOptions;
+  //     //Charts Data
+  //     const { insightsChart, skuCustomersChart, skuRevenueChart, skuSubscriptionsChart } = chartOptions;
       
-      const newSkuRevenue = {
-        ...chartOptions.skuRevenueChart, xAxis: { categories: skuByRevenue.map(sku => sku.sku) || [] },
-        series: [{
-          type: 'column',
-          colorByPoint: true,
-          data: skuByRevenue.map(sku => parseInt(sku.value || 0)) || [],
-          showInLegend: false
-        }]
-      }
+  //     const newSkuRevenue = {
+  //       ...chartOptions.skuRevenueChart, xAxis: { categories: skuByRevenue.map(sku => sku.sku) || [] },
+  //       series: [{
+  //         type: 'column',
+  //         colorByPoint: true,
+  //         data: skuByRevenue.map(sku => parseInt(sku.value || 0)) || [],
+  //         showInLegend: false
+  //       }]
+  //     }
 
-      const newSkuCustomersChart = {
-        ...skuCustomersChart, xAxis: { categories: skuByCustomers.map(sku => sku.sku) || [] },
-        series: [{
-          type: 'column',
-          colorByPoint: true,
-          data: skuByCustomers.map(sku => parseInt(sku.value || 0)) || [],
-          showInLegend: false
-        }]
-      }
+  //     const newSkuCustomersChart = {
+  //       ...skuCustomersChart, xAxis: { categories: skuByCustomers.map(sku => sku.sku) || [] },
+  //       series: [{
+  //         type: 'column',
+  //         colorByPoint: true,
+  //         data: skuByCustomers.map(sku => parseInt(sku.value || 0)) || [],
+  //         showInLegend: false
+  //       }]
+  //     }
 
-      const newSkuSubscriptions = {
-        ...chartOptions.skuSubscriptionsChart, xAxis: { categories: skuBySubscriptions.map(sku => sku.sku) || [] },
-        series: [{
-          type: 'column',
-          colorByPoint: true,
-          data: skuBySubscriptions.map(sku => parseInt(sku.value || 0)) || [],
-          showInLegend: false
-        }]
-      }
+  //     const newSkuSubscriptions = {
+  //       ...chartOptions.skuSubscriptionsChart, xAxis: { categories: skuBySubscriptions.map(sku => sku.sku) || [] },
+  //       series: [{
+  //         type: 'column',
+  //         colorByPoint: true,
+  //         data: skuBySubscriptions.map(sku => parseInt(sku.value || 0)) || [],
+  //         showInLegend: false
+  //       }]
+  //     }
 
-      setChartOptions({
-        ...chartOptions,
-        // insightsChart:insightChartOptions,
-        skuCustomersChart:newSkuCustomersChart,
-        skuRevenueChart:newSkuRevenue,
-        skuSubscriptionsChart:newSkuSubscriptions
-      })
+  //     setChartOptions({
+  //       ...chartOptions,
+  //       // insightsChart:insightChartOptions,
+  //       skuCustomersChart:newSkuCustomersChart,
+  //       skuRevenueChart:newSkuRevenue,
+  //       skuSubscriptionsChart:newSkuSubscriptions
+  //     })
 
-    }
+  //   }
 
-  },[productCharts])
+  // },[productCharts])
 
   useEffect(()=>{
     if(!isEmpty(data?.fetchRevenueTrend)){
@@ -303,11 +300,22 @@ const CustomerInsights = () => {
         skuBySubscriptions,
         skuByCustomers
       }=data.fetchRevenueTrend;
-    
-    setInsightsData(skuByFrequency)
+      const { insightsChart, skuCustomersChart, skuRevenueChart, skuSubscriptionsChart } = chartOptions;
+      
+
+      
+      if (!isEmpty(skuByFrequency)) {
+        setInsightsData(skuByFrequency)
+        setSelectedInsight(skuByFrequency[0]?.billingPolicy)
+      }else{
+        setInsightsData({});
+        setInsightOptions([]);
+        setSelectedInsight('');
+      }
+      
 
       //Charts Data
-      const { insightsChart, skuCustomersChart, skuRevenueChart, skuSubscriptionsChart } = chartOptions;
+      
       
       const newSkuRevenue = {
         ...chartOptions.skuRevenueChart, xAxis: { categories: skuByRevenue.map(sku => sku.sku) || [] },
@@ -341,7 +349,7 @@ const CustomerInsights = () => {
 
       setChartOptions({
         ...chartOptions,
-        // insightsChart:insightChartOptions,
+        insightsChart:PercentVerticalChart,
         skuCustomersChart:newSkuCustomersChart,
         skuRevenueChart:newSkuRevenue,
         skuSubscriptionsChart:newSkuSubscriptions
@@ -351,7 +359,7 @@ const CustomerInsights = () => {
 
   return (
     <>
-    {!productCharts.hasData && isEmpty(data) ? (
+    {(loading || !data) ? (
         <Card>
           <Spinner
             accessibilityLabel="Spinner example"
@@ -370,6 +378,7 @@ const CustomerInsights = () => {
                     <DateRangePicker
                       start={filters.startDate}
                       end={filters.endDate}
+                      span={filters.span}
                       handleDates={handleFiltersDates}
                     />
                     </div>

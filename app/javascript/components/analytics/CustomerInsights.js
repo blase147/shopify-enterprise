@@ -595,11 +595,12 @@ const CustomerInsights = () => {
     customersFrequencyChart:customersFrequency
   })
 
-  const [filters,setFilters]=useContext(FilterContext)
-  const handleFiltersDates=(dates)=>{
+  // const [filters,setFilters]=useContext(FilterContext)
+  const [filters,setFilters]=useState({startDate:dayjs(new Date()).subtract(30,'days').format("YYYY-MM-DD"),endDate:dayjs(new Date()).format("YYYY-MM-DD"),span:"30 days"})
+  const handleFiltersDates=(dates,span)=>{
     if(!isEmpty(dates)){
       const {start,end}=dates;
-      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD")});
+      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD"),span:span});
     }
   }
   const [getReport, { loading, data:reportData }] = useLazyQuery(fetchReport,{fetchPolicy:"network-only"});
@@ -773,7 +774,7 @@ const CustomerInsights = () => {
 
   return (
     <>
-    {loading ? (
+    {(loading || !reportData) ? (
         <Card>
           <Spinner
             accessibilityLabel="Spinner example"
@@ -792,6 +793,7 @@ const CustomerInsights = () => {
                     <DateRangePicker
                       start={filters.startDate}
                       end={filters.endDate}
+                      span={filters.span}
                       handleDates={handleFiltersDates}
                     />
                     </div>

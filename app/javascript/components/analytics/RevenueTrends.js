@@ -30,11 +30,12 @@ const RevenueTrends = () => {
   const [selected_1, setSelected_1] = useState('today');
   const handleSelectChange_1 = useCallback((value) => setSelected_1(value), []);
 
-  const [filters,setFilters,productCharts,setProductCharts]=useContext(FilterContext)
-  const handleFiltersDates=(dates)=>{
+  // const [filters,setFilters,productCharts,setProductCharts]=useContext(FilterContext)
+  const [filters,setFilters]=useState({startDate:dayjs(new Date()).subtract(30,'days').format("YYYY-MM-DD"),endDate:dayjs(new Date()).format("YYYY-MM-DD"),span:"30 days"})
+  const handleFiltersDates=(dates,span)=>{
     if(!isEmpty(dates)){
       const {start,end}=dates;
-      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD")});
+      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD"),span:span});
     }
   }
 
@@ -400,7 +401,7 @@ const RefundChart = {
         },
       },
       title: {
-        text: 'Refund Amount',
+        text: 'Refund Count',
         style: {
           color: '#202b35',
         },
@@ -409,7 +410,7 @@ const RefundChart = {
     {
       // Secondary yAxis
       title: {
-        text: 'Refund Count',
+        text: 'Refund Amount',
         style: {
           color: '#202b35',
         },
@@ -435,13 +436,15 @@ const RefundChart = {
       type: 'column',
       yAxis: 1,
       data: [],
-      color: '#959595',
+      color: '#202b35',
+      fillOpacity:0.4,
     },
     {
       name: 'Refund amount',
       type: 'spline',
       data: [],
-      color: '#202b35',
+      color: '#959595',
+      fillOpacity:0.4,
     },
   ],
 };
@@ -451,7 +454,7 @@ const SaleChart = {
     zoomType: 'xy',
   },
   title: {
-    text: 'Total Sales (Inc.Refunds)',
+    text: 'Subscriptions Revenue (incl. refunds)',
   },
   xAxis: [
     {
@@ -470,7 +473,7 @@ const SaleChart = {
         },
       },
       title: {
-        text: 'Total Sales',
+        text: 'Revenue ($)',
         style: {
           color: '#202b35',
         },
@@ -508,7 +511,7 @@ const SaleChart = {
       color: '#00a030',
     },
     {
-      name: 'Total Sales',
+      name: 'Subscriptions revenue',
       type: 'column',
       data: [],
       color: '#007ffa',
@@ -797,14 +800,15 @@ const rows_Charges = [
         ninetyDaysErrorCharge
       }=data.fetchRevenueTrend;
 
-      //Setting charts for product page
-      setProductCharts({
-        skuByRevenue,
-        skuBySubscriptions,
-        skuByCustomers,
-        skuByFrequency,
-        hasData:true
-      })
+      // //Setting charts for product page
+      // setProductCharts({
+      //   skuByRevenue,
+      //   skuBySubscriptions,
+      //   skuByCustomers,
+      //   skuByFrequency,
+      //   hasData:true
+      // })
+
       //setting cards data ....
       setCardData({
         ...cardData,
@@ -861,17 +865,19 @@ const rows_Charges = [
         xAxis: {categories: refundsData.map(data=>data.date),},
         series: [
           {
-            name: 'Refund Count',
+            name: 'Refund amount',
             type: 'column',
             yAxis: 1,
-            data: refundsData.map(data=>parseInt(data.data.refundsCount)),
+            data: refundsData.map(data=>parseInt(data.data.value)),
             color: '#959595',
+            fillOpacity:0.4,
           },
           {
-            name: 'Refund amount',
+            name: 'Refund Count',
             type: 'spline',
-            data: refundsData.map(data=>parseInt(data.data.value)),
+            data: refundsData.map(data=>parseInt(data.data.refundsCount)),
             color: '#202b35',
+            fillOpacity:0.4,
           },
         ]
       }
@@ -889,7 +895,7 @@ const rows_Charges = [
             color: '#00a030',
           },
           {
-            name: 'Total Sales',
+            name: 'Subscriptions revenue',
             type: 'column',
             data: totalSalesData.map(data=>parseInt(data.data.value)),
             color: '#007ffa',
@@ -1229,19 +1235,10 @@ const rows_Charges = [
                     <DateRangePicker
                       start={filters.startDate}
                       end={filters.endDate}
+                      span={filters.span}
                       handleDates={handleFiltersDates}
                     />
-                    <div className="analytics-btn-group">
-                      <ButtonGroup segmented>
-                        <Button  primary>
-                          Daily
-                        </Button>
-                        <Button  >3 Months</Button>
-                        <Button  >6 Months</Button>
-                        <Button  >12 Months</Button>
-                      </ButtonGroup>
-                      <Button primary type="button">Run</Button>
-                    </div>
+                    
                   </div>
                   
                 </Card.Section>

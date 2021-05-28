@@ -98,11 +98,20 @@
   }
   //revenue trends
 
-
+    .filter-parent {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
     .rev-date-picker {
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
+      width: 100%;
+      > div {
+        width: 100%;
+      }
       .analytics-btn-group {
         display: flex;
         > button {
