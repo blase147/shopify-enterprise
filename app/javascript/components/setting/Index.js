@@ -1,6 +1,7 @@
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery, useLazyQuery } from '@apollo/client';
 import { Banner, Card, ContextualSaveBar, Form, Frame, List, Page, Spinner, Tabs, Toast, Layout, FormLayout, TextField, Button } from '@shopify/polaris';
 import { Formik } from 'formik';
+import { isEmpty } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import * as yup from 'yup';
@@ -30,6 +31,14 @@ const Settings = () => {
     // internalName: yup.string().required().label('Internal name'),
   });
 
+  const confirmPasswordQuery=gql`
+  query($password:String!)
+    {
+      confirmPassword(password:$password) {
+              success
+    }
+  }
+  `;
   const GET_DATA = gql`
     query {
       fetchSetting {
@@ -316,8 +325,29 @@ const Settings = () => {
   const [selectedTitleTab, setSelectedTitleTab] = useState(0);
 
   // Password confirmation
-  const [passwordConfirmed, setPasswordConfirmed] = useState(true)
+  const [passwordConfirmed, setPasswordConfirmed] = useState(false)
   const [password, setPassword] = useState("")
+  const [passwordError,setPasswordError]=useState("")
+  const [confirmPassword,{data:confirmPasswordRes,loading:passwordLoading}]=useLazyQuery(confirmPasswordQuery,{fetchPolicy:"network-only"})
+
+  const verifyPassword =()=>{
+    if(!isEmpty(password)){
+      confirmPassword({
+        variables:{
+          password:password
+        }
+      })
+    }
+  }
+
+  useEffect(()=>{
+      if(confirmPasswordRes?.confirmPassword?.success)
+      {
+        setPasswordConfirmed(true);
+      }else{
+        setPasswordError(confirmPasswordRes?.errors[0]?.message)
+      }
+  },[confirmPasswordRes])
 
   const handleTabChange = useCallback(
     (selectedTabIndex) => setSelectedTitleTab(selectedTabIndex),
@@ -542,8 +572,9 @@ const Settings = () => {
                         onChange={value => setPassword(value)}
                         label="Password"
                         type="password"
+                        error={passwordError && passwordError}
                       />
-                      <Button primary>Confirm</Button>
+                      <Button primary loading={passwordLoading} onClick={verifyPassword} >Confirm</Button>
                     </FormLayout>
                   </Card>
                 </Layout.Section>
