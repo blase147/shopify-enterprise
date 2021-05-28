@@ -31,12 +31,13 @@ export default class DateRangePicker extends React.Component {
       <>
       <div className="filter-parent" style={{width:'100%'}}>
         <Button
-          plain
+          
           monochrome
           onClick={this.togglePopover}
-          icon={DropdownMinor}
+          disclosure={'down'}
+          textAlign='left'
             >
-            Filter
+            Choose date range
         </Button>
       </div>
       </>)

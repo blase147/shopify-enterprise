@@ -7,7 +7,8 @@ import {
   TextField,
   TextStyle,
   Icon,
-  Spinner
+  Spinner,
+  ButtonGroup
 } from '@shopify/polaris';
 import {
   DropdownMinor,
@@ -1230,7 +1231,18 @@ const rows_Charges = [
                       end={filters.endDate}
                       handleDates={handleFiltersDates}
                     />
+                    <div className="analytics-btn-group">
+                      <ButtonGroup segmented>
+                        <Button  primary>
+                          Daily
+                        </Button>
+                        <Button  >3 Months</Button>
+                        <Button  >6 Months</Button>
+                        <Button  >12 Months</Button>
+                      </ButtonGroup>
+                      <Button primary type="button">Run</Button>
                     </div>
+                  </div>
                   
                 </Card.Section>
               </Card>
