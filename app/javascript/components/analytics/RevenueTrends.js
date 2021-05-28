@@ -1231,72 +1231,7 @@ const rows_Charges = [
                       handleDates={handleFiltersDates}
                     />
                     </div>
-                  {/* <Button
-                    plain
-                    monochrome
-                    onClick={() => {
-                      setExpandedFilter(!expandedFilter);
-                    }}
-                    icon={DropdownMinor}
-                  >
-                    Filter
-                  </Button> */}
-                  <br />
-                  {expandedFilter ? (
-                    // <form className="form-inline">
-                    //   <div className="form-inline-child">
-                    //     <p>Date Granularity</p>
-                    //     <div className="select">
-                    //       <Select
-                    //         options={selectOptions}
-                    //         onChange={value=>setFilters({...filters,granularity:value})}
-                    //         value={filters.granularity}
-                    //       />
-                    //     </div>
-                    //     {/* <div className="select">
-                    //       <Select
-                    //         options={options_1}
-                    //         onChange={handleSelectChange_1}
-                    //         value={selected_1}
-                    //       />
-                    //     </div> */}
-                    //   </div>
-                    //   <div className="form-inline-child">
-                    //     <p>Date Range</p>
-                    //     {/* <div className="select">
-                    //       <Select
-                    //         options={options_1}
-                    //         onChange={handleSelectChange_1}
-                    //         value={selected_1}
-                    //       />
-                    //     </div> */}
-                    //     <div className="textfield">
-                    //       <TextField 
-                    //       value={filters.dataPeriodFor}
-                    //       onChange={value=>setFilters({...filters,dataPeriodFor:value})}
-                    //       ></TextField>
-                    //     </div>
-                    //     <div className="select">
-                    //       <Select
-                    //         options={selectOptions}
-                    //         onChange={value=>setFilters({...filters,dataByPeriod:value})}
-                    //         value={filters.dataByPeriod}
-                    //       />
-                    //     </div>
-                    //   </div>
-                    //   <Button primary onClick={()=>getReportData()} >
-                    //     {'   '}Run{'   '}
-                    //   </Button>
-                    // </form>
-                    <>
-                        <DateRangePicker
-                          start={filters.startDate}
-                          end={filters.endDate}
-                          handleDates={handleFiltersDates}
-                        />
-                    </>
-                  ) : // </div>
-                  null}
+                  
                 </Card.Section>
               </Card>
             </Layout.Section>

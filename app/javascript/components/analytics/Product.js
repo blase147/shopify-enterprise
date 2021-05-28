@@ -17,6 +17,7 @@ import {
   Spinner
 } from '@shopify/polaris';
 import { isEmpty } from 'lodash';
+import DateRangePicker from '../common/DatePicker/DateRangePicker';
 
 const CustomerInsights = () => {
 
@@ -183,7 +184,15 @@ const CustomerInsights = () => {
     ],
   };
 
-  const [filters,setFilters,productCharts]=useContext(FilterContext)
+  const [filters,setFilters,productCharts,setProductCharts]=useContext(FilterContext)
+  const handleFiltersDates=(dates)=>{
+    if(!isEmpty(dates)){
+      const {start,end}=dates;
+      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD")});
+      console.log("product Charts")
+      setProductCharts({hasData:false});
+    }
+  }
   const [getReport, { loading, data }] = useLazyQuery(fetchReport);
 
   const getReportData = useCallback(() => {
@@ -195,11 +204,14 @@ const CustomerInsights = () => {
     })
   }, [filters, getReport])
 
+  useEffect(()=>{
+    console.log(productCharts,"Changed---")
+  },[productCharts])
   useEffect(() => {
     if(!productCharts.hasData){
       getReportData()
     }
-  }, [filters])
+  }, [filters,productCharts])
 
   const [chartOptions,setChartOptions]=useState({
     skuRevenueChart:skuRevenue,
@@ -350,6 +362,22 @@ const CustomerInsights = () => {
       ) :
     <FormLayout>
       <Stack vertical spacing="extraLoose">
+      <Layout>
+            <Layout.Section>
+              <Card title="">
+                <Card.Section>
+                  <div className="rev-date-picker">
+                    <DateRangePicker
+                      start={filters.startDate}
+                      end={filters.endDate}
+                      handleDates={handleFiltersDates}
+                    />
+                    </div>
+                  
+                </Card.Section>
+              </Card>
+            </Layout.Section>
+      </Layout>
         <Layout>
           <Layout.Section>
             <Heading>{'  '}</Heading>

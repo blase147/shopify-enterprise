@@ -595,14 +595,13 @@ const CustomerInsights = () => {
     customersFrequencyChart:customersFrequency
   })
 
-  const [filters]=useContext(FilterContext)
-  // const [filters,setFilters]=useState({startDate:dayjs(new Date()).subtract(30,'days').format("YYYY-MM-DD"),endDate:dayjs(new Date()).format("YYYY-MM-DD")})
-  // const handleFiltersDates=(dates)=>{
-  //   if(!isEmpty(dates)){
-  //     const {start,end}=dates;
-  //     setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD")});
-  //   }
-  // }
+  const [filters,setFilters]=useContext(FilterContext)
+  const handleFiltersDates=(dates)=>{
+    if(!isEmpty(dates)){
+      const {start,end}=dates;
+      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD")});
+    }
+  }
   const [getReport, { loading, data:reportData }] = useLazyQuery(fetchReport,{fetchPolicy:"network-only"});
 
   const getReportData = useCallback(() => {
@@ -785,6 +784,22 @@ const CustomerInsights = () => {
       ) :
     <FormLayout>
       <Stack vertical spacing="extraLoose">
+      <Layout>
+            <Layout.Section>
+              <Card title="">
+                <Card.Section>
+                  <div className="rev-date-picker">
+                    <DateRangePicker
+                      start={filters.startDate}
+                      end={filters.endDate}
+                      handleDates={handleFiltersDates}
+                    />
+                    </div>
+                  
+                </Card.Section>
+              </Card>
+            </Layout.Section>
+      </Layout>
         <Layout>
           {/* <Layout.Section secondary> */}
           <div className="container-left customer-count">
