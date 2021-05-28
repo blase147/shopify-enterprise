@@ -281,7 +281,7 @@ const Installation = () => {
               </Stack>
             </Page>
           ) : (
-            <Page title="Password confirmation">
+            <Page title="Password protected">
               <Layout>
                 <Layout.Section>
                   <Card sectioned>

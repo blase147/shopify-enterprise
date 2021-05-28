@@ -25,7 +25,7 @@ const Settings = () => {
   const [formErrors, setFormErrors] = useState([]);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
-  
+
 
   const validationSchema = yup.object().shape({
     // internalName: yup.string().required().label('Internal name'),
@@ -497,7 +497,7 @@ const Settings = () => {
 
                         {selectedTitleTab === 0 ? (
                           <HouseKeeping
-                            
+
                           />):
                         selectedTitleTab === 1 ? (
                           <Billing
@@ -562,7 +562,7 @@ const Settings = () => {
               </Tabs>
             </Page>
           ): (
-            <Page title="Password confirmation">
+            <Page title="Password protected">
               <Layout>
                 <Layout.Section>
                   <Card sectioned>
