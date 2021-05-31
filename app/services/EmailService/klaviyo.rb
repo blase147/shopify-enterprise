@@ -2,10 +2,20 @@ class EmailService::Klaviyo < ApplicationService
   require 'uri'
   require 'net/http'
   require 'openssl'
+  require 'klaviyo'
 
   def initialize(email_notification)
+    init_session(email_notification.setting.shop)
     @email_notification = email_notification
     @shopify_shop = ShopifyAPI::Shop.current
+  end
+
+  def init_session(shop)
+    integration = shop.email_integration_service
+    if integration.present?
+      Klaviyo.public_api_key = integration.credentials['public_key']
+      Klaviyo.private_api_key = integration.credentials['private_key']
+    end
   end
 
   def fetch_template

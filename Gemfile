@@ -57,6 +57,7 @@ gem 'mina'
 gem 'twilio-ruby', '~> 5.52.0'
 gem 'percentage', '~> 1.4', '>= 1.4.1'
 gem 'klaviyo'
+gem 'sendgrid-ruby'
 
 gem 'bcrypt', '~> 3.1.7'
 
