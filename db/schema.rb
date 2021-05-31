@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_28_111450) do
+ActiveRecord::Schema.define(version: 2021_05_31_101554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -102,6 +102,20 @@ ActiveRecord::Schema.define(version: 2021_05_28_111450) do
     t.string "slug"
     t.string "template_identity"
     t.text "hypertext"
+  end
+
+  create_table "integrations", force: :cascade do |t|
+    t.integer "integration_type", default: 0
+    t.string "name"
+    t.string "image_url"
+    t.json "credentials"
+    t.integer "status", default: 0
+    t.integer "service_type", default: 0
+    t.bigint "shop_id"
+    t.boolean "default", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["shop_id"], name: "index_integrations_on_shop_id"
   end
 
   create_table "lock_passwords", force: :cascade do |t|
@@ -323,7 +337,6 @@ ActiveRecord::Schema.define(version: 2021_05_28_111450) do
     t.boolean "renewal_reminder", default: false
     t.boolean "skip_update_next_charge", default: false
     t.boolean "one_time_upsells", default: false
-    t.boolean "failed_renewal", default: false
     t.boolean "cancel_reactivate_subscription", default: false
     t.boolean "edit_quantity", default: false
     t.boolean "cancel_subscription", default: false
@@ -333,6 +346,7 @@ ActiveRecord::Schema.define(version: 2021_05_28_111450) do
     t.string "renewal_duration"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "failed_renewal"
     t.boolean "opt_in", default: false
     t.boolean "swap_product", default: false
     t.boolean "update_billing", default: false
