@@ -8,8 +8,12 @@ class Integration < ApplicationRecord
   before_update :set_default_integration
 
   def set_default_integration
-    unless shop.integrations.where(integration_type: integration_type, service_type: service_type, credentials: nil).present?
+    unless shop.integrations.where(integration_type: integration_type, service_type: service_type).where.not(id: id, credentials: nil).present?
       self.default = true
+      unless shop.setting.email_service.present?
+        shop.setting.update(email_service: name)
+      end
     end
   end
+
 end
