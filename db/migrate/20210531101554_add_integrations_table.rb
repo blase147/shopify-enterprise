@@ -12,5 +12,7 @@ class AddIntegrationsTable < ActiveRecord::Migration[6.0]
       t.string :keys
       t.timestamps
     end
+
+    add_column :settings, :email_service, :string
   end
 end

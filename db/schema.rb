@@ -262,6 +262,7 @@ ActiveRecord::Schema.define(version: 2021_05_31_101554) do
     t.boolean "show_account", default: true
     t.string "delay_order"
     t.string "pause_subscription"
+    t.string "email_service"
     t.index ["shop_id"], name: "index_settings_on_shop_id", unique: true
   end
 
