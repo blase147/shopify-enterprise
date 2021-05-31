@@ -102,5 +102,5 @@ shop.smarty_variables.create(name: 'shop_name')
 
 #integrations
 
-shop.integrations.create(integration_type: :marketing, service_type: :email, name: 'SendGrid')
-shop.integrations.create(integration_type: :marketing, service_type: :email, name: 'Klaviyo')
+shop.integrations.create(integration_type: :marketing, service_type: :email, name: 'SendGrid', keys: 'username,password')
+shop.integrations.create(integration_type: :marketing, service_type: :email, name: 'Klaviyo', keys: 'public_key,private_key')

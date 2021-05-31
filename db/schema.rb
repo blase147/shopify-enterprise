@@ -113,6 +113,7 @@ ActiveRecord::Schema.define(version: 2021_05_31_101554) do
     t.integer "service_type", default: 0
     t.bigint "shop_id"
     t.boolean "default", default: false
+    t.string "keys"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["shop_id"], name: "index_integrations_on_shop_id"

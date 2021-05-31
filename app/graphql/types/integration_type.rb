@@ -7,6 +7,7 @@ module Types
     field :default, String, null: true
     field :credentials, String, null: true
     field :status, String, null: true
+    field :keys, String, null: true
     field :__typename, String, null: true
   end
 end

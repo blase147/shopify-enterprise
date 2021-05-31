@@ -9,6 +9,7 @@ class AddIntegrationsTable < ActiveRecord::Migration[6.0]
       t.integer :service_type, default: 0
       t.references :shop
       t.boolean :default, default: false
+      t.string :keys
       t.timestamps
     end
   end
