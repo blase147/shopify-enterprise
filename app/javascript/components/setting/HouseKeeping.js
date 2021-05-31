@@ -41,15 +41,14 @@ const updateSmsSettingQuery = gql`
   }
 `;
 
-const updatePasswordMutation = gql`
-  mutation ($input: UpdatePasswordInput!) {
-    updatePassword(input: $input) {
-      lockPassword {
-        password
-        passwordConfirmation
+  const updatePasswordMutation = gql`
+mutation ($input: UpdatePasswordInput!) {
+  updatePassword(input: $input) {
+      password {
+          success
       }
-    }
   }
+}
 `;
 
   const [formErrors, setFormErrors] = useState([]);
@@ -104,7 +103,7 @@ const updatePasswordMutation = gql`
   })
   const [password, setPassword] = useState("")
   const [passwordConfirmation, setPasswordConfirmation] = useState("")
-  const [updatePassword, {data1, error1, loading1}] = useMutation(updatePasswordMutation)
+  const [updatePassword, {data1, error1, loading:loadingPssword}] = useMutation(updatePasswordMutation)
   const handleSmsChange=(updated)=>{
     setSmsData({...smsData,...updated})
   }
@@ -239,7 +238,7 @@ const updatePasswordMutation = gql`
                     type="password"
                   />
                   <div class="tabs-btn">
-                    <Button primary loading={loading} onClick={handleChangePassword}>Save</Button>
+                    <Button primary loading={loadingPssword} onClick={handleChangePassword}>Save</Button>
                     <Button type="button">Cancel</Button>
                   </div>
                 </Layout.Section>

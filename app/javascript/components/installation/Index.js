@@ -29,13 +29,21 @@ import {
   Frame
 } from '@shopify/polaris';
 
-import _ from 'lodash';
+import _, { isEmpty } from 'lodash';
 import * as yup from 'yup';
 
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery,useLazyQuery } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 
 const Installation = () => {
+  const confirmPasswordQuery=gql`
+  query($password:String!)
+    {
+      confirmPassword(password:$password) {
+              success
+    }
+  }
+  `;
   // data form ##
   const [themes, setThemes] = useState(null);
   const GET_DATA = gql`
@@ -105,8 +113,29 @@ const Installation = () => {
 
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
-  const [passwordConfirmed, setPasswordConfirmed] = useState(true)
+  const [passwordConfirmed, setPasswordConfirmed] = useState(false)
   const [password, setPassword] = useState("")
+  const [passwordError,setPasswordError]=useState("")
+  const [confirmPassword,{data:confirmPasswordRes,loading:passwordLoading}]=useLazyQuery(confirmPasswordQuery,{fetchPolicy:"network-only"})
+
+  const verifyPassword =()=>{
+    if(!isEmpty(password)){
+      confirmPassword({
+        variables:{
+          password:password
+        }
+      })
+    }
+  }
+
+  useEffect(()=>{
+      if(confirmPasswordRes?.confirmPassword?.success)
+      {
+        setPasswordConfirmed(true);
+      }else{
+        setPasswordError(confirmPasswordRes?.errors[0]?.message)
+      }
+  },[confirmPasswordRes])
 
   return (
     <AppLayout typePage="Installation" tabIndex='3'>
@@ -252,7 +281,7 @@ const Installation = () => {
               </Stack>
             </Page>
           ) : (
-            <Page title="Password confirmation">
+            <Page title="Password protected">
               <Layout>
                 <Layout.Section>
                   <Card sectioned>
@@ -262,8 +291,9 @@ const Installation = () => {
                         onChange={value => setPassword(value)}
                         label="Password"
                         type="password"
+                        error={passwordError && passwordError}
                       />
-                      <Button primary>Confirm</Button>
+                      <Button primary loading={passwordLoading} onClick={verifyPassword}>Confirm</Button>
                     </FormLayout>
                   </Card>
                 </Layout.Section>

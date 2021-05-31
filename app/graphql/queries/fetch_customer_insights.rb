@@ -36,8 +36,8 @@ module Queries
       active_customers_percentage = report.customers_percentage('ACTIVE').round(2)
       dunned_customers_percentage = report.dunning_customers_percentage.round(2)
       cancelled_customers_percentage = report.customers_percentage('CANCELLED').round(2)
-      sku_by_customers = report.sku_by_customers
-      billing_frequency = report.billing_frequency
+      sku_by_customers = all_subscription_report.sku_by_customers
+      billing_frequency = all_subscription_report.billing_frequency
       cancellation_reasons = report.cancellation_reasons
       { customers_count: customers_count, sales_per_charge: sales_per_charge, charge_per_customer: charge_per_customer,
         total_churn: total_churn, swap_count: swap_count, skip_count: skip_count,

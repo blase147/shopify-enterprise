@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, DatePicker, Popover } from "@shopify/polaris";
+import { Button, DatePicker, Popover,ButtonGroup } from "@shopify/polaris";
 import {
   DropdownMinor
 } from '@shopify/polaris-icons';
@@ -16,7 +16,8 @@ export default class DateRangePicker extends React.Component {
       start: new Date(Date.parse(this.props.start)) || new Date(),
       end: new Date(Date.parse(this.props.end)) || new Date()
     },
-    active: false
+    active: false,
+    span:this.props.span
   };
 
   togglePopover = () => {
@@ -25,19 +26,62 @@ export default class DateRangePicker extends React.Component {
     });
   };
 
+  handleSpan=(span)=>{
+    switch(span){
+      case "30 days":
+      {
+        let start=new Date(Date.parse(dayjs(dayjs(dayjs().subtract(30, 'days'))).format()))
+        let end =new Date();
+        this.setState({selected:{start:start,end:end},span:span})
+      }
+      break;
+      case "3 months":
+        {
+          let start=new Date(Date.parse(dayjs(dayjs(dayjs().subtract(3, 'month'))).format()))
+          let end =new Date();
+          this.setState({selected:{start:start,end:end},span:span})
+        }
+      break;
+      case "6 months":
+        {
+          let start=new Date(Date.parse(dayjs(dayjs(dayjs().subtract(6, 'month'))).format()))
+          let end =new Date();
+          this.setState({selected:{start:start,end:end},span:span})
+        }
+        break;
+      case "12 months":
+        {
+          let start=new Date(Date.parse(dayjs(dayjs(dayjs().subtract(12, 'month'))).format()))
+          let end =new Date();
+          this.setState({selected:{start:start,end:end},span:span})
+        }  
+    }
+  }
+
   render() {
     const { month, year, selected } = this.state;
     const activator = (
       <>
       <div className="filter-parent" style={{width:'100%'}}>
         <Button
-          plain
+          
           monochrome
           onClick={this.togglePopover}
-          icon={DropdownMinor}
+          disclosure={'down'}
+          textAlign='left'
             >
-            Filter
+            Choose date range
         </Button>
+
+          <div className="analytics-btn-group">
+            <ButtonGroup segmented>
+              <Button onClick={()=>this.handleSpan("30 days")}   primary={this.state.span==="30 days"} >30 days</Button>
+              <Button onClick={()=>this.handleSpan("3 months")}  primary={this.state.span==="3 months"} >3 Months</Button>
+              <Button onClick={()=>this.handleSpan("6 months")}  primary={this.state.span==="6 months"} >6 Months</Button>
+              <Button onClick={()=>this.handleSpan("12 months")} primary={this.state.span==="12 months"} >12 Months</Button>
+            </ButtonGroup>
+            <Button primary onClick={this.applyFilter} type="button">Run</Button>
+          </div>
       </div>
       </>)
 
@@ -58,19 +102,20 @@ export default class DateRangePicker extends React.Component {
           allowRange={true}
           multiMonth={true}
         />
-        <div className="applybtn">
+        {/* <div className="applybtn">
         <Button onClick={this.applyFilter} primary>Apply</Button>
-        </div>
+        </div> */}
       </Popover>
     );
   }
 
-  applyFilter=()=>{
+  applyFilter=(e)=>{
+   e.stopPropagation();
    this.togglePopover();
-   this.props.handleDates && this.props.handleDates(this.state.selected)  
+   this.props.handleDates && this.props.handleDates(this.state.selected,this.state.span)  
   }
   handleChange = value => {
-    this.setState({ selected: value });
+    this.setState({ selected: value, span:"custom" });
   };
 
   handleMonthChange = (month, year) => {
