@@ -21,6 +21,7 @@ class CustomerSubscriptionContractsService < GraphqlService
               customer {
                 firstName
                 lastName
+                email
               }
               lines(first: 10) {
                 edges {

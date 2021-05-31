@@ -16,6 +16,7 @@ class Customer < ApplicationRecord
   reject_if: :all_blank, allow_destroy: true
 
   after_create :send_opt_in_sms, unless: -> { opt_in_sent }
+  after_create :activation_email
 
   # default_scope { order(created_at: :asc) }
 
@@ -29,6 +30,15 @@ class Customer < ApplicationRecord
         self.update(opt_in_sent: true, opt_in_reminder_at: Time.current + 12.hours)
       end
     end
+  end
+
+  def activation_email
+    email_notification = EmailNotification.find_by_name "Subscription Activation"
+    EmailService::Klaviyo.new(email_notification).send_email({customer: self}) unless email_notification.nil?
+  end
+
+  def name
+    self.first_name + " " + self.last_name
   end
 
   def shopify_identity
