@@ -5,6 +5,7 @@ module Types
     field :integration_type, String, null: true
     field :service_type, String, null: true
     field :default, String, null: true
+    field :image_url, String, null: true
     field :credentials, String, null: true
     field :status, String, null: true
     field :keys, String, null: true

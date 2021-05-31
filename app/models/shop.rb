@@ -70,4 +70,13 @@ class Shop < ActiveRecord::Base
       )
     end
   end
+
+  def email_integration_service
+    name = setting.email_service
+    if name.present? && integrations.marketing.email.where(name: name).exists?
+      integrations.marketing.email.where(name: name).last
+    else
+      integrations.marketing.email.where(default: true).last
+    end
+  end
 end
