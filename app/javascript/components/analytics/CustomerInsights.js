@@ -785,23 +785,23 @@ const CustomerInsights = () => {
       ) :
     <FormLayout>
       <Stack vertical spacing="extraLoose">
-      <Layout>
-            <Layout.Section>
-              <Card title="">
-                <Card.Section>
-                  <div className="rev-date-picker">
-                    <DateRangePicker
-                      start={filters.startDate}
-                      end={filters.endDate}
-                      span={filters.span}
-                      handleDates={handleFiltersDates}
-                    />
-                    </div>
-                  
-                </Card.Section>
-              </Card>
-            </Layout.Section>
-      </Layout>
+        <Layout>
+              <Layout.Section>
+                <Card title="">
+                  <Card.Section>
+                    <div className="rev-date-picker">
+                      <DateRangePicker
+                        start={filters.startDate}
+                        end={filters.endDate}
+                        span={filters.span}
+                        handleDates={handleFiltersDates}
+                      />
+                      </div>
+                    
+                  </Card.Section>
+                </Card>
+              </Layout.Section>
+        </Layout>
         <Layout>
           {/* <Layout.Section secondary> */}
           <div className="container-left customer-count">
