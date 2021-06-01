@@ -32,14 +32,15 @@ const Smarty = () => {
       id: 'tab-messages',
       content: 'Messages',
     },
-    // {
-    //   id: 'tab-custom-messages',
-    //   content: 'Custom Messages',
-    // },
-    // {
-    //   id: 'tab-custom-keywords',
-    //   content: 'Custom Keywords',
-    // },
+    ...(process.env.APP_TYPE=="public" ?
+    [{
+      id: 'tab-custom-messages',
+      content: 'Custom Messages',
+    },
+    {
+      id: 'tab-custom-keywords',
+      content: 'Custom Keywords',
+    }]:[]),
     {
       id: 'cancellation-reasons',
       content: 'Cancellation Reasons',
@@ -92,7 +93,7 @@ const Smarty = () => {
               </>
             }
             {
-              selectedTitleTab===2 && 
+              selectedTitleTab===(process.env.APP_TYPE=="public" ?1:2) && 
               <>
                 {showEditPage ?
                   <EditSmartyMessage
@@ -106,7 +107,7 @@ const Smarty = () => {
               </>
             }
             {
-              selectedTitleTab===3 && 
+              selectedTitleTab===(process.env.APP_TYPE=="public" ?2:3) && 
               <>
               {
                  showEditPage ?
@@ -121,7 +122,7 @@ const Smarty = () => {
               </>
             }
             {
-              selectedTitleTab===1 && 
+              selectedTitleTab===(process.env.APP_TYPE=="public" ?3:1) && 
               <>
               {
                   showEditPage ?

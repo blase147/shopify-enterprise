@@ -168,17 +168,21 @@ const emailNotificationsDetails = (props) => {
           </TextContainer>
         </Card.Section>
 
-        {/* <Card.Section>
-          <TextContainer>
-            <Heading h4>Need help with ChargeZen variables?</Heading>
-            <br />
-            <TextStyle variation="subdued">
-              We’ve compiled a list of all available CharegeZen variables along
-              with additional information and help. You can check out the guide
-              here.
-            </TextStyle>
-          </TextContainer>
-        </Card.Section> */}
+        {
+          process.env.APP_TYPE=="public" &&
+          <Card.Section>
+            <TextContainer>
+              <Heading h4>Need help with ChargeZen variables?</Heading>
+              <br />
+              <TextStyle variation="subdued">
+                We’ve compiled a list of all available CharegeZen variables along
+                with additional information and help. You can check out the guide
+                here.
+           </TextStyle>
+            </TextContainer>
+          </Card.Section>
+        }
+        
 
         <Card.Section>
           <TextContainer>

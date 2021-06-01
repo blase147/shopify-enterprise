@@ -36,10 +36,11 @@ const Analytics = () => {
       id: 'customer-insights',
       content: 'Customer Insights',
     },
-    // {
-    //   id: 'retention',
-    //   content: 'Retention',
-    // },
+    ...(process.env.APP_TYPE=="public" ?
+    [{
+      id: 'retention',
+      content: 'Retention',
+    }]:[]),
     {
       id: 'product',
       content: 'Product',
@@ -61,12 +62,13 @@ const Analytics = () => {
               <CustomerInsights />
             </div>
           ) 
-          // : selectedTitleTab === 2 ? (
-          //   <div className="retention">
-          //     <Retention />
-          //   </div>
-          // ) 
-          : selectedTitleTab === 2 ?(
+          :
+          (process.env.APP_TYPE=="public" && selectedTitleTab === 2) ? (
+            <div className="retention">
+              <Retention />
+            </div>
+          ) 
+          : selectedTitleTab === (process.env.APP_TYPE=="public" ?3:2) ?(
             <div className="product">
               <Product />
             </div>
