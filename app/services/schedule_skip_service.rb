@@ -43,7 +43,7 @@ class ScheduleSkipService < GraphqlService
     customer.shop.subscription_logs.skip.create(subscription_id: @id, customer_id: customer.id)
     p result
     email_notification = EmailNotification.find_by_name "Skip Next Order"
-    EmailService::Klaviyo.new(email_notification).send_email({customer: customer, next_order_date: skip_billing_date}) unless email_notification.nil?
+    EmailService::Send.new(email_notification).send_email({customer: customer, next_order_date: skip_billing_date}) unless email_notification.nil?
     p result
   rescue Exception => ex
     p ex.message

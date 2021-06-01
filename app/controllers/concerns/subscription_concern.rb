@@ -71,9 +71,9 @@ module SubscriptionConcern
       customer = Customer.find_by_shopify_id params[:customer_id]
       customer.update(reasons_cancel_id: params[:reasons_cancel_id]) if !customer.nil? && params[:reasons_cancel_id].present?
       email_notification = EmailNotification.find_by_name "Subscription Cancellation"
-      EmailService::Klaviyo.new(email_notification).send_email({customer: customer, line_name: params[:line_name]}) unless email_notification.nil?
+      EmailService::Send.new(email_notification).send_email({customer: customer, line_name: params[:line_name]}) unless email_notification.nil?
       owner_email_notification = EmailNotification.find_by_name "Cancellation Alert"
-      EmailService::Klaviyo.new(owner_email_notification).send_email({customer: customer, line_name: params[:line_name]}) unless owner_email_notification.nil?
+      EmailService::Send.new(owner_email_notification).send_email({customer: customer, line_name: params[:line_name]}) unless owner_email_notification.nil?
       SubscriptionDraftsService.new.commit @draft_id
       render js: 'location.reload()'
     end

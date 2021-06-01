@@ -6,15 +6,15 @@ class EmailNotification < ApplicationRecord
   before_destroy :remove_template
 
   def push_template
-    EmailService::Klaviyo.new(self).create_template
+    EmailService::Klaviyo.new(self).create_template if self.setting.email_service.downcase == "klaviyo"
   end
 
   def update_template
-    EmailService::Klaviyo.new(self).update_template
+    EmailService::Klaviyo.new(self).update_template if self.setting.email_service.downcase == "klaviyo"
   end
 
   def remove_template
-    EmailService::Klaviyo.new(self).delete_template
+    EmailService::Klaviyo.new(self).delete_template if self.setting.email_service.downcase == "klaviyo"
   end
 
 end
