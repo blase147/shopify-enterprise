@@ -168,7 +168,9 @@ const IntegrationDetail = () => {
             <>
             <Stack>
             <Stack.Item>
+              <div className="save-button">
               <Button onClick={handleSubmit} primary loading={loading} >Save</Button>
+              </div>
             </Stack.Item>
             </Stack>
             </>
