@@ -234,19 +234,23 @@ mutation ($input: UpdatePasswordInput!) {
             <>
               <Layout>
                 <Layout.Section>
-                  <p>Default password: AdminAlaska777</p>
-                  <TextField
-                    value={password}
-                    onChange={value => setPassword(value)}
-                    label="Password"
-                    type="password"
-                  />
-                  <TextField
-                    value={passwordConfirmation}
-                    onChange={value => setPasswordConfirmation(value)}
-                    label="Confirm Password"
-                    type="password"
-                  />
+                  <p className="default-pass">
+                    Default Password: <strong>Admin Alaska777</strong>
+                  </p>
+                  <div className="password-fields">
+                    <TextField
+                      value={password}
+                      onChange={value => setPassword(value)}
+                      label="Password"
+                      type="password"
+                    />
+                    <TextField
+                      value={passwordConfirmation}
+                      onChange={value => setPasswordConfirmation(value)}
+                      label="Confirm Password"
+                      type="password"
+                    />
+                  </div>
                   <div class="tabs-btn">
                     <Button primary loading={loadingPssword} onClick={handleChangePassword}>Save</Button>
                     <Button type="button">Cancel</Button>
