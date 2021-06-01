@@ -1,5 +1,5 @@
 module Types
-  class DashboardReportType < Types::BaseObject
+  class SmsAnalyticType < Types::BaseObject
     field :swap_count, Types::GraphValueType, null: true
     field :skip_count, Types::GraphValueType, null: true
     field :delay_count, Types::GraphValueType, null: true
@@ -11,9 +11,9 @@ module Types
     field :interected_customers, Integer, null: true
     field :opt_out_customers, Integer, null: true
     field :reached_customers, Integer, null: true
-    field :most_swaped_product, Type::ProductType, null: true
-    field :most_swaped_product_to, Type::ProductType, null: true
-    field :most_skipped_product, Type::ProductType, null: true
+    field :most_swaped_product, Types::ProductType, null: true
+    field :most_swaped_product_to, Types::ProductType, null: true
+    field :most_skipped_product, Types::ProductType, null: true
     field :__typename, String, null: true
   end
 end

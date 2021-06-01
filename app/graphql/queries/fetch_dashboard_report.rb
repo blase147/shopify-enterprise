@@ -15,7 +15,7 @@ module Queries
       past_hour_subscriptions = data_service.in_period_hourly_subscriptions(subscriptions, last_hour_range)
       past_subscriptions = data_service.in_period_hourly_subscriptions(subscriptions, last_24_hours_range)
       current_year_subscriptions = data_service.in_period_subscriptions(subscriptions, current_year_range)
-      subcription_month_revenue = data_service.calculate_percentage(data_service.mrr(past_subscriptions), data_service.mrr(past_hour_subscriptions), data_service.mrr(current_year_subscriptions))
+      subcription_month_revenue = data_service.calculate_percentage(data_service.mrr(past_subscriptions, last_24_hours_range), data_service.mrr(past_hour_subscriptions, last_hour_range), data_service.mrr(current_year_subscriptions, range))
       active_subscriptions_count = data_service.calculate_percentage(data_service.get_subscriptions_count(past_subscriptions, 'ACTIVE'),
                                   data_service.get_subscriptions_count(past_hour_subscriptions, 'ACTIVE'), data_service.get_subscriptions_count(current_year_subscriptions, 'ACTIVE'))
       past_churn_rate = data_service.get_churn_rate(past_subscriptions, last_24_hours_range)

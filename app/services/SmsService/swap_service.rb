@@ -104,7 +104,8 @@ class SmsService::SwapService < SmsService::ProcessService
               else
                 product_id = from_variant_id.first.node.product_id[/\d+/]
                 @shop.sms_logs.swap.create(product_id: product_id, swaped_product_id: variant.product_id, customer_id: @customer.id)
-                message = 'Subscription swaped successfully.'
+                @shop.subscription_logs.swap.create(subscription_id: subscription_message.content, customer_id: @customer.id)
+                message = 'Subscription swaped succesfully.'
               end
             else
               error = true

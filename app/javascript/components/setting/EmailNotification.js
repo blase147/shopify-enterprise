@@ -186,7 +186,7 @@ const EmailNotification = (props) => {
                             </TextStyle>
                           </Button>
                           <br />
-                          <TextStyle>{item.descripton}</TextStyle>
+                          <TextStyle>{item.description}</TextStyle>
                         </Stack.Item>
                         <Stack.Item>
                           {item.status ? (
@@ -242,7 +242,7 @@ const EmailNotification = (props) => {
                             </TextStyle>
                           </Button>
                           <br />
-                          <TextStyle>{item.descripton}</TextStyle>
+                          <TextStyle>{item.description}</TextStyle>
                         </Stack.Item>
                         <Stack.Item>
                           {item.status ? (

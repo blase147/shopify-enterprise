@@ -1,11 +1,13 @@
 class Customer < ApplicationRecord
   enum gender: [:male, :female]
   belongs_to :shop, foreign_key: :shop_id
+  belongs_to :reasons_cancel, optional: true
   mount_uploader :avatar, AvatarUploader
   has_many :additional_contacts, dependent: :destroy
   has_one :billing_address, dependent: :destroy
   has_many :sms_conversations, dependent: :destroy
   has_many :sms_logs, dependent: :destroy
+  has_many :subscription_logs, dependent: :destroy
 
   # validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   # validates :email, presence: true
@@ -15,6 +17,7 @@ class Customer < ApplicationRecord
   reject_if: :all_blank, allow_destroy: true
 
   after_create :send_opt_in_sms, unless: -> { opt_in_sent }
+  after_create :activation_email
 
   # default_scope { order(created_at: :asc) }
 
@@ -29,6 +32,15 @@ class Customer < ApplicationRecord
       shop.sms_logs.opt_in.create(customer_id: id)
       update(opt_in_sent: true, opt_in_reminder_at: Time.current + 12.hours)
     end
+  end
+
+  def activation_email
+    email_notification = EmailNotification.find_by_name "Subscription Activation"
+    EmailService::Send.new(email_notification).send_email({customer: self}) unless email_notification.nil?
+  end
+
+  def name
+    self.first_name + " " + self.last_name
   end
 
   def shopify_identity

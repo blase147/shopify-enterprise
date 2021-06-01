@@ -218,6 +218,9 @@ div#sms-panel {
 		font-weight: 600;
 		margin-bottom: 15px;
 	}
+  h2 {
+    font-size: 14px;
+  }
 }
 .sms-tab {
 	.Polaris-Card {
@@ -228,6 +231,7 @@ div#sms-panel {
   background-color: white;
   padding-top:42px;
   padding-left: 15px;
+  padding-bottom: 50px;
 	.Polaris-Tabs__Wrapper {
 		display: inline-block;
 	}
@@ -302,9 +306,20 @@ div#sms-panel {
 }
 #tab-btn-1:checked ~ #content-1,
 #tab-btn-2:checked ~ #content-2,
-#tab-btn-3:checked ~ #content-3 {
+#tab-btn-3:checked ~ #content-3,
+#tab-btn-4:checked ~ #content-4,
+#tab-btn-5:checked ~ #content-5,
+#tab-btn-6:checked ~ #password {
   display: block;
 }
+
+/********************
+ * Password tab
+ ********************/
+#password .tabs-btn {
+  margin-top: 20px;
+}
+
 .tabs-sms > label {
   border-radius: 5px 5px 0px 0px;
   display: inline-block;

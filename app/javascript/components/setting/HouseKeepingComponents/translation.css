@@ -1,63 +1,114 @@
-.accordion {
-    /* box-sizing: border-box; */
-    font-family: 'Montserrat';
-    font-weight: 300;
-    /* Space section box from left margin*/
-    padding: 0;
-    /* Hide bullets to the left of section box */
-    list-style: none;
+.translation-page {
+  margin-left: 37px;
+  margin-right: 41px;
 }
-/* Indent submenus */
-ul .accordion-inner {
-    padding-left: 1em;
-    overflow: hidden;
-    display: none;
-      /* Space section box from left margin*/
-    padding: 5;
-    /* Hide bullets to the left of section box */
-    list-style: none;
+
+.translation-page .expend-all {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-/* Spacing between sections */
-li {
-    margin: .7em 0;
+.translation-page .expend-all p {
+  font-weight: 900;
+  font-size: 14px;
 }
-/* Box arround each section */
-li a.accordion-toggle {
-    text-decoration: none;
-    color: inherit;
-    width: 50%;
-    display: block;
-    background: rgba(0,0,0,0.78);
-    color: #FEFEFE;
-    padding: .45em;
-    transition: all .3s ease;
-     -webkit-border-radius: 7px;
-     -moz-border-radius: 7px;
-     border-radius: 7px;
+
+.translation-page .customer-see {
+  font-size: 16px;
+  margin-top: 25px;
+  margin-bottom: 30px;
 }
-/* Hover effect on a sections */
-li a.accordion-toggle:hover {
-    background: rgba(0, 0, 0, 0.9);
- }
-.accordion a .fa-chevron-down {
-  position: relative;
-	color: #29D909;
-	-webkit-transition: all 0.4s ease;
-	-o-transition: all 0.4s ease;
-	transition: all 0.4s ease;
-  float:right;
+
+.translation-page .checkout-text {
+  font-size: 24px;
+} 
+
+.translation-page .collapse-section {
+  margin-top: 20px;
 }
-.accordion a.chev .fa-chevron-down {
-	/* color: #C63B4D; */
-}
- .accordion a .fa-chevron-down {
-  margin-left: 5px;
-  margin-right: 15px;
+
+.collapsible-translatoin{
+  background-color: #E8F8FC;
+  cursor: pointer;
+  padding: 10px 16px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
   font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.accordion a.chev .fa-chevron-down {
-	-webkit-transform: rotate(0deg);
-	-ms-transform: rotate(0deg);
-	-o-transform: rotate(0deg);
-	transform: rotate(180deg);
+
+.active-collpase, .collapsible-translatoin:hover {
+  background-color: #E8F8FC;
 }
+
+.collapsible-translatoin:after {
+  content: '\f107';
+  /* font-weight: 600; */
+  float: right;
+  margin-left: 5px;
+  font-family: "FontAwesome";
+  font-size: 34px;
+}
+
+.active-collpase:after {
+  content: "\f106";
+  font-family: "FontAwesome";
+}
+
+.content-forms {
+  max-height: 0;
+  transition: all 0.2s ease-out;
+  border: 1px solid #C4CDD5;
+  border-radius: 0px 0px 3px 3px;
+  overflow: hidden;
+  margin-bottom: 18px;
+  
+}
+
+.content-forms .content-collapse {
+  padding: 29px 12px 19px 16px;
+}
+
+.content-forms .content-collapse p {
+   font-size: 18px;
+   font-weight: 900;
+   margin-bottom: 10px;
+   margin-top: 9px;
+}
+
+.content-forms .content-collapse .Polaris-TextField{
+  margin-bottom: 20px;
+}
+
+.content-forms .content-collapse .Polaris-Labelled__LabelWrapper {
+  margin-bottom: 10px;
+}
+
+.translation-btn  {
+  margin-top: 30px;
+}
+
+.translation-btn .Polaris-Layout__Section {
+  margin-left: 0px;
+}
+.translation-btn button {
+  padding: 14px 70px;
+}
+.translation-btn .save-btn button {
+  background-color: #4D506A;
+	color: white;
+	border: 0;
+	padding: 14px 32px;
+}
+
+.translation-btn .save-btn button:hover {
+  background: #4D506A ;
+	color: white;
+	border: 0;
+	padding: 14px 32px;
+}
+

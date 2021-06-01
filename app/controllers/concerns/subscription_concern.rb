@@ -3,6 +3,7 @@ module SubscriptionConcern
 
   included do
     before_action :set_draft_contract, only: [:add_product, :update_quantity, :update_shiping_detail, :swap_product, :remove_line]
+    before_action :set_customer, only: %i[add_product swap_product]
   end
 
   def add_product
@@ -17,6 +18,7 @@ module SubscriptionConcern
     else
       render js: "window.top.location.href = '/cart/#{variant.id}:1';"
     end
+    current_shop.subscription_logs.upsell.create(subscription_id: params[:id], customer_id: @customer.id)
   end
 
   def update_quantity
@@ -51,6 +53,7 @@ module SubscriptionConcern
       flash[:error] = result[:error]
       render js: "alert('#{result[:error]}'); hideLoading()"
     else
+      current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id)
       render js: 'location.reload()'
     end
   end
@@ -65,6 +68,12 @@ module SubscriptionConcern
     if result[:error].present?
       render js: "alert('#{result[:error]}'); hideLoading()"
     else
+      customer = Customer.find_by_shopify_id params[:customer_id]
+      customer.update(reasons_cancel_id: params[:reasons_cancel_id]) if !customer.nil? && params[:reasons_cancel_id].present?
+      email_notification = EmailNotification.find_by_name "Subscription Cancellation"
+      EmailService::Send.new(email_notification).send_email({customer: customer, line_name: params[:line_name]}) unless email_notification.nil?
+      owner_email_notification = EmailNotification.find_by_name "Cancellation Alert"
+      EmailService::Send.new(owner_email_notification).send_email({customer: customer, line_name: params[:line_name]}) unless owner_email_notification.nil?
       SubscriptionDraftsService.new.commit @draft_id
       render js: 'location.reload()'
     end
@@ -111,5 +120,9 @@ module SubscriptionConcern
     else
       @draft_id = result[:draft_id]
     end
+  end
+
+  def set_customer
+    @customer = Customer.find_by(shopify_id: params[:id])
   end
 end

@@ -4,6 +4,7 @@ import RevenueTrends from './RevenueTrends';
 import CustomerInsights from './CustomerInsights';
 import Retention from './Retention';
 import Product from './Product';
+import {FilterContextProvider} from './../common/Contexts/AnalyticsFilterContext';
 import {
   Card,
   Select,
@@ -35,10 +36,10 @@ const Analytics = () => {
       id: 'customer-insights',
       content: 'Customer Insights',
     },
-    {
-      id: 'retention',
-      content: 'Retention',
-    },
+    // {
+    //   id: 'retention',
+    //   content: 'Retention',
+    // },
     {
       id: 'product',
       content: 'Product',
@@ -47,6 +48,7 @@ const Analytics = () => {
   return (
     <AppLayout typePage="Analytics" tabIndex="5">
       <Page title="Analytics">
+        <FilterContextProvider>
         <Tabs
           tabs={tabAnalytics}
           selected={selectedTitleTab}
@@ -58,16 +60,19 @@ const Analytics = () => {
             <div className="customer-insight">
               <CustomerInsights />
             </div>
-          ) : selectedTitleTab === 2 ? (
-            <div className="retention">
-              <Retention />
-            </div>
-          ) : (
+          ) 
+          // : selectedTitleTab === 2 ? (
+          //   <div className="retention">
+          //     <Retention />
+          //   </div>
+          // ) 
+          : selectedTitleTab === 2 ?(
             <div className="product">
               <Product />
             </div>
-          )}
+          ):""}
         </Tabs>
+        </FilterContextProvider>
       </Page>
     </AppLayout>
   );

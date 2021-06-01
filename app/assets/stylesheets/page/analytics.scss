@@ -1,7 +1,85 @@
+.Polaris-Popover__Section {
+  .Polaris-DatePicker {
+    
+    .Polaris-DatePicker__Header {
+      position: static !important;
+    }
+
+    table {
+      .Polaris-DatePicker__Weekday {
+        display: revert !important;
+
+      }
+      .Polaris-DatePicker__Day {
+        width: 100% ;
+      }
+      .Polaris-DatePicker__Week, .Polaris-DatePicker__WeekHeadings {
+        display: table-row;
+      }
+    }
+    
+  }
+  
+}
+.Polaris-DatePicker__Day.Polaris-DatePicker__Day--selected.Polaris-DatePicker__Day--firstInRange.Polaris-DatePicker__Day--hoverRight {
+  border-radius: 3rem 0 0 3rem !important;
+}
+.Polaris-DatePicker__MonthContainer {
+  margin-left: 1.6rem !important;
+}
+.Polaris-DatePicker__Day.Polaris-DatePicker__Day--selected.Polaris-DatePicker__Day--lastInRange.Polaris-DatePicker__Day--hoverRight.Polaris-DatePicker__Day--hasRange {
+  border-radius: 0 3rem 3rem 0;
+}
+.Polaris-DatePicker__Day--selected {
+  background-color: #306ecb !important;
+  
+  &:focus {
+    box-shadow: none !important;
+  }
+}
+
+.Polaris-DatePicker__MonthLayout {
+  table {
+    tr {
+      border: 0;
+      .Polaris-DatePicker__EmptyDayCell {
+        border: 0;
+      }
+      .Polaris-DatePicker__DayCell {
+        border: 0;
+        button {
+          &:hover {
+            // background-color: rgba(31, 81, 153, 1);
+          }
+        }
+      }
+      .Polaris-DatePicker__Day {
+        border: 0;
+      }
+      .Polaris-DatePicker__Day--inRange {
+        background-color: rgba(242, 247, 254, 1);
+      }
+      
+      td {
+        .Polaris-DatePicker__Day.Polaris-DatePicker__Day--hasRange {
+          border: 0;
+         
+        }
+      }
+    }
+  }
+}
+
 .module-Analytics {
+ 
+  .Polaris-Popover.Polaris-Popover--fullWidth {
+    width: 700px !important;
+  }
   .highcharts-credits {
     display: none;
   }
+
+  
   .Polaris-Page__Content {
     .Polaris-Tabs__Wrapper {
       background: unset;
@@ -19,6 +97,30 @@
     }
   }
   //revenue trends
+
+    .filter-parent {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .rev-date-picker {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      width: 100%;
+      > div {
+        width: 100%;
+      }
+      .analytics-btn-group {
+        display: flex;
+        > button {
+          margin-left: 50px;
+          padding: 10px 50px;
+        }
+      }
+    }
+  
   .form-inline {
     display: flex;
     flex-flow: row wrap;
@@ -37,6 +139,15 @@
       }
     }
   }
+  .sales-section {
+    .Polaris-Layout__Section--secondary {
+      margin-top: 0.4rem;
+      .Polaris-Stack>.Polaris-Stack__Item {
+        margin-top: 1.6rem; 
+        
+    }
+    }
+  }
   .Polaris-TextStyle--variationPositive {
     display: flex;
   }
@@ -45,6 +156,7 @@
   }
   .Polaris-Stack {
     margin-top: unset;
+    flex-wrap: wrap;
     .Polaris-Stack--vertical {
       width: 100%;
     }
@@ -58,23 +170,119 @@
   .Polaris-Layout__Section--secondary {
     margin-top: -0.1rem;
   }
+
+  .frequency-graph-revenue {
+    .Polaris-Card__Section {
+      display: flex;
+      align-items: center;
+    }
+  }
+  .frequency-graph-parameters {
+    display: grid;
+    justify-content: space-between;
+    padding: 0px 18px;
+    flex-direction: column;
+    > div {
+      display: flex;
+      margin-top: 26px;
+      grid-template-columns: auto auto;
+      div {
+        width: 41px;
+        height: 17px;
+      }
+      p {
+        margin-left: 28px;
+        white-space: nowrap;
+      }
+    }
+    .active-color {
+      background-color: #007EFF;
+    }
+    .dunning-color {
+      background-color: #57AAFF;
+    }
+    .cancel-color {
+      background-color: #979797;
+    }
+  }
   // customer insight
   .customer-insight {
-    thead {
-      background: #258aff;
-      .Polaris-DataTable__Cell {
-        &.Polaris-DataTable__Cell--verticalAlignTop {
-          &.Polaris-DataTable__Cell--header {
-            color: rgba(255, 255, 255, 0.87);
+    // thead {
+    //   background: #258aff;
+    //   .Polaris-DataTable__Cell {
+    //     &.Polaris-DataTable__Cell--verticalAlignTop {
+    //       &.Polaris-DataTable__Cell--header {
+    //         color: rgba(255, 255, 255, 0.87);
+    //       }
+    //     }
+    //   }
+    // }
+    .container-left {
+      width: 28%;
+    }
+    .frequency-graph {
+      .Polaris-Card__Section {
+        display: grid;
+        grid-template-columns: 20% 80%;
+        align-items: center;
+      }
+    }
+
+    .container-right {
+      width: 72%;
+      .card-chart {
+       
+        .Polaris-Card {
+          justify-content: center;
+          flex-direction: column;
+          overflow: hidden;
+          .card-graph-parameters {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            padding: 0px 18px;
+            > div {
+              display: flex;
+              div {
+                width: 41px;
+                height: 17px;
+              }
+              p {
+                margin-left: 28px;
+              }
+            }
+            .active-color {
+              background-color: #007EFF;
+            }
+            .dunning-color {
+              background-color: #57AAFF;
+            }
+            .cancel-color {
+              background-color: #979797;
+            }
           }
         }
       }
     }
-    .container-left {
-      width: 28%;
-    }
-    .container-right {
-      width: 72%;
+    .customer-count {
+      .count-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 25px;
+        margin-top: 7px;
+      }
+      .Polaris-Layout__Section {
+        .Polaris-Stack {
+          > .Polaris-Stack__Item:first-child {
+            margin-top: 0px;
+          }
+        }
+      }
+     
+      
     }
 
     .last {
@@ -91,64 +299,70 @@
       }
     }
 
-    tbody {
-      .Polaris-DataTable__Cell--verticalAlignTop {
-        border: 1.0624px solid #cecece;
-        box-sizing: border-box;
-      }
-    }
+    // tbody {
+    //   .Polaris-DataTable__Cell--verticalAlignTop {
+    //     border: 1.0624px solid #cecece;
+    //     box-sizing: border-box;
+    //   }
+    // }
     .subscription-chart {
       display: flex;
       flex-flow: row wrap;
       justify-content: space-between;
     }
-    .Polaris-Stack {
-      &.Polaris-Stack--distributionTrailing {
-        .Polaris-DataTable {
-          thead {
-            display: none;
-          }
-        }
-        tbody {
-          th.Polaris-DataTable__Cell {
-            border-top: none;
-            border-left: none;
-          }
-          .Polaris-DataTable__TableRow td:last-child {
-            border-right: none;
-            border-top: none;
-          }
-        }
-        tbody tr:first-child {
-          td {
-            border-top: none;
-          }
-        }
-        tbody tr:last-child {
-          th.Polaris-DataTable__Cell {
-            border-bottom: none;
-          }
-          td {
-            border-bottom: none;
-          }
-        }
-      }
-    }
+    // .Polaris-Stack {
+    //   // &.Polaris-Stack--distributionTrailing {
+    //   //   .Polaris-DataTable {
+    //   //     thead {
+    //   //       display: none;
+    //   //     }
+    //   //   }
+    //   //   tbody {
+    //   //     th.Polaris-DataTable__Cell {
+    //   //       border-top: none;
+    //   //       border-left: none;
+    //   //     }
+    //   //     .Polaris-DataTable__TableRow td:last-child {
+    //   //       border-right: none;
+    //   //       border-top: none;
+    //   //     }
+    //   //   }
+    //   //   tbody tr:first-child {
+    //   //     td {
+    //   //       border-top: none;
+    //   //     }
+    //   //   }
+    //   //   tbody tr:last-child {
+    //   //     th.Polaris-DataTable__Cell {
+    //   //       border-bottom: none;
+    //   //     }
+    //   //     td {
+    //   //       border-bottom: none;
+    //   //     }
+    //   //   }
+    //   // }
+    // }
   }
-  .product {
-    thead {
-      background: #258aff;
-      .Polaris-DataTable__Cell {
-        &.Polaris-DataTable__Cell--verticalAlignTop {
-          &.Polaris-DataTable__Cell--header {
-            color: rgba(255, 255, 255, 0.87);
-          }
-        }
-      }
-    }
-  }
+  // .product {
+  //   // thead {
+  //   //   background: #258aff;
+  //   //   .Polaris-DataTable__Cell {
+  //   //     &.Polaris-DataTable__Cell--verticalAlignTop {
+  //   //       &.Polaris-DataTable__Cell--header {
+  //   //         color: rgba(255, 255, 255, 0.87);
+  //   //       }
+  //   //     }
+  //   //   }
+  //   // }
+  // }
 }
 
 .data-tabels {
   display: none;
+}
+.insight-chart-select {
+  width: 20%;
+  top: 38px !important;
+  left: 30px !important;
+  position: relative;
 }

@@ -1,5 +1,5 @@
 .wrapper {
-	padding: 10px;
+	/* padding: 10px; */
 	
 }
 .wrapper button {
@@ -11,6 +11,12 @@
 	display: flex;
 	justify-content: flex-end;
 	background-color: #E2F5FF !important;
+	margin-top: 14px;
+	
+}
+
+.button-bar  button {
+	padding: 14px 18px !important;
 }
 .text-wrapper {
 	margin: 20px 0px;
@@ -50,21 +56,60 @@
 }
 
 .password-btn {
-	padding-bottom: 55px;
+	/* padding-bottom: 55px; */
 	/* margin-top: 30px; */
 }
 .password-btn button {
   padding: 14px 39px;
 }
-.password-btn button:last-child {
+.password-btn .cancel-pass-btn button {
   background-color: #4D506A;
 	color: white;
 	border: 0;
 	padding: 14px 32px;
 }
+.password-btn .cancel-pass-btn button:hover {
+  background: #4D506A;
+	color: white;
+	border: 0;
+	padding: 14px 32px;
+}
+
 
 .password-fields .Polaris-Connected {
 	max-width: 616px;
 	margin-bottom: 30px;
 }
 
+
+
+/* next form */
+
+.bread-bar{
+  padding: 16px;
+  display: flex;
+  background-color:#E2F5FF !important;
+}
+.bread-bar > a{
+  cursor: pointer;
+  margin :0px 4px;
+}
+
+.input-section {
+  margin-left: 16px;
+	margin-bottom: 30px;
+}
+.input-section  p {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+.Polaris-Card__Section{
+  /* padding-top: 2px !important; */
+}
+.Polaris-Card__Section > *{
+	/* margin: 10px 0px !important; */
+} 
+
+.create-input .Polaris-Select {
+	max-width: 595px;
+}

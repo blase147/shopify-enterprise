@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef,useContext } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import { FilterContext } from './../common/Contexts/AnalyticsFilterContext';
+import { gql, useLazyQuery } from '@apollo/client';
 import {
   Card,
   FormLayout,
@@ -9,220 +11,132 @@ import {
   DisplayText,
   TextStyle,
   Heading,
+  Select,
   DataTable,
   TextContainer,
+  Spinner
 } from '@shopify/polaris';
+import dayjs from 'dayjs'
+import { isEmpty } from 'lodash';
+import DateRangePicker from '../common/DatePicker/DateRangePicker';
 
 const CustomerInsights = () => {
-  const categories = [
-    'January ‘21',
-    'February ‘21',
-    'March ‘21',
-    'April ‘21',
-    'May ‘21',
-    'June ‘21',
-    'July ‘21',
-    'August ‘21',
-    'September ‘21',
-    'October ‘21',
-    'November ‘21',
-    'December ‘21',
-    'January ‘22',
-    'February ‘22',
-  ];
-  const GrossChart = {
-    chart: {
-      type: 'column',
-    },
-    title: {
-      text: 'Top 15 SKUs by Gross Sales',
-    },
-    xAxis: {
-      categories: categories,
-    },
-    yAxis: {
-      min: 0,
-      title: {
-        text: 'Gross Sales',
-      },
-    },
-    // legend: {
-    //   align: 'center',
-    //   alignColumns: true,
-    //   verticalAlign: 'bottom',
-    //   shadow: false,
-    //   squareSymbol: true,
-    //   symbolRadius: 0,
-    // },
-    tooltip: {
-      headerFormat: '<b>{point.x}</b><br/>',
-      pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
-    },
-    plotOptions: {
-      column: {
-        stacking: 'normal',
-        // dataLabels: {
-        //   enabled: true,
-        // },
-      },
-    },
-    series: [
-      {
-        // name: 'Active Customers',
-        data: [
-          90000,
-          90000,
-          100000,
-          80000,
-          60000,
-          90000,
-          100000,
-          80000,
-          60000,
-          0,
-          0,
-          0,
-          0,
-          0,
-        ],
-      },
-      {
-        // name: 'Churned Customers',
-        data: [
-          60000,
-          90000,
-          100000,
-          80000,
-          50000,
-          90000,
-          100000,
-          80000,
-          60000,
-          0,
-          0,
-          0,
-          0,
-          0,
-        ],
-      },
-      {
-        // name: 'Churned Customers',
-        data: [
-          70000,
-          90000,
-          100000,
-          80000,
-          60000,
-          90000,
-          100000,
-          80000,
-          60000,
-          0,
-          0,
-          0,
-          0,
-          0,
-        ],
-      },
-    ],
-  };
-  const NumberChart = {
-    chart: {
-      type: 'column',
-    },
-    title: {
-      text: 'Top 15 SKUs by Gross Sales',
-    },
-    xAxis: {
-      categories: categories,
-    },
-    yAxis: {
-      min: 0,
-      title: {
-        text: 'Gross Sales',
-      },
-    },
-    legend: {
-      align: 'center',
-      alignColumns: true,
-      verticalAlign: 'bottom',
-      shadow: false,
-      squareSymbol: true,
-      symbolRadius: 0,
-    },
 
+  ///Graph Query...
+  const fetchReport = gql`
+  query($startDate: String!, $endDate: String!) {  
+    fetchRevenueTrend(startDate: $startDate, endDate: $endDate) {
+        skuBySubscriptions {
+            sku
+            value
+        }
+        skuByRevenue {
+            sku
+            value
+        }
+        skuByCustomers {
+          sku
+          value
+        }
+        billingFrequencyRevenue {
+            billingPolicy
+            value
+        }
+        skuByFrequency {
+            billingPolicy
+            skus {
+                sku
+                value
+            }
+        }
+    }
+}
+  `;
+
+  const skuRevenue = {
+    colors: ["#0D91AE", "#6B97C5", "#FFF500", "#FFCC00", "#E77320", "#FF0000", "#FF5C00", "#979797", "#007EFF", "#00A023", "#8000A0", "#A0007D", "#F4EC19"],
+    title: {
+      text: 'Top 14 SKUs by Recurring Revenue (Subscriptions)'
+    },
     tooltip: {
-      headerFormat: '<b>{point.x}</b><br/>',
-      pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
+      pointFormat: '<b>{point.y}</b>',
     },
-    plotOptions: {
-      column: {
-        stacking: 'normal',
-        // dataLabels: {
-        //   enabled: true,
-        // },
+    xAxis: {
+      categories: []
+    },
+    yAxis: {
+      title: {
+        text: 'Recurring Revenue ($)'
+      },
+      labels: {
+        formatter: function () {
+          return this.value;
+        }
       },
     },
-    series: [
-      {
-        name: 'Active',
-        data: [
-          90000,
-          90000,
-          100000,
-          80000,
-          60000,
-          90000,
-          100000,
-          80000,
-          60000,
-          0,
-          0,
-          0,
-          0,
-          0,
-        ],
+    series: [{
+      type: 'column',
+      colorByPoint: true,
+      data: [],
+      showInLegend: false
+    }]
+  }
+  const skuSubscriptions = {
+    colors: ["#0D91AE", "#6B97C5", "#FFF500", "#FFCC00", "#E77320", "#FF0000", "#FF5C00", "#979797", "#007EFF", "#00A023", "#8000A0", "#A0007D", "#F4EC19"],
+    title: {
+      text: 'Top 14 SKUs by Subscriptions'
+    },
+    tooltip: {
+      pointFormat: '<b>{point.y}</b>',
+    },
+    xAxis: {
+      categories: []
+    },
+    yAxis: {
+      title: {
+        text: 'Subscriptions'
       },
-      {
-        name: 'Cancelled',
-        data: [
-          60000,
-          90000,
-          100000,
-          80000,
-          50000,
-          90000,
-          100000,
-          80000,
-          60000,
-          0,
-          0,
-          0,
-          0,
-          0,
-        ],
+      labels: {
+        formatter: function () {
+          return this.value;
+        }
       },
-    ],
-  };
-  // SKU details
-  const rows_SKU = [
-    ['1', '$21,609', '2,069', '21,609', '$21,609', '69', '2,069', '54%'],
-    ['2', '$21,609', '2,069', '21,609', '$21,609', '69', '2,069', '54%'],
-    ['3', '$21,609', '2,069', '21,609', '$21,609', '69', '2,069', '54%'],
-    ['4', '$21,609', '2,069', '21,609', '$21,609', '69', '2,069', '54%'],
-    ['5', '$21,609', '2,069', '21,609', '$21,609', '69', '2,069', '54%'],
-    ['6', '$21,609', '2,069', '21,609', '$21,609', '69', '2,069', '54%'],
-    ['7', '$21,609', '2,069', '21,609', '$21,609', '69', '2,069', '54%'],
-    ['8', '$21,609', '2,069', '21,609', '$21,609', '69', '2,069', '54%'],
-    ['9', '$21,609', '2,069', '21,609', '$21,609', '69', '2,069', '54%'],
-    ['10', '$21,609', '2,069', '21,609', '$21,609', '69', '2,069', '54%'],
-    ['11', '$21,609', '2,069', '21,609', '$21,609', '69', '2,069', '54%'],
-    ['12', '$21,609', '2,069', '21,609', '$21,609', '69', '2,069', '54%'],
-    ['13', '$21,609', '2,069', '21,609', '$21,609', '69', '2,069', '54%'],
-    ['14', '$21,609', '2,069', '21,609', '$21,609', '69', '2,069', '54%'],
-    ['15', '$21,609', '2,069', '21,609', '$21,609', '69', '2,069', '54%'],
-    ['16', '$21,609', '2,069', '21,609', '$21,609', '69', '2,069', '54%'],
-  ];
+    },
+    series: [{
+      type: 'column',
+      colorByPoint: true,
+      data: [],
+      showInLegend: false
+    }]
+  }
+  const skuCustomersChart = {
+    colors: ["#0D91AE", "#6B97C5", "#FFF500", "#FFCC00", "#E77320", "#FF0000", "#FF5C00", "#979797", "#007EFF", "#00A023", "#8000A0", "#A0007D", "#F4EC19"],
+    title: {
+      text: 'Top SKUs by Customer Count'
+    },
+    tooltip: {
+      pointFormat: '<b>{point.y}</b>',
+    },
+    xAxis: {
+      categories: []
+    },
+    yAxis: {
+      title: {
+        text: 'Number of Customers'
+      },
+      labels: {
+        formatter: function () {
+          return this.value;
+        }
+      },
+    },
+    series: [{
+      type: 'column',
+      colorByPoint: true,
+      data: [],
+      showInLegend: false
+    }]
+  }
   //chart
   const PercentVerticalChart = {
     chart: {
@@ -233,7 +147,7 @@ const CustomerInsights = () => {
       // width: '720px',
     },
     title: {
-      text: '2021-02-09',
+      text: '',
       align: 'center',
       verticalAlign: 'middle',
       // y: 60,
@@ -251,6 +165,7 @@ const CustomerInsights = () => {
         dataLabels: {
           enabled: true,
           distance: -50,
+          format: '{point.y} %',
           style: {
             fontWeight: 'bold',
             color: 'white',
@@ -265,32 +180,217 @@ const CustomerInsights = () => {
       {
         type: 'pie',
         innerSize: '50%',
-        data: [
-          ['60%', 60],
-          ['18%', 18],
-          ['19%', 19],
-          ['2%', 2],
-        ],
+        data: [],
       },
     ],
   };
+
+  // const [filters,setFilters,productCharts,setProductCharts]=useContext(FilterContext)
+  const [filters,setFilters]=useState({startDate:dayjs(new Date()).subtract(30,'days').format("YYYY-MM-DD"),endDate:dayjs(new Date()).format("YYYY-MM-DD"),span:"30 days"})
+  const handleFiltersDates=(dates,span)=>{
+    if(!isEmpty(dates)){
+      const {start,end}=dates;
+      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD"),span:span});
+    }
+  }
+  const [getReport, { loading, data }] = useLazyQuery(fetchReport,{fetchPolicy:"network-only"});
+
+  const getReportData = useCallback(() => {
+    getReport({
+      variables:{
+        startDate:filters.startDate,
+        endDate:filters.endDate
+      }
+    })
+  }, [filters, getReport])
+
+
+  useEffect(() => { 
+      getReportData()
+  }, [filters])
+
+  const [chartOptions,setChartOptions]=useState({
+    skuRevenueChart:skuRevenue,
+    skuCustomersChart:skuCustomersChart,
+    skuSubscriptionsChart:skuSubscriptions,
+    insightsChart:PercentVerticalChart
+  })
+
+ const [insightsOptions,setInsightOptions] = useState([])
+  const [insightsData,setInsightsData]=useState({})
+  const [selectedInsight, setSelectedInsight] = useState('');
+  const handleSelectChange = (value) => setSelectedInsight(value);
+ 
+  useEffect(()=>{
+    const {insightsChart}=chartOptions;
+    if(!isEmpty(insightsData)){
+      // billingPolicy
+      const insightOptions=insightsData.map(data=>({label:data.billingPolicy,value:data.billingPolicy}))
+      setInsightOptions(insightOptions);
+      const selectedData=insightsData.find(data=>data.billingPolicy===selectedInsight);
+      console.log(selectedData,"--",selectedInsight,"--",insightsOptions)
+      const insightChartOptions = {
+        ...insightsChart, series: [{
+          type: 'pie', innerSize: '50%', showInLegend: true, data:selectedData.skus.map(f=>[f.sku,parseFloat(f.value) || 0])}]
+      }
+      setChartOptions({...chartOptions,insightsChart:insightChartOptions})
+    }
+  },[selectedInsight])
+
+  // useEffect(()=>{
+  //   if(productCharts.hasData){
+  //     const {
+  //       skuByFrequency,
+  //       skuByRevenue,
+  //       skuBySubscriptions,
+  //       skuByCustomers
+  //     }=productCharts;
+  //     setInsightsData(skuByFrequency)
+
+  //     //Charts Data
+  //     const { insightsChart, skuCustomersChart, skuRevenueChart, skuSubscriptionsChart } = chartOptions;
+      
+  //     const newSkuRevenue = {
+  //       ...chartOptions.skuRevenueChart, xAxis: { categories: skuByRevenue.map(sku => sku.sku) || [] },
+  //       series: [{
+  //         type: 'column',
+  //         colorByPoint: true,
+  //         data: skuByRevenue.map(sku => parseInt(sku.value || 0)) || [],
+  //         showInLegend: false
+  //       }]
+  //     }
+
+  //     const newSkuCustomersChart = {
+  //       ...skuCustomersChart, xAxis: { categories: skuByCustomers.map(sku => sku.sku) || [] },
+  //       series: [{
+  //         type: 'column',
+  //         colorByPoint: true,
+  //         data: skuByCustomers.map(sku => parseInt(sku.value || 0)) || [],
+  //         showInLegend: false
+  //       }]
+  //     }
+
+  //     const newSkuSubscriptions = {
+  //       ...chartOptions.skuSubscriptionsChart, xAxis: { categories: skuBySubscriptions.map(sku => sku.sku) || [] },
+  //       series: [{
+  //         type: 'column',
+  //         colorByPoint: true,
+  //         data: skuBySubscriptions.map(sku => parseInt(sku.value || 0)) || [],
+  //         showInLegend: false
+  //       }]
+  //     }
+
+  //     setChartOptions({
+  //       ...chartOptions,
+  //       // insightsChart:insightChartOptions,
+  //       skuCustomersChart:newSkuCustomersChart,
+  //       skuRevenueChart:newSkuRevenue,
+  //       skuSubscriptionsChart:newSkuSubscriptions
+  //     })
+
+  //   }
+
+  // },[productCharts])
+
+  useEffect(()=>{
+    if(!isEmpty(data?.fetchRevenueTrend)){
+      const {
+        skuByFrequency,
+        skuByRevenue,
+        skuBySubscriptions,
+        skuByCustomers
+      }=data.fetchRevenueTrend;
+      const { insightsChart, skuCustomersChart, skuRevenueChart, skuSubscriptionsChart } = chartOptions;
+      
+
+      
+      if (!isEmpty(skuByFrequency)) {
+        setInsightsData(skuByFrequency)
+        setSelectedInsight(skuByFrequency[0]?.billingPolicy)
+      }else{
+        setInsightsData({});
+        setInsightOptions([]);
+        setSelectedInsight('');
+      }
+      
+
+      //Charts Data
+      
+      
+      const newSkuRevenue = {
+        ...chartOptions.skuRevenueChart, xAxis: { categories: skuByRevenue.map(sku => sku.sku) || [] },
+        series: [{
+          type: 'column',
+          colorByPoint: true,
+          data: skuByRevenue.map(sku => parseInt(sku.value || 0)) || [],
+          showInLegend: false
+        }]
+      }
+
+      const newSkuCustomersChart = {
+        ...skuCustomersChart, xAxis: { categories: skuByCustomers.map(sku => sku.sku) || [] },
+        series: [{
+          type: 'column',
+          colorByPoint: true,
+          data: skuByCustomers.map(sku => parseInt(sku.value || 0)) || [],
+          showInLegend: false
+        }]
+      }
+
+      const newSkuSubscriptions = {
+        ...chartOptions.skuSubscriptionsChart, xAxis: { categories: skuBySubscriptions.map(sku => sku.sku) || [] },
+        series: [{
+          type: 'column',
+          colorByPoint: true,
+          data: skuBySubscriptions.map(sku => parseInt(sku.value || 0)) || [],
+          showInLegend: false
+        }]
+      }
+
+      setChartOptions({
+        ...chartOptions,
+        insightsChart:PercentVerticalChart,
+        skuCustomersChart:newSkuCustomersChart,
+        skuRevenueChart:newSkuRevenue,
+        skuSubscriptionsChart:newSkuSubscriptions
+      })
+    }
+  },[data])
+
   return (
+    <>
+    {(loading || !data) ? (
+        <Card>
+          <Spinner
+            accessibilityLabel="Spinner example"
+            size="large"
+            color="teal"
+          />
+        </Card>
+      ) :
     <FormLayout>
       <Stack vertical spacing="extraLoose">
+      <Layout>
+            <Layout.Section>
+              <Card title="">
+                <Card.Section>
+                  <div className="rev-date-picker">
+                    <DateRangePicker
+                      start={filters.startDate}
+                      end={filters.endDate}
+                      span={filters.span}
+                      handleDates={handleFiltersDates}
+                    />
+                    </div>
+                  
+                </Card.Section>
+              </Card>
+            </Layout.Section>
+      </Layout>
         <Layout>
           <Layout.Section>
-            <DisplayText size="medium">MRR Retention Cohort</DisplayText>
-            <br />
-            <Card>
-              <HighchartsReact highcharts={Highcharts} options={GrossChart} />
-            </Card>
-          </Layout.Section>
-        </Layout>
-        <Layout>
-          <Layout.Section>
-            <Card>
-              <HighchartsReact highcharts={Highcharts} options={NumberChart} />
-            </Card>
+            <Heading>{'  '}</Heading>
+            <HighchartsReact highcharts={Highcharts} options={chartOptions.skuRevenueChart} />
           </Layout.Section>
         </Layout>
         <Layout>
@@ -298,44 +398,38 @@ const CustomerInsights = () => {
             <Card>
               <HighchartsReact
                 highcharts={Highcharts}
-                options={PercentVerticalChart}
+                options={chartOptions.skuCustomersChart}
               />
             </Card>
           </Layout.Section>
         </Layout>
         <Layout>
           <Layout.Section>
-            <DisplayText size="medium">SKU Details</DisplayText>
-            <br />
+            <Heading>{'  '}</Heading>
+            <HighchartsReact highcharts={Highcharts} options={chartOptions.skuSubscriptionsChart} />
+          </Layout.Section>
+        </Layout>
+        <Layout>
+          <Layout.Section>
             <Card>
-              <DataTable
-                columnContentTypes={[
-                  'text',
-                  'text',
-                  'text',
-                  'text',
-                  'text',
-                  'text',
-                  'text',
-                ]}
-                headings={[
-                  '',
-                  'Gross Sales',
-                  'Quantity Sold',
-                  'Charges',
-                  'Refunded Amt',
-                  'Refunded Qty',
-                  'Customers with...',
-                  'Recurring Sales %',
-                ]}
-                rows={rows_SKU}
-                hideScrollIndicator={true}
+              <div className="insight-chart-select">
+              <Select
+                options={insightsOptions}
+                onChange={handleSelectChange}
+                value={selectedInsight}
+              />
+              </div>
+              <HighchartsReact
+                highcharts={Highcharts}
+                options={chartOptions.insightsChart}
               />
             </Card>
           </Layout.Section>
         </Layout>
       </Stack>
     </FormLayout>
+  }
+  </>
   );
 };
 

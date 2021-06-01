@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_19_110621) do
+ActiveRecord::Schema.define(version: 2021_05_31_101554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,11 +82,15 @@ ActiveRecord::Schema.define(version: 2021_05_19_110621) do
     t.datetime "shopify_updated_at"
     t.boolean "opt_in_sent", default: false
     t.datetime "opt_in_reminder_at"
+    t.datetime "failed_at"
+    t.integer "retry_count", default: 0
+    t.bigint "reasons_cancel_id"
+    t.index ["reasons_cancel_id"], name: "index_customers_on_reasons_cancel_id"
   end
 
   create_table "email_notifications", force: :cascade do |t|
     t.string "name"
-    t.string "descripton"
+    t.string "description"
     t.string "from_name"
     t.string "from_email"
     t.string "email_subject"
@@ -96,6 +100,30 @@ ActiveRecord::Schema.define(version: 2021_05_19_110621) do
     t.boolean "status"
     t.integer "setting_id"
     t.string "slug"
+    t.string "template_identity"
+    t.text "hypertext"
+  end
+
+  create_table "integrations", force: :cascade do |t|
+    t.integer "integration_type", default: 0
+    t.string "name"
+    t.string "image_url"
+    t.json "credentials"
+    t.integer "status", default: 0
+    t.integer "service_type", default: 0
+    t.bigint "shop_id"
+    t.boolean "default", default: false
+    t.string "keys"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["shop_id"], name: "index_integrations_on_shop_id"
+  end
+
+  create_table "lock_passwords", force: :cascade do |t|
+    t.integer "shop_id"
+    t.string "password_digest", null: false
+    t.datetime "created_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
   end
 
   create_table "reasons_cancels", force: :cascade do |t|
@@ -234,6 +262,7 @@ ActiveRecord::Schema.define(version: 2021_05_19_110621) do
     t.boolean "show_account", default: true
     t.string "delay_order"
     t.string "pause_subscription"
+    t.string "email_service"
     t.index ["shop_id"], name: "index_settings_on_shop_id", unique: true
   end
 
@@ -357,6 +386,19 @@ ActiveRecord::Schema.define(version: 2021_05_19_110621) do
     t.string "status"
   end
 
+  create_table "subscription_logs", force: :cascade do |t|
+    t.integer "billing_status", default: 0
+    t.integer "action_type", default: 0
+    t.string "subscription_id"
+    t.bigint "shop_id"
+    t.bigint "customer_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "executions", default: false
+    t.index ["customer_id"], name: "index_subscription_logs_on_customer_id"
+    t.index ["shop_id"], name: "index_subscription_logs_on_shop_id"
+  end
+
   create_table "upsell_campaign_groups", force: :cascade do |t|
     t.string "internal_name"
     t.string "selector_title"
@@ -402,4 +444,5 @@ ActiveRecord::Schema.define(version: 2021_05_19_110621) do
     t.json "rule_customer_value"
   end
 
+  add_foreign_key "customers", "reasons_cancels"
 end

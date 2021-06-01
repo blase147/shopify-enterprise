@@ -58,7 +58,7 @@ const emailNotificationsDetails = (props) => {
             </Stack.Item>
             <Stack.Item>
               <TextStyle variation="subdued">
-                {values.emailNotifications[index]?.descripton}
+                {values.emailNotifications[index]?.description}
               </TextStyle>
             </Stack.Item>
             <Stack.Item>
@@ -168,7 +168,7 @@ const emailNotificationsDetails = (props) => {
           </TextContainer>
         </Card.Section>
 
-        <Card.Section>
+        {/* <Card.Section>
           <TextContainer>
             <Heading h4>Need help with ChargeZen variables?</Heading>
             <br />
@@ -178,7 +178,7 @@ const emailNotificationsDetails = (props) => {
               here.
             </TextStyle>
           </TextContainer>
-        </Card.Section>
+        </Card.Section> */}
 
         <Card.Section>
           <TextContainer>

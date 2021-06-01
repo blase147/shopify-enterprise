@@ -29,7 +29,6 @@ $primary: #007EFF;
 }
 .message-form {
   display: flex;
-
   .order-title {
     margin-left: 15px;
     width: 45%;
@@ -262,16 +261,16 @@ $primary: #007EFF;
   color:#000000;
 }
 .variable-section {
+  margin-top: 47px;
   display: flex;
-  > * {
-    flex-basis: 100%;
-  }
+  // > * {
+  //   // flex-basis: 100%;
+  // }
   p {
     color:#000000;
   }
 
   .available-variables {
-    margin-top: 47px;
     button {
       background-color: #365870;
       color: white;
@@ -397,4 +396,10 @@ $primary: #007EFF;
     }
   }
   
+}
+.buttons-wrapper{
+  padding: 20px;
+}
+.edit-from{
+  width: 50%;
 }

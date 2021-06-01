@@ -9,9 +9,9 @@ class SmsAnalyticsService
     @messages = messages
   end
 
-  def percentage(past_data, new_data)
+  def percentage(past_data, new_data, original_data)
     percent = Percentage.change(past_data.to_f, new_data.to_f).to_i rescue 0
-    { value: new_data.to_f.round(2), percent: percent, up: percent.positive? }
+    { value: original_data.to_f.round(2), percent: percent, up: percent.positive? }
   end
 
   def swap_count

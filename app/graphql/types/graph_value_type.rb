@@ -11,6 +11,10 @@ module Types
     field :one_time_sales, String, null: true
     field :up, GraphQL::Types::Boolean, null: true
     field :percent, Integer, null: true
+    field :sku, String, null: true
+    field :billing_policy, String, null: true
+    field :cancellation_reason, String, null: true
+    field :skus, [Types::SkuType], null: true
     field :__typename, String, null: true
   end
 end
