@@ -73,7 +73,7 @@ const Settings = () => {
           returnContent
           _destroy
         }
-
+        emailService
         emailNotifications {
           id
           name
@@ -162,6 +162,7 @@ const Settings = () => {
           cancellationEmailContact
           allowCancelAfter
           reactiveSubscription
+          emailService
           reasonsCancels {
             id
             title
@@ -239,6 +240,7 @@ const Settings = () => {
     cancellationEmailContact: '',
     changeVariant: '1',
     discount: [],
+    emailService:'',
     emailNotifications: [
       {
         emailMessage: '',
@@ -392,7 +394,7 @@ const Settings = () => {
   }, [selectedTitleTab]);
 
   return (
-    <AppLayout typePage="settings" tabIndex="7">
+    <AppLayout typePage="settings" tabIndex="8">
       <Frame>
         { passwordConfirmed
           ? (

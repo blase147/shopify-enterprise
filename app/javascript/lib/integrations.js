@@ -38,16 +38,16 @@ import vector99 from 'images/vector99.svg';
 import get_start from 'images/get_start.svg';
 
 const integrations = [
-  {
-    title: 'Sales',
-    id: 'sale',
-    data: [
-      { title: 'Hubspot', icon: hubspot },
-      { title: 'Zoho CRM', icon: zoho_crm },
-      { title: 'Pipedrive', icon: pipedrive },
-      { title: 'Salesforce', icon: Salesforce },
-    ],
-  },
+  // {
+  //   title: 'Sales',
+  //   id: 'sale',
+  //   data: [
+  //     { title: 'Hubspot', icon: hubspot },
+  //     { title: 'Zoho CRM', icon: zoho_crm },
+  //     { title: 'Pipedrive', icon: pipedrive },
+  //     { title: 'Salesforce', icon: Salesforce },
+  //   ],
+  // },
   {
     title: 'Marketing',
     id: 'marketing',
@@ -62,64 +62,64 @@ const integrations = [
       { title: 'Mailchimp', icon: Mailchimp },
     ],
   },
-  {
-    title: 'Reporting & Analytics',
-    id: 'report',
-    data: [
-      { title: 'Baremetrics', icon: Baremetrics },
-      { title: 'Chart Mogul', icon: ChartMogul },
-      { title: 'Stitch', icon: Stitch },
-      { title: 'ProfitWell', icon: ProfitWell },
-      { title: 'Google Analytics', icon: GoogleAnalytics },
-    ],
-  },
-  {
-    title: 'Collaboration',
-    id: 'collabration',
-    data: [
-      { title: 'Shopify', icon: Shopify },
-      { title: 'Slack', icon: Slack },
-      { title: 'Twillo', icon: Twillo },
-      { title: 'PieSync', icon: PieSync },
-      { title: 'Moxtra', icon: Moxtra },
-      { title: 'Shipstation', icon: Shipstation },
-    ],
-  },
-  {
-    title: 'Accounting',
-    id: 'accounting',
-    data: [
-      { title: 'Xero', icon: xero },
-      { title: 'Revenue Manager', icon: RevenueManager },
-      { title: 'QuickBooks', icon: QuickBooks },
-      { title: 'Intacct', icon: Intacct },
-    ],
-  },
-  {
-    title: 'Customer Support & Success',
-    id: 'customer',
-    data: [
-      { title: 'Freshdesk', icon: Freshdesk },
-      { title: 'Natero', icon: Natero },
-      { title: 'Zendesk', icon: Zendesk },
-      { title: 'Intercom', icon: Intercom },
-      { title: 'Groove', icon: Groove },
-    ],
-  },
-  {
-    title: 'Contract Management',
-    id: 'contract',
-    data: [{ title: 'GetAccept', icon: GetAccept }],
-  },
-  {
-    title: 'Tax Management',
-    id: 'tax',
-    data: [
-      { title: 'Avalar', icon: Avalar },
-      { title: 'TaxJar', icon: TaxJar },
-      { title: 'Hubspot', icon: hubspot },
-    ],
-  },
+  // {
+  //   title: 'Reporting & Analytics',
+  //   id: 'report',
+  //   data: [
+  //     { title: 'Baremetrics', icon: Baremetrics },
+  //     { title: 'Chart Mogul', icon: ChartMogul },
+  //     { title: 'Stitch', icon: Stitch },
+  //     { title: 'ProfitWell', icon: ProfitWell },
+  //     { title: 'Google Analytics', icon: GoogleAnalytics },
+  //   ],
+  // },
+  // {
+  //   title: 'Collaboration',
+  //   id: 'collabration',
+  //   data: [
+  //     { title: 'Shopify', icon: Shopify },
+  //     { title: 'Slack', icon: Slack },
+  //     { title: 'Twillo', icon: Twillo },
+  //     { title: 'PieSync', icon: PieSync },
+  //     { title: 'Moxtra', icon: Moxtra },
+  //     { title: 'Shipstation', icon: Shipstation },
+  //   ],
+  // },
+  // {
+  //   title: 'Accounting',
+  //   id: 'accounting',
+  //   data: [
+  //     { title: 'Xero', icon: xero },
+  //     { title: 'Revenue Manager', icon: RevenueManager },
+  //     { title: 'QuickBooks', icon: QuickBooks },
+  //     { title: 'Intacct', icon: Intacct },
+  //   ],
+  // },
+  // {
+  //   title: 'Customer Support & Success',
+  //   id: 'customer',
+  //   data: [
+  //     { title: 'Freshdesk', icon: Freshdesk },
+  //     { title: 'Natero', icon: Natero },
+  //     { title: 'Zendesk', icon: Zendesk },
+  //     { title: 'Intercom', icon: Intercom },
+  //     { title: 'Groove', icon: Groove },
+  //   ],
+  // },
+  // {
+  //   title: 'Contract Management',
+  //   id: 'contract',
+  //   data: [{ title: 'GetAccept', icon: GetAccept }],
+  // },
+  // {
+  //   title: 'Tax Management',
+  //   id: 'tax',
+  //   data: [
+  //     { title: 'Avalar', icon: Avalar },
+  //     { title: 'TaxJar', icon: TaxJar },
+  //     { title: 'Hubspot', icon: hubspot },
+  //   ],
+  // },
 ];
 
 export default integrations;
