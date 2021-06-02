@@ -271,7 +271,7 @@ div#sms-panel {
       }
     }
 
-    
+
   }
 }
 .smarty-sms-number {
@@ -353,4 +353,19 @@ div#sms-panel {
     width: 291px;
     height: 143px;
   }
-}  
+}
+.back-btn-container{
+  display:flex;
+  flex-direction:row;
+  width:100px;
+  cursor:pointer;
+  > span{
+    margin-left: 0;
+    margin-right: 8px;
+
+    > svg{
+      fill:#007eff;
+    }
+
+  }
+}

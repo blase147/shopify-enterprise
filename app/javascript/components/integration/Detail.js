@@ -117,7 +117,7 @@ const IntegrationDetail = () => {
         <span>Get Started</span>
       </Button>
 
-      <Page fullWidth title="Integrate with ChargeZen" breadcrumbs={[{
+      <Page fullWidth title={process.env.APP_TYPE=="public"?"Integrate with ChargeZen":"Integrations"} breadcrumbs={[{
         content: title, onAction: () => history.push('/integrations')
       }]}>
         <Layout>

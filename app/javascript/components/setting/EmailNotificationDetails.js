@@ -12,8 +12,12 @@ import {
   FormLayout,
   Layout,
   TextContainer,
+  Icon
 } from '@shopify/polaris';
 import Switch from 'react-switch';
+import {
+  CircleLeftMajor
+} from '@shopify/polaris-icons';
 
 const emailNotificationsDetails = (props) => {
   const [valueFromName, setValueFromName] = useState();
@@ -48,11 +52,24 @@ const emailNotificationsDetails = (props) => {
     handleSubmit,
   } = props;
 
+  const submit=async ()=>{
+    await handleSubmit();
+    setSelectedIndex(null);
+  }
   return (
     <div className="noti-detail">
       <div className="container-left">
         <Card.Section>
           <Stack vertical>
+            <Stack.Item>
+              <div className="back-btn-container" onClick={()=>setSelectedIndex(null)} >
+              <Icon
+                source={CircleLeftMajor}
+                color="base" />
+                <p>Go Back</p>
+              </div>
+              
+            </Stack.Item>
             <Stack.Item>
               <Heading>{values.emailNotifications[index]?.name}</Heading>
             </Stack.Item>
@@ -126,7 +143,7 @@ const emailNotificationsDetails = (props) => {
                 <Button primary onClick={() => setSelectedIndex(null)}>
                   Cancel
                 </Button>
-                <Button onClick={() => handleSubmit()}>Save Changes</Button>
+                <Button onClick={() => submit()}>Save Changes</Button>
               </ButtonGroup>
             </Stack.Item>
           </Stack>
