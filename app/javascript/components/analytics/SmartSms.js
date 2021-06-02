@@ -165,7 +165,7 @@ const SmartSms = () => {
 
   /// cards ... List 2
   const serviceListKeys=[
-    {section:"Service Opt-Outs",key:"optOutMessages"},
+    {section:"SmartySMS Opt-out",key:"optOutMessages"},
     {section:"Delayed Orders",key:"delayCount"},
     {section:"Add One-time Item Revenue",key:"oneTimeRevenue",prefix :"$" , decimal:true}
   ]
