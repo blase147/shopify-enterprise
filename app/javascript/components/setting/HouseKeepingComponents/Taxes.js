@@ -88,8 +88,8 @@ const [getSetting, { loading, data }] = useLazyQuery(fetchSetting);
               });
           }
       }, [data])
-      
-      
+
+
     return (
       <React.Fragment>
             <div className="sms-tab">
@@ -146,11 +146,8 @@ const [getSetting, { loading, data }] = useLazyQuery(fetchSetting);
               </Layout>
             </Card>
             </div>
-<<<<<<< HEAD
-=======
             {
-            (process.env.APP_TYPE=="public") && 
->>>>>>> bb8a77f518366174954da2d14bc1ea301dc181c0
+            (process.env.APP_TYPE=="public") &&
             <div className ="faq-sms">
             <Card sectioned>
               <h1>Frequently Asked Questions </h1>
@@ -199,11 +196,7 @@ const [getSetting, { loading, data }] = useLazyQuery(fetchSetting);
                 </Stack.Item>
               </Stack>
             </Card>
-<<<<<<< HEAD
-          </div>
-=======
           </div> }
->>>>>>> bb8a77f518366174954da2d14bc1ea301dc181c0
           </div>
       </React.Fragment>
     );

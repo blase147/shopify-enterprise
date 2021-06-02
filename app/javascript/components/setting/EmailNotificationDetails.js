@@ -68,7 +68,7 @@ const emailNotificationsDetails = (props) => {
                 color="base" />
                 <p>Go Back</p>
               </div>
-              
+
             </Stack.Item>
             <Stack.Item>
               <Heading>{values.emailNotifications[index]?.name}</Heading>
@@ -185,19 +185,6 @@ const emailNotificationsDetails = (props) => {
           </TextContainer>
         </Card.Section>
 
-<<<<<<< HEAD
-        <Card.Section>
-          <TextContainer>
-            <Heading h4>Need help with ChargeZen variables?</Heading>
-            <br />
-            <TextStyle variation="subdued">
-              We’ve compiled a list of all available CharegeZen variables along
-              with additional information and help. You can check out the guide
-              here.
-            </TextStyle>
-          </TextContainer>
-        </Card.Section>
-=======
         {
           process.env.APP_TYPE=="public" &&
           <Card.Section>
@@ -212,8 +199,7 @@ const emailNotificationsDetails = (props) => {
             </TextContainer>
           </Card.Section>
         }
-        
->>>>>>> bb8a77f518366174954da2d14bc1ea301dc181c0
+
 
         <Card.Section>
           <TextContainer>

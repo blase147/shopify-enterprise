@@ -54,7 +54,7 @@ mutation ($input: UpdatePasswordInput!) {
   const [formErrors, setFormErrors] = useState([]);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
-  
+
   const [selectedTab, setSelectedTab] = useState(2);
   const [showForm,setShowForm]=useState(false)
 
@@ -79,7 +79,7 @@ mutation ($input: UpdatePasswordInput!) {
   //   [setSelectedTitleTab])
 
   const [updateSmsSettings,{data ,error,loading}]=useMutation(updateSmsSettingQuery);
-  
+
   const [smsData, setSmsData] = useState({
     status: "",
     shopPhone: "",
@@ -132,7 +132,7 @@ mutation ($input: UpdatePasswordInput!) {
       setFormErrors(error);
     });
   }
-  
+
   // Change pasword
   const handleChangePassword = () => {
     updatePassword({
@@ -160,21 +160,13 @@ mutation ($input: UpdatePasswordInput!) {
       <div className="tab-section">
         <div class="tab-parent">
           <div class="tabs-sms">
-<<<<<<< HEAD
+            {
+            process.env.APP_TYPE=="public" &&
+            <>
             <input type="radio" name="tab-btn" id="tab-btn-1" value="" onChange={e=>setSelectedTab(0)} checked={selectedTab==0}  />
             <label for="tab-btn-1">Discount</label>
             <input type="radio" name="tab-btn" id="tab-btn-2" value="" onChange={e=>setSelectedTab(1)} checked={selectedTab==1} />
             <label for="tab-btn-2">Export</label>
-            <input type="radio" name="tab-btn" id="tab-btn-3" value="" onChange={e=>setSelectedTab(2)} checked={selectedTab==2} />
-            <label for="tab-btn-3">SMS</label>
-=======
-            {
-            process.env.APP_TYPE=="public" &&
-            <>
-            <input type="radio" name="tab-btn" id="tab-btn-1" value="" onChange={e=>setSelectedTab(0)} checked={selectedTab==0}  />
-            <label for="tab-btn-1">Discount</label>
-            <input type="radio" name="tab-btn" id="tab-btn-2" value="" onChange={e=>setSelectedTab(1)} checked={selectedTab==1} />
-            <label for="tab-btn-2">Export</label> 
             </>
             }
             <input type="radio" name="tab-btn" id="tab-btn-3" value="" onChange={e=>setSelectedTab(2)} checked={selectedTab==2} />
@@ -182,16 +174,12 @@ mutation ($input: UpdatePasswordInput!) {
             {
             process.env.APP_TYPE=="public" &&
             <>
->>>>>>> bb8a77f518366174954da2d14bc1ea301dc181c0
             <input type="radio" name="tab-btn" id="tab-btn-4" value="" onChange={e=>setSelectedTab(3)} checked={selectedTab==3} />
             <label for="tab-btn-4">Legal</label>
             <input type="radio" name="tab-btn" id="tab-btn-5" value="" onChange={e=>setSelectedTab(4)} checked={selectedTab==4} />
             <label for="tab-btn-5">Translation</label>
-<<<<<<< HEAD
-=======
             </>
             }
->>>>>>> bb8a77f518366174954da2d14bc1ea301dc181c0
             <input type="radio" name="tab-btn" id="tab-btn-6" value="" onChange={e=>setSelectedTab(5)} checked={selectedTab==5} />
             <label for="tab-btn-6">Password</label>
           </div>
