@@ -205,6 +205,33 @@
       background-color: #979797;
     }
   }
+
+  .container-left {
+    width: 28%;
+  }
+
+  .container-right {
+    width: 72%;
+  }
+  
+  .customer-count {
+    .count-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 25px;
+      margin-top: 7px;
+    }
+    .Polaris-Layout__Section {
+      .Polaris-Stack {
+        > .Polaris-Stack__Item:first-child {
+          margin-top: 0px;
+        }
+      }
+    }
+   
+    
+  }
   // customer insight
   .customer-insight {
     // thead {
@@ -217,9 +244,7 @@
     //     }
     //   }
     // }
-    .container-left {
-      width: 28%;
-    }
+   
     .frequency-graph {
       .Polaris-Card__Section {
         display: grid;
@@ -266,24 +291,7 @@
         }
       }
     }
-    .customer-count {
-      .count-section {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 25px;
-        margin-top: 7px;
-      }
-      .Polaris-Layout__Section {
-        .Polaris-Stack {
-          > .Polaris-Stack__Item:first-child {
-            margin-top: 0px;
-          }
-        }
-      }
-     
-      
-    }
+   
 
     .last {
       display: flex;
@@ -366,3 +374,65 @@
   left: 30px !important;
   position: relative;
 }
+
+//smarty-sms sectoin //@at-root
+.image-card-section {
+  .Polaris-Layout__Section {
+    margin-top: 0px;
+  }
+  
+  .smarty-card-section {
+    .Polaris-Stack__Item {
+      margin-top: 4px;
+    }
+    .img-section {
+      background-color: #5C5F62;
+      width: 291px;
+      height: 143px;
+      border-radius: 9px;
+      img {
+        overflow: hidden;
+        height: 100%;
+        object-fit: cover;
+        width: 100%;
+        border-radius: 9px;
+      
+      }
+      +  {
+        p {
+          font-weight: bold;
+          margin-top: 9px;
+          font-size: 24px;
+          margin-bottom: 5px;
+        }
+      }
+    }
+
+    span {
+      margin-bottom: 7px;
+      font-size: 16px;
+      display: inline-block;
+      color: #4D506A;
+    }
+    small  {
+      color: #4D506A;
+      font-size: 14px;
+    }
+  }  
+}
+  .smart-card {
+    >.Polaris-Stack {
+      > .Polaris-Stack__Item {
+        display: flex;
+        margin-top: 0;
+
+        > .Polaris-Stack__Item:not(:first-child) {
+          margin-left: 1.6rem;
+        } 
+
+        > .Polaris-Stack__Item {
+          flex-basis: 25%;
+        }
+      }
+    }
+  }
