@@ -2,7 +2,8 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import dayjs from 'dayjs';
-
+import CounterUp from 'react-countup';
+import { gql, useLazyQuery } from '@apollo/client';
 import {
   Card,
   FormLayout,
@@ -29,11 +30,65 @@ import {
 
 import { Form } from 'formik';
 import DateRangePicker from '../common/DatePicker/DateRangePicker';
+import { isEmpty } from 'lodash';
 
 
 
 const SmartSms = () => {
-
+  const fetchReport = gql`
+  query($startDate: String!, $endDate: String!) {  
+    fetchSmsAnalytics(startDate: $startDate, endDate: $endDate) {
+        swapCount {
+          value
+          percent
+          up
+        }
+        skipCount {
+          value
+          percent
+          up
+        }
+        delayCount {
+          value
+          percent
+          up
+        }
+        oneTimeRevenue {
+          value
+          percent
+          up
+        }
+        optOutMessages {
+          value
+          percent
+          up 
+        }
+        messages {
+            date
+            data {
+                inboundSms
+                outboundSms
+                totalSms
+            }
+        }
+        mostSwapedProduct {
+            productId
+            image
+            title
+        }
+        mostSwapedProductTo {
+            productId
+            image
+            title
+        }
+        mostSkippedProduct {
+            productId
+            image
+            title
+        }
+    }
+}
+  `;
   const chartOptions={
     chart: {
         type: 'area'
@@ -77,23 +132,64 @@ const SmartSms = () => {
         }
     },
     series: [{
-        name: 'Asia',
+        name: 'Total SMS',
         data: [502, 635, 809, 947, 1402, 3634, 5268]
     }, {
-        name: 'Africa',
+        name: 'Outbound SMS',
         data: [106, 107, 111, 133, 221, 767, 1766]
     }, {
-        name: 'Europe',
+        name: 'Inbound SMS',
         data: [163, 203, 276, 408, 547, 729, 628]
-    }, {
-        name: 'America',
-        data: [18, 31, 54, 156, 339, 818, 1201]
-    }, {
-        name: 'Oceania',
-        data: [2, 2, 2, 6, 13, 30, 46]
     }]
 }
 
+  /// cards ... List 1
+  const productListKeys=[
+    {section:"Product Swaps",key:"swapCount"},
+    {section:"Skipped Orders",key:"skipCount"}
+  ]
+  const [sectionProductList,setSectionProductList] = useState({
+    swapCount:{
+      percent: 0,
+      up: true,
+      value: '0',
+    },
+    skipCount:{
+      percent: 0,
+      up: true,
+      value: '0'
+    }
+  });
+
+  /// cards ... List 2
+  const serviceListKeys=[
+    {section:"Service Opt-Outs",key:"optOutMessages"},
+    {section:"Delayed Orders",key:"delayCount"},
+    {section:"Add One-time Item Revenue",key:"oneTimeRevenue",prefix :"$" , decimal:true}
+  ]
+  const [sectionServiceList,setSectionServiceList] = useState({
+    optOutMessages:{
+      percent: 0,
+      up: true,
+      value: '0',
+    },
+    delayCount:{
+      percent: 0,
+      up: true,
+      value: '0'
+    },
+    oneTimeRevenue:{
+      percent: 0,
+      up: true,
+      value: '0'
+    }
+  });
+
+  const [swappedCards,setSwappedCards]=useState({
+    mostSwapedProduct:{image:"",title:""},
+    mostSwapedProductTo:{image:"",title:""},
+    mostSkippedProduct:{image:"",title:""}
+  })
     // const [filters,setFilters]=useContext(FilterContext)
     const [filters,setFilters]=useState({startDate:dayjs(new Date()).subtract(30,'days').format("YYYY-MM-DD"),endDate:dayjs(new Date()).format("YYYY-MM-DD"),span:"30 days"})
     const handleFiltersDates=(dates,span)=>{
@@ -102,10 +198,56 @@ const SmartSms = () => {
         setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD"),span:span});
       }
     }
+
+    const [getReport, { loading, data:reportData }] = useLazyQuery(fetchReport,{fetchPolicy:"network-only"});
+
+  const getReportData = useCallback(() => {
+    getReport({
+      variables:{
+        startDate:filters.startDate,
+        endDate:filters.endDate
+      }
+    })
+  }, [filters,getReport])
+
+  useEffect(() => {
+    getReportData()
+  }, [filters])
+
+  useEffect(()=>{
+    if(!isEmpty(reportData?.fetchSmsAnalytics)){
+
+      const {
+        swapCount,
+        skipCount,
+        optOutMessages,
+        delayCount,
+        oneTimeRevenue,
+
+        //swapped cards
+        mostSwapedProduct,
+        mostSwapedProductTo,
+        mostSkippedProduct
+      }=reportData?.fetchSmsAnalytics;
+
+    setSectionProductList(prevList=>({
+      swapCount:swapCount || prevList.swapCount,
+      skipCount:skipCount || prevList.skipCount
+    }))
+
+    setSectionServiceList(prevList=>({
+      optOutMessages:optOutMessages || prevList.optOutMessages,
+      delayCount:delayCount || prevList.delayCount,
+      oneTimeRevenue:oneTimeRevenue || prevList.oneTimeRevenue
+    }))
+
+    setSwappedCards({...swappedCards,mostSwapedProduct:mostSwapedProduct,mostSwapedProductTo:mostSwapedProductTo,mostSkippedProduct:mostSkippedProduct});
+    }
+
+  },[reportData])
   return (
    
       <FormLayout>
-      
           <Layout>
                 <Layout.Section>
                   <Card title="">
@@ -123,32 +265,29 @@ const SmartSms = () => {
                   </Card>
                 </Layout.Section>
           </Layout>
-
         <div className="card-tabs">
           <Layout>
           {/* <Layout.Section secondary> */}
           <div className="container-left customer-count">
             <Layout.Section>
               <Stack vertical distribution="equalSpacing">
-                {/* {customerListKeys?.map((item, i) => ( */}
+                {productListKeys?.map((item, i) => (
                   <Stack.Item>
                     <Card sectioned>
                     <div className="count-section">
                        
                           <TextStyle variation="strong">
-                            {/* {item.section} */}
-                            sasass
+                            {item.section}
                           </TextStyle>
                           <TextStyle
-                            // variation={sectionCustomerList[item.key]?.up ? 'positive' : 'negative'}
+                            variation={sectionProductList[item.key]?.up ? 'positive' : 'negative'}
                             
                           >
-                            sadasdds
                             <Icon
-                              // source={sectionCustomerList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
-                              // color={sectionCustomerList[item.key]?.up ? 'green' : 'red'}
+                              source={sectionProductList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                              color={sectionProductList[item.key]?.up ? 'green' : 'red'}
                             />
-                            {/* {(sectionCustomerList[item.key]?.up===false && sectionCustomerList[item.key]?.percent==0)?100:Math.abs(sectionCustomerList[item.key].percent)}% */}
+                            {(sectionProductList[item.key]?.up===false && sectionProductList[item.key]?.percent==0)?100:Math.abs(sectionProductList[item.key].percent)}%
                           </TextStyle>
                         
                         </div>
@@ -156,15 +295,14 @@ const SmartSms = () => {
                         <Stack.Item>
                           <DisplayText size="medium">
                             <TextStyle variation="strong">
-                              sasass
-                            {/* <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionCustomerList[item.key]?.value).toFixed(2)} duration={1.5} decimals={2} /> */}
+                            <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionProductList[item.key]?.value)} duration={1.5} />
                             </TextStyle>
                           </DisplayText>
                         </Stack.Item>
                       </Stack>
                     </Card>
                   </Stack.Item>
-                {/* ))} */}
+                  ))}
               </Stack>
             </Layout.Section>
           </div>
@@ -177,9 +315,6 @@ const SmartSms = () => {
                     highcharts={Highcharts}
                     options={chartOptions}
                   />
-
-                  
-                
                 </Card>
               </div>
             </Layout.Section>
@@ -190,24 +325,24 @@ const SmartSms = () => {
       </div>
           <Layout>
             <Layout.Section>
-              {/* <DisplayText size="medium">Revenue</DisplayText> */}
               <div className="smart-card">
                 <Stack distribution="fill" wrap={true}>
                   {
+                  serviceListKeys?.map((item, i) => (
                     <>
                     <Stack.Item >
                       <Card sectioned>
                         <Stack>
                           <Stack.Item fill>
                             <TextStyle variation="strong">
-                              {/* {item.section} */} hello
+                              {item.section} 
                             </TextStyle>
                           </Stack.Item>
                           <Stack.Item>
                             <TextStyle
-                              // variation={cardData[item.key]?.up ? 'positive' : 'negative'}
+                              variation={sectionServiceList[item.key]?.up ? 'positive' : 'negative'}
                             >
-                            100* {/* {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}% */}
+                            {(sectionServiceList[item.key]?.percent==0 && !sectionServiceList[item.key]?.up)?100:Math.abs(sectionServiceList[item.key]?.percent)}%
                             </TextStyle>
                           </Stack.Item>
                         </Stack>
@@ -216,65 +351,7 @@ const SmartSms = () => {
                           <Stack.Item>
                             <DisplayText size="medium">
                               <TextStyle variation="strong">
-                              8765{/* <CounterUp prefix={item.prefix || ''} suffix={item.suffix || ''} start={0} end={Number.parseFloat(cardData[item.key]?.value || 0).toFixed(2)} duration={1.5} decimals={2} /> */}
-                              </TextStyle>
-                            </DisplayText>
-                          </Stack.Item>
-                        </Stack>
-                      </Card>
-                    </Stack.Item>
-
-                    <Stack.Item >
-                      <Card sectioned>
-                        <Stack>
-                          <Stack.Item fill>
-                            <TextStyle variation="strong">
-                              {/* {item.section} */} hello
-                            </TextStyle>
-                          </Stack.Item>
-                          <Stack.Item>
-                            <TextStyle
-                              // variation={cardData[item.key]?.up ? 'positive' : 'negative'}
-                            >
-                            100* {/* {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}% */}
-                            </TextStyle>
-                          </Stack.Item>
-                        </Stack>
-
-                        <Stack>
-                          <Stack.Item>
-                            <DisplayText size="medium">
-                              <TextStyle variation="strong">
-                              8765{/* <CounterUp prefix={item.prefix || ''} suffix={item.suffix || ''} start={0} end={Number.parseFloat(cardData[item.key]?.value || 0).toFixed(2)} duration={1.5} decimals={2} /> */}
-                              </TextStyle>
-                            </DisplayText>
-                          </Stack.Item>
-                        </Stack>
-                      </Card>
-                    </Stack.Item>
-
-                    <Stack.Item >
-                      <Card sectioned>
-                        <Stack>
-                          <Stack.Item fill>
-                            <TextStyle variation="strong">
-                              {/* {item.section} */} hello
-                            </TextStyle>
-                          </Stack.Item>
-                          <Stack.Item>
-                            <TextStyle
-                              // variation={cardData[item.key]?.up ? 'positive' : 'negative'}
-                            >
-                            100* {/* {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}% */}
-                            </TextStyle>
-                          </Stack.Item>
-                        </Stack>
-
-                        <Stack>
-                          <Stack.Item>
-                            <DisplayText size="medium">
-                              <TextStyle variation="strong">
-                              8765{/* <CounterUp prefix={item.prefix || ''} suffix={item.suffix || ''} start={0} end={Number.parseFloat(cardData[item.key]?.value || 0).toFixed(2)} duration={1.5} decimals={2} /> */}
+                              <CounterUp prefix={item.prefix || ''} suffix={item.suffix || ''} start={0} end={Number.parseFloat(sectionServiceList[item.key]?.value || 0).toFixed(2)} duration={1.5} decimals={item?.decimal ?2:0} />
                               </TextStyle>
                             </DisplayText>
                           </Stack.Item>
@@ -282,8 +359,7 @@ const SmartSms = () => {
                       </Card>
                     </Stack.Item>
                   </>
-                    
-                  }
+                    ))}
                 </Stack>
               </div>
             </Layout.Section>
@@ -300,7 +376,9 @@ const SmartSms = () => {
                         <Card sectioned>
                           <TextStyle small>Most Swapped Product From </TextStyle>
                           <div className="img-section">
-                            <img src="https://www.gstatic.com/webp/gallery/4.sm.jpg"/>
+                            { swappedCards?.mostSwapedProduct?.image &&
+                              <img src={swappedCards?.mostSwapedProduct?.image || ""}/>
+                            }
                           </div>
                           <p>No Data Yet</p>
                           <small>Not enough data to calculate this metric.</small>
@@ -308,16 +386,24 @@ const SmartSms = () => {
                         </Stack.Item>
                         <Stack.Item fill>
                         <Card sectioned>
-                          <TextStyle small>Most Swapped Product From </TextStyle>
-                          <div className="img-section"></div>
+                          <TextStyle small>Most Swapped Product To </TextStyle>
+                          <div className="img-section">
+                            { swappedCards?.mostSwapedProduct?.image &&
+                              <img src={swappedCards?.mostSwapedProductTo?.image || ""}/>
+                            }
+                          </div>
                           <p>No Data Yet</p>
                           <small>Not enough data to calculate this metric.</small>
                         </Card>
                         </Stack.Item>
                         <Stack.Item fill>
                         <Card sectioned>
-                          <TextStyle small>Most Swapped Product From </TextStyle>
-                          <div className="img-section"></div>
+                          <TextStyle small>Most Skipped Product</TextStyle>
+                          <div className="img-section">
+                            { swappedCards?.mostSwapedProduct?.image &&
+                              <img src={swappedCards?.mostSkippedProduct?.image || ""}/>
+                            }
+                          </div>
                           <p><b>No Data Yet</b> </p>
                           <small>Not enough data to calculate this metric.</small>
                         </Card>
