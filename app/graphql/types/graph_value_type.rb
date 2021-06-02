@@ -15,6 +15,9 @@ module Types
     field :billing_policy, String, null: true
     field :cancellation_reason, String, null: true
     field :skus, [Types::SkuType], null: true
+    field :inbound_sms, String, null: true
+    field :outbound_sms, String, null: true
+    field :total_sms, String, null: true
     field :__typename, String, null: true
   end
 end

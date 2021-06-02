@@ -18,15 +18,13 @@ module Queries
       skip_count = sms_analytics.percentage(sms_analytics_past.skip_count, sms_analytics_current.skip_count, sms_analytics.skip_count)
       delay_count = sms_analytics.percentage(sms_analytics_past.delay_count, sms_analytics_current.delay_count, sms_analytics.delay_count)
       one_time_revenue = sms_analytics.percentage(sms_analytics_past.one_time_revenue, sms_analytics_current.one_time_revenue, sms_analytics.one_time_revenue)
-      inbound_sms = sms_analytics.messages_by_direction('inbound')
-      outbound_sms = sms_analytics.messages_by_direction('outbound-api')
-      opt_out_messages = sms_analytics.percentage(sms_analytics_past.opt_out_messages.count, sms_analytics_current.opt_out_messages.count, sms_analytics.opt_out_messages.count)
+      messages = sms_analytics.graph_data_by_granularity(:messages)
+      opt_out_messages = sms_analytics.percentage(sms_analytics_past.opt_out_messages, sms_analytics_current.opt_out_messages, sms_analytics.opt_out_messages)
       most_swaped_product = sms_analytics.most_swaped_product
       most_swaped_product_to = sms_analytics.most_swaped_product_to
       most_skipped_product = sms_analytics.most_skipped_product
       { swap_count: swap_count, skip_count: skip_count, delay_count: delay_count, one_time_revenue: one_time_revenue,
-        total_sms: messages.count, inbound_sms: inbound_sms, outbound_sms: outbound_sms,
-        most_swaped_product: most_swaped_product, most_skipped_product: most_skipped_product,
+        messages: messages, most_swaped_product: most_swaped_product, most_skipped_product: most_skipped_product,
         most_swaped_product_to: most_swaped_product_to, opt_out_messages: opt_out_messages }
     end
   end

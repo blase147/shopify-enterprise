@@ -188,7 +188,7 @@ class CustomerInsightReportService
 
   def granularity
     range = 'day'
-    if @range.count > 30
+    if @range.count > 31
       range = 'month'
     elsif @range.count > 365
       range = 'year'

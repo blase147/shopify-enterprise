@@ -31,15 +31,25 @@ class SmsAnalyticsService
   end
 
   def opt_out_messages
-    @messages.select { |message| OPT_OUT_KEYWORDS.include?(message.body.downcase.strip) }
+    @messages.count { |message| OPT_OUT_KEYWORDS.include?(message.body.downcase.strip) }
   end
 
-  def messages_by_direction(direction)
-    @messages.count { |message| message.direction.eql?(direction) }
+  def messages_by_direction(direction, range)
+    @messages.count { |message| message.direction.eql?(direction) && range.cover?(message.date_created.to_date) }
+  end
+
+  def messages(range)
+    inbound_sms_count = messages_by_direction('inbound', range)
+    outbound_sms_count = messages_by_direction('outbound-api', range)
+    {
+      inbound_sms: inbound_sms_count,
+      outbound_sms: outbound_sms_count,
+      total_sms: inbound_sms_count + outbound_sms_count
+    }
   end
 
   def most_swaped_product
-    swaped_product =  @shop.sms_logs.swap.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last)
+    swaped_product = @shop.sms_logs.swap.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last)
                            .select('COUNT(*) AS log_count, sms_logs.product_id').group(:product_id, :id)
                            .order('log_count DESC')
                            .limit(1).first
@@ -70,5 +80,24 @@ class SmsAnalyticsService
 
     product = ShopifyAPI::Product.find(swaped_product.swaped_product_id, params: { fields: 'id,title,image' })
     { product_id: product.id, title: product.title, image: product.image.src }
+  end
+
+  def graph_data_by_granularity(method)
+    @range.map(&"beginning_of_#{granularity}".to_sym).uniq.map do |date|
+      {
+        date: date.strftime(granularity == 'year' ? '%Y' : '%b %d'),
+        data: send(method, date.instance_eval("beginning_of_#{granularity}")..date.instance_eval("end_of_#{granularity}"))
+      }
+    end
+  end
+
+  def granularity
+    range = 'day'
+    if @range.count > 31
+      range = 'month'
+    elsif @range.count > 365
+      range = 'year'
+    end
+    range
   end
 end
