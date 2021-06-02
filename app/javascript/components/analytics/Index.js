@@ -77,7 +77,7 @@ const Analytics = () => {
             <div className="product">
               <Product />
             </div>
-          ):selectedTitleTab === 3 ?(
+          ):selectedTitleTab === (process.env.APP_TYPE=="public" ?4:3) ?(
             <>
             <SmartSms />
             </>
