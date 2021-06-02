@@ -14,6 +14,7 @@ class Shop < ActiveRecord::Base
   has_one :sms_setting, dependent: :destroy
   has_many :smarty_messages, dependent: :destroy
   has_many :smarty_variables, dependent: :destroy
+  has_many :sms_logs, dependent: :destroy
   has_many :subscription_logs, dependent: :destroy
 
   has_many :upsell_campaign_groups, dependent: :destroy

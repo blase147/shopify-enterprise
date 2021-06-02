@@ -24,5 +24,6 @@ module Types
     field :confirm_password, resolver: Queries::ConfirmPassword
     field :fetch_integrations, resolver: Queries::FetchIntegrations
     field :fetch_integration, resolver: Queries::FetchIntegration
+    field :fetch_sms_analytics, resolver: Queries::FetchSmsAnalytics
   end
 end

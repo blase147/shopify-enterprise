@@ -19,6 +19,7 @@ import {
   Tabs,
 } from '@shopify/polaris';
 import { FlagMajor, ChevronDownMinor } from '@shopify/polaris-icons';
+import SmartSms from './SmartSms';
 
 const Analytics = () => {
   const [selectedTitleTab, setSelectedTitleTab] = useState(0);
@@ -45,6 +46,10 @@ const Analytics = () => {
       id: 'product',
       content: 'Product',
     },
+    {
+      id: 'smartsms',
+      content: 'SmartySMS',
+    }
   ];
   return (
     <AppLayout typePage="Analytics" tabIndex="5">
@@ -72,7 +77,12 @@ const Analytics = () => {
             <div className="product">
               <Product />
             </div>
-          ):""}
+          ):selectedTitleTab === 3 ?(
+            <>
+            <SmartSms />
+            </>
+          ):
+          ""}
         </Tabs>
         </FilterContextProvider>
       </Page>

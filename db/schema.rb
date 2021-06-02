@@ -317,6 +317,19 @@ ActiveRecord::Schema.define(version: 2021_05_31_101554) do
     t.index ["customer_id"], name: "index_sms_conversations_on_customer_id"
   end
 
+  create_table "sms_logs", force: :cascade do |t|
+    t.bigint "shop_id"
+    t.bigint "customer_id"
+    t.integer "action", default: 0
+    t.decimal "revenue", precision: 5, scale: 2
+    t.string "product_id"
+    t.string "swaped_product_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["customer_id"], name: "index_sms_logs_on_customer_id"
+    t.index ["shop_id"], name: "index_sms_logs_on_shop_id"
+  end
+
   create_table "sms_messages", force: :cascade do |t|
     t.bigint "sms_conversation_id"
     t.string "from_number"
