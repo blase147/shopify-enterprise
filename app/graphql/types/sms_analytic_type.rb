@@ -4,8 +4,8 @@ module Types
     field :skip_count, Types::GraphValueType, null: true
     field :delay_count, Types::GraphValueType, null: true
     field :one_time_revenue, Types::GraphValueType, null: true
+    field :opt_out_messages, Types::GraphValueType, null: true
     field :total_sms, Integer, null: true
-    field :opt_out_messages, Integer, null: true
     field :inbound_sms, Integer, null: true
     field :outbound_sms, Integer, null: true
     field :new_customers, Integer, null: true

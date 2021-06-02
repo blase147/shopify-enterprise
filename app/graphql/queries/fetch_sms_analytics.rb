@@ -20,7 +20,7 @@ module Queries
       one_time_revenue = sms_analytics.percentage(sms_analytics_past.one_time_revenue, sms_analytics_current.one_time_revenue, sms_analytics.one_time_revenue)
       inbound_sms = sms_analytics.messages_by_direction('inbound')
       outbound_sms = sms_analytics.messages_by_direction('outbound-api')
-      opt_out_messages = sms_analytics.opt_out_messages.count
+      opt_out_messages = sms_analytics.percentage(sms_analytics_past.opt_out_messages.count, sms_analytics_current.opt_out_messages.count, sms_analytics.opt_out_messages.count)
       most_swaped_product = sms_analytics.most_swaped_product
       most_swaped_product_to = sms_analytics.most_swaped_product_to
       most_skipped_product = sms_analytics.most_skipped_product
