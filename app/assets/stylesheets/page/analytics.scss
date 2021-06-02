@@ -382,12 +382,15 @@
   }
   
   .smarty-card-section {
+    .Polaris-Stack {
+      flex-wrap: nowrap;
+    }
     .Polaris-Stack__Item {
       margin-top: 4px;
     }
     .img-section {
       background-color: #5C5F62;
-      width: 291px;
+      width: 100%;
       height: 143px;
       border-radius: 9px;
       img {
@@ -410,7 +413,7 @@
 
     span {
       margin-bottom: 7px;
-      font-size: 16px;
+      font-size: 14px;
       display: inline-block;
       color: #4D506A;
     }
@@ -423,8 +426,9 @@
   .smart-card {
     >.Polaris-Stack {
       > .Polaris-Stack__Item {
-        display: flex;
         margin-top: 0;
+        flex: 0 0 auto;
+        flex-basis: 25%;
 
         > .Polaris-Stack__Item:not(:first-child) {
           margin-left: 1.6rem;
@@ -432,6 +436,27 @@
 
         > .Polaris-Stack__Item {
           flex-basis: 25%;
+        }
+      }
+    }
+    .Polaris-Card__Section {
+      .Polaris-Stack {
+        flex-wrap: nowrap;
+        height: 38px;
+      }
+    }
+  }
+  
+  .card-tabs {
+    .container-right {
+      .Polaris-Card {
+        > div {
+          > div {
+            height: 264px !important;
+            > svg {
+              height:264px;
+            }
+          }
         }
       }
     }
