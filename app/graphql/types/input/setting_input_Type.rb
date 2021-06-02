@@ -55,6 +55,7 @@ module Types
       argument :cc_storeowner, GraphQL::Types::Boolean, required: false
       argument :send_shopify_receipt, GraphQL::Types::Boolean, required: false
       argument :send_fullfillment, GraphQL::Types::Boolean, required: false
+      argument :email_service, String, required: false
 
       #dunning
       argument :activate_dunning_for_cards, GraphQL::Types::Boolean, required: false

@@ -20,6 +20,7 @@ import {
   DataTable,
   TextContainer,
   DatePicker,
+  Spinner
 } from '@shopify/polaris';
 import {
   DropdownMinor,
@@ -206,6 +207,9 @@ const CustomerInsights = () => {
     title: {
       text: 'Top SKUs by Customer Count'
     },
+    tooltip: {
+      pointFormat: '<b>{point.y}</b>',
+    },
     xAxis: {
       categories: []
     },
@@ -242,7 +246,7 @@ const CustomerInsights = () => {
       // y: 60,
     },
     tooltip: {
-      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+      pointFormat: '<b>{point.percentage:.1f}%</b>',
     },
     accessibility: {
       point: {
@@ -302,7 +306,7 @@ const CustomerInsights = () => {
     },
     tooltip: {
       headerFormat: '<b>{point.x}</b><br/>',
-      pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
+      pointFormat: '{point.y}<br/>Total: {point.stackTotal}',
     },
     plotOptions: {
       column: {
@@ -507,7 +511,7 @@ const CustomerInsights = () => {
     }
   });
   const purchaseListKeys=[
-    {section:"Total Dunning & Dunned Subs",key:"dunned",suffix:"%"},
+    {section:"Total Dunning & Dunned Subs",key:"dunned"},
     {section:"% Dunning",key:"dunningCount",suffix:"%"},
     {section:"% Recovered",key:"recovered",suffix:"%"},
     {section:"% Churn",key:"churned",suffix:"%"}
@@ -518,25 +522,25 @@ const CustomerInsights = () => {
       section: 'Total Dunning & Dunned Subs',
       percent: 0,
       up: true,
-      amount: '0'
+      value: '0'
     },
     dunningCount:{
       section: '% Dunning',
       percent: 0,
       up: true,
-      amount: '0'
+      value: '0'
     },
     recovered:{
       section: '% Recovered',
       percent: 0,
       up: true,
-      amount: '0'
+      value: '0'
     },
     churned:{
       section: '% Churn',
       percent: 0,
       up: true,
-      amount: '0'
+      value: '0'
     },
   });
   //Customer Actions
@@ -551,25 +555,25 @@ const CustomerInsights = () => {
     skipCount:{
       percent: 0,
       up: true,
-      amount: '0',
+      value: '0',
     },
     swapCount:{
       section: 'Swaps',
       percent: 0,
       up: true,
-      amount: '0',
+      value: '0',
     },
     upsellCount:{
       section: 'Upsells',
       percent: 0,
       up: true,
-      amount: '0',
+      value: '0',
     },
     restartCount:{
       section: 'Reactivations',
       percent: 0,
       up: true,
-      amount: '0',
+      value: '0',
     },
   });
 
@@ -591,14 +595,14 @@ const CustomerInsights = () => {
     customersFrequencyChart:customersFrequency
   })
 
-  const [filters]=useContext(FilterContext)
-  // const [filters,setFilters]=useState({startDate:dayjs(new Date()).subtract(30,'days').format("YYYY-MM-DD"),endDate:dayjs(new Date()).format("YYYY-MM-DD")})
-  // const handleFiltersDates=(dates)=>{
-  //   if(!isEmpty(dates)){
-  //     const {start,end}=dates;
-  //     setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD")});
-  //   }
-  // }
+  // const [filters,setFilters]=useContext(FilterContext)
+  const [filters,setFilters]=useState({startDate:dayjs(new Date()).subtract(30,'days').format("YYYY-MM-DD"),endDate:dayjs(new Date()).format("YYYY-MM-DD"),span:"30 days"})
+  const handleFiltersDates=(dates,span)=>{
+    if(!isEmpty(dates)){
+      const {start,end}=dates;
+      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD"),span:span});
+    }
+  }
   const [getReport, { loading, data:reportData }] = useLazyQuery(fetchReport,{fetchPolicy:"network-only"});
 
   const getReportData = useCallback(() => {
@@ -679,14 +683,14 @@ const CustomerInsights = () => {
       const insightChartOptions = {
         ...insightsChart, series: [{
           type: 'pie', innerSize: '50%', showInLegend: true, data: [
-            [`active`, parseInt(activeCustomersPercentage) || 0],
-            [`dunned`, parseInt(dunnedCustomersPercentage) || 0],
-            [`cancelled`, parseInt(cancelledCustomersPercentage) || 0],],
+            [`Active`, parseFloat(activeCustomersPercentage) || 0],
+            [`Dunned`, parseFloat(dunnedCustomersPercentage) || 0],
+            [`Cancelled`, parseFloat(cancelledCustomersPercentage) || 0],],
         }]
       }
 
       const newcustomersFrequency={...customersFrequencyChart,series: [{
-        type: 'pie', innerSize: '50%', showInLegend: true, data: billingFrequency.map(f=>[f.billingPolicy,parseInt(f.value) || 0])
+        type: 'pie', innerSize: '50%', showInLegend: true, data: billingFrequency.map(f=>[f.billingPolicy,parseFloat(f.value) || 0])
       }]
     }
       const newSkuCustomersChart = {
@@ -769,20 +773,35 @@ const CustomerInsights = () => {
 
 
   return (
-    <FormLayout>
-      
-      {/* <Layout>
-        <Layout.Section>
-        </Layout.Section>
-        <Layout.Section>
-          <DateRangePicker
-            start={filters.startDate}
-            endDate={filters.endDate}
-            handleDates={handleFiltersDates}
+    <>
+    {(loading || !reportData) ? (
+        <Card>
+          <Spinner
+            accessibilityLabel="Spinner example"
+            size="large"
+            color="teal"
           />
-        </Layout.Section>
-      </Layout> */}
+        </Card>
+      ) :
+    <FormLayout>
       <Stack vertical spacing="extraLoose">
+        <Layout>
+              <Layout.Section>
+                <Card title="">
+                  <Card.Section>
+                    <div className="rev-date-picker">
+                      <DateRangePicker
+                        start={filters.startDate}
+                        end={filters.endDate}
+                        span={filters.span}
+                        handleDates={handleFiltersDates}
+                      />
+                      </div>
+                    
+                  </Card.Section>
+                </Card>
+              </Layout.Section>
+        </Layout>
         <Layout>
           {/* <Layout.Section secondary> */}
           <div className="container-left customer-count">
@@ -796,8 +815,6 @@ const CustomerInsights = () => {
                           <TextStyle variation="strong">
                             {item.section}
                           </TextStyle>
-                     
-                       
                           <TextStyle
                             variation={sectionCustomerList[item.key]?.up ? 'positive' : 'negative'}
                           >
@@ -805,7 +822,7 @@ const CustomerInsights = () => {
                               source={sectionCustomerList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
                               color={sectionCustomerList[item.key]?.up ? 'green' : 'red'}
                             />
-                            {(sectionCustomerList[item.key]?.up===false && sectionCustomerList[item.key]?.percent==0)?100:sectionCustomerList[item.key].percent}%
+                            {(sectionCustomerList[item.key]?.up===false && sectionCustomerList[item.key]?.percent==0)?100:Math.abs(sectionCustomerList[item.key].percent)}%
                           </TextStyle>
                         
                         </div>
@@ -929,7 +946,7 @@ const CustomerInsights = () => {
                             source={sectionCustomerActionList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
                             color={sectionCustomerActionList[item.key]?.up ? 'green' : 'red'}
                           />
-                          {(sectionCustomerActionList[item.key]?.up===false && sectionCustomerActionList[item.key]?.percent==0)?100:sectionCustomerActionList[item.key]?.percent}%
+                          {(sectionCustomerActionList[item.key]?.up===false && sectionCustomerActionList[item.key]?.percent==0)?100:Math.abs(sectionCustomerActionList[item.key]?.percent)}%
                         </TextStyle>
                       </Stack.Item>
                     </Stack>
@@ -938,7 +955,7 @@ const CustomerInsights = () => {
                       <Stack.Item>
                         <DisplayText size="medium">
                           <TextStyle variation="strong">
-                          <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionCustomerActionList[item.key]?.value).toFixed(2)} duration={1.5} decimals={2} />
+                          <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionCustomerActionList[item.key]?.value)} duration={1.5} />
                           </TextStyle>
                         </DisplayText>
                       </Stack.Item>
@@ -972,7 +989,7 @@ const CustomerInsights = () => {
                             source={sectionPurchaseItemList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
                             color={sectionPurchaseItemList[item.key]?.up ? 'green' : 'red'}
                           />
-                          {(sectionPurchaseItemList[item.key]?.up===false && sectionPurchaseItemList[item.key]?.percent==0)?100:sectionPurchaseItemList[item.key].percent}%
+                          {(sectionPurchaseItemList[item.key]?.up===false && sectionPurchaseItemList[item.key]?.percent==0)?100:Math.abs(sectionPurchaseItemList[item.key].percent)}%
                         </TextStyle>
                       </Stack.Item>
                     </Stack>
@@ -1055,6 +1072,8 @@ const CustomerInsights = () => {
         </Layout> */}
       </Stack>
     </FormLayout>
+  }
+  </>
   );
 };
 

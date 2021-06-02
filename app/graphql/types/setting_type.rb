@@ -53,6 +53,7 @@ module Types
     field :cc_storeowner, GraphQL::Types::Boolean, null: true
     field :send_shopify_receipt, GraphQL::Types::Boolean, null: true
     field :send_fullfillment, GraphQL::Types::Boolean, null: true
+    field :email_service, String, null: true
 
     #dunning
     field :activate_dunning_for_cards, GraphQL::Types::Boolean, null: true

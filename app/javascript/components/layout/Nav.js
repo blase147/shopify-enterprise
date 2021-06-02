@@ -47,7 +47,6 @@ const Nav = (props) => {
       id: 'smarty-sms',
       path: '/smarty',
     },
-
     {
       content: 'Integration',
       id: 'integrations',

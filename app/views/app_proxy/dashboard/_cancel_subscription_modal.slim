@@ -15,7 +15,7 @@
                 svg fill="none" height="20" viewbox=("0 0 18 20") width="18" xmlns="http://www.w3.org/2000/svg"
                   path d=("M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z") fill="#DDDDDD" /
             h3 This is why I want to cancel
-            = form_tag action_subscription_contract_path(:remove_line, subscription.id[/\d+/], "line_id=#{line_item.id}&lines_count=#{lines_count}&quantity=#{line_item.quantity}&variant_id=#{line_item.variant_id}"), method: :post, :id => "form-#{line_item.id}", remote: true do
+            = form_tag action_subscription_contract_path(:remove_line, subscription.id[/\d+/], "line_id=#{line_item.id}&line_name=#{line_item.title}&lines_count=#{lines_count}&quantity=#{line_item.quantity}&variant_id=#{line_item.variant_id}"), method: :post, :id => "form-#{line_item.id}", remote: true do
                 .variants-wrapper
                   - @customer.shop.setting.reasons_cancels.each_with_index do |reason, index|
                     label for="input-#{index}"

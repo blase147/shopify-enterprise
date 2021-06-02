@@ -75,6 +75,7 @@ GEM
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
+    bcrypt (3.1.16)
     bindex (0.8.1)
     bootsnap (1.5.1)
       msgpack (~> 1.0)
@@ -150,6 +151,7 @@ GEM
       dry-initializer (~> 3.0)
       dry-schema (~> 1.5, >= 1.5.2)
     erubi (1.10.0)
+    escape (0.0.4)
     execjs (2.7.0)
     faraday (1.1.0)
       multipart-post (>= 1.2, < 3)
@@ -174,6 +176,7 @@ GEM
       ruby-vips (>= 2.0.17, < 3)
     jbuilder (2.10.1)
       activesupport (>= 5.0.0)
+    json (2.5.1)
     jwt (2.2.2)
     kaminari (1.2.1)
       activesupport (>= 4.1.0)
@@ -187,6 +190,11 @@ GEM
       activerecord
       kaminari-core (= 1.2.1)
     kaminari-core (1.2.1)
+    klaviyo (2.0.8)
+      escape
+      faraday
+      json
+      rack
     listen (3.4.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -292,6 +300,7 @@ GEM
     ruby-vips (2.0.17)
       ffi (~> 1.9)
     ruby2_keywords (0.0.2)
+    ruby_http_client (3.5.2)
     rubyzip (2.3.0)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
@@ -306,6 +315,8 @@ GEM
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
+    sendgrid-ruby (6.4.0)
+      ruby_http_client (~> 3.4)
     shopify_api (9.2.0)
       activeresource (>= 4.1.0, < 6.0.0)
       graphql-client
@@ -375,6 +386,7 @@ PLATFORMS
 
 DEPENDENCIES
   apollo_upload_server
+  bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.2)
   bootstrap (~> 5.0.0.alpha3)
   byebug
@@ -388,6 +400,7 @@ DEPENDENCIES
   graphql
   jbuilder (~> 2.7)
   kaminari
+  klaviyo
   listen (~> 3.2)
   mina
   percentage (~> 1.4, >= 1.4.1)
@@ -400,6 +413,7 @@ DEPENDENCIES
   redis
   sass-rails (>= 6)
   selenium-webdriver
+  sendgrid-ruby
   shopify_app
   shopify_cli (= 1.0.5)
   sidekiq
