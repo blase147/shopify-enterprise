@@ -481,25 +481,6 @@ const Dashboard = (props) => {
             </div>
             </Layout.Section>
             </div>
-          <Layout.Section>
-          <Layout>
-          <Layout.Section>
-              <Card title="">
-                <Card.Section>
-                  <div className="rev-date-picker">
-                    <DateRangePicker
-                      start={filters.startDate}
-                      end={filters.endDate}
-                      span={filters.span}
-                      handleDates={handleFiltersDates}
-                    />
-                    </div>
-
-                </Card.Section>
-              </Card>
-            </Layout.Section>
-          </Layout>
-          </Layout.Section>
           {(loading || !data) ? (
             <Layout.Section>
               <Card>
@@ -553,6 +534,24 @@ const Dashboard = (props) => {
                 ))}
               </Stack>
             </Layout.Section>
+            <Layout.Section>
+          <Layout>
+          <Layout.Section>
+              <Card title="">
+                <Card.Section>
+                  <div className="rev-date-picker">
+                    <DateRangePicker
+                      start={filters.startDate}
+                      end={filters.endDate}
+                      span={filters.span}
+                      handleDates={handleFiltersDates}
+                    />
+                    </div>
+                </Card.Section>
+              </Card>
+            </Layout.Section>
+          </Layout>
+          </Layout.Section>
             </div>
             {listContainerChart?.map((item, i) => (
               <Layout.Section oneHalf key={i}>

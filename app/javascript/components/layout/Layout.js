@@ -7,7 +7,10 @@ const Layout = (props) => {
     <div className={`module-${props.typePage}`}>
       <Nav selected={parseInt(props.tabIndex)}/>
       {props.children}
-      <Footer/>
+      { process.env.APP_TYPE=="public" &&
+        <Footer/>
+      }
+      
       <br/>
     </div>
   );

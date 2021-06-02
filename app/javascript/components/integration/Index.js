@@ -94,7 +94,7 @@ const Integrations = () => {
             </Card>
           </Layout.Section>
           <Layout.Section>
-          <Heading>{category}</Heading>
+          <Heading><span style={{textTransform:"capitalize"}} >{category}</span></Heading>
           {
             (loading) ? (
               <Card>
