@@ -141,6 +141,9 @@ const EmailNotification = (props) => {
     }
   }, [selectedIndex]);
 
+  const emailOptions=[{label: 'Klaviyo', value: 'Klaviyo'},
+                      {label: 'SendGrid', value: 'SendGrid'}]
+
   return (
     <Layout>
       {selectedIndex != null ? (
@@ -169,7 +172,12 @@ const EmailNotification = (props) => {
               <Stack.Item>
                 <Heading>Customer Notifications</Heading>
               </Stack.Item>
-
+              <Select
+                label="Email Service"
+                options={emailOptions}
+                onChange={(value)=>setFieldValue("emailService",value)}
+                value={values.emailService}
+              />
               {values.emailNotifications?.map(
                 (item, i) =>
                   item.slug === 'customer' && (
@@ -186,7 +194,7 @@ const EmailNotification = (props) => {
                             </TextStyle>
                           </Button>
                           <br />
-                          <TextStyle>{item.descripton}</TextStyle>
+                          <TextStyle>{item.description}</TextStyle>
                         </Stack.Item>
                         <Stack.Item>
                           {item.status ? (
@@ -242,7 +250,7 @@ const EmailNotification = (props) => {
                             </TextStyle>
                           </Button>
                           <br />
-                          <TextStyle>{item.descripton}</TextStyle>
+                          <TextStyle>{item.description}</TextStyle>
                         </Stack.Item>
                         <Stack.Item>
                           {item.status ? (

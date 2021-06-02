@@ -98,3 +98,9 @@ shop.smarty_variables.create(name: 'line_item_name')
 shop.smarty_variables.create(name: 'manage_subscriptions_url')
 shop.smarty_variables.create(name: 'cancellation_reasons')
 shop.smarty_variables.create(name: 'shop_name')
+
+
+#integrations
+
+shop.integrations.create(integration_type: :marketing, service_type: :email, name: 'Klaviyo', keys: 'public_key,private_key')
+shop.integrations.create(integration_type: :marketing, service_type: :email, name: 'SendGrid', keys: 'private_key')

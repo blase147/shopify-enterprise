@@ -14,43 +14,52 @@ import {
   Select,
   DataTable,
   TextContainer,
+  Spinner
 } from '@shopify/polaris';
+import dayjs from 'dayjs'
 import { isEmpty } from 'lodash';
+import DateRangePicker from '../common/DatePicker/DateRangePicker';
 
 const CustomerInsights = () => {
 
-  // const fetchReport = gql`
-  // query($startDate: String!, $endDate: String!) {  
-  //   fetchCustomerInsights(startDate: $startDate, endDate: $endDate) {
-  //     skuByCustomers {
-  //         sku
-  //         value
-  //     }
-  //   }
-  //   fetchRevenueTrend(startDate: $startDate, endDate: $endDate) {
-  //     skuBySubscriptions {
-  //         sku
-  //         value
-  //     }
-  //     skuByRevenue {
-  //         sku
-  //         value
-  //     }
-  //     skuByFrequency {
-  //         billingPolicy
-  //         skus {
-  //             sku
-  //             value
-  //         }
-  //     }
-  //   }
-  // }
-  //   `;
+  ///Graph Query...
+  const fetchReport = gql`
+  query($startDate: String!, $endDate: String!) {  
+    fetchRevenueTrend(startDate: $startDate, endDate: $endDate) {
+        skuBySubscriptions {
+            sku
+            value
+        }
+        skuByRevenue {
+            sku
+            value
+        }
+        skuByCustomers {
+          sku
+          value
+        }
+        billingFrequencyRevenue {
+            billingPolicy
+            value
+        }
+        skuByFrequency {
+            billingPolicy
+            skus {
+                sku
+                value
+            }
+        }
+    }
+}
+  `;
 
   const skuRevenue = {
     colors: ["#0D91AE", "#6B97C5", "#FFF500", "#FFCC00", "#E77320", "#FF0000", "#FF5C00", "#979797", "#007EFF", "#00A023", "#8000A0", "#A0007D", "#F4EC19"],
     title: {
       text: 'Top 14 SKUs by Recurring Revenue (Subscriptions)'
+    },
+    tooltip: {
+      pointFormat: '<b>{point.y}</b>',
     },
     xAxis: {
       categories: []
@@ -77,6 +86,9 @@ const CustomerInsights = () => {
     title: {
       text: 'Top 14 SKUs by Subscriptions'
     },
+    tooltip: {
+      pointFormat: '<b>{point.y}</b>',
+    },
     xAxis: {
       categories: []
     },
@@ -101,6 +113,9 @@ const CustomerInsights = () => {
     colors: ["#0D91AE", "#6B97C5", "#FFF500", "#FFCC00", "#E77320", "#FF0000", "#FF5C00", "#979797", "#007EFF", "#00A023", "#8000A0", "#A0007D", "#F4EC19"],
     title: {
       text: 'Top SKUs by Customer Count'
+    },
+    tooltip: {
+      pointFormat: '<b>{point.y}</b>',
     },
     xAxis: {
       categories: []
@@ -170,7 +185,30 @@ const CustomerInsights = () => {
     ],
   };
 
-  const [filters,setFilters,productCharts]=useContext(FilterContext)
+  // const [filters,setFilters,productCharts,setProductCharts]=useContext(FilterContext)
+  const [filters,setFilters]=useState({startDate:dayjs(new Date()).subtract(30,'days').format("YYYY-MM-DD"),endDate:dayjs(new Date()).format("YYYY-MM-DD"),span:"30 days"})
+  const handleFiltersDates=(dates,span)=>{
+    if(!isEmpty(dates)){
+      const {start,end}=dates;
+      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD"),span:span});
+    }
+  }
+  const [getReport, { loading, data }] = useLazyQuery(fetchReport,{fetchPolicy:"network-only"});
+
+  const getReportData = useCallback(() => {
+    getReport({
+      variables:{
+        startDate:filters.startDate,
+        endDate:filters.endDate
+      }
+    })
+  }, [filters, getReport])
+
+
+  useEffect(() => { 
+      getReportData()
+  }, [filters])
+
   const [chartOptions,setChartOptions]=useState({
     skuRevenueChart:skuRevenue,
     skuCustomersChart:skuCustomersChart,
@@ -178,53 +216,106 @@ const CustomerInsights = () => {
     insightsChart:PercentVerticalChart
   })
 
- const insightsOptions = [
-    {label: '1 Day', value: '1 Day'},
-    {label: '1 Month', value: '1 Month'}
-  ];
+ const [insightsOptions,setInsightOptions] = useState([])
   const [insightsData,setInsightsData]=useState({})
-  const [selectedInsight, setSelectedInsight] = useState('1 Month');
+  const [selectedInsight, setSelectedInsight] = useState('');
   const handleSelectChange = (value) => setSelectedInsight(value);
  
   useEffect(()=>{
     const {insightsChart}=chartOptions;
     if(!isEmpty(insightsData)){
+      // billingPolicy
+      const insightOptions=insightsData.map(data=>({label:data.billingPolicy,value:data.billingPolicy}))
+      setInsightOptions(insightOptions);
       const selectedData=insightsData.find(data=>data.billingPolicy===selectedInsight);
+      console.log(selectedData,"--",selectedInsight,"--",insightsOptions)
       const insightChartOptions = {
         ...insightsChart, series: [{
           type: 'pie', innerSize: '50%', showInLegend: true, data:selectedData.skus.map(f=>[f.sku,parseFloat(f.value) || 0])}]
       }
       setChartOptions({...chartOptions,insightsChart:insightChartOptions})
     }
-  },[insightsData,selectedInsight])
-  // const [getReport, { loading, data:reportData }] = useLazyQuery(fetchReport);
+  },[selectedInsight])
 
-  // const getReportData = useCallback(() => {
-  //   getReport({
-  //     variables:{
-  //       startDate:filters.startDate,
-  //       endDate:filters.endDate
+  // useEffect(()=>{
+  //   if(productCharts.hasData){
+  //     const {
+  //       skuByFrequency,
+  //       skuByRevenue,
+  //       skuBySubscriptions,
+  //       skuByCustomers
+  //     }=productCharts;
+  //     setInsightsData(skuByFrequency)
+
+  //     //Charts Data
+  //     const { insightsChart, skuCustomersChart, skuRevenueChart, skuSubscriptionsChart } = chartOptions;
+      
+  //     const newSkuRevenue = {
+  //       ...chartOptions.skuRevenueChart, xAxis: { categories: skuByRevenue.map(sku => sku.sku) || [] },
+  //       series: [{
+  //         type: 'column',
+  //         colorByPoint: true,
+  //         data: skuByRevenue.map(sku => parseInt(sku.value || 0)) || [],
+  //         showInLegend: false
+  //       }]
   //     }
-  //   })
-  // }, [filters,getReport])
 
-  // useEffect(() => {
-  //   getReportData()
-  // }, [filters])
+  //     const newSkuCustomersChart = {
+  //       ...skuCustomersChart, xAxis: { categories: skuByCustomers.map(sku => sku.sku) || [] },
+  //       series: [{
+  //         type: 'column',
+  //         colorByPoint: true,
+  //         data: skuByCustomers.map(sku => parseInt(sku.value || 0)) || [],
+  //         showInLegend: false
+  //       }]
+  //     }
+
+  //     const newSkuSubscriptions = {
+  //       ...chartOptions.skuSubscriptionsChart, xAxis: { categories: skuBySubscriptions.map(sku => sku.sku) || [] },
+  //       series: [{
+  //         type: 'column',
+  //         colorByPoint: true,
+  //         data: skuBySubscriptions.map(sku => parseInt(sku.value || 0)) || [],
+  //         showInLegend: false
+  //       }]
+  //     }
+
+  //     setChartOptions({
+  //       ...chartOptions,
+  //       // insightsChart:insightChartOptions,
+  //       skuCustomersChart:newSkuCustomersChart,
+  //       skuRevenueChart:newSkuRevenue,
+  //       skuSubscriptionsChart:newSkuSubscriptions
+  //     })
+
+  //   }
+
+  // },[productCharts])
 
   useEffect(()=>{
-    if(!isEmpty(productCharts)){
+    if(!isEmpty(data?.fetchRevenueTrend)){
       const {
         skuByFrequency,
         skuByRevenue,
         skuBySubscriptions,
         skuByCustomers
-      }=productCharts;
+      }=data.fetchRevenueTrend;
+      const { insightsChart, skuCustomersChart, skuRevenueChart, skuSubscriptionsChart } = chartOptions;
       
-      setInsightsData(skuByFrequency)
+
+      
+      if (!isEmpty(skuByFrequency)) {
+        setInsightsData(skuByFrequency)
+        setSelectedInsight(skuByFrequency[0]?.billingPolicy)
+      }else{
+        setInsightsData({});
+        setInsightOptions([]);
+        setSelectedInsight('');
+      }
+      
 
       //Charts Data
-      const { insightsChart, skuCustomersChart, skuRevenueChart, skuSubscriptionsChart } = chartOptions;
+      
       
       const newSkuRevenue = {
         ...chartOptions.skuRevenueChart, xAxis: { categories: skuByRevenue.map(sku => sku.sku) || [] },
@@ -258,19 +349,44 @@ const CustomerInsights = () => {
 
       setChartOptions({
         ...chartOptions,
-        // insightsChart:insightChartOptions,
+        insightsChart:PercentVerticalChart,
         skuCustomersChart:newSkuCustomersChart,
         skuRevenueChart:newSkuRevenue,
         skuSubscriptionsChart:newSkuSubscriptions
       })
-
     }
-
-  },[productCharts])
+  },[data])
 
   return (
+    <>
+    {(loading || !data) ? (
+        <Card>
+          <Spinner
+            accessibilityLabel="Spinner example"
+            size="large"
+            color="teal"
+          />
+        </Card>
+      ) :
     <FormLayout>
       <Stack vertical spacing="extraLoose">
+      <Layout>
+            <Layout.Section>
+              <Card title="">
+                <Card.Section>
+                  <div className="rev-date-picker">
+                    <DateRangePicker
+                      start={filters.startDate}
+                      end={filters.endDate}
+                      span={filters.span}
+                      handleDates={handleFiltersDates}
+                    />
+                    </div>
+                  
+                </Card.Section>
+              </Card>
+            </Layout.Section>
+      </Layout>
         <Layout>
           <Layout.Section>
             <Heading>{'  '}</Heading>
@@ -312,6 +428,8 @@ const CustomerInsights = () => {
         </Layout>
       </Stack>
     </FormLayout>
+  }
+  </>
   );
 };
 

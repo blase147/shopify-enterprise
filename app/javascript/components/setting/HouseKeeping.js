@@ -41,15 +41,14 @@ const updateSmsSettingQuery = gql`
   }
 `;
 
-const updatePasswordMutation = gql`
-  mutation ($input: UpdatePasswordInput!) {
-    updatePassword(input: $input) {
-      lockPassword {
-        password
-        passwordConfirmation
+  const updatePasswordMutation = gql`
+mutation ($input: UpdatePasswordInput!) {
+  updatePassword(input: $input) {
+      password {
+          success
       }
-    }
   }
+}
 `;
 
   const [formErrors, setFormErrors] = useState([]);
@@ -104,7 +103,7 @@ const updatePasswordMutation = gql`
   })
   const [password, setPassword] = useState("")
   const [passwordConfirmation, setPasswordConfirmation] = useState("")
-  const [updatePassword, {data1, error1, loading1}] = useMutation(updatePasswordMutation)
+  const [updatePassword, {data1, error1, loading:loadingPssword}] = useMutation(updatePasswordMutation)
   const handleSmsChange=(updated)=>{
     setSmsData({...smsData,...updated})
   }
@@ -161,16 +160,38 @@ const updatePasswordMutation = gql`
       <div className="tab-section">
         <div class="tab-parent">
           <div class="tabs-sms">
+<<<<<<< HEAD
             <input type="radio" name="tab-btn" id="tab-btn-1" value="" onChange={e=>setSelectedTab(0)} checked={selectedTab==0}  />
             <label for="tab-btn-1">Discount</label>
             <input type="radio" name="tab-btn" id="tab-btn-2" value="" onChange={e=>setSelectedTab(1)} checked={selectedTab==1} />
             <label for="tab-btn-2">Export</label>
             <input type="radio" name="tab-btn" id="tab-btn-3" value="" onChange={e=>setSelectedTab(2)} checked={selectedTab==2} />
             <label for="tab-btn-3">SMS</label>
+=======
+            {
+            process.env.APP_TYPE=="public" &&
+            <>
+            <input type="radio" name="tab-btn" id="tab-btn-1" value="" onChange={e=>setSelectedTab(0)} checked={selectedTab==0}  />
+            <label for="tab-btn-1">Discount</label>
+            <input type="radio" name="tab-btn" id="tab-btn-2" value="" onChange={e=>setSelectedTab(1)} checked={selectedTab==1} />
+            <label for="tab-btn-2">Export</label> 
+            </>
+            }
+            <input type="radio" name="tab-btn" id="tab-btn-3" value="" onChange={e=>setSelectedTab(2)} checked={selectedTab==2} />
+            <label for="tab-btn-3">SMS</label>
+            {
+            process.env.APP_TYPE=="public" &&
+            <>
+>>>>>>> bb8a77f518366174954da2d14bc1ea301dc181c0
             <input type="radio" name="tab-btn" id="tab-btn-4" value="" onChange={e=>setSelectedTab(3)} checked={selectedTab==3} />
             <label for="tab-btn-4">Legal</label>
             <input type="radio" name="tab-btn" id="tab-btn-5" value="" onChange={e=>setSelectedTab(4)} checked={selectedTab==4} />
             <label for="tab-btn-5">Translation</label>
+<<<<<<< HEAD
+=======
+            </>
+            }
+>>>>>>> bb8a77f518366174954da2d14bc1ea301dc181c0
             <input type="radio" name="tab-btn" id="tab-btn-6" value="" onChange={e=>setSelectedTab(5)} checked={selectedTab==5} />
             <label for="tab-btn-6">Password</label>
           </div>
@@ -225,21 +246,25 @@ const updatePasswordMutation = gql`
             <>
               <Layout>
                 <Layout.Section>
-                  <p>Default password: AdminAlaska777</p>
-                  <TextField
-                    value={password}
-                    onChange={value => setPassword(value)}
-                    label="Password"
-                    type="password"
-                  />
-                  <TextField
-                    value={passwordConfirmation}
-                    onChange={value => setPasswordConfirmation(value)}
-                    label="Confirm Password"
-                    type="password"
-                  />
+                  <p className="default-pass">
+                    Default Password: <strong>Admin Alaska777</strong>
+                  </p>
+                  <div className="password-fields">
+                    <TextField
+                      value={password}
+                      onChange={value => setPassword(value)}
+                      label="Password"
+                      type="password"
+                    />
+                    <TextField
+                      value={passwordConfirmation}
+                      onChange={value => setPasswordConfirmation(value)}
+                      label="Confirm Password"
+                      type="password"
+                    />
+                  </div>
                   <div class="tabs-btn">
-                    <Button primary loading={loading} onClick={handleChangePassword}>Save</Button>
+                    <Button primary loading={loadingPssword} onClick={handleChangePassword}>Save</Button>
                     <Button type="button">Cancel</Button>
                   </div>
                 </Layout.Section>

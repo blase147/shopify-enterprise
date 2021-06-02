@@ -6,7 +6,9 @@ import {
   Select, Stack,
   TextField,
   TextStyle,
-  Icon
+  Icon,
+  Spinner,
+  ButtonGroup
 } from '@shopify/polaris';
 import {
   DropdownMinor,
@@ -28,11 +30,12 @@ const RevenueTrends = () => {
   const [selected_1, setSelected_1] = useState('today');
   const handleSelectChange_1 = useCallback((value) => setSelected_1(value), []);
 
-  const [filters,setFilters,productCharts,setProductCharts]=useContext(FilterContext)
-  const handleFiltersDates=(dates)=>{
+  // const [filters,setFilters,productCharts,setProductCharts]=useContext(FilterContext)
+  const [filters,setFilters]=useState({startDate:dayjs(new Date()).subtract(30,'days').format("YYYY-MM-DD"),endDate:dayjs(new Date()).format("YYYY-MM-DD"),span:"30 days"})
+  const handleFiltersDates=(dates,span)=>{
     if(!isEmpty(dates)){
       const {start,end}=dates;
-      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD")});
+      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD"),span:span});
     }
   }
 
@@ -270,6 +273,9 @@ const skuRevenue = {
   title: {
     text: 'Top 14 SKUs by Recurring Revenue (Subscriptions)'
   },
+  tooltip: {
+    pointFormat: '<b>{point.y}</b>',
+  },
   xAxis: {
     categories: []
   },
@@ -294,6 +300,9 @@ const skuSubscriptions = {
   colors: ["#0D91AE", "#6B97C5", "#FFF500", "#FFCC00", "#E77320", "#FF0000", "#FF5C00", "#979797", "#007EFF", "#00A023", "#8000A0", "#A0007D", "#F4EC19"],
   title: {
     text: 'Top 14 SKUs by Subscriptions'
+  },
+  tooltip: {
+    pointFormat: '<b>{point.y}</b>',
   },
   xAxis: {
     categories: []
@@ -392,7 +401,7 @@ const RefundChart = {
         },
       },
       title: {
-        text: 'Refund Amount',
+        text: 'Refund Count',
         style: {
           color: '#202b35',
         },
@@ -401,7 +410,7 @@ const RefundChart = {
     {
       // Secondary yAxis
       title: {
-        text: 'Refund Count',
+        text: 'Refund Amount',
         style: {
           color: '#202b35',
         },
@@ -427,13 +436,15 @@ const RefundChart = {
       type: 'column',
       yAxis: 1,
       data: [],
-      color: '#959595',
+      color: '#202b35',
+      fillOpacity:0.4,
     },
     {
       name: 'Refund amount',
       type: 'spline',
       data: [],
-      color: '#202b35',
+      color: '#959595',
+      fillOpacity:0.4,
     },
   ],
 };
@@ -443,7 +454,7 @@ const SaleChart = {
     zoomType: 'xy',
   },
   title: {
-    text: 'Total Sales (Inc.Refunds)',
+    text: 'Subscriptions Revenue (incl. refunds)',
   },
   xAxis: [
     {
@@ -462,7 +473,7 @@ const SaleChart = {
         },
       },
       title: {
-        text: 'Total Sales',
+        text: 'Revenue ($)',
         style: {
           color: '#202b35',
         },
@@ -500,7 +511,7 @@ const SaleChart = {
       color: '#00a030',
     },
     {
-      name: 'Total Sales',
+      name: 'Subscriptions revenue',
       type: 'column',
       data: [],
       color: '#007ffa',
@@ -789,13 +800,15 @@ const rows_Charges = [
         ninetyDaysErrorCharge
       }=data.fetchRevenueTrend;
 
-      //Setting charts for product page
-      setProductCharts({
-        skuByRevenue,
-        skuBySubscriptions,
-        skuByCustomers,
-        skuByFrequency,
-      })
+      // //Setting charts for product page
+      // setProductCharts({
+      //   skuByRevenue,
+      //   skuBySubscriptions,
+      //   skuByCustomers,
+      //   skuByFrequency,
+      //   hasData:true
+      // })
+
       //setting cards data ....
       setCardData({
         ...cardData,
@@ -852,17 +865,19 @@ const rows_Charges = [
         xAxis: {categories: refundsData.map(data=>data.date),},
         series: [
           {
-            name: 'Refund Count',
+            name: 'Refund amount',
             type: 'column',
             yAxis: 1,
-            data: refundsData.map(data=>parseInt(data.data.refundsCount)),
+            data: refundsData.map(data=>parseInt(data.data.value)),
             color: '#959595',
+            fillOpacity:0.4,
           },
           {
-            name: 'Refund amount',
+            name: 'Refund Count',
             type: 'spline',
-            data: refundsData.map(data=>parseInt(data.data.value)),
+            data: refundsData.map(data=>parseInt(data.data.refundsCount)),
             color: '#202b35',
+            fillOpacity:0.4,
           },
         ]
       }
@@ -880,7 +895,7 @@ const rows_Charges = [
             color: '#00a030',
           },
           {
-            name: 'Total Sales',
+            name: 'Subscriptions revenue',
             type: 'column',
             data: totalSalesData.map(data=>parseInt(data.data.value)),
             color: '#007ffa',
@@ -971,7 +986,7 @@ const rows_Charges = [
     }] }
     const insightChartOptions = {
       ...chartOptions.insightsChart, series: [{
-        type: 'pie', innerSize: '50%', showInLegend: true, data:billingFrequencyRevenue.map(f=>[f.billingPolicy,parseInt(f.value) || 0])}]
+        type: 'pie', innerSize: '50%', showInLegend: true, data:billingFrequencyRevenue.map(f=>[f.billingPolicy,parseFloat(f.value) || 0])}]
     }
       //// set New Chart Options
       setChartOptions({
@@ -1008,7 +1023,7 @@ const rows_Charges = [
       setTableData({...tableData,revenueTable:newRevenueTable,chargesTable:newChargesTable})
 
     }
-  }, [data,loading])
+  }, [data])
 
 
   const options_1 = [
@@ -1198,85 +1213,34 @@ const rows_Charges = [
   ];
   
   return (
+    <>
+      {loading ? (
+        <Card>
+          <Spinner
+            accessibilityLabel="Spinner example"
+            size="large"
+            color="teal"
+          />
+        </Card>
+      ) :
     <FormLayout>
-      <div className="analytics-page-layout">
+    <div className="analytics-page-layout">
       <Layout>
         <Stack vertical spacing="extraLoose">
           <Layout>
             <Layout.Section>
-              <Card title="Revenue Trends - Basic">
+              <Card title="">
                 <Card.Section>
+                  <div className="rev-date-picker">
                     <DateRangePicker
                       start={filters.startDate}
                       end={filters.endDate}
+                      span={filters.span}
                       handleDates={handleFiltersDates}
                     />
-                  {/* <Button
-                    plain
-                    monochrome
-                    onClick={() => {
-                      setExpandedFilter(!expandedFilter);
-                    }}
-                    icon={DropdownMinor}
-                  >
-                    Filter
-                  </Button> */}
-                  <br />
-                  {expandedFilter ? (
-                    // <form className="form-inline">
-                    //   <div className="form-inline-child">
-                    //     <p>Date Granularity</p>
-                    //     <div className="select">
-                    //       <Select
-                    //         options={selectOptions}
-                    //         onChange={value=>setFilters({...filters,granularity:value})}
-                    //         value={filters.granularity}
-                    //       />
-                    //     </div>
-                    //     {/* <div className="select">
-                    //       <Select
-                    //         options={options_1}
-                    //         onChange={handleSelectChange_1}
-                    //         value={selected_1}
-                    //       />
-                    //     </div> */}
-                    //   </div>
-                    //   <div className="form-inline-child">
-                    //     <p>Date Range</p>
-                    //     {/* <div className="select">
-                    //       <Select
-                    //         options={options_1}
-                    //         onChange={handleSelectChange_1}
-                    //         value={selected_1}
-                    //       />
-                    //     </div> */}
-                    //     <div className="textfield">
-                    //       <TextField 
-                    //       value={filters.dataPeriodFor}
-                    //       onChange={value=>setFilters({...filters,dataPeriodFor:value})}
-                    //       ></TextField>
-                    //     </div>
-                    //     <div className="select">
-                    //       <Select
-                    //         options={selectOptions}
-                    //         onChange={value=>setFilters({...filters,dataByPeriod:value})}
-                    //         value={filters.dataByPeriod}
-                    //       />
-                    //     </div>
-                    //   </div>
-                    //   <Button primary onClick={()=>getReportData()} >
-                    //     {'   '}Run{'   '}
-                    //   </Button>
-                    // </form>
-                    <>
-                        <DateRangePicker
-                          start={filters.startDate}
-                          end={filters.endDate}
-                          handleDates={handleFiltersDates}
-                        />
-                    </>
-                  ) : // </div>
-                  null}
+                    
+                  </div>
+                  
                 </Card.Section>
               </Card>
             </Layout.Section>
@@ -1738,6 +1702,8 @@ const rows_Charges = [
       </Layout>
       </div>
     </FormLayout>
+    }
+    </>
   );
 };
 export default RevenueTrends;

@@ -1,21 +1,24 @@
 module Queries
   class FetchDashboardReport < Queries::BaseQuery
     type Types::DashboardReportType, null: false
-    argument :duration, String, required: true
+    argument :start_date, String, required: true
+    argument :end_date, String, required: true
 
-    def resolve(duration:)
+    def resolve(start_date:, end_date:)
       subscriptions = ReportService.new.all_subscriptions
-      range = get_date_range(duration)
+      range = start_date.to_date..end_date.to_date
       orders_service = OrdersService.new(current_shop)
       orders = orders_service.orders_in_range(range.first, range.last, 'id,refunds,created_at')
       data_service = ReportDataService.new(subscriptions, orders)
       current_year_range = Time.current.beginning_of_year.to_date..Date.today
       last_hour_range = Time.current.beginning_of_year..Time.current - 1.hour
       last_24_hours_range = Time.current.beginning_of_year..Time.current - 24.hours
+      last_month_range = Date.today - 30.days..Date.today - 1.day
+      last_month_subscriptions = data_service.subscriptions_by_order_period(subscriptions, last_month_range)
       past_hour_subscriptions = data_service.in_period_hourly_subscriptions(subscriptions, last_hour_range)
       past_subscriptions = data_service.in_period_hourly_subscriptions(subscriptions, last_24_hours_range)
       current_year_subscriptions = data_service.in_period_subscriptions(subscriptions, current_year_range)
-      subcription_month_revenue = data_service.calculate_percentage(data_service.mrr(past_subscriptions), data_service.mrr(past_hour_subscriptions), data_service.mrr(current_year_subscriptions))
+      subcription_month_revenue = data_service.calculate_percentage(data_service.mrr(past_subscriptions, last_24_hours_range), data_service.mrr(past_hour_subscriptions, last_hour_range), data_service.mrr(last_month_subscriptions, range))
       active_subscriptions_count = data_service.calculate_percentage(data_service.get_subscriptions_count(past_subscriptions, 'ACTIVE'),
                                   data_service.get_subscriptions_count(past_hour_subscriptions, 'ACTIVE'), data_service.get_subscriptions_count(current_year_subscriptions, 'ACTIVE'))
       past_churn_rate = data_service.get_churn_rate(past_subscriptions, last_24_hours_range)
@@ -35,15 +38,6 @@ module Queries
       { mrr: subcription_month_revenue, active_subscriptions_count: active_subscriptions_count,
         churn_rate: churn_rate, active_customers: active_customers, customer_lifetime_value: customer_lifetime,
         revenue_churn: revenue_churn, arr_data: arr_data, mrr_data: mrr_data, refund_data: refund_data, sales_data: sales_data, renewal_data: renewal_data }
-    end
-
-    def get_date_range(duration)
-      case duration
-      when 'daily'
-        (Date.today - 1.day)..(Date.today - 1.day)
-      else
-        Date.today - instance_eval(duration.downcase.split(' ').join('.'))..Date.today
-      end
     end
   end
 end
