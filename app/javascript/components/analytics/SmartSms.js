@@ -89,18 +89,18 @@ const SmartSms = () => {
     }
 }
   `;
-  const chartOptions={
+  const messagesChartOptions={
     chart: {
         type: 'area'
     },
     title: {
-        text: 'Historic and Estimated Worldwide Population Growth by Region'
+        text: ''
     },
     subtitle: {
-        text: 'Source: Wikipedia.org'
+        text: ''
     },
     xAxis: {
-        categories: ['1750', '1800', '1850', '1900', '1950', '1999', '2050'],
+        categories: [],
         tickmarkPlacement: 'on',
         title: {
             enabled: false
@@ -108,17 +108,16 @@ const SmartSms = () => {
     },
     yAxis: {
         title: {
-            text: 'Billions'
+            text: ''
         },
         labels: {
             formatter: function () {
-                return this.value / 1000;
+                return this.value;
             }
         }
     },
     tooltip: {
         split: true,
-        valueSuffix: ' millions'
     },
     plotOptions: {
         area: {
@@ -133,13 +132,16 @@ const SmartSms = () => {
     },
     series: [{
         name: 'Total SMS',
-        data: [502, 635, 809, 947, 1402, 3634, 5268]
+        color:"#00A023",
+        data: []
     }, {
         name: 'Outbound SMS',
-        data: [106, 107, 111, 133, 221, 767, 1766]
+        color:"#007EFF",
+        data: []
     }, {
         name: 'Inbound SMS',
-        data: [163, 203, 276, 408, 547, 729, 628]
+        color:"#FFA000",
+        data: []
     }]
 }
 
@@ -190,6 +192,10 @@ const SmartSms = () => {
     mostSwapedProductTo:{image:"",title:""},
     mostSkippedProduct:{image:"",title:""}
   })
+
+  const [chartOptions,setChartOptions]=useState({
+    messagesChart:messagesChartOptions
+  })
     // const [filters,setFilters]=useContext(FilterContext)
     const [filters,setFilters]=useState({startDate:dayjs(new Date()).subtract(30,'days').format("YYYY-MM-DD"),endDate:dayjs(new Date()).format("YYYY-MM-DD"),span:"30 days"})
     const handleFiltersDates=(dates,span)=>{
@@ -227,7 +233,10 @@ const SmartSms = () => {
         //swapped cards
         mostSwapedProduct,
         mostSwapedProductTo,
-        mostSkippedProduct
+        mostSkippedProduct,
+        
+        //Charts data
+        messages
       }=reportData?.fetchSmsAnalytics;
 
     setSectionProductList(prevList=>({
@@ -242,11 +251,43 @@ const SmartSms = () => {
     }))
 
     setSwappedCards({...swappedCards,mostSwapedProduct:mostSwapedProduct,mostSwapedProductTo:mostSwapedProductTo,mostSkippedProduct:mostSkippedProduct});
-    }
+    //Set Chart Options...
+
+      const newMessagesChartOptions = {
+        ...messagesChartOptions, xAxis: { ...messagesChartOptions.xAxis, categories: messages.map(data => data.date) || [] },
+        series: [{
+          name: 'Total SMS',
+          color: "#00A023",
+          data: messages.map(data => data.totalSms || 0) || []
+        }, {
+          name: 'Outbound SMS',
+          color: "#007EFF",
+          data: messages.map(data => data.outboundSms || 0) || []
+        }, {
+          name: 'Inbound SMS',
+          color: "#FFA000",
+          data: messages.map(data => data.inboundSms || 0) || []
+        }]
+      };
+
+    setChartOptions({
+      ...chartOptions,
+      messagesChart:newMessagesChartOptions
+    })
+  }
 
   },[reportData])
   return (
-   
+    <>
+    {(loading || !reportData) ? (
+      <Card>
+        <Spinner
+          accessibilityLabel="Spinner example"
+          size="large"
+          color="teal"
+        />
+      </Card>
+      ) :
       <FormLayout>
           <Layout>
                 <Layout.Section>
@@ -311,9 +352,12 @@ const SmartSms = () => {
             <Layout.Section>
               <div className="card-chart">
                 <Card>
+                {
+                  console.log(chartOptions.messagesChart,"---")
+                }
                 <HighchartsReact
                     highcharts={Highcharts}
-                    options={chartOptions}
+                    options={chartOptions.messagesChart}
                   />
                 </Card>
               </div>
@@ -322,7 +366,7 @@ const SmartSms = () => {
           </Layout>
           
          
-      </div>
+        </div>
           <Layout>
             <Layout.Section>
               <div className="smart-card">
@@ -380,7 +424,7 @@ const SmartSms = () => {
                               <img src={swappedCards?.mostSwapedProduct?.image || ""}/>
                             }
                           </div>
-                          <p>No Data Yet</p>
+                          <p>{swappedCards?.mostSwapedProduct?.title || "No Data Yet"}</p>
                           <small>Not enough data to calculate this metric.</small>
                         </Card>
                         </Stack.Item>
@@ -388,11 +432,11 @@ const SmartSms = () => {
                         <Card sectioned>
                           <TextStyle small>Most Swapped Product To </TextStyle>
                           <div className="img-section">
-                            { swappedCards?.mostSwapedProduct?.image &&
+                            { swappedCards?.mostSwapedProductTo?.image &&
                               <img src={swappedCards?.mostSwapedProductTo?.image || ""}/>
                             }
                           </div>
-                          <p>No Data Yet</p>
+                          <p>{swappedCards?.mostSwapedProductTo?.title || "No Data Yet"}</p>
                           <small>Not enough data to calculate this metric.</small>
                         </Card>
                         </Stack.Item>
@@ -400,11 +444,11 @@ const SmartSms = () => {
                         <Card sectioned>
                           <TextStyle small>Most Skipped Product</TextStyle>
                           <div className="img-section">
-                            { swappedCards?.mostSwapedProduct?.image &&
+                            { swappedCards?.mostSkippedProduct?.image &&
                               <img src={swappedCards?.mostSkippedProduct?.image || ""}/>
                             }
                           </div>
-                          <p><b>No Data Yet</b> </p>
+                          <p><b>{swappedCards?.mostSkippedProduct?.title || "No Data Yet"}</b> </p>
                           <small>Not enough data to calculate this metric.</small>
                         </Card>
                         </Stack.Item>
@@ -419,7 +463,8 @@ const SmartSms = () => {
           </div>
 
       </FormLayout>
-   
+    }
+   </>
   )
 }
 
