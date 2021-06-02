@@ -36,6 +36,7 @@ class SubscriptionContractDeleteService < GraphqlService
     if status == 'ACTIVE' && result['data'].present?
       customer = Customer.find_by(shopify_id: @id)
       subscription = SubscriptionContract.find_or_create_by(shopify_id: id)
+      data = result['data']['subscriptionDraftCommit']['contract']
       subscription.update(cancelled_at: nil, shopify_created_at: data['createdAt'], status: 'ACTIVE')
       customer.shop.subscription_logs.restart.create(subscription_id: @id, customer_id: customer.id)
     end
