@@ -258,15 +258,15 @@ const SmartSms = () => {
         series: [{
           name: 'Total SMS',
           color: "#00A023",
-          data: messages.map(data => data.totalSms || 0) || []
+          data: messages.map(data => parseInt(data?.data?.totalSms) || 0) || []
         }, {
           name: 'Outbound SMS',
           color: "#007EFF",
-          data: messages.map(data => data.outboundSms || 0) || []
+          data: messages.map(data => parseInt(data?.data?.outboundSms) || 0) || []
         }, {
           name: 'Inbound SMS',
           color: "#FFA000",
-          data: messages.map(data => data.inboundSms || 0) || []
+          data: messages.map(data => parseInt(data?.data?.inboundSms) || 0) || []
         }]
       };
 
@@ -352,9 +352,6 @@ const SmartSms = () => {
             <Layout.Section>
               <div className="card-chart">
                 <Card>
-                {
-                  console.log(chartOptions.messagesChart,"---")
-                }
                 <HighchartsReact
                     highcharts={Highcharts}
                     options={chartOptions.messagesChart}
