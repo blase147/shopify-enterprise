@@ -82,8 +82,7 @@ const Integrations = () => {
         <img src={getStart} width="20" />
         <span>Get Started</span>
       </Button>
-
-      <Page fullWidth title="Integrate with ChargeZen">
+      <Page fullWidth title={process.env.APP_TYPE=="public"?"Integrate with ChargeZen":"Integrations"}>
         <Layout>
           <Layout.Section>
             <Card>

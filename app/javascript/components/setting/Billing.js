@@ -30,8 +30,8 @@ const Billing = (props) => {
 
   const options_delay = [
     { label: '1 Day', value: '1' },
-    { label: '2 Day', value: '2' },
-    { label: '3 Day', value: '3' },
+    { label: '2 Days', value: '2' },
+    { label: '3 Days', value: '3' },
   ];
 
   const { values, touched, errors, setFieldValue } = props;
