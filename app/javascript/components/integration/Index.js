@@ -26,6 +26,18 @@ import integrations from '../../lib/integrations';
 
 const Integrations = () => {
 
+  const mapCatagory=useMemo(() =>({
+    all:"",
+    sale:"sales",
+    marketing:"marketing",
+    report:"reporting_and_analytics",
+    collabration:"collaboration",
+    accounting:"accounting",
+    customer:"customer_support_and_success",
+    contract:"contract_management",
+    tax:"tax_management"
+  }),[])
+
   const IntegerationsQuery=gql`
   query($type:String!){
       fetchIntegrations(type: $type) {
@@ -60,13 +72,6 @@ const Integrations = () => {
   }, []);
 
   const [fetchIntegrations,{data:integerations,loading}]=useLazyQuery(IntegerationsQuery,{fetchPolicy:"network-only"})
-  useEffect(()=>{
-    
-  },[])
-
-  useEffect(()=>{
-    console.log(integerations);
-  },[integerations])
 
   useEffect(()=>{
     fetchIntegrations({
@@ -106,17 +111,49 @@ const Integrations = () => {
               </Card>
             ):
                   <>
-                  <Stack spacing="loose">
-                    {
-                      integerations?.fetchIntegrations && integerations?.fetchIntegrations?.map(item => (
-                        <Link
-                          to={{pathname:`/integration-detail/${item.id}/${item.name}/${item.keys}`,state:{credentials:item.credentials}}}
-                          className="roundedCard"
-                          key={item.id}
-                        >
-                          <Stack.Item>
-                            <Card sectioned>
-                              <Stack alignment="center">
+                  {
+                    category=="all" ?
+                      <>
+                        {
+                         lodas && Object.keys(lodas).map((key, i) => (
+                          <Layout.Section>
+                              <Heading>{_.startCase(key)}</Heading>
+                            <Stack spacing="loose">
+                              {lodas[key]?.map((childItem, i) => (
+                                <Link
+                                to={{ pathname: `/integration-detail/${childItem.id}/${childItem.name}/${childItem.keys}`, state: { credentials: childItem.credentials } }}
+                                  className="roundedCard"
+                                  key={i}
+                                >
+                                  <Stack.Item>
+                                    <Card sectioned>
+                                      <Stack alignment="center">
+                                        <Stack.Item>
+                                        <img src={require(`images/${childItem.name?.split(" ").join("").toLowerCase()}`)} style={{ maxWidth: "80px" }} />
+                                        </Stack.Item>
+                                        <Stack.Item fill>
+                                          <DisplayText size="small">
+                                            {childItem.name}
+                                          </DisplayText>
+                                        </Stack.Item>
+                                      </Stack>
+                                    </Card>
+                                  </Stack.Item>
+                                </Link>
+                              ))}
+                            </Stack>
+                          </Layout.Section>
+                        ))}
+                      </>:
+                      <>
+                        <Stack spacing="loose">
+                          {
+                            integerations?.fetchIntegrations && integerations?.fetchIntegrations?.map(item => (
+                              <Link
+                                to={{ pathname: `/integration-detail/${item.id}/${item.name}/${item.keys}`, state: { credentials: item.credentials } }}
+                                className="roundedCard"
+                                key={item.id}
+                              >
                                 <Stack.Item>
                                   <img src={require(`images/${item.name}`)} style={{ maxWidth: "80px" }} />
                                 </Stack.Item>
@@ -125,13 +162,12 @@ const Integrations = () => {
                                     {item.name}
                                   </DisplayText>
                                 </Stack.Item>
-                              </Stack>
-                            </Card>
-                          </Stack.Item>
-                        </Link>
-                      ))
-                    }
-                    </Stack>
+                              </Link>
+                            ))
+                          }
+                        </Stack>
+                      </>
+                  }
                   </>
           }
           </Layout.Section>
