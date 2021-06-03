@@ -396,6 +396,10 @@ const SmartSms = () => {
                             <TextStyle
                               variation={sectionServiceList[item.key]?.up ? 'positive' : 'negative'}
                             >
+                            <Icon
+                              source={sectionServiceList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                              color={sectionServiceList[item.key]?.up ? 'green' : 'red'}
+                            />
                             {(sectionServiceList[item.key]?.percent==0 && !sectionServiceList[item.key]?.up)?100:Math.abs(sectionServiceList[item.key]?.percent)}%
                             </TextStyle>
                           </Stack.Item>
