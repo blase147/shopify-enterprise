@@ -53,6 +53,11 @@ const SmartSms = () => {
           percent
           up
         }
+        cancelCount {
+          value
+          percent
+          up
+        }
         oneTimeRevenue {
           value
           percent
@@ -167,6 +172,7 @@ const SmartSms = () => {
   const serviceListKeys=[
     {section:"SmartySMS Opt-out",key:"optOutMessages"},
     {section:"Delayed Orders",key:"delayCount"},
+    {section:"Canceled Subscriptions",key:"cancelCount"},
     {section:"Add One-time Item Revenue",key:"oneTimeRevenue",prefix :"$" , decimal:true}
   ]
   const [sectionServiceList,setSectionServiceList] = useState({
@@ -176,6 +182,11 @@ const SmartSms = () => {
       value: '0',
     },
     delayCount:{
+      percent: 0,
+      up: true,
+      value: '0'
+    },
+    cancelCount:{
       percent: 0,
       up: true,
       value: '0'
@@ -228,6 +239,7 @@ const SmartSms = () => {
         skipCount,
         optOutMessages,
         delayCount,
+        cancelCount,
         oneTimeRevenue,
 
         //swapped cards
@@ -247,7 +259,8 @@ const SmartSms = () => {
     setSectionServiceList(prevList=>({
       optOutMessages:optOutMessages || prevList.optOutMessages,
       delayCount:delayCount || prevList.delayCount,
-      oneTimeRevenue:oneTimeRevenue || prevList.oneTimeRevenue
+      oneTimeRevenue:oneTimeRevenue || prevList.oneTimeRevenue,
+      cancelCount:cancelCount || prevList.cancelCount
     }))
 
     setSwappedCards({...swappedCards,mostSwapedProduct:mostSwapedProduct,mostSwapedProductTo:mostSwapedProductTo,mostSkippedProduct:mostSkippedProduct});
