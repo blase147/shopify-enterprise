@@ -26,6 +26,10 @@ class SmsAnalyticsService
     @shop.sms_logs.delay.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last).count
   end
 
+  def cancel_count
+    @shop.sms_logs.cancel.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last).count
+  end
+
   def one_time_revenue
     @shop.sms_logs.one_time_order.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last).sum(:revenue)
   end
