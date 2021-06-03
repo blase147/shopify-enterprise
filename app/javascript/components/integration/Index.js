@@ -31,14 +31,14 @@ const Integrations = () => {
     all:"",
     sale:"sales",
     marketing:"marketing",
-    report:"report_and_analytics",
+    report:"reporting_and_analytics",
     collabration:"collaboration",
     accounting:"accounting",
     customer:"customer_support_and_success",
     contract:"contract_management",
     tax:"tax_management"
   }),[])
-  
+
   const IntegerationsQuery=gql`
   query($type:String!){
       fetchIntegrations(type: $type) {
@@ -73,7 +73,7 @@ const Integrations = () => {
   }, []);
 
   const [fetchIntegrations,{data:integerations,loading}]=useLazyQuery(IntegerationsQuery,{fetchPolicy:"network-only"})
-  
+
   useEffect(()=>{
     fetchIntegrations({
       variables:{
@@ -115,14 +115,11 @@ const Integrations = () => {
             ):
                   <>
                   {
-                    category=="all" ? 
+                    category=="all" ?
                       <>
-                      {
-                        console.log("I'm Running")
-                      }
                         {
                          lodas && Object.keys(lodas).map((key, i) => (
-                          <Layout.Section>                            
+                          <Layout.Section>
                               <Heading>{_.startCase(key)}</Heading>
                             <Stack spacing="loose">
                               {lodas[key]?.map((childItem, i) => (
@@ -135,9 +132,6 @@ const Integrations = () => {
                                     <Card sectioned>
                                       <Stack alignment="center">
                                         <Stack.Item>
-                                        {
-                                          console.log("upper hello",item.name?.split(" ").join("").toLowerCase())
-                                        }
                                         <img src={require(`images/${childItem.name?.split(" ").join("").toLowerCase()}`)} style={{ maxWidth: "80px" }} />
                                         </Stack.Item>
                                         <Stack.Item fill>
@@ -155,9 +149,6 @@ const Integrations = () => {
                         ))}
                       </>:
                       <>
-                      {
-                        console.log("I'm not Running")
-                      }
                         <Stack spacing="loose">
                           {
                             integerations?.fetchIntegrations && integerations?.fetchIntegrations?.map(item => (
@@ -187,7 +178,7 @@ const Integrations = () => {
                             ))
                           }
                         </Stack>
-                      </> 
+                      </>
                   }
                   </>
           }
