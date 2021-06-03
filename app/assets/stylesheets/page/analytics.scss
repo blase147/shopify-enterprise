@@ -425,6 +425,7 @@
 }
   .smart-card {
     >.Polaris-Stack {
+      flex-wrap: nowrap;
       > .Polaris-Stack__Item {
         margin-top: 0;
         flex: 0 0 auto;

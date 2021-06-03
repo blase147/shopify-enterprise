@@ -295,7 +295,7 @@ const SmartSms = () => {
     {(loading || !reportData) ? (
       <Card>
         <Spinner
-          accessibilityLabel="Spinner example"
+          accessibilityLabel="Spinner example1"
           size="large"
           color="teal"
         />

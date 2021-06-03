@@ -82,9 +82,7 @@ const Integrations = () => {
     })
   },[category])
 
-  console.log("abc")
-  let lodas= catagory=="all" && _.groupBy(integerations?.fetchIntegrations,"integrationType") || [];
-  console.log("im running","lodash",lodas,"data",integerations?.fetchIntegrations)
+  let lodas= category=="all" && _.groupBy(integerations?.fetchIntegrations,"integrationType") || [];
   return (
     <AppLayout typePage="integrations" tabIndex="7">
       <Button>
