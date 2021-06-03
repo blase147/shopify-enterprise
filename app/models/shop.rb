@@ -14,9 +14,11 @@ class Shop < ActiveRecord::Base
   has_one :sms_setting, dependent: :destroy
   has_many :smarty_messages, dependent: :destroy
   has_many :smarty_variables, dependent: :destroy
+  has_many :sms_logs, dependent: :destroy
   has_many :subscription_logs, dependent: :destroy
 
   has_many :upsell_campaign_groups, dependent: :destroy
+  has_many :integrations, dependent: :destroy
   has_one :lock_password
   after_create :build_sms_setting
   after_create :setup_default_lock_password
@@ -67,6 +69,15 @@ class Shop < ActiveRecord::Base
         language: "$#{item.node.lines.edges.first&.node&.current_price&.amount} / #{billing_policy.interval.pluralize}",
         communication: "#{billing_policy.interval_count} #{billing_policy.interval} Pack".titleize
       )
+    end
+  end
+
+  def email_integration_service
+    name = setting.email_service
+    if name.present? && integrations.marketing.email.where(name: name).exists?
+      integrations.marketing.email.where(name: name).last
+    else
+      integrations.marketing.email.where(default: true).last
     end
   end
 end

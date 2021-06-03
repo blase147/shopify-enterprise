@@ -111,7 +111,7 @@ export default class DateRangePicker extends React.Component {
 
   applyFilter=(e)=>{
    e.stopPropagation();
-   this.togglePopover();
+  //  this.togglePopover();
    this.props.handleDates && this.props.handleDates(this.state.selected,this.state.span)  
   }
   handleChange = value => {
