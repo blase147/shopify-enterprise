@@ -44,11 +44,11 @@ class AppProxy::DashboardController < AppProxyController
   end
 
   def load_subscriptions
-    @active_subscriptions_count = params[:active_subscriptions_count].to_i
     @data = CustomerSubscriptionContractsService.new(shopify_customer_id).run
     @subscription_contracts = @data[:subscriptions] || []
     @cancelled_subscriptions = @data[:cancelled_subscriptions] || []
     @active_subscriptions = @data[:active_subscriptions] || []
+    @active_subscriptions_count = params[:active_subscriptions_count].present? ? params[:active_subscriptions_count].to_i : @data[:active_subscriptions].count
     @cancelled_line_items = RemovedSubscriptionLine.where(customer_id: params[:customer_id])
   end
 end

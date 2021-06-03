@@ -12,7 +12,6 @@
   .icon-chevron
     svg fill="none" height="24px" viewbox=("0 0 17 10") width="24px" xmlns="http://www.w3.org/2000/svg"
       path d=("M1.5 1L8.5 8L15.5 1") stroke="#4D506A" stroke-width="2" /
-
 nav.Polaris-Navigation.account
   .Polaris-Navigation__PrimaryNavigation.Polaris-Scrollable.Polaris-Scrollable--vertical data-polaris-scrollable="true"
     ul.Polaris-Navigation__Section.account-sidebar
@@ -60,7 +59,7 @@ nav.Polaris-Navigation.account
       - if @setting.show_delivery_schedule.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
-            a.Polaris-Navigation__Item class=active_nav('dashboard', 'upcoming') href="/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions&.count}" tabindex="0"
+            a.Polaris-Navigation__Item class=active_nav('dashboard', 'upcoming') href="/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
               .Polaris-Navigation__Icon
                 span.Polaris-Icon
                   svg fill="none" height="18" viewbox=("0 0 22 18") width="22" xmlns="http://www.w3.org/2000/svg"
@@ -72,11 +71,11 @@ nav.Polaris-Navigation.account
                         rect height="17" transform=("translate(0.753906 0.556641)") width="21" /
 
 
-              span.Polaris-Navigation__Text Delivery Schedules
+              span.Polaris-Navigation__Text Delivery Schedule
       - if @setting.show_order_history.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
-            a.Polaris-Navigation__Item class=active_nav('orders', 'index') href="/a/chargezen_production/orders?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions&.count}" tabindex="0"
+            a.Polaris-Navigation__Item class=active_nav('orders', 'index') href="/a/chargezen_production/orders?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
               div style="margin-right: 20px;display: flex;align-items: center;justify-content: center;height: 100%;"
                 span style="display: flex;align-items: center;justify-content: center;"
                   svg fill="none" height="19" viewbox=("0 0 16 19") width="16" xmlns="http://www.w3.org/2000/svg"
@@ -99,7 +98,7 @@ nav.Polaris-Navigation.account
       - if @setting.show_address.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
-            a.Polaris-Navigation__Item class=active_nav('dashboard', 'addresses') href="/a/chargezen_production/dashboard/addresses?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions&.count}" tabindex="0"
+            a.Polaris-Navigation__Item class=active_nav('dashboard', 'addresses') href="/a/chargezen_production/dashboard/addresses?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
               .Polaris-Navigation__Icon
                 span.Polaris-Icon
                   = icon_tag 'address'
@@ -109,7 +108,7 @@ nav.Polaris-Navigation.account
       - if @setting.show_billing.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
-            a.Polaris-Navigation__Item class=active_nav('dashboard', 'payment_methods') href="/a/chargezen_production/dashboard/payment_methods?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions&.count}" tabindex="0"
+            a.Polaris-Navigation__Item class=active_nav('dashboard', 'payment_methods') href="/a/chargezen_production/dashboard/payment_methods?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
               .Polaris-Navigation__Icon
                 span.Polaris-Icon
                   svg.Polaris-Icon__Svg fill="none" height="16" viewbox=("0 0 16 16") width="16" xmlns="http://www.w3.org/2000/svg"
@@ -120,11 +119,11 @@ nav.Polaris-Navigation.account
                     path d=("M15.697 2.53975L12.197 1.03975C12.07 0.98675 11.929 0.98675 11.802 1.03975L8.302 2.53975C8.119 2.61875 8 2.79975 8 2.99975V4.99975C8 7.75075 9.017 9.35875 11.751 10.9338C11.828 10.9777 11.914 10.9998 12 10.9998C12.086 10.9998 12.172 10.9777 12.249 10.9338C14.983 9.36275 16 7.75475 16 4.99975V2.99975C16 2.79975 15.881 2.61875 15.697 2.53975ZM15 4.99975C15 7.30875 14.236 8.57975 12 9.91975C9.764 8.57675 9 7.30575 9 4.99975V3.32975L12 2.04375L15 3.32975V4.99975Z") stroke="#4D506A" /
                     path d=("M13.8127 4.10886C13.5977 3.93886 13.2837 3.97186 13.1097 4.18686L11.5377 6.15286L10.9157 5.22286C10.7607 4.99286 10.4497 4.93186 10.2227 5.08386C9.99365 5.23686 9.93065 5.54786 10.0837 5.77686L11.0837 7.27686C11.1727 7.40986 11.3187 7.49186 11.4787 7.49986C11.4857 7.49986 11.4937 7.49986 11.4997 7.49986C11.6507 7.49986 11.7947 7.43186 11.8907 7.31186L13.8907 4.81186C14.0627 4.59586 14.0287 4.28186 13.8127 4.10886Z") fill="#4D506A" /
 
-              span.Polaris-Navigation__Text Billings
+              span.Polaris-Navigation__Text Billing
       - if @setting.show_account.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
-            a.Polaris-Navigation__Item class=active_nav('dashboard', 'settings') href="/a/chargezen_production/dashboard/settings?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions&.count}" tabindex="0"
+            a.Polaris-Navigation__Item class=active_nav('dashboard', 'settings') href="/a/chargezen_production/dashboard/settings?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
               .Polaris-Navigation__Icon
                 span.Polaris-Icon
                   svg fill="none" height="18" viewbox=("0 0 18 18") width="18" xmlns="http://www.w3.org/2000/svg"
