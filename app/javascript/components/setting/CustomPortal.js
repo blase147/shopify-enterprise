@@ -407,7 +407,7 @@ const CustomPortal = (props) => {
                     }
                     onChange={(e) => handleChange('showDeliverySchedule', e)}
                   />
-               
+
                   <p>Order History</p>
                   <Select
                     options={showHideValues}
@@ -426,7 +426,7 @@ const CustomPortal = (props) => {
                     }
                     onChange={(e) => handleChange('showAddress', e)}
                   />
-               
+
                   <p>Billing</p>
                   <Select
                     options={showHideValues}
@@ -445,9 +445,9 @@ const CustomPortal = (props) => {
                     }
                     onChange={(e) => handleChange('showAccount', e)}
                   />
-              
+
               </div>
-         
+
             <Stack.Item>
               <Stack vertical>
                 <p className="navigation-text" variation="strong">Subscription Management</p>
