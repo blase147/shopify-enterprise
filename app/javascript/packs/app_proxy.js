@@ -27,6 +27,14 @@ $(document).ready(function () {
     }
   );
 
+  $(document).on('click', 'a.btn-discount', function () {
+    if ($('.btn-discount').data().redirect_url != 'undefined' || $('.btn-discount').data().redirect_url != '') {
+      window.top.location.href = $('.btn-discount').data().redirect_url;
+    } else {
+      window.top.location.href = '/pages/contact-us';
+    }
+  });
+
   $(document).on('click', 'button.open-dp', function () {
     $(this).hide();
     let this_ = $(this).parent();

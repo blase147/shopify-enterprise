@@ -19,6 +19,7 @@ import {
   Tabs,
 } from '@shopify/polaris';
 import { FlagMajor, ChevronDownMinor } from '@shopify/polaris-icons';
+import SmartSms from './SmartSms';
 
 const Analytics = () => {
   const [selectedTitleTab, setSelectedTitleTab] = useState(0);
@@ -36,14 +37,19 @@ const Analytics = () => {
       id: 'customer-insights',
       content: 'Customer Insights',
     },
-    // {
-    //   id: 'retention',
-    //   content: 'Retention',
-    // },
+    ...(process.env.APP_TYPE=="public" ?
+    [{
+      id: 'retention',
+      content: 'Retention',
+    }]:[]),
     {
       id: 'product',
       content: 'Product',
     },
+    {
+      id: 'smartsms',
+      content: 'SmartySMS',
+    }
   ];
   return (
     <AppLayout typePage="Analytics" tabIndex="5">
@@ -61,16 +67,22 @@ const Analytics = () => {
               <CustomerInsights />
             </div>
           ) 
-          // : selectedTitleTab === 2 ? (
-          //   <div className="retention">
-          //     <Retention />
-          //   </div>
-          // ) 
-          : selectedTitleTab === 2 ?(
+          :
+          (process.env.APP_TYPE=="public" && selectedTitleTab === 2) ? (
+            <div className="retention">
+              <Retention />
+            </div>
+          ) 
+          : selectedTitleTab === (process.env.APP_TYPE=="public" ?3:2) ?(
             <div className="product">
               <Product />
             </div>
-          ):""}
+          ):selectedTitleTab === (process.env.APP_TYPE=="public" ?4:3) ?(
+            <>
+            <SmartSms />
+            </>
+          ):
+          ""}
         </Tabs>
         </FilterContextProvider>
       </Page>

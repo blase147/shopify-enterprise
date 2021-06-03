@@ -6,6 +6,7 @@ class SmsService::ProductService < SmsService::ProcessService
     @shared_service = SmsService::SharedService.new(conversation, params)
     @data = subscriptions_data
     @customer = customer
+    @shop = customer.shop
   end
 
   def process_message(step)
@@ -16,11 +17,11 @@ class SmsService::ProductService < SmsService::ProcessService
     increase_step = step
     case step
     when 1
-      message = 'Please reply with product ID\n' + @shared_service.get_all_products(products)
+      message = "Please reply with product ID\n" + @shared_service.get_all_products(products)
     when 2
       product = ShopifyAPI::Product.find(@params['Body']) rescue nil
       if product.present?
-        message = 'Please select the product variant ID:\n' + product.variants.each_with_index.map{|variant, i| "#{i+1}. #{variant.id} #{variant.title} $#{variant.price}"}.join("\n")
+        message = "Please select the product variant ID:\n" + product.variants.each_with_index.map{|variant, i| "#{i+1}. #{variant.id} #{variant.title} $#{variant.price}"}.join("\n")
       else
         error = true
       end
@@ -44,7 +45,7 @@ class SmsService::ProductService < SmsService::ProcessService
         variant_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 3).last
         variant = ShopifyAPI::Variant.find(variant_message.content) rescue nil
         quantity_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 4).last
-        input = {customerId: @customer.shopify_identity, useCustomerDefaultAddress: true, lineItems: { quantity: quantity_message.content.to_i, variantId: "gid://shopify/ProductVariant/#{variant.id}", originalUnitPrice: variant.price}}
+        input = { customerId: @customer.shopify_identity, useCustomerDefaultAddress: true, lineItems: { quantity: quantity_message.content.to_i, variantId: "gid://shopify/ProductVariant/#{variant.id}", originalUnitPrice: variant.price } }
         result = OrderDraftService.new.create(input)
         if result.is_a?(Hash)
           error = true
@@ -53,6 +54,7 @@ class SmsService::ProductService < SmsService::ProcessService
           if result.is_a?(Hash)
             error = true
           else
+            @shop.sms_logs.one_time_order.create(product_id: variant.product_id, revenue: variant.price * quantity_message.content.to_i, customer_id: @customer.id)
             message = 'Product added successfully.'
           end
         end

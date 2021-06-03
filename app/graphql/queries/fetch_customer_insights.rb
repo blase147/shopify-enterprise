@@ -9,11 +9,13 @@ module Queries
       range = start_date.to_date..end_date.to_date
       all_subscription_report = CustomerInsightReportService.new(current_shop, all_subscriptions, range)
       subscriptions = all_subscription_report.in_period_subscriptions(all_subscriptions, range)
-      previous_day_subscriptions = all_subscription_report.in_period_subscriptions(all_subscriptions, Date.today - 1.day..Date.today - 1.day)
-      current_day_subscriptions = all_subscription_report.in_period_subscriptions(all_subscriptions, Date.today..Date.today)
+      previous_day_range = Time.current.beginning_of_year..Time.current - 24.hours
+      current_day_range = Time.current.beginning_of_year..Time.current - 1.hour
+      previous_day_subscriptions = all_subscription_report.in_period_hourly_subscriptions(all_subscriptions, previous_day_range)
+      current_day_subscriptions = all_subscription_report.in_period_hourly_subscriptions(all_subscriptions, current_day_range)
       report = CustomerInsightReportService.new(current_shop, subscriptions, range)
-      previous_day = CustomerInsightReportService.new(current_shop, previous_day_subscriptions, Date.today - 1.day..Date.today - 1.day)
-      current_day = CustomerInsightReportService.new(current_shop, current_day_subscriptions, Date.today..Date.today)
+      previous_day = CustomerInsightReportService.new(current_shop, previous_day_subscriptions, previous_day_range)
+      current_day = CustomerInsightReportService.new(current_shop, current_day_subscriptions, current_day_range)
       swap_count = report.percentage(previous_day.swap_count, current_day.swap_count, report.swap_count)
       skip_count = report.percentage(previous_day.skip_count, current_day.skip_count, report.skip_count)
       restart_count = report.percentage(previous_day.restart_count, current_day.restart_count, report.restart_count)

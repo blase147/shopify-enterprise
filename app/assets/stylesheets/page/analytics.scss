@@ -1,6 +1,6 @@
 .Polaris-Popover__Section {
   .Polaris-DatePicker {
-    
+
     .Polaris-DatePicker__Header {
       position: static !important;
     }
@@ -17,9 +17,9 @@
         display: table-row;
       }
     }
-    
+
   }
-  
+
 }
 .Polaris-DatePicker__Day.Polaris-DatePicker__Day--selected.Polaris-DatePicker__Day--firstInRange.Polaris-DatePicker__Day--hoverRight {
   border-radius: 3rem 0 0 3rem !important;
@@ -32,7 +32,7 @@
 }
 .Polaris-DatePicker__Day--selected {
   background-color: #306ecb !important;
-  
+
   &:focus {
     box-shadow: none !important;
   }
@@ -59,11 +59,11 @@
       .Polaris-DatePicker__Day--inRange {
         background-color: rgba(242, 247, 254, 1);
       }
-      
+
       td {
         .Polaris-DatePicker__Day.Polaris-DatePicker__Day--hasRange {
           border: 0;
-         
+
         }
       }
     }
@@ -71,7 +71,7 @@
 }
 
 .module-Analytics {
- 
+
   .Polaris-Popover.Polaris-Popover--fullWidth {
     width: 700px !important;
   }
@@ -79,7 +79,7 @@
     display: none;
   }
 
-  
+
   .Polaris-Page__Content {
     .Polaris-Tabs__Wrapper {
       background: unset;
@@ -120,7 +120,7 @@
         }
       }
     }
-  
+
   .form-inline {
     display: flex;
     flex-flow: row wrap;
@@ -143,8 +143,8 @@
     .Polaris-Layout__Section--secondary {
       margin-top: 0.4rem;
       .Polaris-Stack>.Polaris-Stack__Item {
-        margin-top: 1.6rem; 
-        
+        margin-top: 1.6rem;
+
     }
     }
   }
@@ -205,6 +205,33 @@
       background-color: #979797;
     }
   }
+
+  .container-left {
+    width: 28%;
+  }
+
+  .container-right {
+    width: 72%;
+  }
+
+  .customer-count {
+    .count-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 25px;
+      margin-top: 7px;
+    }
+    .Polaris-Layout__Section {
+      .Polaris-Stack {
+        > .Polaris-Stack__Item:first-child {
+          margin-top: 0px;
+        }
+      }
+    }
+
+
+  }
   // customer insight
   .customer-insight {
     // thead {
@@ -217,9 +244,7 @@
     //     }
     //   }
     // }
-    .container-left {
-      width: 28%;
-    }
+
     .frequency-graph {
       .Polaris-Card__Section {
         display: grid;
@@ -231,7 +256,7 @@
     .container-right {
       width: 72%;
       .card-chart {
-       
+
         .Polaris-Card {
           justify-content: center;
           flex-direction: column;
@@ -266,24 +291,7 @@
         }
       }
     }
-    .customer-count {
-      .count-section {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 25px;
-        margin-top: 7px;
-      }
-      .Polaris-Layout__Section {
-        .Polaris-Stack {
-          > .Polaris-Stack__Item:first-child {
-            margin-top: 0px;
-          }
-        }
-      }
-     
-      
-    }
+
 
     .last {
       display: flex;
@@ -366,3 +374,91 @@
   left: 30px !important;
   position: relative;
 }
+
+//smarty-sms sectoin //@at-root
+.image-card-section {
+  .Polaris-Layout__Section {
+    margin-top: 0px;
+  }
+
+  .smarty-card-section {
+    .Polaris-Stack {
+      flex-wrap: nowrap;
+    }
+    .Polaris-Stack__Item {
+      margin-top: 4px;
+    }
+    .img-section {
+      background-color: #5C5F62;
+      width: 100%;
+      height: 143px;
+      border-radius: 9px;
+      img {
+        overflow: hidden;
+        height: 100%;
+        object-fit: cover;
+        width: 100%;
+        border-radius: 9px;
+
+      }
+      +  {
+        p {
+          font-weight: bold;
+          margin-top: 9px;
+          font-size: 24px;
+          margin-bottom: 5px;
+        }
+      }
+    }
+
+    span {
+      margin-bottom: 7px;
+      font-size: 14px;
+      display: inline-block;
+      color: #4D506A;
+    }
+    small  {
+      color: #4D506A;
+      font-size: 14px;
+    }
+  }
+}
+  .smart-card {
+    >.Polaris-Stack {
+      flex-wrap: nowrap;
+      > .Polaris-Stack__Item {
+        margin-top: 0;
+        flex: 0 0 auto;
+        flex-basis: 25%;
+
+        > .Polaris-Stack__Item:not(:first-child) {
+          margin-left: 1.6rem;
+        }
+
+        > .Polaris-Stack__Item {
+          flex-basis: 25%;
+        }
+      }
+    }
+    .Polaris-Card__Section {
+      .Polaris-Stack {
+        flex-wrap: nowrap;
+        height: 38px;
+      }
+    }
+  }
+
+  .card-tabs {
+    .container-right {
+      .Polaris-Card {
+        > div {
+          > div {
+            height: 264px !important;
+            > svg {
+              height:264px;
+            }
+          }
+        }
+      }
+    }
+  }

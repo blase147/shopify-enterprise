@@ -102,5 +102,59 @@ shop.smarty_variables.create(name: 'shop_name')
 
 #integrations
 
-shop.integrations.create(integration_type: :marketing, service_type: :email, name: 'Klaviyo', keys: 'public_key,private_key')
-shop.integrations.create(integration_type: :marketing, service_type: :email, name: 'SendGrid', keys: 'private_key')
+#sales
+shop.integrations.find_or_create_by(integration_type: :sales, name: 'Hubspot')
+shop.integrations.find_or_create_by(integration_type: :sales, name: 'Zoho CRM')
+shop.integrations.find_or_create_by(integration_type: :sales, name: 'Pipedrive')
+shop.integrations.find_or_create_by(integration_type: :sales, name: 'Salesforce')
+#marketing
+shop.integrations.find_or_create_by(integration_type: :marketing, service_type: :email, name: 'Klaviyo', keys: 'public_key,private_key')
+shop.integrations.find_or_create_by(integration_type: :marketing, service_type: :email, name: 'SendGrid', keys: 'private_key')
+shop.integrations.find_or_create_by(integration_type: :marketing, name: 'Active Campaign')
+shop.integrations.find_or_create_by(integration_type: :marketing, name: 'Zapier')
+shop.integrations.find_or_create_by(integration_type: :marketing, name: 'LeadDyno')
+shop.integrations.find_or_create_by(integration_type: :marketing, name: 'Referral Candy')
+shop.integrations.find_or_create_by(integration_type: :marketing, name: 'Refersion')
+shop.integrations.find_or_create_by(integration_type: :marketing, name: 'Friendbuy')
+shop.integrations.find_or_create_by(integration_type: :marketing, service_type: :email, name: 'Mailchimp')
+
+#reporting_and_analytics
+
+shop.integrations.find_or_create_by(integration_type: :reporting_and_analytics, name: 'Baremetrics')
+shop.integrations.find_or_create_by(integration_type: :reporting_and_analytics, name: 'Chart Mogul')
+shop.integrations.find_or_create_by(integration_type: :reporting_and_analytics, name: 'Stitch')
+shop.integrations.find_or_create_by(integration_type: :reporting_and_analytics, name: 'ProfitWell')
+shop.integrations.find_or_create_by(integration_type: :reporting_and_analytics, name: 'Google Analytics')
+
+# collaboration
+shop.integrations.find_or_create_by(integration_type: :collaboration, name: 'Shopify')
+shop.integrations.find_or_create_by(integration_type: :collaboration, name: 'Slack')
+shop.integrations.find_or_create_by(integration_type: :collaboration, name: 'Twilio', keys: 'public_key,private_key')
+shop.integrations.find_or_create_by(integration_type: :collaboration, name: 'PieSync')
+shop.integrations.find_or_create_by(integration_type: :collaboration, name: 'Moxtra')
+shop.integrations.find_or_create_by(integration_type: :collaboration, name: 'Shipstation')
+
+#accounting
+
+shop.integrations.find_or_create_by(integration_type: :accounting, name: 'Xero')
+shop.integrations.find_or_create_by(integration_type: :accounting, name: 'Revenue Manager')
+shop.integrations.find_or_create_by(integration_type: :accounting, name: 'QuickBooks')
+shop.integrations.find_or_create_by(integration_type: :accounting, name: 'Intacct')
+
+# customer_support_and_success
+
+shop.integrations.find_or_create_by(integration_type: :customer_support_and_success, name: 'Freshdesk')
+shop.integrations.find_or_create_by(integration_type: :customer_support_and_success, name: 'Netero')
+shop.integrations.find_or_create_by(integration_type: :customer_support_and_success, name: 'Zendesk')
+shop.integrations.find_or_create_by(integration_type: :customer_support_and_success, name: 'Intercom')
+shop.integrations.find_or_create_by(integration_type: :customer_support_and_success, name: 'Groove')
+
+#contract_management
+
+shop.integrations.find_or_create_by(integration_type: :contract_management, name: 'GetAccept')
+
+#tax_management
+
+shop.integrations.find_or_create_by(integration_type: :tax_management, name: 'Avalar')
+shop.integrations.find_or_create_by(integration_type: :tax_management, name: 'TaxJar')
+shop.integrations.find_or_create_by(integration_type: :tax_management, name: 'Hubspot')

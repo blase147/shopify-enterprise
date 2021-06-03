@@ -996,7 +996,7 @@ nav.top-nav {
     padding: 7px 0px;
   }
 
-  
+
 
 }
 .add_weekly_box {
@@ -1464,6 +1464,7 @@ div.notification-banner {
             background: #fff;
             color: #fff;
             background: $primary;
+            display: none;
 
             @media (max-width: 1000px) {
               margin-top: 10px;

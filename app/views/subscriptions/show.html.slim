@@ -6,7 +6,7 @@
 
 - formatted = address.formatted.join(', ').titleize rescue nil
 - address_id = address.id[/\d+/] rescue nil
-
+- setting = current_shop.setting
 .Polaris-Page
   .Polaris-Page-Header.Polaris-Page-Header--isSingleRow.Polaris-Page-Header--hasNavigation.Polaris-Page-Header--mobileView.Polaris-Page-Header--mediumTitle
     .Polaris-Page-Header__Navigation
@@ -57,33 +57,37 @@
                       div.product-qty
                         .Polaris-Stack__Item.Polaris-Stack__Item--fill
                           span= line.node.title
-                        .Polaris-Stack__Item
-                          form action="#{action_subscription_contract_path(:update_quantity, @subscription.id[/\d+/])}" method='post' data-remote=true enctype="multipart/form-data"
-                            .quantity-field
-                              div
-                                span.btn-wrapper
-                                  button.minus-quantity type="button"
-                                    svg fill="none" height="8" viewbox=("0 0 7 2") width="8" xmlns="http://www.w3.org/2000/svg"
-                                      path d=("M7 0H0V1.5H7V0Z") fill="#637381" /
+                        - if setting.admin_allowed?('upcoming_quantity')
+                          .Polaris-Stack__Item
+                            form action="#{action_subscription_contract_path(:update_quantity, @subscription.id[/\d+/])}" method='post' data-remote=true enctype="multipart/form-data"
+                              .quantity-field
+                                div
+                                  span.btn-wrapper
+                                    button.minus-quantity type="button"
+                                      svg fill="none" height="8" viewbox=("0 0 7 2") width="8" xmlns="http://www.w3.org/2000/svg"
+                                        path d=("M7 0H0V1.5H7V0Z") fill="#637381" /
 
-                                  input.quatity-val type="number" name="quantity" value="#{line.node.quantity}"/
-                                  button.plus-quantity type="button"
-                                    svg fill="none" height="8" viewbox=("0 0 8 8") width="8" xmlns="http://www.w3.org/2000/svg"
-                                      path d=("M0 3.08V4.508H3.08V7.588H4.508V4.508H7.588V3.08H4.508V0H3.08V3.08H0Z") fill="#212B36" /
-                                  input.prev-quantity type="hidden" value="#{line.node.quantity}"/
-                                span.update-quantity
-                                  input.hidden type="text" name="line_item_id" value="#{line.node.id}"/
-                                  button type="submit" APPLY
-                      div.slider-btns
-                        .Polaris-Stack__Item
-                          .Polaris-ButtonGroup
-                            .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                              button.Polaris-Button.Polaris-Button--plain type="button" data-toggle='modal' data-target="#swap-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}"
-                                span.Polaris-Button__Content
-                                  svg fill="none" height="16" viewbox=("0 0 17 16") width="17" xmlns="http://www.w3.org/2000/svg"
-                                    circle cx="8.99268" cy="8" fill="#212B36" r="8" /
-                                    path d=("M13.9278 7.84612L12.6236 6.54184C12.5388 6.45684 12.4012 6.45668 12.3162 6.54145C12.2752 6.58233 12.2522 6.63787 12.2523 6.69574V7.34788H9.64373V4.73933H10.2959C10.4159 4.73956 10.5134 4.64239 10.5136 4.52233C10.5137 4.46446 10.4908 4.40892 10.4498 4.36804L9.1455 3.06377C9.06062 2.97891 8.92302 2.97891 8.83812 3.06377L7.53385 4.36804C7.44884 4.45282 7.44868 4.59046 7.53346 4.67546C7.57424 4.71634 7.62959 4.73931 7.68732 4.73933H8.33946V7.34788H5.73091V6.69574C5.73113 6.57569 5.63396 6.4782 5.51391 6.47797C5.45603 6.47787 5.4005 6.50086 5.35962 6.54184L4.05534 7.84612C3.97048 7.931 3.97048 8.0686 4.05534 8.1535L5.35962 9.45777C5.4444 9.54277 5.58204 9.54294 5.66704 9.45816C5.70792 9.41738 5.73089 9.36203 5.73091 9.3043V8.65216H8.33946V11.2607H7.68732C7.56727 11.2605 7.46977 11.3577 7.46955 11.4777C7.46945 11.5356 7.49243 11.5911 7.53342 11.632L8.83769 12.9363C8.92257 13.0211 9.06017 13.0211 9.14507 12.9363L10.4493 11.632C10.5344 11.5472 10.5345 11.4096 10.4497 11.3246C10.409 11.2837 10.3536 11.2607 10.2959 11.2607H9.64373V8.65216H12.2523V9.3043C12.2521 9.42435 12.3492 9.52184 12.4693 9.52207C12.5272 9.52217 12.5827 9.49918 12.6236 9.4582L13.9278 8.15392C14.0129 8.06915 14.013 7.9315 13.9282 7.8465C13.9281 7.84638 13.928 7.84624 13.9278 7.84612Z") fill="white" /
-                                  span.Polaris-Button__Text Swap Subscription
+                                    input.quatity-val type="number" name="quantity" value="#{line.node.quantity}"/
+                                    button.plus-quantity type="button"
+                                      svg fill="none" height="8" viewbox=("0 0 8 8") width="8" xmlns="http://www.w3.org/2000/svg"
+                                        path d=("M0 3.08V4.508H3.08V7.588H4.508V4.508H7.588V3.08H4.508V0H3.08V3.08H0Z") fill="#212B36" /
+                                    input.prev-quantity type="hidden" value="#{line.node.quantity}"/
+                                  span.update-quantity
+                                    input.hidden type="text" name="line_item_id" value="#{line.node.id}"/
+                                    button type="submit" APPLY
+                        - else
+                          span= line.node.quantity
+                      - if setting.admin_allowed?('swap_product')
+                        div.slider-btns
+                          .Polaris-Stack__Item
+                            .Polaris-ButtonGroup
+                              .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
+                                button.Polaris-Button.Polaris-Button--plain type="button" data-toggle='modal' data-target="#swap-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}"
+                                  span.Polaris-Button__Content
+                                    svg fill="none" height="16" viewbox=("0 0 17 16") width="17" xmlns="http://www.w3.org/2000/svg"
+                                      circle cx="8.99268" cy="8" fill="#212B36" r="8" /
+                                      path d=("M13.9278 7.84612L12.6236 6.54184C12.5388 6.45684 12.4012 6.45668 12.3162 6.54145C12.2752 6.58233 12.2522 6.63787 12.2523 6.69574V7.34788H9.64373V4.73933H10.2959C10.4159 4.73956 10.5134 4.64239 10.5136 4.52233C10.5137 4.46446 10.4908 4.40892 10.4498 4.36804L9.1455 3.06377C9.06062 2.97891 8.92302 2.97891 8.83812 3.06377L7.53385 4.36804C7.44884 4.45282 7.44868 4.59046 7.53346 4.67546C7.57424 4.71634 7.62959 4.73931 7.68732 4.73933H8.33946V7.34788H5.73091V6.69574C5.73113 6.57569 5.63396 6.4782 5.51391 6.47797C5.45603 6.47787 5.4005 6.50086 5.35962 6.54184L4.05534 7.84612C3.97048 7.931 3.97048 8.0686 4.05534 8.1535L5.35962 9.45777C5.4444 9.54277 5.58204 9.54294 5.66704 9.45816C5.70792 9.41738 5.73089 9.36203 5.73091 9.3043V8.65216H8.33946V11.2607H7.68732C7.56727 11.2605 7.46977 11.3577 7.46955 11.4777C7.46945 11.5356 7.49243 11.5911 7.53342 11.632L8.83769 12.9363C8.92257 13.0211 9.06017 13.0211 9.14507 12.9363L10.4493 11.632C10.5344 11.5472 10.5345 11.4096 10.4497 11.3246C10.409 11.2837 10.3536 11.2607 10.2959 11.2607H9.64373V8.65216H12.2523V9.3043C12.2521 9.42435 12.3492 9.52184 12.4693 9.52207C12.5272 9.52217 12.5827 9.49918 12.6236 9.4582L13.9278 8.15392C14.0129 8.06915 14.013 7.9315 13.9282 7.8465C13.9281 7.84638 13.928 7.84624 13.9278 7.84612Z") fill="white" /
+                                    span.Polaris-Button__Text Swap Subscription
                         .Polaris-Stack__Item
                           .Polaris-ButtonGroup
                             .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
@@ -91,38 +95,41 @@
                                 span.Polaris-Button__Content
                                   = icon_tag 'edit'
                                   span.Polaris-Button__Text Edit
-                        .Polaris-Stack__Item
-                          .Polaris-ButtonGroup
-                            .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                              = link_to action_subscription_contract_path(:pause, @subscription.id[/\d+/]), remote: true, method: :post do
-                                svg fill="none" height="16" viewbox=("0 0 17 16") width="17" xmlns="http://www.w3.org/2000/svg"
-                                  circle cx="8.99268" cy="8" fill="#212B36" r="8" /
-                                  path d=("M13.9278 7.84612L12.6236 6.54184C12.5388 6.45684 12.4012 6.45668 12.3162 6.54145C12.2752 6.58233 12.2522 6.63787 12.2523 6.69574V7.34788H9.64373V4.73933H10.2959C10.4159 4.73956 10.5134 4.64239 10.5136 4.52233C10.5137 4.46446 10.4908 4.40892 10.4498 4.36804L9.1455 3.06377C9.06062 2.97891 8.92302 2.97891 8.83812 3.06377L7.53385 4.36804C7.44884 4.45282 7.44868 4.59046 7.53346 4.67546C7.57424 4.71634 7.62959 4.73931 7.68732 4.73933H8.33946V7.34788H5.73091V6.69574C5.73113 6.57569 5.63396 6.4782 5.51391 6.47797C5.45603 6.47787 5.4005 6.50086 5.35962 6.54184L4.05534 7.84612C3.97048 7.931 3.97048 8.0686 4.05534 8.1535L5.35962 9.45777C5.4444 9.54277 5.58204 9.54294 5.66704 9.45816C5.70792 9.41738 5.73089 9.36203 5.73091 9.3043V8.65216H8.33946V11.2607H7.68732C7.56727 11.2605 7.46977 11.3577 7.46955 11.4777C7.46945 11.5356 7.49243 11.5911 7.53342 11.632L8.83769 12.9363C8.92257 13.0211 9.06017 13.0211 9.14507 12.9363L10.4493 11.632C10.5344 11.5472 10.5345 11.4096 10.4497 11.3246C10.409 11.2837 10.3536 11.2607 10.2959 11.2607H9.64373V8.65216H12.2523V9.3043C12.2521 9.42435 12.3492 9.52184 12.4693 9.52207C12.5272 9.52217 12.5827 9.49918 12.6236 9.4582L13.9278 8.15392C14.0129 8.06915 14.013 7.9315 13.9282 7.8465C13.9281 7.84638 13.928 7.84624 13.9278 7.84612Z") fill="white" /
-                                span.pause-btn type="button" Pause
-                        .Polaris-Stack__Item
-                          .Polaris-ButtonGroup
-                            .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                              button.Polaris-Button.Polaris-Button--plain type="button" data-toggle='modal' data-target="#cancel-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}"
-                                span.Polaris-Button__Content
-                                  / = icon_tag 'edit'
+                        - if setting.admin_allowed?('pause_subscription')
+                          .Polaris-Stack__Item
+                            .Polaris-ButtonGroup
+                              .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
+                                = link_to action_subscription_contract_path(:pause, @subscription.id[/\d+/]), remote: true, method: :post do
                                   svg fill="none" height="16" viewbox=("0 0 17 16") width="17" xmlns="http://www.w3.org/2000/svg"
                                     circle cx="8.99268" cy="8" fill="#212B36" r="8" /
                                     path d=("M13.9278 7.84612L12.6236 6.54184C12.5388 6.45684 12.4012 6.45668 12.3162 6.54145C12.2752 6.58233 12.2522 6.63787 12.2523 6.69574V7.34788H9.64373V4.73933H10.2959C10.4159 4.73956 10.5134 4.64239 10.5136 4.52233C10.5137 4.46446 10.4908 4.40892 10.4498 4.36804L9.1455 3.06377C9.06062 2.97891 8.92302 2.97891 8.83812 3.06377L7.53385 4.36804C7.44884 4.45282 7.44868 4.59046 7.53346 4.67546C7.57424 4.71634 7.62959 4.73931 7.68732 4.73933H8.33946V7.34788H5.73091V6.69574C5.73113 6.57569 5.63396 6.4782 5.51391 6.47797C5.45603 6.47787 5.4005 6.50086 5.35962 6.54184L4.05534 7.84612C3.97048 7.931 3.97048 8.0686 4.05534 8.1535L5.35962 9.45777C5.4444 9.54277 5.58204 9.54294 5.66704 9.45816C5.70792 9.41738 5.73089 9.36203 5.73091 9.3043V8.65216H8.33946V11.2607H7.68732C7.56727 11.2605 7.46977 11.3577 7.46955 11.4777C7.46945 11.5356 7.49243 11.5911 7.53342 11.632L8.83769 12.9363C8.92257 13.0211 9.06017 13.0211 9.14507 12.9363L10.4493 11.632C10.5344 11.5472 10.5345 11.4096 10.4497 11.3246C10.409 11.2837 10.3536 11.2607 10.2959 11.2607H9.64373V8.65216H12.2523V9.3043C12.2521 9.42435 12.3492 9.52184 12.4693 9.52207C12.5272 9.52217 12.5827 9.49918 12.6236 9.4582L13.9278 8.15392C14.0129 8.06915 14.013 7.9315 13.9282 7.8465C13.9281 7.84638 13.928 7.84624 13.9278 7.84612Z") fill="white" /
-                                  span.Polaris-Button__Text Cancel
+                                  span.pause-btn type="button" Pause
+                        - if setting.admin_allowed?('subscription_cancellation')
+                          .Polaris-Stack__Item
+                            .Polaris-ButtonGroup
+                              .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
+                                button.Polaris-Button.Polaris-Button--plain type="button" data-toggle='modal' data-target="#cancel-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}"
+                                  span.Polaris-Button__Content
+                                    / = icon_tag 'edit'
+                                    svg fill="none" height="16" viewbox=("0 0 17 16") width="17" xmlns="http://www.w3.org/2000/svg"
+                                      circle cx="8.99268" cy="8" fill="#212B36" r="8" /
+                                      path d=("M13.9278 7.84612L12.6236 6.54184C12.5388 6.45684 12.4012 6.45668 12.3162 6.54145C12.2752 6.58233 12.2522 6.63787 12.2523 6.69574V7.34788H9.64373V4.73933H10.2959C10.4159 4.73956 10.5134 4.64239 10.5136 4.52233C10.5137 4.46446 10.4908 4.40892 10.4498 4.36804L9.1455 3.06377C9.06062 2.97891 8.92302 2.97891 8.83812 3.06377L7.53385 4.36804C7.44884 4.45282 7.44868 4.59046 7.53346 4.67546C7.57424 4.71634 7.62959 4.73931 7.68732 4.73933H8.33946V7.34788H5.73091V6.69574C5.73113 6.57569 5.63396 6.4782 5.51391 6.47797C5.45603 6.47787 5.4005 6.50086 5.35962 6.54184L4.05534 7.84612C3.97048 7.931 3.97048 8.0686 4.05534 8.1535L5.35962 9.45777C5.4444 9.54277 5.58204 9.54294 5.66704 9.45816C5.70792 9.41738 5.73089 9.36203 5.73091 9.3043V8.65216H8.33946V11.2607H7.68732C7.56727 11.2605 7.46977 11.3577 7.46955 11.4777C7.46945 11.5356 7.49243 11.5911 7.53342 11.632L8.83769 12.9363C8.92257 13.0211 9.06017 13.0211 9.14507 12.9363L10.4493 11.632C10.5344 11.5472 10.5345 11.4096 10.4497 11.3246C10.409 11.2837 10.3536 11.2607 10.2959 11.2607H9.64373V8.65216H12.2523V9.3043C12.2521 9.42435 12.3492 9.52184 12.4693 9.52207C12.5272 9.52217 12.5827 9.49918 12.6236 9.4582L13.9278 8.15392C14.0129 8.06915 14.013 7.9315 13.9282 7.8465C13.9281 7.84638 13.928 7.84624 13.9278 7.84612Z") fill="white" /
+                                    span.Polaris-Button__Text Cancel
                   - else
-                    .Polaris-Stack__Item
-                      .Polaris-ButtonGroup.resume
-                        .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                          = link_to action_subscription_contract_path(:resume, @subscription.id[/\d+/]), remote: true, method: :post do
-                            svg fill="none" height="16" viewbox=("0 0 17 16") width="17" xmlns="http://www.w3.org/2000/svg"
-                              circle cx="8.99268" cy="8" fill="#212B36" r="8" /
-                              path d=("M13.9278 7.84612L12.6236 6.54184C12.5388 6.45684 12.4012 6.45668 12.3162 6.54145C12.2752 6.58233 12.2522 6.63787 12.2523 6.69574V7.34788H9.64373V4.73933H10.2959C10.4159 4.73956 10.5134 4.64239 10.5136 4.52233C10.5137 4.46446 10.4908 4.40892 10.4498 4.36804L9.1455 3.06377C9.06062 2.97891 8.92302 2.97891 8.83812 3.06377L7.53385 4.36804C7.44884 4.45282 7.44868 4.59046 7.53346 4.67546C7.57424 4.71634 7.62959 4.73931 7.68732 4.73933H8.33946V7.34788H5.73091V6.69574C5.73113 6.57569 5.63396 6.4782 5.51391 6.47797C5.45603 6.47787 5.4005 6.50086 5.35962 6.54184L4.05534 7.84612C3.97048 7.931 3.97048 8.0686 4.05534 8.1535L5.35962 9.45777C5.4444 9.54277 5.58204 9.54294 5.66704 9.45816C5.70792 9.41738 5.73089 9.36203 5.73091 9.3043V8.65216H8.33946V11.2607H7.68732C7.56727 11.2605 7.46977 11.3577 7.46955 11.4777C7.46945 11.5356 7.49243 11.5911 7.53342 11.632L8.83769 12.9363C8.92257 13.0211 9.06017 13.0211 9.14507 12.9363L10.4493 11.632C10.5344 11.5472 10.5345 11.4096 10.4497 11.3246C10.409 11.2837 10.3536 11.2607 10.2959 11.2607H9.64373V8.65216H12.2523V9.3043C12.2521 9.42435 12.3492 9.52184 12.4693 9.52207C12.5272 9.52217 12.5827 9.49918 12.6236 9.4582L13.9278 8.15392C14.0129 8.06915 14.013 7.9315 13.9282 7.8465C13.9281 7.84638 13.928 7.84624 13.9278 7.84612Z") fill="white" /
-                            span.resume-btn type="button" Resume
+                    - if setting.admin_allowed?('reactive_subscription')
+                      .Polaris-Stack__Item
+                        .Polaris-ButtonGroup.resume
+                          .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
+                            = link_to action_subscription_contract_path(:resume, @subscription.id[/\d+/]), remote: true, method: :post do
+                              svg fill="none" height="16" viewbox=("0 0 17 16") width="17" xmlns="http://www.w3.org/2000/svg"
+                                circle cx="8.99268" cy="8" fill="#212B36" r="8" /
+                                path d=("M13.9278 7.84612L12.6236 6.54184C12.5388 6.45684 12.4012 6.45668 12.3162 6.54145C12.2752 6.58233 12.2522 6.63787 12.2523 6.69574V7.34788H9.64373V4.73933H10.2959C10.4159 4.73956 10.5134 4.64239 10.5136 4.52233C10.5137 4.46446 10.4908 4.40892 10.4498 4.36804L9.1455 3.06377C9.06062 2.97891 8.92302 2.97891 8.83812 3.06377L7.53385 4.36804C7.44884 4.45282 7.44868 4.59046 7.53346 4.67546C7.57424 4.71634 7.62959 4.73931 7.68732 4.73933H8.33946V7.34788H5.73091V6.69574C5.73113 6.57569 5.63396 6.4782 5.51391 6.47797C5.45603 6.47787 5.4005 6.50086 5.35962 6.54184L4.05534 7.84612C3.97048 7.931 3.97048 8.0686 4.05534 8.1535L5.35962 9.45777C5.4444 9.54277 5.58204 9.54294 5.66704 9.45816C5.70792 9.41738 5.73089 9.36203 5.73091 9.3043V8.65216H8.33946V11.2607H7.68732C7.56727 11.2605 7.46977 11.3577 7.46955 11.4777C7.46945 11.5356 7.49243 11.5911 7.53342 11.632L8.83769 12.9363C8.92257 13.0211 9.06017 13.0211 9.14507 12.9363L10.4493 11.632C10.5344 11.5472 10.5345 11.4096 10.4497 11.3246C10.409 11.2837 10.3536 11.2607 10.2959 11.2607H9.64373V8.65216H12.2523V9.3043C12.2521 9.42435 12.3492 9.52184 12.4693 9.52207C12.5272 9.52217 12.5827 9.49918 12.6236 9.4582L13.9278 8.15392C14.0129 8.06915 14.013 7.9315 13.9282 7.8465C13.9281 7.84638 13.928 7.84624 13.9278 7.84612Z") fill="white" /
+                              span.resume-btn type="button" Resume
 
         - @subscription.lines.edges.each do |line|
           - if @subscription.status == 'ACTIVE'
             - product = ShopifyAPI::Product.find(line.node.product_id[/\d+/])
-            = render 'app_proxy/dashboard/edit_subscription_modal', subscription: @subscription, line_item: line.node, product_image: product.images.first&.src
+            = render 'app_proxy/dashboard/edit_subscription_modal', subscription: @subscription, line_item: line.node, product_image: product.images.first&.src, admin_action: true, setting: setting
             = render 'app_proxy/dashboard/swap_subscription_modal', subscription: @subscription, line_item: line.node
             = render 'app_proxy/dashboard/upgrade_subscription_modal', subscription: @subscription, line_item: line.node
             = render 'app_proxy/dashboard/cancel_subscription_modal', subscription: @subscription, line_item: line.node, lines_count: @subscription.lines.edges.size
@@ -281,28 +288,29 @@
                 /           == icon_tag 'cancel'
                 /           span.Polaris-Button__Text Remove
         br/
-        .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
-          h2.Polaris-Heading.Polaris-TextStyle--variationStrongDelivery Delivery schedule
-        .Polaris-Card
-          .Polaris-Card__Section
-            .Polaris-Card__Subsection.delivery-schedule
-              p Delivery schedule dates are when your order will be placed. Future deliveries will be added to your schedule as the date approaches.
-            .Polaris-Card__Subsection
-              .Polaris-TextStyle--variationStrong
-                .text-par
-                  p.text
-                    = DateTime.parse(@subscription.next_billing_date).strftime("%B %e, %Y")
-                  = link_to action_subscription_contract_path(:skip_schedule, @subscription.id[/\d+/], "billing_date=#{@subscription.next_billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post do
-                    = icon_tag 'skip'
-                    span.skip-btn type="button" SKIP
-                - (1..3).each do |index|
+        - if setting.admin_allowed?('navigation_delivery')
+          .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
+            h2.Polaris-Heading.Polaris-TextStyle--variationStrongDelivery Delivery schedule
+          .Polaris-Card
+            .Polaris-Card__Section
+              .Polaris-Card__Subsection.delivery-schedule
+                p Delivery schedule dates are when your order will be placed. Future deliveries will be added to your schedule as the date approaches.
+              .Polaris-Card__Subsection
+                .Polaris-TextStyle--variationStrong
                   .text-par
-                    -  billing_date = @subscription.next_billing_date.to_date + (index * billing_policy.interval_count).send(billing_policy.interval.downcase)
                     p.text
-                      = billing_date.strftime("%B %e, %Y")
-                    = link_to action_subscription_contract_path(:skip_schedule, @subscription.id[/\d+/], "billing_date=#{billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post do
+                      = DateTime.parse(@subscription.next_billing_date).strftime("%B %e, %Y")
+                    = link_to action_subscription_contract_path(:skip_schedule, @subscription.id[/\d+/], "billing_date=#{@subscription.next_billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post do
                       = icon_tag 'skip'
                       span.skip-btn type="button" SKIP
+                  - (1..3).each do |index|
+                    .text-par
+                      -  billing_date = @subscription.next_billing_date.to_date + (index * billing_policy.interval_count).send(billing_policy.interval.downcase)
+                      p.text
+                        = billing_date.strftime("%B %e, %Y")
+                      = link_to action_subscription_contract_path(:skip_schedule, @subscription.id[/\d+/], "billing_date=#{billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post do
+                        = icon_tag 'skip'
+                        span.skip-btn type="button" SKIP
               / p= order&.shipping_address&.formatted&.join(', ')&.titleize
             / .Polaris-Card__Subsection
             /   .Polaris-TextStyle--variationStrong Type
