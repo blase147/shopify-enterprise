@@ -107,6 +107,10 @@ class CustomerInsightReportService
     subscriptions.select { |subscription| range.cover?(subscription.node.created_at.to_date) && (status ? subscription.node.status == status : true) }
   end
 
+  def in_period_hourly_subscriptions(subscriptions, range, status = nil)
+    subscriptions.select { |subscription| subscription.node.created_at.to_datetime.between?(range.first, range.last) && (status ? subscription.node.status == status : true) }
+  end
+
   def get_orders_total_amount(subscription, range = nil)
     subscription.node.orders.edges.sum { |order| range.nil? || range.present? && (range.cover?(order.node.created_at.to_date)) ? order.node.total_price_set.presentment_money.amount.to_f.round(2) : 0 }
   end
