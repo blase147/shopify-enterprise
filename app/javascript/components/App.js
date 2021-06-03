@@ -128,7 +128,7 @@ export default function App(props) {
             <Route exact path="/integrations" component={Integrations} />
             <Route
               exact
-              path="/integration-detail/:id/:title/:keys"
+              path="/integration-detail/:id/:title/:keys?"
               component={IntegrationDetail}
             />
             <Route exact path="/smarty" component={Smarty} />

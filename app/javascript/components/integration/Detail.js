@@ -84,7 +84,7 @@ const IntegrationDetail = () => {
     [],
   );
   const location=useLocation();
-  let fieldKeys=keys.split(",").map(field=>_.camelCase(field));
+  let fieldKeys=keys!="null" && keys.split(",").map(field=>_.camelCase(field)) || [];
 
   const [updateMutation,{data,loading}]=useMutation(updateQuery);
   const [formData,setFormData]=useState(/*fieldKeys.reduce((acc,curr)=> (acc[curr]='',acc),{})*/{...location?.state?.credentials})
@@ -134,7 +134,7 @@ const IntegrationDetail = () => {
                 <Card sectioned>
                   <Stack alignment="center">
                     <Stack.Item>
-                      <img src={require(`images/${title}`)} style={{maxWidth:"80px"}} />
+                      <img src={require(`images/${title?.split(" ").join("").toLowerCase()}`)} style={{maxWidth:"80px"}} />
                     </Stack.Item>
 
                     <Stack.Item>
@@ -154,7 +154,7 @@ const IntegrationDetail = () => {
               </div>
           </Layout.Section>
           {
-            fieldKeys.map(field=>(
+            fieldKeys.length>0 && fieldKeys.map(field=>(
               <>
               <Layout.Section>
               <TextField name={field} label={_.startCase(field)} value={formData[field] || ''} onChange={(value)=>setFormData({...formData,[field]:value})}  />
@@ -164,7 +164,7 @@ const IntegrationDetail = () => {
           }
           <Layout.Section>
           {
-            fieldKeys.length && 
+            fieldKeys.length >0 && 
             <>
             <Stack>
             <Stack.Item>

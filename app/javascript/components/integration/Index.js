@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback,useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
 import AppLayout from '../layout/Layout';
@@ -21,8 +21,9 @@ import {
 } from '@shopify/polaris';
 
 import getStart from 'images/get_start.svg';
-import { map } from 'lodash';
+import _, { map } from 'lodash';
 import integrations from '../../lib/integrations';
+import { groupBy } from '../common/utils/utils';
 
 const Integrations = () => {
 
@@ -60,7 +61,7 @@ const Integrations = () => {
     id: item.id,
   }));
   tabs = [
-    // { content: 'All', id: 'all' }
+    ...(process.env.APP_TYPE=="public" ? [{ content: 'All', id: 'all' }]:[])
   ].concat(tabs);
 
   const [selected, setSelected] = useState(0);
@@ -76,11 +77,12 @@ const Integrations = () => {
   useEffect(()=>{
     fetchIntegrations({
       variables:{
-        type:category
+        type:mapCatagory[category]
       }
     })
   },[category])
 
+  let lodas= category=="all" && _.groupBy(integerations?.fetchIntegrations,"integrationType") || [];
   return (
     <AppLayout typePage="integrations" tabIndex="7">
       <Button>
@@ -98,6 +100,7 @@ const Integrations = () => {
               ></Tabs>
             </Card>
           </Layout.Section>
+          {/* Data from API's */}
           <Layout.Section>
           <Heading><span style={{textTransform:"capitalize"}} >{category}</span></Heading>
           {
@@ -155,12 +158,21 @@ const Integrations = () => {
                                 key={item.id}
                               >
                                 <Stack.Item>
-                                  <img src={require(`images/${item.name}`)} style={{ maxWidth: "80px" }} />
-                                </Stack.Item>
-                                <Stack.Item fill>
-                                  <DisplayText size="small">
-                                    {item.name}
-                                  </DisplayText>
+                                  <Card sectioned>
+                                    <Stack alignment="center">
+                                      <Stack.Item>
+                                        {
+                                          console.log("hello",item.name?.split(" ").join("").toLowerCase())
+                                        }
+                                        <img src={require(`images/${item.name?.split(" ").join("").toLowerCase()}`)} style={{ maxWidth: "80px" }} />
+                                      </Stack.Item>
+                                      <Stack.Item fill>
+                                        <DisplayText size="small">
+                                          {item.name}
+                                        </DisplayText>
+                                      </Stack.Item>
+                                    </Stack>
+                                  </Card>
                                 </Stack.Item>
                               </Link>
                             ))
@@ -171,37 +183,6 @@ const Integrations = () => {
                   </>
           }
           </Layout.Section>
-          {/* {integrations
-            .filter((item) => category == 'all' || item.id == category)
-            .map((item, i) => (
-              <Layout.Section>
-                <Heading>{item.title}</Heading>
-                <Stack spacing="loose">
-                  {item.data?.map((childItem, i) => (
-                    <Link
-                      to={`/integration-detail/${item.id}/${childItem.name}`}
-                      className="roundedCard"
-                      key={i}
-                    >
-                      <Stack.Item>
-                        <Card sectioned>
-                          <Stack alignment="center">
-                            <Stack.Item>
-                              <img src={`images/${item.name}.svg`} />
-                            </Stack.Item>
-                            <Stack.Item fill>
-                              <DisplayText size="small">
-                                {childItem.name}
-                              </DisplayText>
-                            </Stack.Item>
-                          </Stack>
-                        </Card>
-                      </Stack.Item>
-                    </Link>
-                  ))}
-                </Stack>
-              </Layout.Section>
-            ))} */}
         </Layout>
       </Page>
     </AppLayout>
