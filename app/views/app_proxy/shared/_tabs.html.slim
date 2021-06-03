@@ -5,7 +5,7 @@
       .full-name = "#{@customer&.first_name} #{@customer&.last_name}"
   .details
     .contact
-      p Questions? Call Us: +1 800 000 0000
+      p = @setting.contact_box_content.present? ? @setting.contact_box_content : 'Questions? Call Us: +1 800 000 0000'
       p Monday - Friday 8:30 - 18:30
   .details
-    a.btn-discount href="#" GET $5 OFF
+    a.btn-discount href="#" data-redirect_url="#{@setting.promo_button_url.present? ? @setting.promo_button_url : ''}" = @setting.promo_button_content.present? ? @setting.promo_button_content : 'GET $5 OFF'

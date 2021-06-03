@@ -17,6 +17,14 @@ class Setting < ApplicationRecord
     "#{style_account_profile} #{style_account_profile} #{style_subscription} #{style_upsell} #{style_sidebar_pages}"
   end
 
+  def customer_allowed?(column)
+    send(column) == 'storeowner_and_customer'
+  end
+
+  def admin_allowed?(column)
+    send(column) == 'storeowner' || send(column) == 'storeowner_and_customer'
+  end
+
   private ##
 
   def add_script_tags

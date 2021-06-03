@@ -82,8 +82,8 @@ const CustomPortal = (props) => {
     []
   );
   const options = [
-    { label: 'Admin and Customer', value: 'adminAndCustomer' },
-    { label: 'Customer', value: 'customer' },
+    { label: 'Storeowner and Customer', value: 'storeowner_and_customer' },
+    { label: 'Storeowner Only', value: 'customer' },
   ];
   const oneTimePurchaseOptions = [
     { label: 'Disabled for everyone', value: 'DisabledForEveryone' }
@@ -407,7 +407,7 @@ const CustomPortal = (props) => {
                     }
                     onChange={(e) => handleChange('showDeliverySchedule', e)}
                   />
-               
+
                   <p>Order History</p>
                   <Select
                     options={showHideValues}
@@ -426,7 +426,7 @@ const CustomPortal = (props) => {
                     }
                     onChange={(e) => handleChange('showAddress', e)}
                   />
-               
+
                   <p>Billing</p>
                   <Select
                     options={showHideValues}
@@ -445,9 +445,9 @@ const CustomPortal = (props) => {
                     }
                     onChange={(e) => handleChange('showAccount', e)}
                   />
-              
+
               </div>
-         
+
             <Stack.Item>
               <Stack vertical>
                 <p className="navigation-text" variation="strong">Subscription Management</p>
