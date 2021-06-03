@@ -18,11 +18,11 @@ class Setting < ApplicationRecord
   end
 
   def customer_allowed?(column)
-    send(column) == 'customer' || send(column) == 'adminAndCustomer'
+    send(column) == 'storeowner_and_customer'
   end
 
   def admin_allowed?(column)
-    send(column) == 'adminAndCustomer'
+    send(column) == 'storeowner' || send(column) == 'storeowner_and_customer'
   end
 
   private ##

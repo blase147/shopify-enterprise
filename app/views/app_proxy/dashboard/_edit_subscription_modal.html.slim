@@ -33,7 +33,7 @@
                 button.swap-subscription type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#swap-#{line_item.id.split("gid://shopify/SubscriptionLine/")[1]}" SWAP SUBSCRIPTION
                 button.downgrade-subscription.light type="button" DOWNGRADE SUBSCRIPTION
                 button.ask-questions.light type="button" ASK A QUESTION
-                - if @setting.customer_allowed?('subscription_cancellation')
+                - if (defined?(admin_action) && setting.admin_allowed?('subscription_cancellation')) || (!defined?(admin_action) && setting.customer_allowed?('subscription_cancellation'))
                   button.cancel-subscription type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-name="#{line_item.title}" data-target="#cancel-#{line_item.id.split("gid://shopify/SubscriptionLine/")[1]}" CANCEL SUBSCRIPTION
             / = p_button text: 'Cancel Subscription', data: { url: action_subscription_path(:cancel), confirm_text: 'Are you sure you want to Cancel your Subscription?' }
 

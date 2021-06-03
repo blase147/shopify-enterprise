@@ -28,7 +28,7 @@
             - if @setting.customer_allowed?('frequency')
               button.delivery-schedule.text-btn.action-btn data-toggle="modal" data-target="#delayOrderModal-#{subscription.node.id[/\d+/]}" DELAY NEXT ORDER
               = render 'delay_order_modal', subscription: subscription.node
-            = render 'edit_subscription_modal', subscription: subscription.node, line_item: edge.node, product_image: product.images.first&.src
+            = render 'edit_subscription_modal', subscription: subscription.node, line_item: edge.node, product_image: product.images.first&.src, setting: @setting
             - if @setting.customer_allowed?('swap_product')
               = render 'swap_subscription_modal', subscription: subscription.node, line_item: edge.node
             = render 'upgrade_subscription_modal', subscription: subscription.node, line_item: edge.node
@@ -57,6 +57,13 @@
                     svg fill="none" height="30" viewbox=("0 0 30 30") width="30" xmlns="http://www.w3.org/2000/svg"
                       circle cx="15" cy="15" r="14" stroke="#007EFF" stroke-width="2" /
                       path d=("M7.5 12L14.5 19L21.5 12") stroke="#007EFF" stroke-width="2" /
+        - else
+          .quantity-wrapper
+            form action="" method='post' data-remote=true enctype="multipart/form-data"
+              .quantity-field
+                div
+                  span.label.active-text Quantity:
+                  span.label.active-text= edge.node.quantity
         .slide-down
           .item
             p start date

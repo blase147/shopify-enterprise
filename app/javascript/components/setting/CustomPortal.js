@@ -82,8 +82,8 @@ const CustomPortal = (props) => {
     []
   );
   const options = [
-    { label: 'Admin and Customer', value: 'adminAndCustomer' },
-    { label: 'Customer', value: 'customer' },
+    { label: 'Storeowner and Customer', value: 'storeowner_and_customer' },
+    { label: 'Storeowner Only', value: 'customer' },
   ];
   const oneTimePurchaseOptions = [
     { label: 'Disabled for everyone', value: 'DisabledForEveryone' }
