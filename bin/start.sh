@@ -15,7 +15,7 @@ configure_db() {
   if [ "$RAILS_ENV" = "development" ]; then
     "$RAILS_CMD" db:create
     "$RAILS_CMD" db:migrate
-    "$RAILS_CMD" db:seed
+    # "$RAILS_CMD" db:seed
   else
     echo "running migration for $RAILS_ENV"
     "$RAILS_CMD" db:migrate:ignore_concurrent
