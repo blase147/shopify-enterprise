@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_31_101554) do
+ActiveRecord::Schema.define(version: 2021_06_02_163931) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -139,6 +139,14 @@ ActiveRecord::Schema.define(version: 2021_05_31_101554) do
     t.string "customer_id"
     t.string "variant_id"
     t.integer "quantity"
+  end
+
+  create_table "report_logs", force: :cascade do |t|
+    t.integer "report_type"
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "selling_plan_groups", force: :cascade do |t|

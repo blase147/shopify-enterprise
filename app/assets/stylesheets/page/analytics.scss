@@ -104,6 +104,9 @@
       justify-content: space-between;
       flex-wrap: wrap;
     }
+    .export-filter-parent *{
+      margin: 20px !important;
+      }
     .rev-date-picker {
       display: flex;
       justify-content: space-between;

@@ -20,6 +20,7 @@ import StoreInfomation from './StoreInformation';
 
 
 const Settings = () => {
+
   // form data ########################################################
   const [formData, setFormData] = useState(null);
   const [formErrors, setFormErrors] = useState([]);
@@ -126,12 +127,13 @@ const Settings = () => {
         showAddress
         showBilling
         showAccount
+        pauseSubscription
       }
     }
   `;
   let { id } = useParams();
   const { data, loading, error, refetch } = useQuery(GET_DATA, {
-    fetchPolicy: 'no-cache',
+    fetchPolicy: 'network-only',
   });
 
   const UPDATE_SETTING = gql`
@@ -223,6 +225,7 @@ const Settings = () => {
           showAddress
           showBilling
           showAccount
+          pauseSubscription
         }
       }
     }
@@ -285,24 +288,24 @@ const Settings = () => {
     ],
     facingFrequencyOption: '',
     frequency: '',
-    navigationDelivery: '',
+    navigationDelivery: 'storeowner_and_customer',
     oneTimePurchase: '',
     paymentDelayRetries: '',
     paymentRetries: '',
     productToSubscription: '',
-    reactiveSubscription: '',
-    shipingAddress: '',
-    shipment: '',
+    reactiveSubscription: 'storeowner_and_customer',
+    shipingAddress: 'storeowner_and_customer',
+    shipment: 'storeowner_and_customer',
     styleAccountProfile: '',
     styleSidebar: '',
     styleSidebarPages: '',
     styleSubscription: '',
     styleUpsell: '',
-    subscriptionCancellation: '',
-    swapProduct: '',
+    subscriptionCancellation: 'storeowner_and_customer',
+    swapProduct: 'storeowner_and_customer',
     themes: '',
     upcomingOderDate: '',
-    upcomingQuantity: '',
+    upcomingQuantity: 'storeowner_and_customer',
 
     showPromoButton: 'true',
     promoButtonContent: '',
@@ -318,8 +321,8 @@ const Settings = () => {
     showBilling: '',
     showAccount: '',
 
-    delayOrder: '',
-    pauseSubscription: '',
+    delayOrder: 'storeowner_and_customer',
+    pauseSubscription: 'storeowner_and_customer',
     _destroy: false,
   };
   // form data #####################################################
@@ -425,7 +428,6 @@ const Settings = () => {
                     <br />
                   </>
                 )}
-
                 {formData && (
                   <Formik
                     validationSchema={validationSchema}
@@ -435,7 +437,19 @@ const Settings = () => {
                       values,
                       { setSubmitting, setDirty, resetForm, touched }
                     ) => {
-                      updateSetting({ variables: { input: { params: values } } })
+                      const newValues={...values,
+                        navigationDelivery:values.navigationDelivery || "storeowner_and_customer",
+                        reactiveSubscription:values.reactiveSubscription || 'storeowner_and_customer',
+                        shipingAddress:values.shipingAddress || 'storeowner_and_customer',
+                        shipment:values.shipment || 'storeowner_and_customer',
+                        subscriptionCancellation:values.subscriptionCancellation || 'storeowner_and_customer',
+                        swapProduct:values.swapProduct || 'storeowner_and_customer',
+                        upcomingQuantity:values.upcomingQuantity ||  'storeowner_and_customer',
+                        delayOrder:values.delayOrder || 'storeowner_and_customer',
+                        pauseSubscription:values.pauseSubscription || 'storeowner_and_customer',
+                      };
+
+                      updateSetting({ variables: { input: { params: newValues } } })
                         .then((resp) => {
                           const data = resp.data;
                           const errors = data.errors;
@@ -496,7 +510,9 @@ const Settings = () => {
                             onDismiss={hideSaveSuccess}
                           />
                         )}
-
+                        {
+                          console.log("SelectedTab..",selectedTitleTab)
+                        }
                         {selectedTitleTab === 0 ? (
                           <HouseKeeping
 

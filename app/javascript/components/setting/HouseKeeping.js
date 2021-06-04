@@ -9,6 +9,7 @@ import {gql,useLazyQuery,useMutation} from '@apollo/client'
 import DiscountForm from './HouseKeepingComponents/DiscountComponents/DiscountForm';
 import Export from './HouseKeepingComponents/ExportComponents/Export';
 import ExportForm from './HouseKeepingComponents/ExportComponents/ExportForm';
+import { isEmpty } from 'lodash';
 const HouseKeeping = () => {
 
 // Mutations
@@ -57,6 +58,7 @@ mutation ($input: UpdatePasswordInput!) {
 
   const [selectedTab, setSelectedTab] = useState(2);
   const [showForm,setShowForm]=useState(false)
+  const [exportData,setExportData]=useState(null);
 
   const handleShowForm=useCallback(
     () => {
@@ -65,8 +67,11 @@ mutation ($input: UpdatePasswordInput!) {
     [setShowForm]
   )
   const handleCloseForm=useCallback(
-    () => {
-     setShowForm(false)
+    (data,filters) => {
+     setShowForm(false);
+     if(!isEmpty(data) && !isEmpty(filters)){
+      setExportData({data:data,filters:filters})
+     }
     },
     [setShowForm]
   )
@@ -191,7 +196,7 @@ mutation ($input: UpdatePasswordInput!) {
             {
               showForm ?
               <DiscountForm handleCloseForm={handleCloseForm} />:
-              <Discount handleDiscountCodeForm={handleShowForm}  />
+              <Discount handleDiscountCodeForm={handleShowForm}/>
             }
             </>
             :
@@ -200,7 +205,7 @@ mutation ($input: UpdatePasswordInput!) {
             {
               showForm ?
               <ExportForm handleCloseForm={handleCloseForm}/>:
-              <Export handleCreateExport={handleShowForm}/>
+              <Export exportData={exportData} handleCreateExport={handleShowForm}/>
             }
             </>:
             selectedTab==2?
