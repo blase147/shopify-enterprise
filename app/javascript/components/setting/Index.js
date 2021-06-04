@@ -20,6 +20,7 @@ import StoreInfomation from './StoreInformation';
 
 
 const Settings = () => {
+
   // form data ########################################################
   const [formData, setFormData] = useState(null);
   const [formErrors, setFormErrors] = useState([]);
@@ -132,7 +133,7 @@ const Settings = () => {
   `;
   let { id } = useParams();
   const { data, loading, error, refetch } = useQuery(GET_DATA, {
-    fetchPolicy: 'no-cache',
+    fetchPolicy: 'network-only',
   });
 
   const UPDATE_SETTING = gql`
@@ -427,7 +428,6 @@ const Settings = () => {
                     <br />
                   </>
                 )}
-
                 {formData && (
                   <Formik
                     validationSchema={validationSchema}
@@ -510,7 +510,9 @@ const Settings = () => {
                             onDismiss={hideSaveSuccess}
                           />
                         )}
-
+                        {
+                          console.log("SelectedTab..",selectedTitleTab)
+                        }
                         {selectedTitleTab === 0 ? (
                           <HouseKeeping
 
