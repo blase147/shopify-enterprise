@@ -69,13 +69,13 @@ namespace :subscriptions do
           TwilioServices::SendSms.call(from: shop.phone, to: customer.phone, message: message)
           customer.update_columns(failed_at: Time.current)
           SubscriptionLog.create(billing_status: :failure, executions: (customer.shop.setting.payment_retries.to_i>0 ? true : false), customer_id: customer.id, shop_id: customer.shop_id, subscription_id: subscription_id)
-          email_notification = EmailNotification.find_by_name "Card declined"
+          email_notification = customer.shop.setting.email_notifications.find_by_name "Card declined"
           EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
         end
       else
         ScheduleSkipService.new(subscription_id).run
         SubscriptionLog.create(billing_status: :success, customer_id: customer.id, shop_id: customer.shop_id, subscription_id: subscription_id)
-        email_notification = EmailNotification.find_by_name "Recurring Charge Confirmation"
+        email_notification = customer.shop.setting.email_notifications.find_by_name "Recurring Charge Confirmation"
         EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
       end
     end
@@ -99,7 +99,7 @@ namespace :subscriptions do
           if customer.retry_count>=customer.shop.setting.payment_retries
             subs_log.update(billing_status: :churn, executions: false)
           end
-          email_notification = EmailNotification.find_by_name "Card declined"
+          email_notification = customer.shop.setting.email_notifications.find_by_name "Card declined"
           EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
           # subscription = SubscriptionContractService.new(id).run
         else
@@ -107,7 +107,7 @@ namespace :subscriptions do
           ScheduleSkipService.new(subscription_id).run({ billing_date: next_schedule_date })
           customer.update_columns(failed_at: nil, retry_count: 0)
           subs_log.update(billing_status: :retry_success, executions: false)
-          email_notification = EmailNotification.find_by_name "Recurring Charge Confirmation"
+          email_notification = customer.shop.setting.email_notifications.find_by_name "Recurring Charge Confirmation"
           EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
         end
       end
@@ -140,7 +140,7 @@ namespace :subscriptions do
     billing_date = DateTime.parse subscription.next_billing_date
     customer = Customer.find_by(shopify_id: subscription.id[/\d+/])
     if billing_date.utc.beginning_of_day.to_date == (Time.current-3.days).utc.beginning_of_day.to_date
-      email_notification = EmailNotification.find_by_name "Upcoming Charge"
+      email_notification = customer.shop.setting.email_notifications.find_by_name "Upcoming Charge"
       EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
     end
   end
