@@ -9,20 +9,20 @@ module Queries
       subscriptions = ReportService.new.all_subscriptions
       range = start_date.to_date..end_date.to_date
       orders = orders_service.orders_in_range(range.first, range.last, 'id,refunds,created_at,current_total_price_set,total_shipping_price_set,source_name')
-      data_service = ReportDataService.new(subscriptions, orders, range)
+      data_service = ReportDataService.new(subscriptions, current_shop, orders, range)
 
       in_period_subscriptions = data_service.in_period_subscriptions(subscriptions, range)
-      range_data_service = ReportDataService.new(in_period_subscriptions, orders, range)
+      range_data_service = ReportDataService.new(in_period_subscriptions, current_shop, orders, range)
 
       today_range = Time.current.beginning_of_year..Time.current - 1.hour
       today_orders = orders_service.orders_in_range(today_range.first, today_range.last, 'id,refunds,created_at,current_total_price_set,total_shipping_price_set,source_name')
       today_subscriptions = data_service.in_period_hourly_subscriptions(subscriptions, today_range)
-      today_range_data_service = ReportDataService.new(today_subscriptions, today_orders, today_range)
+      today_range_data_service = ReportDataService.new(today_subscriptions, current_shop, today_orders, today_range)
 
       yesterday_range = Time.current.beginning_of_year..Time.current - 24.hours
       yesterday_orders = orders_service.orders_in_range(yesterday_range.first, yesterday_range.last, 'id,refunds,created_at,current_total_price_set,total_shipping_price_set,source_name')
       yesterday_subscriptions = data_service.in_period_hourly_subscriptions(subscriptions, yesterday_range)
-      yesterday_range_data_service = ReportDataService.new(yesterday_subscriptions, yesterday_orders, yesterday_range)
+      yesterday_range_data_service = ReportDataService.new(yesterday_subscriptions, current_shop, yesterday_orders, yesterday_range)
 
       last_month_range = Date.today - 30.days..Date.today - 1.day
       last_month_subscriptions = data_service.subscriptions_by_order_period(subscriptions, last_month_range)
@@ -44,7 +44,7 @@ module Queries
       active_vs_churned_data = range_data_service.graph_data_by_granularity(:active_vs_churned_data)
       total_sales_data = data_service.graph_data_by_granularity(:total_sales_data)
       refunds_data = range_data_service.graph_data_by_granularity(:refunds_data)
-      active_customers_data = range_data_service.graph_data_by_granularity(:active_customers_data)
+      active_customers_data = data_service.graph_data_by_granularity(:active_customers_data)
       new_vs_cancelled_data = range_data_service.graph_data_by_granularity(:new_vs_cancelled_data)
       estimated_seven_days = data_service.get_upcoming_revenue(7)
       estimated_thirty_days = data_service.get_upcoming_revenue(30)

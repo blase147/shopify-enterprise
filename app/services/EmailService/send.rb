@@ -1,5 +1,5 @@
 class EmailService::Send < ApplicationService
-  
+
   def initialize(email_notification)
     @email_notification = email_notification
   end

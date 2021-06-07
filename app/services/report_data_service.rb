@@ -1,8 +1,9 @@
 class ReportDataService
-  def initialize(subscriptions, orders = nil, range = nil)
+  def initialize(subscriptions, shop, orders = nil, range = nil)
     @subscriptions = subscriptions
     @orders = orders
     @range = range
+    @shop = shop
   end
 
   def calculate_percentage(past_data, new_data, original_data)
@@ -20,10 +21,16 @@ class ReportDataService
   end
 
   def get_churn_rate(subscriptions, range)
-    customer_at_period_start = in_period_subscriptions(subscriptions, range.first - 1.year..range.first - 1.day, 'ACTIVE').count
-    cancelled_customer_in_period = in_period_cancelled_subscriptions(subscriptions, range, 'CANCELLED').count
+    customer_at_period_start = customer_at_period_start(subscriptions, range)
+    cancelled_customer_in_period = in_period_cancelled_subscriptions(subscriptions, range).count
     (cancelled_customer_in_period * 100) / customer_at_period_start rescue 0
     # (get_subscriptions_count(subscriptions_in_period, 'ACTIVE') * 100) / subscriptions.count
+  end
+
+  def customer_at_period_start(subscriptions, range)
+    active_subs_before_period = in_period_subscriptions(subscriptions, range.first - 2.year..range.first - 1.day, 'ACTIVE').count
+    cancelled_sub_after_period = @shop.customers.where(status: 'CANCELLED').where('shopify_at::date BETWEEN ? AND ?', range.first - 2.year, range.first - 1.day).where('cancelled_at::date > ?', range.last).count
+    active_subs_before_period + cancelled_sub_after_period
   end
 
   def get_customer_lifetime_value(subscriptions)
@@ -103,8 +110,8 @@ class ReportDataService
     subscriptions.select { |subscription| range.cover?(subscription.node.created_at.to_date) && (status ? subscription.node.status == status : true) }
   end
 
-  def in_period_cancelled_subscriptions(subscriptions, range, status = nil)
-    subscriptions.select { |subscription| range.cover?(SubscriptionContract.find_by(:status=>"CANCELLED", :shopify_id=>subscription.node.id)&.cancelled_at) && (status ? subscription.node.status == status : true) }
+  def in_period_cancelled_subscriptions(subscriptions, range)
+    subscriptions.select { |subscription| range.cover?(@shop.customers.find_by(status: 'CANCELLED', shopify_id: subscription.node.id[/\d+/])&.cancelled_at) && subscription.node.status == 'CANCELLED' }
   end
 
   def in_period_hourly_subscriptions(subscriptions, range, status = nil)
@@ -222,7 +229,9 @@ class ReportDataService
   end
 
   def customers_in_range(range)
-    subscriptions = in_period_subscriptions(@subscriptions, range, 'ACTIVE')
+    active_customers_subscriptions = in_period_subscriptions(@subscriptions, (range.first - 2.years)..range.last, 'ACTIVE')
+    cancelled_subscription_ids = @shop.customers.where(status: 'CANCELLED').where('cancelled_at::date > ?', range.last).pluck('shopify_id')
+    subscriptions = active_customers_subscriptions + @subscriptions.select{ |sub| cancelled_subscription_ids.include?(sub.node.id[/\d+/]) }
     subscriptions.group_by { |subscription| subscription.node.customer.id }.count
   end
 
@@ -266,8 +275,7 @@ class ReportDataService
   end
 
   def same_day_cancelled
-    subscription_ids = @subscriptions.map{ |subscription| subscription.node.id }
-    SubscriptionContract.where.not(shopify_id: subscription_ids, status: 'CANCELLED').where('shopify_created_at::date = cancelled_at::date').count
+    @shop.customers.where('shopify_at::date = cancelled_at::date').count
   end
 
   def sku_by_revenue

@@ -29,15 +29,12 @@ class SubscriptionContractDeleteService < GraphqlService
     result = SubscriptionDraftsService.new.update draft_id, input
     result = SubscriptionDraftsService.new.commit draft_id
     if status == 'CANCELLED' && result['data'].present?
-      data = result['data']['subscriptionDraftCommit']['contract']
-      subscription = SubscriptionContract.find_or_create_by(shopify_id: id)
-      subscription.update(cancelled_at: Time.current, shopify_created_at: data['createdAt'], status: 'CANCELLED')
+      customer = Customer.find_by(shopify_id: @id)
+      customer.update(cancelled_at: Time.current)
     end
     if status == 'ACTIVE' && result['data'].present?
       customer = Customer.find_by(shopify_id: @id)
-      subscription = SubscriptionContract.find_or_create_by(shopify_id: id)
-      data = result['data']['subscriptionDraftCommit']['contract']
-      subscription.update(cancelled_at: nil, shopify_created_at: data['createdAt'], status: 'ACTIVE')
+      customer.update(cancelled_at: nil)
       customer.shop.subscription_logs.restart.create(subscription_id: @id, customer_id: customer.id)
     end
     p result

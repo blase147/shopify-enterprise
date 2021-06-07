@@ -1,7 +1,7 @@
 class AppProxy::DashboardController < AppProxyController
   before_action :load_subscriptions
   before_action :load_customer, only: %w(index addresses payment_methods settings upcoming)
-  before_action :update_subscriptions, only: :index
+
   def index
     products = ProductService.new.list
     @swap_products = products.is_a?(Hash) ? nil : products.select{ |p| p.node.selling_plan_group_count > 0 }
@@ -37,10 +37,6 @@ class AppProxy::DashboardController < AppProxyController
   def load_customer
     customer_service ||= CustomerService.new({shop: current_shop})
     @customer = customer_service.find(customer_id)
-  end
-
-  def update_subscriptions
-    CustomerSubscriptionContractsService.new(shopify_customer_id).create_contracts
   end
 
   def load_subscriptions
