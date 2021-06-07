@@ -30,7 +30,7 @@ class SmsService::MessageGenerateService
       when 'delay_weeks'
         message = message.gsub("{{#{variable.name}}}", @custom_data[:delay_weeks].to_s) if @custom_data.present?
       when 'first_name'
-        message = message.gsub("{{#{variable.name}}}", @customer.first_name) if @customer.present?
+        message = message.gsub("{{#{variable.name}}}", @customer.first_name) if @customer.present? && @customer.first_name.present?
       when 'old_charge_date'
         message = message.gsub("{{#{variable.name}}}", @custom_data[:old_charge_date].to_s) if @custom_data.present?
       when 'line_item_qty'
