@@ -27,8 +27,7 @@ const translations = {
     hello: 'Bonjour',
   },
 };
-// const HOST = process.env.HOST || 'https://aroma360.ecomtarget.com/graphql_extension';
-const HOST = 'https://shopapp.chargezen.co/'
+const HOST = process.env.HOST || 'https://aroma360.ecomtarget.com/graphql_extension';
 
 function Actions({onPrimary, onClose, title}) {
   return (
