@@ -180,8 +180,7 @@ class ReportDataService
   end
 
   def new_customers
-    # @subscriptions.group_by{ |subscription| subscription.node.customer.id }.sum { |data| data[1].count == 1 ? 1 : 0 }
-    @subscriptions.count
+    @subscriptions.group_by { |subscription| subscription.node.customer.id }.sum { |data| data[1].count == 1 ? 1 : 0 }
   end
 
   def graph_data_by_granularity(method)

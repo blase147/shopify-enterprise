@@ -495,22 +495,19 @@ const CustomerInsights = () => {
       section: 'Sales Per Charge',
       percent: 0,
       up: true,
-      value: '0',
-      decimal: true
+      value: '0'
     },
     chargePerCustomer:{
       section: 'Charges Per Customer',
       percent: 0,
       up: true,
       value: '0',
-      decimal: true
     },
     totalChurn:{
       section: 'Total Churn %',
       percent: 0,
       up: true,
-      value: '0',
-      decimal: true
+      value: '0'
     }
   });
   const purchaseListKeys=[
@@ -833,7 +830,7 @@ const CustomerInsights = () => {
                         <Stack.Item>
                           <DisplayText size="medium">
                             <TextStyle variation="strong">
-                            <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionCustomerList[item.key]?.value)} duration={1.5} decimals={sectionCustomerList[item.key]?.decimal?2 : 0} />
+                            <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionCustomerList[item.key]?.value).toFixed(2)} duration={1.5} decimals={2} />
                             </TextStyle>
                           </DisplayText>
                         </Stack.Item>
