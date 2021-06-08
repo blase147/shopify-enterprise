@@ -32,198 +32,205 @@ const Translation = () => {
           <div className='translation-page'>
             <p className='customer-see'>Update the text that your customers see.</p>
             <div class="expend-all">
-              <strong className="checkout-text">Checkout</strong>
+              <strong className="checkout-text">Customer Portal Translation</strong>
               <p>Expand All</p>
             </div>
 
             <div className="collapse-section">
-              <button className="collapsible-translatoin">Checkout Buttons/Page Controls</button>
+              <button className="collapsible-translatoin">Sidebar Navigation </button>
               <div className="content-forms">
                 <div className="content-collapse">
-                  <p>Buttons </p>
-                  <TextField label="Continue Button Label" placeholder ="Continue Button Label" />
-                  <TextField label="Complete Purchase Button Label" placeholder ="Place my Order" />
-                  <p>Links </p>
-                  <TextField label="Continue Button Label" placeholder ="Continue Button Label" />
-                  <TextField label="Complete Purchase Button Label" placeholder ="Place my Order" />
-                  <p>Footer text </p>
-                  <TextField label="Copyright Text" placeholder ="All Right Reserved" />
+                  <TextField label="Subscription" placeholder ="Subscription" />
+                  <TextField label="Active" placeholder ="Active" />
+                  <TextField label="Canceled " placeholder ="Canceled " />
+                  <TextField label="Delivery Schedule" placeholder ="Delivery Schedule" />
+                  <TextField label="Order History" placeholder ="Order History" />
+                  <TextField label="Addresses" placeholder ="Addresses" />
+                  <TextField label="Billing " placeholder ="Billing " />
+                  <TextField label="Account" placeholder ="Account" />
                 </div>
               </div>
               {/*Account Setting */}
-              <button className="collapsible-translatoin">Account Section</button>
+              <button className="collapsible-translatoin">Subscription Home Tab</button>
               <div className="content-forms">
                 <div className="content-collapse">
-                <p>Login to an Existing Account </p>
-                  <TextField label="Login" placeholder ="Login" />
-                  <TextField label="Logout" placeholder ="Logout" />
-                  <TextField label="Login to an Account Title" placeholder ="Login to an Account Title" />
-                  <TextField label="Password" placeholder ="Password" />
+                {/* <p>Login to an Existing Account </p> */}
+                  <TextField label="My Active Subscriptions" placeholder ="My Active Subscriptions" />
+                  <TextField label="No Active Subscription Message " placeholder ="No Subscription have been found for your Account" />
+                  <TextField label="Quantity" placeholder ="Quantity" />
+                  <TextField label="Edit Button" placeholder ="Edit Button" />
+                  <TextField label="Delay Next Order Button" placeholder ="Delay Next Order Button" />
+                  <TextField label="Delivery Schedule Button" placeholder ="Delivery Schedule Button" />
+                  <TextField label="Edit Subscription Button" placeholder ="Edit Subscription Button" />
+                  <TextField label="Delivery Address " placeholder ="Delivery Address " />
+                  <TextField label="Edit Button" placeholder ="Edit Button" />
+                  <TextField label="Recommended For You" placeholder ="Recommended For You" />
+                  <TextField label="Add Subscription" placeholder ="Add Subscription" />
+                  <TextField label="Apply Discount to your Next Order" placeholder ="Apply Discount to your Next Order" />
+                  <TextField label="Start Date" placeholder ="Start Date" />
+                  <TextField label="Est. Next Delivery" placeholder ="Est. Next Delivery" />
+                  <TextField label="Last Card Charge " placeholder ="Last Card Charge " />
+                  <TextField label="Est. Next Delivery" placeholder ="Est. Next Delivery" />
+                  <p>Subscriber + Upsell</p>
+                  <TextField label="Hey there! There’s an offer for you!" placeholder ="Hey there! There’s an offer for you!" />
+                  <TextField label="10:00 left to claim this offer" placeholder ="10:00 left to claim this offer" />
+                  <TextField label="Product Variants" placeholder ="Product Variants" />
+                  <TextField label="Pay Now" placeholder ="Pay Now" />
+                  <TextField label="No Thanks" placeholder ="No Thanks" />
+                  <TextField label="Search for Products" placeholder ="Search for Products" />
+                  <TextField label="Search" placeholder ="Search" />
+                  <TextField label="Clear" placeholder ="Clear" />
+                  
+                  <p>Delay Next Order Popup</p>
+                  <TextField label="Choose Dates" placeholder ="Choose Dates" />
+                  <TextField label="Delay 2 Weeks" placeholder ="Delay 2 Weeks" />
+                  <TextField label="Delay 1 Month" placeholder ="Delay 1 Month" />
+                  <TextField label="Delay 2 Months" placeholder ="Delay 2 Months" />
+                  <TextField label="Delay 3 Months" placeholder ="Delay 3 Months" />
+                  <TextField label="Back" placeholder ="Back" />
+                  <TextField label="Apply" placeholder ="Apply" />
+                  <p>Delay Next Shipment Popup</p>
+                  <TextField label="Delay your Next Shipment" placeholder ="Delay your Next Shipment" />
+                  <TextField label="Back" placeholder ="Back" />
+                  <TextField label="Apply" placeholder ="Apply" />
+                  <p>Delivery Schedule popup</p>
+                  <TextField label="My Next Order" placeholder ="My Next Order" />
+                  <TextField label="Order Product" placeholder ="Order Product" />
+                  <TextField label="Order Address" placeholder ="Order Address" />
+                  <TextField label="My Scheduled Orders" placeholder ="My Scheduled Orders" />
+                  <div className="trnaslation-grid">
+                    <TextField label="Skip" placeholder ="Skip" />
+                    <TextField label="Back" placeholder ="Back" />
+                  </div>
+                  <TextField label="Apply" placeholder ="Apply" />
+                  <p>Edit Subscription Popup</p>
+                  <TextField label="Est. Next Delivery" placeholder ="Est. Next Delivery" />
+                  <TextField label="Next Card Charge" placeholder ="Next Card Charge" />
+                  <TextField label="Upgrade Subscription" placeholder ="Upgrade Subscription" />
+                  <TextField label="Swap Subscription" placeholder ="Swap Subscription" />
+                  <TextField label="Ask a Question" placeholder ="Ask a Question" />
+                  <TextField label="Cancel Subscription" placeholder ="Cancel Subscription" />
+                  <p>Swap Subscription Popup</p>
+                  <TextField label="Swap {Product} Subscription to:" placeholder ="Swap {Product} Subscription to:" />
+                  <TextField label="Swap Subscription Buton" placeholder ="Swap Subscription Buton" />
+                  <p>Upgrade Subscription Popup</p>
+                  <TextField label="Upgrade {Product} Subscription to:" placeholder ="Upgrade {Product} Subscription to:" />
+                  <TextField label="Upgrade Subscription Buton" placeholder ="Upgrade Subscription Buton" />
+                </div>
+              </div>
+
+   
+              <button className="collapsible-translatoin">Cancelled Subscriptions Tab </button>
+              <div className="content-forms">
+                <div className="content-collapse">
+                  <TextField label="My Canceled Subscriptions" placeholder ="My Canceled Subscriptions" />
+                  <TextField label="Reactivate Button " placeholder ="Reactivate" />
+                  <TextField label="Start Date" placeholder ="Start Date" />
+                  <TextField label="Quantity " placeholder ="Quantity " />
+                    <p>My Canceled Subscriptions with Loyalty Programs</p>
+                  <TextField label="Cancel {product} Subscription" placeholder ="Cancel {product} Subscription" />
+                  <TextField label="Get Reward" placeholder ="Get Reward" />
+                  <TextField label="Cancel Anyway" placeholder ="Cancel Anyway" />
+                  <TextField label="Keep Points" placeholder ="Keep Points" />
+                    <p>My Canceled Subscriptions without Loyalty Programs</p>
+                  <TextField label="Cancel Anyway " placeholder ="Cancel Anyway " />
+                  <TextField label="Keep Subscription" placeholder ="Keep Subscription" />
+                    <p>Cancel Subscriptions with Reasons</p>
+                  <TextField label="Cancel {product} Subscription" placeholder ="Cancel {product} Subscription" />
+                  <TextField label="Keep Subscription" placeholder ="Keep Subscription" />
+                  <TextField label="Cancel" placeholder ="Cancel" />
+                </div>
+              </div>
+              <button className="collapsible-translatoin">Delivery Schedule tab</button>
+              <div className="content-forms">
+                <div className="content-collapse">
+                  <TextField label="My Next Order" placeholder ="My Next Order" />
+                  <TextField label="My Scheduled Order" placeholder ="My Scheduled Order" />
+                  <TextField label="No Subscription have been found for your Account" placeholder ="No Subscription have been found for your Account" />
+                  <TextField label="Est. Delivery " placeholder ="Est. Delivery " />
+                  <TextField label="Order Product" placeholder ="Order Product" />
+                  <TextField label="Order Address" placeholder ="Order Address" />
                   <TextField label="Skip" placeholder ="Skip" />
-                  <TextField label="Forgot Password?" placeholder ="Forgot Password?" />
-                  <TextField label="Want to Create a New Account?" placeholder ="Want to Create a New Account?" />
-                  <p>Create an Account</p>
-                  <TextField label="Or" placeholder ="Or" />
-                  <TextField label="Create an Account" placeholder ="Create an Account" />
-                  <TextField label="Create" placeholder ="Create" />
-                  <TextField label="Have an Account?" placeholder ="Have an Account?" />
-                  <TextField label="Last step set up the password for your account" placeholder ="Last step set up the password for your account" />
-                  <TextField label="Re-enter Password" placeholder ="Re-enter Password" />
-                  <TextField label="Your Account needs additional setup. We’ll show you how to do so after you’ve completed this purchase" placeholder ="Your Account needs additional setup. We’ll show you how to do so after you’ve completed this purchase" />
-                  <TextField label="Register Account" placeholder ="Register Account" />
-                  <TextField label="To be able to manage subscriptions make sure to register your account for" placeholder ="To be able to manage subscriptions make sure to register your account for" />
-                  <p>Validation Messages</p>
-                  <TextField label="Login Required" placeholder ="Login Required" />
-                  <TextField label="Email already associated with an existing account" placeholder ="Email already associated with an existing account" />
-                  <TextField label="Email is not associated with an account" placeholder ="Email is not associated with an account" />
-                  <TextField label="Email or password is not correct" placeholder ="Email or password is not correct" />
+                </div>
+              </div>
+              <button className="collapsible-translatoin">Order History Tab</button>
+              <div className="content-forms">
+                <div className="content-collapse">
+                  <TextField label="My Order History" placeholder ="My Order History" />
+                  <TextField label="No Subscription have been found for your Account" placeholder ="No Subscription have been found for your Account" />
+                  <TextField label="Order #" placeholder ="Order #" />
+                  <TextField label="Date " placeholder ="Date " />
+                  <TextField label="Amount" placeholder ="Amount" />
+                  <TextField label="View" placeholder ="View" />
+                  <TextField label="Invoice" placeholder ="Invoice" />
+                </div>
+              </div>
+              <button className="collapsible-translatoin">Addresses Tab</button>
+              <div className="content-forms">
+                <div className="content-collapse">
+                  <TextField label="My Address" placeholder ="My Address" />
+                  <TextField label="No Subscription have been found for your Account" placeholder ="No Subscription have been found for your Account" />
+                  <TextField label="Edit " placeholder ="Edit" />
+                  <TextField label="Phone " placeholder ="Date " />
+                  <TextField label="Company" placeholder ="Company" />
+                  <TextField label="Address" placeholder ="Address" />
+                  <TextField label="Add Address" placeholder ="Add Address" />
+                    <p>Add Address Pop Up</p>
+                    <TextField label="First Name " placeholder ="First Name" />
+                    <TextField label="Last Name " placeholder ="Last Name " />
+                    <TextField label="Address 1" placeholder ="Address 1" />
+                    <TextField label="Address 2" placeholder ="Address 2" />
+                    <div className='trnaslation-grid'>
+                      <TextField label="Company" placeholder ="Company" />
+                      <TextField label="City" placeholder ="City" />
+                      <TextField label="Country " placeholder ="Country" />
+                      <TextField label="Zip/Postal Code " placeholder ="Zip/Postal Code " />
+                      <TextField label="State/Province" placeholder ="State/Province" />
+                      <TextField label="Phone" placeholder ="Phone" />
+                    </div>
+                    <TextField label="Update" placeholder ="Update" />
+                </div>
+              </div>
+              <button className="collapsible-translatoin">Billing Tab</button>
+              <div className="content-forms">
+                <div className="content-collapse">
+                  <TextField label="My Billing Information" placeholder ="My Billing Information" />
+                  <TextField label="No Subscription have been found for your Account" placeholder ="No Subscription have been found for your Account" />
+                  <TextField label="Card on File" placeholder ="Card on File" />
+                  <TextField label="Update" placeholder ="Update" />
+                  <TextField label="Edit" placeholder ="Edit" />
+                  <TextField label="Phone" placeholder ="Phone" />
+                  <TextField label="Company" placeholder ="Company" />
+                  <TextField label="Address" placeholder ="Address" />
+                    <p>Update Payment Pop Up</p>
+                    <TextField label="Name on Card" placeholder ="Name on Card" />
+                    <TextField label="Card Number" placeholder ="Card Number" />
+                    <TextField label="Exp. Month" placeholder ="Exp. Month" />
+                    <TextField label="Exp. Date" placeholder ="Exp. Date" />
+                    <TextField label="CVV" placeholder ="CVV" />
+                    <TextField label="Update Card" placeholder ="Update Card" />
+                </div>
+              </div>
+              <button className="collapsible-translatoin">Account Tab</button>
+              <div className="content-forms">
+                <div className="content-collapse">
+                  <TextField label="My Account Details" placeholder ="My Account Details" />
+                  <TextField label="No Subscription have been found for your Account" placeholder ="No Subscription have been found for your Account" />
+                  <TextField label="First Name" placeholder ="First Name" />
+                  <TextField label="Last Name" placeholder ="Last Name" />
+                  <TextField label="Email" placeholder ="Email" />
+                  <TextField label="Save Button" placeholder ="Save" />
+                    <p>Update Payment Pop Up</p>
+                    <TextField label="Name on Card" placeholder ="Name on Card" />
+                    <TextField label="Card Number" placeholder ="Card Number" />
+                    <TextField label="Exp. Month" placeholder ="Exp. Month" />
+                    <TextField label="Exp. Date" placeholder ="Exp. Date" />
+                    <TextField label="CVV" placeholder ="CVV" />
+                    <TextField label="Update Card" placeholder ="Update Card" />
                 </div>
               </div>
               {/*Account Setting */}
 
-              <button className="collapsible-translatoin">Customer Personal and Shipping Information</button>
-              <div className="content-forms">
-                <div className="content-collapse">
-                  <p>Customer Personal Information</p>
-                  <TextField label="Customer Information Title" placeholder ="Customer & shipping information" />
-                  <TextField label="Email Label" placeholder ="Email " />
-                  <TextField label="Email Placeholder" placeholder ="Email " />
-                  <p>Customer Shipping Address</p>
-                  <TextField label="First Name Label" placeholder ="First Name " />
-                  <TextField label="First Name Placeholder" placeholder ="First Name " />
-                  <TextField label="Last Name Label" placeholder ="Last Name " />
-                  <TextField label="Last Name Placeholder" placeholder ="Last Name " />
-                  <TextField label="Company Label" placeholder ="Company Label" />
-                  <TextField label="Company Placeholder" placeholder ="Company (optional)" />
-                  <TextField label="Address 1 Label" placeholder ="Address " />
-                  <TextField label="Address 1 Placeholder" placeholder ="Address " />
-                  <TextField label="Address 2 Label" placeholder ="Apt, suite, etc." />
-                  <TextField label="Address 2 Placeholder" placeholder ="Apt, suite, etc." />
-                  <TextField label="City Label" placeholder ="City " />
-                  <TextField label="City Placeholder" placeholder ="City " />
-                  <TextField label="Country Label" placeholder ="Country Label" />
-                  <TextField label="Province Label" placeholder ="State" />
-                  <TextField label="Province Placeholder" placeholder ="State" />
-                  <TextField label="Zip Code Label" placeholder ="Zip Code " />
-                  <TextField label="Zip Code Placeholder" placeholder ="Zip Code " />
-                  <TextField label="Phone Label" placeholder ="Phone " />
-                  <TextField label="Phone Placeholder" placeholder ="Phone " />
-                  <TextField label="Country Calling Code Label" placeholder ="Country Calling Code" />
-                  <TextField label="Country Calling Code Placeholder" placeholder ="Please select a Country Calling Code" />
-                  <p>Validation Messages</p>
-                  <TextField label="Email Validation/error" placeholder ="Please enter a valid email address" />
-                  <TextField label="Required Field Error" placeholder ="This field is required" />
-                </div>
-              </div>
-            </div>
-
-            {/*Account Setting */}
-
-            <button className="collapsible-translatoin">Shipping Section Labels</button>
-              <div className="content-forms">
-                <div className="content-collapse">
-                  <TextField label="Shipping Address Title" placeholder ="Shipping Address Title " />
-                  <TextField label="Checkout Shipping Title" placeholder ="Shipping " />
-                  <TextField label="Free Rate Label" placeholder ="FREE " />
-                  <TextField label="Shipments Methods not Available" placeholder ="There are no shipping methods available for your cart or destination" />
-                </div>
-              </div>
-
-              <button className="collapsible-translatoin">Payment Section</button>
-              <div className="content-forms">
-                <div className="content-collapse">
-                    <TextField label="Checkout Payment Title" placeholder ="Billing and Payment" />
-                    <TextField label="Credit Card Title" placeholder ="Credit Card " />
-                    <TextField label="Card Number Label" placeholder ="Card Number " />
-                    <TextField label="Card Number Placeholder" placeholder ="Card Number " />
-                    <TextField label="Name on card label" placeholder ="Name on card " />
-                    <TextField label="Name on Card Placeholder" placeholder ="Name on Card " />
-                    <TextField label="Card Expiration Label" placeholder ="Expiration " />
-                    <TextField label="Card Verification Label" placeholder ="CVV " />
-                    <TextField label="Card Verification Placeholder" placeholder ="CVV" />
-                    <TextField label="Card Verification Value Explanation" placeholder ="3 or 4 digit security code usually located on the back of the card. " />
-                    <TextField label="Billing Address Title" placeholder ="Billing Address" />
-                    <TextField label="Different Billing Address Label" placeholder ="Use a different billing address " />
-                    <TextField label="Card Security Notice Pop Up" placeholder ="All transactions are secure and encrypted." />
-                    <p>PayPal</p>
-                    <TextField label="Credit Card or PayPal Title" placeholder ="Credit Card or PayPal" />
-                    <TextField label="Click here" placeholder ="Click here" />
-                    <p>Validation Messages</p>
-                    <TextField label="This is not a Credit Card Number" placeholder ="This is not a Credit Card Number" />
-                    <TextField label="Credit Card is expired" placeholder ="Credit Card is expired" />
-                    <TextField label="Your Card Number is Incorrect" placeholder ="Your Card Number is Incorrect." />
-                    <TextField label="Could not find Payment Information" placeholder ="Could not find Payment Information" />
-                    <p>Payment Options (Apple Pay Only)</p>
-                    <TextField label="Payment Options" placeholder ="How will you be paying today?" />
-                </div>
-            </div>
-
-            <button className="collapsible-translatoin">Newsletter Opt-in</button>
-              <div className="content-forms">
-                <div className="content-collapse">
-                    <TextField label="Subscription Checkbox Label" placeholder ="Subscribe to our Newsletter" />
-                </div>
-                </div>
-
-                <button className="collapsible-translatoin">Order Summary</button>
-            <div className="content-forms">
-                <div className="content-collapse">
-                    <TextField label="Order Summary Title" placeholder ="Order Summary" />
-                    <TextField label="Subtotal Label" placeholder ="Subtotal" />
-                    <TextField label="Shipping Label" placeholder ="Shipping" />
-                    <TextField label="Taxes Label" placeholder ="Taxes" />
-                    <TextField label="Total Label" placeholder ="Total" />
-                    <TextField label="Payment Due Label" placeholder ="Payment Due" />
-                    <TextField label="Paid Label" placeholder ="Paid" />
-                    <p>Frequency Labels</p>
-                    <TextField label="Every" placeholder ="Every" />
-                    <TextField label="Days" placeholder ="Days" />
-                    <TextField label="Week" placeholder ="Week" />
-                    <TextField label="Weeks" placeholder ="Weeks" />
-                    <TextField label="Month" placeholder ="Month" />
-                    <TextField label="Months" placeholder ="Months" />
-                    <TextField label="Year" placeholder ="Year" />
-                    <TextField label="Expires after" placeholder ="Expires after" />
-                    <TextField label="Charge" placeholder ="Charge" />
-                    <TextField label="Charges" placeholder ="Charges" />
-                    <TextField label="Orders" placeholder ="Orders" />
-                    <p>Post-purchase Summary Page</p>
-                    <TextField label="Address Title" placeholder ="Address " />
-                </div>
-            </div>   
-
-            <button className="collapsible-translatoin">Discount Section</button>
-            <div className="content-forms">
-                <div className="content-collapse">
-                    <TextField label="Show discount form link label" placeholder ="Have a discount code? Enter it here " />
-                    <TextField label="Discount Label" placeholder ="Discount - code promo" />
-                    <TextField label="Discount placeholder" placeholder ="Discount " />
-                    <TextField label="Apply Discount Button Label" placeholder ="OK" />
-                    <TextField label="Discount Error Message" placeholder ="Unable to find a valid discount matching the code entered" />
-                    <TextField label="Discount Error Message: Email Required" placeholder ="The discount code provided requires an email address" />
-                    <TextField label="After $(DISCOUNT AMOUNT)" placeholder ="After" />
-                    <TextField label="In Discounts" placeholder ="In Discounts" />
-                    <TextField label="Please sign into PayPal by clicking blue PayPal button or use credit card to complete transaction" placeholder ="Please sign into PayPal by clicking the blue PayPal button, or use credit card to complete transaction" />
-                </div>
-            </div>
-
-            <button className="collapsible-translatoin">Shipment Orders</button>
-             <div className="content-forms">
-                <div className="content-collapse">
-                    <TextField label="Ships Every x Frequency" placeholder ="(Ships Every {{frequency}} {{unit_type}})" />
-                </div>
-            </div>
-
-            <button className="collapsible-translatoin">Checkout Thanks Page</button>
-             <div className="content-forms">
-                <div className="content-collapse">
-                    <TextField label="Page Name" placeholder ="Chargezen - Thank you" />
-                    <TextField label="Title" placeholder ="Thank you for your purchase!" />
-                    <TextField label="Confirmation Emails sent text" placeholder ="A confirmation email has been sent to " />
-                    <TextField label="Order #" placeholder ="Order #" />
-                    <TextField label="Return to store link label" placeholder ="Continue Shopping" />
-                    <TextField label="Print Link Label" placeholder ="Print Receipt" />
-                </div>
             </div>
             <div className="translation-btn">
 
