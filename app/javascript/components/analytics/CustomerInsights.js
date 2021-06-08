@@ -1000,7 +1000,7 @@ const CustomerInsights = () => {
                     <Stack>
                       <Stack.Item>
                         <DisplayText size="medium">
-                          <TextStyle variation="strong">
+                          <TextStyle variation="strong"> 
                           <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionPurchaseItemList[item.key]?.value).toFixed(2)} duration={1.5} decimals={2} />
                           </TextStyle>
                         </DisplayText>
