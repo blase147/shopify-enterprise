@@ -36,7 +36,7 @@ import dayjs from 'dayjs';
 const CustomerInsights = () => {
 
   const fetchReport = gql`
-  query($startDate: String!, $endDate: String!) {  
+  query($startDate: String!, $endDate: String!) {
     fetchCustomerInsights(startDate: $startDate, endDate: $endDate) {
       activeCustomersPercentage
       cancelledCustomersPercentage
@@ -59,47 +59,47 @@ const CustomerInsights = () => {
       chargePerCustomer {
         value
         percent
-        up 
+        up
       }
       skipCount {
         value
         percent
-        up 
+        up
       }
       swapCount {
         value
         percent
-        up 
+        up
       }
       restartCount {
         value
         percent
-        up 
+        up
       }
       upsellCount {
         value
         percent
-        up 
+        up
       }
       dunningCount {
         value
         percent
-        up 
+        up
       }
       recovered {
         value
         percent
-        up 
+        up
       }
       churned {
         value
         percent
-        up 
+        up
       }
       dunned {
         value
         percent
-        up 
+        up
       }
       dunningData {
           date
@@ -352,7 +352,7 @@ const CustomerInsights = () => {
         colorByPoint: true,
         data: [],
         showInLegend: false
-    }] 
+    }]
 }
   // Subscriptions Chart
   const DunningChart = {
@@ -476,7 +476,7 @@ const CustomerInsights = () => {
       },
     ],
   };
-  
+
 
   const customerListKeys=[
     {section:"Customer Count",key:"customerCount"},
@@ -549,7 +549,7 @@ const CustomerInsights = () => {
     {section:"Swaps",key:"swapCount"},
     {section:"Upsells",key:"upsellCount"},
     {section:"Reactivations",key:"restartCount"},
-    
+
   ]
   const [sectionCustomerActionList,setSectionCustomerActionList] = useState({
     skipCount:{
@@ -633,7 +633,7 @@ const CustomerInsights = () => {
         swapCount,
         upsellCount,
         restartCount,
-        
+
         //Pie Data
         activeCustomersPercentage,
         cancelledCustomersPercentage,
@@ -797,7 +797,7 @@ const CustomerInsights = () => {
                         handleDates={handleFiltersDates}
                       />
                       </div>
-                    
+
                   </Card.Section>
                 </Card>
               </Layout.Section>
@@ -811,7 +811,7 @@ const CustomerInsights = () => {
                   <Stack.Item key={i} >
                     <Card sectioned>
                     <div className="count-section">
-                       
+
                           <TextStyle variation="strong">
                             {item.section}
                           </TextStyle>
@@ -824,7 +824,7 @@ const CustomerInsights = () => {
                             />
                             {(sectionCustomerList[item.key]?.up===false && sectionCustomerList[item.key]?.percent==0)?100:Math.abs(sectionCustomerList[item.key].percent)}%
                           </TextStyle>
-                        
+
                         </div>
                       <Stack>
                         <Stack.Item>
@@ -1041,7 +1041,7 @@ const CustomerInsights = () => {
             />
           </Layout.Section>
         </Layout>
-        
+
         {/* <Layout>
           <Layout.Section>
             <Stack wrap={false} distribution="trailing">

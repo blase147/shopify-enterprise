@@ -180,7 +180,7 @@ class ReportDataService
   end
 
   def new_customers
-    @subscriptions.group_by{ |subscription| subscription.node.customer.id }.sum { |data| data[1].count == 1 ? 1 : 0 }
+    @subscriptions.group_by { |subscription| subscription.node.customer.id }.sum { |data| data[1].count == 1 ? 1 : 0 }
   end
 
   def graph_data_by_granularity(method)
@@ -204,9 +204,33 @@ class ReportDataService
 
   def active_vs_churned_data(range)
     {
-      active_customers: in_period_subscriptions(@subscriptions, range, 'ACTIVE').count,
-      churned_customers: in_period_subscriptions(@subscriptions, range, 'CANCELLED').count
+      active_customers: active_customers(range),
+      churned_customers: cancelled_customers(range)
     }
+  end
+
+  def active_customers(range)
+    subscriptions = active_subscriptions(range)
+    subscriptions.group_by { |subscription| subscription.node.customer.id }.count
+  end
+
+  def all_active_customers
+    subscriptions = @subscriptions.select { |subscription| subscription.node.status == 'ACTIVE' }
+    subscriptions.group_by { |subscription| subscription.node.customer.id }.count
+  end
+
+  def cancelled_customers(range)
+    @shop.customers.where(status: 'CANCELLED').where('cancelled_at::date BETWEEN ? AND ?', range.first - 2.year, range.last).count
+  end
+
+  def cancelled_subscriptions_in_period(range)
+    @shop.customers.where(status: 'CANCELLED').where('cancelled_at::date BETWEEN ? AND ?', range.first, range.last).count
+  end
+
+  def active_subscriptions(range)
+    active_customers_subscriptions = in_period_subscriptions(@subscriptions, (range.first - 2.years)..range.last, 'ACTIVE')
+    cancelled_subscription_ids = @shop.customers.where(status: 'CANCELLED').where('cancelled_at::date > ?', range.last).where('shopify_at::date BETWEEN ? AND ?', range.first - 2.year, range.last).pluck('shopify_id')
+    active_customers_subscriptions + @subscriptions.select{ |sub| cancelled_subscription_ids.include?(sub.node.id[/\d+/]) }
   end
 
   def total_sales_data(range)
@@ -225,18 +249,11 @@ class ReportDataService
   end
 
   def active_customers_data(range)
-    { value: customers_in_range(range) }
-  end
-
-  def customers_in_range(range)
-    active_customers_subscriptions = in_period_subscriptions(@subscriptions, (range.first - 2.years)..range.last, 'ACTIVE')
-    cancelled_subscription_ids = @shop.customers.where(status: 'CANCELLED').where('cancelled_at::date > ?', range.last).pluck('shopify_id')
-    subscriptions = active_customers_subscriptions + @subscriptions.select{ |sub| cancelled_subscription_ids.include?(sub.node.id[/\d+/]) }
-    subscriptions.group_by { |subscription| subscription.node.customer.id }.count
+    { value: active_customers(range) }
   end
 
   def new_vs_cancelled_data(range)
-    { new_subscriptions_count: in_period_subscriptions(@subscriptions, range, 'ACTIVE').count, cancelled_subscriptions_count: in_period_subscriptions(@subscriptions, range, 'CANCELLED').count }
+    { new_subscriptions_count: in_period_subscriptions(@subscriptions, range, 'ACTIVE').count, cancelled_subscriptions_count: cancelled_customers(range) }
   end
 
   def get_upcoming_revenue(day_count)
