@@ -253,7 +253,7 @@ class ReportDataService
   end
 
   def new_vs_cancelled_data(range)
-    { new_subscriptions_count: in_period_subscriptions(@subscriptions, range, 'ACTIVE').count, cancelled_subscriptions_count: cancelled_customers(range) }
+    { new_subscriptions_count: in_period_subscriptions(@subscriptions, range, 'ACTIVE').count, cancelled_subscriptions_count: cancelled_subscriptions_in_period(range) }
   end
 
   def get_upcoming_revenue(day_count)
