@@ -480,9 +480,9 @@ const CustomerInsights = () => {
 
   const customerListKeys=[
     {section:"Customer Count",key:"customerCount"},
-    {section:"Sales Per Charge",key:"salesPerCharge",prefix:"$"},
-    {section:"Charges Per Customer",key:"chargePerCustomer"},
-    {section:"Total Churn %",key:"totalChurn",suffix:"%"}
+    {section:"Sales Per Charge",key:"salesPerCharge",prefix:"$",decimal:true},
+    {section:"Charges Per Customer",key:"chargePerCustomer",decimal:true},
+    {section:"Total Churn %",key:"totalChurn",suffix:"%",decimal:true}
   ]
   const [sectionCustomerList,setSectionCustomerList] = useState({
     customerCount:{
@@ -833,7 +833,7 @@ const CustomerInsights = () => {
                         <Stack.Item>
                           <DisplayText size="medium">
                             <TextStyle variation="strong">
-                            <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionCustomerList[item.key]?.value)} duration={1.5} decimals={sectionCustomerList[item.key]?.decimal?2 : 0} />
+                            <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionCustomerList[item.key]?.value).toFixed(2)} duration={1.5} decimals={item?.decimal?2:0} />
                             </TextStyle>
                           </DisplayText>
                         </Stack.Item>
