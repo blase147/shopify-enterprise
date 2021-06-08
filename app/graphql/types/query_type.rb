@@ -27,5 +27,6 @@ module Types
     field :fetch_integrations, resolver: Queries::FetchIntegrations
     field :fetch_integration, resolver: Queries::FetchIntegration
     field :fetch_sms_analytics, resolver: Queries::FetchSmsAnalytics
+    field :fetch_translation, resolver: Queries::FetchTranslation
   end
 end
