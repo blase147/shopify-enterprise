@@ -519,75 +519,57 @@ const SaleChart = {
   ],
 };
 //ActiveVsChurnedChart
-const Active_Churned_CustomerChart = {
-  chart: {
-    type: 'area',
-  },
-  title: {
-    text: 'Active Customers vs Churned Customers',
-  },
-
-  xAxis: {
-    categories: []
-  },
-  yAxis: {
-    labels: {
-      format: '{value}',
+  const Active_Churned_CustomerChart = {
+    chart: {
+      type: 'area'
     },
     title: {
-      text: 'Number of Customers',
+      text: 'Active Customers vs Churned Customers'
     },
-  },
-  exporting: {
-    enabled: false,
-  },
-  plotOptions: {
-    area: {
-      stacking: 'percent',
-      lineColor: '#ffffff',
-      lineWidth: 1,
-      marker: {
-        lineWidth: 1,
-        lineColor: '#ffffff',
+    xAxis: {
+      allowDecimals: false,
+      labels: {
+        formatter: function () {
+          return this.value;
+        }
       },
-      accessibility: {
-        pointDescriptionFormatter: function (point) {
-          function round(x) {
-            return Math.round(x * 100) / 100;
+      categories: []
+    },
+    yAxis: {
+      title: {
+        text: 'Number of Customers'
+      },
+      labels: {
+        formatter: function () {
+          return this.value;
+        }
+      }
+    },
+    tooltip: {
+      pointFormat: '{series.name} : {point.y}'
+    },
+    plotOptions: {
+      area: {
+        marker: {
+          enabled: false,
+          symbol: 'circle',
+          radius: 2,
+          states: {
+            hover: {
+              enabled: true
+            }
           }
-          return (
-            point.index +
-            1 +
-            ', ' +
-            point.category +
-            ', ' +
-            point.y +
-            ' millions, ' +
-            round(point.percentage) +
-            '%, ' +
-            point.series.name
-          );
-        },
-      },
+        }
+      }
     },
-  },
-  series: [
-    {
+    series: [{
       name: 'Active Customers',
-      data: [],
-      marker: {
-        enabled: false
-      }
-    },
-    {
+      data: []
+    }, {
       name: 'Churned Customers',
-      data: [],
-      marker: {
-        enabled: false
-      }
-    },
-  ],
-};
+      data: []
+    }]
+  };
 // estimated chart
 const EstimatedChart = {
   chart: {
@@ -926,16 +908,10 @@ const rows_Charges = [
           {
             name: 'Active Customers',
             data: activeVsChurnedData.map(data=>parseInt(data.data.activeCustomers)),
-            marker: {
-              enabled: false
-            }
           },
           {
             name: 'Churned Customers',
             data: activeVsChurnedData.map(data=>parseInt(data.data.churnedCustomers)),
-            marker: {
-              enabled: false
-            }
           },
         ]
       }
