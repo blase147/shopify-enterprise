@@ -27,6 +27,16 @@
   margin-top: 20px;
 }
 
+.trnaslation-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+}
+
+.trnaslation-grid > * {
+  flex: 1;
+}
+
 .collapsible-translatoin{
   background-color: #E8F8FC;
   cursor: pointer;
@@ -39,6 +49,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.chargezen .collapsible-translatoin .Polaris-Button {
+  padding: 0px;
+  border: none;
+  background: none;
+  box-shadow: none;
 }
 
 .active-collpase, .collapsible-translatoin:hover {
@@ -99,14 +116,12 @@
   padding: 14px 70px;
 }
 .translation-btn .save-btn button {
-  background-color: #4D506A;
 	color: white;
 	border: 0;
 	padding: 14px 32px;
 }
 
 .translation-btn .save-btn button:hover {
-  background: #4D506A ;
 	color: white;
 	border: 0;
 	padding: 14px 32px;

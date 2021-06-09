@@ -31,5 +31,6 @@ module Types
     field :update_password, mutation: Mutations::UpdatePassword
 
     field :update_integration, mutation: Mutations::UpdateIntegration
+    field :update_translation, mutation: Mutations::UpdateTranslation
   end
 end

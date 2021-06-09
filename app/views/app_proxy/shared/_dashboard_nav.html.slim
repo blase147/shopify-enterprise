@@ -26,7 +26,7 @@ nav.Polaris-Navigation.account
                 path d=("M1.875 1.84473H1.88356") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
                 path d=("M1.875 7.55811H1.88356") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
                 path d=("M1.875 13.272H1.88356") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
-            span.Polaris-Navigation__Text Subscription
+            span.Polaris-Navigation__Text #{@translation.sidebar_subscription.present? ? @translation.sidebar_subscription : 'Subscription'}
         .Polaris-Navigation__SecondaryNavigation.Polaris-Navigation--isExpanded
           #PolarisSecondaryNavigation15 aria-expanded="true" style=("transition-duration: 0ms; transition-timing-function: linear; max-height: none; overflow: visible;")
             ul.Polaris-Navigation__List
@@ -35,12 +35,12 @@ nav.Polaris-Navigation.account
                   span.Polaris-Navigation__Text
                     = link_to "/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}&status=active", class: 'Polaris-Navigation__Item', data: {'polaris-unstyled': true}, tab_index: '0', aria: {disabled: false} do
                       span.Polaris-Navigation__Text
-                        span class=("#{params[:status] == "active" ? 'sub-active' : ''}") Active
+                        span class=("#{params[:status] == "active" ? 'sub-active' : ''}") #{@translation.sidebar_active.present? ? @translation.sidebar_active : 'Active'}
               li.Polaris-Navigation__ListItem
                 .Polaris-Navigation__ItemWrapper.cancel-subscription
                 = link_to "/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}&status=cancelled", class: 'Polaris-Navigation__Item', data: {'polaris-unstyled': true}, tab_index: '0', aria: {disabled: false} do
                   span.Polaris-Navigation__Text
-                    span class=("#{params[:status] == "cancelled" ? 'sub-active' : ''}") Cancelled
+                    span class=("#{params[:status] == "cancelled" ? 'sub-active' : ''}") #{@translation.sidebar_cancelled.present? ? @translation.sidebar_cancelled : 'Cancelled'}
 
       / li.Polaris-Navigation__ListItem
       /   .Polaris-Navigation__ItemWrapper
@@ -71,7 +71,7 @@ nav.Polaris-Navigation.account
                         rect height="17" transform=("translate(0.753906 0.556641)") width="21" /
 
 
-              span.Polaris-Navigation__Text Delivery Schedule
+              span.Polaris-Navigation__Text #{@translation.sidebar_delivery_schedule.present? ? @translation.sidebar_delivery_schedule : 'Delivery Schedule'}
       - if @setting.show_order_history.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
@@ -83,7 +83,7 @@ nav.Polaris-Navigation.account
                     path d=("M9.29199 1.24341V6.04763H14.0962") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
 
 
-              span.Polaris-Navigation__Text Order History
+              span.Polaris-Navigation__Text #{@translation.sidebar_order_history.present? ? @translation.sidebar_order_history : 'Order History'}
 
       / li.Polaris-Navigation__ListItem
       /   .Polaris-Navigation__ItemWrapper
@@ -103,7 +103,7 @@ nav.Polaris-Navigation.account
                 span.Polaris-Icon
                   = icon_tag 'address'
 
-              span.Polaris-Navigation__Text Addresses
+              span.Polaris-Navigation__Text #{@translation.sidebar_addresses.present? ? @translation.sidebar_addresses : 'Addresses'}
 
       - if @setting.show_billing.present?
         li.Polaris-Navigation__ListItem
@@ -119,7 +119,7 @@ nav.Polaris-Navigation.account
                     path d=("M15.697 2.53975L12.197 1.03975C12.07 0.98675 11.929 0.98675 11.802 1.03975L8.302 2.53975C8.119 2.61875 8 2.79975 8 2.99975V4.99975C8 7.75075 9.017 9.35875 11.751 10.9338C11.828 10.9777 11.914 10.9998 12 10.9998C12.086 10.9998 12.172 10.9777 12.249 10.9338C14.983 9.36275 16 7.75475 16 4.99975V2.99975C16 2.79975 15.881 2.61875 15.697 2.53975ZM15 4.99975C15 7.30875 14.236 8.57975 12 9.91975C9.764 8.57675 9 7.30575 9 4.99975V3.32975L12 2.04375L15 3.32975V4.99975Z") stroke="#4D506A" /
                     path d=("M13.8127 4.10886C13.5977 3.93886 13.2837 3.97186 13.1097 4.18686L11.5377 6.15286L10.9157 5.22286C10.7607 4.99286 10.4497 4.93186 10.2227 5.08386C9.99365 5.23686 9.93065 5.54786 10.0837 5.77686L11.0837 7.27686C11.1727 7.40986 11.3187 7.49186 11.4787 7.49986C11.4857 7.49986 11.4937 7.49986 11.4997 7.49986C11.6507 7.49986 11.7947 7.43186 11.8907 7.31186L13.8907 4.81186C14.0627 4.59586 14.0287 4.28186 13.8127 4.10886Z") fill="#4D506A" /
 
-              span.Polaris-Navigation__Text Billing
+              span.Polaris-Navigation__Text #{@translation.sidebar_billing.present? ? @translation.sidebar_billing : 'Billing'}
       - if @setting.show_account.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
@@ -131,7 +131,7 @@ nav.Polaris-Navigation.account
                     path d=("M9.06424 3.82199H9.06398C7.44134 3.82199 6.12598 5.13735 6.12598 6.75999C6.12598 8.38263 7.44134 9.69799 9.06398 9.69799C10.6866 9.69799 12.002 8.38263 12.002 6.75999V6.75973C12.0003 5.13795 10.686 3.82371 9.06424 3.82199ZM9.0637 8.66039C8.01422 8.66024 7.16358 7.80951 7.16358 6.75999C7.16358 5.71038 8.01437 4.85959 9.06398 4.85959C10.1135 4.85959 10.9642 5.71023 10.9644 6.75971C10.9632 7.80888 10.1129 8.65923 9.0637 8.66039Z") fill="#4D506A" stroke="#4D506A" stroke-width="0.5" /
 
 
-              span.Polaris-Navigation__Text Account
+              span.Polaris-Navigation__Text #{@translation.sidebar_account.present? ? @translation.sidebar_account : 'Account'}
 
 / .refer-tag
 /   = icon_tag 'refer'
