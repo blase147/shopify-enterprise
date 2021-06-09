@@ -28,11 +28,11 @@
                     path d=("M7.5 12L14.5 19L21.5 12") stroke="#007EFF" stroke-width="2" /
         .slide-down
           .item
-            p start date
+            p #{@translation.cancelled_tab_start_date.present? ? @translation.cancelled_tab_start_date : 'start date'}
             p
               = DateTime.parse(subscription.node.created_at).strftime("%a, %B %e")
           .item
-            p quantity
+            p #{@translation.cancelled_tab_quantity.present? ? @translation.cancelled_tab_quantity : 'quantity'}
             p
               = edge.node.quantity
     - @cancelled_line_items.each do |line_item|
@@ -54,7 +54,7 @@
           - if @setting.customer_allowed?('reactive_subscription')
             .grid-item
               = link_to action_subscription_contract_path(:add_product, subscription.node.id[/\d+/], "quantity=#{line_item.quantity}&line_item_id=#{line_item.id}&variant_id=#{line_item.variant_id[/\d+/]}"), remote: true, method: :post do
-                button.blue-btn.action-btn RE-ACTIVATE
+                button.blue-btn.action-btn #{@translation.cancelled_tab_reactivate_btn.present? ? @translation.cancelled_tab_reactivate_btn : 'RE-ACTIVATE'}
         .quantity-wrapper
           form
             .quantity-field
@@ -66,11 +66,11 @@
                     path d=("M7.5 12L14.5 19L21.5 12") stroke="#007EFF" stroke-width="2" /
         .slide-down
           .item
-            p start date
+            p #{@translation.cancelled_tab_start_date.present? ? @translation.cancelled_tab_start_date : 'start date'}
             p
               = DateTime.parse(subscription.node.created_at).strftime("%a, %B %e")
           .item
-            p quantity
+            p #{@translation.cancelled_tab_quantity.present? ? @translation.cancelled_tab_quantity : 'quantity'}
             p
               = line_item.quantity
 - elsif (params[:status].present? && params[:status] == 'cancelled') || !params[:status].present?

@@ -63,7 +63,7 @@ class CreateTranslationTable < ActiveRecord::Migration[6.0]
       t.string :swap_subscription_popup_swap_subscription_button
 
       t.string :upgrade_subscription_popup_swap_subscription_to
-      t.string :upgrade_subscription_popup_upgrade_subscription_to
+      t.string :upgrade_subscription_popup_upgrade_subscription_btn
 
       t.string :cancelled_tab_cancelled_subscriptions
       t.string :cancelled_tab_reactivate_btn
@@ -90,6 +90,7 @@ class CreateTranslationTable < ActiveRecord::Migration[6.0]
       t.string :delivery_tab_order_address
       t.string :delivery_tab_skip
       t.string :order_history_tab_my_order_history
+      t.string :order_history_tab_order_no
       t.string :order_history_tab_no_subscriptions
       t.string :order_history_tab_date
       t.string :order_history_tab_amount

@@ -62,7 +62,7 @@ module Types
     field :swap_subscription_popup_swap_subscription_button, String, null: true
 
     field :upgrade_subscription_popup_swap_subscription_to, String, null: true
-    field :upgrade_subscription_popup_upgrade_subscription_to, String, null: true
+    field :upgrade_subscription_popup_upgrade_subscription_btn, String, null: true
 
     field :cancelled_tab_cancelled_subscriptions, String, null: true
     field :cancelled_tab_reactivate_btn, String, null: true
@@ -89,6 +89,7 @@ module Types
     field :delivery_tab_order_address, String, null: true
     field :delivery_tab_skip, String, null: true
     field :order_history_tab_my_order_history, String, null: true
+    field :order_history_tab_order_no, String, null: true
     field :order_history_tab_no_subscriptions, String, null: true
     field :order_history_tab_date, String, null: true
     field :order_history_tab_amount, String, null: true

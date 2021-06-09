@@ -63,7 +63,7 @@ module Types
       argument :swap_subscription_popup_swap_subscription_button, String, required: false
 
       argument :upgrade_subscription_popup_swap_subscription_to, String, required: false
-      argument :upgrade_subscription_popup_upgrade_subscription_to, String, required: false
+      argument :upgrade_subscription_popup_upgrade_subscription_btn, String, required: false
 
       argument :cancelled_tab_cancelled_subscriptions, String, required: false
       argument :cancelled_tab_reactivate_btn, String, required: false
@@ -90,6 +90,7 @@ module Types
       argument :delivery_tab_order_address, String, required: false
       argument :delivery_tab_skip, String, required: false
       argument :order_history_tab_my_order_history, String, required: false
+      argument :order_history_tab_order_no, String, required: false
       argument :order_history_tab_no_subscriptions, String, required: false
       argument :order_history_tab_date, String, required: false
       argument :order_history_tab_amount, String, required: false

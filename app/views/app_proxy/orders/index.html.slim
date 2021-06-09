@@ -15,30 +15,33 @@
                   .Polaris-Header-Title__TitleAndSubtitleWrapper
                     .Polaris-Header-Title
                       h2.Polaris-DisplayText.main-heading
-                        span.Polaris-TextStyle--variationStrong MY&nbsp;
-                        span.Polaris-TextStyle--variationStrong style="color: #007EFF" ORDER&nbsp;
-                        span.Polaris-TextStyle--variationStrong HISTORY
+                        - if @translation.order_history_tab_my_order_history.present?
+                          span.Polaris-TextStyle--variationStrong #{@translation.order_history_tab_my_order_history}
+                        - else
+                          span.Polaris-TextStyle--variationStrong MY&nbsp;
+                          span.Polaris-TextStyle--variationStrong style="color: #007EFF" ORDER&nbsp;
+                          span.Polaris-TextStyle--variationStrong HISTORY
         - if @active_subscriptions_count == 0
             div.notification-banner
-              p.Polaris-Heading.order-text No subscription have been found for your account
+              p.Polaris-Heading.order-text #{@translation.order_history_tab_no_subscriptions.present? ? @translation.order_history_tab_no_subscriptions : 'No subscription have been found for your account'}
         - else
           .order-history
             - @orders.each do |order|
               .grid
                 .item
-                  h2.order-text-heading ORDER #
+                  h2.order-text-heading #{@translation.order_history_tab_order_no.present? ? @translation.order_history_tab_order_no : 'ORDER #'}
                   p.order-text = order.order_number
                 .item
-                  h2.order-text-heading DATE
+                  h2.order-text-heading #{@translation.order_history_tab_date.present? ? @translation.order_history_tab_date : 'DATE'}
                   p.order-text = DateTime.parse(order.created_at).strftime("%d %b %Y")
                 .item
-                  h2.order-text-heading AMOUNT
+                  h2.order-text-heading #{@translation.order_history_tab_amount.present? ? @translation.order_history_tab_amount : 'AMOUNT'}
                   p.blue = number_to_currency order.total_price.to_f rescue nil
                 .item
                   .btn-wrapper
                     = link_to "/a/chargezen_production/orders/#{order.id}?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" do
-                      button.btn-view type="button" VIEW
-                    button.btn-invoice type="button" INVOICE
+                      button.btn-view type="button" #{@translation.order_history_tab_view.present? ? @translation.order_history_tab_view : 'VIEW'}
+                    button.btn-invoice type="button" #{@translation.order_history_tab_invoice.present? ? @translation.order_history_tab_invoice : 'INVOICE'}
 
         / .Polaris-DataTable__Footer
         /   = render 'paginate', page_info: @data

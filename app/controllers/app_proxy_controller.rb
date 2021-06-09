@@ -19,6 +19,7 @@ class AppProxyController < ApplicationController
   def init_session
     current_shop.connect
     @setting = current_shop&.setting
+    @translation = current_shop&.translation
   end
 
   def shopify_customer_id
