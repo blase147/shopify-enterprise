@@ -1,16 +1,9 @@
-#FROM ruby:2.7.0-buster AS base
 FROM ruby:2.7.0-alpine AS base
-
-#RUN apt-get update && \
-#    apt-get install -y software-properties-common curl build-essential pkg-config \
-#    libpq-dev nodejs npm
 
 RUN apk add --update build-base postgresql-dev nodejs npm tzdata && rm -rf /var/cache/apk/*
 RUN npm install --global yarn
 
-
 WORKDIR /app
-
 
 COPY Gemfile Gemfile.lock ./
 
@@ -22,18 +15,18 @@ COPY package.json yarn.lock /app/
 RUN yarn install  --check-files
 COPY . /app
 RUN bundle exec rake assets:precompile RAILS_ENV=production
-#RUN rm -rf /app/node_modules
-#RUN rm -rf /app/tmp/*
+RUN rm -rf /app/node_modules
+RUN rm -rf /app/tmp/*
 
-FROM ruby:2.7.0-alpine
-WORKDIR /app
-RUN apk add --update build-base postgresql-dev nodejs tzdata && rm -rf /var/cache/apk/*
-RUN apk add shared-mime-info
+#FROM ruby:2.7.0-alpine
+#WORKDIR /app
+#RUN apk add --update build-base postgresql-dev nodejs tzdata && rm -rf /var/cache/apk/*
+#RUN apk add shared-mime-info
 
-COPY --from=base /app /app
+#COPY --from=base /app /app
 
 # copy gems that already build
-COPY --from=base /usr/local/bundle/ /usr/local/bundle/
+#COPY --from=base /usr/local/bundle/ /usr/local/bundle/
 CMD ["bundle", "exec", "rails", "db:migrate", "-e", "production"]
 CMD ["bundle", "exec", "whenever", "--update-crontab", "-i", "aroma_production", "--set", "environment=production"]
 CMD ["bundle", "exec", "rails", "s", "-e", "production", "-b", "0.0.0.0"]

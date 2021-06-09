@@ -88,8 +88,8 @@ const [getSetting, { loading, data }] = useLazyQuery(fetchSetting);
               });
           }
       }, [data])
-      
-      
+
+
     return (
       <React.Fragment>
             <div className="sms-tab">
@@ -147,7 +147,7 @@ const [getSetting, { loading, data }] = useLazyQuery(fetchSetting);
             </Card>
             </div>
             {
-            (process.env.APP_TYPE=="public") && 
+            (process.env.APP_TYPE=="public") &&
             <div className ="faq-sms">
             <Card sectioned>
               <h1>Frequently Asked Questions </h1>

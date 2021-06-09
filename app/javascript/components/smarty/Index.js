@@ -20,7 +20,7 @@ const Smarty = () => {
    }
   }, [location?.state])
   const handleTabChange = useCallback(
-    (selectedTabIndex) => 
+    (selectedTabIndex) =>
     {
       setSelectedTitleTab(selectedTabIndex);
     },
@@ -47,7 +47,7 @@ const Smarty = () => {
     },
   ];
 
-  
+
 
   const [editId, setEditId] = useState("")
   const [showEditPage, setShowEditPage] = useState(false)
@@ -77,7 +77,7 @@ const Smarty = () => {
             onSelect={handleTabChange}
           >
             {
-              selectedTitleTab===0 && 
+              selectedTitleTab===0 &&
               <>
               {
                   showEditPage ?
@@ -89,11 +89,11 @@ const Smarty = () => {
                       handleEditSmartyMessage={handleEditPage}
                     />
               }
-                
+
               </>
             }
             {
-              selectedTitleTab===(process.env.APP_TYPE=="public" ?1:2) && 
+              selectedTitleTab===(process.env.APP_TYPE=="public" ?1:2) &&
               <>
                 {showEditPage ?
                   <EditSmartyMessage
@@ -107,7 +107,7 @@ const Smarty = () => {
               </>
             }
             {
-              selectedTitleTab===(process.env.APP_TYPE=="public" ?2:3) && 
+              selectedTitleTab===(process.env.APP_TYPE=="public" ?2:3) &&
               <>
               {
                  showEditPage ?
@@ -116,13 +116,13 @@ const Smarty = () => {
                  handleClose={handleCloseEditPage}
                  /> :
                  <CustomKeywords handleEditCustomKewords={handleEditPage}/>
-                
+
               }
-              
+
               </>
             }
             {
-              selectedTitleTab===(process.env.APP_TYPE=="public" ?3:1) && 
+              selectedTitleTab===(process.env.APP_TYPE=="public" ?3:1) &&
               <>
               {
                   showEditPage ?
@@ -130,7 +130,7 @@ const Smarty = () => {
                       id={editId}
                       handleClose={handleCloseEditPage}
                     /> :
-                    <CancellationReasons 
+                    <CancellationReasons
                       handleEditCancellation={handleEditPage}
               />
               }
