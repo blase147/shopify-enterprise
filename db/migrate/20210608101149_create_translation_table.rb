@@ -139,6 +139,10 @@ class CreateTranslationTable < ActiveRecord::Migration[6.0]
       t.string :account_tab_last_name
       t.string :account_tab_email
       t.string :account_tab_save_button
+
+      t.string :delay_shipment_popup_title
+      t.string :delay_shipment_popup_back
+      t.string :delay_shipment_popup_apply
     end
   end
 end

@@ -139,6 +139,10 @@ module Types
       argument :account_tab_last_name, String, required: false
       argument :account_tab_email, String, required: false
       argument :account_tab_save_button, String, required: false
+
+      argument :delay_shipment_popup_title, String, required: false
+      argument :delay_shipment_popup_back, String, required: false
+      argument :delay_shipment_popup_apply, String, required: false
       argument :__typename, String, required: false
     end
   end

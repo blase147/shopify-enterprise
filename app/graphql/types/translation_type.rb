@@ -138,5 +138,9 @@ module Types
     field :account_tab_last_name, String, null: true
     field :account_tab_email, String, null: true
     field :account_tab_save_button, String, null: true
+
+    field :delay_shipment_popup_title, String, null: true
+    field :delay_shipment_popup_back, String, null: true
+    field :delay_shipment_popup_apply, String, null: true
   end
 end
