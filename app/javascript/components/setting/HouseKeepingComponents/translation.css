@@ -116,14 +116,12 @@
   padding: 14px 70px;
 }
 .translation-btn .save-btn button {
-  background-color: #4D506A;
 	color: white;
 	border: 0;
 	padding: 14px 32px;
 }
 
 .translation-btn .save-btn button:hover {
-  background: #4D506A ;
 	color: white;
 	border: 0;
 	padding: 14px 32px;

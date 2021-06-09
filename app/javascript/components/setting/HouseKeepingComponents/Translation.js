@@ -721,12 +721,9 @@ const Translation = () => {
 
               <Layout.Section>
                 <Stack>
-                  <Stack.Item>
-                    <Button primary>Cancel</Button>
-                  </Stack.Item>
                   <div className="save-btn">
                   <Stack.Item>
-                    <Button loading={updateLoading} onClick={handleSubmit} >Save Changes </Button>
+                    <Button primary loading={updateLoading} onClick={handleSubmit} >Save Changes </Button>
                   </Stack.Item>
                   </div>
                 </Stack>
