@@ -539,8 +539,8 @@ const Translation = () => {
                   <TextField label="Recommended For You" placeholder ="Recommended For You" onChange={e=>setField("homeTabRecommendedForYou",e)} value={formData.homeTabRecommendedForYou} />
                   <TextField label="Add Subscription" placeholder ="Add Subscription" onChange={e=>setField("homeTabAddSubscription",e)} value={formData.homeTabAddSubscription} />
                   <TextField label="Apply Discount to your Next Order" placeholder ="Apply Discount to your Next Order" onChange={e=>setField("homeTabApplyDiscount",e)} value={formData.homeTabApplyDiscount} />
-                  <TextField label="Start Date" placeholder ="Start Date" onChange={e=>setField("homeTabStartDate",e)} value={formData.homeTabActiveSubscriptions} />
-                  <TextField label="Est. Next Delivery" placeholder ="Est. Next Delivery" onChange={e=>setField("homeTabEstNextDelivery",e)} value={formData.homeTabActiveSubscriptions} />
+                  <TextField label="Start Date" placeholder ="Start Date" onChange={e=>setField("homeTabStartDate",e)} value={formData.homeTabStartDate} />
+                  <TextField label="Est. Next Delivery" placeholder ="Est. Next Delivery" onChange={e=>setField("homeTabEstNextDelivery",e)} value={formData.homeTabEstNextDelivery} />
                   <TextField label="Last Card Charge " placeholder ="Last Card Charge " onChange={e=>setField("homeTabLastCardCharge",e)} value={formData.homeTabLastCardCharge} />
                   {/* <TextField label="Est. Next Delivery" placeholder ="Est. Next Delivery" onChange={e=>setField("",e)} value={} /> */}
                   <p>Subscriber + Upsell</p>
