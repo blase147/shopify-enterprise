@@ -584,10 +584,10 @@ const Translation = () => {
                   <TextField label="Cancel Subscription" placeholder ="Cancel Subscription" onChange={e=>setField("editSubscriptionPopupCancelSubscription",e)} value={formData.editSubscriptionPopupCancelSubscription} />
                   <p>Swap Subscription Popup</p>
                   <TextField label="Swap {Product} Subscription to:" placeholder ="Swap {Product} Subscription to:" onChange={e=>setField("swapSubscriptionPopupSwapSubscriptionTo",e)} value={formData.swapSubscriptionPopupSwapSubscriptionTo} />
-                  <TextField label="Swap Subscription Buton" placeholder ="Swap Subscription Buton" onChange={e=>setField("swapSubscriptionPopupSwapSubscriptionButton",e)} value={formData.swapSubscriptionPopupSwapSubscriptionButton} />
+                  <TextField label="Swap Subscription Button" placeholder ="Swap Subscription Button" onChange={e=>setField("swapSubscriptionPopupSwapSubscriptionButton",e)} value={formData.swapSubscriptionPopupSwapSubscriptionButton} />
                   <p>Upgrade Subscription Popup</p>
                   <TextField label="Upgrade {Product} Subscription to:" placeholder ="Upgrade {Product} Subscription to:" onChange={e=>setField("upgradeSubscriptionPopupSwapSubscriptionTo",e)} value={formData.upgradeSubscriptionPopupSwapSubscriptionTo} />
-                  <TextField label="Upgrade Subscription Buton" placeholder ="Upgrade Subscription Buton" onChange={e=>setField("upgradeSubscriptionPopupUpgradeSubscriptionBtn",e)} value={formData.upgradeSubscriptionPopupUpgradeSubscriptionBtn} />
+                  <TextField label="Upgrade Subscription Button" placeholder ="Upgrade Subscription Button" onChange={e=>setField("upgradeSubscriptionPopupUpgradeSubscriptionBtn",e)} value={formData.upgradeSubscriptionPopupUpgradeSubscriptionBtn} />
                 </div>
               </div>
 
