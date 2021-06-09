@@ -704,13 +704,6 @@ const Translation = () => {
                   <TextField label="Last Name" placeholder ="Last Name" onChange={e=>setField("accountTabLastName",e)} value={formData.accountTabLastName} />
                   <TextField label="Email" placeholder ="Email" onChange={e=>setField("accountTabEmail",e)} value={formData.accountTabEmail} />
                   <TextField label="Save Button" placeholder ="Save" onChange={e=>setField("accountTabSaveButton",e)} value={formData.accountTabSaveButton} />
-                  <p>Update Payment Pop Up</p>
-                    <TextField label="Name on Card" placeholder ="Name on Card" onChange={e=>setField("updatePaymentPopupCardName",e)} value={formData.updatePaymentPopupCardName} />
-                    <TextField label="Card Number" placeholder ="Card Number" onChange={e=>setField("updatePaymentPopupCardNumber",e)} value={formData.updatePaymentPopupCardNumber} />
-                    <TextField label="Exp. Month" placeholder ="Exp. Month" onChange={e=>setField("updatePaymentPopupExpMonth",e)} value={formData.updatePaymentPopupExpMonth} />
-                    <TextField label="Exp. Date" placeholder ="Exp. Date" onChange={e=>setField("updatePaymentPopupExpDate",e)} value={formData.updatePaymentPopupExpDate} />
-                    <TextField label="CVV" placeholder ="CVV" onChange={e=>setField("updatePaymentPopupCvv",e)} value={formData.updatePaymentPopupCvv} />
-                    <TextField label="Update Card" placeholder ="Update Card" onChange={e=>setField("updatePaymentPopupUpdateCard",e)} value={formData.updatePaymentPopupUpdateCard} />
                 </div>
               </div>
               {/*Account Setting */}
