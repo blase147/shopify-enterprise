@@ -51,6 +51,13 @@
   align-items: center;
 }
 
+.chargezen .collapsible-translatoin .Polaris-Button {
+  padding: 0px;
+  border: none;
+  background: none;
+  box-shadow: none;
+}
+
 .active-collpase, .collapsible-translatoin:hover {
   background-color: #E8F8FC;
 }

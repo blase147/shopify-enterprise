@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react'
+import React, { useEffect,useState,useCallback } from 'react'
 import './translation.css'
 import {
   Card,
@@ -6,7 +6,9 @@ import {
   TextField,
   SkeletonDisplayText,
   Stack,
-  Button
+  Button,
+  Toast,
+  Spinner
 } from '@shopify/polaris';
 import { gql, useLazyQuery, useMutation } from '@apollo/client';
 import { isEmpty } from 'lodash';
@@ -70,7 +72,7 @@ const Translation = () => {
         swapSubscriptionPopupSwapSubscriptionTo
         swapSubscriptionPopupSwapSubscriptionButton
         upgradeSubscriptionPopupSwapSubscriptionTo
-        upgradeSubscriptionPopupUpgradeSubscriptionTo
+        upgradeSubscriptionPopupUpgradeSubscriptionBtn
         cancelledTabCancelledSubscriptions
         cancelledTabReactivateBtn
         cancelledTabStartDate
@@ -95,6 +97,7 @@ const Translation = () => {
         orderHistoryTabNoSubscriptions
         orderHistoryTabDate
         orderHistoryTabAmount
+        orderHistoryTabOrderNo
         orderHistoryTabView
         orderHistoryTabInvoice
         addressTabMyAddress
@@ -135,6 +138,9 @@ const Translation = () => {
         accountTabLastName
         accountTabEmail
         accountTabSaveButton
+        delayShipmentPopupTitle
+        delayShipmentPopupBack
+        delayShipmentPopupApply
     }
 }
   `;
@@ -198,7 +204,7 @@ const Translation = () => {
             swapSubscriptionPopupSwapSubscriptionTo
             swapSubscriptionPopupSwapSubscriptionButton
             upgradeSubscriptionPopupSwapSubscriptionTo
-            upgradeSubscriptionPopupUpgradeSubscriptionTo
+            upgradeSubscriptionPopupUpgradeSubscriptionBtn
             cancelledTabCancelledSubscriptions
             cancelledTabReactivateBtn
             cancelledTabStartDate
@@ -222,6 +228,7 @@ const Translation = () => {
             orderHistoryTabMyOrderHistory
             orderHistoryTabNoSubscriptions
             orderHistoryTabDate
+            orderHistoryTabOrderNo
             orderHistoryTabAmount
             orderHistoryTabView
             orderHistoryTabInvoice
@@ -263,6 +270,9 @@ const Translation = () => {
             accountTabLastName
             accountTabEmail
             accountTabSaveButton
+            delayShipmentPopupTitle
+            delayShipmentPopupBack
+            delayShipmentPopupApply
         }
     }
 }
@@ -323,7 +333,7 @@ const Translation = () => {
         swapSubscriptionPopupSwapSubscriptionTo:"",
         swapSubscriptionPopupSwapSubscriptionButton:"",
         upgradeSubscriptionPopupSwapSubscriptionTo:"",
-        upgradeSubscriptionPopupUpgradeSubscriptionTo:"",
+        upgradeSubscriptionPopupUpgradeSubscriptionBtn:"",
         cancelledTabCancelledSubscriptions:"",
         cancelledTabReactivateBtn:"",
         cancelledTabStartDate:"",
@@ -347,6 +357,7 @@ const Translation = () => {
         orderHistoryTabMyOrderHistory:"",
         orderHistoryTabNoSubscriptions:"",
         orderHistoryTabDate:"",
+        orderHistoryTabOrderNo:"",
         orderHistoryTabAmount:"",
         orderHistoryTabView:"",
         orderHistoryTabInvoice:"",
@@ -388,6 +399,9 @@ const Translation = () => {
         accountTabLastName:"",
         accountTabEmail:"",
         accountTabSaveButton:"",
+        delayShipmentPopupTitle:"",
+        delayShipmentPopupBack:"",
+        delayShipmentPopupApply:""
   })
   const setField=(name,data)=>{
     setFormData({...formData,[name]:data});
@@ -396,6 +410,8 @@ const Translation = () => {
   const [fetchSetting, { data:setting, loading: fetchLoading }] = useLazyQuery(fetchSettingQuery);
   const [updateSetting, { loading: updateLoading }] = useMutation(updateSettingQuery);
 
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
   // Showing Data
   useEffect(()=>{
     fetchSetting()
@@ -417,33 +433,74 @@ const Translation = () => {
             }
         }
         }
+      }).then((resp) => {
+        const data = resp?.data;
+        const errors = data?.errors;
+        if (!errors)
+          setSaveSuccess(true);
       })
     }
   }
   useEffect(() => {
-    var coll = document.getElementsByClassName("collapsible-translatoin");
-    var i;
-    
-    for (i = 0; i < coll.length; i++) {
-      coll[i].addEventListener("click", function() {
-        this.classList.toggle("active-collpase");
-        var content = this.nextElementSibling;
-        if (content.style.maxHeight){
-          content.style.maxHeight = null;
-        } else {
-          content.style.maxHeight = content.scrollHeight + "px";
-        } 
-      });
+    if(!fetchLoading){
+      var coll = document.getElementsByClassName("collapsible-translatoin");
+      var i;
+      for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+          this.classList.toggle("active-collpase");
+          var content = this.nextElementSibling;
+          if (content.style.maxHeight){
+            content.style.maxHeight = null;
+          } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+          } 
+        });
+      }
     }
-  }, [])
+
+  }, [fetchLoading])
+
+  const [expandAll,setExpandAll]=useState(false)
+  const handleExpand=()=>{
+    var coll = document.getElementsByClassName("collapsible-translatoin");
+    for (let i = 0; i < coll.length; i++) {
+        if(!expandAll){
+          coll[i].classList.add("active-collpase");
+        }
+        
+        if(expandAll){
+          coll[i].classList.remove("active-collpase");
+        }
+        
+        var content = coll[i].nextElementSibling;
+        if (!expandAll){
+          setExpandAll(true);
+          content.style.maxHeight = content.scrollHeight + "px";
+        }else if(expandAll){
+          setExpandAll(false);
+          content.style.maxHeight = null;
+        } 
+      }
+    }
+
     return (
         <>
         <Layout>
+        
+        {fetchLoading ? (
+        <Card>
+          <Spinner
+            accessibilityLabel="Spinner example"
+            size="large"
+            color="teal"
+          />
+        </Card>
+      ) :
           <div className='translation-page'>
             <p className='customer-see'>Update the text that your customers see.</p>
             <div class="expend-all">
               <strong className="checkout-text">Customer Portal Translation</strong>
-              <p>Expand All</p>
+              <p style={{cursor:"pointer"}} onClick={handleExpand} >{expandAll ?"Collapse All":"Expand All"}</p>
             </div>
 
             <div className="collapse-section">
@@ -497,40 +554,40 @@ const Translation = () => {
                   <TextField label="Clear" placeholder ="Clear" onChange={e=>setField("upsellClear",e)} value={formData.upsellClear} />
                   
                   <p>Delay Next Order Popup</p>
-                  <TextField label="Choose Dates" placeholder ="Choose Dates" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Delay 2 Weeks" placeholder ="Delay 2 Weeks" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Delay 1 Month" placeholder ="Delay 1 Month" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Delay 2 Months" placeholder ="Delay 2 Months" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Delay 3 Months" placeholder ="Delay 3 Months" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Back" placeholder ="Back" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Apply" placeholder ="Apply" onChange={e=>setField("",e)} value={""} />
+                  <TextField label="Choose Dates" placeholder ="Choose Dates" onChange={e=>setField("delayPopupChooseDate",e)} value={formData.delayPopupChooseDate} />
+                  <TextField label="Delay 2 Weeks" placeholder ="Delay 2 Weeks" onChange={e=>setField("delayPopupDelayTwoWeeks",e)} value={formData.delayPopupDelayTwoWeeks} />
+                  <TextField label="Delay 1 Month" placeholder ="Delay 1 Month" onChange={e=>setField("delayPopupDelayOneMonth",e)} value={formData.delayPopupDelayTwoMonth} />
+                  <TextField label="Delay 2 Months" placeholder ="Delay 2 Months" onChange={e=>setField("delayPopupDelayTwoMonth",e)} value={formData.delayPopupDelayTwoMonth} />
+                  <TextField label="Delay 3 Months" placeholder ="Delay 3 Months" onChange={e=>setField("delayPopupDelayThreeMonth",e)} value={formData.delayPopupDelayThreeMonth} />
+                  <TextField label="Back" placeholder ="Back" onChange={e=>setField("delayPopupBack",e)} value={formData.delayPopupBack} />
+                  <TextField label="Apply" placeholder ="Apply" onChange={e=>setField("delayPopupApply",e)} value={formData.delayPopupApply} />
                   <p>Delay Next Shipment Popup</p>
-                  <TextField label="Delay your Next Shipment" placeholder ="Delay your Next Shipment" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Back" placeholder ="Back" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Apply" placeholder ="Apply" onChange={e=>setField("",e)} value={""} />
+                  <TextField label="Delay your Next Shipment" placeholder ="Delay your Next Shipment" onChange={e=>setField("delayShipmentPopupTitle",e)} value={formData.delayShipmentPopupTitle} />
+                  <TextField label="Back" placeholder ="Back" onChange={e=>setField("delayShipmentPopupBack",e)} value={formData.delayShipmentPopupBack} />
+                  <TextField label="Apply" placeholder ="Apply" onChange={e=>setField("delayShipmentPopupApply",e)} value={formData.delayShipmentPopupApply} />
                   <p>Delivery Schedule popup</p>
-                  <TextField label="My Next Order" placeholder ="My Next Order" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Order Product" placeholder ="Order Product" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Order Address" placeholder ="Order Address" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="My Scheduled Orders" placeholder ="My Scheduled Orders" onChange={e=>setField("",e)} value={""} />
+                  <TextField label="My Next Order" placeholder ="My Next Order" onChange={e=>setField("deliverySchedulePopupNextOrder",e)} value={formData.deliverySchedulePopupNextOrder} />
+                  <TextField label="Order Product" placeholder ="Order Product" onChange={e=>setField("deliverySchedulePopupOrderProduct",e)} value={formData.deliverySchedulePopupOrderProduct} />
+                  <TextField label="Order Address" placeholder ="Order Address" onChange={e=>setField("deliverySchedulePopupOrderAddress",e)} value={formData.deliverySchedulePopupOrderAddress} />
+                  <TextField label="My Scheduled Orders" placeholder ="My Scheduled Orders" onChange={e=>setField("deliverySchedulePopupScheduledOrders",e)} value={formData.deliverySchedulePopupScheduledOrders} />
                   <div className="trnaslation-grid">
-                    <TextField label="Skip" placeholder ="Skip" onChange={e=>setField("",e)} value={""} />
-                    <TextField label="Back" placeholder ="Back" onChange={e=>setField("",e)} value={""} />
+                    <TextField label="Skip" placeholder ="Skip" onChange={e=>setField("deliverySchedulePopupSkip",e)} value={formData.deliverySchedulePopupSkip} />
+                    <TextField label="Back" placeholder ="Back" onChange={e=>setField("deliverySchedulePopupBack",e)} value={formData.deliverySchedulePopupBack} />
                   </div>
-                  <TextField label="Apply" placeholder ="Apply" onChange={e=>setField("",e)} value={""} />
+                  <TextField label="Apply" placeholder ="Apply" onChange={e=>setField("deliverySchedulePopupApply",e)} value={formData.deliverySchedulePopupApply} />
                   <p>Edit Subscription Popup</p>
-                  <TextField label="Est. Next Delivery" placeholder ="Est. Next Delivery" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Next Card Charge" placeholder ="Next Card Charge" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Upgrade Subscription" placeholder ="Upgrade Subscription" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Swap Subscription" placeholder ="Swap Subscription" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Ask a Question" placeholder ="Ask a Question" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Cancel Subscription" placeholder ="Cancel Subscription" onChange={e=>setField("",e)} value={""} />
+                  <TextField label="Est. Next Delivery" placeholder ="Est. Next Delivery" onChange={e=>setField("editSubscriptionPopupEstNextDelivery",e)} value={formData.editSubscriptionPopupEstNextDelivery} />
+                  <TextField label="Next Card Charge" placeholder ="Next Card Charge" onChange={e=>setField("editSubscriptionPopupNextCardCharge",e)} value={formData.editSubscriptionPopupNextCardCharge} />
+                  <TextField label="Upgrade Subscription" placeholder ="Upgrade Subscription" onChange={e=>setField("editSubscriptionPopupUpgradeSubscription",e)} value={formData.editSubscriptionPopupUpgradeSubscription} />
+                  <TextField label="Swap Subscription" placeholder ="Swap Subscription" onChange={e=>setField("editSubscriptionPopupSwapSubscription",e)} value={formData.editSubscriptionPopupSwapSubscription} />
+                  <TextField label="Ask a Question" placeholder ="Ask a Question" onChange={e=>setField("editSubscriptionPopupAskAQuestion",e)} value={formData.editSubscriptionPopupAskAQuestion} />
+                  <TextField label="Cancel Subscription" placeholder ="Cancel Subscription" onChange={e=>setField("editSubscriptionPopupCancelSubscription",e)} value={formData.editSubscriptionPopupCancelSubscription} />
                   <p>Swap Subscription Popup</p>
-                  <TextField label="Swap {Product} Subscription to:" placeholder ="Swap {Product} Subscription to:" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Swap Subscription Buton" placeholder ="Swap Subscription Buton" onChange={e=>setField("",e)} value={""} />
+                  <TextField label="Swap {Product} Subscription to:" placeholder ="Swap {Product} Subscription to:" onChange={e=>setField("swapSubscriptionPopupSwapSubscriptionTo",e)} value={formData.swapSubscriptionPopupSwapSubscriptionTo} />
+                  <TextField label="Swap Subscription Buton" placeholder ="Swap Subscription Buton" onChange={e=>setField("swapSubscriptionPopupSwapSubscriptionButton",e)} value={formData.swapSubscriptionPopupSwapSubscriptionButton} />
                   <p>Upgrade Subscription Popup</p>
-                  <TextField label="Upgrade {Product} Subscription to:" placeholder ="Upgrade {Product} Subscription to:" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Upgrade Subscription Buton" placeholder ="Upgrade Subscription Buton" onChange={e=>setField("",e)} value={""} />
+                  <TextField label="Upgrade {Product} Subscription to:" placeholder ="Upgrade {Product} Subscription to:" onChange={e=>setField("upgradeSubscriptionPopupSwapSubscriptionTo",e)} value={formData.upgradeSubscriptionPopupSwapSubscriptionTo} />
+                  <TextField label="Upgrade Subscription Buton" placeholder ="Upgrade Subscription Buton" onChange={e=>setField("upgradeSubscriptionPopupUpgradeSubscriptionBtn",e)} value={formData.upgradeSubscriptionPopupUpgradeSubscriptionBtn} />
                 </div>
               </div>
 
@@ -540,22 +597,22 @@ const Translation = () => {
               </div>
               <div className="content-forms">
                 <div className="content-collapse">
-                  <TextField label="My Canceled Subscriptions" placeholder ="My Canceled Subscriptions" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Reactivate Button " placeholder ="Reactivate" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Start Date" placeholder ="Start Date" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Quantity " placeholder ="Quantity " onChange={e=>setField("",e)} value={""} />
+                  <TextField label="My Canceled Subscriptions" placeholder ="My Canceled Subscriptions" onChange={e=>setField("cancelledTabCancelledSubscriptions",e)} value={formData.cancelledTabCancelledSubscriptions} />
+                  <TextField label="Reactivate Button " placeholder ="Reactivate" onChange={e=>setField("cancelledTabReactivateBtn",e)} value={formData.cancelledTabReactivateBtn} />
+                  <TextField label="Start Date" placeholder ="Start Date" onChange={e=>setField("cancelledTabStartDate",e)} value={formData.cancelledTabStartDate} />
+                  <TextField label="Quantity " placeholder ="Quantity " onChange={e=>setField("cancelledTabQuantity",e)} value={formData.cancelledTabQuantity} />
                     <p>My Canceled Subscriptions with Loyalty Programs</p>
-                  <TextField label="Cancel {product} Subscription" placeholder ="Cancel {product} Subscription" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Get Reward" placeholder ="Get Reward" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Cancel Anyway" placeholder ="Cancel Anyway" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Keep Points" placeholder ="Keep Points" onChange={e=>setField("",e)} value={""} />
+                  <TextField label="Cancel {product} Subscription" placeholder ="Cancel {product} Subscription" onChange={e=>setField("cancelledLoyaltyCancelSubscription",e)} value={formData.cancelledLoyaltyCancelSubscription} />
+                  <TextField label="Get Reward" placeholder ="Get Reward" onChange={e=>setField("cancelledLoyaltyGetReward",e)} value={formData.cancelledLoyaltyGetReward} />
+                  <TextField label="Cancel Anyway" placeholder ="Cancel Anyway" onChange={e=>setField("cancelledLoyaltyCancelAnyway",e)} value={formData.cancelledLoyaltyCancelAnyway} />
+                  <TextField label="Keep Points" placeholder ="Keep Points" onChange={e=>setField("cancelledLoyaltyKeepPoints",e)} value={formData.cancelledLoyaltyKeepPoints} />
                     <p>My Canceled Subscriptions without Loyalty Programs</p>
-                  <TextField label="Cancel Anyway " placeholder ="Cancel Anyway " onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Keep Subscription" placeholder ="Keep Subscription" onChange={e=>setField("",e)} value={""} />
+                  <TextField label="Cancel Anyway " placeholder ="Cancel Anyway " onChange={e=>setField("cancelledNoLoyaltyCancelAnyway",e)} value={formData.cancelledNoLoyaltyCancelAnyway} />
+                  <TextField label="Keep Subscription" placeholder ="Keep Subscription" onChange={e=>setField("cancelledNoLoyaltyKeepSubscription",e)} value={formData.cancelledNoLoyaltyKeepSubscription} />
                     <p>Cancel Subscriptions with Reasons</p>
-                  <TextField label="Cancel {product} Subscription" placeholder ="Cancel {product} Subscription" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Keep Subscription" placeholder ="Keep Subscription" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Cancel" placeholder ="Cancel" onChange={e=>setField("",e)} value={""} />
+                  <TextField label="Cancel {product} Subscription" placeholder ="Cancel {product} Subscription" onChange={e=>setField("cancelledReasonsCancelSubscription",e)} value={formData.cancelledReasonsCancelSubscription} />
+                  <TextField label="Keep Subscription" placeholder ="Keep Subscription" onChange={e=>setField("cancelledReasonsKeepSubscription",e)} value={formData.cancelledReasonsKeepSubscription} />
+                  <TextField label="Cancel" placeholder ="Cancel" onChange={e=>setField("cancelledReasonsCancel",e)} value={formData.cancelledReasonsCancel} />
                 </div>
               </div>
               <div className="collapsible-translatoin">
@@ -563,13 +620,13 @@ const Translation = () => {
               </div>
               <div className="content-forms">
                 <div className="content-collapse">
-                  <TextField label="My Next Order" placeholder ="My Next Order" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="My Scheduled Order" placeholder ="My Scheduled Order" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="No Subscription have been found for your Account" onChange={e=>setField("",e)} value={""} placeholder ="No Subscription have been found for your Account" />
-                  <TextField label="Est. Delivery " placeholder ="Est. Delivery " onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Order Product" placeholder ="Order Product" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Order Address" placeholder ="Order Address" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Skip" placeholder ="Skip" onChange={e=>setField("",e)} value={""} />
+                  <TextField label="My Next Order" placeholder ="My Next Order" onChange={e=>setField("deliveryTabMyNextOrder",e)} value={formData.deliveryTabMyNextOrder} />
+                  <TextField label="My Scheduled Order" placeholder ="My Scheduled Order" onChange={e=>setField("deliveryTabMyScheduledOrder",e)} value={formData.deliveryTabMyScheduledOrder} />
+                  <TextField label="No Subscription have been found for your Account" onChange={e=>setField("deliveryTabNoSubscriptionsFound",e)} value={formData.deliveryTabNoSubscriptionsFound} placeholder ="No Subscription have been found for your Account" />
+                  <TextField label="Est. Delivery " placeholder ="Est. Delivery " onChange={e=>setField("deliveryTabEstDelivery",e)} value={formData.deliveryTabEstDelivery} />
+                  <TextField label="Order Product" placeholder ="Order Product" onChange={e=>setField("deliveryTabOrderProduct",e)} value={formData.deliveryTabOrderProduct} />
+                  <TextField label="Order Address" placeholder ="Order Address" onChange={e=>setField("deliveryTabOrderAddress",e)} value={formData.deliveryTabOrderAddress} />
+                  <TextField label="Skip" placeholder ="Skip" onChange={e=>setField("deliveryTabSkip",e)} value={formData.deliveryTabSkip} />
                 </div>
               </div>
               <div className="collapsible-translatoin">
@@ -577,13 +634,13 @@ const Translation = () => {
               </div>
               <div className="content-forms">
                 <div className="content-collapse">
-                  <TextField label="My Order History" placeholder ="My Order History" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="No Subscription have been found for your Account" onChange={e=>setField("",e)} value={""} placeholder ="No Subscription have been found for your Account" />
-                  <TextField label="Order #" placeholder ="Order #" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Date " placeholder ="Date " onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Amount" placeholder ="Amount" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="View" placeholder ="View" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Invoice" placeholder ="Invoice" onChange={e=>setField("",e)} value={""} />
+                  <TextField label="My Order History" placeholder ="My Order History" onChange={e=>setField("orderHistoryTabMyOrderHistory",e)} value={formData.orderHistoryTabMyOrderHistory} />
+                  <TextField label="No Subscription have been found for your Account" onChange={e=>setField("orderHistoryTabNoSubscriptions",e)} value={formData.orderHistoryTabNoSubscriptions} placeholder ="No Subscription have been found for your Account" />
+                  <TextField label="Order #" placeholder ="Order #" onChange={e=>setField("orderHistoryTabOrderNo",e)} value={formData.orderHistoryTabOrderNo} />
+                  <TextField label="Date " placeholder ="Date " onChange={e=>setField("orderHistoryTabDate",e)} value={formData.orderHistoryTabDate} />
+                  <TextField label="Amount" placeholder ="Amount" onChange={e=>setField("orderHistoryTabAmount",e)} value={formData.orderHistoryTabAmount} />
+                  <TextField label="View" placeholder ="View" onChange={e=>setField("orderHistoryTabView",e)} value={formData.orderHistoryTabView} />
+                  <TextField label="Invoice" placeholder ="Invoice" onChange={e=>setField("orderHistoryTabInvoice",e)} value={formData.orderHistoryTabInvoice} />
                 </div>
               </div>
               <div className="collapsible-translatoin">
@@ -591,27 +648,27 @@ const Translation = () => {
               </div>
               <div className="content-forms">
                 <div className="content-collapse">
-                  <TextField label="My Address" placeholder ="My Address" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="No Subscription have been found for your Account" onChange={e=>setField("",e)} value={""} placeholder ="No Subscription have been found for your Account" />
-                  <TextField label="Edit " placeholder ="Edit" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Phone " placeholder ="Date " onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Company" placeholder ="Company" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Address" placeholder ="Address" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Add Address" placeholder ="Add Address" onChange={e=>setField("",e)} value={""} />
+                  <TextField label="My Address" placeholder ="My Address" onChange={e=>setField("addressTabMyAddress",e)} value={formData.addressTabMyAddress} />
+                  <TextField label="No Subscription have been found for your Account" onChange={e=>setField("addressTabNoSubscriptionsFound",e)} value={formData.addressTabNoSubscriptionsFound} placeholder ="No Subscription have been found for your Account" />
+                  <TextField label="Edit " placeholder ="Edit" onChange={e=>setField("addressTabEdit",e)} value={formData.addressTabEdit} />
+                  <TextField label="Phone " placeholder ="Phone" onChange={e=>setField("addressTabPhone",e)} value={formData.addressTabPhone} />
+                  <TextField label="Company" placeholder ="Company" onChange={e=>setField("addressTabCompany",e)} value={formData.addressTabCompany} />
+                  <TextField label="Address" placeholder ="Address" onChange={e=>setField("addressTabAddress",e)} value={formData.addressTabAddress} />
+                  <TextField label="Add Address" placeholder ="Add Address" onChange={e=>setField("addressTabAddAddress",e)} value={formData.addressTabAddAddress} />
                     <p>Add Address Pop Up</p>
-                    <TextField label="First Name " placeholder ="First Name" onChange={e=>setField("",e)} value={""} />
-                    <TextField label="Last Name " placeholder ="Last Name " onChange={e=>setField("",e)} value={""} />
-                    <TextField label="Address 1" placeholder ="Address 1" onChange={e=>setField("",e)} value={""} />
-                    <TextField label="Address 2" placeholder ="Address 2" onChange={e=>setField("",e)} value={""} />
+                    <TextField label="First Name " placeholder ="First Name" onChange={e=>setField("addAddressPopupFirstName",e)} value={formData.addAddressPopupFirstName} />
+                    <TextField label="Last Name " placeholder ="Last Name " onChange={e=>setField("addAddressPopupLastName",e)} value={formData.addAddressPopupLastName} />
+                    <TextField label="Address 1" placeholder ="Address 1" onChange={e=>setField("addAddressPopupAddress1",e)} value={formData.addAddressPopupAddress1} />
+                    <TextField label="Address 2" placeholder ="Address 2" onChange={e=>setField("addAddressPopupAddress2",e)} value={formData.addAddressPopupAddress2} />
                     <div className='trnaslation-grid'>
-                      <TextField label="Company" placeholder ="Company" onChange={e=>setField("",e)} value={""} />
-                      <TextField label="City" placeholder ="City" onChange={e=>setField("",e)} value={""} />
-                      <TextField label="Country " placeholder ="Country" onChange={e=>setField("",e)} value={""} />
-                      <TextField label="Zip/Postal Code " placeholder ="Zip/Postal Code " onChange={e=>setField("",e)} value={""} />
-                      <TextField label="State/Province" placeholder ="State/Province" onChange={e=>setField("",e)} value={""} />
-                      <TextField label="Phone" placeholder ="Phone" onChange={e=>setField("",e)} value={""} />
+                      <TextField label="Company" placeholder ="Company" onChange={e=>setField("addAddressPopupCompany",e)} value={formData.addAddressPopupCompany} />
+                      <TextField label="City" placeholder ="City" onChange={e=>setField("addAddressPopupCity",e)} value={formData.addAddressPopupCity} />
+                      <TextField label="Country " placeholder ="Country" onChange={e=>setField("addAddressPopupCountry",e)} value={formData.addAddressPopupCountry} />
+                      <TextField label="Zip/Postal Code " placeholder ="Zip/Postal Code " onChange={e=>setField("addAddressPopupZip",e)} value={formData.addAddressPopupZip} />
+                      <TextField label="State/Province" placeholder ="State/Province" onChange={e=>setField("addAddressPopupState",e)} value={formData.addAddressPopupState} />
+                      <TextField label="Phone" placeholder ="Phone" onChange={e=>setField("addAddressPopupPhone",e)} value={formData.addAddressPopupPhone} />
                     </div>
-                    <TextField label="Update" placeholder ="Update" onChange={e=>setField("",e)} value={""} />
+                    <TextField label="Update" placeholder ="Update" onChange={e=>setField("addAddressPopupUpdate",e)} value={formData.addAddressPopupUpdate} />
                 </div>
               </div>
               <div className="collapsible-translatoin">
@@ -619,21 +676,21 @@ const Translation = () => {
               </div>
               <div className="content-forms">
                 <div className="content-collapse">
-                  <TextField label="My Billing Information" placeholder ="My Billing Information" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="No Subscription have been found for your Account" onChange={e=>setField("",e)} value={""} placeholder ="No Subscription have been found for your Account" />
-                  <TextField label="Card on File" placeholder ="Card on File" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Update" placeholder ="Update" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Edit" placeholder ="Edit" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Phone" placeholder ="Phone" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Company" placeholder ="Company" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Address" placeholder ="Address" onChange={e=>setField("",e)} value={""} />
+                  <TextField label="My Billing Information" placeholder ="My Billing Information" onChange={e=>setField("billingTabBillingInformation",e)} value={formData.billingTabBillingInformation} />
+                  <TextField label="No Subscription have been found for your Account" onChange={e=>setField("billingTabBillingNoSubscriptionsFound",e)} value={formData.billingTabBillingNoSubscriptionsFound} placeholder ="No Subscription have been found for your Account" />
+                  <TextField label="Card on File" placeholder ="Card on File" onChange={e=>setField("billingTabCardOnFile",e)} value={formData.billingTabCardOnFile} />
+                  <TextField label="Update" placeholder ="Update" onChange={e=>setField("billingTabUpdate",e)} value={formData.billingTabUpdate} />
+                  <TextField label="Edit" placeholder ="Edit" onChange={e=>setField("billingTabEdit",e)} value={formData.billingTabEdit} />
+                  <TextField label="Phone" placeholder ="Phone" onChange={e=>setField("billingTabPhone",e)} value={formData.billingTabPhone} />
+                  <TextField label="Company" placeholder ="Company" onChange={e=>setField("billingTabCompany",e)} value={formData.billingTabCompany} />
+                  <TextField label="Address" placeholder ="Address" onChange={e=>setField("billingTabAddress",e)} value={formData.billingTabAddress} />
                     <p>Update Payment Pop Up</p>
-                    <TextField label="Name on Card" placeholder ="Name on Card" onChange={e=>setField("",e)} value={""} />
-                    <TextField label="Card Number" placeholder ="Card Number" onChange={e=>setField("",e)} value={""} />
-                    <TextField label="Exp. Month" placeholder ="Exp. Month" onChange={e=>setField("",e)} value={""} />
-                    <TextField label="Exp. Date" placeholder ="Exp. Date" onChange={e=>setField("",e)} value={""} />
-                    <TextField label="CVV" placeholder ="CVV" onChange={e=>setField("",e)} value={""} />
-                    <TextField label="Update Card" placeholder ="Update Card" onChange={e=>setField("",e)} value={""} />
+                    <TextField label="Name on Card" placeholder ="Name on Card" onChange={e=>setField("updatePaymentPopupCardName",e)} value={formData.updatePaymentPopupCardName} />
+                    <TextField label="Card Number" placeholder ="Card Number" onChange={e=>setField("updatePaymentPopupCardNumber",e)} value={formData.updatePaymentPopupCardNumber} />
+                    <TextField label="Exp. Month" placeholder ="Exp. Month" onChange={e=>setField("updatePaymentPopupExpMonth",e)} value={formData.updatePaymentPopupExpMonth} />
+                    <TextField label="Exp. Date" placeholder ="Exp. Date" onChange={e=>setField("updatePaymentPopupExpDate",e)} value={formData.updatePaymentPopupExpDate} />
+                    <TextField label="CVV" placeholder ="CVV" onChange={e=>setField("updatePaymentPopupCvv",e)} value={formData.updatePaymentPopupCvv} />
+                    <TextField label="Update Card" placeholder ="Update Card" onChange={e=>setField("updatePaymentPopupUpdateCard",e)} value={formData.updatePaymentPopupUpdateCard} />
                 </div>
               </div>
               <div className="collapsible-translatoin">
@@ -641,19 +698,19 @@ const Translation = () => {
               </div>
               <div className="content-forms">
                 <div className="content-collapse">
-                  <TextField label="My Account Details" placeholder ="My Account Details" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="No Subscription have been found for your Account" onChange={e=>setField("",e)} value={""} placeholder ="No Subscription have been found for your Account" />
-                  <TextField label="First Name" placeholder ="First Name" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Last Name" placeholder ="Last Name" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Email" placeholder ="Email" onChange={e=>setField("",e)} value={""} />
-                  <TextField label="Save Button" placeholder ="Save" onChange={e=>setField("",e)} value={""} />
-                    <p>Update Payment Pop Up</p>
-                    <TextField label="Name on Card" placeholder ="Name on Card" onChange={e=>setField("",e)} value={""} />
-                    <TextField label="Card Number" placeholder ="Card Number" onChange={e=>setField("",e)} value={""} />
-                    <TextField label="Exp. Month" placeholder ="Exp. Month" onChange={e=>setField("",e)} value={""} />
-                    <TextField label="Exp. Date" placeholder ="Exp. Date" onChange={e=>setField("",e)} value={""} />
-                    <TextField label="CVV" placeholder ="CVV" onChange={e=>setField("",e)} value={""} />
-                    <TextField label="Update Card" placeholder ="Update Card" onChange={e=>setField("",e)} value={""} />
+                  <TextField label="My Account Details" placeholder ="My Account Details" onChange={e=>setField("accountTabMyAccountDetail",e)} value={formData.accountTabMyAccountDetail} />
+                  <TextField label="No Subscription have been found for your Account" onChange={e=>setField("accountTabNoSubscriptionsFound",e)} value={formData.accountTabNoSubscriptionsFound} placeholder ="No Subscription have been found for your Account" />
+                  <TextField label="First Name" placeholder ="First Name" onChange={e=>setField("accountTabFirstName",e)} value={formData.accountTabFirstName} />
+                  <TextField label="Last Name" placeholder ="Last Name" onChange={e=>setField("accountTabLastName",e)} value={formData.accountTabLastName} />
+                  <TextField label="Email" placeholder ="Email" onChange={e=>setField("accountTabEmail",e)} value={formData.accountTabEmail} />
+                  <TextField label="Save Button" placeholder ="Save" onChange={e=>setField("accountTabSaveButton",e)} value={formData.accountTabSaveButton} />
+                  <p>Update Payment Pop Up</p>
+                    <TextField label="Name on Card" placeholder ="Name on Card" onChange={e=>setField("updatePaymentPopupCardName",e)} value={formData.updatePaymentPopupCardName} />
+                    <TextField label="Card Number" placeholder ="Card Number" onChange={e=>setField("updatePaymentPopupCardNumber",e)} value={formData.updatePaymentPopupCardNumber} />
+                    <TextField label="Exp. Month" placeholder ="Exp. Month" onChange={e=>setField("updatePaymentPopupExpMonth",e)} value={formData.updatePaymentPopupExpMonth} />
+                    <TextField label="Exp. Date" placeholder ="Exp. Date" onChange={e=>setField("updatePaymentPopupExpDate",e)} value={formData.updatePaymentPopupExpDate} />
+                    <TextField label="CVV" placeholder ="CVV" onChange={e=>setField("updatePaymentPopupCvv",e)} value={formData.updatePaymentPopupCvv} />
+                    <TextField label="Update Card" placeholder ="Update Card" onChange={e=>setField("updatePaymentPopupUpdateCard",e)} value={formData.updatePaymentPopupUpdateCard} />
                 </div>
               </div>
               {/*Account Setting */}
@@ -676,6 +733,13 @@ const Translation = () => {
               </Layout.Section>
             </div>
           </div>
+        }
+          {saveSuccess && (
+            <Toast
+              content="Setting is saved"
+              onDismiss={hideSaveSuccess}
+            />
+          )}
         </Layout>
         </>
     )
