@@ -598,7 +598,7 @@ const Translation = () => {
               <div className="content-forms">
                 <div className="content-collapse">
                   <TextField label="My Canceled Subscriptions" placeholder ="My Canceled Subscriptions" onChange={e=>setField("cancelledTabCancelledSubscriptions",e)} value={formData.cancelledTabCancelledSubscriptions} />
-                  <TextField label="Reactivate Button " placeholder ="Reactivate" onChange={e=>setField("cancelledTabReactivateBtn",e)} value={formData.cancelledTabReactivateBtn} />
+                  <TextField label="Reactivate Button " placeholder ="Reactivate Button" onChange={e=>setField("cancelledTabReactivateBtn",e)} value={formData.cancelledTabReactivateBtn} />
                   <TextField label="Start Date" placeholder ="Start Date" onChange={e=>setField("cancelledTabStartDate",e)} value={formData.cancelledTabStartDate} />
                   <TextField label="Quantity " placeholder ="Quantity " onChange={e=>setField("cancelledTabQuantity",e)} value={formData.cancelledTabQuantity} />
                     <p>My Canceled Subscriptions with Loyalty Programs</p>
