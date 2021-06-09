@@ -27,6 +27,16 @@
   margin-top: 20px;
 }
 
+.trnaslation-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+}
+
+.trnaslation-grid > * {
+  flex: 1;
+}
+
 .collapsible-translatoin{
   background-color: #E8F8FC;
   cursor: pointer;
