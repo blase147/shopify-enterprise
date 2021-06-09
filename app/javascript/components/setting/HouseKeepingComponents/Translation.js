@@ -602,7 +602,7 @@ const Translation = () => {
                   <TextField label="Start Date" placeholder ="Start Date" onChange={e=>setField("cancelledTabStartDate",e)} value={formData.cancelledTabStartDate} />
                   <TextField label="Quantity " placeholder ="Quantity " onChange={e=>setField("cancelledTabQuantity",e)} value={formData.cancelledTabQuantity} />
                     <p>My Canceled Subscriptions with Loyalty Programs</p>
-                  <TextField label="Cancel {product} Subscription" placeholder ="Cancel {product} Subscription" onChange={e=>setField("cancelledLoyaltyCancelSubscription",e)} value={formData.cancelledLoyaltyCancelSubscription} />
+                  <TextField label="Cancel {Product} Subscription" placeholder ="Cancel {Product} Subscription" onChange={e=>setField("cancelledLoyaltyCancelSubscription",e)} value={formData.cancelledLoyaltyCancelSubscription} />
                   <TextField label="Get Reward" placeholder ="Get Reward" onChange={e=>setField("cancelledLoyaltyGetReward",e)} value={formData.cancelledLoyaltyGetReward} />
                   <TextField label="Cancel Anyway" placeholder ="Cancel Anyway" onChange={e=>setField("cancelledLoyaltyCancelAnyway",e)} value={formData.cancelledLoyaltyCancelAnyway} />
                   <TextField label="Keep Points" placeholder ="Keep Points" onChange={e=>setField("cancelledLoyaltyKeepPoints",e)} value={formData.cancelledLoyaltyKeepPoints} />
@@ -610,7 +610,7 @@ const Translation = () => {
                   <TextField label="Cancel Anyway " placeholder ="Cancel Anyway " onChange={e=>setField("cancelledNoLoyaltyCancelAnyway",e)} value={formData.cancelledNoLoyaltyCancelAnyway} />
                   <TextField label="Keep Subscription" placeholder ="Keep Subscription" onChange={e=>setField("cancelledNoLoyaltyKeepSubscription",e)} value={formData.cancelledNoLoyaltyKeepSubscription} />
                     <p>Cancel Subscriptions with Reasons</p>
-                  <TextField label="Cancel {product} Subscription" placeholder ="Cancel {product} Subscription" onChange={e=>setField("cancelledReasonsCancelSubscription",e)} value={formData.cancelledReasonsCancelSubscription} />
+                  <TextField label="Cancel {Product} Subscription" placeholder ="Cancel {Product} Subscription" onChange={e=>setField("cancelledReasonsCancelSubscription",e)} value={formData.cancelledReasonsCancelSubscription} />
                   <TextField label="Keep Subscription" placeholder ="Keep Subscription" onChange={e=>setField("cancelledReasonsKeepSubscription",e)} value={formData.cancelledReasonsKeepSubscription} />
                   <TextField label="Cancel" placeholder ="Cancel" onChange={e=>setField("cancelledReasonsCancel",e)} value={formData.cancelledReasonsCancel} />
                 </div>
