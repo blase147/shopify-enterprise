@@ -453,7 +453,7 @@ const Translation = () => {
             content.style.maxHeight = null;
           } else {
             content.style.maxHeight = content.scrollHeight + "px";
-          } 
+          }
         });
       }
     }
@@ -467,11 +467,11 @@ const Translation = () => {
         if(!expandAll){
           coll[i].classList.add("active-collpase");
         }
-        
+
         if(expandAll){
           coll[i].classList.remove("active-collpase");
         }
-        
+
         var content = coll[i].nextElementSibling;
         if (!expandAll){
           setExpandAll(true);
@@ -479,14 +479,14 @@ const Translation = () => {
         }else if(expandAll){
           setExpandAll(false);
           content.style.maxHeight = null;
-        } 
+        }
       }
     }
 
     return (
         <>
         <Layout>
-        
+
         {fetchLoading ? (
         <Card>
           <Spinner
@@ -507,7 +507,7 @@ const Translation = () => {
               <div className="collapsible-translatoin">
               <Button className="collapsible-translatoin">Sidebar Navigation </Button>
               </div>
-              
+
               <div className="content-forms">
                 <div className="content-collapse">
                   <TextField label="Subscription" placeholder ="Subscription" onChange={e=>setField("sidebarSubscription",e)} value={formData.sidebarSubscription} />
@@ -552,11 +552,11 @@ const Translation = () => {
                   <TextField label="Search for Products" placeholder ="Search for Products" onChange={e=>setField("upsellSearchForProduct",e)} value={formData.upsellSearchForProduct} />
                   <TextField label="Search" placeholder ="Search" onChange={e=>setField("upsellSearch",e)} value={formData.upsellSearch} />
                   <TextField label="Clear" placeholder ="Clear" onChange={e=>setField("upsellClear",e)} value={formData.upsellClear} />
-                  
+
                   <p>Delay Next Order Popup</p>
                   <TextField label="Choose Dates" placeholder ="Choose Dates" onChange={e=>setField("delayPopupChooseDate",e)} value={formData.delayPopupChooseDate} />
                   <TextField label="Delay 2 Weeks" placeholder ="Delay 2 Weeks" onChange={e=>setField("delayPopupDelayTwoWeeks",e)} value={formData.delayPopupDelayTwoWeeks} />
-                  <TextField label="Delay 1 Month" placeholder ="Delay 1 Month" onChange={e=>setField("delayPopupDelayOneMonth",e)} value={formData.delayPopupDelayTwoMonth} />
+                  <TextField label="Delay 1 Month" placeholder ="Delay 1 Month" onChange={e=>setField("delayPopupDelayOneMonth",e)} value={formData.delayPopupDelayOneMonth} />
                   <TextField label="Delay 2 Months" placeholder ="Delay 2 Months" onChange={e=>setField("delayPopupDelayTwoMonth",e)} value={formData.delayPopupDelayTwoMonth} />
                   <TextField label="Delay 3 Months" placeholder ="Delay 3 Months" onChange={e=>setField("delayPopupDelayThreeMonth",e)} value={formData.delayPopupDelayThreeMonth} />
                   <TextField label="Back" placeholder ="Back" onChange={e=>setField("delayPopupBack",e)} value={formData.delayPopupBack} />
@@ -591,7 +591,7 @@ const Translation = () => {
                 </div>
               </div>
 
-   
+
               <div className="collapsible-translatoin">
               <Button className="collapsible-translatoin">Cancelled Subscriptions Tab </Button>
               </div>
