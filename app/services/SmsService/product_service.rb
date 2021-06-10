@@ -54,7 +54,8 @@ class SmsService::ProductService < SmsService::ProcessService
           if result.is_a?(Hash)
             error = true
           else
-            @shop.sms_logs.one_time_order.create(product_id: variant.product_id, revenue: variant.price * quantity_message.content.to_i, customer_id: @customer.id)
+            # @shop.sms_logs.one_time_order.create(product_id: variant.product_id, revenue: variant.price * quantity_message.content.to_i, customer_id: @customer.id)
+            @shop.subscription_logs.one_time_order.sms.create(product_id: variant.product_id, revenue: variant.price * quantity_message.content.to_i, customer_id: @customer.id)
             message = 'Product added successfully.'
           end
         end

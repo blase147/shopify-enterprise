@@ -68,7 +68,8 @@ class SmsService::DelayService < SmsService::ProcessService
               message = message_service.content(messages[:failure])
             else
               product_id = subscription.lines.edges.first.node.variant_id[/\d+/]
-              @shop.sms_logs.delay.create(product_id: product_id, customer_id: @customer.id)
+              # @shop.sms_logs.delay.create(product_id: product_id, customer_id: @customer.id)
+              @shop.subscription_logs.delay.sms.create(product_id: product_id, customer_id: @customer.id)
               message_service = SmsService::MessageGenerateService.new(@shop, @customer, subscription,
                                 { delay_weeks: no_of_weeks[next_schedule_date_message.content], subscription_charge_date: next_schedule_date.to_date.strftime("%a, %B %e") })
               message = message_service.content(messages[:success])

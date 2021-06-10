@@ -73,7 +73,8 @@ class SmsService::CancelService < SmsService::ProcessService
             error_message = message_service.content(messages[:failure])
           else
             product_id = subscription.lines.edges.first.node.product_id[/\d+/]
-            @shop.sms_logs.cancel.create(product_id: product_id, customer_id: @customer.id)
+            # @shop.sms_logs.cancel.create(product_id: product_id, customer_id: @customer.id)
+            @shop.subscription_logs.cancel.sms.create(product_id: product_id, customer_id: @customer.id)
             message_service = SmsService::MessageGenerateService.new(@shop, @customer, subscription)
             message = message_service.content(messages[:success])
           end

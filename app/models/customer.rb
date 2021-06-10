@@ -6,7 +6,7 @@ class Customer < ApplicationRecord
   has_many :additional_contacts, dependent: :destroy
   has_one :billing_address, dependent: :destroy
   has_many :sms_conversations, dependent: :destroy
-  has_many :sms_logs, dependent: :destroy
+  # has_many :sms_logs, dependent: :destroy
   has_many :subscription_logs, dependent: :destroy
 
   # validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
@@ -21,6 +21,19 @@ class Customer < ApplicationRecord
 
   # default_scope { order(created_at: :asc) }
 
+  def log_work
+    begin
+      subscription = SubscriptionContractService.new(shopify_id).run
+      product = subscription.lines.edges.collect{|c| c.node}.first
+      note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
+      description = self.name+",just purchased,"+product.title
+      amount = (product.quantity * product.current_price.amount.to_f).round(2).to_s
+      shop.subscription_logs.opt_in.sms.create(customer_id: id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
+    rescue
+      true
+    end
+  end
+
   def send_opt_in_sms
     return if !shop.sms_setting.present? && !shop.sms_setting&.opt_in
 
@@ -29,7 +42,9 @@ class Customer < ApplicationRecord
     message = message_service.content('Opt-in')
     if phone.present? && shop.phone.present?
       TwilioServices::SendSms.call(from: shop.phone, to: phone, message: message)
-      shop.sms_logs.opt_in.create(customer_id: id)
+      # shop.sms_logs.opt_in.create(customer_id: id)
+      # shop.subscription_logs.opt_in.sms.create(customer_id: id)
+      log_work
       update(opt_in_sent: true, opt_in_reminder_at: Time.current + 12.hours)
     end
   end

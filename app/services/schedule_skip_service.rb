@@ -18,15 +18,25 @@ class ScheduleSkipService < GraphqlService
     @id = id
   end
 
+  def log_work(subscription)
+    customer = Customer.find_by_shopify_id @id
+    product_names = subscription.lines.edges.collect{|c| c.node.title}.to_sentence
+    note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
+    description = customer.name+",edited delivery date of,"+product_names
+    customer.shop.subscription_logs.skip.create(customer_id: customer.id, product_name: product_names, note: note, description: description)
+  end
+
   def run(params = nil)
+    subscription = SubscriptionContractService.new(@id).run
     if params.present? && params[:billing_date].present?
       skip_billing_date = params[:billing_date].to_date
     else
-      subscription = SubscriptionContractService.new(@id).run
+      # subscription = SubscriptionContractService.new(@id).run
       billing_date = DateTime.parse(subscription.next_billing_date)
       skip_billing_offset = subscription.billing_policy.interval_count.send(subscription.billing_policy.interval.downcase)
       skip_billing_date = billing_date + skip_billing_offset
     end
+    log_work(subscription)
 
     p skip_billing_date
     input = {}

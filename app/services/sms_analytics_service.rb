@@ -15,23 +15,23 @@ class SmsAnalyticsService
   end
 
   def swap_count
-    @shop.sms_logs.swap.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last).count
+    @shop.subscription_logs.sms.swap.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last).count
   end
 
   def skip_count
-    @shop.sms_logs.skip.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last).count
+    @shop.subscription_logs.sms.skip.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last).count
   end
 
   def delay_count
-    @shop.sms_logs.delay.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last).count
+    @shop.subscription_logs.sms.delay.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last).count
   end
 
   def cancel_count
-    @shop.sms_logs.cancel.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last).count
+    @shop.subscription_logs.sms.cancel.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last).count
   end
 
   def one_time_revenue
-    @shop.sms_logs.one_time_order.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last).sum(:revenue)
+    @shop.subscription_logs.sms.one_time_order.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last).sum(:revenue)
   end
 
   def opt_out_messages
@@ -53,8 +53,8 @@ class SmsAnalyticsService
   end
 
   def most_swaped_product
-    swaped_product = @shop.sms_logs.swap.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last)
-                           .select('COUNT(*) AS log_count, sms_logs.product_id').group(:product_id, :id)
+    swaped_product = @shop.subscription_logs.sms.swap.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last)
+                           .select('COUNT(*) AS log_count, subscription_logs.product_id').group(:product_id, :id)
                            .order('log_count DESC')
                            .limit(1).first
     return unless swaped_product.present?
@@ -64,8 +64,8 @@ class SmsAnalyticsService
   end
 
   def most_skipped_product
-    skipped_product = @shop.sms_logs.skip.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last)
-                           .select('COUNT(*) AS log_count, sms_logs.product_id').group(:product_id, :id)
+    skipped_product = @shop.subscription_logs.sms.skip.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last)
+                           .select('COUNT(*) AS log_count, subscription_logs.product_id').group(:product_id, :id)
                            .order('log_count DESC')
                            .limit(1).first
     return unless skipped_product.present?
@@ -75,8 +75,8 @@ class SmsAnalyticsService
   end
 
   def most_swaped_product_to
-    swaped_product = @shop.sms_logs.swap.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last)
-                          .select('COUNT(*) AS log_count, sms_logs.swaped_product_id')
+    swaped_product = @shop.subscription_logs.sms.swap.where('created_at::date BETWEEN ? AND ?', @range.first, @range.last)
+                          .select('COUNT(*) AS log_count, subscription_logs.swaped_product_id')
                           .group(:swaped_product_id, :id)
                           .order('log_count DESC')
                           .limit(1).first

@@ -46,7 +46,8 @@ class SmsService::SkipService < SmsService::ProcessService
             error = true
           else
             product_id = subscription.lines.edges.first.node.product_id[/\d+/]
-            @shop.sms_logs.skip.create(product_id: product_id, customer_id: @customer.id)
+            # @shop.sms_logs.skip.create(product_id: product_id, customer_id: @customer.id)
+            @shop.subscription_logs.skip.sms.create(product_id: product_id, customer_id: @customer.id)
             message_service = SmsService::MessageGenerateService.new(@shop, @customer, subscription,
                               { old_charge_date: subscription.next_billing_date.to_date.strftime("%a, %B %e"), subscription_charge_date: next_charge_date(subscription).strftime("%a, %B %e") })
             message = message_service.content(messages[:success])
