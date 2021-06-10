@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class AuthenticatedController < ApplicationController
+
   include ShopifyApp::Authenticated
 
   helper_method :current_shop
