@@ -6,7 +6,7 @@ import {
   DisplayText, Heading,
   Layout, Page, Stack,
   Tabs,
-  TextStyle,Icon,Spinner
+  TextStyle,Icon,Spinner,Popover
 } from '@shopify/polaris';
 import {
   CaretUpMinor,
@@ -23,6 +23,7 @@ import CounterUp from 'react-countup';
 import { isEmpty } from 'lodash';
 import DateRangePicker from '../common/DatePicker/DateRangePicker';
 import dayjs from 'dayjs';
+import Notification from './Notification';
 
 
 const Dashboard = (props) => {
@@ -459,6 +460,11 @@ const Dashboard = (props) => {
             }
             
           </Layout.Section>
+          
+          {/* <Layout.Section>
+          <Notification />
+          </Layout.Section> */}
+          
           <div style={{width:'100%'}}>
             <Layout.Section>
             <div className="analytic-section" >
