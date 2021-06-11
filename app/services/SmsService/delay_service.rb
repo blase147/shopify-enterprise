@@ -62,14 +62,20 @@ class SmsService::DelayService < SmsService::ProcessService
             error = true
           else
             next_schedule_date = get_next_date(next_schedule_date_message.content, subscription.next_billing_date.to_date)
-            result = ScheduleSkipService.new(subscription.id[/\d+/]).run({ billing_date: next_schedule_date })
+            result = ScheduleSkipService.new(subscription.id[/\d+/], nil, false).run({ billing_date: next_schedule_date })
             if result[:error].present?
               message_service = SmsService::MessageGenerateService.new(@shop, @customer, subscription, { subscription_charge_date: next_schedule_date.to_date.strftime("%a, %B %e") })
               message = message_service.content(messages[:failure])
             else
-              product_id = subscription.lines.edges.first.node.variant_id[/\d+/]
+              # product_id = subscription.lines.edges.first.node.variant_id[/\d+/]
+              product = subscription.lines.edges.collect{|c| c.node}.first
+              product_id = product.variant_id[/\d+/]
               # @shop.sms_logs.delay.create(product_id: product_id, customer_id: @customer.id)
-              @shop.subscription_logs.delay.sms.create(product_id: product_id, customer_id: @customer.id)
+              # @shop.subscription_logs.delay.sms.create(product_id: product_id, customer_id: @customer.id)
+              product_name = product.title
+              note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
+              description = @customer.name+",just delayed,"+product_names
+              @customer.shop.subscription_logs.sms.delay.create(customer_id: @customer.id, product_id: product_id, product_name: product_name, note: note, description: description)
               message_service = SmsService::MessageGenerateService.new(@shop, @customer, subscription,
                                 { delay_weeks: no_of_weeks[next_schedule_date_message.content], subscription_charge_date: next_schedule_date.to_date.strftime("%a, %B %e") })
               message = message_service.content(messages[:success])

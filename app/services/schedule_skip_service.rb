@@ -14,8 +14,10 @@ class ScheduleSkipService < GraphqlService
     }
   GRAPHQL
 
-  def initialize(id)
+  def initialize(id,type=nil,allow_default=true)
     @id = id
+    @type = type
+    @allow_default= allow_default
   end
 
   def log_work(subscription)
@@ -23,7 +25,11 @@ class ScheduleSkipService < GraphqlService
     product_names = subscription.lines.edges.collect{|c| c.node.title}.to_sentence
     note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
     description = customer.name+",edited delivery date of,"+product_names
-    customer.shop.subscription_logs.skip.create(customer_id: customer.id, product_name: product_names, note: note, description: description)
+    if @type == "sms"
+      customer.shop.subscription_logs.sms.skip.create(customer_id: customer.id, product_name: product_names, note: note, description: description)
+    else
+      customer.shop.subscription_logs.skip.create(customer_id: customer.id, product_name: product_names, note: note, description: description)
+    end
   end
 
   def run(params = nil)
@@ -36,7 +42,7 @@ class ScheduleSkipService < GraphqlService
       skip_billing_offset = subscription.billing_policy.interval_count.send(subscription.billing_policy.interval.downcase)
       skip_billing_date = billing_date + skip_billing_offset
     end
-    log_work(subscription)
+    log_work(subscription) if allow_default
 
     p skip_billing_date
     input = {}

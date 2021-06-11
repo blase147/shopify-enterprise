@@ -32,7 +32,7 @@ class SmsService::PauseService < SmsService::ProcessService
       if @params['Body'].downcase == 'yes'
         subscription_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 2).last
         if subscription_message.present?
-          result = SubscriptionContractDeleteService.new(subscription_message.content).run 'PAUSED'
+          result = SubscriptionContractDeleteService.new(subscription_message.content, "sms").run 'PAUSED'
           if result[:error].present?
             error = true
           else

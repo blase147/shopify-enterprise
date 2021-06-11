@@ -66,7 +66,7 @@ class SmsService::CancelService < SmsService::ProcessService
         subscription_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 2).last
         if subscription_message.present?
           subscription = SubscriptionContractService.new(subscription_message.content).run
-          result = SubscriptionContractDeleteService.new(subscription_message.content).run 'CANCELLED'
+          result = SubscriptionContractDeleteService.new(subscription_message.content,"sms").run 'CANCELLED'
           if result[:error].present?
             error = true
             message_service = SmsService::MessageGenerateService.new(@shop, @customer, subscription)
@@ -74,7 +74,7 @@ class SmsService::CancelService < SmsService::ProcessService
           else
             product_id = subscription.lines.edges.first.node.product_id[/\d+/]
             # @shop.sms_logs.cancel.create(product_id: product_id, customer_id: @customer.id)
-            @shop.subscription_logs.cancel.sms.create(product_id: product_id, customer_id: @customer.id)
+            # @shop.subscription_logs.cancel.sms.create(product_id: product_id, customer_id: @customer.id)
             message_service = SmsService::MessageGenerateService.new(@shop, @customer, subscription)
             message = message_service.content(messages[:success])
           end
