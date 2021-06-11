@@ -84,6 +84,11 @@ class ReportService < GraphqlService
 
     while has_next_page
       data = get_subscriptions next_cursor
+      retry_count = 0
+      until data.present? || retry_count > 10
+        data = get_subscriptions next_cursor
+        retry_count += 1
+      end
       subscriptions.push(data.edges || [])
       has_next_page = data.page_info.has_next_page
       next_cursor = data.edges.last&.cursor
