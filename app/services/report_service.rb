@@ -86,7 +86,7 @@ class ReportService < GraphqlService
       data = get_subscriptions next_cursor
       subscriptions.push(data.edges || [])
       has_next_page = data.page_info.has_next_page
-      next_cursor = data.edges.last.cursor
+      next_cursor = data.edges.last&.cursor
     end
     subscriptions.flatten
   end

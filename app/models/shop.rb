@@ -30,6 +30,7 @@ class Shop < ActiveRecord::Base
   end
 
   def build_setting
+    Setting.find_or_create_by(shop_id: id)
     SmsSetting.find_or_create_by(shop_id: id)
     Translation.find_or_create_by(shop_id: id)
   end
