@@ -50,6 +50,9 @@ const Integrations = () => {
           credentials{
             privateKey
             publicKey
+            twilioAccountSid
+            twilioAuthToken
+            twilioPhoneNumber
           }
           status
           keys

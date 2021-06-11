@@ -10,7 +10,8 @@ class TwilioServices::SendSms < ApplicationService
   end
 
   def send_message
-    message = twilio_client.messages.create(
+    shop = Shop.find_by_phone(@params[:from])
+    message = twilio_client(shop).messages.create(
       from: @params[:from],
       to: @params[:to],
       body: @params[:message]
@@ -21,7 +22,8 @@ class TwilioServices::SendSms < ApplicationService
     { error_message: e.error_message }
   end
 
-  def twilio_client
-    @twilio_client = Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
+  def twilio_client(shop)
+    integration = shop.integrations.find_by_name('Twilio')
+    @twilio_client = Twilio::REST::Client.new(integration.credentials['twilio_account_sid'], integration.credentials['twilio_auth_token'])
   end
 end

@@ -28,7 +28,8 @@ module Types
     end
 
     def sms_count
-      @list = $twilio_client.usage.records.list
+      twilio_client = TwilioServices::SendSms.new({}).twilio_client(object.shop)
+      @list = twilio_client.usage.records.list
       @list.sum { |l| l.count_unit == 'messages' ? l.count.to_i : 0 }
     end
 
