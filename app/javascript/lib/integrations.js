@@ -62,17 +62,6 @@ const integrations = [
     //   { title: 'Mailchimp', icon: Mailchimp },
     // ],
   },
-  ...(process.env.APP_TYPE=="public" ? [{
-    title: 'Reporting & Analytics',
-    id: 'report',
-    // data: [
-    //   { title: 'Baremetrics', icon: Baremetrics },
-    //   { title: 'Chart Mogul', icon: ChartMogul },
-    //   { title: 'Stitch', icon: Stitch },
-    //   { title: 'ProfitWell', icon: ProfitWell },
-    //   { title: 'Google Analytics', icon: GoogleAnalytics },
-    // ],
-  },
   {
     title: 'Collaboration',
     id: 'collabration',
@@ -83,6 +72,17 @@ const integrations = [
     //   { title: 'PieSync', icon: PieSync },
     //   { title: 'Moxtra', icon: Moxtra },
     //   { title: 'Shipstation', icon: Shipstation },
+    // ],
+  },
+  ...(process.env.APP_TYPE=="public" ? [{
+    title: 'Reporting & Analytics',
+    id: 'report',
+    // data: [
+    //   { title: 'Baremetrics', icon: Baremetrics },
+    //   { title: 'Chart Mogul', icon: ChartMogul },
+    //   { title: 'Stitch', icon: Stitch },
+    //   { title: 'ProfitWell', icon: ProfitWell },
+    //   { title: 'Google Analytics', icon: GoogleAnalytics },
     // ],
   },
   {
@@ -120,7 +120,7 @@ const integrations = [
     //   { title: 'Hubspot', icon: hubspot },
     // ],
   }]:[]),
-  
+
 ];
 
 export default integrations;
