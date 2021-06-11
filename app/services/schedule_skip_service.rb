@@ -42,7 +42,7 @@ class ScheduleSkipService < GraphqlService
       skip_billing_offset = subscription.billing_policy.interval_count.send(subscription.billing_policy.interval.downcase)
       skip_billing_date = billing_date + skip_billing_offset
     end
-    log_work(subscription) if allow_default
+    log_work(subscription) if @allow_default
 
     p skip_billing_date
     input = {}
@@ -56,7 +56,7 @@ class ScheduleSkipService < GraphqlService
     p result
     result = SubscriptionDraftsService.new.commit draft_id
     customer = Customer.find_by(shopify_id: @id)
-    customer.shop.subscription_logs.skip.create(subscription_id: @id, customer_id: customer.id)
+    # customer.shop.subscription_logs.skip.create(subscription_id: @id, customer_id: customer.id)
     p result
     email_notification = customer.shop.setting.email_notifications.find_by_name "Skip Next Order"
     EmailService::Send.new(email_notification).send_email({customer: customer, next_order_date: skip_billing_date}) unless email_notification.nil?
