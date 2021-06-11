@@ -55,7 +55,7 @@ mutation ($input: UpdatePasswordInput!) {
   const [formErrors, setFormErrors] = useState([]);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
-  
+
   const [selectedTab, setSelectedTab] = useState(2);
   const [showForm,setShowForm]=useState(false)
   const [exportData,setExportData]=useState(null);
@@ -84,7 +84,7 @@ mutation ($input: UpdatePasswordInput!) {
   //   [setSelectedTitleTab])
 
   const [updateSmsSettings,{data ,error,loading}]=useMutation(updateSmsSettingQuery);
-  
+
   const [smsData, setSmsData] = useState({
     status: "",
     shopPhone: "",
@@ -137,7 +137,7 @@ mutation ($input: UpdatePasswordInput!) {
       setFormErrors(error);
     });
   }
-  
+
   // Change pasword
   const handleChangePassword = () => {
     updatePassword({
@@ -171,7 +171,7 @@ mutation ($input: UpdatePasswordInput!) {
             <input type="radio" name="tab-btn" id="tab-btn-1" value="" onChange={e=>setSelectedTab(0)} checked={selectedTab==0}  />
             <label for="tab-btn-1">Discount</label>
             <input type="radio" name="tab-btn" id="tab-btn-2" value="" onChange={e=>setSelectedTab(1)} checked={selectedTab==1} />
-            <label for="tab-btn-2">Export</label> 
+            <label for="tab-btn-2">Export</label>
             </>
             }
             <input type="radio" name="tab-btn" id="tab-btn-3" value="" onChange={e=>setSelectedTab(2)} checked={selectedTab==2} />

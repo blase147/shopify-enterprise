@@ -68,7 +68,7 @@ const emailNotificationsDetails = (props) => {
                 color="base" />
                 <p>Go Back</p>
               </div>
-              
+
             </Stack.Item>
             <Stack.Item>
               <Heading>{values.emailNotifications[index]?.name}</Heading>
@@ -199,7 +199,7 @@ const emailNotificationsDetails = (props) => {
             </TextContainer>
           </Card.Section>
         }
-        
+
 
         <Card.Section>
           <TextContainer>

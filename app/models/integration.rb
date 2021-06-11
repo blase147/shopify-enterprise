@@ -6,6 +6,7 @@ class Integration < ApplicationRecord
   enum service_type: %i[undefined email]
 
   before_update :set_default_integration
+  before_update :set_twilio_shop_phone, if: -> { name == 'Twilio' }
 
   def set_default_integration
     unless shop.integrations.where(integration_type: integration_type, service_type: service_type).where.not(id: id, credentials: nil).present?
@@ -16,4 +17,7 @@ class Integration < ApplicationRecord
     end
   end
 
+  def set_twilio_shop_phone
+    shop.update(phone: credentials['twilio_phone_number'])
+  end
 end

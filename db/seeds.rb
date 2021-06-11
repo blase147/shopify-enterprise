@@ -129,7 +129,7 @@ shop.integrations.find_or_create_by(integration_type: :reporting_and_analytics, 
 # collaboration
 shop.integrations.find_or_create_by(integration_type: :collaboration, name: 'Shopify')
 shop.integrations.find_or_create_by(integration_type: :collaboration, name: 'Slack')
-shop.integrations.find_or_create_by(integration_type: :collaboration, name: 'Twilio', keys: 'public_key,private_key')
+shop.integrations.find_or_create_by(integration_type: :collaboration, name: 'Twilio', keys: 'twilio_account_sid,twilio_auth_token,twilio_phone_number')
 shop.integrations.find_or_create_by(integration_type: :collaboration, name: 'PieSync')
 shop.integrations.find_or_create_by(integration_type: :collaboration, name: 'Moxtra')
 shop.integrations.find_or_create_by(integration_type: :collaboration, name: 'Shipstation')

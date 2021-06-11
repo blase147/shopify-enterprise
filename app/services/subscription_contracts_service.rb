@@ -72,8 +72,8 @@ class SubscriptionContractsService < GraphqlService
       subscriptions: subscriptions,
       has_next_page: data.page_info.has_next_page,
       has_previous_page: data.page_info.has_previous_page,
-      next_cursor: subscriptions.last.cursor,
-      prev_cursort: subscriptions.first.cursor
+      next_cursor: subscriptions.last&.cursor,
+      prev_cursort: subscriptions.first&.cursor
     }
 
   rescue Exception => ex

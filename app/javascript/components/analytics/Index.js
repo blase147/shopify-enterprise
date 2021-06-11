@@ -72,7 +72,7 @@ const Analytics = () => {
             <div className="retention">
               <Retention />
             </div>
-          ) 
+          )
           : selectedTitleTab === (process.env.APP_TYPE=="public" ?3:2) ?(
             <div className="product">
               <Product />

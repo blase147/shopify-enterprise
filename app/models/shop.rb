@@ -1,3 +1,4 @@
+
 # frozen_string_literal: true
 class Shop < ActiveRecord::Base
   include ShopifyApp::ShopSessionStorage
@@ -20,15 +21,18 @@ class Shop < ActiveRecord::Base
   has_many :upsell_campaign_groups, dependent: :destroy
   has_many :integrations, dependent: :destroy
   has_one :lock_password
-  after_create :build_sms_setting
+  has_one :translation, dependent: :destroy
+  after_create :build_setting
   after_create :setup_default_lock_password
 
   def setup_default_lock_password
     LockPassword.create(password: ENV['DEFAULT_LOCK_PASSWORD'], shop_id: id)
   end
 
-  def build_sms_setting
+  def build_setting
+    Setting.find_or_create_by(shop_id: id)
     SmsSetting.find_or_create_by(shop_id: id)
+    Translation.find_or_create_by(shop_id: id)
   end
 
   def api_version
