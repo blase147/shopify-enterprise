@@ -60,16 +60,30 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
     </div>
   );
 
+  const mapAction={
+    "opt-in":"new",
+    "skip":"skip",
+    "cancel":"cancelled",
+    "swap":"swap",
+    "restart":"restart"
+  }
+
   const getColor=(action)=>{
     switch(action){
-      case "new":
+      case "opt-in":
         return "green";
       break;
-      case "upsell":
+      case "skip":
         return "blue";
       break;
       case "cancel":
         return "red";
+      break;
+      case "swap":
+        return "blue";
+      break;
+      case "restart":
+        return "green";
       break;
       default:
         return "blue"
@@ -109,7 +123,7 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
                                     <p><strong>{notification?.description?.split(",")[0] || ' '}</strong> <small>{notification?.description?.split(",")[1] || ' '}</small> <strong>{notification?.description?.split(",")[2] || ' '}</strong></p>
                                   </div>
                                   <div className="main-2">
-                                    <p className={`status ${getColor(notification?.actionType)}`}>{_.capitalize(notification?.actionType) || ' '}</p>
+                                    <p className={`status ${getColor(notification?.actionType)}`}>{_.capitalize(mapAction[notification?.actionType]) || ' '}</p>
                                     <div className="icon-wrapper">
                                       <span>
                                         <svg width="30" height="28" viewBox="0 0 30 28" fill="none" xmlns="http://www.w3.org/2000/svg">
