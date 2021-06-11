@@ -24,6 +24,7 @@ class Shop < ActiveRecord::Base
   has_one :translation, dependent: :destroy
   after_create :build_setting
   after_create :setup_default_lock_password
+  after_create :populate_store_data
 
   def setup_default_lock_password
     LockPassword.create(password: ENV['DEFAULT_LOCK_PASSWORD'], shop_id: id)
@@ -74,6 +75,10 @@ class Shop < ActiveRecord::Base
         communication: "#{billing_policy.interval_count} #{billing_policy.interval} Pack".titleize
       )
     end
+  end
+
+  def populate_store_data
+    PopulateShopData.new(self).populate_data
   end
 
   def email_integration_service
