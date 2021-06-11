@@ -47,13 +47,19 @@ module SubscriptionConcern
 
   def swap_product
     variant = ShopifyAPI::Variant.find(params[:variant_id][/\d+/])
+    product = ProductService.new(variant.product_id).run
     result = SubscriptionDraftsService.new.line_update @draft_id, params[:line_id], { 'productVariantId': params[:variant_id], 'quantity': 1, 'currentPrice': variant.price }
     SubscriptionDraftsService.new.commit @draft_id
     if result[:error].present?
       flash[:error] = result[:error]
       render js: "alert('#{result[:error]}'); hideLoading()"
     else
-      current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id)
+      # current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id)
+      subscription = SubscriptionContractService.new(params[:id]).run
+      note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
+      description = @customer.name+",just swap,"+variant.title
+      # amount = (product.quantity * variant.price.to_f).round(2).to_s
+      current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id, product_name: variant.title, note: note, description: description, product_id: params[:variant_id], swaped_product_id: variant.product_id)
       render js: 'location.reload()'
     end
   end

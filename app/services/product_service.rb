@@ -3,6 +3,7 @@ class ProductService < GraphqlService
     query($id: ID!){
       product(id: $id) {
         id
+        title
         sellingPlanGroupCount
         requiresSellingPlan
       }
