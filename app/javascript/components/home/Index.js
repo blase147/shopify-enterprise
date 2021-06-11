@@ -461,9 +461,9 @@ const Dashboard = (props) => {
             
           </Layout.Section>
           
-          {/* <Layout.Section>
+          <Layout.Section>
           <Notification />
-          </Layout.Section> */}
+          </Layout.Section>
           
           <div style={{width:'100%'}}>
             <Layout.Section>

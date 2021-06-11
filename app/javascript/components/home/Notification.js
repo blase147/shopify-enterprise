@@ -7,15 +7,28 @@ import {
   Spinner
 } from "@shopify/polaris";
 import { gql, useLazyQuery } from '@apollo/client';
+import { isEmpty } from "lodash";
 
 const Notification = () => {
 
 const notificationQuery=gql`
-
+query
+  {
+    fetchSubscriptionLogs {
+        subscriptionLogs
+        {
+            actionType
+            createdAt
+            description
+            note
+            amount
+            event
+        }
+    }
+}
 `;
 
-const [fetchNotifications,{loading,data,error}]=useLazyQuery(notificationQuery,{fetchPolicy:"network-only"});
-
+const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notificationQuery,{fetchPolicy:"network-only"});
 
   const [popoverActive, setPopoverActive] = useState(false);
 
@@ -47,6 +60,21 @@ const [fetchNotifications,{loading,data,error}]=useLazyQuery(notificationQuery,{
     </div>
   );
 
+  const getColor=(action)=>{
+    switch(action){
+      case "new":
+        return "green";
+      break;
+      case "upsell":
+        return "blue";
+      break;
+      case "cancel":
+        return "red";
+      break;
+      default:
+        return "blue"
+    }
+  }
 
   return (
     <>
@@ -69,19 +97,19 @@ const [fetchNotifications,{loading,data,error}]=useLazyQuery(notificationQuery,{
                     />
                 ) :
                   <>
-                    {
-                      [1, 2, 3].map(notification => (
+                   { 
+                   !isEmpty(notifications) && notifications?.fetchSubscriptionLogs?.subscriptionLogs?.map(notification=>(
                         <div className="notification-wrapper">
                           <Card>
                             <div className="content-notification-wrapper">
                               <div className="conent-inner-wrapper">
-                                <div className={"content-color-green"}></div>
+                                <div className={`content-color-${getColor(notification?.actionType)}`}></div>
                                 <div className={"main-content"}>
                                   <div className="main-1">
-                                    <p><strong>Roe Assaad</strong> <small>just canceled</small> <strong>Citrus & Herbal Must</strong></p>
+                                    <p><strong>{notification?.description?.split(",")[0] || ' '}</strong> <small>{notification?.description?.split(",")[1] || ' '}</small> <strong>{notification?.description?.split(",")[2] || ' '}</strong></p>
                                   </div>
                                   <div className="main-2">
-                                    <p className="status green">Cancelled</p>
+                                    <p className={`status ${getColor(notification?.actionType)}`}>{_.capitalize(notification?.actionType) || ' '}</p>
                                     <div className="icon-wrapper">
                                       <span>
                                         <svg width="30" height="28" viewBox="0 0 30 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -96,14 +124,14 @@ const [fetchNotifications,{loading,data,error}]=useLazyQuery(notificationQuery,{
                                           <path d="M18.6859 6.72875C17.4474 6.11702 16.0252 5.98913 14.6975 6.37008C13.3697 6.75103 12.2317 7.61344 11.5059 8.78875L9.12589 12.6488C8.7199 12.5823 8.30327 12.6427 7.93284 12.8216C7.5624 13.0006 7.25618 13.2894 7.05589 13.6488L6.89588 13.9587C6.68242 14.4214 6.6536 14.9481 6.81528 15.4313C6.97697 15.9145 7.31696 16.3177 7.76588 16.5588L12.5959 19.0288L18.6859 6.75875V6.72875Z" fill="#EE3724" />
                                         </svg>
                                       </span>
-                                      <p className="span-text">Subscription - 3 Months</p>
+                                      <p className="span-text">{notification?.note || ' '}</p>
                                     </div>
 
                                   </div>
                                 </div>
                               </div>
-                              <div className={"price-content price-green"} >-$45.99</div>
-                              <div className={"time-content"}>2 min ago</div>
+                              <div className={`price-content price-${getColor(notification?.actionType)}`}>{notification?.amount ? `${notification?.actionType=='cancel'?"-":notification?.actionType=='new'?'+':" "}${notification?.amount}` :" "}</div>
+                              <div className={"time-content"}>1 min ago</div>
                             </div>
                           </Card>
                         </div>
