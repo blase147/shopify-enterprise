@@ -20,6 +20,7 @@
     "highcharts": "^8.2.2",
     "highcharts-react-official": "^3.0.0",
     "html-react-parser": "1.2.5",
+    "javascript-time-ago": "2.3.6",
     "jquery": "^3.6.0",
     "json2csv": "^5.0.5",
     "lodash": "^4.17.20",

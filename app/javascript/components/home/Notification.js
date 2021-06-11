@@ -8,8 +8,14 @@ import {
 } from "@shopify/polaris";
 import { gql, useLazyQuery } from '@apollo/client';
 import { isEmpty } from "lodash";
+import TimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en'
 
+TimeAgo.addDefaultLocale(en);
 const Notification = () => {
+ 
+  const timeAgo = new TimeAgo('en-US');
+
 
 const notificationQuery=gql`
 query
@@ -145,7 +151,7 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
                                 </div>
                               </div>
                               <div className={`price-content price-${getColor(notification?.actionType)}`}>{notification?.amount ? `${notification?.actionType=='cancel'?"-":notification?.actionType=='new'?'+':" "}${notification?.amount}` :" "}</div>
-                              <div className={"time-content"}>1 min ago</div>
+                              <div className={"time-content"}>{timeAgo.format(Date.parse(notification?.createdAt))}</div>
                             </div>
                           </Card>
                         </div>
