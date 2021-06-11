@@ -21,7 +21,7 @@ import AppLayout from '../layout/Layout';
 
 
 // import json2csv from 'json2csv';
-const subscriptions = ['all', 'inTrial', 'future', 'active', 'cancelled'];
+const subscriptions = ['all', 'new', 'returning', 'active', 'cancelled'];
 
 const {
   Parser,
@@ -320,7 +320,7 @@ const Customers = () => {
     const rowsData = customers.filter((item) => {
       return (
         (item.subscription === subscriptions[selectedTab] ||
-          (subscriptions[selectedTab] === 'all') || (subscriptions[selectedTab] === 'returning') || (subscriptions[selectedTab] === 'active')) &&
+          (subscriptions[selectedTab] === 'all') || (subscriptions[selectedTab] === 'returning') || (subscriptions[selectedTab] === 'active') || (subscriptions[selectedTab] === 'cancelled') || (subscriptions[selectedTab] === 'new')) &&
         (item.name?.toLowerCase()?.includes(queryValue?.toLowerCase()) ||
           !queryValue) &&
         (item.subscription?.toLowerCase()?.includes(taggedWith) || !taggedWith)
@@ -586,6 +586,7 @@ const Customers = () => {
       res.status == 'CANCELLED' && cancelledArr.push(res);
     });
   }
+
 
   return (
     <AppLayout typePage="customers" tabIndex="2">
