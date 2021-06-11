@@ -18,7 +18,7 @@ module SubscriptionConcern
     else
       render js: "window.top.location.href = '/cart/#{variant.id}:1';"
     end
-    current_shop.subscription_logs.upsell.create(subscription_id: params[:id], customer_id: @customer.id)
+    # current_shop.subscription_logs.upsell.create(subscription_id: params[:id], customer_id: @customer.id)
   end
 
   def update_quantity
