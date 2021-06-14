@@ -1,17 +1,27 @@
 .chargezen-plan-selector {
   margin-bottom: 1em;
 
-  border: 1px solid #ddd;
-  padding: 10px;
+  // border: 1px solid #ddd;
+  // padding: 10px;
   border-radius: 5px;
 
   & > legend {
+    display: none;
     padding: 0em 8px 0px 6px;
     font-weight: bold;
   }
 
   .plan-selector-group {
-    margin: 0 1rem 1rem 0;
+    margin-bottom: 1rem;
+    border: 1px solid #4D506A;
+    border-radius: 5px;
+    padding: 11px 15px 11px 21px; 
+
+    label {
+      display: flex;
+      align-items: center;
+      grid-gap: 10px;
+    }
 
     &:not(.group-available) {
       display: none;
