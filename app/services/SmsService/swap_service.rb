@@ -7,6 +7,7 @@ class SmsService::SwapService < SmsService::ProcessService
     @shared_service = SmsService::SharedService.new(conversation, params)
     @customer = conversation.customer
     @shop = @customer.shop
+    @shop.connect
   end
 
   def process_message(step)
