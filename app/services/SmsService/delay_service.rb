@@ -75,7 +75,7 @@ class SmsService::DelayService < SmsService::ProcessService
               product_name = product.title
               note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
               description = @customer.name+",just delayed,"+product_names
-              @customer.shop.subscription_logs.sms.delay.create(customer_id: @customer.id, product_id: product_id, product_name: product_name, note: note, description: description)
+              @customer.shop.subscription_logs.sms.delay.create(subscription_id: subscription_message.content, customer_id: @customer.id, product_id: product_id, product_name: product_name, note: note, description: description)
               message_service = SmsService::MessageGenerateService.new(@shop, @customer, subscription,
                                 { delay_weeks: no_of_weeks[next_schedule_date_message.content], subscription_charge_date: next_schedule_date.to_date.strftime("%a, %B %e") })
               message = message_service.content(messages[:success])

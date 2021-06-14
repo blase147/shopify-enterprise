@@ -28,16 +28,16 @@ class SubscriptionContractDeleteService < GraphqlService
       if status == "CANCELLED"
         description = customer.name+",just canceled,"+product.title
         if @type == "sms"
-          customer.shop.subscription_logs.sms.cancel.create(customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
+          customer.shop.subscription_logs.sms.cancel.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
         else
-          customer.shop.subscription_logs.cancel.create(customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
+          customer.shop.subscription_logs.cancel.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
         end
       else
         description = customer.name+",just restart,"+product.title
         if @type == "sms"
-          customer.shop.subscription_logs.sms.restart.create(customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
+          customer.shop.subscription_logs.sms.restart.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
         else
-          customer.shop.subscription_logs.restart.create(customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
+          customer.shop.subscription_logs.restart.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
         end
       end
     rescue
