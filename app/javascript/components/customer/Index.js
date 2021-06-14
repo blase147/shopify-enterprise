@@ -28,7 +28,8 @@ const {
   transforms: { unwind },
 } = require('json2csv');
 
-let sortOrder = 0;
+// let sortOrder = 0;
+
 
 const ButtonRemove = (props) => {
   const { selectedCustomers, refetch, setselectedCustomers } = props;
@@ -105,6 +106,8 @@ const Customers = () => {
     },
   ];
   // End tabs
+
+  const [sortOrder,setSortOrder]=useState(0);
 
   const [moneySpent, setMoneySpent] = useState(null);
   const [taggedWith, setTaggedWith] = useState(null);
@@ -672,21 +675,20 @@ const Customers = () => {
                   <Button
                     onClick={() => {
                       setFilterCustomers(() => {
-                        if (sortOrder === 0) {
-                          sortOrder = 1;
+                        if (sortOrder === 1) {
+                          setSortOrder(0);
                           return [...filterCustomers].sort(
                             (a, b) =>
-                              Date.parse(b.updatedAt) - Date.parse(a.updatedAt)
+                              new Date(b.updatedAt) - new Date(a.updatedAt)
                           );
                         } else {
-                          sortOrder = 0;
+                          setSortOrder(1);
                           return [...filterCustomers].sort(
                             (a, b) =>
-                              Date.parse(a.updatedAt) - Date.parse(b.updatedAt)
+                              new Date(a.updatedAt) - new Date(b.updatedAt)
                           );
                         }
                       });
-                      // console.log('filterCustomers--after', filterCustomers);
                     }}
                   >
                     <img src={swapIcon} />
