@@ -129,6 +129,7 @@ class SmsService::SwapService < SmsService::ProcessService
     end
     { error: error, message: error ? error_message : message, increase_step: increase_step }
   rescue Exception => ex
+    p ex.message
     { error: true, message: 'Invalid Command, Please try again.' }
   end
 end
