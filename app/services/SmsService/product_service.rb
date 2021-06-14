@@ -44,6 +44,7 @@ class SmsService::ProductService < SmsService::ProcessService
       if @params['Body'].downcase == 'yes'
         variant_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 3).last
         variant = ShopifyAPI::Variant.find(variant_message.content) rescue nil
+        product = ShopifyAPI::Product.find(variant.product_id) rescue nil
         quantity_message = @conversation.sms_messages.where(comes_from_customer: true, command_step: 4).last
         input = { customerId: @customer.shopify_identity, useCustomerDefaultAddress: true, lineItems: { quantity: quantity_message.content.to_i, variantId: "gid://shopify/ProductVariant/#{variant.id}", originalUnitPrice: variant.price } }
         result = OrderDraftService.new.create(input)
@@ -55,7 +56,10 @@ class SmsService::ProductService < SmsService::ProcessService
             error = true
           else
             # @shop.sms_logs.one_time_order.create(product_id: variant.product_id, revenue: variant.price * quantity_message.content.to_i, customer_id: @customer.id)
-            # @shop.subscription_logs.one_time_order.sms.create(product_id: variant.product_id, revenue: variant.price * quantity_message.content.to_i, customer_id: @customer.id)
+            if product.present? && variant.present?
+              description = @customer.name+",just done one time order $#{variant.price * quantity_message.content.to_i},"+product.title
+              @shop.subscription_logs.one_time_order.sms.create(product_id: variant.product_id, product_name: product.title, description: description, revenue: variant.price * quantity_message.content.to_i, customer_id: @customer.id)
+            end
             message = 'Product added successfully.'
           end
         end
