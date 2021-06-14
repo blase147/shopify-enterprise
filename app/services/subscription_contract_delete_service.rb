@@ -14,9 +14,10 @@ class SubscriptionContractDeleteService < GraphqlService
     }
   GRAPHQL
 
-  def initialize(id, type=nil)
+  def initialize(id,type=nil,allow_default=true)
     @id = id
     @type = type
+    @allow_default= allow_default
   end
 
   def log_work(customer, status)
@@ -58,13 +59,13 @@ class SubscriptionContractDeleteService < GraphqlService
     if status == 'CANCELLED' && result['data'].present?
       customer = Customer.find_by(shopify_id: @id)
       customer.update(cancelled_at: Time.current)
-      log_work(customer, status)
+      log_work(customer, status) if @allow_default
     end
     if status == 'ACTIVE' && result['data'].present?
       customer = Customer.find_by(shopify_id: @id)
       customer.update(cancelled_at: nil)
       # customer.shop.subscription_logs.restart.create(subscription_id: @id, customer_id: customer.id)
-      log_work(customer, status)
+      log_work(customer, status) if @allow_default
     end
     p result
   rescue Exception => ex
