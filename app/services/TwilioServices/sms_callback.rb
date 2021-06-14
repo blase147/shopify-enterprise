@@ -8,8 +8,7 @@ class TwilioServices::SmsCallback < ApplicationService
     if @customer.present?
       process_callback
     else
-      shop = Shop.find_by(shopify_domain: ENV['SHOP'])
-      TwilioServices::SendSms.call(from: shop.phone, to: @params['From'], message: "Your phone number was not found in our database, please make sure you set the right phone number in your user profile at #{ENV['SHOP']}")
+      TwilioServices::SendSms.call(from: @params['To'], to: @params['From'], message: "Your phone number was not found in our database, please make sure you set the right phone number in your user profile at #{ENV['SHOP']}")
     end
   end
 

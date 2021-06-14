@@ -10,7 +10,7 @@ class SmsService::SharedService
 
   def send_message(content)
     puts "############################ #{content} ##############################"
-    TwilioServices::SendSms.call(from: @conversation.customer.shop.phone, to: @params['From'], message: content)
+    TwilioServices::SendSms.call(from: @params['To'], to: @params['From'], message: content)
   end
 
   def customer_subscriptions(shopify_id)

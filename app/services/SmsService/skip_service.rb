@@ -30,7 +30,7 @@ class SmsService::SkipService < SmsService::ProcessService
         error = true
       else
         message_service = SmsService::MessageGenerateService.new(@shop, @customer, subscription,
-                          { subscription_charge_date: subscription.next_billing_date.strftime("%a, %B %e") })
+                          { subscription_charge_date: subscription.next_billing_date.to_date.strftime("%a, %B %e") })
         message = message_service.content(messages[:confirm])
       end
     when 3
