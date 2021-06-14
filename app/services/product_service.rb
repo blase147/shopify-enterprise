@@ -92,7 +92,7 @@ class ProductService < GraphqlService
   end
 
   def list
-    result = client.query(client.parse(GET_PRODUCTS_QUERY))
+    result = ShopifyAPIRetry::GraphQL.retry { client.query(client.parse(GET_PRODUCTS_QUERY)) }
     result.data&.products&.edges
   rescue Exception => ex
     p ex.message

@@ -106,7 +106,7 @@ class CustomerSubscriptionContractsService < GraphqlService
   def run cursor=nil
     query = LIST_QUERY
     query = query.gsub("first: #{PAGE}", "first: #{PAGE} after: \"#{cursor}\"") if cursor.present?
-    result = client.query(client.parse(query), variables: { id: @customer_id })
+    result = ShopifyAPIRetry::GraphQL.retry { client.query(client.parse(query), variables: { id: @customer_id }) }
 
     data = result.data&.customer
     return nil unless data.present?
