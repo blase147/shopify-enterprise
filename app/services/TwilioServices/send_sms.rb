@@ -11,7 +11,11 @@ class TwilioServices::SendSms < ApplicationService
 
   def send_message
     shop = Shop.find_by_phone(@params[:from])
-    message = @params[:message]
+    message = twilio_client(shop).messages.create(
+      from: @params[:from],
+      to: @params[:to],
+      body: @params[:message]
+    )
     { message: message, error_message: nil }
   rescue Twilio::REST::RestError => e
     Rails.logger.info("Error from Twilio: #{e.error_message}")
