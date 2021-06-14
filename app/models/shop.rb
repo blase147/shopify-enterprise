@@ -53,10 +53,6 @@ class Shop < ActiveRecord::Base
   def sync_contracts
     self.connect
 
-    self.customers.each do |cus|
-      cus.update_columns shopify_id: cus.shopify_id[/\d+/]
-    end
-
     items = SubscriptionContractsService.new.all_subscriptions
     items[:subscriptions].each do |item|
       billing_policy = item.node.billing_policy
@@ -72,7 +68,8 @@ class Shop < ActiveRecord::Base
         status: item.node.status,
         subscription: item.node.lines.edges.first&.node&.title,
         language: "$#{item.node.lines.edges.first&.node&.current_price&.amount} / #{billing_policy.interval.pluralize}",
-        communication: "#{billing_policy.interval_count} #{billing_policy.interval} Pack".titleize
+        communication: "#{billing_policy.interval_count} #{billing_policy.interval} Pack".titleize,
+        shopify_customer_id: item.node.customer.id[/\d+/]
       )
     end
   end
