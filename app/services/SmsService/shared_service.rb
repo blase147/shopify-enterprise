@@ -2,6 +2,7 @@ class SmsService::SharedService
   def initialize(conversation, params)
     @conversation = conversation
     @params = params
+    @conversation.customer.shop.connect
   end
 
   def create_sms_message(message, step, comes_from_customer: false)
