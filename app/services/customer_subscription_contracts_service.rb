@@ -108,7 +108,9 @@ class CustomerSubscriptionContractsService < GraphqlService
     query = query.gsub("first: #{PAGE}", "first: #{PAGE} after: \"#{cursor}\"") if cursor.present?
     result = client.query(client.parse(query), variables: { id: @customer_id })
 
-    data = result.data.customer
+    data = result.data&.customer
+    return nil unless data.present?
+
     subscriptions = data.subscription_contracts.edges.map do |edge|
       edge
     end

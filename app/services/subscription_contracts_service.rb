@@ -18,6 +18,7 @@ class SubscriptionContractsService < GraphqlService
             nextBillingDate
             appAdminUrl
             customer {
+              id
               firstName
               lastName
               email

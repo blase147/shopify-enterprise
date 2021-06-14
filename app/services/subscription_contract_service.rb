@@ -108,7 +108,7 @@ class SubscriptionContractService < GraphqlService
   def run
     id = "gid://shopify/SubscriptionContract/#{@id}"
     result = client.query(client.parse(GET_QUERY), variables: { id: id} )
-    return result.data.subscription_contract
+    return result.data&.subscription_contract
   rescue Exception => ex
     p ex.message
     { error: ex.message }

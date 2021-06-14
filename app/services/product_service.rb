@@ -93,7 +93,7 @@ class ProductService < GraphqlService
 
   def list
     result = client.query(client.parse(GET_PRODUCTS_QUERY))
-    result.data.products.edges
+    result.data&.products&.edges
   rescue Exception => ex
     p ex.message
     { error: ex.message }

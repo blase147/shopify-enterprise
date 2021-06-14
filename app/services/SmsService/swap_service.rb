@@ -15,6 +15,9 @@ class SmsService::SwapService < SmsService::ProcessService
     error = false
     error_message = 'Invalid Command, Please try again.'
     products = ProductService.new.list
+    while !products.present?
+      products = ProductService.new.list
+    end
     active_subscription_products = @data[:active_subscriptions].map { |subscription| subscription.node.lines.edges.map{ |edge| edge.node.product_id } }.flatten
     products_list = products.select{ |product| active_subscription_products.include?(product.node.id) ? nil : product }
     case step

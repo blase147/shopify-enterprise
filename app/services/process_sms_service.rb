@@ -10,7 +10,7 @@ class ProcessSmsService
   def process
     return if !processing_allowed?(@customer) || !command_allowed?(@conversation)
     if %w[SWAP SKIP QUANTITY BILLING SHIPPING PRODUCT CLOSE RESTART PAUSE RESUME DELAY].include?(@conversation.command)
-      @data = @shared_service.customer_subscriptions(@customer.shopify_id)
+      @data = @shared_service.customer_subscriptions(@customer.shopify_customer_id)
       if @conversation.command == 'PAUSE' && @data[:active_subscriptions].count.zero?
         @shared_service.send_message('You have no active subscription.')
         return
