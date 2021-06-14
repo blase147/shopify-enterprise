@@ -52,7 +52,7 @@ class ProcessSmsService
       @shared_service.send_message('Invalid Command')
     end
   rescue Exception => ex
-    p ex.message
+    Rails.logger.info("Error: #{ex.message}")
     { error: true, message: 'Invalid Request' }
   end
 
