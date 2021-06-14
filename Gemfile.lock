@@ -321,6 +321,8 @@ GEM
       activeresource (>= 4.1.0, < 6.0.0)
       graphql-client
       rack
+    shopify_api_retry (0.1.3)
+      shopify_api (>= 4.0)
     shopify_app (15.0.0)
       browser_sniffer (~> 1.2.2)
       jwt (~> 2.2.1)
@@ -414,6 +416,7 @@ DEPENDENCIES
   sass-rails (>= 6)
   selenium-webdriver
   sendgrid-ruby
+  shopify_api_retry
   shopify_app
   shopify_cli (= 1.0.5)
   sidekiq

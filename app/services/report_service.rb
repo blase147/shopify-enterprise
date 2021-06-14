@@ -70,7 +70,7 @@ class ReportService < GraphqlService
   def get_subscriptions cursor=nil
     query = GET_SUBSCRIPTIONS
     query = query.gsub("first: #{PAGE}", "first: #{PAGE} after: \"#{cursor}\"") if cursor.present?
-    result = client.query(client.parse(query))
+    result = ShopifyAPIRetry::GraphQL.retry { client.query(client.parse(query)) }
     result&.data&.subscription_contracts
   rescue Exception => ex
     p ex.message
@@ -84,11 +84,6 @@ class ReportService < GraphqlService
 
     while has_next_page
       data = get_subscriptions next_cursor
-      retry_count = 0
-      until data.present? || retry_count > 10
-        data = get_subscriptions next_cursor
-        retry_count += 1
-      end
       subscriptions.push(data.edges || [])
       has_next_page = data.page_info.has_next_page
       next_cursor = data.edges.last&.cursor

@@ -15,11 +15,7 @@ class SmsService::SharedService
   end
 
   def customer_subscriptions(shopify_id)
-    contracts = CustomerSubscriptionContractsService.new("gid://shopify/Customer/#{shopify_id}").run
-    until contracts.present?
-      contracts = CustomerSubscriptionContractsService.new("gid://shopify/Customer/#{shopify_id}").run
-    end
-    contracts
+    CustomerSubscriptionContractsService.new("gid://shopify/Customer/#{shopify_id}").run
   end
 
   def subscription_draft(contract_id)

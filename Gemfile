@@ -25,11 +25,7 @@ gem 'jbuilder', '~> 2.7'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
-gem 'carrierwave'
 gem 'apollo_upload_server'
-
-# Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.4.2', require: false
 
 # shopify #######
 gem 'dotenv-rails'
@@ -58,6 +54,7 @@ gem 'twilio-ruby', '~> 5.52.0'
 gem 'percentage', '~> 1.4', '>= 1.4.1'
 gem 'klaviyo'
 gem 'sendgrid-ruby'
+gem "shopify_api_retry"
 
 gem 'bcrypt', '~> 3.1.7'
 

@@ -59,7 +59,7 @@ class SubscriptionContractsService < GraphqlService
   def run cursor=nil
     query = LIST_QUERY
     query = query.gsub("first: #{PAGE}", "first: #{PAGE} after: \"#{cursor}\"") if cursor.present?
-    result = client.query(client.parse(query))
+    result = ShopifyAPIRetry::GraphQL.retry { client.query(client.parse(query)) }
 
     puts '###'
     p result
