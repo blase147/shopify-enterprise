@@ -151,7 +151,7 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
                                 </div>
                               </div>
                               <div className={`price-content price-${getColor(notification?.actionType)}`}>{notification?.amount ? `${notification?.actionType=='cancel'?"-":notification?.actionType=='new'?'+':" "}${notification?.amount}` :" "}</div>
-                              <div className={"time-content"}>{timeAgo.format(Date.parse(notification?.createdAt))}</div>
+                              <div className={"time-content"}>{timeAgo.format(Date.parse(new Date(`${notification?.createdAt} ${'UTC'}`).toString()))}</div>
                             </div>
                           </Card>
                         </div>
