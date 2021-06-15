@@ -13,6 +13,7 @@ import EmailNotification from './EmailNotification';
 import HouseKeeping from './HouseKeeping';
 import Password from './HouseKeepingComponents/Password';
 import Legal from './Legal';
+import ProductExtention from './ProductExtention';
 import StoreInfomation from './StoreInformation';
 
 
@@ -226,6 +227,8 @@ const Settings = () => {
           showBilling
           showAccount
           pauseSubscription
+
+          designType
         }
       }
     }
@@ -324,6 +327,7 @@ const Settings = () => {
     delayOrder: 'storeowner_and_customer',
     pauseSubscription: 'storeowner_and_customer',
     _destroy: false,
+    designType:'one'
   };
   // form data #####################################################
 
@@ -388,6 +392,10 @@ const Settings = () => {
       id: 'legal',
       content: 'Legal',
     },
+    {
+      id: 'product-extension',
+      content: 'Product Extension',
+    },
   ];
   const history = useHistory();
   useEffect(() => {
@@ -402,6 +410,9 @@ const Settings = () => {
         { passwordConfirmed
           ? (
             <Page title="Settings">
+              {
+                console.log("...",tabs,"hahahh")
+              }
               <Tabs
                 tabs={tabs}
                 selected={selectedTitleTab}
@@ -562,7 +573,7 @@ const Settings = () => {
                               handleSubmit={handleSubmit}
                             />
                           </div>
-                        ) : (
+                        ) : selectedTitleTab === 6?(
                           <div className="storeInfomation">
                             <Legal
                               values={values}
@@ -572,7 +583,17 @@ const Settings = () => {
                               handleSubmit={handleSubmit}
                             />
                           </div>
-                        )}
+                        ):
+                        <div className="storeInfomation">
+                            <ProductExtention  
+                              values={values}
+                              touched={touched}
+                              errors={errors}
+                              setFieldValue={setFieldValue}
+                              handleSubmit={handleSubmit}
+                            />
+                          </div>
+                        }
                       </Form>
                     )}
                   </Formik>
