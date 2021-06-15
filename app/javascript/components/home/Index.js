@@ -462,7 +462,9 @@ const Dashboard = (props) => {
           </Layout.Section>
           
           <Layout.Section>
-          <Notification />
+            <div class="feeds-container">
+            <Notification />
+            </div>
           </Layout.Section>
           
           <div style={{width:'100%'}}>

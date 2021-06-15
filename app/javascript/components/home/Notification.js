@@ -50,6 +50,7 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
     () => {
       if(!popoverActive){
         setRendered(true);
+        setPage(1);
         fetchNotifications({
           variables:{
             page:page.toString()
@@ -64,7 +65,7 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
   );
 
   useEffect(() => {
-    if(rendered && totalPages <= page){
+    if(rendered && totalPages <= page && popoverActive && page!=1){
       fetchNotifications({
         variables:{
           page:page.toString()
@@ -89,11 +90,11 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
 
   const fetchMoreData = () => {
     const nextPage = page + 1;
-    setPage(nextPage);
     console.log("Fetching More...",nextPage)
-    if (nextPage === totalPages) {
+    if (nextPage > totalPages) {
       setHasMore(false);
-    }
+    }else
+    setPage(nextPage);
   }
 
   useEffect(()=>{
@@ -107,6 +108,9 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
     }
   },[notifications])
 
+  useEffect(()=>{
+    console.log("pop-overActive",popoverActive);
+  },[popoverActive])
   // useLayoutEffect(()=>{
   //   if(popoverActive){
   //     var toolbox = document.getElementById("scrollableDiv"),
@@ -203,7 +207,7 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
                   {
                   !isEmpty(notifications) && rendered && 
                   <>
-                  <div id="scrollableDiv" style={{overflow:"auto",maxHeight:"450px"}}>
+                  <div id="scrollableDiv" style={{overflow:"auto",maxHeight:"450px",overscrollBehavior:"none"}}>
                   <InfiniteScroll
                   dataLength={notifications?.fetchSubscriptionLogs?.subscriptionLogs?.length}
                   next={fetchMoreData}
