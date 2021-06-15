@@ -14,7 +14,7 @@ class Setting < ApplicationRecord
   accepts_nested_attributes_for :reasons_cancels,
   reject_if: :all_blank, allow_destroy: true
 
-  after_save :set_design_metafield, if: -> { saved_change_to_design_type? }
+  after_save :set_design_metafield, if: -> { saved_change_to_design_type? || new_record? }
 
   def style_content
     "#{style_account_profile} #{style_account_profile} #{style_subscription} #{style_upsell} #{style_sidebar_pages}"
