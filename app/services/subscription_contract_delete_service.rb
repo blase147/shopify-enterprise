@@ -33,7 +33,7 @@ class SubscriptionContractDeleteService < GraphqlService
           customer.shop.subscription_logs.cancel.create(customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
         end
       else
-        description = customer.name+",just restart,"+product.title
+        description = customer.name+",just restarted,"+product.title
         if @type == "sms"
           customer.shop.subscription_logs.sms.restart.create(customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
         else
