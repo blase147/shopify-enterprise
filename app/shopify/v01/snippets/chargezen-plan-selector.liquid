@@ -1,16 +1,21 @@
 {% assign product_extension = shop.metafields.extension %}
 {% assign design_type = product_extension.plan_selector_type %}
-<span class="test_it">{{ design_type }}</span>
+{% assign plan_selector_classes = "chargezen-plan-selector product-form__fieldset"%}
+
+{% if design_type == 'design_type_two' %}
+  {% assign plan_selector_classes = "chargezen-plan-selector product-form__fieldset sec-deisgn"%}
+{% endif %}
+<!-- <span class="test_it">{{ design_type }}</span> -->
 {% if product and product.selling_plan_groups.size > 0 %}
 
-  <fieldset class="chargezen-plan-selector product-form__fieldset" style="display: none">
+  <fieldset class="{{ plan_selector_classes }}" style="display: none">
     <input type="hidden" name="selling_plan" value="{{ product.selected_selling_plan.id }}" />
     <legend data-i18n="plan-selector-title">Purchase options</legend>
 
     {% unless product.requires_selling_plan %}
-      <div class="plan-selector-group">
+      <div for='one-time'class="plan-selector-group ">
         <label>
-          <input type="radio" name="plan-selector-group" value="" />
+          <input id ='one-time'type="radio" name="plan-selector-group" value="" />
           <span data-i18n="one-time-purchase-label">One-time purchase</span>
         </label>
 
@@ -88,5 +93,20 @@
       var selector = $('fieldset.chargezen-plan-selector');
       selector.attr('plans', JSON.stringify(planProduct))
     })();
+
+
+    $(document).ready(function () {
+      $('.plan-selector-group').click(function () {
+        var parent=$(this);
+        $('.plan-selector-group').children("input[type=radio]").attr("checked", false);
+        var radio = $(this).children("input");
+        $('.plan-selector-group').removeClass('active-check');
+        parent.addClass("active-check");
+        $(radio).attr("checked", true);
+        console.log($(radio));
+        var value = $("input[type=radio]:checked").attr("name", "check").val();
+        console.log(value);
+  });
+});
   </script>
 {% endif %}

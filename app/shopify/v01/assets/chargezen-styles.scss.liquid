@@ -1,9 +1,16 @@
+
 .chargezen-plan-selector {
   margin-bottom: 1em;
 
   // border: 1px solid #ddd;
   // padding: 10px;
   border-radius: 5px;
+
+  @media(max-width: 810px) and (min-width: 400px) {
+    display: flex;
+    justify-content: center;
+    grid-gap: 20px;
+  }
 
   & > legend {
     display: none;
@@ -44,6 +51,8 @@
       margin-bottom: 5px;
     }
   }
+
+  
 }
 
 .chargezen-cart-selling-plan {
@@ -51,4 +60,25 @@
 }
 #chargezen-customer-portal-frame{
   min-height: 125vh;
+}
+.sec-deisgn {
+  display: flex;
+  justify-content: center;
+  grid-gap: 20px;
+  .plan-selector-group  {
+    width: 160px;
+    height: 196px;
+    border: 1.5px solid #E3E4E4;
+    display: flex;
+    justify-content: center;
+
+    input {
+      display: none;
+    }
+  }
+  
+}
+
+.active-check {
+  background-color: #daf1f9;
 }

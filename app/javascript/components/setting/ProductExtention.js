@@ -12,10 +12,11 @@ import {
 const ProductExtention = ({ values, touched, errors, setFieldValue }) => {
 
     const options = [
-      { label: 'One', value: 'one' },
-      { label: 'Two', value: 'two' }
+      { label: 'Design I', value: 'one' },
+      { label: 'Design II', value: 'two' }
     ];
     return (
+      <div className="product-extention">
         <Layout>
         <Card>
           <Card.Section>
@@ -39,7 +40,9 @@ const ProductExtention = ({ values, touched, errors, setFieldValue }) => {
           </Card.Section>
         </Card>
       </Layout>
+      </div>
     )
 }
+
 
 export default ProductExtention

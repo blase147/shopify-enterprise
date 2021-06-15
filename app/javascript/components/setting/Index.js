@@ -386,7 +386,7 @@ const Settings = () => {
     },
     {
       id: 'store-information',
-      content: 'StoreInformation',
+      content: 'Store Information',
     },
     {
       id: 'legal',
