@@ -380,10 +380,12 @@ const Settings = () => {
       id: 'dunning',
       content: 'Dunning',
     },
-    {
+    ...(process.env.APP_TYPE=="public" ? 
+    [{
       id: 'store-information',
       content: 'StoreInformation',
-    },
+    }]:[])
+    ,
     {
       id: 'legal',
       content: 'Legal',
@@ -552,7 +554,7 @@ const Settings = () => {
                             setFieldValue={setFieldValue}
                             handleSubmit={handleSubmit}
                           />
-                        ) : selectedTitleTab === 5 ? (
+                        ) : selectedTitleTab === (process.env.APP_TYPE=="public"?5:10) ? (
                           <div className="storeInfomation">
                             <StoreInfomation
                               values={values}
@@ -562,7 +564,7 @@ const Settings = () => {
                               handleSubmit={handleSubmit}
                             />
                           </div>
-                        ) : (
+                        ) : selectedTitleTab === (process.env.APP_TYPE=="public"?6:5)?(
                           <div className="storeInfomation">
                             <Legal
                               values={values}
@@ -572,7 +574,7 @@ const Settings = () => {
                               handleSubmit={handleSubmit}
                             />
                           </div>
-                        )}
+                        ):""}
                       </Form>
                     )}
                   </Formik>
