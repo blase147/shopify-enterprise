@@ -339,9 +339,9 @@ const Customers = () => {
     // console.log('searchvalue: ', queryValue);
   }, [queryValue, taggedWith, customers]);
 
-  useEffect(() => {
-    filterCustomersValue();
-  }, [selectedCustomers]);
+  // useEffect(() => {
+  //   filterCustomersValue();
+  // }, [selectedCustomers]);
 
   useEffect(() => {
     if (data && data.fetchCustomers) {
