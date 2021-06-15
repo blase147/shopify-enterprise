@@ -45,6 +45,7 @@ module Types
     field :show_account, String, null: true
     field :delay_order, String, null: true
     field :pause_subscription, String, null: true
+    field :design_type, String, null: true
 
     #email notification
     field :email_notifications, [Types::EmailNotificationType], null: true

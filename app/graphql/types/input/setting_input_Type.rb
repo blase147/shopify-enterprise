@@ -47,6 +47,7 @@ module Types
       argument :show_account, String, required: false
       argument :delay_order, String, required: false
       argument :pause_subscription, String, required: false
+      argument :design_type, String, required: false
 
       #email notification
       argument :email_notifications, [Types::Input::EmailNotificationInputType], required: false

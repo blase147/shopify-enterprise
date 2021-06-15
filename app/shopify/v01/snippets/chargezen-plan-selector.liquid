@@ -1,3 +1,6 @@
+{% assign product_extension = shop.metafields.extension %}
+{% assign design_type = product_extension.plan_selector_type %}
+<span class="test_it">{{ design_type }}</span>
 {% if product and product.selling_plan_groups.size > 0 %}
 
   <fieldset class="chargezen-plan-selector product-form__fieldset" style="display: none">
