@@ -380,18 +380,20 @@ const Settings = () => {
       id: 'email-notification',
       content: 'Email Notification',
     },
-    {
-      id: 'dunning',
-      content: 'Dunning',
-    },
-    {
+    // {
+    //   id: 'dunning',
+    //   content: 'Dunning',
+    // },
+    ...(process.env.APP_TYPE=="public" ? 
+    [{
       id: 'store-information',
-      content: 'Store Information',
-    },
-    {
-      id: 'legal',
-      content: 'Legal',
-    },
+      content: 'StoreInformation',
+    }]:[])
+    ,
+    // {
+    //   id: 'legal',
+    //   content: 'Legal',
+    // },
     {
       id: 'product-extension',
       content: 'Product Extension',
@@ -555,15 +557,17 @@ const Settings = () => {
                               handleSubmit={handleSubmit}
                             />
                           </div>
-                        ) : selectedTitleTab === 4 ? (
-                          <Dunning
-                            values={values}
-                            touched={touched}
-                            errors={errors}
-                            setFieldValue={setFieldValue}
-                            handleSubmit={handleSubmit}
-                          />
-                        ) : selectedTitleTab === 5 ? (
+                        ) 
+                        // : selectedTitleTab === 4 ? (
+                        //   <Dunning
+                        //     values={values}
+                        //     touched={touched}
+                        //     errors={errors}
+                        //     setFieldValue={setFieldValue}
+                        //     handleSubmit={handleSubmit}
+                        //   />
+                        // ) 
+                        : selectedTitleTab === (process.env.APP_TYPE=="public"?4:10) ? (
                           <div className="storeInfomation">
                             <StoreInfomation
                               values={values}
@@ -573,9 +577,10 @@ const Settings = () => {
                               handleSubmit={handleSubmit}
                             />
                           </div>
-                        ) : selectedTitleTab === 6?(
+                        ) 
+                        : selectedTitleTab === (process.env.APP_TYPE=="public"?5:4) ? (
                           <div className="storeInfomation">
-                            <Legal
+                            <ProductExtention
                               values={values}
                               touched={touched}
                               errors={errors}
@@ -583,17 +588,19 @@ const Settings = () => {
                               handleSubmit={handleSubmit}
                             />
                           </div>
-                        ):
-                        <div className="storeInfomation">
-                            <ProductExtention  
-                              values={values}
-                              touched={touched}
-                              errors={errors}
-                              setFieldValue={setFieldValue}
-                              handleSubmit={handleSubmit}
-                            />
-                          </div>
-                        }
+                        ) 
+                        // : selectedTitleTab === (process.env.APP_TYPE=="public"?5:5)?(
+                        //   <div className="storeInfomation">
+                        //     <Legal
+                        //       values={values}
+                        //       touched={touched}
+                        //       errors={errors}
+                        //       setFieldValue={setFieldValue}
+                        //       handleSubmit={handleSubmit}
+                        //     />
+                        //   </div>
+                        // )
+                        :""}
                       </Form>
                     )}
                   </Formik>

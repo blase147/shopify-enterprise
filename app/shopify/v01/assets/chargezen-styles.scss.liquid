@@ -82,3 +82,70 @@
 .active-check {
   background-color: #daf1f9;
 }
+
+.subscription-popup {
+  position: relative; 
+  display: inline-block;
+  height: 35px;
+  clear: both;
+
+  .popup-div {
+    position: absolute;
+    display: none;
+    background-color: #474747;
+    width: 300px;
+    padding: 15px;
+    cursor: default;
+    left: 0;
+    text-align: left;
+    white-space: normal;
+    vertical-align: baseline;
+    z-index: 1;
+    top: 30px;
+    height: 230px;
+
+    &::before {
+      content: "";
+      display: block;
+      width: 1px;
+      border: 10px solid transparent;
+      position: absolute;
+      top: -20px;
+      left: 0;
+      border-bottom-color: #474747;
+    }
+
+
+    strong {
+      color: white;
+      margin-bottom: 25px;
+      display:inline-block;
+    }
+    a {
+      color: #4DD6B7;
+    }
+    p {
+      color: lightgray;
+    }
+    .powered-by {
+      background-color: #53bad3;
+      padding: 6px;
+      position: absolute;
+      bottom: 26px;
+      right: 0;
+      border-radius: 20px 0px 0px 20px;
+       p {
+         color: white;
+         font-size: 13px;
+       }
+    }
+  }
+
+  &:hover  .popup-div {
+    display: block;
+
+  }
+
+
+
+}
