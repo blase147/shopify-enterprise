@@ -82,6 +82,8 @@ Rails.application.routes.draw do
     end
   end
 
+
+  get 'subscription/charge', to: 'callback#charge'
   get '*path' => 'home#index'
   post 'twilio/sms', 'twilio#sms'
 end

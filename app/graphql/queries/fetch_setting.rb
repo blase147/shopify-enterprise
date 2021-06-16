@@ -24,6 +24,7 @@ module Queries
           {name: 'Variant not found', description: 'Sent to storeowner when variant not found error occurs in an order', status: true, slug: "store_owner"},
           {name: 'Customer Action Log', description: 'Sent to storeowner, daily log of customer’s actions', status: true, slug: "store_owner" },
         ]
+        email_notifications.push({name: 'Store Charge Confirmation', description: 'Sent to storeowner to confirm their recurring charges', status: true, slug: "store_owner" }) if ENV['APP_TYPE'] == 'public'
         @setting.email_notifications.create(email_notifications)
       end
       if @setting.reasons_cancels.blank?

@@ -18,7 +18,7 @@ class Customer < ApplicationRecord
 
   after_create :send_opt_in_sms, unless: -> { opt_in_sent }
   after_create :activation_email
-
+  after_create :charge_store
   # default_scope { order(created_at: :asc) }
 
   def log_work
@@ -52,6 +52,13 @@ class Customer < ApplicationRecord
   def activation_email
     email_notification = shop.setting.email_notifications.find_by_name "Subscription Activation"
     EmailService::Send.new(email_notification).send_email({customer: self}) if email_notification.present? && email_notification.setting.shop
+  end
+
+  def charge_store
+    if ENV['APP_TYPE'] == 'public'
+      subscription = SubscriptionContractService.new(shopify_id).run
+      StoreChargeService.new(shop).create_usage_charge(subscription)
+    end
   end
 
   def name

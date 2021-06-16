@@ -83,9 +83,20 @@ module Types
     field :email_subscription_terms, String, null: true
     field :apple_pay_subscription_terms, String, null: true
 
+    #shop_data
+    field :recurring_charge_status, String, null: true
+    field :charge_confirmation_link, String, null: true
+
     # def reasons_cancels
     #   object.reasons_cancels
     # end
 
+    def recurring_charge_status
+      object.shop.recurring_charge_status
+    end
+
+    def charge_confirmation_link
+      object.shop.charge_confirmation_link
+    end
   end
 end
