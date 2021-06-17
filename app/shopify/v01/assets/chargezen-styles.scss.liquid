@@ -25,10 +25,11 @@
     padding: 11px 15px 11px 21px; 
 
     label {
-      display: flex;
+      // display: flex;
       align-items: center;
       grid-gap: 10px;
     }
+  
 
     &:not(.group-available) {
       display: none;
@@ -67,11 +68,50 @@
   grid-gap: 20px;
   .plan-selector-group  {
     width: 160px;
-    height: 196px;
-    border: 1.5px solid #E3E4E4;
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    border: 1.5px solid #e3e4e4;
+    text-align: center;
+    & > p {
+      font-weight: bold;
+    }
+    .best-seller {
+      background-color: #FFB800;
+      padding: 4px 4px 3px 3px;
+      border-radius: 3px;
+      width: 85px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      margin-bottom: 30px;
 
+       span {
+         font-size: 9px;
+         color: white;
+         margin-left: 3px;
+         font-weight: 900;
+       }
+       & + p {
+        font-weight: bold;
+        & + p {
+          font-weight: bold;
+        }
+      }
+    }
+
+    .del-price {
+      del {
+        color :#828384;
+        font-size: 12px;
+      }
+      + p {
+        font-weight: 800;
+      }
+    }
+  
+     
     input {
       display: none;
     }
@@ -88,6 +128,15 @@
   display: inline-block;
   height: 35px;
   clear: both;
+  .chrge-logo {
+    display: flex;
+    align-items: center;
+     p{ 
+       margin-left: 14px;
+       white-space: nowrap;
+       font-size: 16px;
+     }
+  }
 
   .popup-div {
     position: absolute;
@@ -115,7 +164,7 @@
       border-bottom-color: #474747;
     }
 
-
+ 
     strong {
       color: white;
       margin-bottom: 25px;
@@ -126,23 +175,35 @@
     }
     p {
       color: lightgray;
+      white-space: pre-wrap;
     }
     .powered-by {
-      background-color: #53bad3;
-      padding: 6px;
-      position: absolute;
+      background-color: #007EFF;
+      padding: 5px;
+      // position: absolute;
       bottom: 26px;
       right: 0;
-      border-radius: 20px 0px 0px 20px;
-       p {
+      // border-radius: 20px 0px 0px 20px;
+      width: 160px;
+       & > p {
          color: white;
-         font-size: 13px;
+         font-size: 10px;
+         display: flex;
+         align-items: center;
+         grid-gap: 10px;
        }
     }
   }
 
+  svg {
+    &:hover {
+      & + .popup-div {
+        display: block;
+      }
+    }
+  }
   &:hover  .popup-div {
-    display: block;
+    // display: block;
 
   }
 
