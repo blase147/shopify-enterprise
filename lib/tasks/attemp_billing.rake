@@ -73,6 +73,7 @@ namespace :subscriptions do
           EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
         end
       else
+        charge_store(result[:data].id, subscription_id, customer.shop)
         ScheduleSkipService.new(subscription_id).run
         SubscriptionLog.create(billing_status: :success, customer_id: customer.id, shop_id: customer.shop_id, subscription_id: subscription_id)
         email_notification = customer.shop.setting.email_notifications.find_by_name "Recurring Charge Confirmation"
@@ -103,6 +104,7 @@ namespace :subscriptions do
           EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
           # subscription = SubscriptionContractService.new(id).run
         else
+          charge_store(result[:data].id, subscription_id, customer.shop)
           next_schedule_date = (Time.current+subscription.billing_policy.interval_count.days).to_date
           ScheduleSkipService.new(subscription_id).run({ billing_date: next_schedule_date })
           customer.update_columns(failed_at: nil, retry_count: 0)
@@ -143,6 +145,21 @@ namespace :subscriptions do
       email_notification = customer.shop.setting.email_notifications.find_by_name "Upcoming Charge"
       EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
     end
+  end
+
+  def charge_store(billing_id, subscription_id, shop)
+    if ENV['APP_TYPE'] == 'public'
+      billing = SubscriptionBillingAttempService.new(subscription_id).get_attempt(billing_id)
+      state = billing.data.subscription_billing_attempt.ready
+      if state == true
+        subscription = SubscriptionContractService.new(subscription_id).run
+        StoreChargeService.new(shop).create_usage_charge(subscription)
+      else
+        charge_store(billing_id, subscription_id, shop)
+      end
+    end
+  rescue StabdardError => e
+    p e.message
   end
 
 end
