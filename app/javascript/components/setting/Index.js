@@ -128,11 +128,14 @@ const Settings = () => {
         showBilling
         showAccount
         pauseSubscription
+
+        recurringChargeStatus
+        chargeConfirmationLink
       }
     }
   `;
   let { id } = useParams();
-  const { data, loading, error, refetch } = useQuery(GET_DATA, {
+  const [getData,{ data, loading, error, refetch }] = useLazyQuery(GET_DATA, {
     fetchPolicy: 'network-only',
   });
 
@@ -226,17 +229,22 @@ const Settings = () => {
           showBilling
           showAccount
           pauseSubscription
+
+          recurringChargeStatus
+          chargeConfirmationLink
         }
       }
     }
   `;
   const [updateSetting] = useMutation(UPDATE_SETTING);
 
+
   useEffect(() => {
     if (data) {
       setFormData(data.fetchSetting);
     }
   }, [data]);
+
   const initialValues = {
     allowCancelAfter: '',
     availablePurchase: '',
@@ -346,6 +354,13 @@ const Settings = () => {
   }
 
   useEffect(()=>{
+    if(passwordConfirmed){
+      getData();
+    }
+  },[passwordConfirmed])
+
+
+  useEffect(()=>{
       if(confirmPasswordRes?.confirmPassword?.success)
       {
         setPasswordConfirmed(true);
@@ -380,7 +395,7 @@ const Settings = () => {
       id: 'dunning',
       content: 'Dunning',
     },
-    ...(process.env.APP_TYPE=="public" ? 
+    ...(process.env.APP_TYPE=="public" ?
     [{
       id: 'store-information',
       content: 'StoreInformation',

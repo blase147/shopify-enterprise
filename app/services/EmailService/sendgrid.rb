@@ -19,13 +19,13 @@ class EmailService::Sendgrid < EmailService::Base
     subject_str = subject(object)
     return unless subject_str
     context_hash = context(object)
-    to = object[:customer].email
-    to = @shopify_shop.email if @email_notification.name == "Cancellation Alert"
+    to = object[:customer]&.email
+    to = @shopify_shop.email if @email_notification.slug == 'store_owner'
     from = SendGrid::Email.new(email: @email_notification.from_email)
     to = SendGrid::Email.new(email: to)
     content = SendGrid::Content.new(type: 'text/plain', value: email_body(context_hash))
     mail = SendGrid::Mail.new(from, subject_str, to, content)
-    
+
     response = @sg.client.mail._('send').post(request_body: mail.to_json)
     # puts response.status_code
     # puts response.body

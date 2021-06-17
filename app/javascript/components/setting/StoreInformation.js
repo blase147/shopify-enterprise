@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import _ from "lodash";
 import AppLayout from '../layout/Layout';
 import {
   Card,
@@ -13,6 +14,7 @@ import {
   TextStyle,
   Stack,
   DisplayText,
+  Link
 } from '@shopify/polaris';
 
 const StoreInformation = (props) => {
@@ -102,7 +104,7 @@ const StoreInformation = (props) => {
                 Recurring Processing Status
               </TextStyle>
               <br />
-              <Badge status="success">Active</Badge>
+              <Badge status={`${values.recurringChargeStatus?'success':'attention'}`}>{_.capitalize(values.recurringChargeStatus) || "Pending"}</Badge>
             </Stack.Item>
             <Stack.Item>
               <TextStyle variation="strong">
@@ -111,6 +113,16 @@ const StoreInformation = (props) => {
               <br />
               <Badge status="warning">Unpublished</Badge>
             </Stack.Item>
+              <Stack.Item>
+                {
+                  values.chargeConfirmationLink &&
+                  <Button fullWidth disabled={!values.chargeConfirmationLink}>
+                    <Link external={true} url={values.chargeConfirmationLink || "#"}>
+                      Confirm Recurring Payment
+                    </Link>
+                  </Button>
+                }
+              </Stack.Item>
             <Stack.Item>
               <Button fullWidth>Cancel my Account</Button>
             </Stack.Item>
