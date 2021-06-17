@@ -13,6 +13,7 @@ import {
   TextStyle,
   Stack,
   DisplayText,
+  Link
 } from '@shopify/polaris';
 
 const StoreInformation = (props) => {
@@ -102,7 +103,7 @@ const StoreInformation = (props) => {
                 Recurring Processing Status
               </TextStyle>
               <br />
-              <Badge status="success">Active</Badge>
+              <Badge status={`${values.recurringChargeStatus?'success':'attention'}`}>{values.recurringChargeStatus || "Pending"}</Badge>
             </Stack.Item>
             <Stack.Item>
               <TextStyle variation="strong">
@@ -111,6 +112,13 @@ const StoreInformation = (props) => {
               <br />
               <Badge status="warning">Unpublished</Badge>
             </Stack.Item>
+              <Stack.Item>
+                <Button fullWidth disabled={!values.chargeConfirmationLink}>
+                  <Link target="_blank" rel="noopener noreferrer" url={values.chargeConfirmationLink || "#"}>
+                    Confirm Recurring Payment
+                  </Link>
+                </Button>
+              </Stack.Item>
             <Stack.Item>
               <Button fullWidth>Cancel my Account</Button>
             </Stack.Item>

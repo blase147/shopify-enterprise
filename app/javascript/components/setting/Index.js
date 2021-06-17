@@ -226,6 +226,9 @@ const Settings = () => {
           showBilling
           showAccount
           pauseSubscription
+
+        recurringChargeStatus
+        chargeConfirmationLink
         }
       }
     }
