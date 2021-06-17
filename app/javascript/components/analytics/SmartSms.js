@@ -341,7 +341,7 @@ const SmartSms = () => {
                               source={sectionProductList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
                               color={sectionProductList[item.key]?.up ? 'green' : 'red'}
                             />
-                            {(sectionProductList[item.key]?.up===false && sectionProductList[item.key]?.percent==0)?100:Math.abs(sectionProductList[item.key].percent)}%
+                            {Math.abs(sectionProductList[item.key].percent) || 0}%
                           </TextStyle>
                         
                         </div>
@@ -400,7 +400,7 @@ const SmartSms = () => {
                               source={sectionServiceList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
                               color={sectionServiceList[item.key]?.up ? 'green' : 'red'}
                             />
-                            {(sectionServiceList[item.key]?.percent==0 && !sectionServiceList[item.key]?.up)?100:Math.abs(sectionServiceList[item.key]?.percent)}%
+                            {Math.abs(sectionServiceList[item.key]?.percent) || 0}%
                             </TextStyle>
                           </Stack.Item>
                         </Stack>

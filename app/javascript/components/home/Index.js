@@ -519,7 +519,7 @@ const Dashboard = (props) => {
                             source={sectionListData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
                             color={sectionListData[item.key]?.up ? 'green' : 'red'}
                           />
-                          {(sectionListData[item.key]?.percent==0 && !sectionListData[item.key]?.up)?100:Math.abs(sectionListData[item.key]?.percent)}%
+                          {Math.abs(sectionListData[item.key]?.percent) || 0}%
                         </TextStyle>
                         </Stack.Item>
                       </Stack>

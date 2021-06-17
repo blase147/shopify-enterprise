@@ -1244,7 +1244,7 @@ const rows_Charges = [
                               source={cardData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
                               color={cardData[item.key]?.up ? 'green' : 'red'}
                             />
-                            {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}%
+                            {Math.abs(cardData[item.key]?.percent) || 0}%
                           </TextStyle>
                         </Stack.Item>
                       </Stack>
@@ -1398,7 +1398,7 @@ const rows_Charges = [
                               source={cardData[item.key]?.up  ? CaretUpMinor : CaretDownMinor}
                               color={cardData[item.key]?.up  ? 'green' : 'red'}
                             />
-                            {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}%
+                            {Math.abs(cardData[item.key]?.percent) || 0}%
                           </TextStyle>
                         </Stack.Item>
                       </Stack>
@@ -1504,7 +1504,7 @@ const rows_Charges = [
                                 source={cardData[item.key]?.up  ? CaretUpMinor : CaretDownMinor}
                                 color={cardData[item.key]?.up  ? 'green' : 'red'}
                               />
-                              {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}%
+                              {Math.abs(cardData[item.key]?.percent) || 0}%
                             </TextStyle>
                           </Stack.Item>
                         </Stack>
@@ -1565,7 +1565,7 @@ const rows_Charges = [
                                 source={cardData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
                                 color={cardData[item.key]?.up ? 'green' : 'red'}
                               />
-                              {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}%
+                              {Math.abs(cardData[item.key]?.percent) || 0}%
                             </TextStyle>
                           </Stack.Item>
                         </Stack>
