@@ -128,6 +128,9 @@ const Settings = () => {
         showBilling
         showAccount
         pauseSubscription
+
+        recurringChargeStatus
+        chargeConfirmationLink
       }
     }
   `;
@@ -227,8 +230,8 @@ const Settings = () => {
           showAccount
           pauseSubscription
 
-        recurringChargeStatus
-        chargeConfirmationLink
+          recurringChargeStatus
+          chargeConfirmationLink
         }
       }
     }
@@ -392,7 +395,7 @@ const Settings = () => {
       id: 'dunning',
       content: 'Dunning',
     },
-    ...(process.env.APP_TYPE=="public" ? 
+    ...(process.env.APP_TYPE=="public" ?
     [{
       id: 'store-information',
       content: 'StoreInformation',

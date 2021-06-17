@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import _ from "lodash";
 import AppLayout from '../layout/Layout';
 import {
   Card,
@@ -103,7 +104,7 @@ const StoreInformation = (props) => {
                 Recurring Processing Status
               </TextStyle>
               <br />
-              <Badge status={`${values.recurringChargeStatus?'success':'attention'}`}>{values.recurringChargeStatus || "Pending"}</Badge>
+              <Badge status={`${values.recurringChargeStatus?'success':'attention'}`}>{_.capitalize(values.recurringChargeStatus) || "Pending"}</Badge>
             </Stack.Item>
             <Stack.Item>
               <TextStyle variation="strong">
@@ -113,11 +114,14 @@ const StoreInformation = (props) => {
               <Badge status="warning">Unpublished</Badge>
             </Stack.Item>
               <Stack.Item>
-                <Button fullWidth disabled={!values.chargeConfirmationLink}>
-                  <Link target="_blank" rel="noopener noreferrer" url={values.chargeConfirmationLink || "#"}>
-                    Confirm Recurring Payment
-                  </Link>
-                </Button>
+                {
+                  values.chargeConfirmationLink &&
+                  <Button fullWidth disabled={!values.chargeConfirmationLink}>
+                    <Link target="_blank" rel="noopener noreferrer" url={values.chargeConfirmationLink || "#"}>
+                      Confirm Recurring Payment
+                    </Link>
+                  </Button>
+                }
               </Stack.Item>
             <Stack.Item>
               <Button fullWidth>Cancel my Account</Button>
