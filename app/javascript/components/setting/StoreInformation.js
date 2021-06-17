@@ -117,7 +117,7 @@ const StoreInformation = (props) => {
                 {
                   values.chargeConfirmationLink &&
                   <Button fullWidth disabled={!values.chargeConfirmationLink}>
-                    <Link target="_blank" rel="noopener noreferrer" url={values.chargeConfirmationLink || "#"}>
+                    <Link external={true} url={values.chargeConfirmationLink || "#"}>
                       Confirm Recurring Payment
                     </Link>
                   </Button>
