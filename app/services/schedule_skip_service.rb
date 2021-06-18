@@ -26,9 +26,9 @@ class ScheduleSkipService < GraphqlService
     note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
     description = customer.name+",edited delivery date of,"+product_names
     if @type == "sms"
-      customer.shop.subscription_logs.sms.skip.create(customer_id: customer.id, product_name: product_names, note: note, description: description)
+      customer.shop.subscription_logs.sms.skip.create(subscription_id: @id, customer_id: customer.id, product_name: product_names, note: note, description: description)
     else
-      customer.shop.subscription_logs.skip.create(customer_id: customer.id, product_name: product_names, note: note, description: description)
+      customer.shop.subscription_logs.skip.create(subscription_id: @id, customer_id: customer.id, product_name: product_names, note: note, description: description)
     end
   end
 
