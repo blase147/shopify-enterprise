@@ -629,7 +629,7 @@ const Customers = () => {
                   'Export'
                 )}
               </Button>
-              <Button
+              {/*<Button
                 onClick={() => {
                   toggleActive();
                   setFile();
@@ -648,7 +648,7 @@ const Customers = () => {
               </div>
               <Button primary onClick={() => history.push('/customers/new')}>
                 Add Customer
-              </Button>
+              </Button>*/}
             </ButtonGroup>
           }
         >
