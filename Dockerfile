@@ -18,15 +18,6 @@ RUN bundle exec rake assets:precompile RAILS_ENV=production
 RUN rm -rf /app/node_modules
 RUN rm -rf /app/tmp/*
 
-#FROM ruby:2.7.0-alpine
-#WORKDIR /app
-#RUN apk add --update build-base postgresql-dev nodejs tzdata && rm -rf /var/cache/apk/*
-#RUN apk add shared-mime-info
-
-#COPY --from=base /app /app
-
-# copy gems that already build
-#COPY --from=base /usr/local/bundle/ /usr/local/bundle/
 CMD ["bundle", "exec", "rails", "db:migrate", "-e", "production"]
 CMD ["bundle", "exec", "whenever", "--update-crontab", "-i", "aroma_production", "--set", "environment=production"]
 CMD ["bundle", "exec", "rails", "s", "-e", "production", "-b", "0.0.0.0"]
