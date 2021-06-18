@@ -822,7 +822,7 @@ const CustomerInsights = () => {
                               source={sectionCustomerList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
                               color={sectionCustomerList[item.key]?.up ? 'green' : 'red'}
                             />
-                            {(sectionCustomerList[item.key]?.up===false && sectionCustomerList[item.key]?.percent==0)?100:Math.abs(sectionCustomerList[item.key].percent)}%
+                            {Math.abs(sectionCustomerList[item.key].percent) || 0}%
                           </TextStyle>
 
                         </div>
@@ -946,7 +946,7 @@ const CustomerInsights = () => {
                             source={sectionCustomerActionList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
                             color={sectionCustomerActionList[item.key]?.up ? 'green' : 'red'}
                           />
-                          {(sectionCustomerActionList[item.key]?.up===false && sectionCustomerActionList[item.key]?.percent==0)?100:Math.abs(sectionCustomerActionList[item.key]?.percent)}%
+                          {Math.abs(sectionCustomerActionList[item.key]?.percent) || 0}%
                         </TextStyle>
                       </Stack.Item>
                     </Stack>
@@ -989,7 +989,7 @@ const CustomerInsights = () => {
                             source={sectionPurchaseItemList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
                             color={sectionPurchaseItemList[item.key]?.up ? 'green' : 'red'}
                           />
-                          {(sectionPurchaseItemList[item.key]?.up===false && sectionPurchaseItemList[item.key]?.percent==0)?100:Math.abs(sectionPurchaseItemList[item.key].percent)}%
+                          {Math.abs(sectionPurchaseItemList[item.key].percent) || 0}%
                         </TextStyle>
                       </Stack.Item>
                     </Stack>
