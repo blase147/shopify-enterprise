@@ -375,6 +375,11 @@ div.Polaris-Modal-Dialog__Container {
   &.index {
     //
   }
+  .Polaris-Button__Content {
+    & > span {
+      margin-left: 5px;
+    }
+  }
 }
 
 .text-par {
@@ -423,7 +428,7 @@ div.Polaris-Modal-Dialog__Container {
     display: flex;
     justify-content: space-between;
     margin-top: 27px;
-    margin-bottom: 27px;
+    margin-bottom: 47px;
     margin-right: 100px;
 
   }
@@ -466,26 +471,43 @@ div.Polaris-Modal-Dialog__Container {
 .product-header {
   margin-right: 100px;
 }
-.slider-btns {
 
+.subscription-btns {
   display: flex;
+  // align-items: center;
   padding-bottom: 20px;
-  > div {
-    margin-right: 30px;
+  grid-gap: 25px;
 
-  }
-  svg {
-    margin-right: 10px;
-  }
-  img {
-    margin-right: 10px;
+  span {
+    margin-left: 5px;
   }
   a {
+    color: black;
     display: flex;
     align-items: center;
-    text-decoration: none;
-    color: #000;
   }
+  .slider-btns {
+
+    display: flex;
+    // padding-bottom: 20px;
+    > div {
+      // margin-right: 30px;
+  
+    }
+    svg {
+      // margin-right: 10px;
+    }
+    img {
+      margin-right: 10px;
+    }
+    a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #000;
+    }
+  }
+  
 }
 
 .hidden {
