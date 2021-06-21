@@ -9,6 +9,10 @@ Rails.application.routes.draw do
   mount ShopifyApp::Engine, at: '/'
   root :to => 'home#index'
 
+  post '/shop/redact', to: 'gdpr_webhooks#shop_redact'
+  post '/customers/redact', to: 'gdpr_webhooks#customer_redact'
+  post '/customers/data_request', to: 'gdpr_webhooks#customer_data_request'
+
   namespace :app_proxy do
     resources :account do
       collection do

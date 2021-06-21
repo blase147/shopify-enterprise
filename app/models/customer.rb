@@ -68,4 +68,17 @@ class Customer < ApplicationRecord
   def shopify_identity
     "gid://shopify/Customer/#{shopify_id}"
   end
+
+  def self.to_csv(customer_id, save_path)
+    attributes = %w{id first_name last_name email phone communication subscription language}
+    customers = Customer.where(shopify_customer_id: customer_id)
+
+    CSV.open(save_path, 'wb') do |csv|
+      csv << attributes
+
+      customers.each do |customer|
+        csv << attributes.map { |attr| customer.send(attr) }
+      end
+    end
+  end
 end
