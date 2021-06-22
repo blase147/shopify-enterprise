@@ -175,7 +175,10 @@ const Dashboard = (props) => {
     cmrr: "$0"
   })
 
-  const [filters,setFilters]=useState({startDate:dayjs(new Date()).subtract(30,'days').format("YYYY-MM-DD"),endDate:dayjs(new Date()).format("YYYY-MM-DD"),span:"30 days"})
+  const [filters,setFilters]=uuseState({
+    startDate:new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(2,"days")).subtract(30, 'days'))).format())),
+    endDate:new Date(Date.parse(dayjs(new Date()).subtract(1,"days").format())) 
+  })
   const handleFiltersDates=(dates,span)=>{
     console.log("hahah")
     if(!isEmpty(dates)){
