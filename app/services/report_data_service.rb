@@ -91,8 +91,10 @@ class ReportDataService
 
   def mrr_data_by_date(date, subscriptions)
     range = date.beginning_of_month..date.end_of_month
-    #current_month_subscriptions = in_period_subscriptions(subscriptions, range)
-    subscriptions.sum { |subscription| get_orders_total_amount(subscription, range) }
+    previous_month_range = (range.first - 1.day).beginning_of_month..(range.first - 1.day).end_of_month
+    previous_month_revenue = subscriptions.sum { |subscription| get_orders_total_amount(subscription, previous_month_range)}
+    current_month_revenue = subscriptions.sum { |subscription| get_orders_total_amount(subscription, range.first..range.last) }
+    previous_month_revenue + current_month_revenue
   end
 
   def get_orders_total_amount(subscription, range = nil)
