@@ -2,7 +2,7 @@
 
 class AuthenticatedController < ApplicationController
 
-  include ShopifyApp::Authenticated
+  # include ShopifyApp::Authenticated
 
   helper_method :current_shop
 
