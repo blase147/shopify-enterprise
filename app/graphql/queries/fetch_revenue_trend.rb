@@ -8,28 +8,28 @@ module Queries
       orders_service = OrdersService.new(current_shop)
       subscriptions = ReportService.new.all_subscriptions
       range = start_date.to_date..end_date.to_date
-      orders = orders_service.orders_in_range(range.first, range.last, 'id,refunds,created_at,current_total_price_set,total_shipping_price_set,source_name')
+      orders = orders_service.orders_in_range(range.first, range.last, 'id,refunds,created_at,total_price,current_total_price_set,total_shipping_price_set,source_name')
       data_service = ReportDataService.new(subscriptions, current_shop, orders, range)
 
       in_period_subscriptions = data_service.in_period_subscriptions(subscriptions, range)
       range_data_service = ReportDataService.new(in_period_subscriptions, current_shop, orders, range)
 
       today_range = Time.current.beginning_of_year..Time.current - 1.hour
-      today_orders = orders_service.orders_in_range(today_range.first, today_range.last, 'id,refunds,created_at,current_total_price_set,total_shipping_price_set,source_name')
+      today_orders = orders_service.orders_in_range(today_range.first, today_range.last, 'id,refunds,created_at,total_price,current_total_price_set,total_shipping_price_set,source_name')
       today_subscriptions = data_service.in_period_hourly_subscriptions(subscriptions, today_range)
       today_range_data_service = ReportDataService.new(today_subscriptions, current_shop, today_orders, today_range)
 
       yesterday_range = Time.current.beginning_of_year..Time.current - 24.hours
-      yesterday_orders = orders_service.orders_in_range(yesterday_range.first, yesterday_range.last, 'id,refunds,created_at,current_total_price_set,total_shipping_price_set,source_name')
+      yesterday_orders = orders_service.orders_in_range(yesterday_range.first, yesterday_range.last, 'id,refunds,created_at,total_price,current_total_price_set,total_shipping_price_set,source_name')
       yesterday_subscriptions = data_service.in_period_hourly_subscriptions(subscriptions, yesterday_range)
       yesterday_range_data_service = ReportDataService.new(yesterday_subscriptions, current_shop, yesterday_orders, yesterday_range)
 
-      last_month_range = Date.today - 30.days..Date.today - 1.day
-      last_month_subscriptions = data_service.subscriptions_by_order_period(subscriptions, last_month_range)
+      last_month_range = (Date.today - 1.day) - 1.month..Date.today - 1.day
+      #last_month_subscriptions = data_service.subscriptions_by_order_period(subscriptions, last_month_range)
 
       total_sales = data_service.calculate_percentage(yesterday_range_data_service.get_total_sales, today_range_data_service.get_total_sales, data_service.get_total_sales)
       recurring_sales = data_service.calculate_percentage(yesterday_range_data_service.recurring_sales, today_range_data_service.recurring_sales, data_service.recurring_sales)
-      mrr = data_service.calculate_percentage(yesterday_range_data_service.mrr(yesterday_subscriptions, yesterday_range), today_range_data_service.mrr(today_subscriptions, today_range), data_service.mrr(last_month_subscriptions, range))
+      mrr = data_service.calculate_percentage(yesterday_range_data_service.mrr(yesterday_subscriptions, yesterday_range), today_range_data_service.mrr(today_subscriptions, today_range), data_service.mrr(subscriptions, last_month_range))
       sales_per_charge = data_service.calculate_percentage(yesterday_range_data_service.sales_per_charge, today_range_data_service.sales_per_charge, range_data_service.sales_per_charge)
       total_refunds = data_service.calculate_percentage(yesterday_range_data_service.refunded_amount(yesterday_orders), today_range_data_service.refunded_amount(today_orders), range_data_service.refunded_amount(orders))
       new_subscriptions = data_service.calculate_percentage(yesterday_range_data_service.in_period_subscriptions(yesterday_subscriptions, yesterday_range, 'ACTIVE').count, today_range_data_service.in_period_subscriptions(today_subscriptions, today_range, 'ACTIVE').count, range_data_service.in_period_subscriptions(subscriptions, range, 'ACTIVE').count)
