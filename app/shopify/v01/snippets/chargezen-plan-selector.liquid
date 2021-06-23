@@ -2,7 +2,6 @@
 {% assign design_type = product_extension.plan_selector_type %}
 {%- assign hide_sale_price = true -%}
 {% assign current_variant = product.selected_or_first_available_variant %}
-<script>console.log({{product | json }});</script>
 
 {% if design_type == 'design_type_two' %}
     <fieldset class="chargezen-plan-selector product-form__fieldset sec-deisgn" style="display: none">
@@ -89,7 +88,7 @@
     {% for selling_plan_group in product.selling_plan_groups %}
       <div class="plan-selector-group active-check">
         <label>
-          <input type="radio" name="plan-selector-group" value="{{ selling_plan_group.id }}" />
+          <input type="radio" id='subscribe'name="plan-selector-group" value="{{ selling_plan_group.id }}" />
           <span>{{ selling_plan_group.name }}</span>
         </label>
 
@@ -101,45 +100,54 @@
             {% endfor %}
           </select>
         </div>
+        {% if selling_plan_group.selling_plans[0].price_adjustments[0].value_type == 'percentage' %}
+          {% assign saved_value = selling_plan_group.selling_plans[0].price_adjustments[0].value | append: "%" %}
+          {% assign discounted_price = selling_plan_group.selling_plans[0].price_adjustments[0].value | times: current_variant.price | divided_by: 100 %}
+          {% capture variant_price %} {{current_variant.price | minus: discounted_price | money }}{% endcapture %}
+        {% elsif selling_plan_group.selling_plans[0].price_adjustments[0].value_type == 'fixed_amount' %}
+          {% assign saved_value = selling_plan_group.selling_plans[0].price_adjustments[0].value | money %}
+          {% capture variant_price %} {{ current_variant.price | minus: selling_plan_group.selling_plans[0].price_adjustments[0].value | money }}{% endcapture %}
+        {% endif %}
+        <div class="show-hide">
+          <ul class="custom-mnakrer">
+            <li>{{saved_value}} off subscription products</li>
+            <li>Free U.S. Shipping</li>
+            <li>You're in control </li>
+            <li>Membership Concierge</li>
 
-        <ul class="custom-mnakrer">
-          <li>20% off subscription products</li>
-          <li>Free U.S. Shipping</li>
-          <li>You're in control </li>
-          <li>Membership Concierge</li>
+          </ul>
+          <div class="popup-design">
+            <p id='myBtn'>See all benefits (7)</p>
+            <div id="myModal" class="modal">
 
-        </ul>
-        <div class="popup-design">
-          <p id='myBtn'>See all benefits (7)</p>
-          <div id="myModal" class="modal">
+              <!-- Modal content -->
+              <div class="modal-parent">
+              <div class="modal-header">
+                <span id="close-btn"class="close">&times;</span>
+                <p>Membership Savings</p>
 
-            <!-- Modal content -->
-            <div class="modal-parent">
-            <div class="modal-header">
-              <span id="close-btn"class="close">&times;</span>
-              <p>Membership Savings</p>
+              </div>
+              <div class="modal-content">
 
+                <ul>
+                  <li>{{saved_value}} off subscription products</li>
+                  <li>Free U.S. Shipping</li>
+                  <li>You're in control
+                    <p>Add, remove, swap, skip or keep'em coming</p>
+                  </li>
+                  <li>Membership Concierge
+                    <p>Dedicated team to answer questions</p>
+                  </li>
+                  <li>Members-only swag</li>
+                  <li>Samples & gifts</li>
+                  <li>
+                    Free drinks & discount
+                  <p>At Shroom Room LA, NYC and Mushroom Mobile</p></li>
+                </ul>
+                <button>GOT IT!</button>
+              </div>
             </div>
-            <div class="modal-content">
-
-              <ul>
-                <li>20% off subscription products</li>
-                <li>Free U.S. Shipping</li>
-                <li>You're in control
-                  <p>Add, remove, swap, skip or keep'em coming</p>
-                </li>
-                <li>Membership Concierge
-                  <p>Dedicated team to answer questions</p>
-                </li>
-                <li>Members-only swag</li>
-                <li>Samples & gifts</li>
-                <li>
-                  Free drinks & discount
-                <p>At Shroom Room LA, NYC and Mushroom Mobile</p></li>
-              </ul>
-              <button>GOT IT!</button>
             </div>
-          </div>
           </div>
         </div>
       </div>
@@ -159,52 +167,35 @@
           <input id ='one-time'type="radio"  name="plan-selector-group" value="" />
           <span data-i18n="one-time-purchase-label">One-time purchase</span>
         </label>
-        <div class="discount-section">
+        <!-- <div class="discount-section hide purchse-section">
           <p>CHOOSE QUANTITY:</p>
           <div class="radio-check">
             <ul>
-              <li>
-                <div class="varint">
-                  <div class="offer-section">
-                    <label>
-                      <input type="radio"name='quantity'/>
-                      <span> 1-pack</span>
-                    </label>
-                  </div>
-                  <div class="save-offer">
-                    Save 0%
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="varint">
-                  <div class="offer-section">
-                    <label>
-                      <input type="radio" name='quantity'/>
-                      <span> 3-pack</span>
-                    </label>
-                  </div>
-                  <div class="save-offer">
-                    Save 10%
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="varint">
-                  <div class="offer-section">
-                    <label>
-                      <input type="radio" name='quantity'/>
-                      <span> 6-pack</span>
-                    </label>
-                  </div>
-                  <div class="save-offer">
-                    Save 15%
-                  </div>
-                </div>
-              </li>
+              {% for variant in product.variants %}
+                {% if variant.available %}
+                  <li>
+                    <div class="varint">
+                      <div class="offer-section">
+                        <label>
+                          <input type="radio"name='quantity' {% if variant == product.selected_or_first_available_variant %} 'checked' {% endif %} />
+                          <span> {{variant.title}}</span>
+                        </label>
+                      </div>
+                      <div class="save-offer">
+                        {% capture saved_amount %}{{ variant.compare_at_price | minus: variant.price | money }}{% endcapture %}
+                        {% if variant.compare_at_price > variant.price %}
+                          Save {{saved_amount}}
+                        {% else %}
+                          Save 0%
+                        {% endif %}
+                      </div>
+                    </div>
+                  </li>
+                {% endif %}
+              {% endfor %}
             </ul>
           </div>
-        </div>
+        </div> -->
 
 
         <div class="plan-selector-plan" style="display: none">
@@ -277,7 +268,7 @@
       <div class="popup-div">
         <strong> How subscriptions work</strong>
         <p>Products are automatically delivered on your schedule. No obligation, modify or cancel your subscription anytime.</p>
-        <a>Learn more...</a>
+        <a href="https://{{shop.domain}}/pages/subscription">Learn more...</a>
         <div class="powered-by">
 
 
@@ -287,7 +278,7 @@
         </div>
       </div>
 
-      <a><p>Learn more about Subscriptions</p></a>
+      <a href="https://{{shop.domain}}/pages/subscription"><p>Learn more about Subscriptions</p></a>
     </div>
 
   </div>
@@ -382,5 +373,14 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+
+$("#one-time").click(function(){
+  $(".purchse-section").removeClass("hide");
+  $(".show-hide").addClass("hide");
+})
+$("#subscribe").click(function(){
+  $(".show-hide").removeClass("hide");
+  $(".purchse-section").addClass("hide");
+})
   </script>
 {% endif %}
