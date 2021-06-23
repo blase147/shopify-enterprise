@@ -163,24 +163,29 @@
     .modal-header {
       padding: 20px;
       border-bottom: 1px solid lightgrey;
+
+      p {
+        font-size: 24px;
+      }
       
     }
     .modal-content {
-      padding: 3.8rem 5.8rem;
+      padding: 2rem 5.8rem;
       & > ul {
         margin-bottom: 1.1rem;
         & > li {
-          padding-bottom: 2.6rem;
+          padding-bottom: 1rem;
           position: relative;
           padding-left: 1em;
           letter-spacing: .016rem;
           font-weight: 700;
           p {
-            margin-top: .4rem;
-            margin-bottom: -.6rem;
-            font-size: 1.2rem;
+            margin-top: .3rem;
+            margin-bottom: -.4rem;
+            font-size: 1rem;
             line-height: 1.8rem;
             letter-spacing: .013rem;
+            font-weight: 300;
           }
         }
         li::marker {
@@ -192,7 +197,7 @@
         }
       }
       & > button {
-        padding: 1.9rem 4rem;
+        padding: 1.7rem 3rem;
         font-size: 1.2rem;
         color: white;
         background-color: #c8102e;
@@ -217,6 +222,52 @@
         color: #000;
         text-decoration: none;
         cursor: pointer;
+      }
+    }
+    
+  }
+
+  .discount-section {
+    margin-left: 17px;
+    ul {
+      display: flex;
+      // flex-wrap: wrap;
+      margin-top: .6rem;
+      margin-bottom: -1rem;
+      // margin-left: 4.1rem;
+      list-style: none;
+      .varint {
+        display: flex;
+        flex-direction: column;
+        padding: 0 .5rem;
+        margin-bottom: 1rem;
+        width: 120px;
+        .offer-section {
+          font-size: 1.4rem;
+          line-height: 1.8rem;
+          letter-spacing: .016rem;
+          label {
+            display: block;
+            padding: .5rem 1rem;
+            cursor: pointer;
+            border: .1rem solid hsla(0,0%,59.2%,.3);
+            border-radius: .5rem;
+            // box-shadow: 0 1rem 3rem 0 hsl(0deg 0% 73% / 20%);
+          }
+  
+          span {
+            margin-left: .4rem;
+            opacity: .6;
+            font-size: 14px;
+          }
+        }
+        .save-offer {
+          margin-top: .3rem;
+          font-size: .9rem;
+          line-height: 1.8rem;
+          text-align: center;
+          letter-spacing: .012rem;
+        }
       }
     }
     
