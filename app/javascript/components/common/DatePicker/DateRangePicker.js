@@ -30,29 +30,29 @@ export default class DateRangePicker extends React.Component {
     switch(span){
       case "30 days":
       {
-        let start=new Date(Date.parse(dayjs(dayjs(dayjs().subtract(30, 'days'))).format()))
-        let end =new Date();
+        let start=new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(2,"days")).subtract(30, 'days'))).format()))
+        let end =new Date(Date.parse(dayjs(new Date()).subtract(1,"days").format()));
         this.setState({selected:{start:start,end:end},span:span})
       }
       break;
       case "3 months":
         {
-          let start=new Date(Date.parse(dayjs(dayjs(dayjs().subtract(3, 'month'))).format()))
-          let end =new Date();
+          let start=new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(1,"days")).subtract(3, 'month'))).format()))
+          let end =new Date(Date.parse(dayjs(new Date()).subtract(1,"days").format()));
           this.setState({selected:{start:start,end:end},span:span})
         }
       break;
       case "6 months":
         {
-          let start=new Date(Date.parse(dayjs(dayjs(dayjs().subtract(6, 'month'))).format()))
-          let end =new Date();
+          let start=new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(1,"days")).subtract(6, 'month'))).format()))
+          let end =new Date(Date.parse(dayjs(new Date()).subtract(1,"days").format()));
           this.setState({selected:{start:start,end:end},span:span})
         }
         break;
       case "12 months":
         {
-          let start=new Date(Date.parse(dayjs(dayjs(dayjs().subtract(12, 'month'))).format()))
-          let end =new Date();
+          let start=new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(1,"days")).subtract(12, 'month'))).format()))
+          let end =new Date(Date.parse(dayjs(new Date()).subtract(1,"days").format()));
           this.setState({selected:{start:start,end:end},span:span})
         }  
     }

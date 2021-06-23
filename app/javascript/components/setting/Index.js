@@ -130,11 +130,14 @@ const Settings = () => {
         showAccount
         pauseSubscription
         designType
+
+        recurringChargeStatus
+        chargeConfirmationLink
       }
     }
   `;
   let { id } = useParams();
-  const { data, loading, error, refetch } = useQuery(GET_DATA, {
+  const [getData,{ data, loading, error, refetch }] = useLazyQuery(GET_DATA, {
     fetchPolicy: 'network-only',
   });
 
@@ -230,17 +233,21 @@ const Settings = () => {
           pauseSubscription
 
           designType
+          recurringChargeStatus
+          chargeConfirmationLink
         }
       }
     }
   `;
   const [updateSetting] = useMutation(UPDATE_SETTING);
 
+
   useEffect(() => {
     if (data) {
       setFormData(data.fetchSetting);
     }
   }, [data]);
+
   const initialValues = {
     allowCancelAfter: '',
     availablePurchase: '',
@@ -351,6 +358,13 @@ const Settings = () => {
   }
 
   useEffect(()=>{
+    if(passwordConfirmed){
+      getData();
+    }
+  },[passwordConfirmed])
+
+
+  useEffect(()=>{
       if(confirmPasswordRes?.confirmPassword?.success)
       {
         setPasswordConfirmed(true);
@@ -381,11 +395,11 @@ const Settings = () => {
       id: 'email-notification',
       content: 'Email Notification',
     },
-    // {
-    //   id: 'dunning',
-    //   content: 'Dunning',
-    // },
-    ...(process.env.APP_TYPE=="public" ? 
+    {
+      id: 'dunning',
+      content: 'Dunning',
+    },
+    ...(process.env.APP_TYPE=="public" ?
     [{
       id: 'store-information',
       content: 'StoreInformation',
@@ -558,7 +572,7 @@ const Settings = () => {
                               handleSubmit={handleSubmit}
                             />
                           </div>
-                        ) 
+                        )
                         // : selectedTitleTab === 4 ? (
                         //   <Dunning
                         //     values={values}
@@ -567,7 +581,7 @@ const Settings = () => {
                         //     setFieldValue={setFieldValue}
                         //     handleSubmit={handleSubmit}
                         //   />
-                        // ) 
+                        // )
                         : selectedTitleTab === (process.env.APP_TYPE=="public"?4:10) ? (
                           <div className="storeInfomation">
                             <StoreInfomation
@@ -578,7 +592,7 @@ const Settings = () => {
                               handleSubmit={handleSubmit}
                             />
                           </div>
-                        ) 
+                        )
                         : selectedTitleTab === (process.env.APP_TYPE=="public"?5:4) ? (
                           <div className="storeInfomation">
                             <ProductExtention
@@ -589,7 +603,7 @@ const Settings = () => {
                               handleSubmit={handleSubmit}
                             />
                           </div>
-                        ) 
+                        )
                         // : selectedTitleTab === (process.env.APP_TYPE=="public"?5:5)?(
                         //   <div className="storeInfomation">
                         //     <Legal

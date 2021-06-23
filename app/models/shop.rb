@@ -25,6 +25,8 @@ class Shop < ActiveRecord::Base
   after_create :build_setting
   after_create :setup_default_lock_password
   after_create :populate_store_data
+  after_create :set_recurring_charge_id
+  after_save :email_confirmation_link, if: -> { saved_change_to_charge_confirmation_link? }
 
   def setup_default_lock_password
     LockPassword.create(password: ENV['DEFAULT_LOCK_PASSWORD'], shop_id: id)
@@ -85,5 +87,14 @@ class Shop < ActiveRecord::Base
     else
       integrations.marketing.email.where(default: true).last
     end
+  end
+
+  def set_recurring_charge_id
+    StoreChargeService.new(self).create_recurring_charge if ENV['APP_TYPE'] == 'public'
+  end
+
+  def email_confirmation_link
+    email_notification = setting.email_notifications.find_by_name('Store Charge Confirmation')
+    EmailService::Send.new(email_notification).send_email({ confirmation_url: charge_confirmation_link }) if email_notification.present? && ENV['APP_TYPE'] == 'public'
   end
 end

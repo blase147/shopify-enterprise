@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_15_094303) do
+ActiveRecord::Schema.define(version: 2021_06_16_080257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -284,6 +284,9 @@ ActiveRecord::Schema.define(version: 2021_06_15_094303) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "phone"
+    t.string "recurring_charge_id"
+    t.string "recurring_charge_status"
+    t.string "charge_confirmation_link"
     t.index ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true
   end
 
@@ -364,7 +367,6 @@ ActiveRecord::Schema.define(version: 2021_06_15_094303) do
     t.boolean "renewal_reminder", default: false
     t.boolean "skip_update_next_charge", default: false
     t.boolean "one_time_upsells", default: false
-    t.boolean "failed_renewal", default: false
     t.boolean "cancel_reactivate_subscription", default: false
     t.boolean "edit_quantity", default: false
     t.boolean "cancel_subscription", default: false
@@ -374,6 +376,7 @@ ActiveRecord::Schema.define(version: 2021_06_15_094303) do
     t.string "renewal_duration"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "failed_renewal"
     t.boolean "opt_in", default: false
     t.boolean "swap_product", default: false
     t.boolean "update_billing", default: false

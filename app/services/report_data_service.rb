@@ -11,8 +11,11 @@ class ReportDataService
     { value: original_data.to_f.round(2), percent: percent, up: percent.positive? }
   end
 
-  def mrr(subscriptions, range)
-    subscriptions.sum { |subscription| get_orders_total_amount(subscription, range) }
+  def mrr(subscriptions, _range)
+    previous_month_range = (Date.today - 1.month).beginning_of_month..(Date.today - 1.month).end_of_month
+    previous_month_revenue = subscriptions.sum { |subscription| get_orders_total_amount(subscription, previous_month_range)}
+    current_month_revenue = subscriptions.sum { |subscription| get_orders_total_amount(subscription, Date.today.beginning_of_month..Date.today) }
+    previous_month_revenue + current_month_revenue
   end
 
 
@@ -34,8 +37,9 @@ class ReportDataService
   end
 
   def get_customer_lifetime_value(subscriptions)
+    range = (Date.today - 1.day) - 1.month..Date.today - 1.day
     customer_data = subscriptions.group_by { |subscription| subscription.node.customer.id }
-    customer_data.sum { |data| data[1].sum { |subscription| subscription.node.orders.edges.sum{ |order| order.node.total_price_set.presentment_money.amount.to_f} } } / customer_data.size  rescue 0
+    mrr(subscriptions, range) / customer_data.size  rescue 0
   end
 
   def month_graph_data(subscriptions, range, method)
@@ -87,12 +91,14 @@ class ReportDataService
 
   def mrr_data_by_date(date, subscriptions)
     range = date.beginning_of_month..date.end_of_month
-    current_month_subscriptions = in_period_subscriptions(subscriptions, range)
-    current_month_subscriptions.sum { |subscription| get_orders_total_amount(subscription, range) }
+    previous_month_range = (range.first - 1.day).beginning_of_month..(range.first - 1.day).end_of_month
+    previous_month_revenue = subscriptions.sum { |subscription| get_orders_total_amount(subscription, previous_month_range)}
+    current_month_revenue = subscriptions.sum { |subscription| get_orders_total_amount(subscription, range.first..range.last) }
+    previous_month_revenue + current_month_revenue
   end
 
   def get_orders_total_amount(subscription, range = nil)
-    subscription.node.orders.edges.sum { |order| range.nil? || range.present? && (range.cover?(order.node.created_at.to_date)) ? order.node.total_price_set.presentment_money.amount.to_f.round(2) : 0 }
+    subscription.node.orders.edges.sum { |order| range.nil? || (range.present? && range.cover?(order.node.created_at.to_date)) ? order.node.total_price_set.presentment_money.amount.to_f.round(2) : 0 }
   end
 
   def get_customers_by_date(date, subscriptions)
@@ -125,7 +131,7 @@ class ReportDataService
   # Revenue Trends
   def get_total_sales(range = nil)
     orders = range.nil? ? @orders : @orders.select { |order| range.cover?(order.created_at.to_date) }
-    orders.sum { |order| order.current_total_price_set.presentment_money.amount.to_f } + orders.sum { |order| order.total_shipping_price_set.presentment_money.amount.to_f }.round(2)
+    orders.sum { |order| order.total_price.to_f } - orders.sum { |order| order.refunds.sum { |refund| refund.transactions.sum {|t| t.amount.to_f} } }.round(2)
   end
 
   def charge_count(range)
@@ -172,7 +178,7 @@ class ReportDataService
   end
 
   def orders_calculate_amount(orders)
-    orders.sum { |order| order.current_total_price_set.presentment_money.amount.to_f } + orders.sum { |order| order.total_shipping_price_set.presentment_money.amount.to_f }.round(2)
+    orders.sum { |order| order.total_price.to_f } - orders.sum { |order| order.refunds.sum { |refund| refund.transactions.sum {|t| t.amount.to_f} } }.round(2)
   end
 
   def average_recurring_charge

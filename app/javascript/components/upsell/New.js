@@ -463,7 +463,7 @@ const NewUpSell = () => {
                           </ButtonGroup>
                         </div>
                       </FormLayout.Group>
-                      <FormLayout.Group>
+                      {/*<FormLayout.Group>
                         <TextField
                           value={values.selectorTitle}
                           error={touched.selectorTitle && errors.selectorTitle}
@@ -493,7 +493,7 @@ const NewUpSell = () => {
                             </span>
                           }
                         />
-                      </FormLayout.Group>
+                      </FormLayout.Group>*/}
                     </FormLayout>
                   </Card>
                   {values.upsellCampaigns.map((campaign, index) => (

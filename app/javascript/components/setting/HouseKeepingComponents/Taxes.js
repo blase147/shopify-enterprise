@@ -107,7 +107,7 @@ const [getSetting, { loading, data }] = useLazyQuery(fetchSetting);
 
           <Checkbox name="optIn" label="opt-in"  checked={formData.optIn=="true"} onChange={val=>setFormData({...formData,optIn:val?"true":"false"})} />
           <Checkbox name="editQuantity" label="Edit quantity"  checked={formData.editQuantity=="true"} onChange={val=>setFormData({...formData,editQuantity:val?"true":"false"})} />
-          <Checkbox name="cancelSubscription" label="Cancel subscrition"  checked={formData.cancelSubscription=="true"} onChange={val=>setFormData({...formData,cancelSubscription:val?"true":"false"})} />
+          <Checkbox name="cancelSubscription" label="Cancel Subscription"  checked={formData.cancelSubscription=="true"} onChange={val=>setFormData({...formData,cancelSubscription:val?"true":"false"})} />
           <Checkbox name="winbackFlow" label="Windback flow"  checked={formData.winbackFlow=="true"} onChange={val=>setFormData({...formData,winbackFlow:val?"true":"false"})} />
 
           </Card>
@@ -135,7 +135,7 @@ const [getSetting, { loading, data }] = useLazyQuery(fetchSetting);
                 <Layout.Section oneHalf>
                   <Stack>
                     <Stack.Item>
-                      <DisplayText size="small">New Renewel</DisplayText>
+                      <DisplayText size="small">New Renewal</DisplayText>
                       <Stack>
                         <TextField name="renewalDuration" value={formData.renewalDuration} onChange={val=>setFormData({...formData,renewalDuration:val})} placeholder="3 days" />
                         <Button loading={submitting} onClick={handleSmsSettingSubmit} >Save</Button>

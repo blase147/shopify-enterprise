@@ -85,6 +85,11 @@ margin: 20px !important;
 }
 
 //////////// Dashboard feed Design..../////@at-root
+.feeds-container{
+  .Polaris-Popover__Pane.Polaris-Scrollable.Polaris-Scrollable--vertical.Polaris-Scrollable--hasBottomShadow.Polaris-Scrollable--verticalHasScrolling {
+    overflow: hidden !important;
+}
+}
 .popover-wrapper {
 	margin: 20px;
 }
@@ -221,4 +226,8 @@ margin: 20px !important;
 	.price-content {
 		padding-right: 10px;
 	}
+}
+
+.Polaris-Popover__Pane.Polaris-Scrollable.Polaris-Scrollable--vertical {
+  overflow: hidden !important;
 }

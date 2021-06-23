@@ -28,7 +28,8 @@ const {
   transforms: { unwind },
 } = require('json2csv');
 
-let sortOrder = 0;
+// let sortOrder = 0;
+
 
 const ButtonRemove = (props) => {
   const { selectedCustomers, refetch, setselectedCustomers } = props;
@@ -105,6 +106,8 @@ const Customers = () => {
     },
   ];
   // End tabs
+
+  const [sortOrder,setSortOrder]=useState(0);
 
   const [moneySpent, setMoneySpent] = useState(null);
   const [taggedWith, setTaggedWith] = useState(null);
@@ -336,9 +339,9 @@ const Customers = () => {
     // console.log('searchvalue: ', queryValue);
   }, [queryValue, taggedWith, customers]);
 
-  useEffect(() => {
-    filterCustomersValue();
-  }, [selectedCustomers]);
+  // useEffect(() => {
+  //   filterCustomersValue();
+  // }, [selectedCustomers]);
 
   useEffect(() => {
     if (data && data.fetchCustomers) {
@@ -626,7 +629,7 @@ const Customers = () => {
                   'Export'
                 )}
               </Button>
-              <Button
+              {/*<Button
                 onClick={() => {
                   toggleActive();
                   setFile();
@@ -645,7 +648,7 @@ const Customers = () => {
               </div>
               <Button primary onClick={() => history.push('/customers/new')}>
                 Add Customer
-              </Button>
+              </Button>*/}
             </ButtonGroup>
           }
         >
@@ -672,21 +675,20 @@ const Customers = () => {
                   <Button
                     onClick={() => {
                       setFilterCustomers(() => {
-                        if (sortOrder === 0) {
-                          sortOrder = 1;
+                        if (sortOrder === 1) {
+                          setSortOrder(0);
                           return [...filterCustomers].sort(
                             (a, b) =>
-                              Date.parse(b.updatedAt) - Date.parse(a.updatedAt)
+                              new Date(b.updatedAt) - new Date(a.updatedAt)
                           );
                         } else {
-                          sortOrder = 0;
+                          setSortOrder(1);
                           return [...filterCustomers].sort(
                             (a, b) =>
-                              Date.parse(a.updatedAt) - Date.parse(b.updatedAt)
+                              new Date(a.updatedAt) - new Date(b.updatedAt)
                           );
                         }
                       });
-                      // console.log('filterCustomers--after', filterCustomers);
                     }}
                   >
                     <img src={swapIcon} />
