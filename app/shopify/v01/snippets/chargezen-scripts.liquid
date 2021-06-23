@@ -45,10 +45,12 @@
     function updatePriceLabelOneTime(price){
       var $container = $(containerSels);
       $container.html(price);
+      $(".cart_data_text").text($('.cart_custom_text_one_time').text());
     }
 
     function updateRecurringPriceLabel(price){
       $('#ProductPriceSubscribe').html(price);
+      $(".cart_data_text").text($('.cart_custom_text_subscribe').text());
     }
 
     function filterGroupsForVariant(variantId) {
