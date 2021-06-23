@@ -129,6 +129,7 @@ const Settings = () => {
         showBilling
         showAccount
         pauseSubscription
+        designType
       }
     }
   `;

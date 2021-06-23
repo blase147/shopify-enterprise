@@ -1,6 +1,6 @@
 class Setting < ApplicationRecord
   belongs_to :shop
-  enum design_type: %i[one two]
+  enum design_type: %i[one two three]
   has_many :email_notifications, dependent: :destroy
   has_many :reasons_cancels, dependent: :destroy
 

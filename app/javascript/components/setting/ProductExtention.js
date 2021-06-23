@@ -13,7 +13,8 @@ const ProductExtention = ({ values, touched, errors, setFieldValue }) => {
 
     const options = [
       { label: 'Design I', value: 'one' },
-      { label: 'Design II', value: 'two' }
+      { label: 'Design II', value: 'two' },
+      { label: 'Design III', value: 'three' }
     ];
     return (
       <div className="product-extention">
