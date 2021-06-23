@@ -72,7 +72,7 @@
     {% for selling_plan_group in product.selling_plan_groups %}
       <div class="plan-selector-group active-check">
         <label>
-          <input type="radio" name="plan-selector-group" value="{{ selling_plan_group.id }}" />
+          <input type="radio" id='subscribe'name="plan-selector-group" value="{{ selling_plan_group.id }}" />
           <span>{{ selling_plan_group.name }}</span>
         </label>
 
@@ -84,45 +84,46 @@
             {% endfor %}
           </select>
         </div>
+        <div class="show-hide">
+          <ul class="custom-mnakrer">
+            <li>20% off subscription products</li>
+            <li>Free U.S. Shipping</li>
+            <li>You're in control </li>
+            <li>Membership Concierge</li>
 
-        <ul class="custom-mnakrer">
-          <li>20% off subscription products</li>
-          <li>Free U.S. Shipping</li>
-          <li>You're in control </li>
-          <li>Membership Concierge</li>
+          </ul>
+          <div class="popup-design">
+            <p id='myBtn'>See all benefits (7)</p>
+            <div id="myModal" class="modal">
 
-        </ul>
-        <div class="popup-design">
-          <p id='myBtn'>See all benefits (7)</p>
-          <div id="myModal" class="modal">
+              <!-- Modal content -->
+              <div class="modal-parent">
+              <div class="modal-header">
+                <span id="close-btn"class="close">&times;</span>
+                <p>Membership Savings</p>
 
-            <!-- Modal content -->
-            <div class="modal-parent">
-            <div class="modal-header">
-              <span id="close-btn"class="close">&times;</span>
-              <p>Membership Savings</p>
-
+              </div>
+              <div class="modal-content">
+                
+                <ul>
+                  <li>20% off subscription products</li>
+                  <li>Free U.S. Shipping</li>
+                  <li>You're in control
+                    <p>Add, remove, swap, skip or keep'em coming</p>
+                  </li>
+                  <li>Membership Concierge
+                    <p>Dedicated team to answer questions</p>
+                  </li>
+                  <li>Members-only swag</li>
+                  <li>Samples & gifts</li>
+                  <li>
+                    Free drinks & discount
+                  <p>At Shroom Room LA, NYC and Mushroom Mobile</p></li>
+                </ul>
+                <button>GOT IT!</button>
+              </div>
             </div>
-            <div class="modal-content">
-              
-              <ul>
-                <li>20% off subscription products</li>
-                <li>Free U.S. Shipping</li>
-                <li>You're in control
-                  <p>Add, remove, swap, skip or keep'em coming</p>
-                </li>
-                <li>Membership Concierge
-                  <p>Dedicated team to answer questions</p>
-                </li>
-                <li>Members-only swag</li>
-                <li>Samples & gifts</li>
-                <li>
-                  Free drinks & discount
-                <p>At Shroom Room LA, NYC and Mushroom Mobile</p></li>
-              </ul>
-              <button>GOT IT!</button>
             </div>
-          </div>
           </div>
         </div>
       </div>
@@ -142,7 +143,7 @@
           <input id ='one-time'type="radio"  name="plan-selector-group" value="" />
           <span data-i18n="one-time-purchase-label">One-time purchase</span>
         </label>
-        <div class="discount-section">
+        <div class="discount-section hide purchse-section">
           <p>CHOOSE QUANTITY:</p>
           <div class="radio-check">
             <ul>
@@ -365,5 +366,14 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+
+$("#one-time").click(function(){
+  $(".purchse-section").removeClass("hide");
+  $(".show-hide").addClass("hide");
+})
+$("#subscribe").click(function(){
+  $(".show-hide").removeClass("hide");
+  $(".purchse-section").addClass("hide");
+})
   </script>
 {% endif %}
