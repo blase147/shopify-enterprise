@@ -68,6 +68,25 @@
     <input type="hidden" name="selling_plan" value="{{ product.selected_selling_plan.id }}" />
     <legend data-i18n="plan-selector-title">Purchase options</legend>
 
+
+    {% for selling_plan_group in product.selling_plan_groups %}
+      <div class="plan-selector-group active-check">
+        <label>
+          <input type="radio" name="plan-selector-group" value="{{ selling_plan_group.id }}" />
+          <span>{{ selling_plan_group.name }}</span>
+        </label>
+
+        <div class="plan-selector-plan">
+          <label>{{ selling_plan_group.options[0].name }}</label>
+          <select>
+            {% for plan in selling_plan_group.selling_plans %}
+              <option value="{{ plan.id }}">{{ plan.options[0].value }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    {% endfor %}
+
     {% unless product.requires_selling_plan %}
       <div for='one-time'class="plan-selector-group ">
         <!-- <div class="best-seller">
@@ -79,7 +98,7 @@
       
           
         <label>
-          <input id ='one-time'type="radio" name="plan-selector-group" value="" />
+          <input id ='one-time'type="radio"  name="plan-selector-group" value="" />
           <span data-i18n="one-time-purchase-label">One-time purchase</span>
         </label>
         <ul class="custom-mnakrer">
@@ -108,6 +127,14 @@
                 <li>You're in control
                   <p>Add, remove, swap, skip or keep'em coming</p>
                 </li>
+                <li>Membership Concierge
+                  <p>Dedicated team to answer questions</p>
+                </li>
+                <li>Members-only swag</li>
+                <li>Samples & gifts</li>
+                <li>
+                  Free drinks & discount
+                <p>At Shroom Room LA, NYC and Mushroom Mobile</p></li>
               </ul>
               <button>GOT IT!</button>
             </div>
@@ -121,23 +148,7 @@
       </div>
     {% endunless %}
 
-    {% for selling_plan_group in product.selling_plan_groups %}
-      <div class="plan-selector-group">
-        <label>
-          <input type="radio" name="plan-selector-group" value="{{ selling_plan_group.id }}" />
-          <span>{{ selling_plan_group.name }}</span>
-        </label>
-
-        <div class="plan-selector-plan">
-          <label>{{ selling_plan_group.options[0].name }}</label>
-          <select>
-            {% for plan in selling_plan_group.selling_plans %}
-              <option value="{{ plan.id }}">{{ plan.options[0].value }}</option>
-            {% endfor %}
-          </select>
-        </div>
-      </div>
-    {% endfor %}
+    
 
     <div class="plan-selector-description"></div>
   </fieldset>
