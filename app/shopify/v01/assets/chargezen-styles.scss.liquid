@@ -1,6 +1,7 @@
 
 .chargezen-plan-selector {
   margin-bottom: 1em;
+  border:0;
 
   // border: 1px solid #ddd;
   // padding: 10px;
@@ -125,13 +126,27 @@
   }
   .custom-mnakrer {
     margin-left: 26px;
-    li::marker {
-      font-size: 1em;
-      content: '\f00c';
-      font-family: 'FontAwesome';
-    }
     li {
-      padding-left: .5em;
+      // padding: 10px 0px 5px 10px;
+      list-style: none;
+      position: relative;
+      display: flex;
+      align-items: center;
+      font-size: 1.1rem;
+      line-height: 1.8rem;
+      .image {
+        width: 1.4rem;
+        height: 1rem;
+        margin-right: .8rem;
+        background-image: url('https://i.ibb.co/sPWjF6c/tickblack.png');
+        background-repeat: no-repeat;
+      }
+
+      // &::before {
+      //   background: red;
+      //   background-image: url('https://i.ibb.co/sPWjF6c/tickblack.png');
+      //   content:' ';
+      // }
     }
   }
   .popup-design {
@@ -193,13 +208,13 @@
             font-weight: 300;
           }
         }
-        li::marker {
-            content: '\f058';
-            font-size: 1.4em;;
-            font-family: 'FontAwesome';
-            color: #7aae7c;
-
-        }
+        // li::marker {
+        //     content: '\f058';
+        //     font-size: 1.4em;;
+        //     font-family: 'FontAwesome';
+        //     color: #7aae7c;
+        //
+        // }
       }
       & > button {
         padding: 1.5rem 2.5rem;
@@ -345,6 +360,7 @@
     p {
       color: lightgray;
       white-space: pre-wrap;
+      margin-bottom: 0;
     }
     .powered-by {
       background-color: #007EFF;
