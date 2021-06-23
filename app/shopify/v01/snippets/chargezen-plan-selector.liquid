@@ -84,23 +84,7 @@
             {% endfor %}
           </select>
         </div>
-      </div>
-    {% endfor %}
 
-    {% unless product.requires_selling_plan %}
-      <div for='one-time'class="plan-selector-group ">
-        <!-- <div class="best-seller">
-          <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4.5 0L5.51031 3.10942H8.77975L6.13472 5.03115L7.14503 8.14058L4.5 6.21885L1.85497 8.14058L2.86528 5.03115L0.220246 3.10942H3.48969L4.5 0Z" fill="white"/>
-          </svg>
-          <span>TOP-SELLER</span>
-        </div> -->
-      
-          
-        <label>
-          <input id ='one-time'type="radio"  name="plan-selector-group" value="" />
-          <span data-i18n="one-time-purchase-label">One-time purchase</span>
-        </label>
         <ul class="custom-mnakrer">
           <li>20% off subscription products</li>
           <li>Free U.S. Shipping</li>
@@ -141,6 +125,24 @@
           </div>
           </div>
         </div>
+      </div>
+    {% endfor %}
+
+    {% unless product.requires_selling_plan %}
+      <div for='one-time'class="plan-selector-group ">
+        <!-- <div class="best-seller">
+          <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4.5 0L5.51031 3.10942H8.77975L6.13472 5.03115L7.14503 8.14058L4.5 6.21885L1.85497 8.14058L2.86528 5.03115L0.220246 3.10942H3.48969L4.5 0Z" fill="white"/>
+          </svg>
+          <span>TOP-SELLER</span>
+        </div> -->
+      
+          
+        <label>
+          <input id ='one-time'type="radio"  name="plan-selector-group" value="" />
+          <span data-i18n="one-time-purchase-label">One-time purchase</span>
+        </label>
+  
 
         <div class="plan-selector-plan" style="display: none">
           <select><option value=""></option></select>
