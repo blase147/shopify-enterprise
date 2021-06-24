@@ -230,8 +230,7 @@ const Settings = () => {
           showAccount
           pauseSubscription
 
-          recurringChargeStatus
-          chargeConfirmationLink
+          designType
         }
       }
     }
@@ -454,6 +453,8 @@ const Settings = () => {
                       values,
                       { setSubmitting, setDirty, resetForm, touched }
                     ) => {
+                      delete values.recurringChargeStatus;
+                      delete values.chargeConfirmationLink;
                       const newValues={...values,
                         navigationDelivery:values.navigationDelivery || "storeowner_and_customer",
                         reactiveSubscription:values.reactiveSubscription || 'storeowner_and_customer',

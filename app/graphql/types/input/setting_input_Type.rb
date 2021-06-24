@@ -84,10 +84,6 @@ module Types
       argument :checkout_subscription_terms, String, required: false
       argument :email_subscription_terms, String, required: false
       argument :apple_pay_subscription_terms, String, required: false
-
-      #shop_date
-      argument :recurring_charge_status, String, required: false
-      argument :charge_confirmation_link, String, required: false
     end
   end
 end
