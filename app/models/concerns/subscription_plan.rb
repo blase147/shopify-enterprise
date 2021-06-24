@@ -132,7 +132,7 @@ module SubscriptionPlan
     private ##
 
     def update_selling_plans
-      self.selling_plans.select {|s| s.id.present? }.map {|s| selling_plan_info(s, s.shopify_id) }
+      self.selling_plans.select {|s| s.id.present? && !s.marked_for_destruction? }.map {|s| selling_plan_info(s, s.shopify_id) }
     end
 
     def delete_selling_plans
