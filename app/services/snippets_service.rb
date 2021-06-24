@@ -11,7 +11,7 @@ class SnippetsService
 
       ShopifyAPI::Asset.create(
         theme_id: @theme_id,
-        key: "snippets/#{file_name}", 
+        key: "snippets/#{file_name}",
         value: File.read(file_path)
       )
     end
@@ -21,7 +21,7 @@ class SnippetsService
 
       ShopifyAPI::Asset.create(
         theme_id: @theme_id,
-        key: "assets/#{file_name}", 
+        key: "assets/#{file_name}",
         value: File.read(file_path)
       )
     end
