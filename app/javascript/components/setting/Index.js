@@ -395,10 +395,10 @@ const Settings = () => {
       id: 'email-notification',
       content: 'Email Notification',
     },
-    {
-      id: 'dunning',
-      content: 'Dunning',
-    },
+    // {
+    //   id: 'dunning',
+    //   content: 'Dunning',
+    // },
     ...(process.env.APP_TYPE=="public" ?
     [{
       id: 'store-information',
