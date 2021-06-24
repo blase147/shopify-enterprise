@@ -9,11 +9,11 @@
       <legend data-i18n="plan-selector-title">Purchase options</legend>
 
       {% unless product.requires_selling_plan %}
-        <div for='one-time'class="plan-selector-group ">
+        <div for='one-time'class="plan-selector-group active-check-parent">
           <p>{{ product.title }}</p>
 
           <label>
-            <input id ='one-time'type="radio" name="plan-selector-group" value="" />
+            <input id ='one-time'type="radio" name="plan-selector-group " value="" />
             <span data-i18n="one-time-purchase-label">one-time </span>
           </label>
 
@@ -25,7 +25,7 @@
       {% endunless %}
 
       {% for selling_plan_group in product.selling_plan_groups %}
-        <div class="plan-selector-group">
+        <div class="plan-selector-group active-check-parent">
 
           <!-- <div class="best-seller">
             <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -86,7 +86,7 @@
 
 
     {% for selling_plan_group in product.selling_plan_groups %}
-      <div class="plan-selector-group active-check">
+      <div class="plan-selector-group ">
         <label>
           <input type="radio" id='subscribe'name="plan-selector-group" value="{{ selling_plan_group.id }}" />
           <span>{{ selling_plan_group.name }}</span>
@@ -152,13 +152,17 @@
                   </li>
                   <li>
                     <div class='check-img'></div>
-                    <span>You're in control</span>
-                    <p>Add, remove, swap, skip or keep'em coming</p>
+                    <div class='li-data'>
+                      <span>You're in control</span>
+                      <p>Add, remove, swap, skip or keep'em coming</p>
+                  </div>
                   </li>
                   <li>
                     <div class='check-img'></div>
+                    <div class='li-data'>
                     <span>Membership Concierge</span>
                     <p>Dedicated team to answer questions</p>
+                    </div>
                   </li>
                   <li>
                     <div class='check-img'></div>
@@ -168,10 +172,13 @@
                     <span>Samples & gifts</span>
                   </li>
                   <li><div class='check-img'></div>
+                    <div class='li-data'>
                     <span>Free drinks & discount</span>
-                  <p>At Shroom Room LA, NYC and Mushroom Mobile</p></li>
+                  <p>At Shroom Room LA, NYC and Mushroom Mobile</p>
+                </div>
+              </li>
                 </ul>
-                <button>GOT IT!</button>
+                <button id="gotit">GOT IT!</button>
               </div>
             </div>
             </div>
@@ -192,7 +199,9 @@
         <span class="cart_custom_text_one_time hide">Add to cart - {{current_variant.price | money}}</span>
         <label>
           <input id ='one-time'type="radio"  name="plan-selector-group" value="" />
-          <span data-i18n="one-time-purchase-label">One-time purchase</span>
+          <span data-i18n="one-time-purchase-label">
+            <span class="hide">$20 - </span> 
+            Buy once</span>
         </label>
         <!-- <div class="discount-section hide purchse-section">
           <p>CHOOSE QUANTITY:</p>
@@ -241,7 +250,7 @@
       <legend data-i18n="plan-selector-title">Purchase options</legend>
 
       {% unless product.requires_selling_plan %}
-        <div for='one-time'class="plan-selector-group ">
+        <div for='one-time'class="plan-selector-group active-check-parent">
           <!-- <div class="best-seller">
             <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M4.5 0L5.51031 3.10942H8.77975L6.13472 5.03115L7.14503 8.14058L4.5 6.21885L1.85497 8.14058L2.86528 5.03115L0.220246 3.10942H3.48969L4.5 0Z" fill="white"/>
@@ -261,7 +270,7 @@
       {% endunless %}
 
       {% for selling_plan_group in product.selling_plan_groups %}
-        <div class="plan-selector-group">
+        <div class="plan-selector-group active-check-parent">
           <label>
             <input type="radio" name="plan-selector-group" value="{{ selling_plan_group.id }}" />
             <span>{{ selling_plan_group.name }}</span>
@@ -358,14 +367,14 @@
 
 
     $(document).ready(function () {
-      $('.plan-selector-group').click(function () {
+      $('.active-check-parent').click(function () {
         var parent=$(this);
         // $('.plan-selector-group').find("input[type=radio]").eacch(elem=>{
         //   console.log("elem",elem);
         //   // .attr("checked", false)
         // });
         var radio = $(this).find("input")[0];
-        $('.plan-selector-group').removeClass('active-check');
+        $('.active-check-parent').removeClass('active-check');
         parent.addClass("active-check");
         // $(radio).attr("checked", true);
         // // $("")$(this).find("input")[0]
@@ -383,6 +392,8 @@ var btn = document.getElementById("myBtn");
 // Get the <span> element that closes the modal
 var span = document.getElementById("close-btn");
 
+var got = document.getElementById('gotit');
+
 // When the user clicks the button, open the modal
 btn.onclick = function() {
   modal.style.display = "block";
@@ -390,6 +401,10 @@ btn.onclick = function() {
 
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
+  modal.style.display = "none";
+}
+
+got.onclick = function() {
   modal.style.display = "none";
 }
 
