@@ -7,7 +7,7 @@
 - formatted = address.formatted.join(', ').titleize rescue nil
 - address_id = address.id[/\d+/] rescue nil
 - setting = current_shop.setting
-- subscription_logs = current_shop.subscription_logs.order(created_at: :desc).limit(5)
+- subscription_logs = @customer.subscription_logs.order(created_at: :desc).limit(5)
 - @translation = current_shop.translation
 
 .Polaris-Page
@@ -204,19 +204,19 @@
                           th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row" $
                           td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= raw event.node.message
                           td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= DateTime.parse(event.node.created_at).strftime("%a, %B %e %T")
-
-        .Polaris-Card
-          .Polaris-Card__Section
-            .Polaris-Heading.Polaris-TextStyle--variationStrong= Time.current.year
-            .Polaris-DataTable
-              .Polaris-DataTable__ScrollContainer
-                table.Polaris-DataTable__Table
-                  tbody
-                    - subscription_logs.each do |log|
-                      tr.Polaris-DataTable__TableRow
-                        th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row" $
-                        td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= raw log.note
-                        td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= DateTime.parse(log.created_at).strftime("%a, %B %e %T")
+        - if subscription_logs.present?
+          .Polaris-Card
+            .Polaris-Card__Section
+              .Polaris-Heading.Polaris-TextStyle--variationStrong= Time.current.year
+              .Polaris-DataTable
+                .Polaris-DataTable__ScrollContainer
+                  table.Polaris-DataTable__Table
+                    tbody
+                      - subscription_logs.each do |log|
+                        tr.Polaris-DataTable__TableRow
+                          th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row" $
+                          td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= raw log.note
+                          td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= log.created_at.strftime("%a, %B %e %T")
 
         br/
         .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
