@@ -459,8 +459,8 @@ const MysteryBoxPlan = () => {
                                   content: 'Remove',
                                   onAction: () => {
                                     setFieldValue(
-                                      'sellingPlans',
-                                      handleRemovingSellingPlan(values, index)
+                                      `sellingPlans[${index}]._destroy`,
+                                      true
                                     );
                                   },
                                 },
