@@ -56,8 +56,8 @@ class EmailService::Klaviyo < EmailService::Base
     subject_str = subject(object)
     return unless subject_str
     context_hash = context(object)
-    to = object[:customer].email
-    to = @shopify_shop.email if @email_notification.name == "Cancellation Alert"
+    to = object[:customer]&.email
+    to = @shopify_shop.email if @email_notification.slug == 'store_owner'
     response = Klaviyo::EmailTemplates.send_template(
       @email_notification.template_identity,
       from_email: @email_notification.from_email,

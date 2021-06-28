@@ -1,5 +1,5 @@
 class EmailService::Base < ApplicationService
-  
+
   def subject(object)
    case @email_notification.name
     when "Subscription Activation"
@@ -96,6 +96,12 @@ class EmailService::Base < ApplicationService
         subscription_line_item: object[:line_name],
         customer_name: object[:customer].name,
         shopify_store_email: shop_email
+      }
+    when 'Store Charge Confirmation'
+      {
+        storename: storename,
+        shopify_store_email: shop_email,
+        confirmation_url: object[:confirmation_url]
       }
     else
       false

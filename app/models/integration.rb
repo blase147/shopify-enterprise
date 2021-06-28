@@ -18,6 +18,6 @@ class Integration < ApplicationRecord
   end
 
   def set_twilio_shop_phone
-    shop.update(phone: credentials['twilio_phone_number'])
+    shop.update(phone: credentials['twilio_phone_number']) if credentials.present?
   end
 end

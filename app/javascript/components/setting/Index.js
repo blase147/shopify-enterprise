@@ -128,11 +128,14 @@ const Settings = () => {
         showBilling
         showAccount
         pauseSubscription
+
+        recurringChargeStatus
+        chargeConfirmationLink
       }
     }
   `;
   let { id } = useParams();
-  const { data, loading, error, refetch } = useQuery(GET_DATA, {
+  const [getData,{ data, loading, error, refetch }] = useLazyQuery(GET_DATA, {
     fetchPolicy: 'network-only',
   });
 
@@ -226,17 +229,21 @@ const Settings = () => {
           showBilling
           showAccount
           pauseSubscription
+
+          designType
         }
       }
     }
   `;
   const [updateSetting] = useMutation(UPDATE_SETTING);
 
+
   useEffect(() => {
     if (data) {
       setFormData(data.fetchSetting);
     }
   }, [data]);
+
   const initialValues = {
     allowCancelAfter: '',
     availablePurchase: '',
@@ -346,6 +353,13 @@ const Settings = () => {
   }
 
   useEffect(()=>{
+    if(passwordConfirmed){
+      getData();
+    }
+  },[passwordConfirmed])
+
+
+  useEffect(()=>{
       if(confirmPasswordRes?.confirmPassword?.success)
       {
         setPasswordConfirmed(true);
@@ -380,10 +394,12 @@ const Settings = () => {
       id: 'dunning',
       content: 'Dunning',
     },
-    {
+    ...(process.env.APP_TYPE=="public" ?
+    [{
       id: 'store-information',
       content: 'StoreInformation',
-    },
+    }]:[])
+    ,
     {
       id: 'legal',
       content: 'Legal',
@@ -437,6 +453,8 @@ const Settings = () => {
                       values,
                       { setSubmitting, setDirty, resetForm, touched }
                     ) => {
+                      delete values.recurringChargeStatus;
+                      delete values.chargeConfirmationLink;
                       const newValues={...values,
                         navigationDelivery:values.navigationDelivery || "storeowner_and_customer",
                         reactiveSubscription:values.reactiveSubscription || 'storeowner_and_customer',
@@ -552,7 +570,7 @@ const Settings = () => {
                             setFieldValue={setFieldValue}
                             handleSubmit={handleSubmit}
                           />
-                        ) : selectedTitleTab === 5 ? (
+                        ) : selectedTitleTab === (process.env.APP_TYPE=="public"?5:10) ? (
                           <div className="storeInfomation">
                             <StoreInfomation
                               values={values}
@@ -562,7 +580,7 @@ const Settings = () => {
                               handleSubmit={handleSubmit}
                             />
                           </div>
-                        ) : (
+                        ) : selectedTitleTab === (process.env.APP_TYPE=="public"?6:5)?(
                           <div className="storeInfomation">
                             <Legal
                               values={values}
@@ -572,7 +590,7 @@ const Settings = () => {
                               handleSubmit={handleSubmit}
                             />
                           </div>
-                        )}
+                        ):""}
                       </Form>
                     )}
                   </Formik>

@@ -208,7 +208,10 @@ const SmartSms = () => {
     messagesChart:messagesChartOptions
   })
     // const [filters,setFilters]=useContext(FilterContext)
-    const [filters,setFilters]=useState({startDate:dayjs(new Date()).subtract(30,'days').format("YYYY-MM-DD"),endDate:dayjs(new Date()).format("YYYY-MM-DD"),span:"30 days"})
+    const [filters,setFilters]=useState({
+      startDate:new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(2,"days")).subtract(30, 'days'))).format())),
+      endDate:new Date(Date.parse(dayjs(new Date()).subtract(1,"days").format())) 
+    })
     const handleFiltersDates=(dates,span)=>{
       if(!isEmpty(dates)){
         const {start,end}=dates;
@@ -341,7 +344,7 @@ const SmartSms = () => {
                               source={sectionProductList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
                               color={sectionProductList[item.key]?.up ? 'green' : 'red'}
                             />
-                            {(sectionProductList[item.key]?.up===false && sectionProductList[item.key]?.percent==0)?100:Math.abs(sectionProductList[item.key].percent)}%
+                            {Math.abs(sectionProductList[item.key].percent) || 0}%
                           </TextStyle>
                         
                         </div>
@@ -400,7 +403,7 @@ const SmartSms = () => {
                               source={sectionServiceList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
                               color={sectionServiceList[item.key]?.up ? 'green' : 'red'}
                             />
-                            {(sectionServiceList[item.key]?.percent==0 && !sectionServiceList[item.key]?.up)?100:Math.abs(sectionServiceList[item.key]?.percent)}%
+                            {Math.abs(sectionServiceList[item.key]?.percent) || 0}%
                             </TextStyle>
                           </Stack.Item>
                         </Stack>

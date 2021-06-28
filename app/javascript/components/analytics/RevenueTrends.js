@@ -31,7 +31,10 @@ const RevenueTrends = () => {
   const handleSelectChange_1 = useCallback((value) => setSelected_1(value), []);
 
   // const [filters,setFilters,productCharts,setProductCharts]=useContext(FilterContext)
-  const [filters,setFilters]=useState({startDate:dayjs(new Date()).subtract(30,'days').format("YYYY-MM-DD"),endDate:dayjs(new Date()).format("YYYY-MM-DD"),span:"30 days"})
+  const [filters,setFilters]=useState({
+    startDate:new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(2,"days")).subtract(30, 'days'))).format())),
+    endDate:new Date(Date.parse(dayjs(new Date()).subtract(1,"days").format())) 
+  })
   const handleFiltersDates=(dates,span)=>{
     if(!isEmpty(dates)){
       const {start,end}=dates;
@@ -1244,7 +1247,7 @@ const rows_Charges = [
                               source={cardData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
                               color={cardData[item.key]?.up ? 'green' : 'red'}
                             />
-                            {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}%
+                            {Math.abs(cardData[item.key]?.percent) || 0}%
                           </TextStyle>
                         </Stack.Item>
                       </Stack>
@@ -1398,7 +1401,7 @@ const rows_Charges = [
                               source={cardData[item.key]?.up  ? CaretUpMinor : CaretDownMinor}
                               color={cardData[item.key]?.up  ? 'green' : 'red'}
                             />
-                            {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}%
+                            {Math.abs(cardData[item.key]?.percent) || 0}%
                           </TextStyle>
                         </Stack.Item>
                       </Stack>
@@ -1504,7 +1507,7 @@ const rows_Charges = [
                                 source={cardData[item.key]?.up  ? CaretUpMinor : CaretDownMinor}
                                 color={cardData[item.key]?.up  ? 'green' : 'red'}
                               />
-                              {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}%
+                              {Math.abs(cardData[item.key]?.percent) || 0}%
                             </TextStyle>
                           </Stack.Item>
                         </Stack>
@@ -1565,7 +1568,7 @@ const rows_Charges = [
                                 source={cardData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
                                 color={cardData[item.key]?.up ? 'green' : 'red'}
                               />
-                              {(cardData[item.key]?.percent==0 && !cardData[item.key]?.up)?100:Math.abs(cardData[item.key]?.percent)}%
+                              {Math.abs(cardData[item.key]?.percent) || 0}%
                             </TextStyle>
                           </Stack.Item>
                         </Stack>
