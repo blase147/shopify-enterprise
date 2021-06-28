@@ -80,11 +80,18 @@ module SubscriptionPlan
         merchantCode: self.internal_name,
         options: [self.plan_selector_title],
         sellingPlansToCreate: create_selling_plans,
-        sellingPlansToUpdate: update_selling_plans,
-        sellingPlansToDelete: delete_selling_plans
+        sellingPlansToUpdate: update_selling_plans
       }
 
-      result = client.query(client.parse(UPDATE_QUERY), variables: { input: input, id: self.shopify_id})
+      if delete_selling_plans.count > 0
+        delete_input = { sellingPlansToDelete: delete_selling_plans }
+        result = client.query(client.parse(UPDATE_QUERY), variables: { input: delete_input, id: self.shopify_id})
+        error = result.errors.messages["data"][0]rescue nil
+        error ||= result.data.selling_plan_group_update.user_errors.first.message rescue nil
+        raise error if error.present?
+      end
+
+      result = ShopifyAPIRetry::GraphQL.retry { client.query(client.parse(UPDATE_QUERY), variables: { input: input, id: self.shopify_id}) }
       puts '#####'
       p result
 

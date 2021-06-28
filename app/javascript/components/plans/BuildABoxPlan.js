@@ -458,15 +458,15 @@ const BuildABoxPlan = () => {
                         title="Selling Plan"
                         sectioned
                         actions={
-                          index == 0
+                          ((!id && index != 0) || (id && values.sellingPlans.filter(p=>!p._destroy).length>1))
                             ? []
                             : [
                                 {
                                   content: 'Remove',
                                   onAction: () => {
                                     setFieldValue(
-                                      'sellingPlans',
-                                      handleRemovingSellingPlan(values, index)
+                                      `sellingPlans[${index}]._destroy`,
+                                      true
                                     );
                                   },
                                 },

@@ -217,6 +217,7 @@ const Customers = () => {
       fetchCustomers(sortColumn: $sortColumn, sortDirection: $sortDirection) {
         id
         shopifyId
+        shopDomain
         firstName
         lastName
         name
@@ -290,7 +291,7 @@ const Customers = () => {
             }
           />,
           <a
-            href={`/subscriptions/${row.shopifyId}`}
+            href={`/subscriptions/${row.shopifyId}?shop=${row.shopDomain}`}
             key={row.id}
           >{`${row.firstName} ${row.lastName}`}</a>,
           row.createdAt,
