@@ -92,7 +92,7 @@
           <span>{{ selling_plan_group.name }}</span>
         </label>
 
-        <div class="plan-selector-plan">
+        <div class="plan-selector-plan hide">
           <label>{{ selling_plan_group.options[0].name }}</label>
           <select>
             {% for plan in selling_plan_group.selling_plans %}
@@ -108,7 +108,11 @@
           {% assign saved_value = selling_plan_group.selling_plans[0].price_adjustments[0].value | money %}
           {% capture variant_price %} {{ current_variant.price | minus: selling_plan_group.selling_plans[0].price_adjustments[0].value | money }}{% endcapture %}
         {% endif %}
-        <span class="cart_custom_text_subscribe hide">Add to cart - {{variant_price}}</span>
+        {% if product.selling_plan_groups.size > 0 %}
+          <span class="cart_custom_text_subscribe hide">Add to cart - {{variant_price}} / {{product.selling_plan_groups[0].selling_plans[0].options[0].value | capitalize}}</span>
+        {% else %}
+          <span class="cart_custom_text_subscribe hide">Add to cart - {{variant_price}}</span>
+        {% endif %}
         <div class="show-hide">
           <ul class="custom-mnakrer">
             <li><div class="image"></div>
@@ -200,7 +204,7 @@
         <label>
           <input id ='one-time'type="radio"  name="plan-selector-group" value="" />
           <span data-i18n="one-time-purchase-label">
-            <span class="hide">$20 - </span> 
+            <span class="hide">$20 - </span>
             Buy once</span>
         </label>
         <!-- <div class="discount-section hide purchse-section">
