@@ -21,16 +21,15 @@ class ReportService < GraphqlService
             }
             customer {
               id
-              productSubscriberStatus
             }
-            lines(first: 10) {
+            lines(first: 5) {
               edges {
                 node {
                   sku
                 }
               }
             }
-            orders(first: 10, reverse: true) {
+            orders(first: 15, reverse: true) {
               edges {
                 node {
                   id
@@ -49,11 +48,6 @@ class ReportService < GraphqlService
                     }
                   }
                   originalTotalPriceSet {
-                    presentmentMoney {
-                      amount
-                    }
-                  }
-                  totalRefundedSet {
                     presentmentMoney {
                       amount
                     }
