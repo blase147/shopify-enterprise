@@ -187,7 +187,7 @@
                 </div>
               </li>
                 </ul>
-                <button id="gotit">GOT IT!</button>
+                <a id="gotit">GOT IT!</a>
               </div>
             </div>
             </div>
@@ -207,14 +207,18 @@
 
         <span class="cart_custom_text_one_time hide">Add to cart - {{current_variant.price | money}}</span>
         <label for="one-time">
-          <input id ='one-time'type="radio" class="radio-iii"  name="plan-selector-group" value="" />
-
+          <input id ='one-time'type="radio" class="radio-iii" name="plan-selector-group" value="" />
           <div class="custom-radio-btn">
             <p class="radio-btnn"></p>
           </div>
-          <span data-i18n="one-time-purchase-label">
-            <span class="hide">$20 - </span>
-            Buy once</span>
+          {% if product.compare_at_price_max > product.price %}
+            {% if current_variant.compare_at_price > current_variant.price %}
+              <div class="del-price one-time-del-price"><del>{{ current_variant.compare_at_price | money }} - </del></div>
+            {% endif %}
+          {% endif %}
+          <!-- <div class="del-price one-time-del-price"><del>56 - </del></div> -->
+          <p id="ProductPriceOneTime">{{ current_variant.price | money }} - </p>
+          <span data-i18n="one-time-purchase-label">Buy once</span>
         </label>
         <!-- <div class="discount-section hide purchse-section">
           <p>CHOOSE QUANTITY:</p>
@@ -359,6 +363,7 @@
         variants[{{ variant_id }}] = {};
 
         variants[{{ variant_id }}].price = {{ variant.price | money | json }};
+        variants[{{ variant_id }}].compare_at_price = {{ variant.compare_at_price | money | json }};
 
         variants[{{ variant_id }}].available_group_ids = {};
         variants[{{ variant_id }}].selling_plan_allocations = {};
@@ -375,11 +380,12 @@
       planProduct.variants = variants;
 
       var selector = $('fieldset.chargezen-plan-selector');
-      selector.attr('plans', JSON.stringify(planProduct))
+      selector.attr('plans', JSON.stringify(planProduct));
     })();
 
 
     $(document).ready(function () {
+      
       $('.active-check-parent').click(function () {
         var parent=$(this);
         // $('.plan-selector-group').find("input[type=radio]").eacch(elem=>{
@@ -399,61 +405,61 @@
       });
       var modal = document.getElementById("myModal");
 
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
+      // Get the button that opens the modal
+      var btn = document.getElementById("myBtn");
 
-// Get the <span> element that closes the modal
-var span = document.getElementById("close-btn");
+      // Get the <span> element that closes the modal
+      var span = document.getElementById("close-btn");
 
-var got = document.getElementById('gotit');
+      var got = document.getElementById('gotit');
 
-// When the user clicks the button, open the modal
-btn.onclick = function() {
-  modal.style.display = "block";
-}
+      // When the user clicks the button, open the modal
+      btn.onclick = function() {
+        modal.style.display = "block";
+      }
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
 
-got.onclick = function() {
-  modal.style.display = "none";
-}
+      got.onclick = function() {
+        modal.style.display = "none";
+      }
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
 
-$("#one-time").click(function(){
-  $(".purchse-section").removeClass("hide");
-  $(".show-hide").addClass("hide");
-})
-$("#subscribe").click(function(){
-  $(".show-hide").removeClass("hide");
-  $(".purchse-section").addClass("hide");
-})
+      $("#one-time").click(function(){
+        $(".purchse-section").removeClass("hide");
+        $(".show-hide").addClass("hide");
+      })
+      $("#subscribe").click(function(){
+        $(".show-hide").removeClass("hide");
+        $(".purchse-section").addClass("hide");
+      })
 
-$(".chrge-logo svg").mouseover(function(){
-  $(".popup-div").css("display","block")
-})
-$(".chrge-logo svg, .popup-div").mouseleave(function(){
+      $(".chrge-logo svg").mouseover(function(){
+        $(".popup-div").css("display","block")
+      })
+      $(".chrge-logo svg, .popup-div").mouseleave(function(){
 
-  setTimeout(()=>{
-    $(".popup-div:not(:hover)").css("display","none");
-  },500)
-  
-})
- $(".popup-div").mouseover(function(){
-  $(".popup-div").css("display","block")
-})
-///Design III radio's active,in-active ...
-$("input[type='radio'].radio-iii").change(function(){
-$(".radio-btnn").removeClass("radio-bg");
-$(this).closest(".plan-selector-group").find(".radio-btnn").addClass("radio-bg");
-})
+        setTimeout(()=>{
+          $(".popup-div:not(:hover)").css("display","none");
+        },500)
+        
+      })
+      $(".popup-div").mouseover(function(){
+        $(".popup-div").css("display","block")
+      })
+      ///Design III radio's active,in-active ...
+      $("input[type='radio'].radio-iii").change(function(){
+      $(".radio-btnn").removeClass("radio-bg");
+      $(this).closest(".plan-selector-group").find(".radio-btnn").addClass("radio-bg");
+      })
   </script>
 {% endif %}

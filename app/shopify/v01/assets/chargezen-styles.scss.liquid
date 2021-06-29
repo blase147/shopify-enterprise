@@ -140,6 +140,11 @@
     margin-bottom: 0;
     label {
       text-align: left;
+      display: flex;
+      align-items: center;
+      p {
+        margin-bottom: 0;
+      }
     }
     input {
       opacity: 0;
@@ -149,10 +154,10 @@
     .custom-radio-btn {
       position: relative;
       display: inline-flex;
+
       .radio-btnn {
-        
         position: absolute;
-        top: -1.2rem;
+        top: -0.9rem;
         left: -2.5rem;
         width: 1.5rem;
         height: 1.5rem;
@@ -170,10 +175,10 @@
         }
       }
       .radio-bg {
-        background-color: #c8102e;
+        background-color: #A2D4B2;
 
         &::before {
-          border-color: #c8102e;
+          border-color: #A2D4B2;
         }
       }
     }
@@ -301,7 +306,7 @@
         //
         // }
       }
-      & > button {
+      & > a {
         padding: 1rem 2.3rem;
         font-size: .9rem;
         color: white;
@@ -311,6 +316,7 @@
         display: flex;
         font-weight: 700;
         margin: 0 auto;
+        width: 130px;
       }
     }
     .close {
