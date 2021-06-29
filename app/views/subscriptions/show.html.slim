@@ -7,7 +7,7 @@
 - formatted = address.formatted.join(', ').titleize rescue nil
 - address_id = address.id[/\d+/] rescue nil
 - setting = current_shop.setting
-- subscription_logs = @customer.subscription_logs.order(created_at: :desc).limit(5)
+- subscription_logs = @customer.subscription_logs.order(created_at: :desc).limit(10)
 - @translation = current_shop.translation
 
 .Polaris-Page
