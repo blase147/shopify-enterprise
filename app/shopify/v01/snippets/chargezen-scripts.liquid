@@ -38,6 +38,8 @@
         price = variant.selling_plan_allocations[planId].price_formatted
         updateRecurringPriceLabel(price);
       } else {
+        console.log(variant)
+        $('.one-time-del-price').text(variant.compare_at_price);
         updatePriceLabelOneTime(price);
       }
     }

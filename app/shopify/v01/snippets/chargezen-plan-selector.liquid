@@ -203,9 +203,13 @@
         <span class="cart_custom_text_one_time hide">Add to cart - {{current_variant.price | money}}</span>
         <label>
           <input id ='one-time'type="radio"  name="plan-selector-group" value="" />
-          <span data-i18n="one-time-purchase-label">
-            <span class="hide">$20 - </span>
-            Buy once</span>
+          {% if product.compare_at_price_max > product.price %}
+            {% if current_variant.compare_at_price > current_variant.price %}
+              <div class="del-price one-time-del-price"><del>{{ current_variant.compare_at_price | money }}</del></div>
+            {% endif %}
+          {% endif %}
+          <p id="ProductPriceOneTime">{{ current_variant.price | money }}</p>
+          <span data-i18n="one-time-purchase-label">Buy once</span>
         </label>
         <!-- <div class="discount-section hide purchse-section">
           <p>CHOOSE QUANTITY:</p>
@@ -350,6 +354,7 @@
         variants[{{ variant_id }}] = {};
 
         variants[{{ variant_id }}].price = {{ variant.price | money | json }};
+        variants[{{ variant_id }}].compare_at_price = {{ variant.compare_at_price | money | json }};
 
         variants[{{ variant_id }}].available_group_ids = {};
         variants[{{ variant_id }}].selling_plan_allocations = {};
