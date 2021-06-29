@@ -213,10 +213,9 @@
           </div>
           {% if product.compare_at_price_max > product.price %}
             {% if current_variant.compare_at_price > current_variant.price %}
-              <div class="del-price one-time-del-price"><del>{{ current_variant.compare_at_price | money }} - </del></div>
+              <div class="del-price one-time-del-price"><del>{{ current_variant.compare_at_price | money }}</del></div>
             {% endif %}
           {% endif %}
-          <!-- <div class="del-price one-time-del-price"><del>56 - </del></div> -->
           <p id="ProductPriceOneTime">{{ current_variant.price | money }} - </p>
           <span data-i18n="one-time-purchase-label">Buy once</span>
         </label>
@@ -385,7 +384,7 @@
 
 
     $(document).ready(function () {
-      
+
       $('.active-check-parent').click(function () {
         var parent=$(this);
         // $('.plan-selector-group').find("input[type=radio]").eacch(elem=>{
@@ -451,7 +450,7 @@
         setTimeout(()=>{
           $(".popup-div:not(:hover)").css("display","none");
         },500)
-        
+
       })
       $(".popup-div").mouseover(function(){
         $(".popup-div").css("display","block")
