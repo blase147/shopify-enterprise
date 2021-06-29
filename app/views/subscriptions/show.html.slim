@@ -215,7 +215,7 @@
                       - subscription_logs.each do |log|
                         tr.Polaris-DataTable__TableRow
                           th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row" $
-                          td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= raw log.note&.gsub(',', ' ')&.capitalize
+                          td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= raw log.description&.gsub(',', ' ')&.capitalize
                           td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= log.created_at.strftime("%a, %B %e %T")
 
         br/
