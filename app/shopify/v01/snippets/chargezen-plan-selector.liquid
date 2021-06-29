@@ -87,9 +87,14 @@
 
     {% for selling_plan_group in product.selling_plan_groups %}
       <div class="plan-selector-group ">
-        <label>
-          <input type="radio" id='subscribe'name="plan-selector-group" value="{{ selling_plan_group.id }}" />
+        <label for="subscribe">
+          <input type="radio" id='subscribe' class="radio-iii" name="plan-selector-group" value="{{ selling_plan_group.id }}" />
+
+          <div class="custom-radio-btn  ">
+            <p class="radio-btnn radio-bg"></p>
+          </div>
           <span>{{ selling_plan_group.name }}</span>
+
         </label>
 
         <div class="plan-selector-plan hide">
@@ -192,7 +197,7 @@
     {% endfor %}
 
     {% unless product.requires_selling_plan %}
-      <div for='one-time'class="plan-selector-group ">
+      <div class="plan-selector-group " style="margin-top: 27px">
         <!-- <div class="best-seller">
           <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M4.5 0L5.51031 3.10942H8.77975L6.13472 5.03115L7.14503 8.14058L4.5 6.21885L1.85497 8.14058L2.86528 5.03115L0.220246 3.10942H3.48969L4.5 0Z" fill="white"/>
@@ -201,8 +206,12 @@
         </div> -->
 
         <span class="cart_custom_text_one_time hide">Add to cart - {{current_variant.price | money}}</span>
-        <label>
-          <input id ='one-time'type="radio"  name="plan-selector-group" value="" />
+        <label for="one-time">
+          <input id ='one-time'type="radio" class="radio-iii"  name="plan-selector-group" value="" />
+
+          <div class="custom-radio-btn">
+            <p class="radio-btnn"></p>
+          </div>
           <span data-i18n="one-time-purchase-label">
             <span class="hide">$20 - </span>
             Buy once</span>
@@ -426,6 +435,25 @@ $("#one-time").click(function(){
 $("#subscribe").click(function(){
   $(".show-hide").removeClass("hide");
   $(".purchse-section").addClass("hide");
+})
+
+$(".chrge-logo svg").mouseover(function(){
+  $(".popup-div").css("display","block")
+})
+$(".chrge-logo svg, .popup-div").mouseleave(function(){
+
+  setTimeout(()=>{
+    $(".popup-div:not(:hover)").css("display","none");
+  },500)
+  
+})
+ $(".popup-div").mouseover(function(){
+  $(".popup-div").css("display","block")
+})
+///Design III radio's active,in-active ...
+$("input[type='radio'].radio-iii").change(function(){
+$(".radio-btnn").removeClass("radio-bg");
+$(this).closest(".plan-selector-group").find(".radio-btnn").addClass("radio-bg");
 })
   </script>
 {% endif %}
