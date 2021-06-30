@@ -200,9 +200,9 @@ class ReportDataService
 
   def granularity
     range = 'day'
-    if @range.count > 31
+    if @range.count > 32
       range = 'month'
-    elsif @range.count > 365
+    elsif @range.count > 366
       range = 'year'
     end
     range
