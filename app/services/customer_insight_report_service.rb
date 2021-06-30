@@ -94,7 +94,7 @@ class CustomerInsightReportService
   end
 
   def sub_customers_count
-    @shop.customers.where('shopify_at::date BETWEEN ? AND ? AND (status = ? OR failed_at IS NOT NULL)', @range.first, @range.last, 'ACTIVE').count
+    @shop.customers.where('shopify_at::date <= ? AND (status = ? OR failed_at IS NOT NULL)', @range.last, 'ACTIVE').count
   end
 
   # def churn_rate
@@ -155,7 +155,7 @@ class CustomerInsightReportService
   end
 
   def customers_count(status = nil)
-    @shop.customers.where('shopify_at::date BETWEEN ? AND ?', @range.first, @range.last)
+    @shop.customers.where('shopify_at::date <= ?', @range.last)
          .where(status.present? ? "status='#{status}'" : 'status IS NOT NULL').count
   end
 
