@@ -97,7 +97,7 @@ class ReportDataService
 
   def renewal_data_by_date(range)
     pending_for_renewal = @subscriptions.count { |subscription| subscription.node.next_billing_date.to_date.between?(range.first, range.last) }
-    renewed_subscriptions = @subscriptions.count { |subscription| subscription.node.orders.edges.count > 1 && (subscription_orders_in_range(subscription, range.first.to_date) > 1)  }
+    renewed_subscriptions = @subscriptions.count { |subscription| subscription.node.orders.edges.count > 1 && (subscription_orders_in_range(subscription, range.first.to_date) >= 1)  }
     renewal_data = (renewed_subscriptions / pending_for_renewal) * 100 rescue 0
     { value: renewal_data }
   end
