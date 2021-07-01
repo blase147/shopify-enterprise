@@ -105,7 +105,7 @@ class CustomerInsightReportService
 
   def churn_rate
     customer_at_period_start = customer_at_period_start(@subscriptions, @range)
-    cancelled_customer_in_period = in_period_subscriptions(@subscriptions, @range, 'CANCELLED').count
+    cancelled_customer_in_period = in_period_cancelled_subscriptions(@subscriptions, @range).count
     (cancelled_customer_in_period * 100) / customer_at_period_start rescue 0
   end
 
@@ -117,6 +117,10 @@ class CustomerInsightReportService
 
   def in_period_subscriptions(subscriptions, range, status = nil)
     subscriptions.select { |subscription| range.cover?(subscription.node.created_at.to_date) && (status ? subscription.node.status == status : true) }
+  end
+
+  def in_period_cancelled_subscriptions(subscriptions, range)
+    subscriptions.select { |subscription| range.cover?(@shop.customers.find_by(status: 'CANCELLED', shopify_id: subscription.node.id[/\d+/])&.cancelled_at) && subscription.node.status == 'CANCELLED' }
   end
 
   def in_period_hourly_subscriptions(subscriptions, range, status = nil)
