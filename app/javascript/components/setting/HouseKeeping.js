@@ -240,7 +240,7 @@ mutation ($input: UpdatePasswordInput!) {
               <Layout>
                 <Layout.Section>
                   <p className="default-pass">
-                    Default Password: <strong>Admin Alaska777</strong>
+                    Default Password: <strong>AdminAlaska777</strong>
                   </p>
                   <div className="password-fields">
                     <TextField

@@ -6,7 +6,7 @@ const Password = () => {
         <Layout >
           <Layout.Section>
             <p className="default-pass">
-              Default Password: <strong>Admin Alaska777</strong>
+              Default Password: <strong>AdminAlaska777</strong>
             </p>
           </Layout.Section>
           <div className="password-fields">
