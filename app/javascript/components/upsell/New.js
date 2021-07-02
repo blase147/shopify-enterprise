@@ -422,7 +422,7 @@ const NewUpSell = () => {
                         <TextField
                           value={values.internalName}
                           label="Internal name"
-                          placeholder="Subscription and Save"
+                          placeholder="Subscribe & Save"
                           type="text"
                           error={touched.internalName && errors.internalName}
                           onChange={(e) => setFieldValue('internalName', e)}
@@ -484,7 +484,7 @@ const NewUpSell = () => {
                           error={touched.publicName && errors.publicName}
                           onChange={(e) => setFieldValue('publicName', e)}
                           label="Public name"
-                          placeholder="Subscription and Save"
+                          placeholder="Subscribe & Save"
                           type="text"
                           helpText={
                             <span>
@@ -530,7 +530,7 @@ const NewUpSell = () => {
                             <TextField
                               value={campaign.name}
                               label="Name"
-                              placeholder="Subscription and Save - delivered every week"
+                              placeholder="Subscribe & Save - delivered every week"
                               type="text"
                               error={
                                 touched.upsellCampaigns?.[index]?.name &&
