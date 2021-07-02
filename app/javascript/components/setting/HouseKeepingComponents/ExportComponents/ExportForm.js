@@ -10,7 +10,7 @@ import {CSVDownload} from  'react-csv';
 const ExportForm = ({handleCloseForm}) => {
 
   const fetchCustomerReport = gql`
-  query($reportType: String!, $startDate: String!, $endDate: String!) {  
+  query($reportType: String!, $startDate: String!, $endDate: String!) {
     fetchReport(reportType: $reportType, startDate: $startDate, endDate: $endDate) {
         customers {
           firstName
@@ -34,7 +34,7 @@ const ExportForm = ({handleCloseForm}) => {
   `;
 
   const fetchProductReport = gql`
-  query($reportType: String!, $startDate: String!, $endDate: String!) {  
+  query($reportType: String!, $startDate: String!, $endDate: String!) {
     fetchReport(reportType: $reportType, startDate: $startDate, endDate: $endDate) {
         products {
           title
@@ -58,7 +58,7 @@ const ExportForm = ({handleCloseForm}) => {
   `;
 
   const fetchAnalyticsReport = gql`
-  query($reportType: String!, $startDate: String!, $endDate: String!) {  
+  query($reportType: String!, $startDate: String!, $endDate: String!) {
     fetchReport(reportType: $reportType, startDate: $startDate, endDate: $endDate) {
         reportLogs{
             reportType
@@ -71,7 +71,7 @@ const ExportForm = ({handleCloseForm}) => {
   `;
   //extra 3 apis to get Data
   const revenueReport = gql`
-  query($startDate: String!, $endDate: String!) {  
+  query($startDate: String!, $endDate: String!) {
     fetchRevenueTrend(startDate: $startDate, endDate: $endDate) {
         totalSales {
           value
@@ -142,7 +142,7 @@ const ExportForm = ({handleCloseForm}) => {
 }
   `;
   const insightReport = gql`
-  query($startDate: String!, $endDate: String!) {  
+  query($startDate: String!, $endDate: String!) {
     fetchCustomerInsights(startDate: $startDate, endDate: $endDate) {
       customersCount {
         value
@@ -162,53 +162,53 @@ const ExportForm = ({handleCloseForm}) => {
       chargePerCustomer {
         value
         percent
-        up 
+        up
       }
       skipCount {
         value
         percent
-        up 
+        up
       }
       swapCount {
         value
         percent
-        up 
+        up
       }
       restartCount {
         value
         percent
-        up 
+        up
       }
       upsellCount {
         value
         percent
-        up 
+        up
       }
       dunningCount {
         value
         percent
-        up 
+        up
       }
       recovered {
         value
         percent
-        up 
+        up
       }
       churned {
         value
         percent
-        up 
+        up
       }
       dunned {
         value
         percent
-        up 
+        up
       }
     }
 }
   `;
   const smartyReport = gql`
-  query($startDate: String!, $endDate: String!) {  
+  query($startDate: String!, $endDate: String!) {
     fetchSmsAnalytics(startDate: $startDate, endDate: $endDate) {
         swapCount {
           value
@@ -238,7 +238,7 @@ const ExportForm = ({handleCloseForm}) => {
         optOutMessages {
           value
           percent
-          up 
+          up
         }
     }
 }
@@ -333,7 +333,7 @@ const ExportForm = ({handleCloseForm}) => {
 
       if(!isEmpty(first)){
         for (const [key, value] of Object.entries(first)) {
-          modified[key] = value?.value || '0'; 
+          modified[key] = value?.value || '0';
        }
       }
       if(!isEmpty(second)){
@@ -346,7 +346,7 @@ const ExportForm = ({handleCloseForm}) => {
         modified[key] = value?.value || '0';
       }
      }
-    
+
       setData([modified]);
     }
   }, [revenueReportData, insightReportData, smartyReportData])
@@ -374,7 +374,7 @@ const ExportForm = ({handleCloseForm}) => {
           </div>
           <div className="input-section">
           {/* <DisplayText size='medium'><strong>Select Export Type</strong></DisplayText> */}
-            <ExportFilter  
+            <ExportFilter
               handleDates={handleFiltersDates}
               loading={productLoading || customerLoading || revenueLoading || smartyLoading || insightLoading}
             />
