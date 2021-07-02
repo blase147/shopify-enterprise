@@ -277,7 +277,7 @@ const NewUpSellV2 = () => {
                       <TextField
                         value={values.merchantCode}
                         label="Internal name"
-                        placeholder="Subscription and Save"
+                        placeholder="Subscribe & Save"
                         type="text"
                         error={touched.merchantCode && errors.merchantCode}
                         onChange={(e) => setFieldValue('merchantCode', e)}
@@ -316,7 +316,7 @@ const NewUpSellV2 = () => {
                         error={touched.name && errors.name}
                         onChange={(e) => setFieldValue('name', e)}
                         label="Public name"
-                        placeholder="Subscription and Save"
+                        placeholder="Subscribe & Save"
                         type="text"
                         helpText={
                           <span>
@@ -335,7 +335,7 @@ const NewUpSellV2 = () => {
                       <TextField
                         value={values.merchantCode}
                         label="Name"
-                        placeholder="Subscription and Save - delivered every week"
+                        placeholder="Subscribe & Save - delivered every week"
                         type="text"
                         error={touched.merchantCode && errors.merchantCode}
                         onChange={(e) => setFieldValue('merchantCode', e)}

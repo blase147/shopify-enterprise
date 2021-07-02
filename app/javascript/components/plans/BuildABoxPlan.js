@@ -376,7 +376,7 @@ const BuildABoxPlan = () => {
                         <TextField
                           value={values.internalName}
                           label="Internal name"
-                          placeholder="Subscription and Save"
+                          placeholder="Subscribe & Save"
                           type="text"
                           error={touched.internalName && errors.internalName}
                           onChange={(e) => setFieldValue('internalName', e)}
@@ -439,7 +439,7 @@ const BuildABoxPlan = () => {
                           error={touched.publicName && errors.publicName}
                           onChange={(e) => setFieldValue('publicName', e)}
                           label="Public name"
-                          placeholder="Subscription and Save"
+                          placeholder="Subscribe & Save"
                           type="text"
                           helpText={
                             <span>
