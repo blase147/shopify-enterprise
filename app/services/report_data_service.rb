@@ -42,15 +42,6 @@ class ReportDataService
     mrr(subscriptions, range) / customer_data.size  rescue 0
   end
 
-  def month_graph_data(subscriptions, range, method)
-    range.map(&:beginning_of_month).uniq.map do |date|
-      {
-        date: date.strftime('%b %d'),
-        data: { value: send(method, date, subscriptions).to_f.round(2) }
-      }
-    end
-  end
-
   def year_graph_data(subscriptions, range, method)
     range.map(&:beginning_of_year).uniq.map do |date|
       {
@@ -60,23 +51,22 @@ class ReportDataService
     end
   end
 
-  def revenue_churn_by_date(date, subscriptions)
-    range = date.beginning_of_month..date.end_of_month
-    subscriptions_in_period = in_period_subscriptions(subscriptions, range)
+  def revenue_churn_by_date(range)
+    subscriptions_in_period = in_period_subscriptions(@subscriptions, range)
     cancelled_subscriptions_revenue = subscriptions_in_period.sum { |subscription| subscription.node.status == 'CANCELLED' ? get_orders_total_amount(subscription, range) : 0 }
     order_total = subscriptions_in_period.sum { |subscription| get_orders_total_amount(subscription, range) }
-    ((order_total - (order_total - cancelled_subscriptions_revenue)) / order_total) * 100 rescue 0
+    churn_data = ((order_total - (order_total - cancelled_subscriptions_revenue)) / order_total) * 100 rescue 0
+    { value: churn_data }
   end
 
-  def sales_data_by_date(date, subscriptions)
-    range = date.beginning_of_month..date.end_of_month
-    subscriptions = in_period_subscriptions(subscriptions, range)
-    subscriptions.sum { |subscription| get_orders_total_amount(subscription, range) }
+  def sales_data_by_date(range)
+    subscriptions = in_period_subscriptions(@subscriptions, range)
+    { value: subscriptions.sum { |subscription| get_orders_total_amount(subscription, range) } }
   end
 
-  def refund_data_by_date(date, _subscriptions)
-    orders = @orders.select { |order| order if (date.beginning_of_month..date.end_of_month).cover?(order.created_at.to_date) }
-    refunded_amount(orders)
+  def refund_data_by_date(range)
+    orders = @orders.select { |order| order if range.cover?(order.created_at.to_date) }
+    { value: refunded_amount(orders) }
   end
 
   def refunded_amount(orders)
@@ -89,27 +79,27 @@ class ReportDataService
     current_year_subscriptions.sum { |subscription| get_orders_total_amount(subscription, range) }.to_f.round(2)
   end
 
-  def mrr_data_by_date(date, subscriptions)
-    range = date.beginning_of_month..date.end_of_month
+  def mrr_data_by_date(range)
     previous_month_range = (range.first - 1.day).beginning_of_month..(range.first - 1.day).end_of_month
-    previous_month_revenue = subscriptions.sum { |subscription| get_orders_total_amount(subscription, previous_month_range)}
-    current_month_revenue = subscriptions.sum { |subscription| get_orders_total_amount(subscription, range.first..range.last) }
-    previous_month_revenue + current_month_revenue
+    previous_month_revenue = @subscriptions.sum { |subscription| get_orders_total_amount(subscription, previous_month_range)}
+    current_month_revenue = @subscriptions.sum { |subscription| get_orders_total_amount(subscription, range.first..range.last) }
+    { value: previous_month_revenue + current_month_revenue }
   end
 
   def get_orders_total_amount(subscription, range = nil)
     subscription.node.orders.edges.sum { |order| range.nil? || (range.present? && range.cover?(order.node.created_at.to_date)) ? order.node.total_price_set.presentment_money.amount.to_f.round(2) : 0 }
   end
 
-  def get_customers_by_date(date, subscriptions)
-    current_month_subscriptions = in_period_subscriptions(subscriptions, date.beginning_of_month..date.end_of_month, 'ACTIVE')
-    current_month_subscriptions.group_by { |subscription| subscription.node.customer.id }.count
+  def get_customers_by_date(range)
+    current_month_subscriptions = in_period_subscriptions(@subscriptions, range, 'ACTIVE')
+    { value: current_month_subscriptions.group_by { |subscription| subscription.node.customer.id }.count }
   end
 
-  def renewal_data_by_date(date, subscriptions)
-    pending_for_renewal = subscriptions.count { |subscription| subscription.node.next_billing_date.to_date.between?(date.beginning_of_month, date.end_of_month) }
-    renewed_subscriptions = subscriptions.count { |subscription| subscription.node.orders.edges.count > 1 && (subscription_orders_in_range(subscription, date) > 1)  }
-    (renewed_subscriptions / pending_for_renewal) * 100 rescue 0
+  def renewal_data_by_date(range)
+    pending_for_renewal = @subscriptions.count { |subscription| subscription.node.next_billing_date.to_date.between?(range.first, range.last) }
+    renewed_subscriptions = @subscriptions.count { |subscription| subscription.node.orders.edges.count > 1 && (subscription_orders_in_range(subscription, range.first.to_date) >= 1)  }
+    renewal_data = (renewed_subscriptions / pending_for_renewal) * 100 rescue 0
+    { value: renewal_data }
   end
 
   def in_period_subscriptions(subscriptions, range, status = nil)
@@ -200,9 +190,9 @@ class ReportDataService
 
   def granularity
     range = 'day'
-    if @range.count > 31
+    if @range.count > 32
       range = 'month'
-    elsif @range.count > 365
+    elsif @range.count > 366
       range = 'year'
     end
     range

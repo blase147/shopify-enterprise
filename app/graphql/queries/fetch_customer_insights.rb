@@ -24,10 +24,10 @@ module Queries
       swap_customers = report.active_vs_churned_swap_data
       restart_customers = report.active_vs_churned_restart_data
       upsell_customers = report.active_vs_churned_upsell_data
-      sales_per_charge = report.percentage(previous_day.sales_per_charge, current_day.sales_per_charge, report.sales_per_charge)
-      customers_count = report.percentage(previous_day.sub_customers_count, current_day.sub_customers_count, report.sub_customers_count)
-      charge_per_customer = report.percentage(previous_day.charge_per_customer, current_day.charge_per_customer, report.charge_per_customer)
-      total_churn = report.percentage(previous_day.churn_rate, current_day.churn_rate, report.churn_rate)
+      sales_per_charge = report.percentage(previous_day.sales_per_charge, current_day.sales_per_charge, all_subscription_report.sales_per_charge)
+      customers_count = report.percentage(previous_day.all_active_customers, current_day.all_active_customers, all_subscription_report.all_active_customers)
+      charge_per_customer = report.percentage(previous_day.charge_per_customer, current_day.charge_per_customer, all_subscription_report.charge_per_customer)
+      total_churn = report.percentage(previous_day.churn_rate, current_day.churn_rate, all_subscription_report.churn_rate)
       dunning_count = report.percentage(previous_day.dunning_count, current_day.dunning_count, report.dunning_count)
       dunned = report.percentage(previous_day.dunned, current_day.dunned, report.dunned)
       recovered = report.percentage(previous_day.recovered_count, current_day.recovered_count, report.recovered_count)
