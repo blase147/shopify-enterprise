@@ -278,6 +278,23 @@ const Installation = () => {
                     </Button>
                   </TextContainer>
                 </Card.Section>
+                <Card.Section>
+                  <TextContainer>
+                    <Heading>
+                      7. Add link to the customer portal in the Order Summary  Page
+                    </Heading>
+
+                    <p>
+                      In order to create a link to the customer portal, paste the following script in additional script section in checkout settings; or click the button below to install it automatically.  To access additional scripts, start from your Shopify admin, and go to Settings > Checkout. Under Order processing you find the Additional scripts section.
+                    </p>
+
+                    <CodeSnippet code={`<script>Shopify.Checkout.OrderStatus.addContentBox(<a href="https://{{shop.domain}}/account" style="text-decoration-line:underline;text-decoration-style: solid;">Manage your subscriptions via the customer portal</a>)</script>`} />
+
+                    <Button loading={loadingAction == 'add_to_order_status'} primary onClick={(e) => handleInstallation('add_to_order_status')}>
+                      Install Automatically
+                    </Button>
+                  </TextContainer>
+                </Card.Section>
               </Stack>
             </Page>
           ) : (

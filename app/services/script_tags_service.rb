@@ -5,11 +5,15 @@ class ScriptTagsService
   end
 
   def add
-    unless order_status_script_tag.present?
+    if !order_status_script_tag.present?
       ShopifyAPI::ScriptTag.create(
-        event: 'onload', 
-        display_scope: 'order_status', src: "#{ENV['HOST']}/script_tags/subscriptions.js?shop_domain=#{shop_domain}"
+        event: 'onload',
+        display_scope: 'order_status', src: "#{ENV['HOST']}script_tags/subscriptions.js?shop_domain=#{shop_domain}"
       )
+    else
+      tag = order_status_script_tag
+      tag.src = "#{ENV['HOST']}script_tags/subscriptions.js?shop_domain=#{shop_domain}"
+      tag.save
     end
   rescue Exception => ex
     { ex: ex.message }
