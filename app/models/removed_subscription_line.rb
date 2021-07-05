@@ -10,7 +10,7 @@ class RemovedSubscriptionLine < ApplicationRecord
       note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
       description = customer.name+",just removed product,"+product.title
       amount = (product.quantity * product.current_price.amount.to_f).round(2).to_s
-      customer.shop.subscription_logs.cancel.create(customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
+      customer.shop.subscription_logs.cancel.create(subscription_id: subscription_id, customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
     rescue
       true
     end

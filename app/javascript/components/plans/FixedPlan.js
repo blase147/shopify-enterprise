@@ -80,7 +80,6 @@ const FixedPlan = () => {
   ];
 
   const adjusmentOptions = [
-    { label: 'None', value: '' },
     { label: 'Fixed amount discount', value: 'FIXED_AMOUNT' },
     { label: 'Percentage discount', value: 'PERCENTAGE' },
     { label: 'Manual price', value: 'PRICE' },
@@ -94,7 +93,7 @@ const FixedPlan = () => {
     intervalType: 'DAY',
     minFullfilment: '1',
     maxFullfilment: '1',
-    adjustmentType: '',
+    adjustmentType: 'FIXED_AMOUNT',
     adjustmentValue: '0',
     _destroy: false,
   };
@@ -108,7 +107,6 @@ const FixedPlan = () => {
   const handleRemovingSellingPlan = useCallback((values, index) => {
     const plans = [...(values.sellingPlans || [])];
     plans[index]._destroy = true;
-    plans[index].name = 'deleted';
     return plans;
   });
 
@@ -395,19 +393,19 @@ const FixedPlan = () => {
                         title="Selling Plan"
                         sectioned
                         actions={
-                          index == 0
-                            ? []
-                            : [
-                                {
-                                  content: 'Remove',
-                                  onAction: () => {
-                                    setFieldValue(
-                                      'sellingPlans',
-                                      handleRemovingSellingPlan(values, index)
-                                    );
-                                  },
+                          ((!id && index != 0) || (id && values.sellingPlans.filter(p=>!p._destroy).length>1))
+                            ? [
+                              {
+                                content: 'Remove',
+                                onAction: () => {
+                                  setFieldValue(
+                                    `sellingPlans[${index}]._destroy`,
+                                    true
+                                  );
                                 },
-                              ]
+                              },
+                            ]
+                            : []
                         }
                       >
                         <FormLayout>

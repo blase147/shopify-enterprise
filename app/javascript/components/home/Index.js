@@ -175,9 +175,9 @@ const Dashboard = (props) => {
     cmrr: "$0"
   })
 
-  const [filters,setFilters]=uuseState({
+  const [filters,setFilters]=useState({
     startDate:new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(2,"days")).subtract(30, 'days'))).format())),
-    endDate:new Date(Date.parse(dayjs(new Date()).subtract(1,"days").format())) 
+    endDate:new Date(Date.parse(dayjs(new Date()).subtract(1,"days").format()))
   })
   const handleFiltersDates=(dates,span)=>{
     console.log("hahah")
@@ -261,7 +261,7 @@ const Dashboard = (props) => {
     { section: 'MRR', amount: '0', key: "mrr" ,type:"currency" },
     { section: 'Active Subscriptions', amount: '00', key: "subscriptions"},
     { section: 'Churn Rate', amount: '0', key: "churn_rate",type:"percent" },
-    { section: 'Customer Lifetime Value', amount: '0', key: "cl_value" ,type:"percent"},
+    { section: 'Customer Lifetime Value', amount: '0', key: "cl_value" ,type:"currency"},
     // { section: 'MBR', percent: '24', up: true, amount: '$47,433' },
     // {
     //   section: 'Active Subscriptions',
@@ -463,11 +463,13 @@ const Dashboard = (props) => {
             }
 
           </Layout.Section>
-          
+
           <Layout.Section>
-          <Notification />
+            <div class="feeds-container">
+            <Notification />
+            </div>
           </Layout.Section>
-          
+
           <div style={{width:'100%'}}>
             <Layout.Section>
             <div className="analytic-section" >

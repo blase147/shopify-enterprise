@@ -94,17 +94,33 @@ class CustomerInsightReportService
   end
 
   def sub_customers_count
-    @shop.customers.where('shopify_at::date BETWEEN ? AND ? AND (status = ? OR failed_at IS NOT NULL)', @range.first, @range.last, 'ACTIVE').count
+    @shop.customers.where('shopify_at::date <= ? AND (status = ? OR failed_at IS NOT NULL)', @range.last, 'ACTIVE').count
   end
 
+  # def churn_rate
+  #   customer_at_period_start = in_period_subscriptions(@subscriptions, @range.first - 1.year..@range.first - 1.day, 'ACTIVE').count
+  #   cancelled_customer_in_period = in_period_subscriptions(@subscriptions, @range, 'CANCELLED').count
+  #   customer_at_period_start.zero? ? 0 : (cancelled_customer_in_period * 100) / customer_at_period_start
+  # end
+
   def churn_rate
-    customer_at_period_start = in_period_subscriptions(@subscriptions, @range.first - 1.year..@range.first - 1.day, 'ACTIVE').count
-    cancelled_customer_in_period = in_period_subscriptions(@subscriptions, @range, 'CANCELLED').count
-    customer_at_period_start.zero? ? 0 : (cancelled_customer_in_period * 100) / customer_at_period_start
+    customer_at_period_start = customer_at_period_start(@subscriptions, @range)
+    cancelled_customer_in_period = in_period_cancelled_subscriptions(@subscriptions, @range).count
+    (cancelled_customer_in_period * 100) / customer_at_period_start rescue 0
+  end
+
+  def customer_at_period_start(subscriptions, range)
+    active_subs_before_period = in_period_subscriptions(subscriptions, range.first - 2.year..range.first - 1.day, 'ACTIVE').count
+    cancelled_sub_after_period = @shop.customers.where(status: 'CANCELLED').where('shopify_at::date BETWEEN ? AND ?', range.first - 2.year, range.first - 1.day).where('cancelled_at::date > ?', range.last).count
+    active_subs_before_period + cancelled_sub_after_period
   end
 
   def in_period_subscriptions(subscriptions, range, status = nil)
     subscriptions.select { |subscription| range.cover?(subscription.node.created_at.to_date) && (status ? subscription.node.status == status : true) }
+  end
+
+  def in_period_cancelled_subscriptions(subscriptions, range)
+    subscriptions.select { |subscription| range.cover?(@shop.customers.find_by(status: 'CANCELLED', shopify_id: subscription.node.id[/\d+/])&.cancelled_at) && subscription.node.status == 'CANCELLED' }
   end
 
   def in_period_hourly_subscriptions(subscriptions, range, status = nil)
@@ -143,7 +159,7 @@ class CustomerInsightReportService
   end
 
   def customers_count(status = nil)
-    @shop.customers.where('shopify_at::date BETWEEN ? AND ?', @range.first, @range.last)
+    @shop.customers.where('shopify_at::date <= ?', @range.last)
          .where(status.present? ? "status='#{status}'" : 'status IS NOT NULL').count
   end
 
@@ -192,9 +208,9 @@ class CustomerInsightReportService
 
   def granularity
     range = 'day'
-    if @range.count > 31
+    if @range.count > 32
       range = 'month'
-    elsif @range.count > 365
+    elsif @range.count > 366
       range = 'year'
     end
     range
@@ -202,5 +218,10 @@ class CustomerInsightReportService
 
   def subscriptions_by_order_period(subscriptions, range)
     subscriptions.select { |subscription| subscription if subscription.node.orders.edges.count { |order| range.cover?(order.node.created_at.to_date) }.positive? }
+  end
+
+  def all_active_customers
+    subscriptions = @subscriptions.select { |subscription| subscription.node.status == 'ACTIVE' }
+    subscriptions.group_by { |subscription| subscription.node.customer.id }.count
   end
 end

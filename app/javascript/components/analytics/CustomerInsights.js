@@ -288,7 +288,7 @@ const CustomerInsights = () => {
       text: 'Active Subscriptions vs Churned Subscriptions',
     },
     xAxis: {
-      categories: ['SKips', 'Swaps', 'Upsells', 'Reactivations','SKips', 'Swaps', 'Upsells', 'Reactivations'],
+      categories: ['Skips', 'Swaps', 'Upsells', 'Reactivations','Skips', 'Swaps', 'Upsells', 'Reactivations'],
     },
     yAxis: {
       min: 0,
@@ -481,7 +481,7 @@ const CustomerInsights = () => {
   const customerListKeys=[
     {section:"Customer Count",key:"customerCount"},
     {section:"Sales Per Charge",key:"salesPerCharge",prefix:"$",decimal:true},
-    {section:"Charges Per Customer",key:"chargePerCustomer",decimal:true},
+    {section:"Charges Per Customer",key:"chargePerCustomer",prefix:"$",decimal:true},
     {section:"Total Churn %",key:"totalChurn",suffix:"%",decimal:true}
   ]
   const [sectionCustomerList,setSectionCustomerList] = useState({
@@ -596,9 +596,9 @@ const CustomerInsights = () => {
   })
 
   // const [filters,setFilters]=useContext(FilterContext)
-  const [filters,setFilters]=uuseState({
+  const [filters,setFilters]=useState({
     startDate:new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(2,"days")).subtract(30, 'days'))).format())),
-    endDate:new Date(Date.parse(dayjs(new Date()).subtract(1,"days").format())) 
+    endDate:new Date(Date.parse(dayjs(new Date()).subtract(1,"days").format()))
   })
   const handleFiltersDates=(dates,span)=>{
     if(!isEmpty(dates)){
@@ -711,7 +711,7 @@ const CustomerInsights = () => {
         series: [{
           type: 'column',
           colorByPoint: true,
-          data: [skipCustomers.activeCustomers, swapCustomers.activeCustomers, upsellCustomers.activeCustomers, restartCustomers.activeCustomers, skipCustomers.churnedCustomers, swapCustomers.churnedCustomers, upsellCustomers.churnedCustomers, restartCustomers.churnedCustomers],
+          data: [parseInt(skipCustomers.activeCustomers), parseInt(swapCustomers.activeCustomers), parseInt(upsellCustomers.activeCustomers), parseInt(restartCustomers.activeCustomers), parseInt(skipCustomers.churnedCustomers), parseInt(swapCustomers.churnedCustomers), parseInt(upsellCustomers.churnedCustomers), parseInt(restartCustomers.churnedCustomers)],
           showInLegend: false
         }]
       };

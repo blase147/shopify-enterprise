@@ -28,7 +28,7 @@ class Customer < ApplicationRecord
       note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
       description = self.name+",just purchased,"+product.title
       amount = (product.quantity * product.current_price.amount.to_f).round(2).to_s
-      shop.subscription_logs.opt_in.sms.create(customer_id: id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
+      shop.subscription_logs.opt_in.sms.create(subscription_id: shopify_id, customer_id: id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
     rescue
       true
     end
@@ -67,5 +67,18 @@ class Customer < ApplicationRecord
 
   def shopify_identity
     "gid://shopify/Customer/#{shopify_id}"
+  end
+
+  def self.to_csv(customer_id, save_path)
+    attributes = %w{id first_name last_name email phone communication subscription language}
+    customers = Customer.where(shopify_customer_id: customer_id)
+
+    CSV.open(save_path, 'wb') do |csv|
+      csv << attributes
+
+      customers.each do |customer|
+        csv << attributes.map { |attr| customer.send(attr) }
+      end
+    end
   end
 end
