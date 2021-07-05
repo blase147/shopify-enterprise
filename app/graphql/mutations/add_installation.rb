@@ -8,7 +8,11 @@ module Mutations
       widget = params[:widget]
 
       begin
-        SnippetsService.new(theme_id).send(widget)
+        if params[:widget] == 'add_to_order_status'
+          ScriptTagsService.new(current_shop).add
+        else
+          SnippetsService.new(theme_id).send(widget)
+        end
         raise result[:error] if result.has_key?(:error)
       rescue Exception => ex
         GraphQL::ExecutionError.new(ex.message)
