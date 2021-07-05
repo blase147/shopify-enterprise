@@ -247,7 +247,7 @@ const Dashboard = (props) => {
         // renewal_rate: `${fetchDashboardReport.renewalData.map(item => parseInt(item.data.value)).reduce((a, b) => a + b, 0)}`,
         revenue_churn: '',
         renewal_rate: '',
-        mrr: `$${fetchDashboardReport.mrr || prevSecList.mrr}`,
+        mrr: `$${fetchDashboardReport.mrr.value || prevSecList.mrr.value}`,
         arr: `$${fetchDashboardReport.arrData.map(item => parseInt(item.data.value)).reduce((a, b) => a + b, 0)}`,
         refunds: `$${fetchDashboardReport.refundData.map(item => parseInt(item.data.value)).reduce((a, b) => a + b, 0)}`,
         cmrr: `$${fetchDashboardReport.salesData.map(item => parseInt(item.data.value)).reduce((a, b) => a + b, 0)}`
