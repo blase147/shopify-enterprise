@@ -152,6 +152,9 @@ const Modals=(props) => {
                   </p>
                 </Stack.Item>
                 <Stack.Item>
+                Default Password: <strong>AdminAlaska777</strong> 
+                </Stack.Item>
+                <Stack.Item>
                   <Button primary onClick={() => history.push('/installation')}>
                     Add product page snippets to your theme
                   </Button>
