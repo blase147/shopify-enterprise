@@ -14,7 +14,7 @@ module Mutations
         plan.update!(plan_params)
 
         { plan: plan }
-      rescue ActiveRecord::RecordInvalid => e
+      rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved => e
         GraphQL::ExecutionError.new("Invalid attributes for #{e.record.class}:"\
           " #{e.record.errors.full_messages.join(', ')}")
       end

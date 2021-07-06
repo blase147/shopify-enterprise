@@ -1,6 +1,7 @@
 - customer = @subscription.customer
 - order = @subscription.origin_order
 - billing_policy = @subscription.billing_policy
+- delivery_policy = @subscription.delivery_policy
 - api_order = ShopifyAPI::Order.find(@subscription.origin_order.id[/\d+/]) rescue nil
 - address = customer.default_address rescue nil
 
@@ -165,9 +166,16 @@
       .Polaris-Layout__Section.Polaris-Layout__Section--oneSix
         .Polaris-Card
           .Polaris-Card__Header
-            span.Polaris-TextStyle--variationStrong Frequency
+            span.Polaris-TextStyle--variationStrong Billing Frequency
           .Polaris-Card__Section
             span.Polaris-DisplayText= "#{billing_policy.interval_count} #{billing_policy.interval}".titleize
+
+      .Polaris-Layout__Section.Polaris-Layout__Section--oneSix
+        .Polaris-Card
+          .Polaris-Card__Header
+            span.Polaris-TextStyle--variationStrong Delivery Schedule
+          .Polaris-Card__Section
+            span.Polaris-DisplayText= "#{delivery_policy.interval_count} #{delivery_policy.interval}".titleize
 
       .Polaris-Layout__Section.Polaris-Layout__Section--oneSix
         .Polaris-Card
@@ -176,14 +184,6 @@
           .Polaris-Card__Section
             span.Polaris-DisplayText
               = link_to 'Link', @subscription.app_admin_url
-
-      .Polaris-Layout__Section.Polaris-Layout__Section--oneSix
-        .Polaris-Card
-          .Polaris-Card__Header
-            span.Polaris-TextStyle--variationStrong Delivery Schedule
-          .Polaris-Card__Section
-            span.Polaris-DisplayText
-              = "#{billing_policy.interval_count} #{billing_policy.interval}".titleize
 
   .Polaris-Page__Content
     .Polaris-Layout

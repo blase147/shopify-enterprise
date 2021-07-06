@@ -45,7 +45,13 @@ const FixedPlan = () => {
           maxFullfilment
           intervalType
           intervalCount
+          deliveryIntervalType
+          deliveryIntervalCount
           description
+          trialAdjustmentValue
+          trialAdjustmentType
+          trialIntervalType
+          trialIntervalCount
           _destroy
         }
       }
@@ -91,10 +97,16 @@ const FixedPlan = () => {
     description: '',
     intervalCount: '1',
     intervalType: 'DAY',
+    deliveryIntervalType: 'DAY',
+    deliveryIntervalCount: '1',
     minFullfilment: '1',
     maxFullfilment: '1',
     adjustmentType: 'FIXED_AMOUNT',
     adjustmentValue: '0',
+    trialIntervalCount: '1',
+    trialIntervalType: 'DAY',
+    trialAdjustmentType: 'FIXED_AMOUNT',
+    trialAdjustmentValue: '0',
     _destroy: false,
   };
 
@@ -575,6 +587,128 @@ const FixedPlan = () => {
                               onChange={(e) =>
                                 setFieldValue(
                                   `sellingPlans[${index}].adjustmentValue`,
+                                  e
+                                )
+                              }
+                              prefix={
+                                plan.adjustmentType == 'PERCENTAGE' ? '' : '$'
+                              }
+                              suffix={
+                                plan.adjustmentType == 'PERCENTAGE' ? '%' : ''
+                              }
+                            />
+                          </FormLayout.Group>
+
+
+
+
+                          <TextContainer>
+                            <br />
+                            <Subheading>Delivery Rules</Subheading>
+                          </TextContainer>
+                          {console.log("Interval_present"+ plan.deliveryIntervalCount === null)}
+                          <FormLayout.Group>
+                            <Select
+                              label="Interval"
+                              value={plan.deliveryIntervalCount === null ? initialValues.deliveryIntervalCount : plan.deliveryIntervalCount }
+                              error={
+                                touched.sellingPlans?.[index]?.deliveryIntervalCount &&
+                                errors.sellingPlans?.[index]?.deliveryIntervalCount
+                              }
+                              onChange={(e) =>
+                                setFieldValue(
+                                  `sellingPlans[${index}].deliveryIntervalCount`,
+                                  e
+                                )
+                              }
+                              options={options}
+                            />
+                            <Select
+                              options={interOptions}
+                              label="  "
+                              value={plan.deliveryIntervalType === null ? initialValues.deliveryIntervalType : plan.deliveryIntervalType }
+                              error={
+                                touched.sellingPlans?.[index]?.deliveryIntervalType &&
+                                errors.sellingPlans?.[index]?.deliveryIntervalType
+                              }
+                              onChange={(e) =>
+                                setFieldValue(
+                                  `sellingPlans[${index}].deliveryIntervalType`,
+                                  e
+                                )
+                              }
+                            />
+                          </FormLayout.Group>
+
+                          <TextContainer>
+                            <Subheading>TRIAL PERIOD</Subheading>
+                          </TextContainer>
+                          <FormLayout.Group>
+                            <Select
+                              label="Interval"
+                              value={plan.trialIntervalCount}
+                              error={
+                                touched.sellingPlans?.[index]
+                                  ?.trialIntervalCount &&
+                                errors.sellingPlans?.[index]?.trialIntervalCount
+                              }
+                              onChange={(e) =>
+                                setFieldValue(
+                                  `sellingPlans[${index}].trialIntervalCount`,
+                                  e
+                                )
+                              }
+                              options={options}
+                            />
+                            <Select
+                              options={interOptions}
+                              label="  "
+                              value={plan.trialIntervalType}
+                              error={
+                                touched.sellingPlans?.[index]
+                                  ?.trialIntervalType &&
+                                errors.sellingPlans?.[index]?.trialIntervalType
+                              }
+                              onChange={(e) =>
+                                setFieldValue(
+                                  `sellingPlans[${index}].trialIntervalType`,
+                                  e
+                                )
+                              }
+                            />
+                          </FormLayout.Group>
+                          <FormLayout.Group>
+                            <Select
+                              options={adjusmentOptions}
+                              label="Trial or manual price"
+                              value={plan.trialAdjustmentType}
+                              error={
+                                touched.sellingPlans?.[index]
+                                  ?.trialAdjustmentType &&
+                                errors.sellingPlans?.[index]
+                                  ?.trialAdjustmentType
+                              }
+                              onChange={(e) =>
+                                setFieldValue(
+                                  `sellingPlans[${index}].trialAdjustmentType`,
+                                  e
+                                )
+                              }
+                            />
+                            <TextField
+                              disabled={plan.trialAdjustmentType == ''}
+                              type="number"
+                              label="Adjustment value"
+                              value={plan.trialAdjustmentValue}
+                              error={
+                                touched.sellingPlans?.[index]
+                                  ?.adjustmentValue &&
+                                errors.sellingPlans?.[index]
+                                  ?.trialAdjustmentValue
+                              }
+                              onChange={(e) =>
+                                setFieldValue(
+                                  `sellingPlans[${index}].trialAdjustmentValue`,
                                   e
                                 )
                               }

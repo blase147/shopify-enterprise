@@ -151,7 +151,7 @@ module SubscriptionPlan
     end
 
     def selling_plan_info selling_plan, id=nil
-      adjustmentValue = if selling_plan.adjustment_type == 'PERCENTAGE'
+      adjustment_value = if selling_plan.adjustment_type == 'PERCENTAGE'
                           { selling_plan.adjustment_type.downcase => selling_plan.adjustment_value.to_i }
                         else
                           { fixedValue: selling_plan.adjustment_value.to_i }
@@ -170,7 +170,7 @@ module SubscriptionPlan
 
       info = {
         name: selling_plan.name,
-        description: selling_plan.description || "",
+        description: selling_plan.description || '',
         options: [
           selling_plan.selector_label
         ],
@@ -178,21 +178,21 @@ module SubscriptionPlan
           recurring: {
             interval: selling_plan.interval_type,
             intervalCount: selling_plan.interval_count,
-            minCycles:  selling_plan.min_fullfilment,
+            minCycles: selling_plan.min_fullfilment,
             maxCycles: selling_plan.max_fullfilment
           }
         },
         deliveryPolicy: {
           recurring: {
-            interval: selling_plan.interval_type,
-            intervalCount: selling_plan.interval_count
+            interval: selling_plan.delivery_interval_type,
+            intervalCount: selling_plan.delivery_interval_count
           }
         },
         pricingPolicies: [
           {
             fixed: {
               adjustmentType: selling_plan.adjustment_type,
-              adjustmentValue: adjustmentValue
+              adjustmentValue: adjustment_value
             }
           }
         ]
