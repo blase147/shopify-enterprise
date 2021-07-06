@@ -9,7 +9,7 @@ class OrdersService
     all_orders = []
     range_start = range_start.beginning_of_day
     range_end = range_end.end_of_day
-    orders = ShopifyAPI::Order.find(:all, params: { status: 'any', limit: limit, created_at_min: range_start, created_at_max: range_end, since_id: 0, fields: fields })
+    orders = ShopifyAPIRetry::REST.retry { ShopifyAPI::Order.find(:all, params: { status: 'any', limit: limit, created_at_min: range_start, created_at_max: range_end, since_id: 0, fields: fields }) }
 
     all_orders = all_orders.concat orders
     puts orders.length
