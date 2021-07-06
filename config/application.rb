@@ -1,6 +1,7 @@
 require_relative 'boot'
 
 require 'rails/all'
+require "shopify_api_retry"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -20,5 +21,7 @@ module Chargezen
     config.eager_load_paths += [
       config.root.join('app', 'services')
     ]
+
+    ShopifyAPI::Base.headers['X-GraphQL-Cost-Include-Fields'] = 'true'
   end
 end
