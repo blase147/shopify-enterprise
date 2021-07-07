@@ -135,7 +135,7 @@
             - product = ShopifyAPI::Product.find(line.node.product_id[/\d+/])
             = render 'app_proxy/dashboard/edit_subscription_modal', subscription: @subscription, line_item: line.node, product_image: product.images.first&.src, admin_action: true, setting: setting
             = render 'app_proxy/dashboard/swap_subscription_modal', subscription: @subscription, line_item: line.node
-            = render 'app_proxy/dashboard/upgrade_subscription_modal', subscription: @subscription, line_item: line.node
+            = render 'app_proxy/dashboard/upgrade_subscription_modal', subscription: @subscription, line_item: line.node, selling_plan_id: line.node.selling_plan_id, product: product
             = render 'app_proxy/dashboard/cancel_subscription_modal', subscription: @subscription, line_item: line.node, lines_count: @subscription.lines.edges.size
 
   .Polaris-Page__Content.shipment-process
