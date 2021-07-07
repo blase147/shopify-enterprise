@@ -31,7 +31,7 @@
             = render 'edit_subscription_modal', subscription: subscription.node, line_item: edge.node, product_image: product.images.first&.src, setting: @setting
             - if @setting.customer_allowed?('swap_product')
               = render 'swap_subscription_modal', subscription: subscription.node, line_item: edge.node
-            = render 'upgrade_subscription_modal', subscription: subscription.node, line_item: edge.node
+            = render 'upgrade_subscription_modal', subscription: subscription.node, line_item: edge.node, selling_plan_id: edge.node.selling_plan_id, product: product
             = render 'cancel_subscription_modal', subscription: subscription.node, line_item: edge.node, lines_count: subscription.node.lines.edges.size
         - if @setting.customer_allowed?('upcoming_quantity')
           .quantity-wrapper

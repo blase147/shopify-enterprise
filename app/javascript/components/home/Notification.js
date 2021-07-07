@@ -14,7 +14,7 @@ import en from 'javascript-time-ago/locale/en'
 
 TimeAgo.addDefaultLocale(en);
 const Notification = () => {
- 
+
   const timeAgo = new TimeAgo('en-US');
 
 
@@ -22,7 +22,7 @@ const notificationQuery=gql`
 query($page: String!) {
   fetchSubscriptionLogs(page: $page){
       subscriptionLogs
-      {    
+      {
           actionType
           createdAt
           description
@@ -114,7 +114,7 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
     </span>
   )
   const activator = (
-    <div style={{width:"100%",textAlign:"right"}}> 
+    <div style={{width:"100%",textAlign:"right"}}>
     <Button primary onClick={togglePopoverActive} >
       {icon("Revenue Live Feed")}
     </Button>
@@ -126,7 +126,9 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
     "skip":"skip",
     "cancel":"cancelled",
     "swap":"swap",
-    "restart":"restart"
+    "restart":"restart",
+    "upgrade":"upgrade",
+    "downgrade":"downgrade"
   }
 
   const getColor=(action)=>{
@@ -139,6 +141,12 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
       break;
       case "cancel":
         return "red";
+      break;
+      case "upgrade":
+        return "blue";
+      break;
+      case "downgrade":
+        return "blue";
       break;
       case "swap":
         return "blue";
@@ -173,7 +181,7 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
                     /> :
                     <>
                   {
-                  !isEmpty(feeds) && rendered && 
+                  !isEmpty(feeds) && rendered &&
                   <>
                           <div id="scrollableDiv" style={{ overflow: "auto", maxHeight: "450px", overscrollBehavior: "none" }}>
                             <InfiniteScroll
@@ -242,7 +250,7 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
                       }
                     </>
                 }
-                
+
               </Card>
             </>
           </Popover>

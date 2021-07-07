@@ -2,8 +2,8 @@ module SubscriptionConcern
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_draft_contract, only: [:add_product, :update_quantity, :update_shiping_detail, :swap_product, :remove_line]
-    before_action :set_customer, only: %i[add_product swap_product]
+    before_action :set_draft_contract, only: [:add_product, :update_quantity, :update_shiping_detail, :swap_product, :upgrade_product, :remove_line]
+    before_action :set_customer, only: %i[add_product swap_product upgrade_product]
   end
 
   def add_product
@@ -67,6 +67,27 @@ module SubscriptionConcern
       # amount = (product.quantity * variant.price.to_f).round(2).to_s
       current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id, product_name: variant.title, note: note, description: description, product_id: params[:variant_id], swaped_product_id: variant.product_id)
       render js: 'location.reload()'
+    end
+  end
+
+  def upgrade_product
+    line_update = SubscriptionDraftsService.new.line_update @draft_id, params[:line_id], { 'sellingPlanId': params[:selling_plan_id], 'sellingPlanName': params[:name] }
+    if line_update[:error].present?
+      flash[:error] = line_update[:error]
+      render js: "alert('#{line_update[:error]}'); hideLoading()"
+    else
+      subscription_update = SubscriptionDraftsService.new.update @draft_id, { billingPolicy: { interval: params[:interval_type], intervalCount: params[:interval_count].to_i }, deliveryPolicy: { interval: params[:interval_type], intervalCount: params[:interval_count].to_i } }
+      if subscription_update[:error].present?
+        flash[:error] = subscription_update[:error]
+        render js: "alert('#{subscription_update[:error]}'); hideLoading()"
+      else
+        SubscriptionDraftsService.new.commit @draft_id
+        subscription = SubscriptionContractService.new(params[:id]).run
+        note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
+        description = @customer.name+",just #{params[:action_text].downcase}d,their plan to #{params[:interval_count]} #{params[:interval_type].titleize}"
+        current_shop.subscription_logs.create(action_type: params[:action_text].downcase.to_sym, subscription_id: params[:id], customer_id: @customer.id, note: note, description: description)
+        render js: 'location.reload()'
+      end
     end
   end
 

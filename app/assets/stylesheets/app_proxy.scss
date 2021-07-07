@@ -370,6 +370,12 @@ div.Polaris-Modal-Dialog__Container {
       }
     }
   }
+  .no_plan_img {
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+    padding-bottom: 91px;
+  }
   .swap-grid  {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
