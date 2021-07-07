@@ -206,6 +206,10 @@ const FixedPlan = () => {
                     }
               }
               onSubmit={(values, { setSubmitting, setDirty }) => {
+                values.sellingPlans.forEach((plan,index)=>{
+                  values.sellingPlans[index].deliveryIntervalCount = values.sellingPlans[index].deliveryIntervalCount || initialValues.deliveryIntervalCount ;
+                  values.sellingPlans[index].deliveryIntervalType = values.sellingPlans[index].deliveryIntervalType || initialValues.deliveryIntervalType;
+                })
                 if (id) {
                   updateSellingPlan({
                     variables: {
@@ -641,6 +645,7 @@ const FixedPlan = () => {
                           </FormLayout.Group>
 
                           <TextContainer>
+                          <br />
                             <Subheading>TRIAL PERIOD</Subheading>
                           </TextContainer>
                           <FormLayout.Group>
