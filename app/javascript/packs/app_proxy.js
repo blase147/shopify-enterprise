@@ -14,6 +14,8 @@ require('webpack-jquery-ui/css');
 require("app_proxy")
 require("app_proxy/custom")
 require("app_proxy/settings");
+const images = require.context('../images', true)
+const imagePath = (name) => images(name, true)
 import TinyDatePicker from 'app_proxy/datepicker';
 
 require('owl.carousel');
@@ -23,7 +25,7 @@ $(document).ready(function () {
   $('.owl-carousel').owlCarousel(
     {
       dots: true,
-      margin: 30  
+      margin: 30
     }
   );
 

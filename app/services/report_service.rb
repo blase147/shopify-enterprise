@@ -64,7 +64,9 @@ class ReportService < GraphqlService
   def get_subscriptions cursor=nil
     query = GET_SUBSCRIPTIONS
     query = query.gsub("first: #{PAGE}", "first: #{PAGE} after: \"#{cursor}\"") if cursor.present?
-    result = ShopifyAPIRetry::GraphQL.retry { client.query(client.parse(query)) }
+    result = ShopifyAPIRetry::GraphQL.retry(:wait => 10, :tries => 5) do
+      client.query(client.parse(query))
+    end
     result&.data&.subscription_contracts
   rescue Exception => ex
     p ex.message

@@ -2,11 +2,11 @@ module Types
   class CustomerSubscriptionType < Types::BaseObject
     field :id, ID, null: false
     field :shopify_id, ID, null: false
-    field :shop_domain, String, null: false
+    field :shop_domain, String, null: true
     field :first_name, String, null: true
     field :last_name, String, null: true
     field :name, String, null: true
-    field :email, String, null: false
+    field :email, String, null: true
     field :communication, String, null: true
     field :language, String, null: true
     field :subscription, String, null: true

@@ -40,6 +40,7 @@ Rails.application.routes.draw do
         post :apply_discount
         post :update_shiping_detail
         post :swap_product
+        post :upgrade_product
         post :remove_line
         post :skip_schedule
       end
@@ -80,6 +81,7 @@ Rails.application.routes.draw do
       post :add_product
       post :update_quantity
       post :swap_product
+      post :upgrade_product
       post :remove_line
       post :skip_schedule
       post :pause
