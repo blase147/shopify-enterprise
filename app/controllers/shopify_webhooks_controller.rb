@@ -4,10 +4,13 @@ class ShopifyWebhooksController < ApplicationController
 
   def app_uninstalled
     if ENV['APP_TYPE'] == 'public'
-      shop = Shop.where(shopify_domain: params[:domain])
+      shop = Shop.where(shopify_domain: params[:domain]).last
       if shop.present?
-        shop.last.connect
-        shop.last.destroy
+        shop.selling_plan_groups.each do |selling_plan_group|
+          selling_plan_group.selling_plans.delete_all
+          selling_plan_group.delete
+        end
+        shop.destroy
       end
     end
     head :no_content
