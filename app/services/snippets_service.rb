@@ -99,7 +99,7 @@ class SnippetsService
   end
 
   def populate_images(theme_id)
-    %w[checktick.png tick.png].each do |file_name|
+    %w[checktick.png tick.png save-price.png].each do |file_name|
       image = File.read(Rails.root.join('app', 'assets', 'images', file_name))
       i = ShopifyAPI::Asset.new(key: "assets/#{file_name}", theme_id: theme_id)
       i.attach(image)
