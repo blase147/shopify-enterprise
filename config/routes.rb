@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   post '/customers/redact', to: 'gdpr_webhooks#customer_redact'
   post '/customers/data_request', to: 'gdpr_webhooks#customer_data_request'
 
+  post '/shopify_webhooks/app_uninstalled', to: 'shopify_webhooks#app_uninstalled'
+
   namespace :app_proxy do
     resources :account do
       collection do

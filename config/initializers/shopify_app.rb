@@ -11,6 +11,9 @@ ShopifyApp.configure do |config|
   config.api_version = "2021-07"
   config.shop_session_repository = 'Shop'
   config.allow_jwt_authentication = true
+  config.webhooks = [
+    { topic: 'app/uninstalled', address: "#{ENV['HOST']}shopify_webhooks/app_uninstalled" }
+  ]
 end
 
 # ShopifyApp::Utils.fetch_known_api_versions                        # Uncomment to fetch known api versions from shopify servers on boot
