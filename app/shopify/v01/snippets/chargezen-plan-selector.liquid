@@ -17,7 +17,7 @@
             <span data-i18n="one-time-purchase-label">one-time </span>
           </label>
 
-          <div class="plan-selector-plan" style="display: none">
+          <div class="plan-selector-plan hide" style="display: none">
             <select><option value=""></option></select>
           </div>
           <p id="ProductPriceOneTime">{{ current_variant.price | money }}</p>
@@ -71,7 +71,7 @@
             <input type="radio" name="plan-selector-group" value="{{ selling_plan_group.id }}" />
             <p>{{ selling_plan_group.name }}</p>
           </label>
-          <div class="plan-selector-plan">
+          <div class="plan-selector-plan hide">
             <label>{{ selling_plan_group.options[0].name }}</label>
             <select>
               {% for plan in selling_plan_group.selling_plans %}
