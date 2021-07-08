@@ -5,7 +5,7 @@ class ShopifyWebhooksController < ApplicationController
   def app_uninstalled
     if ENV['APP_TYPE'] == 'public'
       shop = Shop.where(shopify_domain: params[:domain])
-      shop.destroy if shop.present?
+      shop.first.destroy if shop.present?
     end
     head :no_content
   end
