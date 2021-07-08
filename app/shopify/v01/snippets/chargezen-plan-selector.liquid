@@ -47,7 +47,7 @@
             {%- assign hide_sale_price = false -%}
           {% endif %}
           <div>
-          
+
           <!-- <svg width="63" height="15" viewBox="0 0 63 15" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M9.41605 0.8C10.1196 0.280711 10.9753 0 11.8548 0H58.258C60.5028 0 62.3225 1.79086 62.3225 4V11C62.3225 13.2091 60.5028 15 58.258 15H11.8548C10.9753 15 10.1196 14.7193 9.41605 14.2L4.67411 10.7C2.50637 9.1 2.50637 5.9 4.67411 4.3L9.41605 0.8Z" fill="#007EFF"/>
             <path d="M9.99188 9C10.8337 9 11.5161 8.32843 11.5161 7.5C11.5161 6.67157 10.8337 6 9.99188 6C9.15009 6 8.46768 6.67157 8.46768 7.5C8.46768 8.32843 9.15009 9 9.99188 9Z" fill="white"/>
@@ -58,7 +58,7 @@
             <span class="{% if hide_sale_price %}{% endif %} save_smount">Save
                {{ saved_value }}
             </span>
-          </div>  
+          </div>
 
           </div>
           {% if product.compare_at_price_max > product.price %}
@@ -127,7 +127,7 @@
         {% endif %}
         <div class="show-hide">
           <ul class="custom-mnakrer">
-            <li><div class="image"></div>
+            <!-- <li><div class="image"></div>
               <span>{{saved_value}} off subscription products</span>
             </li>
             <li><div class="image"></div>
@@ -140,7 +140,8 @@
             </li>
             <li>  <div class="image"></div>
                <span>Membership Concierge</span>
-            </li>
+            </li> -->
+            {{selling_plan_group.selling_plans[0].description}}
 
           </ul>
           <div class="popup-design">
