@@ -93,6 +93,10 @@ class SubscriptionContractService < GraphqlService
           id
         }
         deliveryMethod
+        deliveryPolicy {
+          interval
+          intervalCount
+        }
         billingPolicy {
           interval
           intervalCount

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_16_080257) do
+ActiveRecord::Schema.define(version: 2021_07_06_112704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -192,6 +192,8 @@ ActiveRecord::Schema.define(version: 2021_06_16_080257) do
     t.string "build_a_box_duration_value"
     t.string "mystery_duration"
     t.string "mystery_duration_value"
+    t.string "delivery_interval_type"
+    t.integer "delivery_interval_count"
   end
 
   create_table "settings", force: :cascade do |t|
