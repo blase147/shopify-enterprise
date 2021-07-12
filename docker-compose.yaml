@@ -1,0 +1,28 @@
+version: "3.3"
+
+services:
+  aroma:
+    tty: true
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    ports:
+      - "3000:3000"
+    environment:
+      - RAILS_ENV=development
+    volumes:
+      - ./:/workspace
+      - ./docker/database.yml:/workspace/config/database.yml
+    links:
+      - db
+    depends_on:
+      - db
+  db:
+    image: postgres:11.6
+    environment:
+      POSTGRES_USER: "aroma"
+      POSTGRES_PASSWORD: "aroma"
+      POSTGRES_DB: "aroma_db"
+    ports:
+      - "5432:5432"

@@ -10,6 +10,11 @@ module Types
       argument :style_header, String, required: false
       argument :style_footer, String, required: false
       argument :style_credit_card, String, required: false
+      argument :style_account_profile, String, required: false
+      argument :style_sidebar, String, required: false
+      argument :style_sidebar_pages, String, required: false
+      argument :style_subscription, String, required: false
+      argument :style_upsell, String, required: false
       argument :navigation_delivery, String, required: false
       argument :shiping_address, String, required: false
       argument :upcoming_oder_date, String, required: false
@@ -28,6 +33,20 @@ module Types
       argument :reactive_subscription, String, required: false
       argument :upcoming_quantity, String, required: false
       argument :reasons_cancels, [Types::Input::ReasonsCancelInputType], required: false
+      argument :show_promo_button, String, required: false
+      argument :promo_button_content, String, required: false
+      argument :promo_button_url, String, required: false
+      argument :contact_box_content, String, required: false
+      argument :promo_tagline1_content, String, required: false
+      argument :promo_tagline2_content, String, required: false
+      argument :show_subscription, String, required: false
+      argument :show_delivery_schedule, String, required: false
+      argument :show_order_history, String, required: false
+      argument :show_address, String, required: false
+      argument :show_billing, String, required: false
+      argument :show_account, String, required: false
+      argument :delay_order, String, required: false
+      argument :pause_subscription, String, required: false
 
       #email notification
       argument :email_notifications, [Types::Input::EmailNotificationInputType], required: false
@@ -36,6 +55,7 @@ module Types
       argument :cc_storeowner, GraphQL::Types::Boolean, required: false
       argument :send_shopify_receipt, GraphQL::Types::Boolean, required: false
       argument :send_fullfillment, GraphQL::Types::Boolean, required: false
+      argument :email_service, String, required: false
 
       #dunning
       argument :activate_dunning_for_cards, GraphQL::Types::Boolean, required: false

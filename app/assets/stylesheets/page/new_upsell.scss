@@ -138,3 +138,230 @@
     background: none;
   }
 }
+
+.form-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  margin-top: 10px;
+  .preview {
+    margin-right: 20px;
+    background-color: #007EFF;
+    color: #eee;
+    padding: 10px 46px;
+    border-radius: 5px;
+    border: 0 none;
+    font-weight: bold;
+    @media(max-width: 1040px) {
+      padding: 10px 20px;
+    }
+  }
+}
+.customize-text {
+  margin-bottom: 14px;
+  font-size: 20px;
+  color: #000000;
+  margin-bottom: 0px;
+  font-weight: 600;
+}
+.applied-classes {
+  font-size: 18px;
+  margin-top: 50px;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+.control-text {
+  font-size: 18px;
+}
+
+.portal-section {
+  // display: grid;
+  // grid-template-columns: 70% auto;
+  // grid-gap: 40px;
+
+  .custom-portal {
+    .account-profile-head {
+      display: grid;
+      grid-template-columns: auto 300px;
+      grid-column-gap: 40px;
+      @media(max-width:768px) {
+        grid-template-columns: auto;
+      }
+      .promo-tag {
+        p {
+          margin-bottom: 9px;
+          margin-top: 9px;
+          &:last-child {
+            margin-top: 25px;
+          }
+        }
+        input {
+          // margin-bottom: 25px;
+        }
+
+      }
+      
+    }
+    .Polaris-TextField--multiline>.Polaris-TextField__Input {
+      height: 120px !important;
+      margin-bottom: 30px;
+     &::placeholder {
+       font-size: 18px;
+     } 
+    }
+    .custom-classes {
+      color:red;
+    }
+    label {
+      margin-bottom: 25px;
+      margin-left: 8px;
+      .Polaris-TextStyle--variationSubdued {
+        font-size: 18px;
+      }
+    }
+  }
+
+  .promo-section {
+    p {
+      margin-bottom: 9px;
+    }
+    .promo-discount {
+      display: grid;
+      grid-template-columns: 30% auto;
+      grid-gap: 15px;
+    }
+
+  .link-searching {
+    display: flex;
+    // justify-content: space-between;
+    margin-top: 14px;
+    align-items: center;
+    p {
+      margin-right: 17px;
+    }
+
+    .cross-img {
+      border: 1px solid lightgrey;
+      margin-left: 10px;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      /* border: .1rem solid transparent; */
+      border-radius: 3px;
+    }
+  }
+}
+
+}
+
+
+.customer-portal {
+
+  .navigation-selectors {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    align-items: center;
+    grid-row-gap: 21px;
+    margin-bottom: 50px;
+
+    .Polaris-Select {
+      width: 100px;
+
+    }
+    .Polaris-FormLayout--grouped .Polaris-FormLayout__Item div {
+      width: 68%;
+    }
+    .Polaris-Select__Input {
+      width: 100%;
+    }
+    .Polaris-FormLayout__Items {
+      margin-bottom: 21px;
+    }
+    .Polaris-FormLayout--grouped {
+      margin-bottom: 21px;
+    }
+
+  }
+  .Polaris-FormLayout__Item {
+    margin-top: 0px;
+  }
+
+  .Polaris-FormLayout__Items {
+    margin-bottom: 30px;
+  }
+  .Polaris-FormLayout--grouped {
+    margin-bottom: 30px;
+  }
+  .portal-heading {
+    margin-bottom: 30px;
+    font-size: 20px;
+  }
+  .navigation-text  {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 41px;
+  }
+  p {
+    font-size: 16px;
+    font-weight: 500;
+  }
+    
+   
+}
+.frequency-checkbox {
+  background-color: #F7F7F7;
+  padding: 24px 18px;
+  p {
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: 900;
+  }
+}
+.frequency-heading {
+  font-size: 16px;
+  font-weight: 900;
+  margin-top: 12px;
+  margin-bottom: 10px;
+}
+.future-delivery {
+  margin-top:35px;
+  margin-bottom: 23px;
+}
+.reactive-text {
+  font-size: 16px;
+  color: #000000;
+}
+
+.Polaris-Card__Section .cancelation-section  .Polaris-Stack--vertical .Polaris-TextStyle--variationStrong a {
+  color: #004E82;
+  margin-bottom: 10px;
+  display: inline-block;
+  font-size: 16px;
+}
+.cancelation-section {
+  span {
+    font-size: 16px;
+  }
+  .Polaris-Stack.Polaris-Stack--distributionEqualSpacing {
+    margin-bottom: 10px;
+  }
+}
+.preview-changes {
+  .preview-changes-text {
+    font-size: 20px;
+    margin: 30px 0px;
+  }
+  .subscription-contract-products {
+    margin-right: 30px;
+  }
+  .Polaris-Navigation__Icon img {
+    filter: none;
+  }
+  
+}
+
+
+.disabled{
+  opacity:0.7;
+}

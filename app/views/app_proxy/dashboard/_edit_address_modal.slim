@@ -1,22 +1,60 @@
-.Polaris-Modal#editModal
+.Polaris-Modal id=("editAddressModal")
   .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"
-    form action="/a/chargezen_production/account/update_info" method='post' data-remote=true enctype="multipart/form-data"
+    = simple_form_for :address, url: "/a/chargezen_production/account/update_address", method: :post, remote: true do |f|
       .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1"
-        .Polaris-Modal-Dialog__Modal
+        .Polaris-Modal-Dialog__Modal.Polaris-Modal-Dialog--sizeLarge
           .Polaris-Modal__BodyWrapper
             .Polaris-Modal__Body.Polaris-Scrollable.Polaris-Scrollable--vertical data-polaris-scrollable="true"
-              = hidden_field_tag :id, @customer.shopify_id
+              input name="id" type="hidden" value="#{@customer.shopify_id}"
               section.Polaris-Modal-Section
-                .Polaris-FormLayout
-                  .Polaris-FormLayout__Item
-                    = p_text_area name: 'address_1', label: 'Address 1', value:  @customer.try(:address_1)
-                  .Polaris-FormLayout__Item
-                    = p_text_area name: 'address_2', label: 'Address 2', value:  @customer.try(:address_2)
-                  
+                .modal-fields-wrapper
+                  .group
+                    p
+                      span #{@translation.add_address_popup_first_name.present? ? @translation.add_address_popup_first_name : 'FIRST NAME'}
+                      span.red *
+                    = f.input :first_name, input_html: { value: @customer.first_name  }, label: false, required: true
+                  .group
+                    p
+                      span #{@translation.add_address_popup_last_name.present? ? @translation.add_address_popup_last_name : 'LAST NAME'}
+                      span.red *
+                    = f.input :last_name, input_html: { value: @customer.last_name  }, label: false, required: true
+                  .group
+                    p
+                      span #{@translation.add_address_popup_address1.present? ? @translation.add_address_popup_address1 : 'ADDRESS 1'}
+                      span.red *
+                    = f.input :address_1, label: false, input_html: { value: @customer.address_1 }, required: true
+                  .group
+                    p #{@translation.add_address_popup_address2.present? ? @translation.add_address_popup_address2 : 'ADDRESS 2'}
+                    = f.input :address_2, input_html: { value: @customer.address_2  }, label: false, required: false
+                  .group
+                    p #{@translation.add_address_popup_company.present? ? @translation.add_address_popup_company : 'COMPANY'}
+                    = f.input :company, input_html: { value: @customer.company  }, label: false, required: false
+                  .group
+                    p
+                      span #{@translation.add_address_popup_city.present? ? @translation.add_address_popup_city : 'CITY'}
+                      span.red *
+                    = f.input :city, label: false, input_html: { value: @customer.city  }, required: true
+                  .group
+                    p
+                      span #{@translation.add_address_popup_country.present? ? @translation.add_address_popup_country : 'COUNTRY'}
+                      span.red *
+                    = f.input :country, as: :select, collection: [['United States', 'United States']], label: false, required: true, selected: @customer.country
+                  .group
+                    p
+                      span #{@translation.add_address_popup_zip.present? ? @translation.add_address_popup_zip : 'ZIP/POSTAL CODE'}
+                      span.red *
+                    = f.input :zip, label: false, input_html: { value: @customer.zip  }, required: true
+                  .group
+                    p #{@translation.add_address_popup_state.present? ? @translation.add_address_popup_state : 'STATE/PROVINCE'}
+                    = f.input :province, input_html: { value: @customer.province  }, label: false, required: false
+                  .group
+                    p #{@translation.add_address_popup_phone.present? ? @translation.add_address_popup_phone : 'PHONE'}
+                    = f.input :phone, input_html: { value: @customer.phone  }, label: false, required: false
+
           .Polaris-Modal-Footer
             button.Polaris-Button.mr-10[type="button" aria-hidden="true" tabindex="-1" data-action='close']
               | Cancel
 
-            = p_button text: 'Save', type: 'submit'
+            = p_button text: @translation.add_address_popup_update.present? ? @translation.add_address_popup_update : 'Update', type: 'submit'
 
   .Polaris-Backdrop

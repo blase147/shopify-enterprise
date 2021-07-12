@@ -10,7 +10,7 @@ import {
 } from '@shopify/polaris';
 
 const SearchPlan = (props) => {
-  const { value, setFieldValue, fieldName, error } = props;
+  const { value, setFieldValue, fieldName, error, disabled } = props;
 
   // Search product to add
   const GET_SELLING_PLAN = gql`
@@ -18,9 +18,10 @@ const SearchPlan = (props) => {
       fetchSellingPlanByName(name: $name) {
         id
         name
+        shopifyId
       }
     }
-  `;
+  `; 
 
   const [sellingPlanList, setSellingPlanList] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -40,7 +41,7 @@ const SearchPlan = (props) => {
       const result = [];
       plans.map((plan) =>
         result.push({
-          value: plan.id,
+          value: plan.shopifyId,
           label: plan.name,
         })
       );
@@ -51,7 +52,7 @@ const SearchPlan = (props) => {
     [sellingPlanList]
   );
 
-  useEffect(() => {}, [sellingPlanList]);
+  useEffect(() => { }, [sellingPlanList]);
   const updateText = useCallback(
     (value) => {
       setFieldValue(fieldName, { sellingPlanId: '', sellingPlanName: value });
@@ -90,6 +91,7 @@ const SearchPlan = (props) => {
           <Spinner accessibilityLabel="Small spinner example" size="small" />
         )
       }
+      disabled={disabled}
     />
   );
 

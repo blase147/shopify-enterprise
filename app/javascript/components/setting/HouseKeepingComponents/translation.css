@@ -1,0 +1,129 @@
+.translation-page {
+  margin-left: 37px;
+  margin-right: 41px;
+}
+
+.translation-page .expend-all {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.translation-page .expend-all p {
+  font-weight: 900;
+  font-size: 14px;
+}
+
+.translation-page .customer-see {
+  font-size: 16px;
+  margin-top: 25px;
+  margin-bottom: 30px;
+}
+
+.translation-page .checkout-text {
+  font-size: 24px;
+} 
+
+.translation-page .collapse-section {
+  margin-top: 20px;
+}
+
+.trnaslation-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+}
+
+.trnaslation-grid > * {
+  flex: 1;
+}
+
+.collapsible-translatoin{
+  background-color: #E8F8FC;
+  cursor: pointer;
+  padding: 10px 16px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chargezen .collapsible-translatoin .Polaris-Button {
+  padding: 0px;
+  border: none;
+  background: none;
+  box-shadow: none;
+}
+
+.active-collpase, .collapsible-translatoin:hover {
+  background-color: #E8F8FC;
+}
+
+.collapsible-translatoin:after {
+  content: '\f107';
+  /* font-weight: 600; */
+  float: right;
+  margin-left: 5px;
+  font-family: "FontAwesome";
+  font-size: 34px;
+}
+
+.active-collpase:after {
+  content: "\f106";
+  font-family: "FontAwesome";
+}
+
+.content-forms {
+  max-height: 0;
+  transition: all 0.2s ease-out;
+  border: 1px solid #C4CDD5;
+  border-radius: 0px 0px 3px 3px;
+  overflow: hidden;
+  margin-bottom: 18px;
+  
+}
+
+.content-forms .content-collapse {
+  padding: 29px 12px 19px 16px;
+}
+
+.content-forms .content-collapse p {
+   font-size: 18px;
+   font-weight: 900;
+   margin-bottom: 10px;
+   margin-top: 9px;
+}
+
+.content-forms .content-collapse .Polaris-TextField{
+  margin-bottom: 20px;
+}
+
+.content-forms .content-collapse .Polaris-Labelled__LabelWrapper {
+  margin-bottom: 10px;
+}
+
+.translation-btn  {
+  margin-top: 30px;
+}
+
+.translation-btn .Polaris-Layout__Section {
+  margin-left: 0px;
+}
+.translation-btn button {
+  padding: 14px 70px;
+}
+.translation-btn .save-btn button {
+	color: white;
+	border: 0;
+	padding: 14px 32px;
+}
+
+.translation-btn .save-btn button:hover {
+	color: white;
+	border: 0;
+	padding: 14px 32px;
+}
+

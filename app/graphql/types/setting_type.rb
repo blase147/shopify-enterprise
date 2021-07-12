@@ -8,6 +8,11 @@ module Types
     field :style_header, String, null: true
     field :style_footer, String, null: true
     field :style_credit_card, String, null: true
+    field :style_account_profile, String, null: true
+    field :style_sidebar, String, null: true
+    field :style_sidebar_pages, String, null: true
+    field :style_subscription, String, null: true
+    field :style_upsell, String, null: true
     field :navigation_delivery, String, null: true
     field :shiping_address, String, null: true
     field :upcoming_oder_date, String, null: true
@@ -26,6 +31,20 @@ module Types
     field :reactive_subscription, String, null: true
     field :upcoming_quantity, String, null: true
     field :reasons_cancels, [Types::ReasonsCancelType], null: true
+    field :show_promo_button, String, null: true
+    field :promo_button_content, String, null: true
+    field :promo_button_url, String, null: true
+    field :contact_box_content, String, null: true
+    field :promo_tagline1_content, String, null: true
+    field :promo_tagline2_content, String, null: true
+    field :show_subscription, String, null: true
+    field :show_delivery_schedule, String, null: true
+    field :show_order_history, String, null: true
+    field :show_address, String, null: true
+    field :show_billing, String, null: true
+    field :show_account, String, null: true
+    field :delay_order, String, null: true
+    field :pause_subscription, String, null: true
 
     #email notification
     field :email_notifications, [Types::EmailNotificationType], null: true
@@ -34,7 +53,8 @@ module Types
     field :cc_storeowner, GraphQL::Types::Boolean, null: true
     field :send_shopify_receipt, GraphQL::Types::Boolean, null: true
     field :send_fullfillment, GraphQL::Types::Boolean, null: true
-    
+    field :email_service, String, null: true
+
     #dunning
     field :activate_dunning_for_cards, GraphQL::Types::Boolean, null: true
     field :dunning_period, String, null: true
@@ -63,9 +83,20 @@ module Types
     field :email_subscription_terms, String, null: true
     field :apple_pay_subscription_terms, String, null: true
 
+    #shop_data
+    field :recurring_charge_status, String, null: true
+    field :charge_confirmation_link, String, null: true
+
     # def reasons_cancels
     #   object.reasons_cancels
     # end
 
+    def recurring_charge_status
+      object.shop.recurring_charge_status
+    end
+
+    def charge_confirmation_link
+      object.shop.charge_confirmation_link
+    end
   end
 end

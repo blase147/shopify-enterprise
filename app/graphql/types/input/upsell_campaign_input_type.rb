@@ -25,7 +25,7 @@ module Types
       argument :rule_product_condition, String, required: false
       argument :rule_product_value, String, required: false
 
-      argument :product_offer, Types::Input::ProductInputType, required: false
+      argument :product_offer, [Types::Input::ProductInputType], required: false
       argument :product_display_quantity, String, required: false
       argument :product_limit_quantity, GraphQL::Types::Boolean, required: false
       argument :product_quantity_value, String, required: false

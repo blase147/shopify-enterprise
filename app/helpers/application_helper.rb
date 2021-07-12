@@ -19,11 +19,23 @@ module ApplicationHelper
     image_tag("icons/#{icon}.svg", class: 'icon')
   end
 
-  def action_subscription_path action
-    "/a/chargezen_production/subscriptions/#{params[:id]}/#{action}?customer_id=#{params[:customer_id]}"
+  def action_subscription_path(action, query = '')
+    "/a/chargezen_production/subscriptions/#{params[:id]}/#{action}?customer_id=#{params[:customer_id]} #{query.present? ? "&#{query}" : ''}"
   end
 
   def app_path path
     "#{path}?hmac=#{session[:hmac]}&shop=#{session[:shop]}"
+  end
+
+  def shopify_product_id(product_id)
+    "gid://shopify/Product/#{product_id}"
+  end
+
+  def action_subscription_contract_path(action, contract_id, query = '')
+    if params[:controller] == 'subscriptions'
+      "/subscriptions/#{contract_id}/#{action}?#{query.present? ? "#{query}" : ''}"
+    else
+      "/a/chargezen_production/subscriptions/#{contract_id}/#{action}?customer_id=#{params[:customer_id]}#{query.present? ? "&#{query}" : ''}"
+    end
   end
 end

@@ -7,99 +7,99 @@
     a#AppFrameMainContent tabindex="-1"
     .Polaris-Frame__Content
       .Polaris-Page
-        .Polaris-Page-Header.Polaris-Page-Header--isSingleRow.Polaris-Page-Header--noBreadcrumbs.Polaris-Page-Header--mediumTitle
-          .Polaris-Page-Header__MainContent
-            .Polaris-Page-Header__TitleActionMenuWrapper
-              .Polaris-Page-Header__TitleWrapper
-                div
-                  .Polaris-Header-Title__TitleAndSubtitleWrapper
-                    .Polaris-Header-Title
-                      h1.Polaris-DisplayText.Polaris-DisplayText--sizeLarge
-                        span.Polaris-TextStyle--variationStrong Upcomming deliveries
-        - if @subscription_contracts.empty?
-          .Polaris-Page__Content
-            .Polaris-Layout
-              .Polaris-Layout__AnnotatedSection
-                .Polaris-Layout__AnnotationWrapper
-                  .Polaris-Layout__AnnotationContent
-                    .Polaris-Card
-                      .Polaris-Banner.Polaris-Banner--withinContentContainer
-                        .Polaris-Banner__Ribbon
-                          span.Polaris-Icon.Polaris-Icon--colorInkLighter.Polaris-Icon--isColored.Polaris-Icon--hasBackdrop
-                            svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
-                              path d=("M10 20c5.514 0 10-4.486 10-10S15.514 0 10 0 0 4.486 0 10s4.486 10 10 10zm1-6a1 1 0 1 1-2 0v-4a1 1 0 1 1 2 0v4zm-1-9a1 1 0 1 0 0 2 1 1 0 0 0 0-2z") fill-rule="evenodd"
-                        .Polaris-Banner__ContentWrapper
-                          #PolarisBanner8Heading.Polaris-Banner__Heading
-                            p.Polaris-Heading You have no upcoming deliveries
+        - if @active_subscriptions_count == 0 || params[:active_subscriptions_count].to_i == 0
+          div.content-wrapper
+            div
+              .Polaris-Header-Title__TitleAndSubtitleWrapper
+                .Polaris-Header-Title
+                  h2.Polaris-DisplayText.main-heading
+                    - if @translation.delivery_tab_my_next_order.present?
+                      span.Polaris-TextStyle--variationStrong #{@translation.delivery_tab_my_next_order}
+                    - else
+                      span.Polaris-TextStyle--variationStrong MY&nbsp;
+                      span.Polaris-TextStyle--variationStrong style="color: #007EFF" NEXT
+                      span.Polaris-TextStyle--variationStrong &nbsp;ORDER
+            div.notification-banner
+              p.Polaris-Heading #{@translation.delivery_tab_no_subscriptions_found.present? ? @translation.delivery_tab_no_subscriptions_found : 'No subscription have been found for your account'}
         - else
-          .Polaris-Page__Content.mt-30
-            .Polaris-Layout
-              .Polaris-Layout__AnnotatedSection
-                .Polaris-Layout__AnnotationWrapper
-                  .Polaris-Layout__AnnotationContent
-                    .Polaris-Card
-                      .Polaris-Banner.Polaris-Banner--withinContentContainer
-                        .Polaris-Banner__ContentWrapper
-                            #PolarisBanner8Heading.Polaris-Banner__Heading
-                              - @subscription_contracts.each do |subscription|
-                                - subscription_id = subscription.id[/\d+/]
-                                - product_id = subscription.lines.edges.first.node.product_id[/\d+/]
-                                - price = subscription.lines.edges.first.node.current_price.amount
-                                - product = ShopifyAPI::Product.find(product_id)
-                                - billing_policy = subscription.billing_policy
-
-                                h3 Next Delivery Date
-                                =  DateTime.parse(subscription.next_billing_date).strftime("%a, %B %e")
-                                .pull-right
-                                   .Polaris-Banner__PrimaryAction
-                                    a.Polaris-Button.Polaris-Button--primary href=proxy_path("subscriptions/#{subscription_id}")
-                                      span.Polaris-Button__Content
-                                        span.Polaris-Button__Text Edit
-                                .clearfix
-                                hr/
-                                .Polaris-MediaCard
-                                  .Polaris-MediaCard__MediaContainer
-                                    img alt="" height="100%" src=product.images.first.src style=("object-fit: cover; object-position: center center;") width="100%" /
-                                  .Polaris-MediaCard__InfoContainer
-                                    .Polaris-Card__Section
-                                      .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
-                                        .Polaris-Stack__Item
-                                          .Polaris-Stack
-                                            .Polaris-Stack__Item.Polaris-Stack__Item--fill
-                                              h2.Polaris-Heading
-                                                = "#{product.title} (#{subscription.lines.edges.first.node.quantity} pack)"
-                                            .Polaris-Stack__Item
-                                              h2.Polaris-Heading= number_to_currency price
-
-                                          .Polaris-Stack
-                                            .Polaris-Stack__Item.Polaris-Stack__Item--fill
-                                              p
-                                                b Delivery Every:&nbsp;
-                                                = "#{billing_policy.interval_count} #{billing_policy.interval}".titleize
-                                            .Polaris-Stack__Item
-                                              p
-                                                b Delivery Date:&nbsp;
-                                                =  DateTime.parse(subscription.next_billing_date).strftime("%a, %B %e")
-
-                                          .Polaris-Stack
-                                            .Polaris-Stack__Item
-                                              .Polaris-Banner__PrimaryAction
-                                                a.Polaris-Button.Polaris-Button--primary href=proxy_path("subscriptions/#{subscription_id}")
-                                                  span.Polaris-Button__Content
-                                                    span.Polaris-Button__Text Edit Subscription
-                                br/
-
-                    .Polaris-Card
-                      .Polaris-Banner.Polaris-Banner--withinContentContainer
-                        .Polaris-Banner__ContentWrapper
-                          #PolarisBanner8Content.Polaris-Banner__Content
-                            .Polaris-Stack
-                              .Polaris-Stack__Item.Polaris-Stack__Item--fill
-                                h3 Add more products to your order
-                              .Polaris-Stack__Item  
-                                .Polaris-Banner__Actions
-                                  .Polaris-ButtonGroup__Item
-                                    .Polaris-Banner__PrimaryAction
-                                      button.Polaris-Button.Polaris-Button--primary type="button"
-                                        span.Polaris-Button__Content
-                                          span.Polaris-Button__Text Add to Order
+          - if params[:subscription_id].present?
+            - @active_subscriptions = @active_subscriptions.select{|subscription| subscription.node.id == params[:subscription_id] }
+          div.content-wrapper
+            div
+              .Polaris-Header-Title__TitleAndSubtitleWrapper
+                .Polaris-Header-Title
+                  h2.Polaris-DisplayText
+                    - if @translation.delivery_tab_my_next_order.present?
+                      span.Polaris-TextStyle--variationStrong #{@translation.delivery_tab_my_next_order}
+                    - else
+                      span.Polaris-TextStyle--variationStrong MY&nbsp;
+                      span.Polaris-TextStyle--variationStrong style="color: #007EFF" NEXT
+                      span.Polaris-TextStyle--variationStrong &nbsp;ORDER
+            - @active_subscriptions.each do |subscription|
+              - subscription_id = subscription.node.id[/\d+/]
+              - billing_policy = subscription.node.billing_policy
+              - subscription.node.lines.edges.each do |edge|
+                - if (params[:line_id].present? && edge.node.id == params[:line_id]) || !params[:line_id].present?
+                  .delivery-details-tile
+                    .date-details
+                      h2.delivery-heading
+                        = DateTime.parse(subscription.node.next_billing_date).strftime("%a, %B %e")
+                      p.delivery-text
+                        span #{@translation.delivery_tab_est_delivery.present? ? @translation.delivery_tab_est_delivery : 'EST DELIVERY'}&nbsp;
+                        span.blue
+                          = (subscription.node.next_billing_date.to_date + 4.days).strftime("%a, %B %e")
+                    .grid
+                      .item
+                        h2.delivery-heading #{@translation.delivery_tab_order_product.present? ? @translation.delivery_tab_order_product : 'ORDER PRODUCT'}
+                        p.delivery-text
+                          = edge.node.title
+                      .item
+                        h2.delivery-heading #{@translation.delivery_tab_order_address.present? ? @translation.delivery_tab_order_address : 'ORDER ADDRESS'}
+                        p.delivery-text
+                          = subscription.node.delivery_method.address.address1
+                      - if @setting.customer_allowed?('shipment')
+                        .item
+                          .btn-wrapper
+                            = link_to action_subscription_contract_path(:skip_schedule, subscription.node.id[/\d+/], "billing_date=#{subscription.node.next_billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post do
+                              button type="button" #{@translation.delivery_tab_skip.present? ? @translation.delivery_tab_skip : 'SKIP'}
+            - if @active_subscriptions.present? && @active_subscriptions.any? {|sub| sub.node.lines.edges.count == 1 }
+              div
+                .Polaris-Header-Title__TitleAndSubtitleWrapper
+                  .Polaris-Header-Title
+                    h2.delivery-heading.Polaris-DisplayText
+                      - if @translation.delivery_tab_my_scheduled_order.present?
+                        span.Polaris-TextStyle--variationStrong #{@translation.delivery_tab_my_scheduled_order}
+                      - else
+                        span.Polaris-TextStyle--variationStrong MY&nbsp;
+                        span.Polaris-TextStyle--variationStrong style="color: #007EFF" SCHEDULED
+                        span.Polaris-TextStyle--variationStrong &nbsp;ORDERS
+            - @active_subscriptions.each do |subscription|
+              - if subscription.node.lines.edges.count == 1
+                - subscription_id = subscription.node.id[/\d+/]
+                - product_id = subscription.node.lines.edges.first.node.product_id[/\d+/]
+                - price = subscription.node.lines.edges.first.node.current_price.amount
+                - product = ShopifyAPI::Product.find(product_id)
+                - billing_policy = subscription.node.billing_policy
+                - (1..3).each do |index|
+                  .delivery-details-tile
+                    .date-details
+                      h2.delivery-heading
+                        = (subscription.node.next_billing_date.to_date + (index * billing_policy.interval_count).send(billing_policy.interval.downcase)).strftime("%a, %B %e")
+                      p.delivery-text
+                        span #{@translation.delivery_tab_est_delivery.present? ? @translation.delivery_tab_est_delivery : 'EST DELIVERY'}&nbsp;
+                        span.blue
+                          - billing_date = subscription.node.next_billing_date.to_date + (index * billing_policy.interval_count).send(billing_policy.interval.downcase)
+                          = billing_date.strftime("%a, %B %e")
+                    .grid
+                      .item
+                        h2.delivery-heading #{@translation.delivery_tab_order_product.present? ? @translation.delivery_tab_order_product : 'ORDER PRODUCT'}
+                        p.delivery-text
+                          = product.title
+                      .item
+                        h2.delivery-heading #{@translation.delivery_tab_order_address.present? ? @translation.delivery_tab_order_address : 'ORDER ADDRESS'}
+                        p.delivery-text
+                          = subscription.node.delivery_method.address.address1
+                      .item
+                        .btn-wrapper
+                          = link_to action_subscription_contract_path(:skip_schedule, subscription.node.id[/\d+/], "billing_date=#{billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post do
+                            button.delivery-btn type="button" #{@translation.delivery_tab_skip.present? ? @translation.delivery_tab_skip : 'SKIP'}

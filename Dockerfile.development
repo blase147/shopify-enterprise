@@ -1,0 +1,20 @@
+FROM ruby:2.7.0
+
+WORKDIR /workspace
+
+COPY . ./
+
+# install nvm
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | /bin/bash
+RUN apt-get update && \
+  apt-get install -qq -y --no-install-recommends cron && \
+  rm -rf /var/lib/apt/lists/*
+
+# ruby deps
+RUN gem install bundler \
+  && bundle install
+
+RUN chmod 0755 "./bin/start.sh"
+EXPOSE 3000
+# Start the application server
+ENTRYPOINT [ "/bin/bash","./bin/start.sh" ]

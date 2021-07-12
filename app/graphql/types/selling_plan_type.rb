@@ -2,6 +2,7 @@ module Types
   class SellingPlanType < Types::BaseObject
     field :id, ID, null: false
     field :name, String, null: true
+    field :shopify_id, String, null: true
 
     field :adjustment_value, String, null: true
     field :adjustment_type, String, null: true

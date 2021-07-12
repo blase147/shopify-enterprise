@@ -1,69 +1,56 @@
-import ReactDOM from 'react-dom';
+import { gql, useMutation, useQuery, useLazyQuery } from '@apollo/client';
+import { Banner, Card, ContextualSaveBar, Form, Frame, List, Page, Spinner, Tabs, Toast, Layout, FormLayout, TextField, Button } from '@shopify/polaris';
+import { Formik } from 'formik';
+import { isEmpty } from 'lodash';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import * as yup from 'yup';
 import AppLayout from '../layout/Layout';
 import Billing from './Billing';
 import CustomPortal from './CustomPortal';
-import EmailNotification from './EmailNotification';
 import Dunning from './Dunning';
-import StoreInfomation from './StoreInformation';
+import EmailNotification from './EmailNotification';
+import HouseKeeping from './HouseKeeping';
+import Password from './HouseKeepingComponents/Password';
 import Legal from './Legal';
+import StoreInfomation from './StoreInformation';
 
-import {
-  Page,
-  EmptyState,
-  Frame,
-  CalloutCard,
-  Card,
-  Icon,
-  Stack,
-  Badge,
-  DisplayText,
-  Tabs,
-  FormLayout,
-  Select,
-  TextStyle,
-  ChoiceList,
-  Checkbox,
-  Button,
-} from '@shopify/polaris';
 
-import {
-  Form,
-  ContextualSaveBar,
-  Toast,
-  Banner,
-  List,
-  Spinner,
-} from '@shopify/polaris';
 
-import React, { useState, useCallback, useEffect } from 'react';
-import { Formik } from 'formik';
-import _ from 'lodash';
-import * as yup from 'yup';
 
-import { gql, useMutation, useQuery } from '@apollo/client';
-import { Link, useHistory, useParams } from 'react-router-dom';
 
 const Settings = () => {
+
   // form data ########################################################
   const [formData, setFormData] = useState(null);
   const [formErrors, setFormErrors] = useState([]);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
 
+
   const validationSchema = yup.object().shape({
     // internalName: yup.string().required().label('Internal name'),
   });
 
+  const confirmPasswordQuery=gql`
+  query($password:String!)
+    {
+      confirmPassword(password:$password) {
+              success
+    }
+  }
+  `;
   const GET_DATA = gql`
     query {
       fetchSetting {
         paymentRetries
         paymentDelayRetries
 
-        themes
-        styleHeader
-        styleFooter
-        styleCreditCard
+        styleAccountProfile
+        styleSidebar
+        styleSubscription
+        styleUpsell
+        styleSidebarPages
         navigationDelivery
         shipingAddress
         upcomingOderDate
@@ -87,7 +74,7 @@ const Settings = () => {
           returnContent
           _destroy
         }
-
+        emailService
         emailNotifications {
           id
           name
@@ -97,7 +84,7 @@ const Settings = () => {
           emailSubject
           emailMessage
           slug
-          descripton
+          description
         }
         additionalSendAccountAfterCheckout
         bbcStoreowner
@@ -127,12 +114,29 @@ const Settings = () => {
         checkoutSubscriptionTerms
         emailSubscriptionTerms
         applePaySubscriptionTerms
+        showPromoButton
+        promoButtonContent
+        promoButtonUrl
+        contactBoxContent
+        promoTagline1Content
+        promoTagline2Content
+
+        showSubscription
+        showDeliverySchedule
+        showOrderHistory
+        showAddress
+        showBilling
+        showAccount
+        pauseSubscription
+
+        recurringChargeStatus
+        chargeConfirmationLink
       }
     }
   `;
   let { id } = useParams();
-  const { data, loading, error, refetch } = useQuery(GET_DATA, {
-    fetchPolicy: 'no-cache',
+  const [getData,{ data, loading, error, refetch }] = useLazyQuery(GET_DATA, {
+    fetchPolicy: 'network-only',
   });
 
   const UPDATE_SETTING = gql`
@@ -141,10 +145,11 @@ const Settings = () => {
         setting {
           paymentRetries
           paymentDelayRetries
-          themes
-          styleHeader
-          styleFooter
-          styleCreditCard
+          styleAccountProfile
+          styleSidebar
+          styleSubscription
+          styleUpsell
+          styleSidebarPages
           navigationDelivery
           shipingAddress
           upcomingOderDate
@@ -162,6 +167,7 @@ const Settings = () => {
           cancellationEmailContact
           allowCancelAfter
           reactiveSubscription
+          emailService
           reasonsCancels {
             id
             title
@@ -177,7 +183,7 @@ const Settings = () => {
             emailSubject
             emailMessage
             slug
-            descripton
+            description
           }
           additionalSendAccountAfterCheckout
           bbcStoreowner
@@ -209,24 +215,42 @@ const Settings = () => {
           checkoutSubscriptionTerms
           emailSubscriptionTerms
           applePaySubscriptionTerms
+          showPromoButton
+          promoButtonContent
+          promoButtonUrl
+          contactBoxContent
+          promoTagline1Content
+          promoTagline2Content
+
+          showSubscription
+          showDeliverySchedule
+          showOrderHistory
+          showAddress
+          showBilling
+          showAccount
+          pauseSubscription
+
+          designType
         }
       }
     }
   `;
   const [updateSetting] = useMutation(UPDATE_SETTING);
 
+
   useEffect(() => {
     if (data) {
-      console.log('mnmnmnmnm', data.fetchSetting);
       setFormData(data.fetchSetting);
     }
   }, [data]);
+
   const initialValues = {
     allowCancelAfter: '',
     availablePurchase: '',
     cancellationEmailContact: '',
     changeVariant: '1',
     discount: [],
+    emailService:'',
     emailNotifications: [
       {
         emailMessage: '',
@@ -271,27 +295,78 @@ const Settings = () => {
     ],
     facingFrequencyOption: '',
     frequency: '',
-    navigationDelivery: '',
+    navigationDelivery: 'storeowner_and_customer',
     oneTimePurchase: '',
     paymentDelayRetries: '',
     paymentRetries: '',
     productToSubscription: '',
-    reactiveSubscription: '',
-    shipingAddress: '',
-    shipment: '',
-    styleCreditCard: '',
-    styleFooter: '',
-    styleHeader: '',
-    subscriptionCancellation: '',
-    swapProduct: '',
+    reactiveSubscription: 'storeowner_and_customer',
+    shipingAddress: 'storeowner_and_customer',
+    shipment: 'storeowner_and_customer',
+    styleAccountProfile: '',
+    styleSidebar: '',
+    styleSidebarPages: '',
+    styleSubscription: '',
+    styleUpsell: '',
+    subscriptionCancellation: 'storeowner_and_customer',
+    swapProduct: 'storeowner_and_customer',
     themes: '',
     upcomingOderDate: '',
-    upcomingQuantity: '',
+    upcomingQuantity: 'storeowner_and_customer',
+
+    showPromoButton: 'true',
+    promoButtonContent: '',
+    promoButtonUrl: '',
+    contactBoxContent: '',
+    promoTagline1Content: '',
+    promoTagline2Content: '',
+
+    showSubscription: '',
+    showDeliverySchedule: '',
+    showOrderHistory: '',
+    showAddress: '',
+    showBilling: '',
+    showAccount: '',
+
+    delayOrder: 'storeowner_and_customer',
+    pauseSubscription: 'storeowner_and_customer',
     _destroy: false,
   };
   // form data #####################################################
 
   const [selectedTitleTab, setSelectedTitleTab] = useState(0);
+
+  // Password confirmation
+  const [passwordConfirmed, setPasswordConfirmed] = useState(false)
+  const [password, setPassword] = useState("")
+  const [passwordError,setPasswordError]=useState("")
+  const [confirmPassword,{data:confirmPasswordRes,loading:passwordLoading}]=useLazyQuery(confirmPasswordQuery,{fetchPolicy:"network-only"})
+
+  const verifyPassword =()=>{
+    if(!isEmpty(password)){
+      confirmPassword({
+        variables:{
+          password:password
+        }
+      })
+    }
+  }
+
+  useEffect(()=>{
+    if(passwordConfirmed){
+      getData();
+    }
+  },[passwordConfirmed])
+
+
+  useEffect(()=>{
+      if(confirmPasswordRes?.confirmPassword?.success)
+      {
+        setPasswordConfirmed(true);
+      }else{
+        setPasswordError(confirmPasswordRes?.errors[0]?.message)
+      }
+  },[confirmPasswordRes])
 
   const handleTabChange = useCallback(
     (selectedTabIndex) => setSelectedTitleTab(selectedTabIndex),
@@ -299,6 +374,10 @@ const Settings = () => {
   );
 
   const tabs = [
+    {
+      id: 'house',
+      content: 'House keeping',
+    },
     {
       id: 'billing',
       content: 'Billing',
@@ -315,10 +394,12 @@ const Settings = () => {
       id: 'dunning',
       content: 'Dunning',
     },
-    {
+    ...(process.env.APP_TYPE=="public" ?
+    [{
       id: 'store-information',
       content: 'StoreInformation',
-    },
+    }]:[])
+    ,
     {
       id: 'legal',
       content: 'Legal',
@@ -332,169 +413,211 @@ const Settings = () => {
   }, [selectedTitleTab]);
 
   return (
-    <AppLayout typePage="settings" tabIndex="6">
+    <AppLayout typePage="settings" tabIndex="8">
       <Frame>
-        <Page title="Settings">
-          <Tabs
-            tabs={tabs}
-            selected={selectedTitleTab}
-            onSelect={handleTabChange}
-          >
-            {loading && (
-              <Card>
-                <Spinner
-                  accessibilityLabel="Spinner example"
-                  size="large"
-                  color="teal"
-                />
-              </Card>
-            )}
-            {formErrors.length > 0 && (
-              <>
-                <Banner title="Setting could not be saved" status="critical">
-                  <List type="bullet">
-                    {formErrors.map((message, index) => (
-                      <List.Item key={index}>{message.message}</List.Item>
-                    ))}
-                  </List>
-                </Banner>
-                <br />
-              </>
-            )}
-
-            {formData && (
-              <Formik
-                validationSchema={validationSchema}
-                initialValues={formData ? formData : initialValues}
-                enableReinitialize
-                onSubmit={(
-                  values,
-                  { setSubmitting, setDirty, resetForm, touched }
-                ) => {
-                  updateSetting({ variables: { input: { params: values } } })
-                    .then((resp) => {
-                      const data = resp.data;
-                      const errors = data.errors;
-
-                      if (errors) {
-                        setFormErrors(errors);
-                      } else {
-                        setSaveSuccess(true);
-                        console.log('oke');
-                        refetch();
-                        setDirty(false);
-                        // resetForm({});
-                        console.log('kxjckxjck');
-                      }
-
-                      setSubmitting(false);
-                    })
-                    .catch((error) => {
-                      setSubmitting(false);
-                      setFormErrors(error);
-                    });
-                }}
+        { passwordConfirmed
+          ? (
+            <Page title="Settings">
+              <Tabs
+                tabs={tabs}
+                selected={selectedTitleTab}
+                onSelect={handleTabChange}
               >
-                {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  isSubmitting,
-                  setFieldValue,
-                  resetForm,
-                  dirty,
-                  setDirty,
-                  formik,
-                  /* and other goodies */
-                }) => (
-                  <Form onSubmit={handleSubmit}>
-                    {dirty && (
-                      <ContextualSaveBar
-                        alignContentFlush={true}
-                        message="Unsaved changes"
-                        saveAction={{
-                          onAction: () => handleSubmit(),
-                          loading: isSubmitting,
-                          disabled: false,
-                        }}
-                        discardAction={{
-                          onAction: resetForm,
-                        }}
-                      />
-                    )}
-
-                    {saveSuccess && (
-                      <Toast
-                        content="Setting is saved"
-                        onDismiss={hideSaveSuccess}
-                      />
-                    )}
-
-                    {selectedTitleTab === 0 ? (
-                      <Billing
-                        values={values}
-                        touched={touched}
-                        errors={errors}
-                        setFieldValue={setFieldValue}
-                      />
-                    ) : selectedTitleTab === 1 ? (
-                      <CustomPortal
-                        values={values}
-                        touched={touched}
-                        errors={errors}
-                        setFieldValue={setFieldValue}
-                        handleSubmit={handleSubmit}
-                        refetch={refetch}
-                        isSubmitting={isSubmitting}
-                      />
-                    ) : selectedTitleTab === 2 ? (
-                      <div className="EmailNotification">
-                        <EmailNotification
-                          values={values}
-                          touched={touched}
-                          errors={errors}
-                          setFieldValue={setFieldValue}
-                          handleSubmit={handleSubmit}
-                        />
-                      </div>
-                    ) : selectedTitleTab === 3 ? (
-                      <Dunning
-                        values={values}
-                        touched={touched}
-                        errors={errors}
-                        setFieldValue={setFieldValue}
-                        handleSubmit={handleSubmit}
-                      />
-                    ) : selectedTitleTab === 4 ? (
-                      <div className="storeInfomation">
-                        <StoreInfomation
-                          values={values}
-                          touched={touched}
-                          errors={errors}
-                          setFieldValue={setFieldValue}
-                          handleSubmit={handleSubmit}
-                        />
-                      </div>
-                    ) : (
-                      <div className="storeInfomation">
-                        <Legal
-                          values={values}
-                          touched={touched}
-                          errors={errors}
-                          setFieldValue={setFieldValue}
-                          handleSubmit={handleSubmit}
-                        />
-                      </div>
-                    )}
-                  </Form>
+                {loading && (
+                  <Card>
+                    <Spinner
+                      accessibilityLabel="Spinner example"
+                      size="large"
+                      color="teal"
+                    />
+                  </Card>
                 )}
-              </Formik>
-            )}
-          </Tabs>
-        </Page>
+                {formErrors.length > 0 && (
+                  <>
+                    <Banner title="Setting could not be saved" status="critical">
+                      <List type="bullet">
+                        {formErrors.map((message, index) => (
+                          <List.Item key={index}>{message.message}</List.Item>
+                        ))}
+                      </List>
+                    </Banner>
+                    <br />
+                  </>
+                )}
+                {formData && (
+                  <Formik
+                    validationSchema={validationSchema}
+                    initialValues={formData ? formData : initialValues}
+                    enableReinitialize
+                    onSubmit={(
+                      values,
+                      { setSubmitting, setDirty, resetForm, touched }
+                    ) => {
+                      delete values.recurringChargeStatus;
+                      delete values.chargeConfirmationLink;
+                      const newValues={...values,
+                        navigationDelivery:values.navigationDelivery || "storeowner_and_customer",
+                        reactiveSubscription:values.reactiveSubscription || 'storeowner_and_customer',
+                        shipingAddress:values.shipingAddress || 'storeowner_and_customer',
+                        shipment:values.shipment || 'storeowner_and_customer',
+                        subscriptionCancellation:values.subscriptionCancellation || 'storeowner_and_customer',
+                        swapProduct:values.swapProduct || 'storeowner_and_customer',
+                        upcomingQuantity:values.upcomingQuantity ||  'storeowner_and_customer',
+                        delayOrder:values.delayOrder || 'storeowner_and_customer',
+                        pauseSubscription:values.pauseSubscription || 'storeowner_and_customer',
+                      };
+
+                      updateSetting({ variables: { input: { params: newValues } } })
+                        .then((resp) => {
+                          const data = resp.data;
+                          const errors = data.errors;
+
+                          if (errors) {
+                            setFormErrors(errors);
+                          } else {
+                            setSaveSuccess(true);
+                            console.log('oke');
+                            refetch();
+                            setDirty(false);
+                            // resetForm({});
+                            console.log('kxjckxjck');
+                          }
+
+                          setSubmitting(false);
+                        })
+                        .catch((error) => {
+                          setSubmitting(false);
+                          setFormErrors(error);
+                        });
+                    }}
+                  >
+                    {({
+                      values,
+                      errors,
+                      touched,
+                      handleChange,
+                      handleBlur,
+                      handleSubmit,
+                      isSubmitting,
+                      setFieldValue,
+                      resetForm,
+                      dirty,
+                      setDirty,
+                      formik,
+                      /* and other goodies */
+                    }) => (
+                      <Form onSubmit={handleSubmit}>
+                        {dirty && (
+                          <ContextualSaveBar
+                            alignContentFlush={true}
+                            message="Unsaved changes"
+                            saveAction={{
+                              onAction: () => handleSubmit(),
+                              loading: isSubmitting,
+                              disabled: false,
+                            }}
+                            discardAction={{
+                              onAction: resetForm,
+                            }}
+                          />
+                        )}
+
+                        {saveSuccess && (
+                          <Toast
+                            content="Setting is saved"
+                            onDismiss={hideSaveSuccess}
+                          />
+                        )}
+                        {
+                          console.log("SelectedTab..",selectedTitleTab)
+                        }
+                        {selectedTitleTab === 0 ? (
+                          <HouseKeeping
+
+                          />):
+                        selectedTitleTab === 1 ? (
+                          <Billing
+                            values={values}
+                            touched={touched}
+                            errors={errors}
+                            setFieldValue={setFieldValue}
+                          />
+                        ) : selectedTitleTab === 2 ? (
+                          <CustomPortal
+                            values={values}
+                            touched={touched}
+                            errors={errors}
+                            setFieldValue={setFieldValue}
+                            handleSubmit={handleSubmit}
+                            refetch={refetch}
+                            isSubmitting={isSubmitting}
+                          />
+                        ) : selectedTitleTab === 3 ? (
+                          <div className="EmailNotification">
+                            <EmailNotification
+                              values={values}
+                              touched={touched}
+                              errors={errors}
+                              setFieldValue={setFieldValue}
+                              handleSubmit={handleSubmit}
+                            />
+                          </div>
+                        ) : selectedTitleTab === 4 ? (
+                          <Dunning
+                            values={values}
+                            touched={touched}
+                            errors={errors}
+                            setFieldValue={setFieldValue}
+                            handleSubmit={handleSubmit}
+                          />
+                        ) : selectedTitleTab === (process.env.APP_TYPE=="public"?5:10) ? (
+                          <div className="storeInfomation">
+                            <StoreInfomation
+                              values={values}
+                              touched={touched}
+                              errors={errors}
+                              setFieldValue={setFieldValue}
+                              handleSubmit={handleSubmit}
+                            />
+                          </div>
+                        ) : selectedTitleTab === (process.env.APP_TYPE=="public"?6:5)?(
+                          <div className="storeInfomation">
+                            <Legal
+                              values={values}
+                              touched={touched}
+                              errors={errors}
+                              setFieldValue={setFieldValue}
+                              handleSubmit={handleSubmit}
+                            />
+                          </div>
+                        ):""}
+                      </Form>
+                    )}
+                  </Formik>
+                )}
+              </Tabs>
+            </Page>
+          ): (
+            <Page title="Password protected">
+              <Layout>
+                <Layout.Section>
+                  <Card sectioned>
+                    <FormLayout>
+                      <TextField
+                        value={password}
+                        onChange={value => setPassword(value)}
+                        label="Password"
+                        type="password"
+                        error={passwordError && passwordError}
+                      />
+                      <Button primary loading={passwordLoading} onClick={verifyPassword} >Confirm</Button>
+                    </FormLayout>
+                  </Card>
+                </Layout.Section>
+              </Layout>
+            </Page>
+          )
+        }
       </Frame>
     </AppLayout>
   );

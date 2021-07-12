@@ -3,7 +3,7 @@ module Types
       class EmailNotificationInputType < Types::BaseInputObject
         argument :id, String, required: false
         argument :name, String, required: true
-        argument :descripton, String, required: false
+        argument :description, String, required: false
         argument :from_name, String, required: false
         argument :from_email, String, required: false
         argument :email_subject, String, required: false

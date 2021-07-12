@@ -1,24 +1,24 @@
 class SubscriptionsController < AuthenticatedController
   skip_before_action :verify_authenticity_token
   layout 'subscriptions'
+  include SubscriptionConcern
 
   def index
     redirect_to subscription_path(id: params[:id]) if params[:id].present?
 
-    @data = SubscriptionContractsService.new.run params[:cursor]
+    @data = SubscriptionContractsService.new.all_subscriptions # params[:cursor]
     @subscription_contracts = @data[:subscriptions] || []
   end
 
   def show
     id = params[:id]
-
+    @customer = Customer.find_by_shopify_id(params[:id])
     @subscription = SubscriptionContractService.new(id).run
-
+    products = ProductService.new.list
+    @swap_products = products.is_a?(Hash) ? nil : products.select{ |p| p.node.selling_plan_group_count > 0 }
     @total = @subscription.orders.edges.map { |order|
       order.node.total_received_set.presentment_money.amount.to_f
     }.sum
-
-    @customer = @subscription.customer
   end
 
   def update_customer
@@ -67,23 +67,11 @@ class SubscriptionsController < AuthenticatedController
     end
   end
 
-  def skip_schedule
-    id = params[:id]
-    result = ScheduleSkipService.new(id).run
-
-    if result.is_a?(Hash)
-      flash[:error] = result[:error]
-      render js: "showToast('error', '#{result[:error]}'); hideLoading()"
-    else
-      render js: "showToast('notice', 'Next schedule is skipped!'); hideModal();"
-    end
-  end
-
   def destroy
     id = params[:id]
     result = SubscriptionContractDeleteService.new(id).run
     p result
-    
+
     if result.is_a?(Hash)
       flash[:error] = result[:error]
       render js: "showToast('error', '#{result[:error]}'); hideLoading()"

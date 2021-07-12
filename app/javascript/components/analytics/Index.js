@@ -4,6 +4,7 @@ import RevenueTrends from './RevenueTrends';
 import CustomerInsights from './CustomerInsights';
 import Retention from './Retention';
 import Product from './Product';
+import {FilterContextProvider} from './../common/Contexts/AnalyticsFilterContext';
 import {
   Card,
   Select,
@@ -18,6 +19,7 @@ import {
   Tabs,
 } from '@shopify/polaris';
 import { FlagMajor, ChevronDownMinor } from '@shopify/polaris-icons';
+import SmartSms from './SmartSms';
 
 const Analytics = () => {
   const [selectedTitleTab, setSelectedTitleTab] = useState(0);
@@ -35,18 +37,24 @@ const Analytics = () => {
       id: 'customer-insights',
       content: 'Customer Insights',
     },
-    {
+    ...(process.env.APP_TYPE=="public" ?
+    [{
       id: 'retention',
       content: 'Retention',
-    },
+    }]:[]),
     {
       id: 'product',
       content: 'Product',
     },
+    {
+      id: 'smartsms',
+      content: 'SmartySMS',
+    }
   ];
   return (
     <AppLayout typePage="Analytics" tabIndex="5">
       <Page title="Analytics">
+        <FilterContextProvider>
         <Tabs
           tabs={tabAnalytics}
           selected={selectedTitleTab}
@@ -58,16 +66,25 @@ const Analytics = () => {
             <div className="customer-insight">
               <CustomerInsights />
             </div>
-          ) : selectedTitleTab === 2 ? (
+          ) 
+          :
+          (process.env.APP_TYPE=="public" && selectedTitleTab === 2) ? (
             <div className="retention">
               <Retention />
             </div>
-          ) : (
+          )
+          : selectedTitleTab === (process.env.APP_TYPE=="public" ?3:2) ?(
             <div className="product">
               <Product />
             </div>
-          )}
+          ):selectedTitleTab === (process.env.APP_TYPE=="public" ?4:3) ?(
+            <>
+            <SmartSms />
+            </>
+          ):
+          ""}
         </Tabs>
+        </FilterContextProvider>
       </Page>
     </AppLayout>
   );

@@ -308,7 +308,7 @@ const TrialPlan = () => {
                         <TextField
                           value={values.internalName}
                           label="Internal name"
-                          placeholder="Subscription and Save"
+                          placeholder="Subscribe & Save"
                           type="text"
                           error={touched.internalName && errors.internalName}
                           onChange={(e) => setFieldValue('internalName', e)}
@@ -371,7 +371,7 @@ const TrialPlan = () => {
                           error={touched.publicName && errors.publicName}
                           onChange={(e) => setFieldValue('publicName', e)}
                           label="Public name"
-                          placeholder="Subscription and Save"
+                          placeholder="Subscribe & Save"
                           type="text"
                           helpText={
                             <span>
@@ -390,15 +390,15 @@ const TrialPlan = () => {
                         title="Selling Plan"
                         sectioned
                         actions={
-                          index == 0
+                          ((!id && index != 0) || (id && values.sellingPlans.filter(p=>!p._destroy).length>1))
                             ? []
                             : [
                                 {
                                   content: 'Remove',
                                   onAction: () => {
                                     setFieldValue(
-                                      'sellingPlans',
-                                      handleRemovingSellingPlan(values, index)
+                                      `sellingPlans[${index}]._destroy`,
+                                      true
                                     );
                                   },
                                 },

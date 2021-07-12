@@ -12,7 +12,7 @@ module Mutations
 
         plan = current_shop.selling_plan_groups.find_by(id: params[:id])
         plan.update!(plan_params)
-        
+
         { plan: plan }
       rescue ActiveRecord::RecordInvalid => e
         GraphQL::ExecutionError.new("Invalid attributes for #{e.record.class}:"\

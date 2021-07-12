@@ -1,5 +1,6 @@
 class AppProxy::SubscriptionsController < AppProxyController
   before_action :init_session
+  include SubscriptionConcern
 
   def index
     customer_id = "gid://shopify/Customer/#{params[:customer_id]}"
@@ -18,36 +19,14 @@ class AppProxy::SubscriptionsController < AppProxyController
     end
   end
 
-  def pause
-    id = params[:id]
-    result = SubscriptionContractDeleteService.new(id).run 'PAUSED'
-
-    if result.is_a?(Hash)
-      render :json => { error: result[:error] }
-    else
-      render :json => { status: :ok, message: "Success" }
-    end
-  end
-
-  def resume
-    id = params[:id]
-    result = SubscriptionContractDeleteService.new(id).run 'ACTIVE'
-
-    if result.is_a?(Hash)
-      render :json => { error: result[:error] }
-    else
-      render :json => { status: :ok, message: "Success" }
-    end
-  end
-
   def cancel
     id = params[:id]
     result = SubscriptionContractDeleteService.new(id).run
 
-    if result.is_a?(Hash)
+    if result[:error].present?
       render :json => { error: result[:error] }
     else
-      render :json => { status: :ok, message: "Success" }
+      render js: "location.reload();"
     end
   end
 
@@ -63,15 +42,33 @@ class AppProxy::SubscriptionsController < AppProxyController
   end
 
   def update_subscription
-    id = params[:id]
-    id = "gid://shopify/SubscriptionContract/#{id}"
+    if params[:subscription].present?
+      date = params[:subscription][:next_billing_date].to_date rescue nil
+      if date.nil?
+        splitted_date = params[:subscription][:next_billing_date].split('/')
+        params[:subscription][:next_billing_date] = [splitted_date[2], splitted_date[0], splitted_date[1]].join('-')
+      end
+    end
+    id = "gid://shopify/SubscriptionContract/#{params[:id]}"
     result = SubscriptionContractUpdateService.new(id).run params
 
     if result.is_a?(Hash)
       flash[:error] = result[:error]
       render js: "alert('#{result[:error]}'); hideLoading()"
     else
-      render js: "hideModal(true);"
+      render js: "location.reload();"
+    end
+  end
+
+  def apply_discount
+    redeem_code = params[:redeem_code]
+    result = SubscriptionDraftsService.new.apply_discount(@draft_id, redeem_code)
+    SubscriptionDraftsService.new.commit @draft_id
+    if result[:error].present?
+      flash[:error] = result[:error]
+      render js: "alert('#{result[:error]}'); hideLoading()"
+    else
+      render js: 'location.reload()'
     end
   end
 end

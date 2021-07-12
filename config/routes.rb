@@ -9,6 +9,12 @@ Rails.application.routes.draw do
   mount ShopifyApp::Engine, at: '/'
   root :to => 'home#index'
 
+  post '/shop/redact', to: 'gdpr_webhooks#shop_redact'
+  post '/customers/redact', to: 'gdpr_webhooks#customer_redact'
+  post '/customers/data_request', to: 'gdpr_webhooks#customer_data_request'
+
+  post '/shopify_webhooks/app_uninstalled', to: 'shopify_webhooks#app_uninstalled'
+
   namespace :app_proxy do
     resources :account do
       collection do
@@ -17,6 +23,7 @@ Rails.application.routes.draw do
         get :password
 
         post :update_info
+        post :update_address
       end
     end
     resources :orders
@@ -30,6 +37,14 @@ Rails.application.routes.draw do
         post :change_quantity
         post :change_date
         post :update_subscription
+        post :add_product
+        post :update_quantity
+        post :apply_discount
+        post :update_shiping_detail
+        post :swap_product
+        post :upgrade_product
+        post :remove_line
+        post :skip_schedule
       end
     end
     resources :dashboard, only: [:index] do
@@ -53,7 +68,7 @@ Rails.application.routes.draw do
   end
 
   post "/graphql_extension", to: "extension#execute"
-  
+
   resources :subscriptions do
     collection do
       post :update_subscription
@@ -64,8 +79,19 @@ Rails.application.routes.draw do
       get :send_update_card
       get :remove_card
       get :skip_schedule
+      post :resume
+      post :add_product
+      post :update_quantity
+      post :swap_product
+      post :upgrade_product
+      post :remove_line
+      post :skip_schedule
+      post :pause
     end
   end
 
+
+  get 'subscription/charge', to: 'callback#charge'
   get '*path' => 'home#index'
+  post 'twilio/sms', 'twilio#sms'
 end

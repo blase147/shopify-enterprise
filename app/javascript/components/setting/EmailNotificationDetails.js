@@ -12,8 +12,12 @@ import {
   FormLayout,
   Layout,
   TextContainer,
+  Icon
 } from '@shopify/polaris';
 import Switch from 'react-switch';
+import {
+  CircleLeftMajor
+} from '@shopify/polaris-icons';
 
 const emailNotificationsDetails = (props) => {
   const [valueFromName, setValueFromName] = useState();
@@ -48,17 +52,30 @@ const emailNotificationsDetails = (props) => {
     handleSubmit,
   } = props;
 
+  const submit=async ()=>{
+    await handleSubmit();
+    setSelectedIndex(null);
+  }
   return (
     <div className="noti-detail">
       <div className="container-left">
         <Card.Section>
           <Stack vertical>
             <Stack.Item>
+              <div className="back-btn-container" onClick={()=>setSelectedIndex(null)} >
+              <Icon
+                source={CircleLeftMajor}
+                color="base" />
+                <p>Go Back</p>
+              </div>
+
+            </Stack.Item>
+            <Stack.Item>
               <Heading>{values.emailNotifications[index]?.name}</Heading>
             </Stack.Item>
             <Stack.Item>
               <TextStyle variation="subdued">
-                {values.emailNotifications[index]?.descripton}
+                {values.emailNotifications[index]?.description}
               </TextStyle>
             </Stack.Item>
             <Stack.Item>
@@ -126,7 +143,7 @@ const emailNotificationsDetails = (props) => {
                 <Button primary onClick={() => setSelectedIndex(null)}>
                   Cancel
                 </Button>
-                <Button onClick={() => handleSubmit()}>Save Changes</Button>
+                <Button onClick={() => submit()}>Save Changes</Button>
               </ButtonGroup>
             </Stack.Item>
           </Stack>
@@ -168,17 +185,21 @@ const emailNotificationsDetails = (props) => {
           </TextContainer>
         </Card.Section>
 
-        <Card.Section>
-          <TextContainer>
-            <Heading h4>Need help with ChargeZen variables?</Heading>
-            <br />
-            <TextStyle variation="subdued">
-              We’ve compiled a list of all available CharegeZen variables along
-              with additional information and help. You can check out the guide
-              here.
-            </TextStyle>
-          </TextContainer>
-        </Card.Section>
+        {
+          process.env.APP_TYPE=="public" &&
+          <Card.Section>
+            <TextContainer>
+              <Heading h4>Need help with ChargeZen variables?</Heading>
+              <br />
+              <TextStyle variation="subdued">
+                We’ve compiled a list of all available CharegeZen variables along
+                with additional information and help. You can check out the guide
+                here.
+           </TextStyle>
+            </TextContainer>
+          </Card.Section>
+        }
+
 
         <Card.Section>
           <TextContainer>

@@ -1,39 +1,40 @@
+- customer = @subscription.customer
 .Polaris-Modal#customerEditModal
-  .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true" 
+  .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"
     div
       form action='update_customer' method='post' data-remote=true
-        = hidden_field_tag :id, @customer.id
+        = hidden_field_tag :id, customer.id
         = hidden_field_tag :subscription_id, params[:id]
-        .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1" 
+        .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1"
           .Polaris-Modal-Dialog__Modal
             .Polaris-Modal__BodyWrapper
-              .Polaris-Modal__Body.Polaris-Scrollable.Polaris-Scrollable--vertical data-polaris-scrollable="true" 
+              .Polaris-Modal__Body.Polaris-Scrollable.Polaris-Scrollable--vertical data-polaris-scrollable="true"
                 section.Polaris-Modal-Section
                   .Polaris-FormLayout--grouped[role="group"]
                     .Polaris-FormLayout__Items
                       .Polaris-FormLayout__Item.Polaris-FormLayout__Item--firstOne
-                        = p_text_field label: 'First Name', name: 'first_name', value: @customer.first_name
+                        = p_text_field label: 'First Name', name: 'first_name', value: customer.first_name
                       .Polaris-FormLayout__Item
-                        = p_text_field label: 'Last Name', name: 'last_name', value: @customer.last_name
+                        = p_text_field label: 'Last Name', name: 'last_name', value: customer.last_name
 
                   .Polaris-FormLayout--grouped[role="group"]
                     .Polaris-FormLayout__Items
                       .Polaris-FormLayout__Item.Polaris-FormLayout__Item--firstOne
-                        = p_text_field label: 'Address Line 1', name: 'address_1', value: @customer.default_address&.address1
+                        = p_text_field label: 'Address Line 1', name: 'address_1', value: customer.default_address&.address1
 
                   .Polaris-FormLayout--grouped[role="group"]
                     .Polaris-FormLayout__Items
                       .Polaris-FormLayout__Item.Polaris-FormLayout__Item--firstOne
-                        = p_text_field label: 'Address Line 2', name: 'address_2', value: @customer.default_address&.address2
+                        = p_text_field label: 'Address Line 2', name: 'address_2', value: customer.default_address&.address2
 
                   .Polaris-FormLayout--grouped[role="group"]
                     .Polaris-FormLayout__Items
                       .Polaris-FormLayout__Item.Polaris-FormLayout__Item--firstOne
-                        = p_text_field label: 'Email', name: 'email', value: @customer.email
+                        = p_text_field label: 'Email', name: 'email', value: customer.email
 
                       .Polaris-FormLayout__Item.Polaris-FormLayout__Item
-                        = p_text_field label: 'Phone', name: 'phone', value: @customer.phone
-                        
+                        = p_text_field label: 'Phone', name: 'phone', value: customer.phone
+
             .Polaris-Modal-Footer
               .Polaris-Modal-Footer__FooterContent
                 button.Polaris-Button.mr-10[type="button" aria-hidden="true" tabindex="-1" data-action='close']
@@ -42,4 +43,3 @@
                 = p_button text: 'Save Changes', type: 'submit'
 
   .Polaris-Backdrop
-  

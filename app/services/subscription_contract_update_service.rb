@@ -21,10 +21,16 @@ class SubscriptionContractUpdateService < GraphqlService
   def run params
     result = client.query(client.parse(GET_QUERY), variables: { contractId: @id} )
     draft_id = result.data.subscription_contract_update.draft.id
-
     if params[:next_billing_date].present?
       input = { }
       input['nextBillingDate'] = DateTime.parse(params[:next_billing_date])
+      result = SubscriptionDraftsService.new.update draft_id, input
+      raise result[:error] if result[:error].present?
+    end
+
+    if params[:subscription] && params[:subscription][:next_billing_date].present?
+      input = { }
+      input['nextBillingDate'] = DateTime.parse(params[:subscription][:next_billing_date])
       result = SubscriptionDraftsService.new.update draft_id, input
       raise result[:error] if result[:error].present?
     end
@@ -41,6 +47,15 @@ class SubscriptionContractUpdateService < GraphqlService
 
     result = SubscriptionDraftsService.new.commit draft_id
     raise result[:error] if result[:error].present?
+  rescue Exception => ex
+    p ex.message
+    { error: ex.message }
+  end
+
+  def get_draft params
+    result = client.query(client.parse(GET_QUERY), variables: { contractId: @id} )
+    draft_id = result.data.subscription_contract_update.draft.id
+    { draft_id: draft_id }
   rescue Exception => ex
     p ex.message
     { error: ex.message }

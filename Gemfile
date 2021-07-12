@@ -25,11 +25,7 @@ gem 'jbuilder', '~> 2.7'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
-gem 'carrierwave'
 gem 'apollo_upload_server'
-
-# Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.4.2', require: false
 
 # shopify #######
 gem 'dotenv-rails'
@@ -51,9 +47,15 @@ gem 'sidekiq'
 gem 'redis'
 
 gem 'rack-cors'
-gem 'shopify_cli', '1.0.5'
 gem 'whenever'
 gem 'mina'
+gem 'twilio-ruby', '~> 5.52.0'
+gem 'percentage', '~> 1.4', '>= 1.4.1'
+gem 'klaviyo'
+gem 'sendgrid-ruby'
+gem "shopify_api_retry"
+
+gem 'bcrypt', '~> 3.1.7'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -80,3 +82,6 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'carrierwave'
 gem 'config'
+
+# yanked v0.3.5
+#gem "mimemagic", github: "mimemagicrb/mimemagic", ref: "01f92d86d15d85cfd0f20dabd025dcbd36a8a60f"

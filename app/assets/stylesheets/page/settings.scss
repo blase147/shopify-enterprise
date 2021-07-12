@@ -30,6 +30,10 @@
         border-radius: 5px 5px 0px 0px;
         padding: 13px 11px 15px 14px;
       }
+      #dunning,#legal {
+        display: none;
+      }
+
     }
   }
   //Billing
@@ -166,5 +170,202 @@
     .container-right {
       width: 33%;
     }
+  }
+}
+
+.app-content .Polaris-Page {
+  max-width: 89%;
+}
+div#sms-panel {
+  position: relative;
+}
+.sms-options {
+	.Polaris-Card__Section {
+		display: grid;
+		grid-template-columns: auto auto auto auto;
+	}
+}
+.sms-config {
+	.Polaris-DisplayText--sizeSmall {
+		font-size: 1.7rem;
+		margin-bottom: 17px;
+	}
+	.Polaris-Button {
+		background: #007EFF;
+		color: white;
+		padding: 13px 30px;
+		&:hover {
+			background: #007EFF;
+			color: white;
+			padding: 13px 30px;
+		}
+	}
+	.custom-text-field {
+		margin-left: 65px;
+	}
+	input {
+		padding: 8px 10px;
+	}
+	.Polaris-Layout__Section {
+		&:first-child {
+			margin-bottom: 39px;
+		}
+	}
+}
+.faq-sms {
+	h1 {
+		font-size: 18px;
+		font-weight: 600;
+		margin-bottom: 15px;
+	}
+  h2 {
+    font-size: 14px;
+  }
+}
+.sms-tab {
+	.Polaris-Card {
+		margin-bottom: 20px;
+	}
+}
+.tab-section {
+  background-color: white;
+  padding-top:42px;
+  padding-left: 15px;
+  padding-bottom: 50px;
+	.Polaris-Tabs__Wrapper {
+		display: inline-block;
+	}
+
+  button {
+    span {
+      font-size: 16px;
+    }
+  }
+}
+.tabs-btn {
+  margin-bottom: 20px;
+  button {
+    &:first-child {
+      background: #007EFF;
+      color: white;
+      padding: 13px 30px;
+      width: 127px;
+      border: 0;
+      border-radius: 3px !important;
+      &:hover {
+        background: #007EFF;
+        color: white;
+      }
+    }
+    &:nth-child(2) {
+      background: #4D506A;
+      color: white;
+      padding: 13px 30px;
+      width: 114px;
+      margin-left: 14px;
+      border: 0;
+      border-radius: 3px;
+      &:hover {
+        background: #4D506A;
+        color: white;
+      }
+    }
+
+
+  }
+}
+.smarty-sms-number {
+	display: grid;
+	grid-template-columns: 65% auto;
+	p {
+		font-size: 18px;
+		font-weight: 600;
+		margin-bottom: 25px;
+	}
+	label {
+		margin-right: 23px;
+	}
+	span {
+		&:nth-child(1) {
+			color: #6CC56C;
+		}
+	}
+}
+
+.tabs-sms {
+  font-size: 0;
+  // max-width:100%;
+}
+.tabs-sms > input[type="radio"] {
+  display: none;
+}
+.tabs-sms > div {
+  display: none;
+  padding: 10px 15px;
+  font-size: 16px;
+}
+#tab-btn-1:checked ~ #content-1,
+#tab-btn-2:checked ~ #content-2,
+#tab-btn-3:checked ~ #content-3,
+#tab-btn-4:checked ~ #content-4,
+#tab-btn-5:checked ~ #content-5,
+#tab-btn-6:checked ~ #password {
+  display: block;
+}
+
+/********************
+ * Password tab
+ ********************/
+#password .tabs-btn {
+  margin-top: 20px;
+}
+
+.tabs-sms > label {
+  border-radius: 5px 5px 0px 0px;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  background-color: #F5F5F5;
+  border: 1px solid #E0E0E0;
+  padding: 15px 8px;
+  width:113px;
+  font-size: 16px;
+  line-height: 1.5;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+  cursor: pointer;
+  position: relative;
+  top: 1px;
+}
+.tabs-sms > label:not(:first-of-type) {
+  border-left: none;
+}
+.tabs-sms > input[type="radio"]:checked + label {
+  background-color: #fff;
+  border-bottom: 1px solid #fff;
+}
+.tab-parent {
+  display: flex;
+}
+.smarty-card-section {
+  .img-sectoin {
+    background-color: #5C5F62;
+    width: 291px;
+    height: 143px;
+  }
+}
+.back-btn-container{
+  display:flex;
+  flex-direction:row;
+  width:100px;
+  cursor:pointer;
+  > span{
+    margin-left: 0;
+    margin-right: 8px;
+
+    > svg{
+      fill:#007eff;
+    }
+
   }
 }

@@ -12,7 +12,7 @@ module Mutations
         setting = current_shop.setting
         # byebug
         setting.update!(setting_params)
-        
+
         { setting: setting }
       rescue ActiveRecord::RecordInvalid => e
         GraphQL::ExecutionError.new("Invalid attributes for #{e.record.class}:"\

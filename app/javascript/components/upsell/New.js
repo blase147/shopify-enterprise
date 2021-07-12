@@ -8,6 +8,7 @@ import { gql, useMutation, useLazyQuery } from '@apollo/client';
 import offerImg from '../../../assets/images/upsell/offerImage.svg';
 import SearchProduct from './SearchProduct';
 import SearchPlan from './SearchPlan';
+import Preview from './preview';
 
 import {
   Card,
@@ -35,6 +36,9 @@ import {
 
 const NewUpSell = () => {
   const options = [...Array(99).keys()].map((foo) => (foo + 1).toString());
+  const [canceledProducts, setCanceledProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
+  const [updated, setUpdated] = useState(false);
 
   const interOptions = [
     { label: 'Day(s)', value: 'day' },
@@ -116,10 +120,7 @@ const NewUpSell = () => {
         ruleProduct: false,
         ruleProductCondition: '',
         ruleProductValue: '',
-        productOffer: {
-          productId: '',
-          title: '',
-        },
+        productOffer: [],
         productDisplayQuantity: 'true',
         productLimitQuantity: false,
         productQuantityValue: '',
@@ -138,6 +139,7 @@ const NewUpSell = () => {
 
   const [formErrors, setFormErrors] = useState([]);
   const [campaignData, setCampaignData] = useState(null);
+  const [checkboxDisabled, setcheckboxDisabled] = useState(true);
 
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
@@ -212,6 +214,7 @@ const NewUpSell = () => {
           productOffer {
             productId
             title
+            image
           }
           productDisplayQuantity
           productLimitQuantity
@@ -274,6 +277,7 @@ const NewUpSell = () => {
   useEffect(() => {
     if (data) {
       setCampaignData(data.fetchCampaign);
+      setAllProducts(data.fetchCampaign.upsellCampaigns[0].productOffer);
     }
   }, [data]);
 
@@ -301,10 +305,12 @@ const NewUpSell = () => {
               validationSchema={validationSchema}
               initialValues={campaignData || initialValues}
               onSubmit={(values, { setSubmitting }) => {
+                const formData = { ...values };
+                formData.upsellCampaigns[0].productOffer = allProducts;
                 if (id) {
                   updateUpsellCampaign({
                     variables: {
-                      input: { params: values },
+                      input: { params: formData },
                     },
                   })
                     .then((resp) => {
@@ -327,7 +333,7 @@ const NewUpSell = () => {
                 } else {
                   //const variables = formatUpsellCampaignGroup(values);
                   createUpsellCampaign({
-                    variables: { input: { params: values } },
+                    variables: { input: { params: formData } },
                   })
                     .then((resp) => {
                       const data = resp.data;
@@ -364,7 +370,7 @@ const NewUpSell = () => {
                 /* and other goodies */
               }) => (
                 <Form onSubmit={handleSubmit}>
-                  {dirty && (
+                  {(dirty || updated) && (
                     <ContextualSaveBar
                       message="Unsaved changes"
                       saveAction={{
@@ -373,7 +379,16 @@ const NewUpSell = () => {
                         disabled: false,
                       }}
                       discardAction={{
-                        onAction: resetForm,
+                        onAction: () => {
+                          canceledProducts.map(prod => {
+                            allProducts.push(prod)
+                          });
+
+                          setAllProducts(allProducts);
+                          setCanceledProducts(prod => prod = []);
+                          setUpdated(flag => flag = false);
+                          resetForm();
+                        },
                       }}
                     />
                   )}
@@ -407,7 +422,7 @@ const NewUpSell = () => {
                         <TextField
                           value={values.internalName}
                           label="Internal name"
-                          placeholder="Subscription and Save"
+                          placeholder="Subscribe & Save"
                           type="text"
                           error={touched.internalName && errors.internalName}
                           onChange={(e) => setFieldValue('internalName', e)}
@@ -418,13 +433,15 @@ const NewUpSell = () => {
                             </span>
                           }
                         />
-                        <div className={`btn-group ${!dirty && 'hidden'}`}>
+                        <div className={`btn-group ${(!dirty && !updated) && 'hidden'}`}>
                           <ButtonGroup>
                             <Button
                               primary
                               onClick={() =>
-                                setFieldValue('status', 'draft').then(() =>
+                                setFieldValue('status', 'draft').then(() => {
                                   handleSubmit()
+                                  setUpdated(flag => flag = false);
+                                }
                                 )
                               }
                               loading={isSubmitting}
@@ -433,8 +450,10 @@ const NewUpSell = () => {
                             </Button>
                             <Button
                               onClick={() =>
-                                setFieldValue('status', 'publish').then(() =>
+                                setFieldValue('status', 'publish').then(() => {
                                   handleSubmit()
+                                  setUpdated(flag => flag = false);
+                                }
                                 )
                               }
                               loading={isSubmitting}
@@ -444,7 +463,7 @@ const NewUpSell = () => {
                           </ButtonGroup>
                         </div>
                       </FormLayout.Group>
-                      <FormLayout.Group>
+                      {/*<FormLayout.Group>
                         <TextField
                           value={values.selectorTitle}
                           error={touched.selectorTitle && errors.selectorTitle}
@@ -465,7 +484,7 @@ const NewUpSell = () => {
                           error={touched.publicName && errors.publicName}
                           onChange={(e) => setFieldValue('publicName', e)}
                           label="Public name"
-                          placeholder="Subscription and Save"
+                          placeholder="Subscribe & Save"
                           type="text"
                           helpText={
                             <span>
@@ -474,7 +493,7 @@ const NewUpSell = () => {
                             </span>
                           }
                         />
-                      </FormLayout.Group>
+                      </FormLayout.Group>*/}
                     </FormLayout>
                   </Card>
                   {values.upsellCampaigns.map((campaign, index) => (
@@ -491,27 +510,27 @@ const NewUpSell = () => {
                           index == 0
                             ? null
                             : [
-                                {
-                                  content: 'Remove',
-                                  onAction: () => {
-                                    setFieldValue(
-                                      'upsellCampaigns',
-                                      handleRemovingUpsellCampaign(
-                                        values,
-                                        index
-                                      )
-                                    );
-                                  },
+                              {
+                                content: 'Remove',
+                                onAction: () => {
+                                  setFieldValue(
+                                    'upsellCampaigns',
+                                    handleRemovingUpsellCampaign(
+                                      values,
+                                      index
+                                    )
+                                  );
                                 },
-                              ]
+                              },
+                            ]
                         }
                       >
                         <FormLayout>
-                          <FormLayout.Group>
+                          {/*<FormLayout.Group>
                             <TextField
                               value={campaign.name}
                               label="Name"
-                              placeholder="Subscription and Save - delivered every week"
+                              placeholder="Subscribe & Save - delivered every week"
                               type="text"
                               error={
                                 touched.upsellCampaigns?.[index]?.name &&
@@ -578,7 +597,7 @@ const NewUpSell = () => {
                               }
                             />
                             <p> </p>
-                          </FormLayout.Group>
+                          </FormLayout.Group>*/}
                           <TextContainer>
                             <Subheading>DISPLAY RULES</Subheading>
                             <TextStyle variation="subdued">
@@ -621,7 +640,7 @@ const NewUpSell = () => {
                             />
                           </FormLayout.Group>
 
-                          <div className="when-cart">
+                          {/* <div className="when-cart">
                             <Stack>
                               <Checkbox
                                 label="When cart"
@@ -670,7 +689,7 @@ const NewUpSell = () => {
                                 }
                               />
                             </div>
-                          </div>
+                          </div> */}
 
                           <div className="when-cart">
                             <Stack>
@@ -682,11 +701,13 @@ const NewUpSell = () => {
                                     ?.ruleCustomer &&
                                   errors.upsellCampaigns?.[index]?.ruleCustomer
                                 }
-                                onChange={(e) =>
+                                onChange={(e) => {
                                   setFieldValue(
                                     `upsellCampaigns[${index}].ruleCustomer`,
                                     e
-                                  )
+                                  );
+                                  setcheckboxDisabled(checked => checked = !checkboxDisabled);
+                                }
                                 }
                               />
                               <Select
@@ -698,13 +719,15 @@ const NewUpSell = () => {
                                   errors.upsellCampaigns?.[index]
                                     ?.ruleCustomerCondition
                                 }
-                                onChange={(e) =>
+                                onChange={(e) => {
                                   setFieldValue(
                                     `upsellCampaigns[${index}].ruleCustomerCondition`,
                                     e
-                                  )
+                                  );
+                                }
                                 }
                                 options={customerConditionOptions}
+                                disabled={!campaign.ruleCustomer ? true : false}
                               />
                               <p>of the following plans</p>
                             </Stack>
@@ -721,10 +744,11 @@ const NewUpSell = () => {
                                   errors.upsellCampaigns?.[index]
                                     ?.ruleCustomerValue?.sellingPlanId
                                 }
+                                disabled={!campaign.ruleCustomer ? true : false}
                               />
                             </div>
                           </div>
-
+                          {/*
                           <div className="when-order">
                             <Checkbox
                               label="When order value is"
@@ -833,7 +857,7 @@ const NewUpSell = () => {
                                 options={productOptions}
                               />
                             </div>
-                          </div>
+                          </div> */}
 
                           <TextContainer>
                             <Subheading>OFFERS</Subheading>
@@ -845,7 +869,7 @@ const NewUpSell = () => {
 
                           <FormLayout.Group>
                             <p className="card-offer">PRODUCT</p>
-                            <p className="card-offer">CUSTOMIZE</p>
+                            <div></div>
                           </FormLayout.Group>
 
                           <FormLayout.Group>
@@ -854,6 +878,7 @@ const NewUpSell = () => {
                                 value={campaign.productOffer}
                                 setFieldValue={setFieldValue}
                                 fieldName={`upsellCampaigns[${index}].productOffer`}
+                                allProducts={allProducts}
                                 error={
                                   touched.upsellCampaigns?.[index]?.productOffer
                                     ?.productId &&
@@ -862,23 +887,8 @@ const NewUpSell = () => {
                                 }
                               />
                             </div>
-                            <Select
-                              label="Templates"
-                              value={campaign.template}
-                              error={
-                                touched.upsellCampaigns?.[index]?.template &&
-                                errors.upsellCampaigns?.[index]?.template
-                              }
-                              onChange={(e) =>
-                                setFieldValue(
-                                  `upsellCampaigns[${index}].template`,
-                                  e
-                                )
-                              }
-                              options={templateOptions}
-                            />
-                          </FormLayout.Group>
-                          <FormLayout.Group>
+
+
                             <div className="offer-left">
                               <Select
                                 label="Display Quantity ?"
@@ -934,95 +944,63 @@ const NewUpSell = () => {
                               />
                               <div></div>
                             </div>
+                          </FormLayout.Group>
 
-                            <div className="offer-right">
-                              <div className="offer-right-select">
-                                <Select
-                                  label="Offer title"
-                                  value={campaign.showOfferTitle}
-                                  error={
-                                    touched.upsellCampaigns?.[index]
-                                      ?.showOfferTitle &&
-                                    errors.upsellCampaigns?.[index]
-                                      ?.showOfferTitle
-                                  }
-                                  onChange={(e) =>
-                                    setFieldValue(
-                                      `upsellCampaigns[${index}].showOfferTitle`,
-                                      e
-                                    )
-                                  }
-                                  options={showOptions}
-                                />
-                              </div>
-                              <div className="offer-right-textfield">
-                                <TextField
-                                  label="  "
-                                  placeholder="Wait, there’s an offer for you!"
-                                  value={campaign.offerTitle}
-                                  type="text"
-                                  error={
-                                    touched.upsellCampaigns?.[index]
-                                      ?.offerTitle &&
-                                    errors.upsellCampaigns?.[index]?.offerTitle
-                                  }
-                                  onChange={(e) =>
-                                    setFieldValue(
-                                      `upsellCampaigns[${index}].offerTitle`,
-                                      e
-                                    )
-                                  }
-                                ></TextField>
-                              </div>
-                            </div>
-                          </FormLayout.Group>
                           <FormLayout.Group>
+                            <p className="card-offer">CUSTOMIZE</p>
                             <div></div>
-                            <div className="offer-right">
-                              <div className="offer-right-select">
-                                <Select
-                                  label="Timer"
-                                  value={campaign.showTimer}
-                                  error={
-                                    touched.upsellCampaigns?.[index]
-                                      ?.showTimer &&
-                                    errors.upsellCampaigns?.[index]?.showTimer
-                                  }
-                                  onChange={(e) =>
-                                    setFieldValue(
-                                      `upsellCampaigns[${index}].showTimer`,
-                                      String(e)
-                                    )
-                                  }
-                                  options={showOptions}
-                                />
-                              </div>
-                              <div className="offer-right-textfield">
-                                <TextField
-                                  label="Background Color"
-                                  placeholder="#00000"
-                                  value={campaign.backgroundColor}
-                                  type="text"
-                                  error={
-                                    touched.upsellCampaigns?.[index]
-                                      ?.backgroundColor &&
-                                    errors.upsellCampaigns?.[index]
-                                      ?.backgroundColor
-                                  }
-                                  onChange={(e) =>
-                                    setFieldValue(
-                                      `upsellCampaigns[${index}].backgroundColor`,
-                                      e
-                                    )
-                                  }
-                                ></TextField>
-                              </div>
-                            </div>
                           </FormLayout.Group>
+
                           <FormLayout.Group>
                             <div></div>
                             <TextContainer>
-                              <Heading>Buttons</Heading>
+                              <Heading>Button</Heading>
+                            </TextContainer>
+                          </FormLayout.Group>
+                          <FormLayout.Group>
+                            <TextContainer>
+                              <div className="offer-right">
+                                <div className="offer-right-select">
+                                  <Select
+                                    label="Offer title"
+                                    value={campaign.showOfferTitle}
+                                    error={
+                                      touched.upsellCampaigns?.[index]
+                                        ?.showOfferTitle &&
+                                      errors.upsellCampaigns?.[index]
+                                        ?.showOfferTitle
+                                    }
+                                    onChange={(e) =>
+                                      setFieldValue(
+                                        `upsellCampaigns[${index}].showOfferTitle`,
+                                        e
+                                      )
+                                    }
+                                    options={showOptions}
+                                  />
+                                </div>
+                                <div className="offer-right-textfield">
+                                  <TextField
+                                    label="  "
+                                    placeholder="Wait, there’s an offer for you!"
+                                    value={campaign.offerTitle}
+                                    type="text"
+                                    error={
+                                      touched.upsellCampaigns?.[index]
+                                        ?.offerTitle &&
+                                      errors.upsellCampaigns?.[index]?.offerTitle
+                                    }
+                                    onChange={(e) =>
+                                      setFieldValue(
+                                        `upsellCampaigns[${index}].offerTitle`,
+                                        e
+                                      )
+                                    }
+                                  ></TextField>
+                                </div>
+                              </div>
+                            </TextContainer>
+                            <TextContainer>
                               <div className="offer-right">
                                 <div className="offer-right-select">
                                   <Select
@@ -1066,37 +1044,24 @@ const NewUpSell = () => {
                               </div>
                             </TextContainer>
                           </FormLayout.Group>
-                          <FormLayout.Group>
-                            <div></div>
-                            <div className="decline">
-                              <TextField
-                                label="Button Text (Decline Offer)"
-                                placeholder="No thanks"
-                                value={campaign.buttonTextDecline}
-                                type="text"
-                                error={
-                                  touched.upsellCampaigns?.[index]
-                                    ?.buttonTextDecline &&
-                                  errors.upsellCampaigns?.[index]
-                                    ?.buttonTextDecline
-                                }
-                                onChange={(e) =>
-                                  setFieldValue(
-                                    `upsellCampaigns[${index}].buttonTextDecline`,
-                                    e
-                                  )
-                                }
-                              ></TextField>
-                            </div>
-                          </FormLayout.Group>
                         </FormLayout>
+                        <Preview
+                          allProducts={allProducts}
+                          setAllProducts={setAllProducts}
+                          showOfferTitle={campaign.showOfferTitle}
+                          offerTitle={campaign.offerTitle}
+                          buttonText={campaign.buttonTextAccept}
+                          setUpdated={setUpdated}
+                          canceledProducts={canceledProducts}
+                          setCanceledProducts={setCanceledProducts}
+                        />
                       </Card>
                     </div>
                   ))}
 
                   <br />
                   <div className="addUpsellCampaigns">
-                    <Button
+                    {/* <Button
                       plain
                       onClick={() =>
                         setFieldValue(
@@ -1106,7 +1071,7 @@ const NewUpSell = () => {
                       }
                     >
                       Add upsell campaign
-                    </Button>
+                    </Button> */}
                   </div>
                 </Form>
               )}

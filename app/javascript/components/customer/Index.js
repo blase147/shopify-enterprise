@@ -1,59 +1,35 @@
-import {
-  ApolloClient,
-  ApolloProvider,
-  HttpLink,
-  InMemoryCache,
-} from '@apollo/client';
-import { Link, useHistory } from 'react-router-dom';
-import { CSVLink } from 'react-csv';
-import Papa from 'papaparse';
-import {
-  Layout,
-  Card,
-  Button,
-  ResourceList,
-  Stack,
-  TextStyle,
-  Thumbnail,
-  DataTable,
-  Page,
-  ButtonGroup,
-  Select,
-  Tabs,
-  Autocomplete,
-  Icon,
-  Badge,
-  Filters,
-  TextField,
-  RangeSlider,
-  FormLayout,
-  Spinner,
-  ChoiceList,
-  Checkbox,
-  Modal,
-  DropZone,
-  Caption,
-  Banner,
-  Toast,
-  List,
-  Frame,
-} from '@shopify/polaris';
-import { NoteMinor } from '@shopify/polaris-icons';
-
-import { authenticatedFetch } from '@shopify/app-bridge-utils';
 import { gql, useMutation, useQuery } from '@apollo/client';
-
-import React, { useState, useCallback, useEffect } from 'react';
-import AppLayout from '../layout/Layout';
-import { SearchMajor, DeleteMajor } from '@shopify/polaris-icons';
+import {
+  Badge,
+  Banner, Button,
+  ButtonGroup,
+  Caption, Card,
+  Checkbox, ChoiceList, DataTable,
+  DropZone, Filters,
+  Frame, List, Modal, Page,
+  Spinner, Stack,
+  Tabs, Thumbnail,
+  Toast
+} from '@shopify/polaris';
+import { DeleteMajor, NoteMinor } from '@shopify/polaris-icons';
+import Papa from 'papaparse';
+import React, { useCallback, useEffect, useState } from 'react';
+import { CSVLink } from 'react-csv';
+import { useHistory } from 'react-router-dom';
 import swapIcon from '../../../assets/images/icons/swap.svg';
+import AppLayout from '../layout/Layout';
+
+
 // import json2csv from 'json2csv';
-const subscriptions = ['all', 'inTrial', 'future', 'active', 'cancelled'];
+const subscriptions = ['all', 'new', 'returning', 'active', 'cancelled'];
 
 const {
   Parser,
   transforms: { unwind },
 } = require('json2csv');
+
+// let sortOrder = 0;
+
 
 const ButtonRemove = (props) => {
   const { selectedCustomers, refetch, setselectedCustomers } = props;
@@ -126,10 +102,12 @@ const Customers = () => {
     },
     {
       id: 'expired',
-      content: 'Expired',
+      content: 'Canceled',
     },
   ];
   // End tabs
+
+  const [sortOrder,setSortOrder]=useState(0);
 
   const [moneySpent, setMoneySpent] = useState(null);
   const [taggedWith, setTaggedWith] = useState(null);
@@ -173,7 +151,7 @@ const Customers = () => {
           ]}
           selected={taggedWith || []}
           onChange={handleTaggedWithChange}
-          // allowMultiple
+        // allowMultiple
         />
       ),
       shortcut: true,
@@ -235,10 +213,11 @@ const Customers = () => {
   }
   // -------------------
   const GET_CUSTOMERS = gql`
-    query {
-      fetchCustomers {
+    query($sortColumn: String, $sortDirection: String) {
+      fetchCustomers(sortColumn: $sortColumn, sortDirection: $sortDirection) {
         id
         shopifyId
+        shopDomain
         firstName
         lastName
         name
@@ -301,40 +280,42 @@ const Customers = () => {
   };
   //each row in data table
   const formatRows = (rows) => {
-    return rows?.map((row) => [
-      <Checkbox
-        label={row.id}
-        checked={selectedCustomers.indexOf(row.id) != -1}
-        onChange={(newChecked) =>
-          handleChangeCheckedCustomers(newChecked, row.id)
-        }
-      />,
-      <a
-        href={`/subscriptions/${row.shopifyId}`}
-        key={row.id}
-      >{`${row.firstName} ${row.lastName}`}</a>,
-      row.createdAt,
-      <div
-        className={
-          row.status === 'PAUSED'
-            ? 'cancelled'
-            : row.status === 'ACTIVE'
-            ? 'active'
-            : 'future'
-        }
-      >
-        <Badge>{capitalize(row.status)}</Badge>
-      </div>,
-      <div className='subscription'>{row.subscription}</div>,
-      <div>
-        <p className="more">
-          {row.communication}
-        </p>
-        <p>
-          <span className="price">{row.language}</span>
-        </p>
-      </div>,
-    ]);
+    return rows?.map((row) =>
+      row?.subscription !== null ?
+        [
+          <Checkbox
+            label={row.id}
+            checked={selectedCustomers.indexOf(row.id) != -1}
+            onChange={(newChecked) =>
+              handleChangeCheckedCustomers(newChecked, row.id)
+            }
+          />,
+          <a
+            href={`/subscriptions/${row.shopifyId}?shop=${row.shopDomain}`}
+            key={row.id}
+          >{`${row.firstName} ${row.lastName}`}</a>,
+          row.createdAt,
+          <div
+            className={
+              row.status === 'PAUSED'
+                ? 'cancelled'
+                : row.status === 'ACTIVE'
+                  ? 'active'
+                  : 'future'
+            }
+          >
+            <Badge>{capitalize(row.status)}</Badge>
+          </div>,
+          <div className='subscription'>{row.subscription}</div>,
+          <div>
+            <p className="more">
+              {row.communication}
+            </p>
+            <p>
+              <span className="price">{row.language}</span>
+            </p>
+          </div>
+        ] : []);
   };
   const [customers, setCustomers] = useState([]);
   const [filterCustomers, setFilterCustomers] = useState([]);
@@ -343,7 +324,7 @@ const Customers = () => {
     const rowsData = customers.filter((item) => {
       return (
         (item.subscription === subscriptions[selectedTab] ||
-          subscriptions[selectedTab] === 'all') &&
+          (subscriptions[selectedTab] === 'all') || (subscriptions[selectedTab] === 'returning') || (subscriptions[selectedTab] === 'active') || (subscriptions[selectedTab] === 'cancelled') || (subscriptions[selectedTab] === 'new')) &&
         (item.name?.toLowerCase()?.includes(queryValue?.toLowerCase()) ||
           !queryValue) &&
         (item.subscription?.toLowerCase()?.includes(taggedWith) || !taggedWith)
@@ -357,11 +338,11 @@ const Customers = () => {
       filterCustomersValue();
     }
     // console.log('searchvalue: ', queryValue);
-  }, [queryValue, taggedWith, customers, selectedTab]);
+  }, [queryValue, taggedWith, customers]);
 
-  useEffect(() => {
-    filterCustomersValue();
-  }, [selectedCustomers]);
+  // useEffect(() => {
+  //   filterCustomersValue();
+  // }, [selectedCustomers]);
 
   useEffect(() => {
     if (data && data.fetchCustomers) {
@@ -527,14 +508,14 @@ const Customers = () => {
             item[11] === ''
               ? []
               : [
-                  {
-                    email: item[11],
-                    firstName: item[12],
-                    lastName: item[13],
-                    companyName: item[14],
-                    phone: item[15],
-                  },
-                ],
+                {
+                  email: item[11],
+                  firstName: item[12],
+                  lastName: item[13],
+                  companyName: item[14],
+                  phone: item[15],
+                },
+              ],
           billingAddress: {
             firstName: item[16],
             lastName: item[17],
@@ -579,6 +560,38 @@ const Customers = () => {
   `;
   const [createCustomer] = useMutation(CREATE_CUSTOMER);
 
+  const isToday = (someDate) => {
+    const today = new Date()
+    return someDate.getDate() == today.getDate() &&
+      someDate.getMonth() == today.getMonth() &&
+      someDate.getFullYear() == today.getFullYear()
+  }
+
+  let activeArr = [],
+    newArr = [],
+    pausedArr = [],
+    cancelledArr = [];
+  if (selectedTab == 1 && filterCustomers.length !== 0) {
+    filterCustomers?.map(res => {
+      if (res.createdAt !== null && (new Date(Date.parse(res.createdAt)).toDateString()) === new Date(new Date().getTime()).toDateString()) {
+        newArr.push(res);
+      }
+    });
+  } else if (selectedTab == 2 && filterCustomers.length !== 0) {
+    filterCustomers?.map(res => {
+      res.status == 'PAUSED' && pausedArr.push(res);
+    });
+  } else if (selectedTab == 3 && filterCustomers.length !== 0) {
+    filterCustomers?.map(res => {
+      res.status == 'ACTIVE' && activeArr.push(res);
+    });
+  } else if (selectedTab == 4 && filterCustomers.length !== 0) {
+    filterCustomers?.map(res => {
+      res.status == 'CANCELLED' && cancelledArr.push(res);
+    });
+  }
+
+
   return (
     <AppLayout typePage="customers" tabIndex="2">
       <Frame>
@@ -605,7 +618,7 @@ const Customers = () => {
           title="Customer Subscriptions"
           primaryAction={
             <ButtonGroup>
-              <Button onClick={() => {}}>
+              <Button onClick={() => { }}>
                 {dataSelected.length > 0 ? (
                   <CSVLink
                     data={json2csvParser.parse(dataSelected)}
@@ -617,7 +630,7 @@ const Customers = () => {
                   'Export'
                 )}
               </Button>
-              <Button
+              {/*<Button
                 onClick={() => {
                   toggleActive();
                   setFile();
@@ -636,7 +649,7 @@ const Customers = () => {
               </div>
               <Button primary onClick={() => history.push('/customers/new')}>
                 Add Customer
-              </Button>
+              </Button>*/}
             </ButtonGroup>
           }
         >
@@ -663,12 +676,20 @@ const Customers = () => {
                   <Button
                     onClick={() => {
                       setFilterCustomers(() => {
-                        return [...filterCustomers].sort(
-                          (a, b) =>
-                            Date.parse(b.updatedAt) - Date.parse(a.updatedAt)
-                        );
+                        if (sortOrder === 1) {
+                          setSortOrder(0);
+                          return [...filterCustomers].sort(
+                            (a, b) =>
+                              new Date(b.updatedAt) - new Date(a.updatedAt)
+                          );
+                        } else {
+                          setSortOrder(1);
+                          return [...filterCustomers].sort(
+                            (a, b) =>
+                              new Date(a.updatedAt) - new Date(b.updatedAt)
+                          );
+                        }
                       });
-                      // console.log('filterCustomers--after', filterCustomers);
                     }}
                   >
                     <img src={swapIcon} />
@@ -676,7 +697,7 @@ const Customers = () => {
                   </Button>
                 </div>
               </div>
-              <div className="table">
+              <div className={"table customer-subscription-tbl" + " " + selectedTab}>
                 <DataTable
                   columnContentTypes={[
                     'text',
@@ -693,7 +714,7 @@ const Customers = () => {
                     'Product',
                     '',
                   ]}
-                  rows={formatRows(filterCustomers)}
+                  rows={selectedTab == 1 ? formatRows(newArr) : selectedTab == 2 ? formatRows(pausedArr) : selectedTab == 3 ? formatRows(activeArr) : selectedTab == 4 ? formatRows(cancelledArr) : formatRows(filterCustomers)}
                 />
               </div>
               {loading && (

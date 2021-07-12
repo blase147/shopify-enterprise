@@ -1,3 +1,4 @@
+
 # frozen_string_literal: true
 class Shop < ActiveRecord::Base
   include ShopifyApp::ShopSessionStorage
@@ -6,11 +7,36 @@ class Shop < ActiveRecord::Base
     ShopifyApp.configuration.api_version
   end
 
-  has_many :selling_plan_groups
-  has_one :setting
-  has_many :customers
-  
-  has_many :upsell_campaign_groups
+  has_many :selling_plan_groups, dependent: :destroy
+  has_one :setting, dependent: :destroy
+  has_many :customers, dependent: :destroy
+  has_many :smarty_cancellation_reasons, dependent: :destroy
+  has_many :custom_keywords, dependent: :destroy
+  has_one :sms_setting, dependent: :destroy
+  has_many :smarty_messages, dependent: :destroy
+  has_many :smarty_variables, dependent: :destroy
+  # has_many :sms_logs, dependent: :destroy
+  has_many :subscription_logs, dependent: :destroy
+
+  has_many :upsell_campaign_groups, dependent: :destroy
+  has_many :integrations, dependent: :destroy
+  has_one :lock_password
+  has_one :translation, dependent: :destroy
+  after_create :build_setting
+  after_create :setup_default_lock_password
+  after_create :populate_store_data
+  after_create :set_recurring_charge_id
+  after_save :email_confirmation_link, if: -> { saved_change_to_charge_confirmation_link? }
+
+  def setup_default_lock_password
+    LockPassword.create(password: ENV['DEFAULT_LOCK_PASSWORD'], shop_id: id)
+  end
+
+  def build_setting
+    Setting.find_or_create_by(shop_id: id)
+    SmsSetting.find_or_create_by(shop_id: id)
+    Translation.find_or_create_by(shop_id: id)
+  end
 
   def api_version
     ShopifyApp.configuration.api_version
@@ -29,11 +55,7 @@ class Shop < ActiveRecord::Base
   def sync_contracts
     self.connect
 
-    self.customers.each do |cus|
-      cus.update_columns shopify_id: cus.shopify_id[/\d+/]
-    end
-
-    items = SubscriptionContractsService.new.run
+    items = SubscriptionContractsService.new.all_subscriptions
     items[:subscriptions].each do |item|
       billing_policy = item.node.billing_policy
 
@@ -42,12 +64,37 @@ class Shop < ActiveRecord::Base
         first_name: item.node.customer.first_name,
         last_name: item.node.customer.last_name,
         email: item.node.customer.email,
+        phone: item.node.customer.phone,
         shopify_at: item.node.created_at.to_date,
+        shopify_updated_at: item.node.updated_at&.to_date,
         status: item.node.status,
-        subscription: item.node.lines.edges.first.node.title,
-        language: "$#{item.node.lines.edges.first.node.current_price.amount} / #{billing_policy.interval.pluralize}",
-        communication: "#{billing_policy.interval_count} #{billing_policy.interval} Pack".titleize
+        subscription: item.node.lines.edges.first&.node&.title,
+        language: "$#{item.node.lines.edges.first&.node&.current_price&.amount} / #{billing_policy.interval.pluralize}",
+        communication: "#{billing_policy.interval_count} #{billing_policy.interval} Pack".titleize,
+        shopify_customer_id: item.node.customer.id[/\d+/]
       )
     end
+  end
+
+  def populate_store_data
+    PopulateShopData.new(self).populate_data
+  end
+
+  def email_integration_service
+    name = setting.email_service
+    if name.present? && integrations.marketing.email.where(name: name).exists?
+      integrations.marketing.email.where(name: name).last
+    else
+      integrations.marketing.email.where(default: true).last
+    end
+  end
+
+  def set_recurring_charge_id
+    StoreChargeService.new(self).create_recurring_charge if ENV['APP_TYPE'] == 'public'
+  end
+
+  def email_confirmation_link
+    email_notification = setting.email_notifications.find_by_name('Store Charge Confirmation')
+    EmailService::Send.new(email_notification).send_email({ confirmation_url: charge_confirmation_link }) if email_notification.present? && ENV['APP_TYPE'] == 'public'
   end
 end

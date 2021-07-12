@@ -17,5 +17,20 @@ module Types
     field :add_campaign, mutation: Mutations::AddUpsellCampaignGroup
     field :update_campaign, mutation: Mutations::UpdateUpsellCampaignGroup
     field :delete_campaigns, mutation: Mutations::DeleteUpsellCampaignGroups
+    field :add_smarty_cancellation, mutation: Mutations::AddSmartyCancellation
+    field :update_smarty_cancellation, mutation: Mutations::UpdateSmartyCancellation
+    field :delete_smarty_cancellation, mutation: Mutations::DeleteSmartyCancellation
+
+    field :add_custom_keyword, mutation: Mutations::AddCustomKeyword
+    field :update_custom_keyword, mutation: Mutations::UpdateCustomKeyword
+    field :delete_custom_keyword, mutation: Mutations::DeleteCustomKeyword
+
+    field :update_sms_setting, mutation: Mutations::UpdateSmsSetting
+    field :update_smarty_message, mutation: Mutations::UpdateSmartyMessage
+    field :delete_smarty_message, mutation: Mutations::DeleteSmartyMessage
+    field :update_password, mutation: Mutations::UpdatePassword
+
+    field :update_integration, mutation: Mutations::UpdateIntegration
+    field :update_translation, mutation: Mutations::UpdateTranslation
   end
 end

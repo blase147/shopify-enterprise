@@ -23,7 +23,7 @@ module Types
     field :rule_product_condition, String, null: true
     field :rule_product_value, String, null: true
 
-    field :product_offer, Types::ProductType, null: true
+    field :product_offer, [Types::ProductType], null: true
     field :product_display_quantity, String, null: true
     field :product_limit_quantity, GraphQL::Types::Boolean, null: true
     field :product_quantity_value, String, null: true

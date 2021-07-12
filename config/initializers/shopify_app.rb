@@ -1,5 +1,5 @@
 ShopifyApp.configure do |config|
-  config.application_name = "Hotel Collection"
+  config.application_name = ENV["SHOPIFY_APP_NAME"]
 
   config.api_key = ENV['SHOPIFY_API_KEY']
   config.secret = ENV['SHOPIFY_API_SECRET']
@@ -8,9 +8,12 @@ ShopifyApp.configure do |config|
                                  # https://help.shopify.com/en/api/getting-started/authentication/oauth/scopes
   config.embedded_app = true
   config.after_authenticate_job = false
-  config.api_version = "2021-01"
+  config.api_version = "2021-07"
   config.shop_session_repository = 'Shop'
   config.allow_jwt_authentication = true
+  config.webhooks = [
+    { topic: 'app/uninstalled', address: "#{ENV['HOST']}shopify_webhooks/app_uninstalled" }
+  ]
 end
 
 # ShopifyApp::Utils.fetch_known_api_versions                        # Uncomment to fetch known api versions from shopify servers on boot

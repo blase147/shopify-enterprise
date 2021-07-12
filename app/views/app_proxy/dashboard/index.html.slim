@@ -2,148 +2,44 @@
   div
     #AppFrameNav
       = render 'app_proxy/shared/dashboard_nav'
-      
-  - if @subscription_contracts.empty?               
-    .Polaris-Frame__ContextualSaveBar.Polaris-Frame-CSSAnimation--startFade
-    main#AppFrameMain.Polaris-Frame__Main data-has-global-ribbon="false"
-      a#AppFrameMainContent tabindex="-1"
-      .Polaris-Frame__Content
-        .Polaris-Page
-          .Polaris-Page-Header.Polaris-Page-Header--isSingleRow.Polaris-Page-Header--noBreadcrumbs.Polaris-Page-Header--mediumTitle
-            .Polaris-Page-Header__MainContent
-              .Polaris-Page-Header__TitleActionMenuWrapper
-                .Polaris-Page-Header__TitleWrapper
-                  div
-                    .Polaris-Header-Title__TitleAndSubtitleWrapper
-                      .Polaris-Header-Title
-                        h1.Polaris-DisplayText.Polaris-DisplayText--sizeLarge
-                          span.Polaris-TextStyle--variationStrong Account Overview
-                        .Polaris-Layout__AnnotationDescription
-                          p Summary of your account
 
-          .Polaris-Page__Content.mt-30
-            .Polaris-Layout
-              .Polaris-Layout__AnnotatedSection
-                .Polaris-Layout__AnnotationWrapper
-                  .Polaris-Layout__AnnotationContent
-                    .Polaris-Card
-                      .Polaris-Banner.Polaris-Banner--withinContentContainer
-                        .Polaris-Banner__Ribbon
-                          span.Polaris-Icon
-                            = icon_tag 'info' 
-                        .Polaris-Banner__ContentWrapper
-                          #PolarisBanner8Heading.Polaris-Banner__Heading
-                            p Orders are typically delivered within 5-7 business days. In some cases deliveries may take longer due to extra safety precautions in our fulfillment center and carrier transportation delays.
-                            p If you need your subscription delivered by a specific date, we suggest adjusting your processing date accordingly
-                    
-                    .Polaris-Card
-                      .Polaris-Banner.Polaris-Banner--withinContentContainer
-                        .Polaris-Banner__Ribbon
-                          span.Polaris-Icon
-                            = icon_tag 'info' 
-                        .Polaris-Banner__ContentWrapper
-                          #PolarisBanner8Heading.Polaris-Banner__Heading
-                            p.Polaris-Heading You have no upcoming deliveries
-                    .Polaris-Card
-                      .Polaris-Banner.Polaris-Banner--withinContentContainer
-                        .Polaris-Banner__Ribbon
-                          span.Polaris-Icon
-                            = icon_tag 'info' 
-                        .Polaris-Banner__ContentWrapper
-
-                          #PolarisBanner8Heading.Polaris-Banner__Heading
-                            p.Polaris-Heading Your Subscriptions
-                          #PolarisBanner8Content.Polaris-Banner__Content
-                            p Within your subscriptions you can easily edit your flavours, change the delivery date, pause or even cancel your subscription
-                            .Polaris-Banner__Actions
-                              .Polaris-ButtonGroup
-                                .Polaris-ButtonGroup__Item
-                                  .Polaris-Banner__PrimaryAction
-                                    button.Polaris-Button.Polaris-Button--outline type="button"
-                                      span.Polaris-Button__Content
-                                        span.Polaris-Button__Text No active subscription found
-                                .Polaris-ButtonGroup__Item
-                                  .Polaris-Banner__PrimaryAction
-                                    button.Polaris-Button.Polaris-Button--primary type="button"
-                                      span.Polaris-Button__Content
-                                        span.Polaris-Button__Text Subcribe Now
-                    .Polaris-Card
-                      .Polaris-Card__Header
-                        .Polaris-Stack.Polaris-Stack--alignmentBaseline
-                          .Polaris-Stack__Item.Polaris-Stack__Item--fill
-                            h2.Polaris-Heading Refer-a-friend & Save
-                          .Polaris-Stack__Item
-                            .Polaris-ButtonGroup
-                              .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                                button.Polaris-Button.Polaris-Button--primary type="button"
-                                  span.Polaris-Button__Content
-                                    span.Polaris-Button__Text Subcription Guide
-                      .Polaris-Card__Section
-
+  - if @subscription_contracts.empty?
+    div.content-wrapper
+      div
+        p.Polaris-DisplayText.Polaris-DisplayText--sizeMedium YOUR SUBSCRIPTION
+      div.notification-banner
+        p.Polaris-Heading #{@translation.home_tab_no_subscriptions_found.present? ? @translation.home_tab_no_subscriptions_found : 'No subscription have been found for your account'}
   - else
-    .Polaris-Frame__ContextualSaveBar.Polaris-Frame-CSSAnimation--startFade
-    main#AppFrameMain.Polaris-Frame__Main data-has-global-ribbon="false"
-      a#AppFrameMainContent tabindex="-1"
-      .Polaris-Frame__Content
-        .Polaris-Page
-          .Polaris-Page-Header.Polaris-Page-Header--isSingleRow.Polaris-Page-Header--noBreadcrumbs.Polaris-Page-Header--mediumTitle
-            .Polaris-Page-Header__MainContent
-              .Polaris-Page-Header__TitleActionMenuWrapper
-                .Polaris-Page-Header__TitleWrapper
-                  div
-                    .Polaris-Header-Title__TitleAndSubtitleWrapper
-                      .Polaris-Header-Title
-                        h1.Polaris-DisplayText.Polaris-DisplayText--sizeLarge
-                          span.Polaris-TextStyle--variationStrong Account Overview
-                        .Polaris-Layout__AnnotationDescription
-                          p Summary of your account
+    div.content-wrapper
+      - if !params[:status].present? || (params[:status].present? && params[:status] == 'active')
+        div.display-text
+          p
+            - if @translation.home_tab_active_subscriptions.present?
+              span #{@translation.home_tab_active_subscriptions}
+            - else
+              span MY &nbsp;
+              span.active ACTIVE &nbsp;
+              span #{@subscription_contracts.count > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION'}
+          a.add_weekly_box.promo-tag-I href="#"
+            span #{@setting.promo_tagline1_content.present? ? @setting.promo_tagline1_content : 'Add one more weekly box'}
+            svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg"
+              path d=("M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z") fill="black" /
+        = render partial: 'active_subscriptions'
+      - if !params[:status].present? || (params[:status].present? && params[:status] == 'cancelled')
+        div.display-text.cancel-text
+          p
+            - if @translation.cancelled_tab_cancelled_subscriptions.present?
+              span #{@translation.cancelled_tab_cancelled_subscriptions}
+            - else
+              span MY &nbsp;
+              span.canceled CANCELLED &nbsp;
+              span #{(@cancelled_subscriptions.count + @cancelled_line_items.count) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION'}
+        = render partial: 'cancelled_subscriptions'
 
-          .Polaris-Page__Content.mt-30
-            .Polaris-Layout
-              .Polaris-Layout__AnnotatedSection
-                .Polaris-Layout__AnnotationWrapper
-                  .Polaris-Layout__AnnotationContent
-                    .Polaris-Card.active
-                      .Polaris-Banner.Polaris-Banner--withinContentContainer
-                        .Polaris-Banner__Ribbon
-                          span.Polaris-Icon.round-icon
-                            = icon_tag 'package' 
-                        .Polaris-Banner__ContentWrapper
-                          #PolarisBanner8Heading.Polaris-Banner__Heading
-                            p We have your order. Your Order will be dispatched shortly
-                    .Polaris-Card
-                      .Polaris-Banner.Polaris-Banner--withinContentContainer
-                        .Polaris-Banner__ContentWrapper
-                            #PolarisBanner8Heading.Polaris-Banner__Heading
-                              h2 Your Subscriptions
-                              br/
-                              - @subscription_contracts.each do |subscription|
-                                - product_id = subscription.lines.edges.first.node.product_id[/\d+/]
-                                - price = subscription.lines.edges.first.node.current_price.amount
-                                - product = ShopifyAPI::Product.find(product_id)
-                                - billing_policy = subscription.billing_policy
-
-                                .Polaris-MediaCard
-                                  .Polaris-MediaCard__MediaContainer
-                                    - if product.images.first.present?
-                                      img alt="" height="100%" src=product.images.first&.src style=("object-fit: cover; object-position: center center;") width="100%" /
-                                  .Polaris-MediaCard__InfoContainer
-                                    .Polaris-Card__Section
-                                      .Polaris-Stack.Polaris-Stack--vertical.Polaris-Stack--spacingTight
-                                        .Polaris-Stack__Item
-                                          .Polaris-Stack
-                                            .Polaris-Stack__Item.Polaris-Stack__Item--fill
-                                              h2.Polaris-Heading
-                                                = "#{product.title} (#{subscription.lines.edges.first.node.quantity} pack)"
-                                            .Polaris-Stack__Item
-                                              h2.Polaris-Heading= number_to_currency price
-
-                                          .Polaris-Stack
-                                            .Polaris-Stack__Item.Polaris-Stack__Item--fill
-                                              p
-                                                b Delivery Every:&nbsp;
-                                                = "#{billing_policy.interval_count} #{billing_policy.interval}".titleize
-                                            .Polaris-Stack__Item
-                                              p
-                                                b Delivery Date:&nbsp;
-                                                =  DateTime.parse(subscription.next_billing_date).strftime("%a, %B %e")
+javascript:
+  $('.owl-carousel').owlCarousel(
+    {
+      dots: true,
+      margin: 30
+    }
+  );

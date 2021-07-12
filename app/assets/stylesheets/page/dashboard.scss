@@ -1,7 +1,7 @@
 .module-Dashboard {
   .Polaris-Button {
     font-weight: bold;
-    border-radius: 10px;
+    // border-radius: 10px;
 
     .Polaris-Button__Text{
       color: #007EFF;
@@ -56,4 +56,178 @@
     align-items: center;
     display: flex;
   }
+}
+
+.filter-parent {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.export-filter-parent *{
+margin: 20px !important;
+}
+.rev-date-picker {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  > div {
+    width: 100%;
+  }
+  .analytics-btn-group {
+    display: flex;
+    > button {
+      margin-left: 50px;
+      padding: 10px 50px;
+    }
+  }
+}
+
+//////////// Dashboard feed Design..../////@at-root
+.feeds-container{
+  .Polaris-Popover__Pane.Polaris-Scrollable.Polaris-Scrollable--vertical.Polaris-Scrollable--hasBottomShadow.Polaris-Scrollable--verticalHasScrolling {
+    overflow: hidden !important;
+}
+}
+.popover-wrapper {
+	margin: 20px;
+}
+.notification-wrapper {
+	.Polaris-Card {
+		margin-top: 20px;
+		min-height: 80px;
+		max-height: auto;
+		padding: 10px 0px;
+	}
+}
+.content-notification-wrapper {
+	position: relative;
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+.content-color-blue {
+	background-color: #007EFF;
+	width: 10px;
+	top: 0px;
+	min-height: 70px;
+	position: absolute;
+}
+.content-color-red {
+	background-color: #D62839;
+	width: 10px;
+	top: 0px;
+	min-height: 70px;
+	position: absolute;
+}
+.content-color-green {
+	background-color: #61C9A8;
+	width: 10px;
+	top: 0px;
+	min-height: 70px;
+	position: absolute;
+}
+.price-content {
+	font-family: Avenir LT Std;
+	font-style: normal;
+	font-weight: 900;
+	font-size: 24px;
+	line-height: 24px;
+	padding-left: 15px;
+}
+.price-green {
+	color: #61C9A8;
+}
+.price-red {
+	color: #D62839;
+}
+.price-blue {
+	color: #007EFF;
+}
+.time-content {
+	font-style: italic;
+	font-weight: 350;
+	font-size: 14px;
+	line-height: 14px;
+	padding: 0px 10px 0px 15px;
+	color: #5C5F62;
+}
+.main-content {
+	margin: 0px 20px;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	white-space: pre;
+	.main-2 {
+		padding: 10px 0px;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+}
+.status {
+	width: 104px;
+	padding: 5px;
+	text-align: center;
+}
+.red {
+	background: #D62839;
+	color: white;
+}
+.green {
+	background: #61C9A8;
+	color: white;
+}
+.blue {
+	background: #007EFF;
+	color: white;
+}
+.icon-wrapper {
+	margin-left: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	>span {
+		margin: 0px 15px;
+	}
+}
+.conent-inner-wrapper {
+	display: flex;
+	align-items: flex-start;
+}
+.span-text {
+	white-space: nowrap;
+}
+@media only screen and (max-width: 597px) {
+	.content-color-green {
+		min-height: 100px;
+	}
+	.content-color-red {
+		min-height: 100px;
+	}
+	.content-color-blue {
+		min-height: 100px;
+	}
+}
+@media (min-width: 597px) and (max-width: 670px) {
+	.content-color-green {
+		min-height: 90px;
+	}
+	.content-color-red {
+		min-height: 90px;
+	}
+	.content-color-blue {
+		min-height: 90px;
+	}
+	.price-content {
+		padding-right: 10px;
+	}
+}
+
+.Polaris-Popover__Pane.Polaris-Scrollable.Polaris-Scrollable--vertical {
+  overflow: hidden !important;
 }

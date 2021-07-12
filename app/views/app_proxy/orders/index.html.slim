@@ -1,55 +1,47 @@
-.Polaris-Page
-  .Polaris-Page-Header.Polaris-Page-Header--isSingleRow.Polaris-Page-Header--noBreadcrumbs.Polaris-Page-Header--mediumTitle
-    .Polaris-Page-Header__MainContent
-      .Polaris-Page-Header__TitleActionMenuWrapper
-        .Polaris-Page-Header__TitleWrapper
-          div
-            .Polaris-Header-Title__TitleAndSubtitleWrapper
-              .Polaris-Header-Title
-                h1.Polaris-DisplayText.Polaris-DisplayText--sizeLarge
-                  span.Polaris-TextStyle--variationStrong My Orders
-                p All timestamps are in Eastern Time (US)
+.Polaris-Frame data-has-navigation="true" data-polaris-layer="true"
+  div
+    #AppFrameNav
+      = render 'app_proxy/shared/dashboard_nav'
+  .Polaris-Frame__ContextualSaveBar.Polaris-Frame-CSSAnimation--startFade
+  main#AppFrameMain.Polaris-Frame__Main data-has-global-ribbon="false"
+    a#AppFrameMainContent tabindex="-1"
+    .Polaris-Frame__Content
+      .Polaris-Page
+        .Polaris-Page-Header.Polaris-Page-Header--isSingleRow.Polaris-Page-Header--noBreadcrumbs.Polaris-Page-Header--mediumTitle
+          .Polaris-Page-Header__MainContent
+            .Polaris-Page-Header__TitleActionMenuWrapper
+              .Polaris-Page-Header__TitleWrapper
+                div
+                  .Polaris-Header-Title__TitleAndSubtitleWrapper
+                    .Polaris-Header-Title
+                      h2.Polaris-DisplayText.main-heading
+                        - if @translation.order_history_tab_my_order_history.present?
+                          span.Polaris-TextStyle--variationStrong #{@translation.order_history_tab_my_order_history}
+                        - else
+                          span.Polaris-TextStyle--variationStrong MY&nbsp;
+                          span.Polaris-TextStyle--variationStrong style="color: #007EFF" ORDER&nbsp;
+                          span.Polaris-TextStyle--variationStrong HISTORY
+        - if @active_subscriptions_count == 0
+            div.notification-banner
+              p.Polaris-Heading.order-text #{@translation.order_history_tab_no_subscriptions.present? ? @translation.order_history_tab_no_subscriptions : 'No subscription have been found for your account'}
+        - else
+          .order-history
+            - @orders.each do |order|
+              .grid
+                .item
+                  h2.order-text-heading #{@translation.order_history_tab_order_no.present? ? @translation.order_history_tab_order_no : 'ORDER #'}
+                  p.order-text = order.order_number
+                .item
+                  h2.order-text-heading #{@translation.order_history_tab_date.present? ? @translation.order_history_tab_date : 'DATE'}
+                  p.order-text = DateTime.parse(order.created_at).strftime("%d %b %Y")
+                .item
+                  h2.order-text-heading #{@translation.order_history_tab_amount.present? ? @translation.order_history_tab_amount : 'AMOUNT'}
+                  p.blue = number_to_currency order.total_price.to_f rescue nil
+                .item
+                  .btn-wrapper
+                    = link_to "/a/chargezen_production/orders/#{order.id}?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" do
+                      button.btn-view type="button" #{@translation.order_history_tab_view.present? ? @translation.order_history_tab_view : 'VIEW'}
+                    button.btn-invoice type="button" #{@translation.order_history_tab_invoice.present? ? @translation.order_history_tab_invoice : 'INVOICE'}
 
-  .Polaris-Page__Content
-    .Polaris-Card
-      div
-        .Polaris-DataTable__Navigation
-          button.Polaris-Button.Polaris-Button--disabled.Polaris-Button--plain.Polaris-Button--iconOnly aria-label=("Scroll table left one column") disabled="" type="button"
-            span.Polaris-Button__Content
-              span.Polaris-Button__Icon
-                span.Polaris-Icon
-                  svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
-                    path d=("M12 16a.997.997 0 0 1-.707-.293l-5-5a.999.999 0 0 1 0-1.414l5-5a.999.999 0 1 1 1.414 1.414L8.414 10l4.293 4.293A.999.999 0 0 1 12 16z")
-          button.Polaris-Button.Polaris-Button--plain.Polaris-Button--iconOnly aria-label=("Scroll table right one column") type="button"
-            span.Polaris-Button__Content
-              span.Polaris-Button__Icon
-                span.Polaris-Icon
-                  svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
-                    path d=("M8 16a.999.999 0 0 1-.707-1.707L11.586 10 7.293 5.707a.999.999 0 1 1 1.414-1.414l5 5a.999.999 0 0 1 0 1.414l-5 5A.997.997 0 0 1 8 16z")
-
-        .Polaris-DataTable
-          .Polaris-DataTable__ScrollContainer
-            table.Polaris-DataTable__Table
-              thead
-                tr
-                  th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header  Order #
-                  th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header  Date
-                  th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header  Items
-                  th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header  Total
-                  th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header  Status
-              tbody
-                - @orders.each do |order|
-                  tr.Polaris-DataTable__TableRow
-                    th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
-                      a.Polaris-Link data-polaris-unstyled="true" href="/a/chargezen_production/orders/#{order.id}?customer_id=#{params[:customer_id]}&payment_detail=#{order.try(:payment_details).try(:credit_card_number)}"= order.order_number
-                    td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
-                      = DateTime.parse(order.created_at).strftime("%d %b %Y")
-                    td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
-                      = order.line_items.first.title
-                    td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
-                      = number_to_currency order.total_price.to_f rescue nil
-                    td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
-                      span.Polaris-Badge.Polaris-Badge--statusSuccess= order.financial_status&.humanize
-
-          .Polaris-DataTable__Footer
-            = render 'paginate', page_info: @data
+        / .Polaris-DataTable__Footer
+        /   = render 'paginate', page_info: @data

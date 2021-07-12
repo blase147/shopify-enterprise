@@ -10,7 +10,7 @@ import {
 } from '@shopify/polaris';
 
 const SearchProduct = (props) => {
-  const { value, setFieldValue, fieldName, error } = props;
+  const { value, setFieldValue, fieldName, allProducts, error } = props;
 
   // Search product to add
   const GET_PRODUCT = gql`
@@ -20,6 +20,13 @@ const SearchProduct = (props) => {
           node {
             id
             title
+            images(first: 1) {
+              edges {
+                node {
+                  originalSrc
+                }
+              }
+            }
           }
         }
       }
@@ -43,6 +50,9 @@ const SearchProduct = (props) => {
             value: product.node.title,
             label: product.node.title,
             id: product.node.id,
+            images: product.node.images.edges.map(img => {
+              return img.node.originalSrc;
+            })
           })
         );
 
@@ -68,8 +78,30 @@ const SearchProduct = (props) => {
         setFieldValue(fieldName, {
           title: product.value,
           productId: product.id,
+          image: product.images[0]
         });
         setSelectedOptions(selected);
+
+        let flag = true;
+
+        for (let i = 0; allProducts.length > i; i++) {
+          if (allProducts[i].title == product.value) {
+            flag = false;
+            break;
+          } else {
+            flag = true;
+          }
+        }
+
+        if (flag) {
+          allProducts.push({
+            title: product.value,
+            productId: product.id,
+            image: product.images[0]
+          });
+        }
+
+        console.log(allProducts);
       }
     },
     [productList, value]

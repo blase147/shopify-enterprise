@@ -85,5 +85,17 @@
         loader = null;
       }
     }, false);
+
+    var header = document.getElementById('shopify-section-header');
+    header.style.display = 'none';
+    window.addEventListener('load', function () {
+      var sectionFooter = document.getElementById('shopify-section-footer');
+      sectionFooter.style.display = 'none';
+
+      var customerPortalWrap = document.getElementById('chargezen-customer-portal-wrap');
+      customerPortalWrap.style.maxWidth = 'none';
+      customerPortalWrap.style.padding = '0';
+    });
+
   })();
 </script>

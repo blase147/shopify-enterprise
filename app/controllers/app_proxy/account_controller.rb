@@ -1,5 +1,5 @@
 class AppProxy::AccountController < AppProxyController
-  before_action :set_customer, only: [:shipping, :personal, :password]
+  before_action :set_customer, only: [:shipping, :personal, :password, :update_address]
 
   def personal; end
 
@@ -9,6 +9,16 @@ class AppProxy::AccountController < AppProxyController
 
   def update_info
     result = customer_service.update params
+    if result.is_a?(Hash)
+      flash[:error] = result[:error]
+      render js: "alert('#{result[:error]}'); hideFormLoading()"
+    else
+      render js: "location.reload();"
+    end
+  end
+
+  def update_address
+    result = customer_service.update_address params
     if result.is_a?(Hash)
       flash[:error] = result[:error]
       render js: "alert('#{result[:error]}'); hideFormLoading()"
