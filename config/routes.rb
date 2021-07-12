@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       end
     end
     resources :orders
+    resources :selling_plans, only: :index
     resources :subscriptions do
       member do
         post :pause

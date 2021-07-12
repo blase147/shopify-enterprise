@@ -85,7 +85,7 @@ const Modals = (props) => {
             </Stack.Item>
           </Stack>
 
-          <Stack wrap={false} vertical={true} alignment="center">
+          {/*<Stack wrap={false} vertical={true} alignment="center">
             <Stack.Item>
               <br />
             </Stack.Item>
@@ -135,7 +135,7 @@ const Modals = (props) => {
             <Stack.Item>
               <br />
             </Stack.Item>
-          </Stack>
+          </Stack>*/}
 
           <Stack wrap={false} vertical={true} alignment="center">
             <Stack.Item>
@@ -147,7 +147,7 @@ const Modals = (props) => {
                   <div className="header">
                     <Stack vertical>
                       <Stack.Item>
-                        <img className="top-img" src={titleImg3} />
+                        <img className="top-img" src={titleImg2} />
                       </Stack.Item>
                       <Stack.Item>
                         <img className="bot-img" />
@@ -176,8 +176,8 @@ const Modals = (props) => {
                       >
                         Create new
                       </Button>
-                      <Button onClick={() => slick.current.slickNext()}>
-                        Next Plan
+                      <Button onClick={() => slick.current.slickPrev()}>
+                        Previous Plan
                       </Button>
                     </ButtonGroup>
                   </TextContainer>
@@ -189,7 +189,7 @@ const Modals = (props) => {
             </Stack.Item>
           </Stack>
 
-          <Stack wrap={false} vertical={true} alignment="center">
+          {/*<Stack wrap={false} vertical={true} alignment="center">
             <Stack.Item>
               <br />
             </Stack.Item>
@@ -239,7 +239,7 @@ const Modals = (props) => {
             <Stack.Item>
               <br />
             </Stack.Item>
-          </Stack>
+          </Stack>*/}
         </Slider>
       </Modal.Section>
     </Modal>
