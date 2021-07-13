@@ -55,6 +55,8 @@ const BuildABoxPlan = () => {
           intervalCount
           description
           _destroy
+          deliveryIntervalType
+          deliveryIntervalCount
           trialAdjustmentValue
           trialAdjustmentType
           trialIntervalType
@@ -106,7 +108,6 @@ const BuildABoxPlan = () => {
     { label: 'Year(s)', value: 'YEAR' },
   ];
   const adjusmentOptions = [
-    { label: 'None', value: '' },
     { label: 'Fixed amount discount', value: 'FIXED_AMOUNT' },
     { label: 'Percentage discount', value: 'PERCENTAGE' },
     { label: 'Manual price', value: 'PRICE' },
@@ -155,16 +156,18 @@ const BuildABoxPlan = () => {
     intervalType: 'DAY',
     minFullfilment: '1',
     maxFullfilment: '1',
-    adjustmentType: '',
+    adjustmentType: 'FIXED_AMOUNT',
     adjustmentValue: '0',
     _destroy: false,
+    deliveryIntervalType: 'DAY',
+    deliveryIntervalCount: '1',
     trialIntervalCount: '1',
     trialIntervalType: 'DAY',
     trialAdjustmentType: '',
     trialAdjustmentValue: '0',
     boxSubscriptionType: 0,
-    boxIsQuantity: false,
-    boxIsQuantityLimited: false,
+    boxIsQuantity: true,
+    boxIsQuantityLimited: true,
     boxQuantityLimit: 0
   };
 
@@ -502,18 +505,18 @@ const BuildABoxPlan = () => {
                         sectioned
                         actions={
                           ((!id && index != 0) || (id && values.sellingPlans.filter(p=>!p._destroy).length>1))
-                            ? []
-                            : [
-                                {
-                                  content: 'Remove',
-                                  onAction: () => {
-                                    setFieldValue(
-                                      `sellingPlans[${index}]._destroy`,
-                                      true
-                                    );
-                                  },
+                            ? [
+                              {
+                                content: 'Remove',
+                                onAction: () => {
+                                  setFieldValue(
+                                    `sellingPlans[${index}]._destroy`,
+                                    true
+                                  );
                                 },
-                              ]
+                              },
+                            ]
+                            : []
                         }
                       >
                         <FormLayout>
@@ -695,7 +698,43 @@ const BuildABoxPlan = () => {
                               }
                             />
                           </FormLayout.Group>
-                          <br />
+                          <TextContainer>
+                            <br />
+                            <Subheading>Delivery Rules</Subheading>
+                          </TextContainer>
+                          <FormLayout.Group>
+                            <Select
+                              label="Interval"
+                              value={plan.deliveryIntervalCount === null ? initialValues.deliveryIntervalCount : plan.deliveryIntervalCount }
+                              error={
+                                touched.sellingPlans?.[index]?.deliveryIntervalCount &&
+                                errors.sellingPlans?.[index]?.deliveryIntervalCount
+                              }
+                              onChange={(e) =>
+                                setFieldValue(
+                                  `sellingPlans[${index}].deliveryIntervalCount`,
+                                  e
+                                )
+                              }
+                              options={options}
+                            />
+                            <Select
+                              options={interOptions}
+                              label="  "
+                              value={plan.deliveryIntervalType === null ? initialValues.deliveryIntervalType : plan.deliveryIntervalType }
+                              error={
+                                touched.sellingPlans?.[index]?.deliveryIntervalType &&
+                                errors.sellingPlans?.[index]?.deliveryIntervalType
+                              }
+                              onChange={(e) =>
+                                setFieldValue(
+                                  `sellingPlans[${index}].deliveryIntervalType`,
+                                  e
+                                )
+                              }
+                            />
+                          </FormLayout.Group>
+                          <br/>
                           {/* Trial Period */}
                           <TextContainer>
                             <Subheading>TRIAL PERIOD</Subheading>
@@ -783,6 +822,43 @@ const BuildABoxPlan = () => {
                             <Subheading>BUILD-A-BOX CONFIGURATION</Subheading>
                           </TextContainer>
                           <FormLayout.Group>
+                          <div className="box-subscription-detail">
+                                  {/* <Select
+                                    className="box-subscription-align"
+                                    label="Display Quantity ?"
+                                    value={plan.boxIsQuantity}
+                                    error={
+                                      touched.sellingPlans?.[index]?.boxIsQuantity &&
+                                      errors.sellingPlans?.[index]?.boxIsQuantity
+                                    }
+                                    onChange={(e) => {
+                                      setFieldValue(
+                                        `sellingPlans[${index}].boxIsQuantity`,
+                                        (e === 'true')
+                                      )}
+                                    }
+                                    options={boxQuantityOptions}
+                                  /> */}
+                                  <TextField
+                                    label="Limit Options"
+                                    value={plan.boxQuantityLimit.toString()}
+                                    disabled={!plan.boxIsQuantity || !plan.boxIsQuantityLimited}
+                                    error={
+                                      touched.sellingPlans?.[index]?.boxQuantityLimit &&
+                                      errors.sellingPlans?.[index]?.boxQuantityLimit
+                                    }
+                                    type="number"
+                                    onChange={(e) => {
+                                      setFieldValue(
+                                        `sellingPlans[${index}].boxQuantityLimit`,
+                                        parseInt(e)
+                                      )}
+                                    }
+                                    // placeholder="1"
+                                  />
+                                </div>
+                          </FormLayout.Group>
+                          <FormLayout.Group>
                             <Checkbox
                               label="Sort box choices by collection"
                               checked={plan.boxSubscriptionType === 1}
@@ -835,59 +911,7 @@ const BuildABoxPlan = () => {
                                     />
                                 </div>
                               )}
-                              { (plan.boxSubscriptionType !== 0) && (
-                                <div className="box-subscription-detail">
-                                  <Select
-                                    className="box-subscription-align"
-                                    label="Display Quantity ?"
-                                    value={plan.boxIsQuantity}
-                                    error={
-                                      touched.sellingPlans?.[index]?.boxIsQuantity &&
-                                      errors.sellingPlans?.[index]?.boxIsQuantity
-                                    }
-                                    onChange={(e) => {
-                                      setFieldValue(
-                                        `sellingPlans[${index}].boxIsQuantity`,
-                                        (e === 'true')
-                                      )}
-                                    }
-                                    options={boxQuantityOptions}
-                                  />
-                                  <TextField
-                                    label={
-                                      <Checkbox
-                                        label="Limit Quantity"
-                                        checked={plan.boxIsQuantityLimited}
-                                        disabled={!plan.boxIsQuantity}
-                                        error={
-                                          touched.sellingPlans?.[index]?.boxIsQuantityLimited &&
-                                          errors.sellingPlans?.[index]?.boxIsQuantityLimited
-                                        }
-                                        onChange={(e) =>
-                                          setFieldValue(
-                                            `sellingPlans[${index}].boxIsQuantityLimited`,
-                                            e
-                                          )
-                                        }
-                                      />
-                                    }
-                                    value={plan.boxQuantityLimit.toString()}
-                                    disabled={!plan.boxIsQuantity || !plan.boxIsQuantityLimited}
-                                    error={
-                                      touched.sellingPlans?.[index]?.boxQuantityLimit &&
-                                      errors.sellingPlans?.[index]?.boxQuantityLimit
-                                    }
-                                    type="number"
-                                    onChange={(e) => {
-                                      setFieldValue(
-                                        `sellingPlans[${index}].boxQuantityLimit`,
-                                        parseInt(e)
-                                      )}
-                                    }
-                                    // placeholder="1"
-                                  />
-                                </div>
-                              )}
+                            
                             </FormLayout.Group>
                             {plan.boxSubscriptionType === 1 && (
                               <div className="collection-stack">

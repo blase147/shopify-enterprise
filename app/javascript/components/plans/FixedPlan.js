@@ -610,7 +610,6 @@ const FixedPlan = () => {
                             <br />
                             <Subheading>Delivery Rules</Subheading>
                           </TextContainer>
-                          {console.log("Interval_present"+ plan.deliveryIntervalCount === null)}
                           <FormLayout.Group>
                             <Select
                               label="Interval"
