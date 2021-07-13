@@ -1,0 +1,39 @@
+span.billing_plan_present.hidden
+  = @selling_plan.present? && @selling_plan.box_subscription_type.present?
+
+.checkout-design
+  h3 Checkout
+  .select-option
+    p Your selection (Please select options):
+    button Go to Payment
+  .img-sec-parent
+    .add-img-section
+      .img-con
+        img src="https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072823_960_720.jpg" /
+      p Lorem Ipsum
+      button Add
+    .add-img-section
+      .img-con
+        img src="https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072823_960_720.jpg" /
+      p Lorem Ipsum
+      button Add
+    .add-img-section
+      .img-con
+        img src="https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072823_960_720.jpg" /
+      p Lorem Ipsum
+      button Add
+    .add-img-section
+      .img-con
+        img src="https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072823_960_720.jpg" /
+      p Lorem Ipsum
+      button Add
+    .add-img-section
+      .img-con
+        img src="https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072823_960_720.jpg" /
+      p Lorem Ipsum
+      button Add
+
+javascript:
+  if ($('.billing_plan_present').text() === 'false') {
+    window.top.location.href = '/cart';
+  }

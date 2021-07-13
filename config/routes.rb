@@ -27,7 +27,12 @@ Rails.application.routes.draw do
       end
     end
     resources :orders
-    resources :selling_plans, only: :index
+    resources :build_a_box, only: :index
+    resources :selling_plans, only: [] do
+      collection do
+        get :plan_type
+      end
+    end
     resources :subscriptions do
       member do
         post :pause

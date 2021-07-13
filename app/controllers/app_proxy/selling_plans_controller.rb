@@ -1,13 +1,16 @@
-class AppProxy::SellingPlansController < AppProxyController
-  before_action :set_customer
+class AppProxy::SellingPlansController < ApplicationController
+  before_action :set_shop
 
-  def index
-    head(:ok)
+  def plan_type
+    @selling_plan = SellingPlan.joins(:selling_plan_group).where(selling_plan_groups: { shop_id: @shop.id }).find_by(shopify_id: "gid://shopify/SellingPlan/#{params[:selling_plan_id]}")
+    if @selling_plan.present? && @selling_plan.box_subscription_type.present?
+      render json: { success: true }
+    else
+      render json: { success: false }
+    end
   end
 
-  private
-
-  def set_customer
-    @customer = Customer.find_by_shopify_id(customer_id)
+  def set_shop
+    @shop = Shop.find_by(shopify_domain: params[:shop])
   end
 end

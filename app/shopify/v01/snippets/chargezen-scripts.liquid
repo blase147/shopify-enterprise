@@ -123,26 +123,37 @@
         .closest('.plan-selector-group')
         .find('select')
         .val();
-      document.cookie = 'selling_plan_id=' + planId + ';';
-      console.log(getCookie('selling_plan_id'))
+      setSellingPlanAttr(planId);
+      if (planId) {
+        getPlanType(planId);
+      } else {
+        $(".build_a_box_btn").unbind();
+        $(".btn.product-form__cart-submit > span").text('ADD TO CART');
+        $(".btn.product-form__cart-submit").removeClass('build_a_box_btn');
+      }
       selectPlan(planId);
     }
 
-    function getCookie(cname) {
-      let name = cname + "=";
-      let ca = document.cookie.split(';');
-      for(let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-          c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-          return c.substring(name.length, c.length);
-        }
-      }
-      return "";
+    function setSellingPlanAttr(val) {
+      jQuery.post('/cart/update.js', { attributes: {'selling_plan_id': val} });
     }
-    
+
+    function getPlanType(planId) {
+      var groupId = planId ? product.plans[parseInt(planId)].selling_plan_group_id : '';
+      jQuery.get('/a/chargezen_production/selling_plans/plan_type', { 'selling_plan_id': planId }, function(data, status) {
+        if (data.success == true) {
+          $(".btn.product-form__cart-submit > span").text('Build a Box');
+          $(".btn.product-form__cart-submit").addClass('build_a_box_btn');
+          $(".build_a_box_btn").click(function(event){
+            event.preventDefault();
+            jQuery.post('/cart/add', {id: $("form select[name='id']").val(), quantity: 1, selling_plan: $("[name='selling_plan']").val(), 'plan-selector-group': groupId}, function(data, status) {
+              window.location.href="/pages/build-a-box";
+            });
+          });
+        }
+      });
+    }
+
     $(form).change('select, input', function(){
       selectSelectedPlan();
     })
@@ -171,6 +182,12 @@
   $(document).ready(function(){
     if($('fieldset.chargezen-plan-selector').length) {
       initChargeZen();
+    }
+    if (location.pathname == '/pages/build-a-box') {
+      setIframePageSize()
+    }
+    function setIframePageSize() {
+      $('.page-width').css('max-width', '100%');
     }
   })
 })(window.chargezenForShopify);

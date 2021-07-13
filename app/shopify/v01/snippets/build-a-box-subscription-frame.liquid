@@ -9,24 +9,6 @@
 
 <div id="build-a-box-subscription-wrap" class="page-width">
 
-  <div
-       id="build-a-box-subscription-loader"
-       style="text-align: center"
-  >
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      role="presentation"
-      style="animation: spin 500ms infinite linear;display:inline-block;width:20px;height:20px;vertical-align:middle;fill:currentColor;"
-      viewBox="0 0 20 20"
-    >
-      <path
-        d="M7.229 1.173a9.25 9.25 0 1 0 11.655 11.412 1.25 1.25 0 1 0-2.4-.698 6.75 6.75 0 1 1-8.506-8.329 1.25 1.25 0 1 0-.75-2.385z"
-        fill="#919EAB"
-      />
-    </svg>
-  </div>
-
   <iframe
     id="build-a-box-subscription-frame"
     style="width: 100%; border: none;"
@@ -60,11 +42,10 @@
     }
 
     function getFrameUrl() {
-      return "/a/chargezen_production/selling_plans?{{ cz_params }}";
+      return "/a/chargezen_production/build_a_box?selling_plan_id={{cart.attributes.selling_plan_id}}&{{ cz_params }}";
     }
 
     var wrap = document.getElementById('build-a-box-subscription-wrap');
-    var loader = document.getElementById('build-a-box-subscription-loader');
     var frame = document.getElementById('build-a-box-subscription-frame');
     var frameUrl = getFrameUrl();
     if (!frameUrl) {
@@ -75,12 +56,6 @@
 
     removePreviousNodes(wrap);
 
-    window.addEventListener('message', function(evt) {
-      if (loader) {
-        loader.remove();
-        loader = null;
-      }
-    }, false);
 
     var header = document.getElementById('shopify-section-header');
     header.style.display = 'none';
