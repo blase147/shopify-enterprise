@@ -13,6 +13,7 @@ import EmailNotification from './EmailNotification';
 import HouseKeeping from './HouseKeeping';
 import Password from './HouseKeepingComponents/Password';
 import Legal from './Legal';
+import ProductExtention from './ProductExtention';
 import StoreInfomation from './StoreInformation';
 
 
@@ -128,6 +129,7 @@ const Settings = () => {
         showBilling
         showAccount
         pauseSubscription
+        designType
 
         recurringChargeStatus
         chargeConfirmationLink
@@ -331,6 +333,7 @@ const Settings = () => {
     delayOrder: 'storeowner_and_customer',
     pauseSubscription: 'storeowner_and_customer',
     _destroy: false,
+    designType:'one'
   };
   // form data #####################################################
 
@@ -390,19 +393,23 @@ const Settings = () => {
       id: 'email-notification',
       content: 'Email Notification',
     },
-    {
-      id: 'dunning',
-      content: 'Dunning',
-    },
+    // {
+    //   id: 'dunning',
+    //   content: 'Dunning',
+    // },
     ...(process.env.APP_TYPE=="public" ?
     [{
       id: 'store-information',
       content: 'StoreInformation',
     }]:[])
     ,
+    // {
+    //   id: 'legal',
+    //   content: 'Legal',
+    // },
     {
-      id: 'legal',
-      content: 'Legal',
+      id: 'product-extension',
+      content: 'Product Extension',
     },
   ];
   const history = useHistory();
@@ -418,6 +425,9 @@ const Settings = () => {
         { passwordConfirmed
           ? (
             <Page title="Settings">
+              {
+                console.log("...",tabs,"hahahh")
+              }
               <Tabs
                 tabs={tabs}
                 selected={selectedTitleTab}
@@ -562,15 +572,17 @@ const Settings = () => {
                               handleSubmit={handleSubmit}
                             />
                           </div>
-                        ) : selectedTitleTab === 4 ? (
-                          <Dunning
-                            values={values}
-                            touched={touched}
-                            errors={errors}
-                            setFieldValue={setFieldValue}
-                            handleSubmit={handleSubmit}
-                          />
-                        ) : selectedTitleTab === (process.env.APP_TYPE=="public"?5:10) ? (
+                        )
+                        // : selectedTitleTab === 4 ? (
+                        //   <Dunning
+                        //     values={values}
+                        //     touched={touched}
+                        //     errors={errors}
+                        //     setFieldValue={setFieldValue}
+                        //     handleSubmit={handleSubmit}
+                        //   />
+                        // )
+                        : selectedTitleTab === (process.env.APP_TYPE=="public"?4:10) ? (
                           <div className="storeInfomation">
                             <StoreInfomation
                               values={values}
@@ -580,9 +592,10 @@ const Settings = () => {
                               handleSubmit={handleSubmit}
                             />
                           </div>
-                        ) : selectedTitleTab === (process.env.APP_TYPE=="public"?6:5)?(
+                        )
+                        : selectedTitleTab === (process.env.APP_TYPE=="public"?5:4) ? (
                           <div className="storeInfomation">
-                            <Legal
+                            <ProductExtention
                               values={values}
                               touched={touched}
                               errors={errors}
@@ -590,7 +603,19 @@ const Settings = () => {
                               handleSubmit={handleSubmit}
                             />
                           </div>
-                        ):""}
+                        )
+                        // : selectedTitleTab === (process.env.APP_TYPE=="public"?5:5)?(
+                        //   <div className="storeInfomation">
+                        //     <Legal
+                        //       values={values}
+                        //       touched={touched}
+                        //       errors={errors}
+                        //       setFieldValue={setFieldValue}
+                        //       handleSubmit={handleSubmit}
+                        //     />
+                        //   </div>
+                        // )
+                        :""}
                       </Form>
                     )}
                   </Formik>

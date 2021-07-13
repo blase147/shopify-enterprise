@@ -11,7 +11,7 @@ class SnippetsService
 
       ShopifyAPI::Asset.create(
         theme_id: @theme_id,
-        key: "snippets/#{file_name}", 
+        key: "snippets/#{file_name}",
         value: File.read(file_path)
       )
     end
@@ -21,10 +21,11 @@ class SnippetsService
 
       ShopifyAPI::Asset.create(
         theme_id: @theme_id,
-        key: "assets/#{file_name}", 
+        key: "assets/#{file_name}",
         value: File.read(file_path)
       )
     end
+    populate_images(@theme_id)
   rescue Exception => ex
     { error: ex.message }
   end
@@ -49,6 +50,7 @@ class SnippetsService
       asset.value.sub!(/<select name="id".*?>[\s\S]*<\/select>/, "\\&\n \t\t\t#{snippet}")
       asset.save
     end
+    populate_images(@theme_id)
   rescue Exception => ex
     { error: ex.message }
   end
@@ -94,6 +96,15 @@ class SnippetsService
     end
   rescue Exception => ex
     { error: ex.message }
+  end
+
+  def populate_images(theme_id)
+    %w[checktick.png tick.png save-price.png].each do |file_name|
+      image = File.read(Rails.root.join('app', 'assets', 'images', file_name))
+      i = ShopifyAPI::Asset.new(key: "assets/#{file_name}", theme_id: theme_id)
+      i.attach(image)
+      i.save
+    end
   end
 
   private ##

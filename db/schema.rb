@@ -369,6 +369,7 @@ ActiveRecord::Schema.define(version: 2021_07_06_112704) do
     t.boolean "renewal_reminder", default: false
     t.boolean "skip_update_next_charge", default: false
     t.boolean "one_time_upsells", default: false
+    t.boolean "failed_renewal", default: false
     t.boolean "cancel_reactivate_subscription", default: false
     t.boolean "edit_quantity", default: false
     t.boolean "cancel_subscription", default: false
@@ -378,7 +379,6 @@ ActiveRecord::Schema.define(version: 2021_07_06_112704) do
     t.string "renewal_duration"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.boolean "failed_renewal"
     t.boolean "opt_in", default: false
     t.boolean "swap_product", default: false
     t.boolean "update_billing", default: false
