@@ -11,6 +11,9 @@ module Types
     field :interval_type, String, null: true
     field :interval_count, String, null: true
 
+    field :delivery_interval_type, String, null: true
+    field :delivery_interval_count, String, null: true
+
     field :trial_adjustment_value, String, null: true
     field :trial_adjustment_type, String, null: true
     field :trial_interval_type, String, null: true

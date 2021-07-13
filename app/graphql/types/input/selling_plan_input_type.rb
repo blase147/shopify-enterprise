@@ -11,6 +11,9 @@ module Types
       argument :interval_type, String, required: false
       argument :interval_count, String, required: false
 
+      argument :delivery_interval_type, String, required: false
+      argument :delivery_interval_count, String, required: false
+
       argument :trial_adjustment_value, String, required: false
       argument :trial_adjustment_type, String, required: false
       argument :trial_interval_type, String, required: false
@@ -29,7 +32,7 @@ module Types
 
       argument :description, String, required: false
       argument :selector_label, String, required: false
-      
+
       argument :__typename, String, required: false
       argument :_destroy, GraphQL::Types::Boolean, required: false
     end
