@@ -33,5 +33,9 @@ module Types
     field :description, String, null: true
     field :selector_label, String, null: true
     field :_destroy, GraphQL::Types::Boolean, null: false
+
+    def box_subscription_type
+      SellingPlan.box_subscription_types[object.box_subscription_type]
+    end
   end
 end

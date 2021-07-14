@@ -27,7 +27,11 @@ Rails.application.routes.draw do
       end
     end
     resources :orders
-    resources :build_a_box, only: :index
+    resources :build_a_box, only: :index do
+      collection do
+        post :add_product
+      end
+    end
     resources :selling_plans, only: [] do
       collection do
         get :plan_type

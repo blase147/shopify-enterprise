@@ -5,6 +5,10 @@ class ScriptTagsService
   end
 
   def add
+    ShopifyAPI::ScriptTag.create(
+      event: 'onload',
+      display_scope: 'order_status', src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'
+    )
     if !order_status_script_tag.present?
       ShopifyAPI::ScriptTag.create(
         event: 'onload',

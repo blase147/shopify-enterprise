@@ -911,7 +911,7 @@ const BuildABoxPlan = () => {
                                     />
                                 </div>
                               )}
-                            
+
                             </FormLayout.Group>
                             {plan.boxSubscriptionType === 1 && (
                               <div className="collection-stack">

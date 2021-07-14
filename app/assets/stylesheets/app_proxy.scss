@@ -2363,3 +2363,34 @@ body.chargezen-proxy {
   font-size: 16px;
   height: 35px;
 }
+
+
+.checkout-design .add-img-section button:disabled {
+  background: #709bc6;
+}
+.image-place-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  grid-template-rows: repeat(auto-fill, minmax(170px, 1fr));
+  grid-gap: 20px;
+  text-align: center;
+  margin-bottom: 50px;
+}
+.cros-img {
+  position: relative;
+}
+.cros-img > p {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: #007eff;
+  height: 50px;
+  width: 50px;
+  color: white;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  /* font-size: 32px; */
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
