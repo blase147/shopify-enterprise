@@ -37,11 +37,11 @@ const Analytics = () => {
       id: 'customer-insights',
       content: 'Customer Insights',
     },
-    ...(process.env.APP_TYPE=="public" ?
-    [{
-      id: 'retention',
-      content: 'Retention',
-    }]:[]),
+    // ...(process.env.APP_TYPE=="public" ?
+    // [{
+    //   id: 'retention',
+    //   content: 'Retention',
+    // }]:[]),
     {
       id: 'product',
       content: 'Product',
