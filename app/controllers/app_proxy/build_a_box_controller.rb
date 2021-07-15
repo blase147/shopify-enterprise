@@ -19,8 +19,9 @@ class AppProxy::BuildABoxController < AppProxyController
   end
 
   def add_product
-    if shopify_customer_id.present? && @shop.customers.last.shopify_customer_id == customer_id
-      @shop.customers.last.update(box_items: params[:box_products])
+    customer = @shop.customers.order(created_at: :desc).first
+    if shopify_customer_id.present? && customer.shopify_customer_id == customer_id && !customer.box_items.present?
+      customer.update(box_items: params[:box_products])
     end
   end
 

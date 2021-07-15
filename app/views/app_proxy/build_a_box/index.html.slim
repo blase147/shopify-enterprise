@@ -28,7 +28,8 @@ javascript:
   $(document).ready(function(){
     eraseCookie('box_items');
     $('.checkout-design .add').click(function(){
-      // if ($('.image-place-section > div').length < parseInt($('.box_limit').text())) {
+      let selectedProducts = getCookie('box_items');
+      if (selectedProducts == null || (selectedProducts.split(',').length <= parseInt($('.box_limit').text()))) {
         var img=$(this).closest('.add-img-section').find('img');
         var id=$(this).attr('data-id');
         var button=$(this);
@@ -39,10 +40,10 @@ javascript:
             $(elem).attr('data-id',id)
             flag=false;
             $(button).attr('disabled',true);
+            document.cookie = setCookie('box_items', (getCookie('box_items') ?  (getCookie('box_items') + ',' + id) : id), 1)
           }
         })
-        document.cookie = setCookie('box_items', (getCookie('box_items') ?  (getCookie('box_items') + ',' + id) : id), 1)
-      // }
+      }
     });
   })
 

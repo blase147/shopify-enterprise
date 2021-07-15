@@ -33,6 +33,7 @@
             </svg>
             <span>TOP-SELLER</span>
           </div> -->
+          <div class="build_a_box_plan_chk hide"></div>
           <p>{{product.title}}</p>
           {% if selling_plan_group.selling_plans[0].price_adjustments[0].value_type == 'percentage' %}
             {% assign saved_value = selling_plan_group.selling_plans[0].price_adjustments[0].value | append: "%" %}
@@ -105,7 +106,7 @@
           <span>{{ selling_plan_group.name }}</span>
 
         </label>
-
+        <div class="build_a_box_plan_chk hide"></div>
         <div class="plan-selector-plan hide">
           <label>{{ selling_plan_group.options[0].name }}</label>
           <select>
