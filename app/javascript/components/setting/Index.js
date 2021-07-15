@@ -392,12 +392,12 @@ const Settings = () => {
     []
   );
   const settings=[
-    // {
-    //   key:"house_keeping",
-    //   title:"House Keeping",
-    //   img:SettingImage,
-    //   desc:"View and update your store details."
-    // },
+    {
+      key:"product_extention",
+      title:"Product Extension",
+      img:SettingImage,
+      desc:"Manage your product extentions."
+    }
     {
       key:"email_notification",
       title:"Email Notifications",
@@ -462,12 +462,6 @@ const Settings = () => {
       title:"Customer Portal",
       img:CustomerImage,
       desc:"Manage your customer information."
-    },
-    {
-      key:"product_extention",
-      title:"Product Extension",
-      img:SettingImage,
-      desc:"Manage your product extentions."
     }
   ]
   const tabs = [
