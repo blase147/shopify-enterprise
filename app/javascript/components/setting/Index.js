@@ -17,7 +17,7 @@ import ProductExtention from './ProductExtention';
 import StoreInfomation from './StoreInformation';
 import Translation from './HouseKeepingComponents/Translation';
 import Legal from './HouseKeepingComponents/Legal';
-//Settings Images 
+//Settings Images
 import SettingImage from '../../../assets/images/settings/setting.svg'
 import BillingImage from '../../../assets/images/settings/billing.svg'
 import CustomerImage from '../../../assets/images/settings/customer.svg'
@@ -397,7 +397,7 @@ const Settings = () => {
       title:"Product Extension",
       img:SettingImage,
       desc:"Manage your product extentions."
-    }
+    },
     {
       key:"email_notification",
       title:"Email Notifications",
@@ -718,7 +718,7 @@ const Settings = () => {
                                   )
                                   :selectedSetting === 'legal' ? (
                                     <>
-                                    <Legal 
+                                    <Legal
                                     handleBack={handleBackSetting}
                                     />
                                     </>
@@ -732,7 +732,7 @@ const Settings = () => {
                                   )
                                   :selectedSetting === 'password' ? (
                                     <>
-                                    <Password 
+                                    <Password
                                     handleBack={handleBackSetting}
                                     />
                                     </>
@@ -740,12 +740,12 @@ const Settings = () => {
                           </>
                         }
                         </>
-                      
+
                       </Form>
                     )}
                   </Formik>
                 )}
-                
+
               {/* </Tabs>
             </Page> */}
             </>
