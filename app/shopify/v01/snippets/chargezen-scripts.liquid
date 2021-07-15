@@ -4,6 +4,7 @@
 
   function initChargeZen() {
     var containerSels = [
+      '#ProductPriceOneTime',
       '#ProductPrice',
       '#productPrice-product-template',
       '#ProductPrice-product-template',
@@ -35,14 +36,26 @@
       var price = variant.price;
       if (planId) {
         price = variant.selling_plan_allocations[planId].price_formatted
+        updateRecurringPriceLabel(price);
+      } else {
+        $('.one-time-del-price').html('<del>' + variant.compare_at_price + '</del>');
+        updatePriceLabelOneTime(price);
       }
-
-      updatePriceLabel(price);
     }
-    
-    function updatePriceLabel(price){
+
+    function updatePriceLabelOneTime(price){
       var $container = $(containerSels);
       $container.html(price);
+      if ($('.cart_custom_text_subscribe').length) {
+        $(".cart_data_text").text($('.cart_custom_text_one_time').text());
+      }
+    }
+
+    function updateRecurringPriceLabel(price){
+      $('#ProductPriceSubscribe').html(price);
+      if ($('.cart_custom_text_subscribe').length) {
+        $(".cart_data_text").text($('.cart_custom_text_subscribe').text());
+      }
     }
 
     function filterGroupsForVariant(variantId) {
@@ -114,7 +127,6 @@
       selectPlan(planId);
     }
 
-    $('')
     $(form).change('select, input', function(){
       selectSelectedPlan();
     })
@@ -128,6 +140,16 @@
 
     setTimeout(selectSelectedPlan, 30);
     planSelector.show();
+
+    $('.variant-input-wrap input:radio').change(function() {
+      var variantId = parseInt(form.find(':input[name="id"]').val());
+      var variant = product.variants[variantId];
+      if (variant.compare_at_price > variant.price) {
+        $('.one-time-del-price').html('<del>' + variant.compare_at_price + '</del>');
+        updatePriceLabelOneTime(variant.price);
+      }
+    });
+
   }
 
   $(document).ready(function(){
