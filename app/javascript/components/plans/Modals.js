@@ -33,59 +33,56 @@ const Modals = (props) => {
     <Modal open={props.active} onClose={() => props.setActive(false)}>
       <Modal.Section>
         <Slider ref={slick} {...slickConfig}>
-          <Stack wrap={false} vertical={true} alignment="center">
-            <Stack.Item>
-              <br />
-            </Stack.Item>
-            <Stack.Item>
-              <Stack wrap={false}>
-                <Stack.Item>
-                  <div className="header">
-                    <Stack vertical>
-                      <Stack.Item>
-                        <img className="top-img" src={titleImg1} />
-                      </Stack.Item>
-                      <Stack.Item>
-                        <img className="bot-img" />
-                      </Stack.Item>
-                    </Stack>
-                  </div>
-                </Stack.Item>
+          <div className="slider-container">
+            <Stack wrap={false} vertical={true} alignment="center">
+              <Stack.Item>
+                <Stack wrap={false}>
+                  <Stack.Item>
+                    <div className="header">
+                      <Stack vertical>
+                        <Stack.Item>
+                          <img className="top-img" src={titleImg1} />
+                        </Stack.Item>
+                        <Stack.Item>
+                          <img className="bot-img" />
+                        </Stack.Item>
+                      </Stack>
+                    </div>
+                  </Stack.Item>
 
-                <Stack.Item fill>
-                  <TextContainer>
-                    <br />
-                    <Heading>Fixed Subscription Plan</Heading>
-                    <p>
-                      Create plans in the ChargeZen app to control how your
-                      customers will be billed and how orders will be generated.
-                      For example, you can create a "subscribe & save" selling
-                      plan group with discounted variants to entice customers to
-                      subscribe to your products or services.
+                  <Stack.Item fill>
+                    <TextContainer>
+                      <Heading>Fixed Subscription Plan</Heading>
+                      <p>
+                        Create plans in the ChargeZen app to control how your
+                        customers will be billed and how orders will be generated.
+                        For example, you can create a "subscribe & save" selling
+                        plan group with discounted variants to entice customers to
+                        subscribe to your products or services.
                     </p>
-                    <ButtonGroup>
-                      <Button
-                        onClick={() =>
-                          props.history.push('/fixed-subscription-plans')
-                        }
-                        primary
-                      >
-                        Create new
+                      <ButtonGroup>
+                        <Button
+                          onClick={() =>
+                            props.history.push('/fixed-subscription-plans')
+                          }
+                          primary
+                        >
+                          Create new
                       </Button>
-                      <Button onClick={() => slick.current.slickNext()}>
-                        Next Plan
+                        <Button onClick={() => slick.current.slickNext()}>
+                          Next Plan
                       </Button>
-                    </ButtonGroup>
-                  </TextContainer>
-                </Stack.Item>
-              </Stack>
-            </Stack.Item>
-            <Stack.Item>
-              <br />
-            </Stack.Item>
-          </Stack>
-
-          <Stack wrap={false} vertical={true} alignment="center">
+                      </ButtonGroup>
+                    </TextContainer>
+                  </Stack.Item>
+                </Stack>
+              </Stack.Item>
+              <Stack.Item>
+                <br />
+              </Stack.Item>
+            </Stack>
+            </div>
+            {/*<Stack wrap={false} vertical={true} alignment="center">
             <Stack.Item>
               <br />
             </Stack.Item>
@@ -135,61 +132,59 @@ const Modals = (props) => {
             <Stack.Item>
               <br />
             </Stack.Item>
-          </Stack>
+          </Stack>*/}
+          <div className="slider-container">
+            <Stack wrap={false} vertical={true} alignment="center">
+              <Stack.Item>
+              </Stack.Item>
+              <Stack.Item>
+                <Stack wrap={false}>
+                  <Stack.Item>
+                    <div className="header">
+                      <Stack vertical>
+                        <Stack.Item>
+                          <img className="top-img" src={titleImg2} />
+                        </Stack.Item>
+                        <Stack.Item>
+                          <img className="bot-img" />
+                        </Stack.Item>
+                      </Stack>
+                    </div>
+                  </Stack.Item>
 
-          <Stack wrap={false} vertical={true} alignment="center">
-            <Stack.Item>
-              <br />
-            </Stack.Item>
-            <Stack.Item>
-              <Stack wrap={false}>
-                <Stack.Item>
-                  <div className="header">
-                    <Stack vertical>
-                      <Stack.Item>
-                        <img className="top-img" src={titleImg3} />
-                      </Stack.Item>
-                      <Stack.Item>
-                        <img className="bot-img" />
-                      </Stack.Item>
-                    </Stack>
-                  </div>
-                </Stack.Item>
-
-                <Stack.Item fill>
-                  <TextContainer>
-                    <br />
-                    <Heading>Build-A-Box Subscription Plan</Heading>
-                    <p>
-                      Create plans in the ChargeZen app to control how your
-                      customers will be billed and how orders will be generated.
-                      For example, you can create a "subscribe & save" selling
-                      plan group with discounted variants to entice customers to
-                      subscribe to your products or services.
+                  <Stack.Item fill>
+                    <TextContainer>
+                      <Heading>Build-A-Box Subscription Plan</Heading>
+                      <p>
+                        Create plans in the ChargeZen app to control how your
+                        customers will be billed and how orders will be generated.
+                        For example, you can create a "subscribe & save" selling
+                        plan group with discounted variants to entice customers to
+                        subscribe to your products or services.
                     </p>
-                    <ButtonGroup>
-                      <Button
-                        primary
-                        onClick={() =>
-                          props.history.push('/build-a-box-subscription-plan')
-                        }
-                      >
-                        Create new
+                      <ButtonGroup>
+                        <Button
+                          primary
+                          onClick={() =>
+                            props.history.push('/build-a-box-subscription-plan')
+                          }
+                        >
+                          Create new
                       </Button>
-                      <Button onClick={() => slick.current.slickNext()}>
-                        Next Plan
+                        <Button onClick={() => slick.current.slickPrev()}>
+                          Previous Plan
                       </Button>
-                    </ButtonGroup>
-                  </TextContainer>
-                </Stack.Item>
-              </Stack>
-            </Stack.Item>
-            <Stack.Item>
-              <br />
-            </Stack.Item>
-          </Stack>
-
-          <Stack wrap={false} vertical={true} alignment="center">
+                      </ButtonGroup>
+                    </TextContainer>
+                  </Stack.Item>
+                </Stack>
+              </Stack.Item>
+              <Stack.Item>
+                <br />
+              </Stack.Item>
+            </Stack>
+            </div>
+            {/*<Stack wrap={false} vertical={true} alignment="center">
             <Stack.Item>
               <br />
             </Stack.Item>
@@ -239,7 +234,8 @@ const Modals = (props) => {
             <Stack.Item>
               <br />
             </Stack.Item>
-          </Stack>
+          </Stack>*/}
+          
         </Slider>
       </Modal.Section>
     </Modal>

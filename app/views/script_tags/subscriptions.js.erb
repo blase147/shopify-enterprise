@@ -4,7 +4,31 @@
   //   '<p>Make changes or cancel your subscriptions <br/><br/><a class="ui-button btn btn--subdued btn--size-small" href="/account?cz-page=/subscriptions/">Manage your subscription</a></p>'
   // )
 <%# end %>
-
 Shopify.Checkout.OrderStatus.addContentBox(
   `<a href="/account" style="text-decoration-line:underline;text-decoration-style: solid;">Manage your subscriptions via the customer portal</a>`
 )
+
+if (Shopify.checkout) {
+  let box_products = getCookie('box_items');
+  if (box_products) {
+    $.ajax({
+      url: "/a/chargezen_production/build_a_box/add_product",
+      type: "POST",
+      data: { box_products : box_products, order_id: Shopify.checkout.order_id, created_at: Shopify.checkout.created_at, customer_id: Shopify.checkout.customer_id },
+      success: function(result){
+        console.log(result)
+      }
+    });
+  }
+}
+
+function getCookie(name) {
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0;i < ca.length;i++) {
+      var c = ca[i];
+      while (c.charAt(0)==' ') c = c.substring(1,c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+  }
+  return null;
+}

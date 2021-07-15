@@ -33,6 +33,7 @@
             </svg>
             <span>TOP-SELLER</span>
           </div> -->
+          <div class="build_a_box_plan_chk hide"></div>
           <p>{{product.title}}</p>
           {% if selling_plan_group.selling_plans[0].price_adjustments[0].value_type == 'percentage' %}
             {% assign saved_value = selling_plan_group.selling_plans[0].price_adjustments[0].value | append: "%" %}
@@ -105,7 +106,7 @@
           <span>{{ selling_plan_group.name }}</span>
 
         </label>
-
+        <div class="build_a_box_plan_chk hide"></div>
         <div class="plan-selector-plan hide">
           <label>{{ selling_plan_group.options[0].name }}</label>
           <select>
@@ -301,7 +302,7 @@
             <input type="radio" name="plan-selector-group" value="{{ selling_plan_group.id }}" />
             <span>{{ selling_plan_group.name }}</span>
           </label>
-
+          <div class="build_a_box_plan_chk hide"></div>
           <div class="plan-selector-plan">
             <label>{{ selling_plan_group.options[0].name }}</label>
             <select>
@@ -396,7 +397,6 @@
 
 
     $(document).ready(function () {
-
       $('.active-check-parent').click(function () {
         var parent=$(this);
         // $('.plan-selector-group').find("input[type=radio]").eacch(elem=>{
@@ -412,65 +412,71 @@
         // console.log($(radio));
         // var value = $("input[type=radio]:checked").attr("name", "check").val();
         // console.log(value);
-        });
       });
-      var modal = document.getElementById("myModal");
 
-      // Get the button that opens the modal
-      var btn = document.getElementById("myBtn");
-
-      // Get the <span> element that closes the modal
-      var span = document.getElementById("close-btn");
-
-      var got = document.getElementById('gotit');
-
-      // When the user clicks the button, open the modal
-      btn.onclick = function() {
-        modal.style.display = "block";
-      }
-
-      // When the user clicks on <span> (x), close the modal
-      span.onclick = function() {
-        modal.style.display = "none";
-      }
-
-      got.onclick = function() {
-        modal.style.display = "none";
-      }
-
-      // When the user clicks anywhere outside of the modal, close it
-      window.onclick = function(event) {
-        if (event.target == modal) {
-          modal.style.display = "none";
+      jQuery.get('/a/chargezen_production/selling_plans/plan_type', { 'selling_plan_id': {{product.selling_plan_groups[0].selling_plans[0].id}} }, function(data, status) {
+        if (data.success == true) {
+          $(".build_a_box_plan_chk").text('true');
         }
+      });
+    });
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementById("close-btn");
+
+    var got = document.getElementById('gotit');
+
+    // When the user clicks the button, open the modal
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    got.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
       }
+    }
 
-      $("#one-time").click(function(){
-        $(".purchse-section").removeClass("hide");
-        $(".show-hide").addClass("hide");
-      })
-      $("#subscribe").click(function(){
-        $(".show-hide").removeClass("hide");
-        $(".purchse-section").addClass("hide");
-      })
+    $("#one-time").click(function(){
+      $(".purchse-section").removeClass("hide");
+      $(".show-hide").addClass("hide");
+    })
+    $("#subscribe").click(function(){
+      $(".show-hide").removeClass("hide");
+      $(".purchse-section").addClass("hide");
+    })
 
-      // $(".chrge-logo svg").mouseover(function(){
-      //   $(".popup-div").css("display","block")
-      // })
-      // $(".chrge-logo svg, .popup-div").mouseleave(function(){
-      //
-      //   setTimeout(()=>{
-      //     $(".popup-div:not(:hover)").css("display","none");
-      //   },500)
-      //
-      // })
-      // $(".popup-div").mouseover(function(){
-      //   $(".popup-div").css("display","block")
-      // })
-      ///Design III radio's active,in-active ...
-      $("input[type='radio'].radio-iii").change(function(){
-      $(".radio-btnn").removeClass("radio-bg");
+    // $(".chrge-logo svg").mouseover(function(){
+    //   $(".popup-div").css("display","block")
+    // })
+    // $(".chrge-logo svg, .popup-div").mouseleave(function(){
+    //
+    //   setTimeout(()=>{
+    //     $(".popup-div:not(:hover)").css("display","none");
+    //   },500)
+    //
+    // })
+    // $(".popup-div").mouseover(function(){
+    //   $(".popup-div").css("display","block")
+    // })
+    ///Design III radio's active,in-active ...
+    $("input[type='radio'].radio-iii").change(function(){
+    $(".radio-btnn").removeClass("radio-bg");
       $(this).closest(".plan-selector-group").find(".radio-btnn").addClass("radio-bg");
-      })
+    })
   </script>
 {% endif %}

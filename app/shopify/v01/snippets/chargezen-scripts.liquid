@@ -123,8 +123,42 @@
         .closest('.plan-selector-group')
         .find('select')
         .val();
-
+      setSellingPlanAttr(planId);
+      if (planId) {
+        getPlanType(planId);
+      } else {
+        $(".build_a_box_btn").unbind();
+        $(".btn.product-form__cart-submit > span").text('ADD TO CART');
+        $(".btn.product-form__cart-submit").removeClass('build_a_box_btn');
+      }
       selectPlan(planId);
+    }
+
+    function setSellingPlanAttr(val) {
+      jQuery.post('/cart/update.js', { attributes: {'selling_plan_id': val} });
+    }
+
+    function getPlanType(planId) {
+      var groupId = planId ? product.plans[parseInt(planId)].selling_plan_group_id : '';
+      if ($('.build_a_box_plan_chk').text() == 'true') {
+        setupBuildABox(groupId);
+      }
+    }
+
+    function setupBuildABox(groupId){
+      $(".btn.product-form__cart-submit > span").text('Build a Box');
+      $(".btn.product-form__cart-submit").addClass('build_a_box_btn');
+      $(".build_a_box_btn").click(function(event){
+        event.preventDefault();
+        let quantity = 1;
+        if ($("[name='quantity']")) {
+          quantity = parseInt($("[name='quantity']").val())
+        }
+
+        jQuery.post('/cart/add', {id: $("form select[name='id']").val(), quantity: quantity, selling_plan: $("[name='selling_plan']").val(), 'plan-selector-group': groupId}, function(data, status) {
+          window.location.href="/pages/build-a-box";
+        });
+      });
     }
 
     $(form).change('select, input', function(){
@@ -153,8 +187,19 @@
   }
 
   $(document).ready(function(){
+    eraseCookie('box_items');
     if($('fieldset.chargezen-plan-selector').length) {
       initChargeZen();
+    }
+    if (location.pathname == '/pages/build-a-box') {
+      setIframePageSize()
+    }
+    function setIframePageSize() {
+      $('.page-width').css('max-width', '100%');
+    }
+
+    function eraseCookie(name) {
+      document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     }
   })
 })(window.chargezenForShopify);

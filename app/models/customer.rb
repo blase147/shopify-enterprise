@@ -81,4 +81,26 @@ class Customer < ApplicationRecord
       end
     end
   end
+
+  def self.update_contracts(customer_id, shop)
+    items = CustomerSubscriptionContractsService.new(customer_id).run
+    items[:subscriptions].each do |item|
+      billing_policy = item.billing_policy
+
+      customer = shop.customers.find_or_create_by(shopify_id: item.id[/\d+/])
+      customer.update_columns(
+        first_name: item.customer.first_name,
+        last_name: item.customer.last_name,
+        email: item.customer.email,
+        phone: item.customer.phone,
+        shopify_at: item.created_at.to_date,
+        shopify_updated_at: item.updated_at&.to_date,
+        status: item.status,
+        subscription: item.lines.edges.first&.node&.title,
+        language: "$#{item.lines.edges.first&.node&.current_price&.amount} / #{billing_policy.interval.pluralize}",
+        communication: "#{billing_policy.interval_count} #{billing_policy.interval} Pack".titleize,
+        shopify_customer_id: item.customer.id[/\d+/]
+      )
+    end
+  end
 end

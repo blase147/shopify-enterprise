@@ -15,13 +15,16 @@ class CustomerSubscriptionContractsService < GraphqlService
             node {
               id
               createdAt
+              updatedAt
               status
               nextBillingDate
               appAdminUrl
               customer {
+                id
                 firstName
                 lastName
                 email
+                phone
               }
               lines(first: 10) {
                 edges {

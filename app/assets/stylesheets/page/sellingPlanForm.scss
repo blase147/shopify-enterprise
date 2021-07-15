@@ -61,7 +61,20 @@
     .Polaris-Stack > .Polaris-Stack__Item {
       margin-top: 1.6rem;
     }
+    > .Polaris-Stack {
+      margin-top: 0rem;
+    }
   }
+
+  .collection-stack {
+    .building-box-collection {
+      margin-top: 39px;
+      > .Polaris-Stack {
+        margin-top: 1rem;
+      }
+    }
+  }
+
   label.add-product-label {
     color: #007eff;
     font-weight: var(--p-button-font-weight, 400);
@@ -74,5 +87,27 @@
   }
   .Polaris-Button--plain {
     background: none;
+  }
+  .box-subscription-search {
+    display: flex;
+    flex-direction: column;
+    height: 68px;
+    justify-content: space-between;
+  }
+  .box-subscription-detail {
+    display: flex;
+    > div:first-child {
+      display: flex;
+      flex-direction: column;
+      height: 68px;
+      justify-content: space-between;
+      margin-right: 25px;
+    }
+    > div:nth-child(2) {
+      .Polaris-Choice {
+        padding: 0;
+        padding-bottom: .8rem;
+      }
+    }
   }
 }
