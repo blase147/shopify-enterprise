@@ -6,6 +6,7 @@ import {
   FormLayout,
   Layout,
   Select,
+  Stack,
   TextStyle,
 } from '@shopify/polaris';
 
@@ -34,10 +35,17 @@ const Billing = (props) => {
     { label: '3 Days', value: '3' },
   ];
 
-  const { values, touched, errors, setFieldValue } = props;
+  const { values, touched, errors, setFieldValue, handleBack } = props;
 
   return (
     <Layout>
+      <Layout.Section>
+      <Stack>
+            <Stack.Item >
+             <p className="pointer" onClick={handleBack}>{'< Back'}</p> 
+            </Stack.Item>
+          </Stack>
+      </Layout.Section>
       <Card>
         <Card.Section>
           <div className="billing">

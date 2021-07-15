@@ -19,6 +19,13 @@ const ProductExtention = ({ values, touched, errors, setFieldValue }) => {
     return (
       <div className="product-extention">
         <Layout>
+          <Layout.Section>
+            <Stack>
+              <Stack.Item >
+                <p className="pointer" onClick={handleBack}>{'< Back'}</p>
+              </Stack.Item>
+            </Stack>
+          </Layout.Section>
         <Card>
           <Card.Section>
             <div className="billing">

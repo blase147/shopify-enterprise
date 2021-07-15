@@ -18,8 +18,10 @@ import {
 } from '@shopify/polaris';
 
 const StoreInformation = (props) => {
-  const { values, touched, errors, setFieldValue } = props;
+  const { values, touched, errors, setFieldValue,handleBack } = props;
   return (
+    <>
+    <p className="pointer" onClick={handleBack}>{'< Back'}</p>
     <Layout>
       <div className="container-left">
         <Card.Section>
@@ -138,6 +140,7 @@ const StoreInformation = (props) => {
         </Card.Section>
       </div>
     </Layout>
+    </>
   );
 };
 export default StoreInformation;

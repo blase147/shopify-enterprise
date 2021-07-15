@@ -12,11 +12,23 @@ import Dunning from './Dunning';
 import EmailNotification from './EmailNotification';
 import HouseKeeping from './HouseKeeping';
 import Password from './HouseKeepingComponents/Password';
-import Legal from './Legal';
+// import Legal from './Legal';
 import ProductExtention from './ProductExtention';
 import StoreInfomation from './StoreInformation';
-
-
+import Translation from './HouseKeepingComponents/Translation';
+import Legal from './HouseKeepingComponents/Legal';
+//Settings Images 
+import SettingImage from '../../../assets/images/settings/setting.svg'
+import BillingImage from '../../../assets/images/settings/billing.svg'
+import CustomerImage from '../../../assets/images/settings/customer.svg'
+import DiscountImage from '../../../assets/images/settings/discount.svg'
+import EmailImage from '../../../assets/images/settings/email.svg'
+import ExportImage from '../../../assets/images/settings/export.svg'
+import InformationImage from '../../../assets/images/settings/information.svg'
+import LegalImage from '../../../assets/images/settings/legal.svg'
+import PasswordImage from '../../../assets/images/settings/password.svg'
+import SMSImage from '../../../assets/images/settings/sms.svg'
+import TranslationImage from '../../../assets/images/settings/translation.svg'
 
 
 
@@ -338,6 +350,10 @@ const Settings = () => {
   // form data #####################################################
 
   const [selectedTitleTab, setSelectedTitleTab] = useState(0);
+  const [selectedSetting,setSelectedSetting]=useState('');
+  const handleBackSetting=useCallback(()=>{
+    setSelectedSetting('');
+  },[setSelectedSetting])
 
   // Password confirmation
   const [passwordConfirmed, setPasswordConfirmed] = useState(false)
@@ -375,7 +391,85 @@ const Settings = () => {
     (selectedTabIndex) => setSelectedTitleTab(selectedTabIndex),
     []
   );
-
+  const settings=[
+    // {
+    //   key:"house_keeping",
+    //   title:"House Keeping",
+    //   img:SettingImage,
+    //   desc:"View and update your store details."
+    // },
+    {
+      key:"email_notification",
+      title:"Email Notifications",
+      img:EmailImage,
+      desc:"Manage email notifications sent to you and your customers."
+    },
+    ...(process.env.APP_TYPE=="public" ?
+    [{
+      key:"store_information",
+      title:"Store Information",
+      img:InformationImage,
+      desc:"Manage the information your customers can view on your store."
+    },
+    {
+      key:"discount",
+      title:"Discount",
+      img:DiscountImage,
+      desc:"Enable and manage your store's discount."
+    }]:[]),
+    {
+      key:"billing",
+      title:"Billing",
+      img:BillingImage,
+      desc:"Manage your billing information and view your invoices."
+    },
+    ...(process.env.APP_TYPE=="public" ?
+    [
+    {
+      key:"legal",
+      title:"Legal",
+      img:LegalImage,
+      desc:"Manage your store's legal pages."
+    },
+    {
+      key:"export",
+      title:"Export",
+      img:ExportImage,
+      desc:"Enable and manage your store's discount."
+    }]:[]),
+    {
+      key:"sms",
+      title:"SMS",
+      img:SMSImage,
+      desc:"View and update your store details."
+    },
+    ...(process.env.APP_TYPE=="public" ?
+    [
+    {
+      key:"translation",
+      title:"Translation",
+      img:TranslationImage,
+      desc:"View and update your customer’s portal details."
+    }]:[]),
+    {
+      key:"password",
+      title:"Password",
+      img:PasswordImage,
+      desc:"Manage your Password information."
+    },
+    {
+      key:"customer-portal",
+      title:"Customer Portal",
+      img:CustomerImage,
+      desc:"Manage your customer information."
+    },
+    {
+      key:"product_extention",
+      title:"Product Extension",
+      img:SettingImage,
+      desc:"Manage your product extentions."
+    }
+  ]
   const tabs = [
     {
       id: 'house',
@@ -424,15 +518,13 @@ const Settings = () => {
       <Frame>
         { passwordConfirmed
           ? (
-            <Page title="Settings">
-              {
-                console.log("...",tabs,"hahahh")
-              }
-              <Tabs
-                tabs={tabs}
-                selected={selectedTitleTab}
-                onSelect={handleTabChange}
-              >
+            // <Page title="Settings">
+            //   <Tabs
+            //     tabs={tabs}
+            //     selected={selectedTitleTab}
+            //     onSelect={handleTabChange}
+            //   >
+            <>
                 {loading && (
                   <Card>
                     <Spinner
@@ -538,90 +630,131 @@ const Settings = () => {
                             onDismiss={hideSaveSuccess}
                           />
                         )}
+                        <>
+                          {/* new settings bar */}
+                          {!selectedSetting &&
+                            <>
+                              <div class="setting-grid">
+                                {settings.map(setting => (
+                                  <div key={Math.random()} class="tabs-parents pointer" onClick={()=>setSelectedSetting(setting.key)}>
+                                    <div class="icon-sec">
+                                      <img src={setting.img} />
+                                    </div>
+                                    <div class="tab-info">
+                                      <h4>{setting.title}</h4>
+                                      <p>{setting.desc}</p>
+                                    </div>
+                                  </div>
+                                ))
+                                }
+                              </div>
+                            </>
+                          }
+                          {/* settings layout */}
                         {
-                          console.log("SelectedTab..",selectedTitleTab)
-                        }
-                        {selectedTitleTab === 0 ? (
-                          <HouseKeeping
+                          selectedSetting &&
+                          <>
+                            {selectedSetting === 'house_keeping' ? (
+                              <HouseKeeping
 
-                          />):
-                        selectedTitleTab === 1 ? (
-                          <Billing
-                            values={values}
-                            touched={touched}
-                            errors={errors}
-                            setFieldValue={setFieldValue}
-                          />
-                        ) : selectedTitleTab === 2 ? (
-                          <CustomPortal
-                            values={values}
-                            touched={touched}
-                            errors={errors}
-                            setFieldValue={setFieldValue}
-                            handleSubmit={handleSubmit}
-                            refetch={refetch}
-                            isSubmitting={isSubmitting}
-                          />
-                        ) : selectedTitleTab === 3 ? (
-                          <div className="EmailNotification">
-                            <EmailNotification
-                              values={values}
-                              touched={touched}
-                              errors={errors}
-                              setFieldValue={setFieldValue}
-                              handleSubmit={handleSubmit}
-                            />
-                          </div>
-                        )
-                        // : selectedTitleTab === 4 ? (
-                        //   <Dunning
-                        //     values={values}
-                        //     touched={touched}
-                        //     errors={errors}
-                        //     setFieldValue={setFieldValue}
-                        //     handleSubmit={handleSubmit}
-                        //   />
-                        // )
-                        : selectedTitleTab === (process.env.APP_TYPE=="public"?4:10) ? (
-                          <div className="storeInfomation">
-                            <StoreInfomation
-                              values={values}
-                              touched={touched}
-                              errors={errors}
-                              setFieldValue={setFieldValue}
-                              handleSubmit={handleSubmit}
-                            />
-                          </div>
-                        )
-                        : selectedTitleTab === (process.env.APP_TYPE=="public"?5:4) ? (
-                          <div className="storeInfomation">
-                            <ProductExtention
-                              values={values}
-                              touched={touched}
-                              errors={errors}
-                              setFieldValue={setFieldValue}
-                              handleSubmit={handleSubmit}
-                            />
-                          </div>
-                        )
-                        // : selectedTitleTab === (process.env.APP_TYPE=="public"?5:5)?(
-                        //   <div className="storeInfomation">
-                        //     <Legal
-                        //       values={values}
-                        //       touched={touched}
-                        //       errors={errors}
-                        //       setFieldValue={setFieldValue}
-                        //       handleSubmit={handleSubmit}
-                        //     />
-                        //   </div>
-                        // )
-                        :""}
+                              />) :
+                              selectedSetting === 'billing' ? (
+                                <Billing
+                                  values={values}
+                                  touched={touched}
+                                  errors={errors}
+                                  setFieldValue={setFieldValue}
+                                  handleBack={handleBackSetting}
+                                />
+                              ) : selectedSetting === 'customer-portal' ? (
+                                <CustomPortal
+                                  values={values}
+                                  touched={touched}
+                                  errors={errors}
+                                  setFieldValue={setFieldValue}
+                                  handleSubmit={handleSubmit}
+                                  refetch={refetch}
+                                  isSubmitting={isSubmitting}
+                                  handleBack={handleBackSetting}
+                                />
+                              ) : selectedSetting === 'email_notification' ? (
+                                <div className="EmailNotification">
+                                  <EmailNotification
+                                    values={values}
+                                    touched={touched}
+                                    errors={errors}
+                                    setFieldValue={setFieldValue}
+                                    handleSubmit={handleSubmit}
+                                    handleBack={handleBackSetting}
+                                  />
+                                </div>
+                              ): selectedSetting === 'store_information' ? (
+                                  <div className="storeInfomation">
+                                    <StoreInfomation
+                                      values={values}
+                                      touched={touched}
+                                      errors={errors}
+                                      setFieldValue={setFieldValue}
+                                      handleSubmit={handleSubmit}
+                                      handleBack={handleBackSetting}
+                                    />
+                                  </div>
+                                ): selectedSetting === 'product_extention' ? (
+                                    <div className="storeInfomation">
+                                      <ProductExtention
+                                        values={values}
+                                        touched={touched}
+                                        errors={errors}
+                                        setFieldValue={setFieldValue}
+                                        handleSubmit={handleSubmit}
+                                        handleBack={handleBackSetting}
+                                      />
+                                    </div>
+                                  ):selectedSetting === 'discount' ? (
+                                    <>
+                                    </>
+                                  )
+                                  :selectedSetting === 'export' ? (
+                                    <>
+                                    </>
+                                  )
+                                  :selectedSetting === 'sms' ? (
+                                    <>
+                                    </>
+                                  )
+                                  :selectedSetting === 'legal' ? (
+                                    <>
+                                    <Legal 
+                                    handleBack={handleBackSetting}
+                                    />
+                                    </>
+                                  )
+                                  :selectedSetting === 'translation' ? (
+                                    <>
+                                    <Translation
+                                    handleBack={handleBackSetting}
+                                     />
+                                    </>
+                                  )
+                                  :selectedSetting === 'password' ? (
+                                    <>
+                                    <Password 
+                                    handleBack={handleBackSetting}
+                                    />
+                                    </>
+                                  ): ""}
+                          </>
+                        }
+                        </>
+                      
                       </Form>
                     )}
                   </Formik>
                 )}
-              </Tabs>
-            </Page>
+                
+              {/* </Tabs>
+            </Page> */}
+            </>
           ): (
             <Page title="Password protected">
               <Layout>
