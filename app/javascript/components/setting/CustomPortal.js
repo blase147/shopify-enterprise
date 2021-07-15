@@ -167,6 +167,7 @@ const CustomPortal = (props) => {
     setFieldValue,
     handleSubmit,
     isSubmitting,
+    handleBack
   } = props;
 
   const handleRemoveReasons = useCallback((values, i) => {
@@ -178,6 +179,13 @@ const CustomPortal = (props) => {
 
   return (
     <Layout>
+      <Layout.Section>
+        <Stack>
+          <Stack.Item >
+            <p className="pointer" onClick={handleBack}>{'< Back'}</p>
+          </Stack.Item>
+        </Stack>
+      </Layout.Section>
       <Card.Section>
         <Stack vertical>
           <Stack.Item>
@@ -496,7 +504,7 @@ const CustomPortal = (props) => {
                     />
                     <p>&nbsp;</p>
                   </FormLayout.Group>
-                  <FormLayout.Group>
+                  <FormLayout.Group> 
                     <p>Change Variants</p>
                     <Select
                       options={options}
@@ -510,7 +518,7 @@ const CustomPortal = (props) => {
                     <p>Cancel Subscription</p>
                     <Select
                       options={options}
-                      value={values.subscriptionCancellation}
+                      value={values.subscriptionCancellation || "storeowner_and_customer"}
                       error={
                         touched.subscriptionCancellation &&
                         errors.subscriptionCancellation
@@ -525,7 +533,7 @@ const CustomPortal = (props) => {
                     <p>Delivery Schedule</p>
                     <Select
                       options={options}
-                      value={values.navigationDelivery}
+                      value={values.navigationDelivery || "storeowner_and_customer"}
                       error={
                         touched.navigationDelivery && errors.navigationDelivery
                       }
@@ -537,7 +545,7 @@ const CustomPortal = (props) => {
                     <p>Pause Subscription</p>
                     <Select
                       options={options}
-                      value={values.pauseSubscription}
+                      value={values.pauseSubscription || "storeowner_and_customer"}
                       error={
                         touched.pauseSubscription && errors.pauseSubscription
                       }
@@ -549,7 +557,7 @@ const CustomPortal = (props) => {
                     <p>Reactivate Subscription</p>
                     <Select
                       options={options}
-                      value={values.reactiveSubscription}
+                      value={values.reactiveSubscription || "storeowner_and_customer"}
                       error={
                         touched.reactiveSubscription && errors.reactiveSubscription
                       }
@@ -561,7 +569,7 @@ const CustomPortal = (props) => {
                     <p>Edit Delivery Address</p>
                     <Select
                       options={options}
-                      value={values.shipingAddress}
+                      value={values.shipingAddress || "storeowner_and_customer"}
                       error={touched.shipingAddress && errors.shipingAddress}
                       onChange={(e) => setFieldValue('shipingAddress', e)}
                     />
@@ -578,7 +586,7 @@ const CustomPortal = (props) => {
                     <p>Skip Shipment</p>
                     <Select
                       options={options}
-                      value={values.shipment}
+                      value={values.shipment || "storeowner_and_customer"}
                       error={touched.shipment && errors.shipment}
                       onChange={(e) => setFieldValue('shipment', e)}
                     />
@@ -598,7 +606,7 @@ const CustomPortal = (props) => {
                     <p>Delay/Speedup order</p>
                     <Select
                       options={options}
-                      value={values.delayOrder}
+                      value={values.delayOrder || "storeowner_and_customer"}
                       error={touched.delayOrder && errors.delayOrder}
                       onChange={(e) => setFieldValue('delayOrder', e)}
                     />

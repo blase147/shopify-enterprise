@@ -376,3 +376,35 @@ div#sms-panel {
     width: 100% !important;
 }
 }
+.setting-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 33px 37px;
+  grid-row-gap: 40px;
+}
+.tabs-parents {
+  display: flex;
+  grid-gap: 16px;
+}
+.setting-grid .tabs-parents .tab-info h4 {
+  margin: 0;
+  color: #007EFF;
+  font-size: 17px;
+}
+.setting-grid .tabs-parents .tab-info p {
+  margin: 6px 0px;
+}
+.pointer{
+  cursor: pointer;
+}
+p.pointer{
+  position: absolute;
+    height: 30px;
+    top: 12px;
+    left: 12px;
+}
+.module-settings .storeInfomation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 45px;
+}

@@ -12,7 +12,7 @@ import {
 } from '@shopify/polaris';
 import { gql, useLazyQuery, useMutation } from '@apollo/client';
 import { isEmpty } from 'lodash';
-const Translation = () => {
+const Translation = ({handleBack}) => {
 
   const fetchSettingQuery=gql`
   query{
@@ -486,7 +486,13 @@ const Translation = () => {
     return (
         <>
         <Layout>
-
+          <Layout.Section>
+            <Stack>
+              <Stack.Item >
+                <p className="pointer" onClick={handleBack}>{'< Back'}</p>
+              </Stack.Item>
+            </Stack>
+          </Layout.Section>
         {fetchLoading ? (
         <Card>
           <Spinner

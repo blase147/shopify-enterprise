@@ -91,7 +91,7 @@ const EmailNotification = (props) => {
     (value) => setSelectedSetting(value),
     []
   );
-  const { values, touched, errors, setFieldValue, handleSubmit } = props;
+  const { values, touched, errors, setFieldValue, handleSubmit, handleBack } = props;
   const listAdditionalSetting = [
     {
       title: 'Send account invite after checkout',
@@ -146,6 +146,13 @@ const EmailNotification = (props) => {
 
   return (
     <Layout>
+      <Layout.Section>
+        <Stack>
+          <Stack.Item >
+            <p className="pointer" onClick={handleBack}>{'< Back'}</p>
+          </Stack.Item>
+        </Stack>
+      </Layout.Section>
       {selectedIndex != null ? (
         <EmailNotificationDetails
           setFieldValue={setFieldValue}
