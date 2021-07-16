@@ -29,6 +29,7 @@ import LegalImage from '../../../assets/images/settings/legal.svg'
 import PasswordImage from '../../../assets/images/settings/password.svg'
 import SMSImage from '../../../assets/images/settings/sms.svg'
 import TranslationImage from '../../../assets/images/settings/translation.svg'
+import Sms from './HouseKeepingComponents/Sms';
 
 
 
@@ -397,7 +398,7 @@ const Settings = () => {
       title:"Product Extension",
       img:SettingImage,
       desc:"Manage your product extentions."
-    }
+    },
     {
       key:"email_notification",
       title:"Email Notifications",
@@ -628,9 +629,11 @@ const Settings = () => {
                           {/* new settings bar */}
                           {!selectedSetting &&
                             <>
+                          <Card>
+                            <Card.Section>
                               <div class="setting-grid">
                                 {settings.map(setting => (
-                                  <div key={Math.random()} class="tabs-parents pointer" onClick={()=>setSelectedSetting(setting.key)}>
+                                  <div key={Math.random()} class="tabs-parents pointer" onClick={() => setSelectedSetting(setting.key)}>
                                     <div class="icon-sec">
                                       <img src={setting.img} />
                                     </div>
@@ -642,6 +645,8 @@ const Settings = () => {
                                 ))
                                 }
                               </div>
+                            </Card.Section>
+                          </Card>
                             </>
                           }
                           {/* settings layout */}
@@ -714,6 +719,7 @@ const Settings = () => {
                                   )
                                   :selectedSetting === 'sms' ? (
                                     <>
+                                    <Sms />
                                     </>
                                   )
                                   :selectedSetting === 'legal' ? (

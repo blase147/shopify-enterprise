@@ -7,6 +7,7 @@ import {
   Layout,
   Select,
   TextStyle,
+  Stack
 } from '@shopify/polaris';
 
 const ProductExtention = ({ values, touched, errors, setFieldValue }) => {
