@@ -1,6 +1,9 @@
 - if @active_subscriptions.present? && (params[:status].present? ? params[:status] == 'active' : true)
   - @active_subscriptions.each do |subscription|
     - billing_policy = subscription.node.billing_policy
+    - selling_plan_ids = subscription.node.lines.edges.map{|edge| edge.node.selling_plan_id}
+    - selling_plan_id = selling_plan_ids.reject{|val| val.nil?}&.first
+    - selling_plan = SellingPlan.find_by(shopify_id: selling_plan_id)
     .subscription-contract-products
       - subscription.node.lines.edges.each_with_index do |edge, index|
         - product = ShopifyAPI::Product.find(edge.node.product_id[/\d+/])
@@ -19,6 +22,9 @@
             p.text.right.active-text
               = number_to_currency (edge.node.current_price.amount.to_f * edge.node.quantity)
           .grid-item
+            - if selling_plan && selling_plan.box_subscription_type.present?
+              = link_to "/a/chargezen_production/dashboard/build_a_box?customer_id=#{params[:customer_id]}&subscription_id=#{subscription.node.id[/\d+/]}&active_subscriptions_count=#{@active_subscriptions.count}&selling_plan_id=#{selling_plan_id[/\d+/]}" do
+                button.white-btn.action-btn UPDATE CHOICES
             - if @setting.customer_allowed?('swap_product')
               button.white-btn.action-btn type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#swap-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" SWAP SUBSCRIPTION
             - if @setting.customer_allowed?('navigation_delivery')
@@ -100,8 +106,6 @@
             button.edit-address data-toggle="modal" data-target="#deliveryEditModal" #{@translation.home_tab_edit_btn.present? ? @translation.home_tab_edit_btn : 'EDIT'}
         = render 'edit_delivery_address_modal', subscription: subscription.node
     - line_products = subscription.node.lines.edges.map{|edge| edge.node.product_id[/\d+/]}
-    - selling_plan_ids = subscription.node.lines.edges.map{|edge| edge.node.selling_plan_id}
-    - selling_plan_id = selling_plan_ids.reject{|val| val.nil?}&.first
     / - selling_plan_id = "gid://shopify/SellingPlan/393543886"
     - campaigns = UpsellCampaign.joins(:upsell_campaign_group).where(upsell_campaign_groups: {status: :publish}).where("rule_customer = 't' AND rule_customer_value ->> 'sellingPlanId' = ?", selling_plan_id).select("product_offer AS product_offer, offer_title, button_text_accept, show_offer_title")
     - product_ids = []

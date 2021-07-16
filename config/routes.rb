@@ -65,6 +65,8 @@ Rails.application.routes.draw do
         get :addresses
         get :payment_methods
         get :settings
+        get :build_a_box
+        post :confirm_box_selection
       end
     end
 

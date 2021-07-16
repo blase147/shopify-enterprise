@@ -1,5 +1,5 @@
 class AppProxy::DashboardController < AppProxyController
-  before_action :load_subscriptions
+  before_action :load_subscriptions, except: [:build_a_box, :confirm_box_selection]
   before_action :load_customer, only: %w(index addresses payment_methods settings upcoming)
 
   def index
@@ -32,7 +32,32 @@ class AppProxy::DashboardController < AppProxyController
   def settings
   end
 
+  def build_a_box
+    products = nil
+    @subscription_id = params[:subscription_id]
+    if params[:selling_plan_id].present?
+      @selling_plan = SellingPlan.joins(:selling_plan_group).where(selling_plan_groups: { shop_id: current_shop.id }).find_by(shopify_id: "gid://shopify/SellingPlan/#{params[:selling_plan_id]}")
+      case @selling_plan&.box_subscription_type
+      when 'collection'
+        products = @selling_plan.collection_images[0]['products']
+      when 'products'
+        products = @selling_plan.product_images
+      end
+      fetch_products(products) if products.present?
+    end
+  end
+
+  def confirm_box_selection
+    customer = current_shop.customers.find_by(shopify_id: params[:subscription_id])
+    customer.update(box_items: params[:box_items])
+  end
+
   private ##
+
+  def fetch_products(products)
+    product_ids = products.map {|product| product['product_id'][/\d+/]}.join(',')
+    @products = ShopifyAPI::Product.where(ids: product_ids, fields: 'id,title,images,variants')
+  end
 
   def load_customer
     customer_service ||= CustomerService.new({shop: current_shop})

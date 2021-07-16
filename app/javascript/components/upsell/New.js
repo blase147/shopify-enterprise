@@ -91,11 +91,11 @@ const NewUpSell = () => {
   ];
 
   const upsellLocationOptions=[
-    { label: 'Customer Portal', value: 'Customer Portal' },
-    { label: 'Checkout', value: 'Checkout' },
-    { label: 'Thank you page', value: 'Thank you page' },
-    { label: 'SmartySMS', value: 'SmartySMS' },
-    { label: 'Cart', value: 'Cart' },
+    { label: 'Customer Portal', value: 'customer_portal' },
+    { label: 'Checkout', value: 'checkout' },
+    { label: 'Thank you page', value: 'thankyou_page' },
+    { label: 'SmartySMS', value: 'smarty_sms' },
+    { label: 'Cart', value: 'cart' },
   ]
   const initialValues = {
     publicName: '',
@@ -191,6 +191,7 @@ const NewUpSell = () => {
       fetchCampaign(id: $id) {
         id
         publicName
+        upsellLocation
         internalName
         selectorTitle
         status
@@ -426,7 +427,7 @@ const NewUpSell = () => {
 
                   <Card title="Upsell campaign Group" sectioned>
                     <FormLayout>
-                      <FormLayout.Group>  
+                      <FormLayout.Group>
                         <TextField
                           value={values.internalName}
                           label="Internal name"
