@@ -1,8 +1,11 @@
-import { Layout, Stack } from '@shopify/polaris'
+import { Icon, Layout, Stack } from '@shopify/polaris'
 import { isEmpty } from 'lodash'
 import React, { useCallback, useState } from 'react'
 import Export from './Export'
-import ExportForm from './ExportForm'
+import ExportForm from './ExportForm';
+import {
+  MobileBackArrowMajor
+} from '@shopify/polaris-icons';
 
 const MainExport = ({handleBack}) => {
 
@@ -28,15 +31,13 @@ const MainExport = ({handleBack}) => {
   return (
     <>
       <Layout>
-        <Layout.Section>
-          <Stack>
-            <Stack.Item>
-              <p className="pointer" onClick={handleBack}>
-                {'< Back'}
-              </p>
-            </Stack.Item>
-          </Stack>
-        </Layout.Section>
+      <Layout.Section>
+        <div className="back-button pointer" onClick={handleBack}>
+          <Icon
+            source={MobileBackArrowMajor}
+            color="base" />
+        </div>
+      </Layout.Section>
       </Layout>
       {showForm ? (
         <ExportForm handleCloseForm={handleCloseForm} />

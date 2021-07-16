@@ -464,11 +464,10 @@ const Dashboard = (props) => {
 
           </Layout.Section>
 
-          <Layout.Section>
-            <div class="feeds-container">
-            <Notification />
-            </div>
-          </Layout.Section>
+          <div className="buttons-container">
+
+
+
 
           <div style={{width:'100%'}}>
             <Layout.Section>
@@ -491,6 +490,12 @@ const Dashboard = (props) => {
               </ButtonGroup> */}
             </div>
             </Layout.Section>
+            </div>
+            <Layout.Section>
+            <div class="feeds-container">
+            <Notification />
+            </div>
+          </Layout.Section>
             </div>
           {(loading || !data) ? (
             <Layout.Section>

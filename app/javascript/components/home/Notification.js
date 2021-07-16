@@ -114,7 +114,7 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
     </span>
   )
   const activator = (
-    <div style={{width:"100%",textAlign:"right"}}>
+    <div>
     <Button primary onClick={togglePopoverActive} >
       {icon("Revenue Live Feed")}
     </Button>

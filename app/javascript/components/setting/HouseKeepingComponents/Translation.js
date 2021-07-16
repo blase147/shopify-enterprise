@@ -8,8 +8,12 @@ import {
   Stack,
   Button,
   Toast,
-  Spinner
+  Spinner,
+  Icon
 } from '@shopify/polaris';
+import {
+  MobileBackArrowMajor
+} from '@shopify/polaris-icons';
 import { gql, useLazyQuery, useMutation } from '@apollo/client';
 import { isEmpty } from 'lodash';
 const Translation = ({handleBack}) => {
@@ -486,13 +490,13 @@ const Translation = ({handleBack}) => {
     return (
         <>
         <Layout>
-          <Layout.Section>
-            <Stack>
-              <Stack.Item >
-                <p className="pointer" onClick={handleBack}>{'< Back'}</p>
-              </Stack.Item>
-            </Stack>
-          </Layout.Section>
+        <Layout.Section>
+        <div className="back-button pointer" onClick={handleBack}>
+          <Icon
+            source={MobileBackArrowMajor}
+            color="base" />
+        </div>
+      </Layout.Section>
         {fetchLoading ? (
         <Card>
           <Spinner

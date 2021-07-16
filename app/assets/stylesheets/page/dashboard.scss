@@ -34,7 +34,7 @@
   .Polaris-Modal-CloseButton--withoutTitle {
     z-index: 100;
   }
-  
+
   .Polaris-Modal-Dialog__Modal.Polaris-Modal-Dialog--sizeLarge {
     max-width: 80rem;
   }
@@ -230,4 +230,12 @@ margin: 20px !important;
 
 .Polaris-Popover__Pane.Polaris-Scrollable.Polaris-Scrollable--vertical {
   overflow: hidden !important;
+}
+.buttons-container{
+	width: 100%;
+    display: flex;
+    align-items: center;
+}
+.popover-wrapper{
+  text-align: end;
 }

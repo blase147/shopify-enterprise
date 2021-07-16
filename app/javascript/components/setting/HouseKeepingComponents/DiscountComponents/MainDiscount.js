@@ -1,7 +1,10 @@
-import { Layout, Stack } from '@shopify/polaris'
+import { Icon, Layout, Stack } from '@shopify/polaris'
 import React, { useCallback, useState } from 'react'
 import Discount from './Discount'
 import DiscountForm from './DiscountForm'
+import {
+  MobileBackArrowMajor
+} from '@shopify/polaris-icons';
 
 const MainDiscount = ({handleBack}) => {
 
@@ -23,15 +26,13 @@ const MainDiscount = ({handleBack}) => {
   return (
     <>
       <Layout>
-        <Layout.Section>
-          <Stack>
-            <Stack.Item>
-              <p className="pointer" onClick={handleBack}>
-                {'< Back'}
-              </p>
-            </Stack.Item>
-          </Stack>
-        </Layout.Section>
+      <Layout.Section>
+        <div className="back-button pointer" onClick={handleBack}>
+          <Icon
+            source={MobileBackArrowMajor}
+            color="base" />
+        </div>
+      </Layout.Section>
       </Layout>
       {showForm ? (
         <DiscountForm handleCloseForm={handleCloseForm} />
