@@ -14,14 +14,23 @@ import {
   TextStyle,
   Stack,
   DisplayText,
-  Link
+  Link,
+  Icon
 } from '@shopify/polaris';
-
+import {
+  MobileBackArrowMajor
+} from '@shopify/polaris-icons';
 const StoreInformation = (props) => {
   const { values, touched, errors, setFieldValue,handleBack } = props;
   return (
     <>
-    <p className="pointer" onClick={handleBack}>{'< Back'}</p>
+   <Layout.Section>
+        <div className="back-button pointer" onClick={handleBack}>
+          <Icon
+            source={MobileBackArrowMajor}
+            color="base" />
+        </div>
+      </Layout.Section>
     <div className="storeInfomation">
     <Layout>
       <div className="container-left">

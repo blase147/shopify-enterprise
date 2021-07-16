@@ -1,4 +1,10 @@
 .module-settings {
+  .back-button{
+    padding: 8px;
+    border: 1px solid #0000002e;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
   .settings-container{
     margin: 25px;
     margin-left: 100px;
@@ -393,6 +399,9 @@ div#sms-panel {
 .tabs-parents {
   display: flex;
   grid-gap: 16px;
+}
+.tab-info{
+  max-width: 65%;
 }
 .setting-grid .tabs-parents .tab-info h4 {
   margin: 0;

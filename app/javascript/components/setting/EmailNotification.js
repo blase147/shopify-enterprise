@@ -10,7 +10,11 @@ import {
   Layout,
   Stack,
   Heading,
+  Icon,
 } from '@shopify/polaris';
+import {
+  MobileBackArrowMajor
+} from '@shopify/polaris-icons';
 import Switch from 'react-switch';
 const EmailNotification = (props) => {
   //SettingToggle
@@ -147,11 +151,11 @@ const EmailNotification = (props) => {
   return (
     <Layout>
       <Layout.Section>
-        <Stack>
-          <Stack.Item >
-            <p className="pointer" onClick={handleBack}>{'< Back'}</p>
-          </Stack.Item>
-        </Stack>
+        <div className="back-button pointer" onClick={handleBack}>
+          <Icon
+            source={MobileBackArrowMajor}
+            color="base" />
+        </div>
       </Layout.Section>
       {selectedIndex != null ? (
         <EmailNotificationDetails

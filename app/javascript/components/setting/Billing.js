@@ -1,9 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
-
+import {
+  MobileBackArrowMajor
+} from '@shopify/polaris-icons';
 import {
   Card,
   DisplayText,
   FormLayout,
+  Icon,
   Layout,
   Select,
   Stack,
@@ -40,11 +43,11 @@ const Billing = (props) => {
   return (
     <Layout>
       <Layout.Section>
-      <Stack>
-            <Stack.Item >
-             <p className="pointer" onClick={handleBack}>{'< Back'}</p> 
-            </Stack.Item>
-          </Stack>
+        <div className="back-button pointer" onClick={handleBack}>
+          <Icon
+            source={MobileBackArrowMajor}
+            color="base" />
+        </div>
       </Layout.Section>
       <Card>
         <Card.Section>
