@@ -15,7 +15,7 @@ const DiscountForm = ({handleCloseForm}) => {
         <Layout>
         <div className="wrapper">
           <div className="bread-bar">
-            <a>Discount</a> 
+            <a>Discount</a>
             <span>{">"}</span>
             <a>Create Discount</a>
           </div>
@@ -55,18 +55,18 @@ const DiscountForm = ({handleCloseForm}) => {
               </div>
               <DisplayText size="small">Type of product</DisplayText>
               <div className="min-radio-group">
-                <RadioButton 
-                name="type" 
+                <RadioButton
+                name="type"
                 label="All product types"
                 helpText="The discount code will apply to subscription and one time products"
                 />
-                <RadioButton 
-                name="type" 
+                <RadioButton
+                name="type"
                 label="One-time products"
                 helpText="The discount code will only apply to non-subscription products"
                 />
-                <RadioButton 
-                name="type" 
+                <RadioButton
+                name="type"
                 label="Subscription products"
                 helpText="The discount code will only apply to subscription products"
                 />
@@ -129,33 +129,33 @@ const DiscountForm = ({handleCloseForm}) => {
           <div class="sec-2">
             <Card title="Application limits" sectioned>
               <div className="limit-group-radio">
-              <RadioButton 
-                name="limit" 
+              <RadioButton
+                name="limit"
                 label="Limit number of times this discount can be applied in total"
                 />
-                <RadioButton 
-                name="limit" 
+                <RadioButton
+                name="limit"
                 label="Limit to one subscription per customer"
                 />
-                <RadioButton 
-                name="limit" 
+                <RadioButton
+                name="limit"
                 label="Limit to first-time subscribers only"
                 />
               </div>
               <p><strong>How many times should the discount apply to the customer's subscription?</strong></p>
               <div className="min-radio-group">
-                <RadioButton 
-                name="charge" 
+                <RadioButton
+                name="charge"
                 label="One charge only"
                 helpText="The discount code will apply to one charge per customer before expiring"
                 />
-                <RadioButton 
-                name="charge" 
+                <RadioButton
+                name="charge"
                 label="Set amount of charges"
                 helpText="The discount code will apply to a set amount of charges per customer before expiring"
                 />
-                <RadioButton 
-                name="charge" 
+                <RadioButton
+                name="charge"
                 label="All charges"
                 helpText="The discount code will continue to apply to all future customer charges"
                 />
@@ -178,10 +178,10 @@ const DiscountForm = ({handleCloseForm}) => {
               <RadioButton label="Set an expiration date for new customers"/>
               <div className="btn-group translation-btn">
               {/* <Button >Cancel</Button>
-              <Button primary>save Changes</Button> */}  
-                <Button primary>Cancel</Button>
+              <Button primary>save Changes</Button> */}
+                <Button onClick={handleCloseForm} primary>Cancel</Button>
                 <div className="save-btn">
-                <Button >Save Changes </Button>
+                <Button onClick={handleCloseForm} >Save Changes </Button>
                 </div>
             </div>
             </Card>

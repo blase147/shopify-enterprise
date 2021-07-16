@@ -1,4 +1,12 @@
 .module-settings {
+  .settings-container{
+    margin: 25px;
+    margin-left: 100px;
+    h1 {
+      font-size: 30px;
+      padding-bottom: 20px;
+  }
+  }
   .Polaris-Card__Section {
     margin-bottom: 20px;
     background: linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
@@ -397,14 +405,16 @@ div#sms-panel {
 .pointer{
   cursor: pointer;
 }
-p.pointer{
-  position: absolute;
-    height: 30px;
-    top: 12px;
-    left: 12px;
-}
-.module-settings .storeInfomation {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 45px;
+.store-info-container{
+  p.pointer{
+    position: absolute;
+      height: 30px;
+      top: 12px;
+      left: 12px;
+  }
+  .module-settings .storeInfomation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 45px;
+  }
 }

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {Banner, Card, ContextualSaveBar, Form, Frame, Layout, List, Page, Spinner, Tabs, Toast, RadioButton,Button, TextField} from '@shopify/polaris';
+import {Banner, Card, ContextualSaveBar, Form, Frame, Layout, List, Page, Spinner, Tabs, Toast, RadioButton,Button, TextField, Stack} from '@shopify/polaris';
 import './ExportComponents/export.css'
 import {gql,useLazyQuery,useMutation} from '@apollo/client'
 const Password = ({handleBack}) => {
@@ -49,7 +49,7 @@ const Password = ({handleBack}) => {
       <Layout.Section>
       <Stack>
             <Stack.Item >
-             <p className="pointer" onClick={handleBack}>{'< Back'}</p> 
+             <p className="pointer" onClick={handleBack}>{'< Back'}</p>
             </Stack.Item>
           </Stack>
       </Layout.Section>

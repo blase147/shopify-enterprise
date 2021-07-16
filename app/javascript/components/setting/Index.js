@@ -29,6 +29,9 @@ import LegalImage from '../../../assets/images/settings/legal.svg'
 import PasswordImage from '../../../assets/images/settings/password.svg'
 import SMSImage from '../../../assets/images/settings/sms.svg'
 import TranslationImage from '../../../assets/images/settings/translation.svg'
+import Sms from './HouseKeepingComponents/Sms';
+import MainDiscount from './HouseKeepingComponents/DiscountComponents/MainDiscount';
+import MainExport from './HouseKeepingComponents/ExportComponents/MainExport';
 
 
 
@@ -510,266 +513,290 @@ const Settings = () => {
   return (
     <AppLayout typePage="settings" tabIndex="8">
       <Frame>
-        { passwordConfirmed
-          ? (
-            // <Page title="Settings">
-            //   <Tabs
-            //     tabs={tabs}
-            //     selected={selectedTitleTab}
-            //     onSelect={handleTabChange}
-            //   >
-            <>
-                {loading && (
-                  <Card>
-                    <Spinner
-                      accessibilityLabel="Spinner example"
-                      size="large"
-                      color="teal"
-                    />
-                  </Card>
-                )}
-                {formErrors.length > 0 && (
-                  <>
-                    <Banner title="Setting could not be saved" status="critical">
-                      <List type="bullet">
-                        {formErrors.map((message, index) => (
-                          <List.Item key={index}>{message.message}</List.Item>
-                        ))}
-                      </List>
-                    </Banner>
-                    <br />
-                  </>
-                )}
-                {formData && (
-                  <Formik
-                    validationSchema={validationSchema}
-                    initialValues={formData ? formData : initialValues}
-                    enableReinitialize
-                    onSubmit={(
-                      values,
-                      { setSubmitting, setDirty, resetForm, touched }
-                    ) => {
-                      delete values.recurringChargeStatus;
-                      delete values.chargeConfirmationLink;
-                      const newValues={...values,
-                        navigationDelivery:values.navigationDelivery || "storeowner_and_customer",
-                        reactiveSubscription:values.reactiveSubscription || 'storeowner_and_customer',
-                        shipingAddress:values.shipingAddress || 'storeowner_and_customer',
-                        shipment:values.shipment || 'storeowner_and_customer',
-                        subscriptionCancellation:values.subscriptionCancellation || 'storeowner_and_customer',
-                        swapProduct:values.swapProduct || 'storeowner_and_customer',
-                        upcomingQuantity:values.upcomingQuantity ||  'storeowner_and_customer',
-                        delayOrder:values.delayOrder || 'storeowner_and_customer',
-                        pauseSubscription:values.pauseSubscription || 'storeowner_and_customer',
-                      };
+        {passwordConfirmed ? (
+          // <Page title="Settings">
+          //   <Tabs
+          //     tabs={tabs}
+          //     selected={selectedTitleTab}
+          //     onSelect={handleTabChange}
+          //   >
+          <>
+            {loading && (
+              <Card>
+                <Spinner
+                  accessibilityLabel="Spinner example"
+                  size="large"
+                  color="teal"
+                />
+              </Card>
+            )}
+            {formErrors.length > 0 && (
+              <>
+                <Banner title="Setting could not be saved" status="critical">
+                  <List type="bullet">
+                    {formErrors.map((message, index) => (
+                      <List.Item key={index}>{message.message}</List.Item>
+                    ))}
+                  </List>
+                </Banner>
+                <br />
+              </>
+            )}
+            {formData && (
+              <Formik
+                validationSchema={validationSchema}
+                initialValues={formData ? formData : initialValues}
+                enableReinitialize
+                onSubmit={(
+                  values,
+                  { setSubmitting, setDirty, resetForm, touched }
+                ) => {
+                  delete values.recurringChargeStatus;
+                  delete values.chargeConfirmationLink;
+                  const newValues = {
+                    ...values,
+                    navigationDelivery:
+                      values.navigationDelivery || 'storeowner_and_customer',
+                    reactiveSubscription:
+                      values.reactiveSubscription || 'storeowner_and_customer',
+                    shipingAddress:
+                      values.shipingAddress || 'storeowner_and_customer',
+                    shipment: values.shipment || 'storeowner_and_customer',
+                    subscriptionCancellation:
+                      values.subscriptionCancellation ||
+                      'storeowner_and_customer',
+                    swapProduct:
+                      values.swapProduct || 'storeowner_and_customer',
+                    upcomingQuantity:
+                      values.upcomingQuantity || 'storeowner_and_customer',
+                    delayOrder: values.delayOrder || 'storeowner_and_customer',
+                    pauseSubscription:
+                      values.pauseSubscription || 'storeowner_and_customer',
+                  };
 
-                      updateSetting({ variables: { input: { params: newValues } } })
-                        .then((resp) => {
-                          const data = resp.data;
-                          const errors = data.errors;
+                  updateSetting({ variables: { input: { params: newValues } } })
+                    .then((resp) => {
+                      const data = resp.data;
+                      const errors = data.errors;
 
-                          if (errors) {
-                            setFormErrors(errors);
-                          } else {
-                            setSaveSuccess(true);
-                            console.log('oke');
-                            refetch();
-                            setDirty(false);
-                            // resetForm({});
-                            console.log('kxjckxjck');
-                          }
+                      if (errors) {
+                        setFormErrors(errors);
+                      } else {
+                        setSaveSuccess(true);
+                        console.log('oke');
+                        refetch();
+                        setDirty(false);
+                        // resetForm({});
+                        console.log('kxjckxjck');
+                      }
 
-                          setSubmitting(false);
-                        })
-                        .catch((error) => {
-                          setSubmitting(false);
-                          setFormErrors(error);
-                        });
-                    }}
-                  >
-                    {({
-                      values,
-                      errors,
-                      touched,
-                      handleChange,
-                      handleBlur,
-                      handleSubmit,
-                      isSubmitting,
-                      setFieldValue,
-                      resetForm,
-                      dirty,
-                      setDirty,
-                      formik,
-                      /* and other goodies */
-                    }) => (
-                      <Form onSubmit={handleSubmit}>
-                        {dirty && (
-                          <ContextualSaveBar
-                            alignContentFlush={true}
-                            message="Unsaved changes"
-                            saveAction={{
-                              onAction: () => handleSubmit(),
-                              loading: isSubmitting,
-                              disabled: false,
-                            }}
-                            discardAction={{
-                              onAction: resetForm,
-                            }}
-                          />
-                        )}
-
-                        {saveSuccess && (
-                          <Toast
-                            content="Setting is saved"
-                            onDismiss={hideSaveSuccess}
-                          />
-                        )}
-                        <>
-                          {/* new settings bar */}
-                          {!selectedSetting &&
-                            <>
-                              <div class="setting-grid">
-                                {settings.map(setting => (
-                                  <div key={Math.random()} class="tabs-parents pointer" onClick={()=>setSelectedSetting(setting.key)}>
-                                    <div class="icon-sec">
-                                      <img src={setting.img} />
-                                    </div>
-                                    <div class="tab-info">
-                                      <h4>{setting.title}</h4>
-                                      <p>{setting.desc}</p>
-                                    </div>
-                                  </div>
-                                ))
-                                }
-                              </div>
-                            </>
-                          }
-                          {/* settings layout */}
-                        {
-                          selectedSetting &&
-                          <>
-                            {selectedSetting === 'house_keeping' ? (
-                              <HouseKeeping
-
-                              />) :
-                              selectedSetting === 'billing' ? (
-                                <Billing
-                                  values={values}
-                                  touched={touched}
-                                  errors={errors}
-                                  setFieldValue={setFieldValue}
-                                  handleBack={handleBackSetting}
-                                />
-                              ) : selectedSetting === 'customer-portal' ? (
-                                <CustomPortal
-                                  values={values}
-                                  touched={touched}
-                                  errors={errors}
-                                  setFieldValue={setFieldValue}
-                                  handleSubmit={handleSubmit}
-                                  refetch={refetch}
-                                  isSubmitting={isSubmitting}
-                                  handleBack={handleBackSetting}
-                                />
-                              ) : selectedSetting === 'email_notification' ? (
-                                <div className="EmailNotification">
-                                  <EmailNotification
-                                    values={values}
-                                    touched={touched}
-                                    errors={errors}
-                                    setFieldValue={setFieldValue}
-                                    handleSubmit={handleSubmit}
-                                    handleBack={handleBackSetting}
-                                  />
-                                </div>
-                              ): selectedSetting === 'store_information' ? (
-                                  <div className="storeInfomation">
-                                    <StoreInfomation
-                                      values={values}
-                                      touched={touched}
-                                      errors={errors}
-                                      setFieldValue={setFieldValue}
-                                      handleSubmit={handleSubmit}
-                                      handleBack={handleBackSetting}
-                                    />
-                                  </div>
-                                ): selectedSetting === 'product_extention' ? (
-                                    <div className="storeInfomation">
-                                      <ProductExtention
-                                        values={values}
-                                        touched={touched}
-                                        errors={errors}
-                                        setFieldValue={setFieldValue}
-                                        handleSubmit={handleSubmit}
-                                        handleBack={handleBackSetting}
-                                      />
-                                    </div>
-                                  ):selectedSetting === 'discount' ? (
-                                    <>
-                                    </>
-                                  )
-                                  :selectedSetting === 'export' ? (
-                                    <>
-                                    </>
-                                  )
-                                  :selectedSetting === 'sms' ? (
-                                    <>
-                                    </>
-                                  )
-                                  :selectedSetting === 'legal' ? (
-                                    <>
-                                    <Legal
-                                    handleBack={handleBackSetting}
-                                    />
-                                    </>
-                                  )
-                                  :selectedSetting === 'translation' ? (
-                                    <>
-                                    <Translation
-                                    handleBack={handleBackSetting}
-                                     />
-                                    </>
-                                  )
-                                  :selectedSetting === 'password' ? (
-                                    <>
-                                    <Password
-                                    handleBack={handleBackSetting}
-                                    />
-                                    </>
-                                  ): ""}
-                          </>
-                        }
-                        </>
-
-                      </Form>
-                    )}
-                  </Formik>
-                )}
-
-              {/* </Tabs>
-            </Page> */}
-            </>
-          ): (
-            <Page title="Password protected">
-              <Layout>
-                <Layout.Section>
-                  <Card sectioned>
-                    <FormLayout>
-                      <TextField
-                        value={password}
-                        onChange={value => setPassword(value)}
-                        label="Password"
-                        type="password"
-                        error={passwordError && passwordError}
+                      setSubmitting(false);
+                    })
+                    .catch((error) => {
+                      setSubmitting(false);
+                      setFormErrors(error);
+                    });
+                }}
+              >
+                {({
+                  values,
+                  errors,
+                  touched,
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                  isSubmitting,
+                  setFieldValue,
+                  resetForm,
+                  dirty,
+                  setDirty,
+                  formik,
+                  /* and other goodies */
+                }) => (
+                  <Form onSubmit={handleSubmit}>
+                    {dirty && (
+                      <ContextualSaveBar
+                        alignContentFlush={true}
+                        message="Unsaved changes"
+                        saveAction={{
+                          onAction: () => handleSubmit(),
+                          loading: isSubmitting,
+                          disabled: false,
+                        }}
+                        discardAction={{
+                          onAction: resetForm,
+                        }}
                       />
-                      <Button primary loading={passwordLoading} onClick={verifyPassword} >Confirm</Button>
-                    </FormLayout>
-                  </Card>
-                </Layout.Section>
-              </Layout>
-            </Page>
-          )
-        }
+                    )}
+
+                    {saveSuccess && (
+                      <Toast
+                        content="Setting is saved"
+                        onDismiss={hideSaveSuccess}
+                      />
+                    )}
+                    <>
+                      {/* new settings bar */}
+                      {!selectedSetting && (
+                        <>
+                          <div className="settings-container">
+                            <div>
+                              <h1>
+                                Settings
+                              </h1>
+                            </div>
+                            <div>
+                              <Card>
+                                <Card.Section>
+                                  <div class="setting-grid">
+                                    {settings.map((setting) => (
+                                      <div
+                                        key={Math.random()}
+                                        class="tabs-parents pointer"
+                                        onClick={() =>
+                                          setSelectedSetting(setting.key)
+                                        }
+                                      >
+                                        <div class="icon-sec">
+                                          <img src={setting.img} />
+                                        </div>
+                                        <div class="tab-info">
+                                          <h4>{setting.title}</h4>
+                                          <p>{setting.desc}</p>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </Card.Section>
+                              </Card>
+                            </div>
+                          </div>
+
+                        </>
+                      )}
+                      {/* settings layout */}
+                      {selectedSetting && (
+                        <>
+                        <Layout>
+                          <Layout.Section>
+                          {selectedSetting === 'house_keeping' ? (
+                            <HouseKeeping />
+                          ) : selectedSetting === 'billing' ? (
+                            <Billing
+                              values={values}
+                              touched={touched}
+                              errors={errors}
+                              setFieldValue={setFieldValue}
+                              handleBack={handleBackSetting}
+                            />
+                          ) : selectedSetting === 'customer-portal' ? (
+                            <CustomPortal
+                              values={values}
+                              touched={touched}
+                              errors={errors}
+                              setFieldValue={setFieldValue}
+                              handleSubmit={handleSubmit}
+                              refetch={refetch}
+                              isSubmitting={isSubmitting}
+                              handleBack={handleBackSetting}
+                            />
+                          ) : selectedSetting === 'email_notification' ? (
+                            <div className="EmailNotification">
+                              <EmailNotification
+                                values={values}
+                                touched={touched}
+                                errors={errors}
+                                setFieldValue={setFieldValue}
+                                handleSubmit={handleSubmit}
+                                handleBack={handleBackSetting}
+                              />
+                            </div>
+                          ) : selectedSetting === 'store_information' ? (
+                              <StoreInfomation
+                                values={values}
+                                touched={touched}
+                                errors={errors}
+                                setFieldValue={setFieldValue}
+                                handleSubmit={handleSubmit}
+                                handleBack={handleBackSetting}
+                              />
+                          ) : selectedSetting === 'product_extention' ? (
+                            <div className="storeInfomation">
+                              <ProductExtention
+                                values={values}
+                                touched={touched}
+                                errors={errors}
+                                setFieldValue={setFieldValue}
+                                handleSubmit={handleSubmit}
+                                handleBack={handleBackSetting}
+                              />
+                            </div>
+                          ) : selectedSetting === 'discount' ? (
+                            <>
+                              <MainDiscount handleBack={handleBackSetting} />
+                            </>
+                          ) : selectedSetting === 'export' ? (
+                            <>
+                              <MainExport handleBack={handleBackSetting} />
+                            </>
+                          ) : selectedSetting === 'sms' ? (
+                            <>
+                              <Sms handleBack={handleBackSetting} />
+                            </>
+                          ) : selectedSetting === 'legal' ? (
+                            <>
+                              <Legal handleBack={handleBackSetting} />
+                            </>
+                          ) : selectedSetting === 'translation' ? (
+                            <>
+                              <Translation handleBack={handleBackSetting} />
+                            </>
+                          ) : selectedSetting === 'password' ? (
+                            <>
+                              <Password handleBack={handleBackSetting} />
+                            </>
+                          ) : (
+                            ''
+                          )}
+                          </Layout.Section>
+                        </Layout>
+                        </>
+                      )}
+                    </>
+                  </Form>
+                )}
+              </Formik>
+            )}
+
+            {/* </Tabs>
+            </Page> */}
+          </>
+        ) : (
+          <Page title="Password protected">
+            <Layout>
+              <Layout.Section>
+                <Card sectioned>
+                  <FormLayout>
+                    <TextField
+                      value={password}
+                      onChange={(value) => setPassword(value)}
+                      label="Password"
+                      type="password"
+                      error={passwordError && passwordError}
+                    />
+                    <Button
+                      primary
+                      loading={passwordLoading}
+                      onClick={verifyPassword}
+                    >
+                      Confirm
+                    </Button>
+                  </FormLayout>
+                </Card>
+              </Layout.Section>
+            </Layout>
+          </Page>
+        )}
       </Frame>
     </AppLayout>
   );

@@ -22,6 +22,7 @@ const StoreInformation = (props) => {
   return (
     <>
     <p className="pointer" onClick={handleBack}>{'< Back'}</p>
+    <div className="storeInfomation">
     <Layout>
       <div className="container-left">
         <Card.Section>
@@ -140,6 +141,7 @@ const StoreInformation = (props) => {
         </Card.Section>
       </div>
     </Layout>
+    </div>
     </>
   );
 };
