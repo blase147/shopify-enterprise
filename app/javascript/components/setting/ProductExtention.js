@@ -10,7 +10,7 @@ import {
   Stack
 } from '@shopify/polaris';
 
-const ProductExtention = ({ values, touched, errors, setFieldValue }) => {
+const ProductExtention = ({ values, touched, errors, setFieldValue, handleBack }) => {
 
     const options = [
       { label: 'Design I', value: 'one' },
@@ -43,7 +43,7 @@ const ProductExtention = ({ values, touched, errors, setFieldValue }) => {
                   onChange={(e) => setFieldValue('designType', e)}
                   options={options}
                 />
-               
+
               </FormLayout>
             </div>
           </Card.Section>

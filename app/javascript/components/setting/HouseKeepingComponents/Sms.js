@@ -1,7 +1,8 @@
 import React,{useMemo,useCallback,useState,useEffect} from 'react'
-import { Banner, Card, ContextualSaveBar, Form, Frame, Layout, List, Page, Spinner, Tabs, Toast, RadioButton,Button, TextField } from '@shopify/polaris';
-
-const Sms = () => {
+import { Banner, Card, ContextualSaveBar, Form, Frame, Layout, List, Page, Spinner, Tabs, Toast, RadioButton,Button, TextField,Stack } from '@shopify/polaris';
+import {gql,useMutation} from '@apollo/client';
+import Taxes from './Taxes';
+const Sms = ({handleBack}) => {
 
     const updateSmsSettingQuery = gql`
   mutation ($input: UpdateSmsSettingInput!) {
@@ -91,6 +92,15 @@ const Sms = () => {
 
     return (
         <>
+        <Layout>
+          <Layout.Section>
+            <Stack>
+              <Stack.Item >
+                <p className="pointer" onClick={handleBack}>{'< Back'}</p>
+              </Stack.Item>
+            </Stack>
+          </Layout.Section>
+          </Layout>
             <Layout>
                 <Layout.Section>
                     <div class="tabs-btn">
