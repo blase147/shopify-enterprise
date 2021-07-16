@@ -90,9 +90,17 @@ const NewUpSell = () => {
     { label: 'Top', value: 'top' },
   ];
 
+  const upsellLocationOptions=[
+    { label: 'Customer Portal', value: 'Customer Portal' },
+    { label: 'Checkout', value: 'Checkout' },
+    { label: 'Thank you page', value: 'Thank you page' },
+    { label: 'SmartySMS', value: 'SmartySMS' },
+    { label: 'Cart', value: 'Cart' },
+  ]
   const initialValues = {
     publicName: '',
-    internalName: '',
+    internalName: 'Customer Portal',
+    upsellLocation:'',
     selectorTitle: '',
     status: '',
     upsellCampaigns: [
@@ -418,7 +426,7 @@ const NewUpSell = () => {
 
                   <Card title="Upsell campaign Group" sectioned>
                     <FormLayout>
-                      <FormLayout.Group>
+                      <FormLayout.Group>  
                         <TextField
                           value={values.internalName}
                           label="Internal name"
@@ -462,6 +470,23 @@ const NewUpSell = () => {
                             </Button>
                           </ButtonGroup>
                         </div>
+                      </FormLayout.Group>
+                      <FormLayout.Group>
+                        <Select
+                          options={upsellLocationOptions}
+                          label="Select Upsell Location"
+                          value={values.upsellLocation}
+                          error={
+                            touched.upsellLocation &&
+                            errors.upsellLocation
+                          }
+                          onChange={(e) =>
+                            setFieldValue(
+                              `upsellLocation`,
+                              e
+                            )
+                          }
+                        />
                       </FormLayout.Group>
                       {/*<FormLayout.Group>
                         <TextField
