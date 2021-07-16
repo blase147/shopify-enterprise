@@ -639,8 +639,13 @@ const Settings = () => {
                       {/* new settings bar */}
                       {!selectedSetting && (
                         <>
-                          <Layout>
-                            <Layout.Section>
+                          <div className="settings-container">
+                            <div>
+                              <h1>
+                                Settings
+                              </h1>
+                            </div>
+                            <div>
                               <Card>
                                 <Card.Section>
                                   <div class="setting-grid">
@@ -664,8 +669,9 @@ const Settings = () => {
                                   </div>
                                 </Card.Section>
                               </Card>
-                            </Layout.Section>
-                          </Layout>
+                            </div>
+                          </div>
+                         
                         </>
                       )}
                       {/* settings layout */}
@@ -706,7 +712,6 @@ const Settings = () => {
                               />
                             </div>
                           ) : selectedSetting === 'store_information' ? (
-                            <div className="storeInfomation">
                               <StoreInfomation
                                 values={values}
                                 touched={touched}
@@ -715,7 +720,6 @@ const Settings = () => {
                                 handleSubmit={handleSubmit}
                                 handleBack={handleBackSetting}
                               />
-                            </div>
                           ) : selectedSetting === 'product_extention' ? (
                             <div className="storeInfomation">
                               <ProductExtention
