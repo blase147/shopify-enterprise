@@ -39,7 +39,7 @@ class ReportDataService
   def get_customer_lifetime_value(subscriptions)
     range = (Date.today - 1.day) - 1.month..Date.today - 1.day
     customer_data = subscriptions.group_by { |subscription| subscription.node.customer.id }
-    mrr(subscriptions, range) / customer_data.size  rescue 0
+    (mrr(subscriptions, range) / customer_data.size) * 100  rescue 0
   end
 
   def year_graph_data(subscriptions, range, method)
