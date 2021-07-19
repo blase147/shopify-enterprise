@@ -86,9 +86,9 @@ namespace :subscriptions do
 
   def reprocess_subscription(subscription, subs_log)
     return unless subscription.status == 'ACTIVE'
-    billing_date = DateTime.parse subscription.next_billing_date
     subscription_id = subscription.id[/\d+/]
     customer = Customer.find_by(shopify_id: subscription_id)
+    billing_date = get_next_billing_date(subscription, customer.shop)
     if customer.present? && customer.shop.sms_setting.present? && customer.shop.sms_setting.failed_renewal.present? && customer.retry_count<=customer.shop.setting.payment_retries
       if billing_date.utc.beginning_of_day == Time.current.utc.beginning_of_day
         result = SubscriptionBillingAttempService.new(subscription.id).run
@@ -121,8 +121,8 @@ namespace :subscriptions do
   def check_for_renewal(subscription)
     return unless subscription.status == 'ACTIVE'
 
-    billing_date = DateTime.parse subscription.next_billing_date
     customer = Customer.find_by(shopify_id: subscription.id[/\d+/])
+    billing_date = get_next_billing_date(subscription, customer.shop)
     sms_setting = customer.shop.sms_setting
     if customer.present? && sms_setting.present? && sms_setting.renewal_reminder.present? && sms_setting.renewal_duration.present?
       renewal_day = sms_setting.renewal_duration.split(' ')
@@ -139,8 +139,8 @@ namespace :subscriptions do
   def renewal_reminder(subscription)
     return unless subscription.status == 'ACTIVE'
 
-    billing_date = DateTime.parse subscription.next_billing_date
     customer = Customer.find_by(shopify_id: subscription.id[/\d+/])
+    billing_date = get_next_billing_date(subscription, customer.shop)
     if billing_date.utc.beginning_of_day.to_date == (Time.current-3.days).utc.beginning_of_day.to_date
       email_notification = customer.shop.setting.email_notifications.find_by_name "Upcoming Charge"
       EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
@@ -160,6 +160,19 @@ namespace :subscriptions do
     end
   rescue StabdardError => e
     p e.message
+  end
+
+  def get_next_billing_date(subscription, shop)
+    selling_plan_id = subscription.to_h.dig('lines', 'edges', 0, 'node', 'sellingPlanId')
+    return DateTime.parse(subscription.next_billing_date) unless selling_plan_id.present?
+
+    selling_plan = SellingPlan.joins(:selling_plan_group).where(selling_plan_groups: { shop_id: shop.id }).find_by(shopify_id: selling_plan_id)
+    if selling_plan.present? && selling_plan.billing_dates.present?
+      current_date = Time.current
+      selling_plan.billing_dates.include?(current_date.utc.to_date.to_s) ? current_date : DateTime.parse(subscription.next_billing_date)
+    else
+      DateTime.parse(subscription.next_billing_date)
+    end
   end
 
 end

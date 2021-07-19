@@ -28,6 +28,7 @@ class SubscriptionContractsService < GraphqlService
               edges {
                 node {
                   title
+                  sellingPlanId
                   currentPrice {
                     amount
                   }

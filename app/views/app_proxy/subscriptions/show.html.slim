@@ -78,6 +78,7 @@
                   td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= DateTime.parse(@subscription.next_billing_date).strftime("%d %b %Y")
                   td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
                     = p_button text: 'Change Date', data: { toggle: 'modal', target: '#subscriptionEditDateModal', purl: action_subscription_path(:change_date) }
+                    = p_button text: 'Change Date', data: { toggle: 'modal', target: '#subscriptionEditDateModal', purl: action_subscription_path(:change_date) }
                 tr.Polaris-DataTable__TableRow
                   th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"
                     | Quantity
@@ -100,7 +101,7 @@
                       | Billing Method
                       br/
                       p #{card.credit_card_company} ending in #{card.credit_card_number}
-                  
+
                   - if billing_address.present?
                     td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
                       = billing_address.name
