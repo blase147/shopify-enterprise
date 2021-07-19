@@ -29,9 +29,10 @@
     border: 1px solid #0606061a;
     border-radius: 2px;
     margin-right: 10px;
+    min-width: 98px;
 }
 .add-date-btn {
-    padding-left: 46%;
+    margin-left: 225px;
 }
 .pointer{
     cursor: pointer;
