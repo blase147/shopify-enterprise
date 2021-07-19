@@ -211,7 +211,7 @@ const removeDate=(dates,index)=>{
 if(dates){
   dates.splice(index,1);
 }
-return dates;
+return [...dates];
 }
   return (
     <AppLayout typePage="sellingPlanForm" tabIndex={1}>
@@ -316,6 +316,7 @@ return dates;
                 resetForm,
                 dirty,
                 formik,
+                setTouched
                 /* and other goodies */
               }) => (
                 <Form onSubmit={handleSubmit}>
@@ -796,9 +797,13 @@ return dates;
                                   }
                                 
                                 </div>
+                                {
+                                values.sellingPlans[index]?.billingDates.length > 0  && 
                                 <div className="add-date-btn">
                                 <Button primary onClick={()=>setSelectedBillingDate(null)}>+ Add</Button>
                                 </div>
+                                }
+                                
                               </div>
                               <div className="muti-input-wrapper">
                                 <div className="date-input">
@@ -823,10 +828,12 @@ return dates;
                                       </div>
                                     ))
                                   }
-                                
-                                </div>
-                                <div className="add-date-btn">
-                                <Button primary onClick={()=>setSelectedShippingDate(null)}>+ Add</Button>
+                                {
+                                  values.sellingPlans[index]?.shippingDates.length > 0  && 
+                                  <div className="add-date-btn">
+                                  <Button primary onClick={()=>setSelectedShippingDate(null)}>+ Add</Button>
+                                  </div>
+                                }
                                 </div>
                               </div>
                           </FormLayout.Group>
