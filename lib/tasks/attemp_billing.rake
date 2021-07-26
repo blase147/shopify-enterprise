@@ -1,5 +1,6 @@
 namespace :subscriptions do
   task :attemp_billing => :environment do
+    puts 'Cron for attempt billing'
     Shop.find_each do |shop|
       shop.connect
       result = SubscriptionContractsService.new.all_subscriptions
@@ -11,6 +12,7 @@ namespace :subscriptions do
   end
 
   task :retries_attemp_billing => :environment do
+    puts 'Cron for retry attempt billing'
     Shop.find_each do |shop|
       shop.connect
       shop.subscription_logs.pending_executions.each do |subs_log|
@@ -21,6 +23,7 @@ namespace :subscriptions do
   end
 
   task :expire_conversation => :environment do
+    puts 'Cron for expire conversations'
     SmsConversation.where('last_activity_at < ?', Time.current - 10.minutes).update_all(status: :expired)
   end
 
