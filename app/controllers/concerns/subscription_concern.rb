@@ -33,7 +33,7 @@ module SubscriptionConcern
       product = subscription.lines.edges.select{ |line| line.node.id == line_item_id }.first.node
       customer = Customer.find_by(shopify_id: params[:id])
       note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
-      description = customer.name+",just updated quantity to #{params[:quantity].to_i},"+product.title
+      description = customer.name+",updated quantity to #{params[:quantity].to_i},"+product.title
       customer.shop.subscription_logs.quantity.create(subscription_id: params[:id], customer_id: customer.id, product_id: line_item_id, product_name: product.title, note: note, description: description)
       render js: 'location.reload()'
     end
@@ -63,7 +63,7 @@ module SubscriptionConcern
       # current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id)
       subscription = SubscriptionContractService.new(params[:id]).run
       note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
-      description = @customer.name+",just swaped,"+variant.title
+      description = @customer.name+",swaped,"+variant.title
       # amount = (product.quantity * variant.price.to_f).round(2).to_s
       current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id, product_name: variant.title, note: note, description: description, product_id: params[:variant_id], swaped_product_id: variant.product_id)
       render js: 'location.reload()'
@@ -84,7 +84,7 @@ module SubscriptionConcern
         SubscriptionDraftsService.new.commit @draft_id
         subscription = SubscriptionContractService.new(params[:id]).run
         note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
-        description = @customer.name+",just #{params[:action_text].downcase}d,their plan to #{params[:interval_count]} #{params[:interval_type].titleize}"
+        description = @customer.name+",#{params[:action_text].downcase}d,their plan to #{params[:interval_count]} #{params[:interval_type].titleize}"
         current_shop.subscription_logs.create(action_type: params[:action_text].downcase.to_sym, subscription_id: params[:id], customer_id: @customer.id, note: note, description: description)
         render js: 'location.reload()'
       end

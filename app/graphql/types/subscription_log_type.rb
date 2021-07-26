@@ -1,5 +1,6 @@
 module Types
   class SubscriptionLogType < Types::BaseObject
+    field :id, ID, null: true
     field :action_type, String, null: true
     field :created_at, String, null: true
     field :description, String, null: true

@@ -26,7 +26,7 @@ class Customer < ApplicationRecord
       subscription = SubscriptionContractService.new(shopify_id).run
       product = subscription.lines.edges.collect{|c| c.node}.first
       note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
-      description = self.name+",just purchased,"+product.title
+      description = self.name+",purchased,"+product.title
       amount = (product.quantity * product.current_price.amount.to_f).round(2).to_s
       shop.subscription_logs.opt_in.sms.create(subscription_id: shopify_id, customer_id: id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
     rescue
