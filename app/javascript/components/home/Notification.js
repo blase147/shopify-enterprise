@@ -23,6 +23,7 @@ query($page: String!) {
   fetchSubscriptionLogs(page: $page){
       subscriptionLogs
       {
+          id
           actionType
           createdAt
           description

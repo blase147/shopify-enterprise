@@ -27,14 +27,14 @@ class SubscriptionContractDeleteService < GraphqlService
       note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
       amount = (product.quantity * product.current_price.amount.to_f).round(2).to_s
       if status == "CANCELLED"
-        description = customer.name+",just canceled,"+product.title
+        description = customer.name+",canceled,"+product.title
         if @type == "sms"
           customer.shop.subscription_logs.sms.cancel.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
         else
           customer.shop.subscription_logs.cancel.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
         end
       else
-        description = customer.name+",just restarted,"+product.title
+        description = customer.name+",restarted,"+product.title
         if @type == "sms"
           customer.shop.subscription_logs.sms.restart.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
         else
