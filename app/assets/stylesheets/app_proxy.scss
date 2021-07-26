@@ -2316,7 +2316,9 @@ body.chargezen-proxy {
   }
 }
 
-
+a[disabled="disabled"] {
+  pointer-events: none;
+}
 .checkout-design > h3 {
   text-align: center;
   font-size: 28px;

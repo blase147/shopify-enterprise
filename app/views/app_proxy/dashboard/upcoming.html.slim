@@ -61,7 +61,7 @@
                       - if @setting.customer_allowed?('shipment')
                         .item
                           .btn-wrapper
-                            = link_to action_subscription_contract_path(:skip_schedule, subscription.node.id[/\d+/], "billing_date=#{next_billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post do
+                            = link_to action_subscription_contract_path(:skip_schedule, subscription.node.id[/\d+/], "billing_date=#{next_billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), class: 'btn-link', remote: true, method: :post do
                               button type="button" #{@translation.delivery_tab_skip.present? ? @translation.delivery_tab_skip : 'SKIP'}
             - if @active_subscriptions.present? && @active_subscriptions.any? {|sub| sub.node.lines.edges.count == 1 }
               div
@@ -103,5 +103,11 @@
                           = subscription.node.delivery_method.address.address1
                       .item
                         .btn-wrapper
-                          = link_to action_subscription_contract_path(:skip_schedule, subscription.node.id[/\d+/], "billing_date=#{billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post do
+                          = link_to action_subscription_contract_path(:skip_schedule, subscription.node.id[/\d+/], "billing_date=#{billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), class: 'btn-link', remote: true, method: :post do
                             button.delivery-btn type="button" #{@translation.delivery_tab_skip.present? ? @translation.delivery_tab_skip : 'SKIP'}
+
+javascript:
+  $('.btn-link').click(function (event) {
+    $(this).attr('disabled', 'disabled');
+    event.preventDefault();
+  });
