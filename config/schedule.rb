@@ -1,5 +1,11 @@
-set :output, "log/cron_log.log"
-require_relative './environment'
+set :output, 'log/cron_log.log'
+env :PATH, ENV['PATH']
+set :environment, ENV['RAILS_ENV']
+
+
+every 4.hours do
+  rake 'log:clear'
+end
 
 every 1.days do
   rake 'subscriptions:attemp_billing'
