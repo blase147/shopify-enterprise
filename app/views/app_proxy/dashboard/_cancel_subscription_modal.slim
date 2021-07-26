@@ -31,7 +31,7 @@
                       br
                 .btn-wrapper
                   button.btn-cancel type="submit"
-                    span #{@translation.cancelled_reasons_cancel.present? ? @translation.cancelled_reasons_cancel : 'CANCEL ANYWAY'}
+                    span.cancel-text #{@translation.cancelled_reasons_cancel.present? ? @translation.cancelled_reasons_cancel : 'CANCEL ANYWAY'}
                     span
                     button.btn-keep type="button" aria-hidden="true" tabindex="-1" data-action='close' #{@translation.cancelled_reasons_keep_subscription.present? ? @translation.cancelled_reasons_keep_subscription : 'KEEP SUBSCRIPTION'}
                     svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg"

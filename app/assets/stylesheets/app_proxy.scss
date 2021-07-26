@@ -2315,3 +2315,7 @@ body.chargezen-proxy {
     transform: translate(-50%, -50%);
   }
 }
+
+a[disabled="disabled"] {
+  pointer-events: none;
+}
