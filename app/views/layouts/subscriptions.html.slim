@@ -21,7 +21,7 @@ html[lang="en"]
     = render 'layouts/shared/flash_messages'
     = yield
 
-    script[src="https://unpkg.com/@shopify/app-bridge"]
+    script[src="https://unpkg.com/@shopify/app-bridge@2"]
     = content_tag(:div, nil, id: 'shopify-app-init', data: { api_key: ShopifyApp.configuration.api_key, shop_origin: @shop_origin || (@current_shopify_session.domain if @current_shopify_session), debug: Rails.env.development? } )
 
     - if content_for?(:javascript)
