@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_19_065742) do
+ActiveRecord::Schema.define(version: 2021_07_27_070759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -166,6 +166,8 @@ ActiveRecord::Schema.define(version: 2021_07_19_065742) do
     t.decimal "price"
     t.integer "trial"
     t.boolean "active", default: true
+    t.json "product_ids"
+    t.json "variant_ids"
   end
 
   create_table "selling_plans", force: :cascade do |t|
