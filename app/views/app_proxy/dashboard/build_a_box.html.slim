@@ -1,43 +1,50 @@
 - if @selling_plan.present? && @selling_plan.box_subscription_type.present?
-  .checkout-design
-    .select-option
-      p Your selection (Please select options):
-      button.confirm_selection data-subscriptionId="#{@subscription_id}" Confirm Selection
-    .image-place-section
-      - @selling_plan.box_quantity_limit.times do
-        #img-template.cros-img
-          img src="" /
-          p.close-img x
-
-      span.box_limit.hidden = @selling_plan.box_quantity_limit
-    .img-sec-parent
-      - @products.each do |product|
-        .add-img-section
-          .img-con
-            img src="#{product.images.first.src}" /
-          p = product.title
-          button.add data-id="#{product.id}" Add
+  .checkout-design-1
+    p Select Style Options
+    .new-desig-parent
+      .img-sec-parent
+        - @products.each do |product|
+          .add-img-section
+            .img-con
+              img src="#{product.images.first.src}" /
+              button.add data-id="#{product.id}"
+                = image_pack_tag 'add_box_icon.svg'
+            p = product.title
+      .img-place-section
+        .top-section
+          h4 Build Your Box
+        .bottom-section
+          .add-img-sec
+            - @selling_plan.box_quantity_limit.times.each do |index|
+              .sec
+                .img-crs-sec.cros-img
+                  img.place-img src="" /
+                  .cros-plus.close-img
+                    | x
+                p Select #{index+1}
+          button.confirm_selection data-subscriptionId="#{@subscription_id}" CONFIRM SELECTION
+        span.box_limit.hidden = @selling_plan.box_quantity_limit
 
 - else
   span.billing_plan_present.hidden
 javascript:
   $(document).ready(function(){
-    eraseCookie('box_items');
-    $('.checkout-design .add').click(function(){
-      let selectedProducts = getCookie('box_items');
+    eraseCookie('customer_box_items');
+    $('.checkout-design-1 .add').click(function(){
+      let selectedProducts = getCookie('customer_box_items');
       if (selectedProducts == null || (selectedProducts.split(',').length <= parseInt($('.box_limit').text()))) {
         var img=$(this).closest('.add-img-section').find('img');
         var id=$(this).attr('data-id');
         var button=$(this);
         var flag=true;
-        $('.image-place-section').children('.cros-img').each(function(index,elem){
-          if(flag && !$(elem).attr('data-id')){
-            $(elem).children('img').attr('src',$(img).attr('src'));
-            $(elem).attr('data-id',id)
-            flag=false;
-            $(button).attr('disabled',true);
-            document.cookie = setCookie('box_items', (getCookie('box_items') ?  (getCookie('box_items') + ',' + id) : id), 1)
-          }
+        $('.img-place-section').find('.add-img-sec').children('.sec').each(function(index,elem){
+         if(flag && !$(elem).attr('data-id')){
+           $(elem).find('img').attr('src',$(img).attr('src')).removeClass('place-img');
+           $(elem).attr('data-id',id)
+           flag=false;
+           $(button).attr('disabled',true);
+           document.cookie = setCookie('customer_box_items', (getCookie('customer_box_items') ?  (getCookie('customer_box_items') + ',' + id) : id), 1)
+         }
         })
       }
     });
@@ -45,7 +52,7 @@ javascript:
 
 
   $(document).on('click','.close-img',function(){
-    var div=$(this).closest('.cros-img');
+    var div=$(this).closest('.sec');
     var id=$(div).attr('data-id');
     // $(div).remove();
     var section=$('.img-sec-parent')
@@ -54,11 +61,11 @@ javascript:
                 .find('button')
                 .attr('disabled',false);
     $(div).removeAttr('data-id');
-    $(div).find('img').attr('src','');
+    $(div).find('img').attr('src','').addClass('place-img');
     /// Shifting elements
     let counter=0;
     let placeholder=null;
-    $('.image-place-section').children('.cros-img').each(function(index,elem){
+    $('.add-img-sec').children('.sec').each(function(index,elem){
      if(!$(elem).attr('data-id')){
       placeholder=$(elem).clone();
       counter++;
@@ -66,13 +73,13 @@ javascript:
      }
     });
     for(let i=0;i<counter;i++){
-      $('.image-place-section').append($(placeholder).clone());
+      $('.add-img-sec').append($(placeholder).clone());
     }
     filterCookieData(id);
   })
 
   $(document).on('click','.confirm_selection',function(){
-    let selectedProducts = getCookie('box_items');
+    let selectedProducts = getCookie('customer_box_items');
     var subscriptionId = $(this).attr('data-subscriptionId');
     if (selectedProducts) {
       $.ajax({
@@ -87,14 +94,14 @@ javascript:
   });
 
   function filterCookieData(id){
-    let products = getCookie('box_items');
+    let products = getCookie('customer_box_items');
     let split_products = products.split(',');
     let filtered = split_products.filter(function(value, index, arr){
         return value != id;
     });
     let updated_products = filtered.join(',');
-    eraseCookie('box_items');
-    setCookie('box_items', updated_products, 1);
+    eraseCookie('customer_box_items');
+    setCookie('customer_box_items', updated_products, 1);
   }
 
   function setCookie(name,value,days) {

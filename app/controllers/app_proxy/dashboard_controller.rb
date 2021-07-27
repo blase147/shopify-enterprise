@@ -49,7 +49,7 @@ class AppProxy::DashboardController < AppProxyController
 
   def confirm_box_selection
     customer = current_shop.customers.find_by(shopify_id: params[:subscription_id])
-    customer.update(box_items: params[:box_items])
+    customer.update(box_items: params[:product_id])
   end
 
   private ##
