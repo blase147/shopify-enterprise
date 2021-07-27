@@ -120,7 +120,7 @@ module SubscriptionPlan
     GRAPHQL
 
     def delete_shopify
-      input = { id: self.shopify_id, productIds: self.product_ids.map { |p| p['product_id'] }, variantIds: self.variant_ids.map { |p| p['variant_id'] } }
+      input = { id: self.shopify_id, productIds: self.product_ids.present? ? self.product_ids.map { |p| p['product_id'] } : [], variantIds: self.variant_ids.present? ? self.variant_ids.map { |p| p['variant_id'] } : [] }
       result = client.query(client.parse(DELETE_QUERY), variables: input)
       puts '#####'
       p result
@@ -159,7 +159,7 @@ module SubscriptionPlan
       if error.present?
         raise error
       else
-        self.update_columns(product_ids: self.product_ids.select{|p| !p['_destroy']}, variant_ids: self.variant_ids.select{|p| !p['_destroy']})
+        self.update_columns(product_ids: self.product_ids.present? ? self.product_ids.select{|p| !p['_destroy']} : nil, variant_ids: self.variant_ids.present? ? self.variant_ids.select{|p| !p['_destroy']} : nil)
       end
 
       plans = result.data.selling_plan_group_update.selling_plan_group.selling_plans.edges
@@ -172,19 +172,19 @@ module SubscriptionPlan
     end
 
     def deleted_products
-      self.product_ids.map{|p| p["product_id"] if p["_destroy"]}.compact
+      self.product_ids.present? ? self.product_ids.map{|p| p["product_id"] if p["_destroy"]}.compact : []
     end
 
     def deleted_variants
-      self.variant_ids.map{|p| p["variant_id"] if p["_destroy"]}.compact
+      self.variant_ids.present? ? self.variant_ids.map{|p| p["variant_id"] if p["_destroy"]}.compact : []
     end
 
     def added_products
-      self.product_ids.map{|p| p["product_id"] unless p["_destroy"]}.compact
+      self.product_ids.present? ? self.product_ids.map{|p| p["product_id"] unless p["_destroy"]}.compact : []
     end
 
     def added_variants
-      self.variant_ids.map{|p| p["variant_id"] unless p["_destroy"]}.compact
+      self.variant_ids.present? ? self.variant_ids.map{|p| p["variant_id"] unless p["_destroy"]}.compact : []
     end
 
     def create_shopify
@@ -196,8 +196,8 @@ module SubscriptionPlan
       }
 
       self.resources = {
-        productIds: self.product_ids.map { |p| p['product_id'] },
-        productVariantIds: self.variant_ids.map { |p| p['variant_id'] }
+        productIds: self.product_ids.present? ? self.product_ids.map { |p| p['product_id'] } : [],
+        productVariantIds: self.variant_ids.present? ? self.variant_ids.map { |p| p['variant_id'] } : []
       }
       result = client.query(client.parse(CREATE_QUERY), variables: { input: input, resources: (self.resources ||  [])})
       puts '#####'

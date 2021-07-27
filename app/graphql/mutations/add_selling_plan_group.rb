@@ -10,7 +10,7 @@ module Mutations
       begin
         plan = current_shop.selling_plan_groups.create!(plan_params)
         { plan: plan }
-      rescue ActiveRecord::RecordInvalid => e
+      rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved => e
         GraphQL::ExecutionError.new("Invalid attributes for #{e.record.class}:"\
           " #{e.record.errors.full_messages.join(', ')}")
       end
