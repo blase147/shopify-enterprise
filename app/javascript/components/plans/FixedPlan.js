@@ -28,7 +28,7 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 import DatePickr from '../common/DatePicker/DatePickr';
 import './fixedplan.css'
 import { getDate } from 'javascript-time-ago/gradation';
-import dayjs from 'dayjs'; 
+import dayjs from 'dayjs';
 import SearchProduct from '../upsell/SearchProduct';
 import Preview from './Preview';
 
@@ -264,7 +264,7 @@ return [...dates];
                       sellingPlans: [{ ...initialValues }],
                     }
               }
-              onSubmit={(values, { setSubmitting, setDirty }) => { 
+              onSubmit={(values, { setSubmitting, setDirty }) => {
                 values.sellingPlans.forEach((plan,index)=>{
                   values.sellingPlans[index].deliveryIntervalCount = values.sellingPlans[index].deliveryIntervalCount || initialValues.deliveryIntervalCount ;
                   values.sellingPlans[index].deliveryIntervalType = values.sellingPlans[index].deliveryIntervalType || initialValues.deliveryIntervalType;
@@ -272,7 +272,7 @@ return [...dates];
                 values.productIds=allProducts;
                 console.log(values,"sellingPlan")
                 if (id) {
-                  updateSellingPlan({ 
+                  updateSellingPlan({
                     variables: {
                       input: { params: values },
                     },
@@ -468,7 +468,7 @@ return [...dates];
                       <FormLayout.Group>
                         <div className="product-search">
                           <SearchProduct
-                            value={values.productIds}
+                            value={values.productIds || []}
                             setFieldValue={setFieldValue}
                             fieldName={`productIds`}
                             allProducts={allProducts}
@@ -821,8 +821,8 @@ return [...dates];
                               <div className="muti-input-wrapper">
                                 <div className="date-input">
                                 <label> Specific billing date </label>
-                                <DatePickr 
-                                handleDate={setBillingDate} 
+                                <DatePickr
+                                handleDate={setBillingDate}
                                 callback={setFieldValue}
                                 selectedDate={selectedBillingDate}
                                 input={`sellingPlans[${index}].billingDates`}
@@ -841,21 +841,21 @@ return [...dates];
                                       </div>
                                     ))
                                   }
-                                
+
                                 </div>
                                 {
-                                values.sellingPlans[index]?.billingDates.length > 0  && 
+                                values.sellingPlans[index]?.billingDates.length > 0  &&
                                 <div className="add-date-btn">
                                 <Button primary onClick={()=>setSelectedBillingDate(null)}>+ Add</Button>
                                 </div>
                                 }
-                                
+
                               </div>
                               <div className="muti-input-wrapper">
                                 <div className="date-input">
                                 <label> Specific shipping date </label>
-                                <DatePickr 
-                                handleDate={setShippingDate} 
+                                <DatePickr
+                                handleDate={setShippingDate}
                                 callback={setFieldValue}
                                 selectedDate={selectedShippingDate}
                                 input={`sellingPlans[${index}].shippingDates`}
@@ -875,7 +875,7 @@ return [...dates];
                                     ))
                                   }
                                 {
-                                  values.sellingPlans[index]?.shippingDates.length > 0  && 
+                                  values.sellingPlans[index]?.shippingDates.length > 0  &&
                                   <div className="add-date-btn">
                                   <Button primary onClick={()=>setSelectedShippingDate(null)}>+ Add</Button>
                                   </div>
