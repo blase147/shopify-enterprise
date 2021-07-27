@@ -28,7 +28,10 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 import DatePickr from '../common/DatePicker/DatePickr';
 import './fixedplan.css'
 import { getDate } from 'javascript-time-ago/gradation';
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'; 
+import SearchProduct from '../upsell/SearchProduct';
+import Preview from './Preview';
+
 const FixedPlan = () => {
   const GET_SELLING_PLAN = gql`
     query($id: ID!) {
@@ -38,6 +41,17 @@ const FixedPlan = () => {
         internalName
         planSelectorTitle
         active
+        productIds {
+          productId
+          title
+          image
+          _destroy
+        }
+        variantIds {
+          variantId
+          title
+          image
+        }
         sellingPlans {
           id
           name
@@ -129,9 +143,12 @@ const FixedPlan = () => {
     return plans;
   });
 
+  const [allProducts, setAllProducts] = useState([]);
+
   useEffect(() => {
     if (data) {
       setPlanData(data.fetchPlanGroup);
+      setAllProducts(data.fetchPlanGroup.productIds || [])
     }
   }, [data]);
 
@@ -243,17 +260,19 @@ return [...dates];
                       planSelectorTitle: '',
                       publicName: '',
                       active: true,
+                      productIds: [],
                       sellingPlans: [{ ...initialValues }],
                     }
               }
-              onSubmit={(values, { setSubmitting, setDirty }) => {
+              onSubmit={(values, { setSubmitting, setDirty }) => { 
                 values.sellingPlans.forEach((plan,index)=>{
                   values.sellingPlans[index].deliveryIntervalCount = values.sellingPlans[index].deliveryIntervalCount || initialValues.deliveryIntervalCount ;
                   values.sellingPlans[index].deliveryIntervalType = values.sellingPlans[index].deliveryIntervalType || initialValues.deliveryIntervalType;
                 })
+                values.productIds=allProducts;
                 console.log(values,"sellingPlan")
                 if (id) {
-                  updateSellingPlan({
+                  updateSellingPlan({ 
                     variables: {
                       input: { params: values },
                     },
@@ -440,6 +459,33 @@ return [...dates];
                           }
                         />
                       </FormLayout.Group>
+
+                      <FormLayout.Group>
+                        <p className="card-offer">PRODUCT</p>
+                        <div></div>
+                      </FormLayout.Group>
+
+                      <FormLayout.Group>
+                        <div className="product-search">
+                          <SearchProduct
+                            value={values.productIds}
+                            setFieldValue={setFieldValue}
+                            fieldName={`productIds`}
+                            allProducts={allProducts}
+                            error={
+                              touched.productIds
+                                ?.productId &&
+                              errors.productIds
+                                ?.productId
+                            }
+                          />
+                        </div>
+                      </FormLayout.Group>
+                      <Preview
+                        allProducts={allProducts}
+                        setAllProducts={setAllProducts}
+                        isUpdate={!!id}
+                      />
                     </FormLayout>
                   </Card>
 
