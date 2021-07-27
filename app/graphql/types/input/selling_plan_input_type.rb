@@ -33,6 +33,9 @@ module Types
       argument :description, String, required: false
       argument :selector_label, String, required: false
 
+      argument :billing_dates, [String], required: false
+      argument :shipping_dates, [String], required: false
+
       argument :__typename, String, required: false
       argument :_destroy, GraphQL::Types::Boolean, required: false
     end

@@ -57,7 +57,7 @@ class SmsService::ProductService < SmsService::ProcessService
           else
             # @shop.sms_logs.one_time_order.create(product_id: variant.product_id, revenue: variant.price * quantity_message.content.to_i, customer_id: @customer.id)
             if product.present? && variant.present?
-              description = @customer.name+",just done one time order $#{variant.price * quantity_message.content.to_i},"+product.title
+              description = @customer.name+",done one time order $#{variant.price * quantity_message.content.to_i},"+product.title
               @shop.subscription_logs.one_time_order.sms.create(product_id: variant.product_id, product_name: product.title, description: description, revenue: variant.price * quantity_message.content.to_i, customer_id: @customer.id)
             end
             message = 'Product added successfully.'

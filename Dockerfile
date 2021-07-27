@@ -1,6 +1,6 @@
 FROM ruby:2.7.0-alpine AS base
 
-RUN apk add --update build-base postgresql-dev nodejs npm tzdata && rm -rf /var/cache/apk/*
+RUN apk add --update build-base postgresql-dev nodejs npm tzdata bash busybox-initscripts && rm -rf /var/cache/apk/*
 RUN npm install --global yarn
 
 WORKDIR /app
@@ -18,6 +18,4 @@ RUN bundle exec rake assets:precompile RAILS_ENV=production
 RUN rm -rf /app/node_modules
 RUN rm -rf /app/tmp/*
 
-CMD ["bundle", "exec", "rails", "db:migrate", "-e", "production"]
-CMD ["bundle", "exec", "whenever", "--update-crontab", "-i", "aroma_production", "--set", "environment=production"]
-CMD ["bundle", "exec", "rails", "s", "-e", "production", "-b", "0.0.0.0"]
+ENTRYPOINT ["/bin/bash","/app/bin/docker-entrypoint.sh"]

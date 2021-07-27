@@ -42,7 +42,7 @@ class SmsService::PauseService < SmsService::ProcessService
             product = subscription.lines.edges.collect{|c| c.node}.first
             note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
             amount = (product.quantity * product.current_price.amount.to_f).round(2).to_s
-            description = customer.name+",just paused,"+product.title
+            description = customer.name+",paused,"+product.title
             customer.shop.subscription_logs.sms.pause.create(subscription_id: subscription_id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
 
             message = 'Thank you, your subscription has been successfully paused, you can resume your subscription at any time by texting the keyword RESUME.'

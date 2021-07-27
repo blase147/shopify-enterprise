@@ -43,3 +43,14 @@ javascript:
       margin: 30
     }
   );
+
+  $('.btn-link').click(function (event) {
+    $(this).attr('disabled', 'disabled');
+    event.preventDefault();
+  });
+
+  $( "form" ).submit(function( event ) {
+    $('button[type="submit"]').attr('disabled', true);
+    $('button[type="submit"] > span.cancel-text').css('color', '#000');
+    event.preventDefault();
+  });

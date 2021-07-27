@@ -1,0 +1,42 @@
+.muti-input-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+.date-input {
+    display: flex;
+    align-items: center;
+}
+.date-input > div {
+    flex-grow: 2;
+}
+.date-list-items {
+    padding-block: 20px;
+}
+.date-input-group {
+    display: flex;
+    align-items: center;
+    margin-block: 5px;
+}
+.date-item-wrapper {
+    display: flex;
+    padding: 5px 15px;
+    border: 1px solid #0606061a;
+    border-radius: 3px;
+    margin-left: 28px;
+}
+.date-item-wrapper p {
+    padding: 5px;
+    border: 1px solid #0606061a;
+    border-radius: 2px;
+    margin-right: 10px;
+    min-width: 98px;
+}
+.add-date-btn {
+    margin-left: 225px;
+}
+.pointer{
+    cursor: pointer;
+}
+.date-input label {
+    margin-right: 12px;
+}

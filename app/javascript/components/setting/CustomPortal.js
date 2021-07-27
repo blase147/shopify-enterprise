@@ -5,8 +5,11 @@ import {
   FormLayout,
   Layout, Select,
   Stack, TextField,
-  TextStyle
+  TextStyle,Icon
 } from '@shopify/polaris';
+import {
+  MobileBackArrowMajor
+} from '@shopify/polaris-icons';
 import React, { useCallback, useState } from 'react';
 import Trash from '../../../assets/images/settings/trash.svg';
 import ActiveSubscription from './preview/subscription/ActiveSubscription';
@@ -180,11 +183,13 @@ const CustomPortal = (props) => {
   return (
     <Layout>
       <Layout.Section>
-        <Stack>
-          <Stack.Item >
-            <p className="pointer" onClick={handleBack}>{'< Back'}</p>
-          </Stack.Item>
-        </Stack>
+      <Layout.Section>
+        <div className="back-button pointer" onClick={handleBack}>
+          <Icon
+            source={MobileBackArrowMajor}
+            color="base" />
+        </div>
+      </Layout.Section>
       </Layout.Section>
       <Card.Section>
         <Stack vertical>

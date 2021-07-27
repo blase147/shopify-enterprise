@@ -19,4 +19,30 @@ module AppProxyHelper
       'UPGRADE'
     end
   end
+
+  def get_next_billing_date(subscription, shop)
+    selling_plan_id = subscription.to_h.dig('lines', 'edges', 0, 'node', 'sellingPlanId')
+    return subscription.next_billing_date.to_date unless selling_plan_id.present?
+
+    selling_plan = SellingPlan.joins(:selling_plan_group).where(selling_plan_groups: { shop_id: shop.id }).find_by(shopify_id: selling_plan_id)
+    if selling_plan.present? && selling_plan.billing_dates.present?
+      next_date = selling_plan.billing_dates.select{ |plan| plan.to_date > Date.today }.sort.first
+      next_date.to_date
+    else
+      subscription.next_billing_date.to_date
+    end
+  end
+
+  def get_next_shipping_date(subscription, shop)
+    selling_plan_id = subscription.to_h.dig('lines', 'edges', 0, 'node', 'sellingPlanId')
+    return subscription.next_billing_date.to_date unless selling_plan_id.present?
+
+    selling_plan = SellingPlan.joins(:selling_plan_group).where(selling_plan_groups: { shop_id: shop.id }).find_by(shopify_id: selling_plan_id)
+    if selling_plan.present? && selling_plan.shipping_dates.present?
+      next_date = selling_plan.shipping_dates.select{ |plan| plan.to_date > Date.today }.sort.first
+      next_date.to_date
+    else
+      subscription.next_billing_date.to_date
+    end
+  end
 end

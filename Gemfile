@@ -32,7 +32,7 @@ gem 'dotenv-rails'
 gem 'graphql'
 gem 'react-rails'
 gem 'shopify_app'    # Version 14.0.0 is used in the sample app
-gem 'shopify_cli', '1.0.5'
+
 
 gem 'bootsnap', '>= 1.4.2', require: false
 

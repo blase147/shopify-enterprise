@@ -38,7 +38,6 @@
                   button.back-dp type="button" BACK
                   button type="submit" APPLY
             .options-btn-wrapper
-              - next_billing_date = subscription.next_billing_date.to_date
               = simple_form_for :subscription, url: "#{action_subscription_contract_path(:update_subscription, subscription.id[/\d+/])}", method: :post, remote: true do |f|
                 = f.input :id, as: :hidden, value: subscription.id
                 = f.input :next_billing_date, as: :hidden, input_html: { value: next_billing_date + 2.weeks }

@@ -1,5 +1,8 @@
 import React,{useMemo,useCallback,useState,useEffect} from 'react'
-import { Banner, Card, ContextualSaveBar, Form, Frame, Layout, List, Page, Spinner, Tabs, Toast, RadioButton,Button, TextField,Stack } from '@shopify/polaris';
+import {
+    MobileBackArrowMajor
+  } from '@shopify/polaris-icons';
+import { Banner, Card, ContextualSaveBar, Form, Frame, Layout, List, Page, Spinner, Tabs, Toast, RadioButton,Button, TextField,Stack, Icon } from '@shopify/polaris';
 import {gql,useMutation} from '@apollo/client';
 import Taxes from './Taxes';
 const Sms = ({handleBack}) => {
@@ -93,13 +96,13 @@ const Sms = ({handleBack}) => {
     return (
         <>
         <Layout>
-          <Layout.Section>
-            <Stack>
-              <Stack.Item >
-                <p className="pointer" onClick={handleBack}>{'< Back'}</p>
-              </Stack.Item>
-            </Stack>
-          </Layout.Section>
+        <Layout.Section>
+        <div className="back-button pointer" onClick={handleBack}>
+          <Icon
+            source={MobileBackArrowMajor}
+            color="base" />
+        </div>
+      </Layout.Section>
           </Layout>
             <Layout>
                 <Layout.Section>

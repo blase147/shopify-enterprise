@@ -7,9 +7,12 @@ import {
   Layout,
   Select,
   TextStyle,
-  Stack
+  Stack,
+  Icon
 } from '@shopify/polaris';
-
+import {
+  MobileBackArrowMajor
+} from '@shopify/polaris-icons';
 const ProductExtention = ({ values, touched, errors, setFieldValue, handleBack }) => {
 
     const options = [
@@ -20,13 +23,13 @@ const ProductExtention = ({ values, touched, errors, setFieldValue, handleBack }
     return (
       <div className="product-extention">
         <Layout>
-          <Layout.Section>
-            <Stack>
-              <Stack.Item >
-                <p className="pointer" onClick={handleBack}>{'< Back'}</p>
-              </Stack.Item>
-            </Stack>
-          </Layout.Section>
+        <Layout.Section>
+        <div className="back-button pointer" onClick={handleBack}>
+          <Icon
+            source={MobileBackArrowMajor}
+            color="base" />
+        </div>
+      </Layout.Section>
         <Card>
           <Card.Section>
             <div className="billing">

@@ -35,7 +35,7 @@ import MainExport from './HouseKeepingComponents/ExportComponents/MainExport';
 
 
 
-const Settings = () => {
+const Settings = () => { 
 
   // form data ########################################################
   const [formData, setFormData] = useState(null);
@@ -637,9 +637,9 @@ const Settings = () => {
                     )}
                     <>
                       {/* new settings bar */}
+                      <div className="settings-container">
                       {!selectedSetting && (
                         <>
-                          <div className="settings-container">
                             <div>
                               <h1>
                                 Settings
@@ -670,8 +670,6 @@ const Settings = () => {
                                 </Card.Section>
                               </Card>
                             </div>
-                          </div>
-
                         </>
                       )}
                       {/* settings layout */}
@@ -762,6 +760,7 @@ const Settings = () => {
                         </Layout>
                         </>
                       )}
+                      </div>
                     </>
                   </Form>
                 )}

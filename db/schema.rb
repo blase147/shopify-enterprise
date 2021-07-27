@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_14_133234) do
+ActiveRecord::Schema.define(version: 2021_07_19_065742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -196,6 +196,8 @@ ActiveRecord::Schema.define(version: 2021_07_14_133234) do
     t.boolean "box_is_quantity_limited"
     t.integer "box_quantity_limit"
     t.json "collection_images"
+    t.text "billing_dates", default: [], array: true
+    t.text "shipping_dates", default: [], array: true
   end
 
   create_table "settings", force: :cascade do |t|

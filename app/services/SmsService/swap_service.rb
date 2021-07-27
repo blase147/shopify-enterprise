@@ -109,7 +109,7 @@ class SmsService::SwapService < SmsService::ProcessService
                 # @shop.subscription_logs.swap.create(subscription_id: subscription_message.content, customer_id: @customer.id)
                 # @shop.subscription_logs.swap.sms.create(subscription_id: subscription_message.content, product_id: product_id, swaped_product_id: variant.product_id, customer_id: @customer.id)
                 note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
-                description = @customer.name+",just swaped,"+variant.title
+                description = @customer.name+",swaped,"+variant.title
                 # amount = (product.quantity * variant.price.to_f).round(2).to_s
                 @shop.subscription_logs.swap.sms.create(subscription_id: subscription_message.content, customer_id: @customer.id, product_name: variant.title, note: note, description: description, product_id: product_id, swaped_product_id: variant.product_id)
                 message = 'Subscription swaped succesfully.'

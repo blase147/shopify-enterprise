@@ -16,7 +16,7 @@ import {
   Spinner,
   ButtonGroup,
 } from '@shopify/polaris';
-
+import DeleteSVG from '../../../assets/images/delete.svg'
 import React, { useState, useCallback, useEffect } from 'react';
 import { Formik } from 'formik';
 import _ from 'lodash';
@@ -25,7 +25,10 @@ import * as yup from 'yup';
 import AppLayout from '../layout/Layout';
 import { gql, useMutation, useLazyQuery } from '@apollo/client';
 import { Link, useHistory, useParams } from 'react-router-dom';
-
+import DatePickr from '../common/DatePicker/DatePickr';
+import './fixedplan.css'
+import { getDate } from 'javascript-time-ago/gradation';
+import dayjs from 'dayjs';
 const FixedPlan = () => {
   const GET_SELLING_PLAN = gql`
     query($id: ID!) {
@@ -52,6 +55,8 @@ const FixedPlan = () => {
           trialAdjustmentType
           trialIntervalType
           trialIntervalCount
+          billingDates
+          shippingDates
           _destroy
         }
       }
@@ -107,6 +112,8 @@ const FixedPlan = () => {
     trialIntervalType: 'DAY',
     trialAdjustmentType: 'FIXED_AMOUNT',
     trialAdjustmentValue: '0',
+    billingDates:[],
+    shippingDates:[],
     _destroy: false,
   };
 
@@ -172,6 +179,40 @@ const FixedPlan = () => {
   const [createSellingPlan] = useMutation(CREATE_SELLING_PLAN);
   const history = useHistory();
 
+  const [selectedBillingDate,setSelectedBillingDate]=useState('');
+  const setBillingDate=useCallback((date)=>{
+    setSelectedBillingDate(date)
+  },[selectedBillingDate])
+
+  const [selectedShippingDate,setSelectedShippingDate]=useState('');
+  const setShippingDate=useCallback((date)=>{
+    setSelectedShippingDate(date)
+  },[selectedShippingDate])
+
+  //Biiling Dates
+  const getDate=(dates)=>{
+    if(dates){
+      dates.push(dayjs(selectedBillingDate).format('YYYY-MM-DD'))
+    }else{
+      dates=[dayjs(selectedBillingDate).format('YYYY-MM-DD')]
+    }
+    return dates;
+  }
+  //Shipping Dates
+  const getShippingDate=(dates)=>{
+    if(dates){
+      dates.push(dayjs(selectedShippingDate).format('YYYY-MM-DD'))
+    }else{
+      dates=[dayjs(selectedShippingDate).format('YYYY-MM-DD')]
+    }
+    return dates;
+  }
+const removeDate=(dates,index)=>{
+if(dates){
+  dates.splice(index,1);
+}
+return [...dates];
+}
   return (
     <AppLayout typePage="sellingPlanForm" tabIndex={1}>
       <Frame>
@@ -210,6 +251,7 @@ const FixedPlan = () => {
                   values.sellingPlans[index].deliveryIntervalCount = values.sellingPlans[index].deliveryIntervalCount || initialValues.deliveryIntervalCount ;
                   values.sellingPlans[index].deliveryIntervalType = values.sellingPlans[index].deliveryIntervalType || initialValues.deliveryIntervalType;
                 })
+                console.log(values,"sellingPlan")
                 if (id) {
                   updateSellingPlan({
                     variables: {
@@ -274,6 +316,7 @@ const FixedPlan = () => {
                 resetForm,
                 dirty,
                 formik,
+                setTouched
                 /* and other goodies */
               }) => (
                 <Form onSubmit={handleSubmit}>
@@ -723,6 +766,76 @@ const FixedPlan = () => {
                                 plan.adjustmentType == 'PERCENTAGE' ? '%' : ''
                               }
                             />
+                          </FormLayout.Group>
+                          <TextContainer>
+                          <br />
+                            <p><strong style={{fontWeight:'600'}}>MANUAL RULES</strong><i> pro</i> </p>
+                          </TextContainer>
+                          <FormLayout.Group>
+                              <div className="muti-input-wrapper">
+                                <div className="date-input">
+                                <label> Specific billing date </label>
+                                <DatePickr 
+                                handleDate={setBillingDate} 
+                                callback={setFieldValue}
+                                selectedDate={selectedBillingDate}
+                                input={`sellingPlans[${index}].billingDates`}
+                                existingValues={values.sellingPlans[index]?.billingDates}
+                                 />
+                                </div>
+                                <div className="date-list-items">
+                                  {
+                                    values.sellingPlans[index]?.billingDates.map((date,i)=>(
+                                      <div className="date-input-group">
+                                      <label> Next billing date: </label>
+                                      <div className="date-item-wrapper">
+                                        <p>{dayjs(date,"YYYY-MM-DD").format("MMM DD, YYYY")}</p>
+                                        <img className="pointer" src={DeleteSVG} onClick={()=>setFieldValue(`sellingPlans[${index}].billingDates`,removeDate(values.sellingPlans[index]?.billingDates,i))} />
+                                      </div>
+                                      </div>
+                                    ))
+                                  }
+                                
+                                </div>
+                                {
+                                values.sellingPlans[index]?.billingDates.length > 0  && 
+                                <div className="add-date-btn">
+                                <Button primary onClick={()=>setSelectedBillingDate(null)}>+ Add</Button>
+                                </div>
+                                }
+                                
+                              </div>
+                              <div className="muti-input-wrapper">
+                                <div className="date-input">
+                                <label> Specific shipping date </label>
+                                <DatePickr 
+                                handleDate={setShippingDate} 
+                                callback={setFieldValue}
+                                selectedDate={selectedShippingDate}
+                                input={`sellingPlans[${index}].shippingDates`}
+                                existingValues={values.sellingPlans[index]?.shippingDates}
+                                 />
+                                </div>
+                                <div className="date-list-items">
+                                  {
+                                    values.sellingPlans[index]?.shippingDates.map((date,i)=>(
+                                      <div className="date-input-group">
+                                      <label> Next shipping date: </label>
+                                      <div className="date-item-wrapper">
+                                        <p>{dayjs(date,"YYYY-MM-DD").format("MMM DD, YYYY")}</p>
+                                        <img className="pointer" src={DeleteSVG} onClick={()=>setFieldValue(`sellingPlans[${index}].shippingDates`,removeDate(values.sellingPlans[index]?.shippingDates,i))} />
+                                      </div>
+                                      </div>
+                                    ))
+                                  }
+                                {
+                                  values.sellingPlans[index]?.shippingDates.length > 0  && 
+                                  <div className="add-date-btn">
+                                  <Button primary onClick={()=>setSelectedShippingDate(null)}>+ Add</Button>
+                                  </div>
+                                }
+                                </div>
+                              </div>
                           </FormLayout.Group>
                         </FormLayout>
                       </Card>
