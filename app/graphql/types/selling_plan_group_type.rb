@@ -7,8 +7,6 @@ module Types
     field :internal_name, String, null: true
     field :name, String, null: true
     field :plan_selector_title, String, null: true
-    field :product_ids, [Types::ProductType], null: true
-    field :variant_ids, [Types::VariantType], null: true
     field :selling_plans, [Types::SellingPlanType], null: false
 
     field :billing_period, String, null: true

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_27_070759) do
+ActiveRecord::Schema.define(version: 2021_07_28_054905) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -166,8 +166,6 @@ ActiveRecord::Schema.define(version: 2021_07_27_070759) do
     t.decimal "price"
     t.integer "trial"
     t.boolean "active", default: true
-    t.json "product_ids"
-    t.json "variant_ids"
   end
 
   create_table "selling_plans", force: :cascade do |t|
@@ -200,6 +198,8 @@ ActiveRecord::Schema.define(version: 2021_07_27_070759) do
     t.json "collection_images"
     t.text "billing_dates", default: [], array: true
     t.text "shipping_dates", default: [], array: true
+    t.json "product_ids"
+    t.json "variant_ids"
   end
 
   create_table "settings", force: :cascade do |t|
@@ -566,6 +566,7 @@ ActiveRecord::Schema.define(version: 2021_07_27_070759) do
     t.integer "shop_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "upsell_location"
   end
 
   create_table "upsell_campaigns", force: :cascade do |t|

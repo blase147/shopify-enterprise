@@ -34,6 +34,8 @@ module Types
     field :selector_label, String, null: true
     field :billing_dates, [String], null: true
     field :shipping_dates, [String], null: true
+    field :product_ids, [Types::ProductType], null: true
+    field :variant_ids, [Types::VariantType], null: true
     field :_destroy, GraphQL::Types::Boolean, null: false
 
     def box_subscription_type

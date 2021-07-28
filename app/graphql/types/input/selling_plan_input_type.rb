@@ -36,6 +36,9 @@ module Types
       argument :billing_dates, [String], required: false
       argument :shipping_dates, [String], required: false
 
+      argument :product_ids, [Types::Input::ProductInputType], required: false
+      argument :variant_ids, [Types::Input::VariantInputType], required: false
+
       argument :__typename, String, required: false
       argument :_destroy, GraphQL::Types::Boolean, required: false
     end
