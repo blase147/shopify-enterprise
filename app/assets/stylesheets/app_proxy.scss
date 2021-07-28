@@ -2401,10 +2401,6 @@ a[disabled="disabled"] {
 
 
 //Customer Build a box
-* {
-  font-family: sans-serif ;
-  background-color: #f7f7f7;
-}
 .checkout-design-1 {
   padding: 40px 42px;
 }
@@ -2447,7 +2443,7 @@ a[disabled="disabled"] {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-size: 19px;
+  font-size: 32px;
   transform: translate(-50%, -50%);
   cursor: pointer;
 }

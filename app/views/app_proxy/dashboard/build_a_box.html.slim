@@ -7,8 +7,7 @@
           .add-img-section
             .img-con
               img src="#{product.images.first.src}" /
-              button.add data-id="#{product.id}"
-                = image_pack_tag 'add_box_icon.svg'
+              button.add data-id="#{product.id}" +
             p = product.title
       .img-place-section
         .top-section
