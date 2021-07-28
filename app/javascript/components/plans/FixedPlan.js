@@ -604,7 +604,7 @@ return [...dates];
                             />
 
                             <FormLayout.Group>
-                              <p className="card-offer">Varients</p>
+                              <p className="card-offer">Variants</p>
                               <div></div>
                             </FormLayout.Group>
 
