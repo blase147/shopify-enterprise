@@ -2400,9 +2400,14 @@ a[disabled="disabled"] {
 
 
 
-//Customer Build a box
+Customer Build a box
 .checkout-design-1 {
   padding: 40px 42px;
+}
+.checkout-design-1 > p {
+  font-weight: 900;
+  line-height: 28px;
+  font-size: 18px;
 }
 .checkout-design-1 > h3 {
   text-align: center;
@@ -2424,6 +2429,7 @@ a[disabled="disabled"] {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
   grid-gap: 20px;
+  grid-row-gap: 40px;
   text-align: center;
   margin-top: 50px;
 }
@@ -2467,18 +2473,16 @@ a[disabled="disabled"] {
   align-items: center;
 }
 
-.img-place-section {
-
-}
-.top-section {
-
-}
 .top-section > h4 {
   color: white;
   padding: 3rem;
   text-align: center;
   background-color: #3caaa8;
   margin: 0;
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 18px;
+  padding: 70px;
 }
 
 .bottom-section {
@@ -2492,12 +2496,17 @@ a[disabled="disabled"] {
   width: 100%;
   border: 0;
   padding: 12px 0px;
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 18px;
 }
 .add-img-sec {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 15px;
   background-color: white;
+  margin-bottom: 10px;
+  margin-top: 5px;
 }
 .add-img-sec > div {
   background-color: white;

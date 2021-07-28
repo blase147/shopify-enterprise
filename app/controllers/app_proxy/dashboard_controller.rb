@@ -1,6 +1,6 @@
 class AppProxy::DashboardController < AppProxyController
   before_action :load_subscriptions, except: [:build_a_box, :confirm_box_selection]
-  before_action :load_customer, only: %w(index addresses payment_methods settings upcoming)
+  before_action :load_customer, only: %w(index addresses payment_methods settings upcoming build_a_box)
 
   def index
     products = ProductService.new.list
@@ -60,8 +60,8 @@ class AppProxy::DashboardController < AppProxyController
   end
 
   def load_customer
-    customer_service ||= CustomerService.new({shop: current_shop})
-    @customer = customer_service.find(customer_id)
+    Customer.update_contracts(shopify_customer_id, current_shop)
+    @customer = current_shop.customers.find_by_shopify_customer_id(customer_id)
   end
 
   def load_subscriptions
