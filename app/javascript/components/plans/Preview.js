@@ -35,7 +35,6 @@ const Preview = ({ allProducts, setAllProducts, setUpdated,atIndex }) => {
           setRemoveFlag(flag => flag = !removeFlag);
       }
   }
-console.log("preview",allProducts," index: ",atIndex)
   const previewCard = allProducts[atIndex]?.map((product) => {
     return (
       <div key={Math.random()} className="preview-item" id={`preview-${product.title.replaceAll(' ', '_')}`}>
