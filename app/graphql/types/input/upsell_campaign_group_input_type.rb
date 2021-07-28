@@ -4,6 +4,7 @@ module Types
       argument :id, String, required: false
 
       argument :internal_name, String, required: true
+      argument :upsell_location, String, required: false
       argument :selector_title, String, required: true
       argument :public_name, String, required: true
       argument :status, String, required: false
