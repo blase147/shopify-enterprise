@@ -82,6 +82,7 @@ export default class DatePickr extends React.Component {
     this.props.callback && this.props.callback(this.props.input,dates)
     this.props.handleDate(value.start);
     this.setState({active:false})
+    this.props.setUpdated(true)
   };
 
   handleMonthChange = (month, year) => {

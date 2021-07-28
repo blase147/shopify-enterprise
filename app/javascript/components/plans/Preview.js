@@ -5,7 +5,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-const Preview = ({ allProducts, setAllProducts, setUpdated, isUpdate=false }) => {
+const Preview = ({ allProducts, setAllProducts, setUpdated,atIndex }) => {
 
   const [removeFlag, setRemoveFlag] = useState(false);
 
@@ -18,26 +18,27 @@ const Preview = ({ allProducts, setAllProducts, setUpdated, isUpdate=false }) =>
   };
 
   const handleAllProducts = (title) => {
-    var index = allProducts.map(prod => {
+    var index = allProducts[atIndex].map(prod => {
       return prod.title;
     }).indexOf(title);
-    let hasDestroy=allProducts[index].hasOwnProperty('_destroy')
-    if (index > -1) {
-    if(isUpdate && hasDestroy){
-        const products=allProducts.map((prod,i)=>(i===index?{...prod,_destroy:true}:prod));
-        setAllProducts(product => product = products);
-    }else{
-        allProducts.splice(index, 1);
-        setAllProducts(product => product = allProducts);
-    }
-      setUpdated && setUpdated(flag => flag = true);
-      setRemoveFlag(flag => flag = !removeFlag);
-    }
-  }
+    // let hasDestroy=allProducts[index].hasOwnProperty('_destroy')
+      if (index > -1) {
+          // if(isUpdate && hasDestroy){
+          //     const products=allProducts.map((prod,i)=>(i===index?{...prod,_destroy:true}:prod));
+          //     setAllProducts(product => product = products);
+          // }else{
 
-  const previewCard = allProducts.filter(prod=>(!prod._destroy)).map((product) => {
+          // }
+          allProducts[atIndex].splice(index, 1);
+          setAllProducts(product => product = allProducts);
+          setUpdated && setUpdated(flag => flag = true);
+          setRemoveFlag(flag => flag = !removeFlag);
+      }
+  }
+console.log("preview",allProducts," index: ",atIndex)
+  const previewCard = allProducts[atIndex]?.map((product) => {
     return (
-      <div key={product.productId} className="preview-item" id={`preview-${product.title.replaceAll(' ', '_')}`}>
+      <div key={Math.random()} className="preview-item" id={`preview-${product.title.replaceAll(' ', '_')}`}>
         <div className="img">
           <div onClick={() => handleAllProducts(product.title)} className="cancel">
             <Icon
@@ -49,7 +50,7 @@ const Preview = ({ allProducts, setAllProducts, setUpdated, isUpdate=false }) =>
           />
         </div>
         <p>
-          {product.title}
+          {product.title} 
           {product.title.length <= 26 ? <div><br /></div> : ''}
         </p>
 

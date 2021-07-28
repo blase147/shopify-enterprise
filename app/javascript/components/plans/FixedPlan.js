@@ -31,6 +31,7 @@ import { getDate } from 'javascript-time-ago/gradation';
 import dayjs from 'dayjs';
 import SearchProduct from '../upsell/SearchProduct';
 import Preview from './Preview';
+import SearchVariants from './SearchVariants';
 
 const FixedPlan = () => {
   const GET_SELLING_PLAN = gql`
@@ -41,17 +42,6 @@ const FixedPlan = () => {
         internalName
         planSelectorTitle
         active
-        productIds {
-          productId
-          title
-          image
-          _destroy
-        }
-        variantIds {
-          variantId
-          title
-          image
-        }
         sellingPlans {
           id
           name
@@ -72,6 +62,16 @@ const FixedPlan = () => {
           billingDates
           shippingDates
           _destroy
+          productIds {
+            productId
+            title
+            image
+          }
+          variantIds {
+            variantId
+            title
+            image
+          }
         }
       }
     }
@@ -128,6 +128,8 @@ const FixedPlan = () => {
     trialAdjustmentValue: '0',
     billingDates:[],
     shippingDates:[],
+    productIds: [],
+    variantIds:[],
     _destroy: false,
   };
 
@@ -143,12 +145,23 @@ const FixedPlan = () => {
     return plans;
   });
 
-  const [allProducts, setAllProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([[]]);
+  const [allVarients, setAllVarients] = useState([[]]);
+  const [updated, setUpdated] = useState(false);
+
 
   useEffect(() => {
     if (data) {
       setPlanData(data.fetchPlanGroup);
-      setAllProducts(data.fetchPlanGroup.productIds || [])
+
+      let products=[];
+      let variants=[];
+      data?.fetchPlanGroup?.sellingPlans.forEach(plan=>{
+        products.push(plan.productIds || []);
+        variants.push(plan.variantIds || []);
+      })
+      setAllProducts(products || [[]])
+      setAllVarients(variants || [[]])
     }
   }, [data]);
 
@@ -227,6 +240,7 @@ const FixedPlan = () => {
 const removeDate=(dates,index)=>{
 if(dates){
   dates.splice(index,1);
+  setUpdated(true);
 }
 return [...dates];
 }
@@ -260,7 +274,6 @@ return [...dates];
                       planSelectorTitle: '',
                       publicName: '',
                       active: true,
-                      productIds: [],
                       sellingPlans: [{ ...initialValues }],
                     }
               }
@@ -268,8 +281,9 @@ return [...dates];
                 values.sellingPlans.forEach((plan,index)=>{
                   values.sellingPlans[index].deliveryIntervalCount = values.sellingPlans[index].deliveryIntervalCount || initialValues.deliveryIntervalCount ;
                   values.sellingPlans[index].deliveryIntervalType = values.sellingPlans[index].deliveryIntervalType || initialValues.deliveryIntervalType;
+                  values.sellingPlans[index].productIds = allProducts[index] || [];
+                  values.sellingPlans[index].variantIds = allVarients[index] || [];
                 })
-                values.productIds=allProducts;
                 console.log(values,"sellingPlan")
                 if (id) {
                   updateSellingPlan({
@@ -339,7 +353,7 @@ return [...dates];
                 /* and other goodies */
               }) => (
                 <Form onSubmit={handleSubmit}>
-                  {dirty && (
+                  {(dirty || updated) && (
                     <ContextualSaveBar
                       alignContentFlush={true}
                       message="Unsaved changes"
@@ -352,7 +366,10 @@ return [...dates];
                         disabled: false,
                       }}
                       discardAction={{
-                        onAction: resetForm,
+                        onAction: ()=>{
+                          resetForm();
+                          setUpdated(flag => flag = false)
+                        },
                       }}
                     />
                   )}
@@ -459,33 +476,6 @@ return [...dates];
                           }
                         />
                       </FormLayout.Group>
-
-                      <FormLayout.Group>
-                        <p className="card-offer">PRODUCT</p>
-                        <div></div>
-                      </FormLayout.Group>
-
-                      <FormLayout.Group>
-                        <div className="product-search">
-                          <SearchProduct
-                            value={values.productIds || []}
-                            setFieldValue={setFieldValue}
-                            fieldName={`productIds`}
-                            allProducts={allProducts}
-                            error={
-                              touched.productIds
-                                ?.productId &&
-                              errors.productIds
-                                ?.productId
-                            }
-                          />
-                        </div>
-                      </FormLayout.Group>
-                      <Preview
-                        allProducts={allProducts}
-                        setAllProducts={setAllProducts}
-                        isUpdate={!!id}
-                      />
                     </FormLayout>
                   </Card>
 
@@ -582,6 +572,66 @@ return [...dates];
                             />
                             <p></p>
                           </FormLayout.Group>
+                          <br/>
+                          <FormLayout.Group>
+                              <p className="card-offer">PRODUCT</p>
+                              <div></div>
+                            </FormLayout.Group>
+
+                            <FormLayout.Group>
+                              <div className="product-search">
+                                <SearchProduct
+                                  value={plan.productIds || [[]]}
+                                  setFieldValue={setFieldValue}
+                                  fieldName={`sellingPlans[${index}].productIds`}
+                                  allProducts={allProducts || [[]]}
+                                  setAllProducts={setAllProducts}
+                                  atIndex={index}
+                                  error={
+                                    touched.sellingPlans?.[index]?.productIds
+                                      ?.productId &&
+                                    errors.sellingPlans?.[index]?.productIds
+                                      ?.productId
+                                  }
+                                />
+                              </div>
+                            </FormLayout.Group>
+                            <Preview
+                              allProducts={allProducts || [[]]}
+                              setAllProducts={setAllProducts}
+                              atIndex={index}
+                              setUpdated={setUpdated}
+                            />
+
+                            <FormLayout.Group>
+                              <p className="card-offer">Varients</p>
+                              <div></div>
+                            </FormLayout.Group>
+
+                            <FormLayout.Group>
+                              <div className="product-search">
+                                <SearchVariants
+                                  value={plan.variantIds || [[]]}
+                                  setFieldValue={setFieldValue}
+                                  fieldName={`sellingPlans[${index}].variantIds`}
+                                  allVariants={allVarients || [[]]}
+                                  atIndex={index}
+                                  setAllVarients={setAllVarients}
+                                  error={
+                                    touched.sellingPlans?.[index]?.variantIds
+                                      ?.variantId &&
+                                    errors.sellingPlans?.[index]?.variantIds
+                                      ?.variantId
+                                  }
+                                />
+                              </div>
+                            </FormLayout.Group>
+                            <Preview
+                              allProducts={allVarients || [[]]}
+                              setAllProducts={setAllVarients}
+                              setUpdated={setUpdated}
+                              atIndex={index}
+                            />
                           <TextContainer>
                             <br />
                             <Subheading>Billing Rules</Subheading>
@@ -827,6 +877,7 @@ return [...dates];
                                 selectedDate={selectedBillingDate}
                                 input={`sellingPlans[${index}].billingDates`}
                                 existingValues={values.sellingPlans[index]?.billingDates}
+                                setUpdated={setUpdated}
                                  />
                                 </div>
                                 <div className="date-list-items">
@@ -860,6 +911,7 @@ return [...dates];
                                 selectedDate={selectedShippingDate}
                                 input={`sellingPlans[${index}].shippingDates`}
                                 existingValues={values.sellingPlans[index]?.shippingDates}
+                                setUpdated={setUpdated}
                                  />
                                 </div>
                                 <div className="date-list-items">
@@ -892,11 +944,12 @@ return [...dates];
                   <div className="addSellingPlans">
                     <Button
                       plain
-                      onClick={() =>
+                      onClick={() =>{
                         setFieldValue(
                           'sellingPlans',
                           handleAddSellingPlan(values)
-                        )
+                        );
+                      }
                       }
                     >
                       Add selling plan
