@@ -75,6 +75,9 @@ javascript:
       $('.add-img-sec').append($(placeholder).clone());
     }
     filterCookieData(id);
+    $('.add-img-sec').children('.sec').each(function(index,elem){
+     $(elem).children('p').html('Select ' + (index + 1));
+    });
   })
 
   $(document).on('click','.confirm_selection',function(){
