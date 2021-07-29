@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_29_073722) do
+ActiveRecord::Schema.define(version: 2021_07_29_113910) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -113,6 +113,7 @@ ActiveRecord::Schema.define(version: 2021_07_29_073722) do
     t.string "biiling_interval"
     t.string "shopify_customer_id"
     t.string "box_items"
+    t.datetime "campaign_date"
     t.index ["reasons_cancel_id"], name: "index_customers_on_reasons_cancel_id"
   end
 

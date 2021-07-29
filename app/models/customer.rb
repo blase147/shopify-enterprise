@@ -51,7 +51,7 @@ class Customer < ApplicationRecord
 
   def activation_email
     email_notification = shop.setting.email_notifications.find_by_name "Subscription Activation"
-    EmailService::Send.new(email_notification).send_email({customer: self}) if email_notification.present? && email_notification.setting.shop
+    EmailService::Send.new(email_notification).send_email({customer: self}) if email_notification.present? && shop.setting.email_service.present?
   end
 
   def charge_store
