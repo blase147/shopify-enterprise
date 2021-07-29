@@ -32,5 +32,9 @@ module Types
 
     field :update_integration, mutation: Mutations::UpdateIntegration
     field :update_translation, mutation: Mutations::UpdateTranslation
+
+    field :add_box_campaign, mutation: Mutations::AddBuildABoxCampaignGroup
+    field :delete_box_campaigns, mutation: Mutations::DeleteBuildABoxCampaignGroup
+    field :update_box_campaign, mutation: Mutations::UpdateBuildABoxCampaignGroup
   end
 end
