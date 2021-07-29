@@ -29,5 +29,7 @@ module Types
     field :fetch_sms_analytics, resolver: Queries::FetchSmsAnalytics
     field :fetch_subscription_logs, resolver: Queries::FetchSubscriptionLogs
     field :fetch_translation, resolver: Queries::FetchTranslation
+    field :fetch_build_a_box_campaign_group, resolver: Queries::FetchBuildABoxCampaignGroup
+    field :fetch_build_a_box_campaign_groups, resolver: Queries::FetchBuildABoxCampaignGroups
   end
 end

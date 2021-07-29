@@ -36,12 +36,13 @@ class AppProxy::DashboardController < AppProxyController
     products = nil
     @subscription_id = params[:subscription_id]
     if params[:selling_plan_id].present?
-      @selling_plan = SellingPlan.joins(:selling_plan_group).where(selling_plan_groups: { shop_id: current_shop.id }).find_by(shopify_id: "gid://shopify/SellingPlan/#{params[:selling_plan_id]}")
-      case @selling_plan&.box_subscription_type
+      @selling_plan_id = params[:selling_plan_id]
+      @box_campaign = current_shop.build_a_box_campaign_groups.last.build_a_box_campaign
+      case @box_campaign&.box_subscription_type
       when 'collection'
-        products = @selling_plan.collection_images[0]['products']
+        products = @box_campaign.collection_images[0]['products']
       when 'products'
-        products = @selling_plan.product_images
+        products = @box_campaign.product_images
       end
       fetch_products(products) if products.present?
     end
@@ -49,7 +50,7 @@ class AppProxy::DashboardController < AppProxyController
 
   def confirm_box_selection
     customer = current_shop.customers.find_by(shopify_id: params[:subscription_id])
-    customer.update(box_items: params[:product_id])
+    customer.update(box_items: params[:product_id], campaign_date: Time.current)
   end
 
   private ##

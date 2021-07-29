@@ -238,7 +238,19 @@
                         th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"= DateTime.parse(order.node.created_at).strftime("%b %d, %H:%M%P")
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= order.node.name
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--numeric $#{order.node.total_received_set.presentment_money.amount}
-
+        - if @box_products.present?
+          br/
+          .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
+            h2.Polaris-Heading.Polaris-TextStyle--variationStrong BUILD-A-BOX CHOICES
+          div.box-items
+            - if @customer.campaign_date.present?
+              div.campaign_date_title
+                h2.Polaris-Heading.Polaris-TextStyle--variationStrong Campaign Name & Date: '#{BuildABoxCampaignGroup.last.internal_name}'
+                span.Polaris-Heading.Polaris-TextStyle--variationStrong.campaign_date &nbsp#{@customer.campaign_date.strftime("%e %B, %Y")}
+            h2.product_choice_label Product choices
+            div.box_images_collection
+              - @box_products.each do |product|
+                img.box-image-d src="#{product.images.first&.src}"
       .Polaris-Layout__Section.Polaris-Layout__Section--secondary
         .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
           h2.Polaris-Heading.Polaris-TextStyle--variationStrong Billing Information

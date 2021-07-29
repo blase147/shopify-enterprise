@@ -492,7 +492,7 @@ div.Polaris-Modal-Dialog__Container {
     // padding-bottom: 20px;
     > div {
       // margin-right: 30px;
-  
+
     }
     svg {
       // margin-right: 10px;
@@ -507,7 +507,7 @@ div.Polaris-Modal-Dialog__Container {
       color: #000;
     }
   }
-  
+
 }
 
 .hidden {
@@ -660,5 +660,35 @@ div.Polaris-Modal-Dialog__Container {
 @media (min-width: 46.5em) {
   .Polaris-Page__Content.shipment-process {
     margin-top: 4rem;
+  }
+}
+
+div.box-items {
+  padding: 20px 10px 10px 39px;
+  //
+  .campaign_date_title {
+    display: flex;
+
+    span {
+      color: #007EFF;
+    }
+  }
+  //
+  .product_choice_label {
+    color: #007EFF;
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 14px;
+    margin-top: 28px;
+  }
+  //
+  .box_images_collection {
+    margin-top: 16px;
+  }
+  //
+  img {
+    height: 65px;
+    width: 65px;
+    margin-right: 30px;
   }
 }
