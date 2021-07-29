@@ -52,7 +52,7 @@ const Analytics = () => {
     }
   ];
   return (
-    <AppLayout typePage="Analytics" tabIndex="5">
+    <AppLayout typePage="Analytics" tabIndex="6">
       <Page title="Analytics">
         <FilterContextProvider>
         <Tabs

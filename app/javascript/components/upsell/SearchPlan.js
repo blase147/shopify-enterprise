@@ -8,9 +8,9 @@ import {
   TextContainer,
   Spinner,
 } from '@shopify/polaris';
-
+import DeleteSVG from '../../../assets/images/delete.svg'
 const SearchPlan = (props) => {
-  const { value, setFieldValue, fieldName, error, disabled } = props;
+  const { value, setFieldValue, fieldName, error, disabled, allSelectedPlans,setAllSelectedPlans } = props;
 
   // Search product to add
   const GET_SELLING_PLAN = gql`
@@ -72,6 +72,31 @@ const SearchPlan = (props) => {
           sellingPlanId: plan.value,
         });
         setSelectedOptions(selected);
+
+        if(Array.isArray(allSelectedPlans)){
+          let flag = true;
+          for (let i = 0; allSelectedPlans?.length > i; i++) {
+            if (allSelectedPlans[i].sellingPlanName == plan.value) {
+              flag = false;
+              break;
+            } else {
+              flag = true;
+            }
+          }  
+  
+          let selecteds=null;  
+          if (flag) {
+            console.log("updating",allSelectedPlans,plan)
+            selecteds=allSelectedPlans || [];
+            selecteds.push({
+              sellingPlanName: plan.label,
+              sellingPlanId: plan.value,
+            });
+            console.log(selecteds);
+            setAllSelectedPlans && setAllSelectedPlans(selecteds);
+          }
+        }
+       
       }
     },
     [sellingPlanList, value]

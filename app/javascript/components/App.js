@@ -15,6 +15,8 @@ import enTranslations from '@shopify/polaris/locales/en.json';
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Analytics from './analytics/Index';
+import BuildBox from './build-a-box/BuildBox';
+import CreateBuildBox from './build-a-box/CreateBuildBox';
 import Customers from './customer/Index';
 import CreateCustomer from './customer/New';
 // pages ####
@@ -146,6 +148,10 @@ export default function App(props) {
             <Route exact path="/upsell" component={Upsell} />
             <Route exact path="/upsell/:id/edit" component={CreateUpsell} />
             <Route exact path="/upsell/new" component={CreateUpsell} />
+
+            <Route exact path='/build-a-box' component={BuildBox}/>
+            <Route exact path="/build-a-box/:id/edit" component={CreateBuildBox} />
+            <Route exact path="/build-a-box/new" component={CreateBuildBox} />
           </Switch>
         </ApolloProvider>
       </AppProvider>
