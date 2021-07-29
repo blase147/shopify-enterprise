@@ -1,4 +1,4 @@
-- if @selling_plan.present? && @selling_plan.box_subscription_type.present?
+- if @box_campaign.present? && @box_campaign.box_subscription_type.present?
   .checkout-design-1
     p Select Style Options
     .new-desig-parent
@@ -14,7 +14,7 @@
           h4 Build Your Box
         .bottom-section
           .add-img-sec
-            - @selling_plan.box_quantity_limit.times.each do |index|
+            - @box_campaign.box_quantity_limit.times.each do |index|
               .sec
                 .img-crs-sec.cros-img
                   img.place-img src="" /
@@ -22,7 +22,7 @@
                     | x
                 p Select #{index+1}
           button.confirm_selection data-subscriptionId="#{@subscription_id}" CONFIRM SELECTION
-        span.box_limit.hidden = @selling_plan.box_quantity_limit
+        span.box_limit.hidden = @box_campaign.box_quantity_limit
 
 - else
   span.billing_plan_present.hidden
@@ -89,7 +89,7 @@ javascript:
         type: "POST",
         data: { product_id: selectedProducts, subscription_id: subscriptionId },
         success: function(result){
-          console.log(result)
+          window.top.location.href = '/account';
         }
       });
     }
