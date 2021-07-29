@@ -114,14 +114,16 @@ const ButtonRemove = (props) => {
                     }
                 }
                 productImages {
-                    title 
+                    productId
+                    image
+                    _destroy
                 }
             }
         }
     }
       `;
     
-      const [formErrors, setFormErrors] = useState([]);
+      const [formErrors, setFormErrors] = useState([]); 
       const [saveSuccess, setSaveSuccess] = useState(false);
       const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
     
@@ -181,7 +183,7 @@ const ButtonRemove = (props) => {
             {/* <div className={`${row.status == 'publish' ? 'active' : 'draft'}`}>
               <Badge>{row.status == 'publish' ? 'Active' : 'Draft'}</Badge>
             </div> */}
-            <Link to={`/upsell/${row.id}/edit`} key={row.id}>
+            <Link to={`/build-a-box/${row.id}/edit`} key={row.id}>
               {row.internalName}
             </Link>
           </div>,

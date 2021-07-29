@@ -129,10 +129,14 @@ const CreateBuildBox = () => {
                 collectionTitle
                 products {
                     title
+                    image
+                    _destroy
                 }
             }
             productImages {
-                title
+                productId
+                image
+                _destroy
             }
         }
     }
@@ -180,29 +184,7 @@ const CreateBuildBox = () => {
   const history = useHistory();
   const [createUpsellCampaign] = useMutation(CREATE_BOX_CAMPAIGN);
 
-  useEffect(() => {
-    if (data && data?.fetchBuildABoxCampaignGroup) {
-      setCampaignData(data.fetchBuildABoxCampaignGroup);
-      setSelectedProducts(data.fetchBuildABoxCampaignGroup.productImages);
-      setSelectedProductOptions(() => {
-        const defaultOption = [];
-        data.fetchBuildABoxCampaignGroup.productImages?.map(
-          (image) =>
-            image._destroy == false && defaultOption.push(image.productId)
-        );
-        return defaultOption;
-      });
-      setSelectedCollections(data.fetchBuildABoxCampaignGroup.collectionImages);
-      setSelectedCollectionOptions(() => {
-        const defaultOption = [];
-        data.fetchBuildABoxCampaignGroup.collectionImages?.map(
-          (image) =>
-            image._destroy == false && defaultOption.push(image.collectionId)
-        );
-        return defaultOption;
-      });
-    }
-  }, [data]);
+  
 
   const formRef = useRef(null);
   const [selectedProductOptions, setSelectedProductOptions] = useState([]);
@@ -263,7 +245,36 @@ const CreateBuildBox = () => {
   const handleRemovePlan=(id)=>{
       setAllSelectedPlans(allSelectedPlans.filter(plan=>plan.sellingPlanId!==id));
   }
-  console.log("Selling Plans",allSelectedPlans)
+  
+
+  useEffect(() => {
+    if (data && data?.fetchBuildABoxCampaignGroup) {
+        data.fetchBuildABoxCampaignGroup.buildABoxCampaign.endDate="";
+        data.fetchBuildABoxCampaignGroup.buildABoxCampaign.startDate=""
+      setCampaignData(data.fetchBuildABoxCampaignGroup);
+      setSelectedProducts(data.fetchBuildABoxCampaignGroup.buildABoxCampaign.productImages);
+      setSelectedProductOptions(() => {
+        const defaultOption = [];
+        data.fetchBuildABoxCampaignGroup.buildABoxCampaign.productImages?.map(
+          (image) =>
+            image._destroy == false && defaultOption.push(image.productId)
+        );
+        return defaultOption;
+      });
+      setSelectedCollections(data.fetchBuildABoxCampaignGroup.buildABoxCampaign.collectionImages);
+      setSelectedCollectionOptions(() => {
+        const defaultOption = [];
+        data.fetchBuildABoxCampaignGroup.buildABoxCampaign.collectionImages?.map(
+          (image) =>
+            image._destroy == false && defaultOption.push(image.collectionId)
+        );
+        return defaultOption;
+      });
+      setAllSelectedPlans(data.fetchBuildABoxCampaignGroup.buildABoxCampaign.sellingPlans)
+    }
+  }, [data]);
+
+  console.log("Selling Plans",allSelectedPlans,"products",selectedProducts)
   return (
     <AppLayout typePage="build-a-box" tabIndex="5">
       <Frame>
