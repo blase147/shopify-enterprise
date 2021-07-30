@@ -197,6 +197,8 @@ const CreateBuildBox = () => {
   
 
   const formRef = useRef(null);
+
+
   const [selectedProductOptions, setSelectedProductOptions] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
 
@@ -204,6 +206,7 @@ const CreateBuildBox = () => {
   const [selectedCollections, setSelectedCollections] = useState([]);
 
   const handleRemoveProduct = (index) => {
+    setUpdated(true);
     setSelectedProducts(() => {
       let newSelectedProduct = [...(selectedProducts || [])];
       newSelectedProduct[index]._destroy = true;
@@ -216,6 +219,7 @@ const CreateBuildBox = () => {
   };
 
   const handleRemoveCollectionProduct = (collectionIndex, productIndex) => {
+    setUpdated(true);
     setSelectedCollections(() => {
       let newSelectedCollection= [...(selectedCollections || [])];
       newSelectedCollection[collectionIndex].products[productIndex]._destroy = true;
@@ -253,6 +257,7 @@ const CreateBuildBox = () => {
   const [allSelectedPlans,setAllSelectedPlans]=useState([]);
 
   const handleRemovePlan=(id)=>{
+      setUpdated(true);
       setAllSelectedPlans(allSelectedPlans.filter(plan=>plan.sellingPlanId!==id));
   }
   
@@ -391,7 +396,7 @@ const CreateBuildBox = () => {
 
                         //   setAllProducts(allProducts);
                         //   setCanceledProducts(prod => prod = []);
-                        //   setUpdated(flag => flag = false);
+                          setUpdated(flag => flag = false);
                           resetForm();
                         },
                       }}
@@ -464,6 +469,7 @@ const CreateBuildBox = () => {
                     <Card.Section>
                         <FormLayout>
                         <FormLayout.Group>
+                            <div>
                             <TextContainer>
                             <h4><strong>DISPLAY RULES</strong></h4>
                             <h5>Show these offers when any of the following individual criteria are met</h5>
@@ -471,6 +477,7 @@ const CreateBuildBox = () => {
                             <br/>
                             <TextContainer>
                             <Subheading element="h3">Campaign Duration:</Subheading>
+                            </TextContainer>
                             <RangePickr 
                             startLabel={"buildABoxCampaign.startDate"}
                             endLabel={"buildABoxCampaign.endDate"}
@@ -478,9 +485,8 @@ const CreateBuildBox = () => {
                             start={values?.buildABoxCampaign?.startDate || ''}
                             end={values?.buildABoxCampaign?.endDate || ''}
                             />
-                          </TextContainer>
-                          <br/>
-                          
+                          </div>
+                          <br/>                
                             </FormLayout.Group>
                         </FormLayout>
                     </Card.Section>
