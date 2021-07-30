@@ -686,9 +686,22 @@ div.box-items {
     margin-top: 16px;
   }
   //
-  img {
+  .building-box-product {
+    display: flex;
+    position: relative;
     height: 65px;
     width: 65px;
+  }
+  //
+  img.box-image-d {
+    width: 65px;
     margin-right: 30px;
+    background-size: cover;
+  }
+  //
+  img.removeIcon {
+    position: absolute;
+    right: -6px;
+    top: -6px;
   }
 }

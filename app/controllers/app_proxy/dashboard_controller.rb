@@ -35,9 +35,11 @@ class AppProxy::DashboardController < AppProxyController
   def build_a_box
     products = nil
     @subscription_id = params[:subscription_id]
+    @customer = current_shop.customers.find_by_shopify_id(params[:subscription_id])
     if params[:selling_plan_id].present?
       @selling_plan_id = params[:selling_plan_id]
       @box_campaign = current_shop.build_a_box_campaign_groups.last.build_a_box_campaign
+      @selected_products = ShopifyAPI::Product.where(ids: @customer.box_items, fields: 'id,title,images') if @customer.box_items.present?
       case @box_campaign&.box_subscription_type
       when 'collection'
         products = @box_campaign.collection_images[0]['products']
@@ -57,7 +59,7 @@ class AppProxy::DashboardController < AppProxyController
 
   def fetch_products(products)
     product_ids = products.map {|product| product['product_id'][/\d+/]}.join(',')
-    @products = ShopifyAPI::Product.where(ids: product_ids, fields: 'id,title,images,variants')
+    @products = ShopifyAPI::Product.where(ids: product_ids, fields: 'id,title,images')
   end
 
   def load_customer

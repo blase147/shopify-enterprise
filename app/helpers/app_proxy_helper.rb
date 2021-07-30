@@ -49,10 +49,10 @@ module AppProxyHelper
   def box_campaign_display(box_campaign, selling_plan_id)
     display = false
     if box_campaign.start_date.present? && box_campaign.end_date.present?
-      display = (start_date..end_date).cover?(Date.today)
-      if box_campaign.selling_plans.present?
-        display = box_campaign.selling_plans.any?{|plan| plan['sellingPlanId'] == selling_plan_id}
-      end
+      display = (box_campaign.start_date..box_campaign.end_date).cover?(Date.today)
+    end
+    if selling_plan_id.present? && box_campaign.selling_plans.present? && !display
+      display = box_campaign.selling_plans.any? { |plan| plan['sellingPlanId'] == selling_plan_id }
     end
     display
   end
