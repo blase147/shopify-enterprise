@@ -36,12 +36,39 @@ const ButtonRemove = (props) => {
         setCampaigns,
         setFilterCampaigns,
         setSaveSuccess,
+        compaigns,
+        filteredCompaigns
       } = props;
       const DELETE_UPSELL_CAMPAIGN = gql`
       mutation ($input: DeleteBuildABoxCampaignGroupInput!) {
         deleteBoxCampaigns(input: $input) {
             buildABoxCampaignGroups {
                 id
+                internalName
+                location
+                buildABoxCampaign {
+                    startDate
+                    endDate
+                    boxQuantityLimit
+                    boxSubscriptionType
+                    triggers {
+                        name
+                    }
+                    sellingPlans {
+                        sellingPlanId
+                        sellingPlanName
+                    }
+                    collectionImages {
+                        collectionId
+                        collectionTitle
+                        products {
+                            title
+                        }
+                    }
+                    productImages {
+                        title
+                    }
+                }
             }
         }
     }
@@ -114,14 +141,16 @@ const ButtonRemove = (props) => {
                     }
                 }
                 productImages {
-                    title 
+                    productId
+                    image
+                    _destroy
                 }
             }
         }
     }
       `;
     
-      const [formErrors, setFormErrors] = useState([]);
+      const [formErrors, setFormErrors] = useState([]); 
       const [saveSuccess, setSaveSuccess] = useState(false);
       const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
     
@@ -181,11 +210,11 @@ const ButtonRemove = (props) => {
             {/* <div className={`${row.status == 'publish' ? 'active' : 'draft'}`}>
               <Badge>{row.status == 'publish' ? 'Active' : 'Draft'}</Badge>
             </div> */}
-            <Link to={`/upsell/${row.id}/edit`} key={row.id}>
+            <Link to={`/build-a-box/${row.id}/edit`} key={row.id}>
               {row.internalName}
             </Link>
           </div>,
-        //   `${row.upsellCampaigns[0].intervalCount} ${row.upsellCampaigns[0].intervalType}`,
+          `${row.location}`,
         //   <p className="money">
         //     <span>$130.00</span>USD
         //   </p>,
@@ -251,7 +280,7 @@ const ButtonRemove = (props) => {
                 <Layout.Section>
                   <Stack>
                     <Stack.Item>
-                      <Select
+                      {/* <Select
                         label="Campaigns"
                         labelInline
                         options={optionsCampaigns}
@@ -259,7 +288,7 @@ const ButtonRemove = (props) => {
                           setCampaignStatus(status);
                         }}
                         value={campaignStatus}
-                      />
+                      /> */}
                     </Stack.Item>
                     <Stack.Item fill></Stack.Item>
                     <Stack.Item>
@@ -270,6 +299,8 @@ const ButtonRemove = (props) => {
                           }`}
                         >
                           <ButtonRemove
+                            compaigns={campaigns}
+                            filteredCompaigns={filterCampaigns}
                             formatRows={formatRows}
                             setCampaigns={setCampaigns}
                             setFilterCampaigns={setFilterCampaigns}
@@ -310,7 +341,7 @@ const ButtonRemove = (props) => {
                       columnContentTypes={[
                         'text',
                         'text',
-                        // 'text',
+                        'text',
                         // 'text',
                         // 'text',
                         // 'text',
@@ -318,7 +349,7 @@ const ButtonRemove = (props) => {
                       headings={[
                         '',
                         'Campaigns',
-                        // 'Campaign Period',
+                        'Location',
                         // 'Created',
                         // 'Pricing Model',
                         // 'Trial Period',
