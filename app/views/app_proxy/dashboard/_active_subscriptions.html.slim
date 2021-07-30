@@ -5,6 +5,7 @@
     - selling_plan_id = selling_plan_ids.reject{|val| val.nil?}&.first
     - selling_plan = SellingPlan.find_by(shopify_id: selling_plan_id)
     - next_billing_date = get_next_billing_date(subscription.node, @current_shop)
+    - box_campaign = @current_shop.build_a_box_campaign_groups.last&.build_a_box_campaign
     / - selling_plan_id = "gid://shopify/SellingPlan/393543886"
     .subscription-contract-products
       - subscription.node.lines.edges.each_with_index do |edge, index|
@@ -24,7 +25,7 @@
             p.text.right.active-text
               = number_to_currency (edge.node.current_price.amount.to_f * edge.node.quantity)
           .grid-item
-            - if @current_shop.build_a_box_campaign_groups.present?#box_campaign_display(box_campaign, selling_plan_id)
+            - if box_campaign && box_campaign_display(box_campaign, selling_plan_id)
               = link_to "/a/chargezen_production/dashboard/build_a_box?customer_id=#{params[:customer_id]}&subscription_id=#{subscription.node.id[/\d+/]}&active_subscriptions_count=#{@active_subscriptions.count}&selling_plan_id=#{selling_plan_id[/\d+/]}" do
                 button.white-btn.action-btn UPDATE CHOICES
             - if @setting.customer_allowed?('swap_product')

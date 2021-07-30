@@ -250,7 +250,10 @@
             h2.product_choice_label Product choices
             div.box_images_collection
               - @box_products.each do |product|
-                img.box-image-d src="#{product.images.first&.src}"
+                div.building-box-product
+                  img.box-image-d src="#{product.images.first&.src}"
+                  = link_to action_subscription_contract_path(:remove_box_item, @subscription.id[/\d+/], "product_id=#{product.id}"), remote: true, method: :post do
+                    = image_pack_tag "media/subscriptionsPlans/removeProduct.svg", class: 'removeIcon'
       .Polaris-Layout__Section.Polaris-Layout__Section--secondary
         .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
           h2.Polaris-Heading.Polaris-TextStyle--variationStrong Billing Information

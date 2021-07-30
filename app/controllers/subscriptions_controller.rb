@@ -80,4 +80,12 @@ class SubscriptionsController < AuthenticatedController
       render js: "showToast('notice', 'Subscription is cancelled!'); hideModal();"
     end
   end
+
+  def remove_box_item
+    @customer = Customer.find_by_shopify_id(params[:id])
+    box_items = @customer.box_items.split(',')
+    box_items.delete(params[:product_id])
+    @customer.update(box_items: box_items.present? ? box_items.join(',') : nil)
+    render js: 'location.reload()'
+  end
 end
