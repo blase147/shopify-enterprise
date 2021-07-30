@@ -100,7 +100,6 @@ const NewUpSell = () => {
   const initialValues = {
     publicName: '',
     internalName: 'Customer Portal',
-    upsellLocation:'',
     selectorTitle: '',
     status: '',
     upsellCampaigns: [
@@ -191,7 +190,6 @@ const NewUpSell = () => {
       fetchCampaign(id: $id) {
         id
         publicName
-        upsellLocation
         internalName
         selectorTitle
         status
@@ -472,7 +470,7 @@ const NewUpSell = () => {
                           </ButtonGroup>
                         </div>
                       </FormLayout.Group>
-                      <FormLayout.Group>
+                      {/* <FormLayout.Group>
                         <Select
                           options={upsellLocationOptions}
                           label="Select Upsell Location"
@@ -488,7 +486,7 @@ const NewUpSell = () => {
                             )
                           }
                         />
-                      </FormLayout.Group>
+                      </FormLayout.Group> */}
                       {/*<FormLayout.Group>
                         <TextField
                           value={values.selectorTitle}
