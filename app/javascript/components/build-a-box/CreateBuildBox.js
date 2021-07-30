@@ -457,6 +457,11 @@ const CreateBuildBox = () => {
                                   e
                                 )
                             }
+                            helpText={
+                                <span>
+                                Customer portal shows directly after Shopify's checkout.
+                                </span>
+                              }
                         />
                       </FormLayout.Group>
                     </FormLayout>
@@ -475,9 +480,11 @@ const CreateBuildBox = () => {
                             <h5>Show these offers when any of the following individual criteria are met</h5>
                           </TextContainer>
                             <br/>
+                            <div className="date-range-label">
                             <TextContainer>
                             <Subheading element="h3">Campaign Duration:</Subheading>
                             </TextContainer>
+                            </div>
                             <RangePickr 
                             startLabel={"buildABoxCampaign.startDate"}
                             endLabel={"buildABoxCampaign.endDate"}
@@ -506,15 +513,27 @@ const CreateBuildBox = () => {
                                   e
                                 )
                             }
+                            helpText={
+                                <span>
+                               Add a trigger to target the box campaign to specific customers and orders.
+                                </span>
+                              }
                         />
                         </FormLayout>
                     </Card.Section>
                     <Card.Section>
                         <FormLayout>
-                        <TextContainer>
-                            <Subheading>Subscription plans</Subheading>
-                          </TextContainer>
                         <FormLayout.Group>
+                        <div className="build-box-search">
+                        <TextContainer>
+                            <Subheading>Subscription plan</Subheading>
+                          </TextContainer>
+                        <Select
+                         options={[{label:"is any",value:"is_any"}]}
+                         label=""
+                         value={'is_any'}
+                        />
+                        
                      <div className="search">
                         <SearchPlan
                             idForTextField={`serchPlan-${Math.random()}`}
@@ -530,7 +549,9 @@ const CreateBuildBox = () => {
                                 }
                         />
                     </div>
-                    </FormLayout.Group>
+               
+                        </div>
+                        </FormLayout.Group>
                     <FormLayout.Group>
                         <Stack vertical={true}>
                             {
