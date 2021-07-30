@@ -194,7 +194,7 @@ const CreateBuildBox = () => {
   const history = useHistory();
   const [createUpsellCampaign] = useMutation(CREATE_BOX_CAMPAIGN);
 
-  
+
 
   const formRef = useRef(null);
 
@@ -260,7 +260,7 @@ const CreateBuildBox = () => {
       setUpdated(true);
       setAllSelectedPlans(allSelectedPlans.filter(plan=>plan.sellingPlanId!==id));
   }
-  
+
 
   useEffect(() => {
     if (data && data?.fetchBuildABoxCampaignGroup) {
@@ -425,7 +425,7 @@ const CreateBuildBox = () => {
                       <br />
                     </>
                   )}
-
+                    <div className="build-a-box-create">
                     <Card title="Box campaign group" sectioned>
                     <FormLayout>
                       <FormLayout.Group>
@@ -485,7 +485,7 @@ const CreateBuildBox = () => {
                             <Subheading element="h3">Campaign Duration:</Subheading>
                             </TextContainer>
                             </div>
-                            <RangePickr 
+                            <RangePickr
                             startLabel={"buildABoxCampaign.startDate"}
                             endLabel={"buildABoxCampaign.endDate"}
                             setFieldValue={setFieldValue}
@@ -493,7 +493,7 @@ const CreateBuildBox = () => {
                             end={values?.buildABoxCampaign?.endDate || ''}
                             />
                           </div>
-                          <br/>                
+                          <br/>
                             </FormLayout.Group>
                         </FormLayout>
                     </Card.Section>
@@ -533,7 +533,7 @@ const CreateBuildBox = () => {
                          label=""
                          value={'is_any'}
                         />
-                        
+
                      <div className="search">
                         <SearchPlan
                             idForTextField={`serchPlan-${Math.random()}`}
@@ -549,7 +549,7 @@ const CreateBuildBox = () => {
                                 }
                         />
                     </div>
-               
+
                         </div>
                         </FormLayout.Group>
                     <FormLayout.Group>
@@ -569,7 +569,9 @@ const CreateBuildBox = () => {
                         <TextContainer>
                             <Subheading>BUILD-A-BOX CONFIGURATION</Subheading>
                           </TextContainer>
+                          <div className='limit-section'>
                           <FormLayout.Group>
+
                           <div className="box-subscription-detail">
                                   <TextField
                                     label="Limit Options"
@@ -588,6 +590,7 @@ const CreateBuildBox = () => {
                                     // placeholder="1"
                                   />
                                 </div>
+
                           </FormLayout.Group>
                           <FormLayout.Group>
                             <Checkbox
@@ -712,9 +715,11 @@ const CreateBuildBox = () => {
                                 </Stack>
                               </div>
                             )}
+                          </div>
                         </FormLayout>
                     </Card.Section>
                       </Card>
+                    </div>
                 </Form>
               )}
             </Formik>

@@ -31,4 +31,24 @@
   .date-range-label{
     margin-bottom: 4px;
   }
-  
+
+  .build-a-box-create .Polaris-Card__Header {
+    background: #007eff;
+    border-radius: 5px 5px 0px 0px;
+    color: white;
+    padding-bottom: 10px;
+}
+
+.limit-section .product-stack > div {
+  margin-bottom: 26px;
+  margin-left: 22px;
+  margin-top: 10px;
+}
+.limit-section .building-box-collection > div{
+  margin-bottom: 26px;
+  margin-left: 22px;
+  margin-top: 10px;
+}
+.limit-section {
+  /* margin-left: 10px; */
+}
