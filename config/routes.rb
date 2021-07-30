@@ -99,6 +99,7 @@ Rails.application.routes.draw do
       post :remove_line
       post :skip_schedule
       post :pause
+      post :remove_box_item
     end
   end
 

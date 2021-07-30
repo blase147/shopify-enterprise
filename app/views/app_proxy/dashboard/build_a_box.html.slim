@@ -1,5 +1,6 @@
 - if @box_campaign.present? && @box_campaign.box_subscription_type.present?
   .checkout-design-1
+    div.box_items_selected.hidden = @customer.box_items
     p Select Style Options
     .new-desig-parent
       .img-sec-parent
@@ -14,21 +15,41 @@
           h4 Build Your Box
         .bottom-section
           .add-img-sec
-            - @box_campaign.box_quantity_limit.times.each do |index|
-              .sec
-                .img-crs-sec.cros-img
-                  img.place-img src="" /
-                  .cros-plus.close-img
-                    | x
-                p Select #{index+1}
+            - if @selected_products.present?
+              - @box_campaign.box_quantity_limit.times.each do |index|
+                - if @selected_products[index].present?
+                  .sec data-id="#{@selected_products[index].id}"
+                    .img-crs-sec.cros-img
+                      img src="#{@selected_products[index].images.first.src}" /
+                      .cros-plus.close-img
+                        | x
+                    p Select #{index+1}
+                - else
+                  .sec
+                    .img-crs-sec.cros-img
+                      img.place-img src="" /
+                      .cros-plus.close-img
+                        | x
+                    p Select #{index+1}
+            - else
+              - @box_campaign.box_quantity_limit.times.each do |index|
+                .sec
+                  .img-crs-sec.cros-img
+                    img.place-img src="" /
+                    .cros-plus.close-img
+                      | x
+                  p Select #{index+1}
           button.confirm_selection data-subscriptionId="#{@subscription_id}" CONFIRM SELECTION
         span.box_limit.hidden = @box_campaign.box_quantity_limit
 
 - else
-  span.billing_plan_present.hidden
+  span.billing_plan_present.hidden = @box_campaign.present? && (@box_campaign.product_images.present? || @box_campaign.collection_images.present?)
 javascript:
   $(document).ready(function(){
     eraseCookie('customer_box_items');
+    if ($('.box_items_selected').text() !== "") {
+      setCookie('customer_box_items', $('.box_items_selected').text(), 1)
+    }
     $('.checkout-design-1 .add').click(function(){
       let selectedProducts = getCookie('customer_box_items');
       if (selectedProducts == null || (selectedProducts.split(',').length <= parseInt($('.box_limit').text()))) {
