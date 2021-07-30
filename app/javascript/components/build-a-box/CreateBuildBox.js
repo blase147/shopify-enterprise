@@ -136,8 +136,9 @@ const CreateBuildBox = () => {
             collectionImages {
                 collectionId
                 collectionTitle
+                _destroy
                 products {
-                    title
+                    productId
                     image
                     _destroy
                 }
