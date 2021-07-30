@@ -2436,6 +2436,10 @@ Customer Build a box
 
 .checkout-design-1 .img-con {
   position: relative;
+  //
+  img {
+    width: 100%
+  }
 }
 .checkout-design-1 .add-img-section button {
   position: absolute;

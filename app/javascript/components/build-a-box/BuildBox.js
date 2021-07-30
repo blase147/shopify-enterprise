@@ -26,6 +26,8 @@ import {
   } from '@shopify/polaris-icons';
   
   import { gql, useMutation, useQuery } from '@apollo/client';
+  import _ from 'lodash';
+
 import AppLayout from '../layout/Layout'
 const ButtonRemove = (props) => {
     const {
@@ -214,7 +216,7 @@ const ButtonRemove = (props) => {
               {row.internalName}
             </Link>
           </div>,
-          `${row.location}`,
+          `${_.startCase(row.location?.split('_').join(" "))}`,
         //   <p className="money">
         //     <span>$130.00</span>USD
         //   </p>,
@@ -252,7 +254,7 @@ const ButtonRemove = (props) => {
       }, [selectedCampaignsForRemove]);
     
       return (
-        <AppLayout typePage="build-a-box" tabIndex="5">
+        <AppLayout typePage="upsell" tabIndex="5">
           <Frame>
             <Page>
               {saveSuccess && (
