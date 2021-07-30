@@ -683,6 +683,8 @@ div.box-items {
   }
   //
   .box_images_collection {
+    display: flex;
+    gap: 20px;
     margin-top: 16px;
   }
   //
