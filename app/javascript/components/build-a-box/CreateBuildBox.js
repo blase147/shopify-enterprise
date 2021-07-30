@@ -38,6 +38,7 @@ import {
 import SearchCollection from '../plans/SearchCollection';
 import SearchProduct from '../plans/SearchProduct';
 import SearchPlan from '../upsell/SearchPlan';
+import RangePickr from './RangePickr';
 
 const CreateBuildBox = () => {
   const options = [...Array(99).keys()].map((foo) => (foo + 1).toString());
@@ -49,6 +50,10 @@ const CreateBuildBox = () => {
     { label: 'Customer Portal', value: 'customer_portal' }
   ];
 
+  const triggerOptions = [
+      { label: 'Customer is subscribed to subscription plan', value: 'customer_is_subscribed_to_subscription_plan' }
+  ]
+
   const initialValues = {
     internalName:"",
     location:"customer_portal",
@@ -56,8 +61,8 @@ const CreateBuildBox = () => {
         startDate:"",
         endDate:"",
         boxQuantityLimit:0,
-        boxSubscriptionType:0,
-        triggers :[],
+        boxSubscriptionType:'',
+        triggers :'customer_is_subscribed_to_subscription_plan',
         sellingPlans :[],
         collectionImages: [],
         productImages: []
@@ -87,6 +92,9 @@ const CreateBuildBox = () => {
 
   const validationSchema = yup.object().shape({
     internalName: yup.string().required().label('Internal name'),
+    buildABoxCampaign:yup.object().shape({
+        boxSubscriptionType:yup.string().required().label('box subscription type')
+    })
     // publicName: yup.string().required().label('Public name'),
     // selectorTitle: yup.string().required().label('Campaign selector title'),
     // upsellCampaigns: yup.array().of(
@@ -113,6 +121,7 @@ const CreateBuildBox = () => {
         internalName
         location
         buildABoxCampaign {
+            id
             startDate
             endDate
             boxQuantityLimit
@@ -249,8 +258,9 @@ const CreateBuildBox = () => {
 
   useEffect(() => {
     if (data && data?.fetchBuildABoxCampaignGroup) {
-        data.fetchBuildABoxCampaignGroup.buildABoxCampaign.endDate="";
-        data.fetchBuildABoxCampaignGroup.buildABoxCampaign.startDate=""
+        data.fetchBuildABoxCampaignGroup.buildABoxCampaign.triggers=data.fetchBuildABoxCampaignGroup.buildABoxCampaign.triggers[0]?.name; //Manipulate later
+        data.fetchBuildABoxCampaignGroup.buildABoxCampaign.endDate=data.fetchBuildABoxCampaignGroup.buildABoxCampaign.endDate || "";
+        data.fetchBuildABoxCampaignGroup.buildABoxCampaign.startDate=data.fetchBuildABoxCampaignGroup.buildABoxCampaign.startDate || "";
       setCampaignData(data.fetchBuildABoxCampaignGroup);
       setSelectedProducts(data.fetchBuildABoxCampaignGroup.buildABoxCampaign.productImages);
       setSelectedProductOptions(() => {
@@ -274,7 +284,6 @@ const CreateBuildBox = () => {
     }
   }, [data]);
 
-  console.log("Selling Plans",allSelectedPlans,"products",selectedProducts)
   return (
     <AppLayout typePage="build-a-box" tabIndex="5">
       <Frame>
@@ -304,7 +313,7 @@ const CreateBuildBox = () => {
                 formData.buildABoxCampaign.collectionImages=selectedCollections;
                 formData.buildABoxCampaign.productImages=selectedProducts;
                 formData.buildABoxCampaign.sellingPlans=allSelectedPlans;
-                console.log("Submit :",formData);
+                formData.buildABoxCampaign.triggers=[{name:formData?.buildABoxCampaign?.triggers}]; // Manipulate later
                 // formData.upsellCampaigns[0].productOffer = allProducts;
                 if (id) {
                   updateBoxCampaign({
@@ -315,8 +324,6 @@ const CreateBuildBox = () => {
                     .then((resp) => {
                       const data = resp.data;
                       const errors = data.errors;
-
-                      console.log(errors);
                       if (errors) {
                         setFormErrors(errors);
                         setSubmitting(false);
@@ -337,8 +344,6 @@ const CreateBuildBox = () => {
                     .then((resp) => {
                       const data = resp.data;
                       const errors = data.errors;
-
-                      console.log(errors);
                       if (errors) {
                         setFormErrors(errors);
                         setSubmitting(false);
@@ -434,7 +439,7 @@ const CreateBuildBox = () => {
                         />
                         <Select
                          options={locationOptions}
-                         label="Select Upsell Location"
+                         label="Select box campaign location"
                          value={values.location}
                          error={
                             touched.location &&
@@ -455,6 +460,49 @@ const CreateBuildBox = () => {
                         title="Box Campaign"
                         sectioned
                       >
+                    <Card.Section>
+                        <FormLayout>
+                        <FormLayout.Group>
+                            <TextContainer>
+                            <h4><strong>DISPLAY RULES</strong></h4>
+                            <h5>Show these offers when any of the following individual criteria are met</h5>
+                          </TextContainer>
+                            <br/>
+                            <TextContainer>
+                            <Subheading element="h3">Campaign Duration:</Subheading>
+                            <RangePickr 
+                            startLabel={"buildABoxCampaign.startDate"}
+                            endLabel={"buildABoxCampaign.endDate"}
+                            setFieldValue={setFieldValue}
+                            start={values?.buildABoxCampaign?.startDate || ''}
+                            end={values?.buildABoxCampaign?.endDate || ''}
+                            />
+                          </TextContainer>
+                          <br/>
+                          
+                            </FormLayout.Group>
+                        </FormLayout>
+                    </Card.Section>
+                    <Card.Section>
+                        <FormLayout>
+                        <Select
+                         options={triggerOptions}
+                         label="Triggers"
+                         value={values?.buildABoxCampaign?.triggers}
+                         error={
+                            touched.buildABoxCampaign?.triggers &&
+                            errors.buildABoxCampaign?.triggers
+                              }
+                         onChange={(e) =>
+                            setFieldValue(
+                                `buildABoxCampaign.triggers`,
+                                  e
+                                )
+                            }
+                        />
+                        </FormLayout>
+                    </Card.Section>
+                    <Card.Section>
                         <FormLayout>
                         <TextContainer>
                             <Subheading>Subscription plans</Subheading>
@@ -637,7 +685,7 @@ const CreateBuildBox = () => {
                               </div>
                             )}
                         </FormLayout>
-
+                    </Card.Section>
                       </Card>
                 </Form>
               )}

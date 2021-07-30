@@ -101,7 +101,6 @@ const SearchProduct = (props) => {
           });
         }
 
-        console.log(allProducts);
       }
     },
     [productList, value]
