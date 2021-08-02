@@ -105,7 +105,7 @@ javascript:
 
   $(document).on('click','.confirm_selection',function(){
     let selectedProducts = getCookie('customer_box_items');
-    if (selectedProducts.split(',').length < $('.box_limit').text()) {
+    if (!selectedProducts || (selectedProducts.split(',').length < $('.box_limit').text())) {
       $('.error_message').css('display', 'block');
     } else {
       var subscriptionId = $(this).attr('data-subscriptionId');
