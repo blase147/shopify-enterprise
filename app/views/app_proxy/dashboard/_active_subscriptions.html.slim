@@ -81,7 +81,7 @@
           .item
             p #{@translation.home_tab_est_next_delivery.present? ? @translation.home_tab_est_next_delivery : 'est. next delivery'}
             p
-              = get_next_shipping_date(subscription.node, @current_shop).strftime("%a, %B %e")
+              = (DateTime.parse(subscription.node.next_billing_date) + 4.days).strftime("%a, %B %e")
           .item
             p #{@translation.home_tab_last_card_charge.present? ? @translation.home_tab_last_card_charge : 'last card charge'}
             p -
