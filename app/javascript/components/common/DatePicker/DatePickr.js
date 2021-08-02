@@ -35,7 +35,7 @@ export default class DatePickr extends React.Component {
           disclosure={'down'}
           textAlign='left'
             >
-            {this.props.selectedDate ? dayjs(this.props.selectedDate).format('DD MMM, YYYY'):"Choose date"}
+            {this.props.date[this.props.index]?.[this.props.type] ? dayjs(this.props.selectedDate).format('DD MMM, YYYY'):"Choose date"}
         </Button>
 
           <div className="analytics-btn-group">
@@ -73,6 +73,7 @@ export default class DatePickr extends React.Component {
   }
   handleChange = value => {
     this.setState({ selected: value });
+    const {date,index,type}=this.props;
     let dates=this.props.existingValues;
     if(dates){
         dates.push(dayjs(value.start).format("YYYY-MM-DD"))
@@ -80,7 +81,9 @@ export default class DatePickr extends React.Component {
         dates=[dayjs(value.start).format("YYYY-MM-DD")]
       }
     this.props.callback && this.props.callback(this.props.input,dates)
-    this.props.handleDate(value.start);
+    let selected=date;
+    selected[index][type]=value.start
+    this.props.handleDate(selected);
     this.setState({active:false})
     this.props.setUpdated(true)
   };

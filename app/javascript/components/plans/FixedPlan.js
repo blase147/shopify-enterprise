@@ -165,11 +165,7 @@ const FixedPlan = () => {
     }
   }, [data]);
 
-  const handleAddSellingPlan = useCallback((values) => {
-    const plans = [...(values.sellingPlans || [])];
-    plans.push({ ...initialValues });
-    return plans;
-  });
+
 
   const validationSchema = yup.object().shape({
     internalName: yup.string().required().label('Internal name'),
@@ -209,15 +205,20 @@ const FixedPlan = () => {
   const [createSellingPlan] = useMutation(CREATE_SELLING_PLAN);
   const history = useHistory();
 
-  const [selectedBillingDate,setSelectedBillingDate]=useState('');
-  const setBillingDate=useCallback((date)=>{
-    setSelectedBillingDate(date)
-  },[selectedBillingDate])
+  // const [selectedBillingDate,setSelectedBillingDate]=useState('');
+  // const setBillingDate=useCallback((date)=>{
+  //   setSelectedBillingDate(date)
+  // },[selectedBillingDate])
 
-  const [selectedShippingDate,setSelectedShippingDate]=useState('');
-  const setShippingDate=useCallback((date)=>{
-    setSelectedShippingDate(date)
-  },[selectedShippingDate])
+  const [selectedDate,setSelectedDate]=useState([{shippingDate:"",billingDate:""}]);
+  const setDate=useCallback((date)=>{
+    setSelectedDate(date)
+  },[setSelectedDate])
+
+  const clearDate =useCallback((type,index)=>{
+    let date=selectedDate[index][type]="";
+    setSelectedDate(date);
+  },[setSelectedDate])
 
   //Biiling Dates
   const getDate=(dates)=>{
@@ -244,6 +245,18 @@ if(dates){
 }
 return [...dates];
 }
+const handleAddSellingPlan = useCallback((values) => {
+  let dates=selectedDate;
+  dates.push({shippingDate:"",billingDate:""});
+  setSelectedDate(dates);
+  //
+  const plans = [...(values.sellingPlans || [])];
+  initialValues.billingDates=[];
+  initialValues.shippingDates=[];
+  plans.push({ ...initialValues });
+  return plans;
+});
+
   return (
     <AppLayout typePage="sellingPlanForm" tabIndex={1}>
       <Frame>
@@ -284,7 +297,6 @@ return [...dates];
                   values.sellingPlans[index].productIds = allProducts[index] || [];
                   values.sellingPlans[index].variantIds = allVarients[index] || [];
                 })
-                console.log(values,"sellingPlan")
                 if (id) {
                   updateSellingPlan({
                     variables: {
@@ -497,6 +509,8 @@ return [...dates];
                                     `sellingPlans[${index}]._destroy`,
                                     true
                                   );
+                                 let dates=selectedDate.slice(index,1);
+                                 setSelectedDate(dates); 
                                 },
                               },
                             ]
@@ -871,10 +885,15 @@ return [...dates];
                               <div className="muti-input-wrapper">
                                 <div className="date-input">
                                 <label> Specific billing date </label>
-                                <DatePickr
-                                handleDate={setBillingDate}
+                                <DatePickr 
+
+                                handleDate={setDate} 
+                                type={'billingDate'}
+                                index={index}
+                                date={selectedDate}
+
                                 callback={setFieldValue}
-                                selectedDate={selectedBillingDate}
+                                selectedDate={values.sellingPlans[index]?.billingDates[0]}
                                 input={`sellingPlans[${index}].billingDates`}
                                 existingValues={values.sellingPlans[index]?.billingDates}
                                 setUpdated={setUpdated}
@@ -897,7 +916,7 @@ return [...dates];
                                 {
                                 values.sellingPlans[index]?.billingDates.length > 0  &&
                                 <div className="add-date-btn">
-                                <Button primary onClick={()=>setSelectedBillingDate(null)}>+ Add</Button>
+                                <Button primary onClick={()=>clearDate("billingDate",index)}>+ Add</Button>
                                 </div>
                                 }
 
@@ -905,10 +924,15 @@ return [...dates];
                               <div className="muti-input-wrapper">
                                 <div className="date-input">
                                 <label> Specific shipping date </label>
-                                <DatePickr
-                                handleDate={setShippingDate}
+                                <DatePickr 
+
+                                handleDate={setDate} 
+                                type={'shippingDate'}
+                                date={selectedDate}
+                                index={index}
+
                                 callback={setFieldValue}
-                                selectedDate={selectedShippingDate}
+                                selectedDate={values.sellingPlans[index]?.shippingDates[0]}
                                 input={`sellingPlans[${index}].shippingDates`}
                                 existingValues={values.sellingPlans[index]?.shippingDates}
                                 setUpdated={setUpdated}
@@ -929,7 +953,7 @@ return [...dates];
                                 {
                                   values.sellingPlans[index]?.shippingDates.length > 0  &&
                                   <div className="add-date-btn">
-                                  <Button primary onClick={()=>setSelectedShippingDate(null)}>+ Add</Button>
+                                  <Button primary onClick={()=>clearDate("shippingDate",index)}>+ Add</Button>
                                   </div>
                                 }
                                 </div>
