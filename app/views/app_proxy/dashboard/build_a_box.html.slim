@@ -39,6 +39,7 @@
                     .cros-plus.close-img
                       | x
                   p Select #{index+1}
+          p.error_message.hidden Selection is not complete
           button.confirm_selection data-subscriptionId="#{@subscription_id}" CONFIRM SELECTION
         span.box_limit.hidden = @box_campaign.box_quantity_limit
 
@@ -51,6 +52,7 @@ javascript:
       setCookie('customer_box_items', $('.box_items_selected').text(), 1)
     }
     $('.checkout-design-1 .add').click(function(){
+      $('.error_message').css('display', 'none');
       let selectedProducts = getCookie('customer_box_items');
       if (selectedProducts == null || (selectedProducts.split(',').length <= parseInt($('.box_limit').text()))) {
         var img=$(this).closest('.add-img-section').find('img');
@@ -103,16 +105,20 @@ javascript:
 
   $(document).on('click','.confirm_selection',function(){
     let selectedProducts = getCookie('customer_box_items');
-    var subscriptionId = $(this).attr('data-subscriptionId');
-    if (selectedProducts) {
-      $.ajax({
-        url: "/a/chargezen_production/dashboard/confirm_box_selection",
-        type: "POST",
-        data: { product_id: selectedProducts, subscription_id: subscriptionId },
-        success: function(result){
-          window.top.location.href = '/account';
-        }
-      });
+    if (selectedProducts.split(',').length < $('.box_limit').text()) {
+      $('.error_message').css('display', 'block');
+    } else {
+      var subscriptionId = $(this).attr('data-subscriptionId');
+      if (selectedProducts) {
+        $.ajax({
+          url: "/a/chargezen_production/dashboard/confirm_box_selection",
+          type: "POST",
+          data: { product_id: selectedProducts, subscription_id: subscriptionId },
+          success: function(result){
+            window.top.location.href = '/account';
+          }
+        });
+      }
     }
   });
 
