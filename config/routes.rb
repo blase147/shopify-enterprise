@@ -55,6 +55,7 @@ Rails.application.routes.draw do
         post :upgrade_product
         post :remove_line
         post :skip_schedule
+        post :update_payment
       end
     end
     resources :dashboard, only: [:index] do

@@ -276,7 +276,14 @@ div.Polaris-Modal-Dialog__Container {
     > form {
       > .field {
         margin-bottom: 40px;
-        > label {
+        .heading_label {
+          display: flex;
+          gap: 3px;
+        }
+        .red {
+          color: red;
+        }
+        label {
           font-size: 18px;
           font-weight: bold;
           margin-bottom: 10px;
@@ -300,7 +307,14 @@ div.Polaris-Modal-Dialog__Container {
 
         > .field {
           margin-bottom: 40px;
-          > label {
+          .heading_label {
+            display: flex;
+            gap: 3px;
+          }
+          .red {
+            color: red;
+          }
+           label {
             font-size: 18px;
             font-weight: bold;
             margin-bottom: 10px;
@@ -992,7 +1006,25 @@ nav.top-nav {
     }
   }
 
-  > a {
+  > a.add_weekly_box {
+    font-size: 18px;
+    color: #212B36;
+    font-weight: bold;
+    // border-bottom: 2px solid $primary;
+    text-decoration: none;
+    // display: none;
+    padding: 7px 0px;
+  }
+
+  > a#logout-btn {
+    font-size: 18px;
+    color: #007EFF;
+    text-decoration: underline;
+    padding: 7px 0px;
+    cursor: pointer;
+  }
+
+  > a.add_weekly_box {
     font-size: 18px;
     color: #212B36;
     font-weight: bold;
@@ -2562,4 +2594,9 @@ Customer Build a box
     color: red;
     padding: 10px;
   }
+}
+.billing_address_label {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
 }

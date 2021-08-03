@@ -11,25 +11,100 @@
                 svg fill="none" height="20" viewbox=("0 0 18 20") width="18" xmlns="http://www.w3.org/2000/svg"
                   path d=("M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z") fill="#DDDDDD" /
             .form-wrapper
-              form
+              form action="#{action_subscription_contract_path(:update_payment, @customer.shopify_id)}" method='post' data-remote=true enctype="multipart/form-data"
                 .field
-                  label #{@translation.update_payment_popup_card_name.present? ? @translation.update_payment_popup_card_name : 'Name on card'}
-                  input type="text" placeholder="Lorem Ipsum"/
+                  div.heading_label
+                    label #{@translation.update_payment_popup_card_name.present? ? @translation.update_payment_popup_card_name : 'Name on card'}
+                    span.red *
+                  input name='name' type="text" placeholder="Name" required="required"/
                 .field
-                  label #{@translation.update_payment_popup_card_number.present? ? @translation.update_payment_popup_card_number : 'Card Number'}
-                  input type="text" placeholder="1234 1234 1234 1234"/
+                  div.heading_label
+                    label #{@translation.update_payment_popup_card_number.present? ? @translation.update_payment_popup_card_number : 'Card Number'}
+                    span.red *
+                  input id="cc" name='card_number' maxlength="19" type="text" placeholder="1234 1234 1234 1234" required="required"/
                 .group
                   .field
-                    label #{@translation.update_payment_popup_exp_month.present? ? @translation.update_payment_popup_exp_month : 'Exp. Month'}
-                    input type="text" placeholder="12"/
+                    div.heading_label
+                      label #{@translation.update_payment_popup_exp_month.present? ? @translation.update_payment_popup_exp_month : 'Exp. Month'}
+                      span.red *
+                    input name='exp_month' maxlength="2" type="text" required="required"/
                   .field
-                    label #{@translation.update_payment_popup_exp_date.present? ? @translation.update_payment_popup_exp_date : 'Exp. Date'}
-                    input type="text" placeholder=""/
+                    div.heading_label
+                      label #{@translation.update_payment_popup_exp_date.present? ? @translation.update_payment_popup_exp_date : 'Exp. Year'}
+                      span.red *
+                    input name='exp_year' maxlength="2" type="text" placeholder="" required="required"/
                 .field
-                  label #{@translation.update_payment_popup_cvv.present? ? @translation.update_payment_popup_cvv : 'CVV'}
-                  input type="text" placeholder=""/
+                  div.heading_label
+                    label #{@translation.update_payment_popup_cvv.present? ? @translation.update_payment_popup_cvv : 'CVV'}
+                    span.red *
+                  input name='verification_value' maxlength="3" type="text" required="required"/
+                h3.billing_address_label Billing Address
+                .group
+                  .field
+                    div.heading_label
+                      label First Name
+                      span.red *
+                    input name='address_first_name' type="text" required="required"/
+                  .field
+                    div.heading_label
+                      label Last Name
+                      span.red *
+                    input name='address_last_name' type="text" required="required"/
+                .field
+                  div.heading_label
+                    label Address
+                    span.red *
+                  input name='address' type="text" required="required"/
+                .group
+                  .field
+                    div.heading_label
+                      label City
+                      span.red *
+                    input name='address_city' type="text" required="required"/
+                  .field
+                    div.heading_label
+                      label Country
+                      span.red *
+                    input name='address_country' type="text" required="required"/
+                .group
+                  .field
+                    div.heading_label
+                      label State
+                      span.red *
+                    input name='address_state' type="text" required="required"/
+                  .field
+                    div.heading_label
+                      label Zip
+                      span.red *
+                    input name='address_zip' type="text" required="required"/
                 .btn-wrapper
                   button.update-card #{@translation.update_payment_popup_update_card.present? ? @translation.update_payment_popup_update_card : 'Update Card'}
 
 
   .Polaris-Backdrop
+javascript:
+  $('#cc').on('input propertychange paste', function() {
+    var value = $('#cc').val();
+    var formattedValue = formatCardNumber(value);
+    $('#cc').val(formattedValue);
+  });
+
+  function formatCardNumber(value) {
+    var value = value.replace(/\D/g, '');
+    var formattedValue;
+    var maxLength;
+    // american express, 15 digits
+    if ((/^3[47]\d{0,13}$/).test(value)) {
+      formattedValue = value.replace(/(\d{4})/, '$1 ').replace(/(\d{4}) (\d{6})/, '$1 $2 ');
+      maxLength = 17;
+    } else if((/^3(?:0[0-5]|[68]\d)\d{0,11}$/).test(value)) { // diner's club, 14 digits
+      formattedValue = value.replace(/(\d{4})/, '$1 ').replace(/(\d{4}) (\d{6})/, '$1 $2 ');
+      maxLength = 16;
+    } else if ((/^\d{0,16}$/).test(value)) { // regular cc number, 16 digits
+      formattedValue = value.replace(/(\d{4})/, '$1 ').replace(/(\d{4}) (\d{4})/, '$1 $2 ').replace(/(\d{4}) (\d{4}) (\d{4})/, '$1 $2 $3 ');
+      maxLength = 19;
+    }
+
+    $('#cc').attr('maxlength', maxLength);
+    return formattedValue;
+  }
