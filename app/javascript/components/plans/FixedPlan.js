@@ -220,6 +220,15 @@ const FixedPlan = () => {
     setSelectedDate(date);
   },[setSelectedDate])
 
+  const removeSelectedDate=(type,index,values)=>{
+    console.log("type values",values[`${type}s`])
+    if(values[`${type}s`].length<1){
+      let date=selectedDate;
+      date[index][type]="";
+      console.log('dates after change',dates)
+      setSelectedDate(date);
+    }
+  }
   //Biiling Dates
   const getDate=(dates)=>{
     if(dates){
@@ -906,7 +915,7 @@ const handleAddSellingPlan = useCallback((values) => {
                                       <label> Next billing date: </label>
                                       <div className="date-item-wrapper">
                                         <p>{dayjs(date,"YYYY-MM-DD").format("MMM DD, YYYY")}</p>
-                                        <img className="pointer" src={DeleteSVG} onClick={()=>setFieldValue(`sellingPlans[${index}].billingDates`,removeDate(values.sellingPlans[index]?.billingDates,i))} />
+                                        <img className="pointer" src={DeleteSVG} onClick={()=>{setFieldValue(`sellingPlans[${index}].billingDates`,removeDate(values.sellingPlans[index]?.billingDates,i));removeSelectedDate('billingDate',index,values.sellingPlans[index])}} />
                                       </div>
                                       </div>
                                     ))
@@ -945,7 +954,7 @@ const handleAddSellingPlan = useCallback((values) => {
                                       <label> Next shipping date: </label>
                                       <div className="date-item-wrapper">
                                         <p>{dayjs(date,"YYYY-MM-DD").format("MMM DD, YYYY")}</p>
-                                        <img className="pointer" src={DeleteSVG} onClick={()=>setFieldValue(`sellingPlans[${index}].shippingDates`,removeDate(values.sellingPlans[index]?.shippingDates,i))} />
+                                        <img className="pointer" src={DeleteSVG} onClick={()=>{setFieldValue(`sellingPlans[${index}].shippingDates`,removeDate(values.sellingPlans[index]?.shippingDates,i)); removeSelectedDate('shippingDate',index,values.sellingPlans[index])}} />
                                       </div>
                                       </div>
                                     ))
