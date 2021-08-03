@@ -45,7 +45,11 @@
                   span.Polaris-Button__Content
                     = icon_tag 'edit'
                     span.Polaris-Button__Text Edit
-
+              .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
+                a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/admin/customers/#{@customer.shopify_customer_id}?shop=#{@customer.shop.shopify_domain}" target="_parent"
+                  span.Polaris-Button__Content
+                    = icon_tag 'profile_icon'
+                    span.Polaris-Button__Text Shopify Profile
       .Polaris-Layout__Section.Polaris-Layout__Section--oneHalf
         .Polaris-Card.polaris-product
           .Polaris-Card__Header.car-arrow
