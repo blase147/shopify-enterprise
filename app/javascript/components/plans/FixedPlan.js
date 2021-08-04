@@ -529,7 +529,7 @@ const handleAddSellingPlan = useCallback((values) => {
                             />
 
                             <FormLayout.Group>
-                              <p className="card-offer">Varients</p>
+                              <p className="card-offer">Variants</p>
                               <div></div>
                             </FormLayout.Group>
 
@@ -577,7 +577,7 @@ const handleAddSellingPlan = useCallback((values) => {
                                     true
                                   );
                                  let dates=selectedDate.slice(index,1);
-                                 setSelectedDate(dates); 
+                                 setSelectedDate(dates);
                                 },
                               },
                             ]
@@ -892,9 +892,9 @@ const handleAddSellingPlan = useCallback((values) => {
                               <div className="muti-input-wrapper">
                                 <div className="date-input">
                                 <label> Specific billing date </label>
-                                <DatePickr 
+                                <DatePickr
 
-                                handleDate={setDate} 
+                                handleDate={setDate}
                                 type={'billingDate'}
                                 index={index}
                                 date={selectedDate}
@@ -931,9 +931,9 @@ const handleAddSellingPlan = useCallback((values) => {
                               <div className="muti-input-wrapper">
                                 <div className="date-input">
                                 <label> Specific shipping date </label>
-                                <DatePickr 
+                                <DatePickr
 
-                                handleDate={setDate} 
+                                handleDate={setDate}
                                 type={'shippingDate'}
                                 date={selectedDate}
                                 index={index}
