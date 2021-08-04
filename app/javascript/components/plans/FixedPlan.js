@@ -19,7 +19,7 @@ import {
 import DeleteSVG from '../../../assets/images/delete.svg'
 import React, { useState, useCallback, useEffect } from 'react';
 import { Formik } from 'formik';
-import _ from 'lodash';
+import _, { isEmpty } from 'lodash';
 import * as yup from 'yup';
 
 import AppLayout from '../layout/Layout';
@@ -46,11 +46,13 @@ const FixedPlan = () => {
           productId
           title
           image
+          _destroy
         }
         variantIds {
           variantId
           title
           image
+          _destroy
         }
         sellingPlans {
           id
@@ -523,6 +525,7 @@ const handleAddSellingPlan = useCallback((values) => {
                               </div>
                             </FormLayout.Group>
                             <Preview
+                              isUpdate={!isEmpty(id)}
                               allProducts={allProducts || [[]]}
                               setAllProducts={setAllProducts}
                               setUpdated={setUpdated}
@@ -551,6 +554,7 @@ const handleAddSellingPlan = useCallback((values) => {
                               </div>
                             </FormLayout.Group>
                             <Preview
+                              isUpdate={!isEmpty(id)}
                               allProducts={allVarients || [[]]}
                               setAllProducts={setAllVarients}
                               setUpdated={setUpdated}

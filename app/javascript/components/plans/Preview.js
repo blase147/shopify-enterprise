@@ -5,7 +5,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-const Preview = ({ allProducts, setAllProducts, setUpdated,atIndex }) => {
+const Preview = ({ allProducts, setAllProducts, setUpdated,isUpdate }) => {
 
   const [removeFlag, setRemoveFlag] = useState(false);
 
@@ -21,21 +21,21 @@ const Preview = ({ allProducts, setAllProducts, setUpdated,atIndex }) => {
     var index = allProducts.map(prod => {
       return prod.title;
     }).indexOf(title);
-    // let hasDestroy=allProducts[index].hasOwnProperty('_destroy')
+    let hasDestroy=allProducts[index].hasOwnProperty('_destroy')
       if (index > -1) {
-          // if(isUpdate && hasDestroy){
-          //     const products=allProducts.map((prod,i)=>(i===index?{...prod,_destroy:true}:prod));
-          //     setAllProducts(product => product = products);
-          // }else{
-
-          // }
-          allProducts.splice(index, 1);
-          setAllProducts(product => product = allProducts);
+          if(isUpdate && hasDestroy){
+              const products=allProducts.map((prod,i)=>(i===index?{...prod,_destroy:true}:prod));
+              setAllProducts(product => product = products);
+          }else{
+            allProducts.splice(index, 1);
+            setAllProducts(product => product = allProducts);
+          }
+          
           setUpdated && setUpdated(flag => flag = true);
           setRemoveFlag(flag => flag = !removeFlag);
       }
   }
-  const previewCard = allProducts?.map((product) => {
+  const previewCard = allProducts?.filter(prod=>(!prod._destroy)).map((product) => {
     return (
       <div key={Math.random()} className="preview-item" id={`preview-${product.title.replaceAll(' ', '_')}`}>
         <div className="img">
