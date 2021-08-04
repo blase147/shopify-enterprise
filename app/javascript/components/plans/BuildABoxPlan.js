@@ -281,11 +281,9 @@ const BuildABoxPlan = () => {
   },[setSelectedDate])
 
   const removeSelectedDate=(type,index,values)=>{
-    console.log("type values",values[`${type}s`])
     if(values[`${type}s`].length<1){
       let date=selectedDate;
       date[index][type]="";
-      console.log('dates after change',dates)
       setSelectedDate(date);
     }
   }
@@ -297,7 +295,14 @@ const BuildABoxPlan = () => {
     }
     return [...dates];
   }
-
+ const checkDates =(setFieldValue,values,selectedDate,field)=>{
+   if(selectedDate[0].billingDate && values.billingDates.length===0){
+     setFieldValue(`${field}.billingDates`,[selectedDate[0].billingDate])
+   }
+   if(selectedDate[0].shippingDate && values.shippingDates.length===0){
+    setFieldValue(`${field}.shippingDates`,[selectedDate[0].shippingDate])
+  }
+ }
   return (
     <LayoutIndex typePage="sellingPlanForm" tabIndex={1}>
       <Frame>
@@ -338,7 +343,6 @@ const BuildABoxPlan = () => {
                     }
               }
               onSubmit={(values, { setSubmitting, setDirty }) => {
-                console.log(values);
                 if (id) {
                   updateSellingPlan({
                     variables: {
@@ -1023,6 +1027,7 @@ const BuildABoxPlan = () => {
                           <FormLayout.Group>
                               <div className="muti-input-wrapper">
                                 <div className="date-input">
+                                  {checkDates(setFieldValue,values.sellingPlans[index],selectedDate,`sellingPlans[${index}]`)}
                                 <label> Specific billing date </label>
                                 <DatePickr 
 
@@ -1041,7 +1046,7 @@ const BuildABoxPlan = () => {
                                 <div className="date-list-items">
                                   {
                                     values.sellingPlans[index]?.billingDates.map((date,i)=>(
-                                      <div className="date-input-group">
+                                      <div key={`billing-date-${i}`} className="date-input-group">
                                       <label> Next billing date: </label>
                                       <div className="date-item-wrapper">
                                         <p>{dayjs(date,"YYYY-MM-DD").format("MMM DD, YYYY")}</p>
@@ -1080,7 +1085,7 @@ const BuildABoxPlan = () => {
                                 <div className="date-list-items">
                                   {
                                     values.sellingPlans[index]?.shippingDates.map((date,i)=>(
-                                      <div className="date-input-group">
+                                      <div key={`shipping-date-${i}`} className="date-input-group">
                                       <label> Next shipping date: </label>
                                       <div className="date-item-wrapper">
                                         <p>{dayjs(date,"YYYY-MM-DD").format("MMM DD, YYYY")}</p>

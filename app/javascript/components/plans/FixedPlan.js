@@ -221,11 +221,9 @@ const FixedPlan = () => {
   },[setSelectedDate])
 
   const removeSelectedDate=(type,index,values)=>{
-    console.log("type values",values[`${type}s`])
     if(values[`${type}s`].length<1){
       let date=selectedDate;
       date[index][type]="";
-      console.log('dates after change',dates)
       setSelectedDate(date);
     }
   }
