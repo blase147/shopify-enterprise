@@ -9,6 +9,8 @@ module Types
       argument :active, GraphQL::Types::Boolean, required: true
 
       argument :selling_plans, [Types::Input::SellingPlanInputType], required: false
+      argument :product_ids, [Types::Input::ProductInputType], required: false
+      argument :variant_ids, [Types::Input::VariantInputType], required: false
       argument :__typename, String, required: false
       argument :plan_type, String, required: false
     end

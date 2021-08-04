@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_28_054905) do
+ActiveRecord::Schema.define(version: 2021_08_04_055156) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,30 @@ ActiveRecord::Schema.define(version: 2021_07_28_054905) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "phone"
+  end
+
+  create_table "build_a_box_campaign_groups", force: :cascade do |t|
+    t.bigint "shop_id"
+    t.string "internal_name"
+    t.string "location"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["shop_id"], name: "index_build_a_box_campaign_groups_on_shop_id"
+  end
+
+  create_table "build_a_box_campaigns", force: :cascade do |t|
+    t.bigint "build_a_box_campaign_group_id"
+    t.date "start_date"
+    t.date "end_date"
+    t.integer "box_quantity_limit"
+    t.integer "box_subscription_type"
+    t.json "collection_images"
+    t.json "product_images"
+    t.json "triggers"
+    t.json "selling_plans"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["build_a_box_campaign_group_id"], name: "index_build_a_box_campaigns_on_build_a_box_campaign_group_id"
   end
 
   create_table "custom_keywords", force: :cascade do |t|
@@ -89,6 +113,7 @@ ActiveRecord::Schema.define(version: 2021_07_28_054905) do
     t.string "biiling_interval"
     t.string "shopify_customer_id"
     t.string "box_items"
+    t.datetime "campaign_date"
     t.index ["reasons_cancel_id"], name: "index_customers_on_reasons_cancel_id"
   end
 
@@ -166,6 +191,8 @@ ActiveRecord::Schema.define(version: 2021_07_28_054905) do
     t.decimal "price"
     t.integer "trial"
     t.boolean "active", default: true
+    t.json "product_ids"
+    t.json "variant_ids"
   end
 
   create_table "selling_plans", force: :cascade do |t|
@@ -198,8 +225,6 @@ ActiveRecord::Schema.define(version: 2021_07_28_054905) do
     t.json "collection_images"
     t.text "billing_dates", default: [], array: true
     t.text "shipping_dates", default: [], array: true
-    t.json "product_ids"
-    t.json "variant_ids"
   end
 
   create_table "settings", force: :cascade do |t|
