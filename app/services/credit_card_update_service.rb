@@ -26,9 +26,8 @@ class CreditCardUpdateService < GraphqlService
     # id = subscription.customer_payment_method.id
     result = client.query(client.parse(CREATE_QUERY), variables: { id: @params[:payment_method_id], sessionId: @session_id, billingAddress: billing_params} )
     p result
-
     errors = result.data.customer_payment_method_credit_card_update.user_errors
-    raise errors.first.message if errors.present?
+    raise errors.last.message if errors.present?
   rescue Exception => ex
     p ex.message
     { error: ex.message }
