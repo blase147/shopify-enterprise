@@ -33,7 +33,7 @@
                     div.heading_label
                       label #{@translation.update_payment_popup_exp_date.present? ? @translation.update_payment_popup_exp_date : 'Exp. Year'}
                       span.red *
-                    input name='exp_year' maxlength="2" type="text" placeholder="" required="required"/
+                    input name='exp_year' maxlength="4" type="text" placeholder="" required="required"/
                 .field
                   div.heading_label
                     label #{@translation.update_payment_popup_cvv.present? ? @translation.update_payment_popup_cvv : 'CVV'}
