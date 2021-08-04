@@ -22,9 +22,9 @@ class CreditCardUpdateService < GraphqlService
   end
 
   def run
-    subscription = SubscriptionContractService.new(@id).run
-    id = subscription.customer_payment_method.id
-    result = client.query(client.parse(CREATE_QUERY), variables: { id: id, sessionId: @session_id, billingAddress: billing_params} )
+    # subscription = SubscriptionContractService.new(@id).run
+    # id = subscription.customer_payment_method.id
+    result = client.query(client.parse(CREATE_QUERY), variables: { id: @params[:payment_method_id], sessionId: @session_id, billingAddress: billing_params} )
     p result
 
     errors = result.data.customer_payment_method_credit_card_update.user_errors

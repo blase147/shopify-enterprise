@@ -10,7 +10,7 @@ import {
 } from '@shopify/polaris';
 
 const SearchProduct = (props) => {
-  const { value, setFieldValue, fieldName, allProducts, error, setAllProducts,atIndex } = props;
+  const { value, setFieldValue, fieldName, allProducts, error, setAllProducts } = props;
   // Search product to add
   const GET_PRODUCT = gql`
     query($query: String!) {
@@ -83,8 +83,8 @@ const SearchProduct = (props) => {
 
         let flag = true;
 
-        for (let i = 0; allProducts?.[atIndex]?.length > i; i++) {
-          if (allProducts[atIndex][i]?.title == product.value) {
+        for (let i = 0; allProducts?.length > i; i++) {
+          if (allProducts[i]?.title == product.value) {
             flag = false;
             break;
           } else {
@@ -93,11 +93,11 @@ const SearchProduct = (props) => {
         }
 
         if (flag) {
-          allProducts[atIndex] ? allProducts[atIndex].push({
+          allProducts ? allProducts.push({
             title: product.value,
             productId: product.id,
             image: product.images[0]
-          }):allProducts[atIndex]=[{
+          }):allProducts=[{
             title: product.value,
             productId: product.id,
             image: product.images[0]
