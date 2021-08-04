@@ -296,10 +296,10 @@ const BuildABoxPlan = () => {
     return [...dates];
   }
  const checkDates =(setFieldValue,values,selectedDate,field)=>{
-   if(selectedDate[0].billingDate && values.billingDates.length===0){
+   if(selectedDate[0]?.billingDate && values.billingDates.length===0){
      setFieldValue(`${field}.billingDates`,[selectedDate[0].billingDate])
    }
-   if(selectedDate[0].shippingDate && values.shippingDates.length===0){
+   if(selectedDate[0]?.shippingDate && values.shippingDates.length===0){
     setFieldValue(`${field}.shippingDates`,[selectedDate[0].shippingDate])
   }
  }
@@ -1029,9 +1029,9 @@ const BuildABoxPlan = () => {
                                 <div className="date-input">
                                   {checkDates(setFieldValue,values.sellingPlans[index],selectedDate,`sellingPlans[${index}]`)}
                                 <label> Specific billing date </label>
-                                <DatePickr 
+                                <DatePickr
 
-                                handleDate={setDate} 
+                                handleDate={setDate}
                                 type={'billingDate'}
                                 index={index}
                                 date={selectedDate}
@@ -1068,9 +1068,9 @@ const BuildABoxPlan = () => {
                               <div className="muti-input-wrapper">
                                 <div className="date-input">
                                 <label> Specific shipping date </label>
-                                <DatePickr 
+                                <DatePickr
 
-                                handleDate={setDate} 
+                                handleDate={setDate}
                                 type={'shippingDate'}
                                 date={selectedDate}
                                 index={index}
