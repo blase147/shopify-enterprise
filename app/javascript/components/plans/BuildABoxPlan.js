@@ -19,7 +19,7 @@ import {
   Spinner,
   Checkbox,
 } from '@shopify/polaris';
-
+import DeleteSVG from '../../../assets/images/delete.svg'
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Formik } from 'formik';
 import _ from 'lodash';
@@ -28,9 +28,9 @@ import { useHistory, useParams } from 'react-router-dom';
 import LayoutIndex from '../layout/Layout';
 import SearchCollection from './SearchCollection';
 import SearchProduct from './SearchProduct';
-
+import dayjs from 'dayjs';
 import { gql, useMutation, useLazyQuery } from '@apollo/client';
-
+import DatePickr from '../common/DatePicker/DatePickr';
 import removeIcon from '../../../assets/images/subscriptionsPlans/removeProduct.svg';
 
 const BuildABoxPlan = () => {
@@ -65,6 +65,8 @@ const BuildABoxPlan = () => {
           boxIsQuantity,
           boxIsQuantityLimited,
           boxQuantityLimit,
+          billingDates
+          shippingDates
           productImages {
             productId
             image
@@ -166,6 +168,8 @@ const BuildABoxPlan = () => {
     trialAdjustmentType: '',
     trialAdjustmentValue: '0',
     boxSubscriptionType: 0,
+    billingDates:[],
+    shippingDates:[],
     boxIsQuantity: true,
     boxIsQuantityLimited: true,
     boxQuantityLimit: 0
@@ -264,6 +268,35 @@ const BuildABoxPlan = () => {
       );
     }
   }, [selectedCollections]);
+
+  const [updated, setUpdated] = useState(false);
+  const [selectedDate,setSelectedDate]=useState([{shippingDate:"",billingDate:""}]);
+  const setDate=useCallback((date)=>{
+    setSelectedDate(date)
+  },[setSelectedDate])
+
+  const clearDate =useCallback((type,index)=>{
+    let date=selectedDate[index][type]="";
+    setSelectedDate(date);
+  },[setSelectedDate])
+
+  const removeSelectedDate=(type,index,values)=>{
+    console.log("type values",values[`${type}s`])
+    if(values[`${type}s`].length<1){
+      let date=selectedDate;
+      date[index][type]="";
+      console.log('dates after change',dates)
+      setSelectedDate(date);
+    }
+  }
+
+  const removeDate=(dates,index)=>{
+    if(dates){
+      dates.splice(index,1);
+      setUpdated(true);
+    }
+    return [...dates];
+  }
 
   return (
     <LayoutIndex typePage="sellingPlanForm" tabIndex={1}>
@@ -373,7 +406,7 @@ const BuildABoxPlan = () => {
                 /* and other goodies */
               }) => (
                 <Form onSubmit={handleSubmit}>
-                  {dirty && (
+                  {(dirty || updated) && (
                     <ContextualSaveBar
                       message="Unsaved changes"
                       saveAction={{
@@ -388,6 +421,7 @@ const BuildABoxPlan = () => {
                         onAction: () => {
                           setSelectedProducts(productImagesFirst);
                           resetForm();
+                          setUpdated(flag => flag = false)
                         },
                       }}
                     />
@@ -981,6 +1015,89 @@ const BuildABoxPlan = () => {
                                 </Stack>
                               </div>
                             )}
+
+                          <TextContainer>
+                          <br />
+                            <p><strong style={{fontWeight:'600'}}>MANUAL RULES</strong><i> pro</i> </p>
+                          </TextContainer>
+                          <FormLayout.Group>
+                              <div className="muti-input-wrapper">
+                                <div className="date-input">
+                                <label> Specific billing date </label>
+                                <DatePickr 
+
+                                handleDate={setDate} 
+                                type={'billingDate'}
+                                index={index}
+                                date={selectedDate}
+
+                                callback={setFieldValue}
+                                selectedDate={values.sellingPlans[index]?.billingDates[0]}
+                                input={`sellingPlans[${index}].billingDates`}
+                                existingValues={values.sellingPlans[index]?.billingDates}
+                                setUpdated={setUpdated}
+                                 />
+                                </div>
+                                <div className="date-list-items">
+                                  {
+                                    values.sellingPlans[index]?.billingDates.map((date,i)=>(
+                                      <div className="date-input-group">
+                                      <label> Next billing date: </label>
+                                      <div className="date-item-wrapper">
+                                        <p>{dayjs(date,"YYYY-MM-DD").format("MMM DD, YYYY")}</p>
+                                        <img className="pointer" src={DeleteSVG} onClick={()=>{setFieldValue(`sellingPlans[${index}].billingDates`,removeDate(values.sellingPlans[index]?.billingDates,i));removeSelectedDate('billingDate',index,values.sellingPlans[index])}} />
+                                      </div>
+                                      </div>
+                                    ))
+                                  }
+
+                                </div>
+                                {
+                                values.sellingPlans[index]?.billingDates.length > 0  &&
+                                <div className="add-date-btn">
+                                <Button primary onClick={()=>clearDate("billingDate",index)}>+ Add</Button>
+                                </div>
+                                }
+
+                              </div>
+                              <div className="muti-input-wrapper">
+                                <div className="date-input">
+                                <label> Specific shipping date </label>
+                                <DatePickr 
+
+                                handleDate={setDate} 
+                                type={'shippingDate'}
+                                date={selectedDate}
+                                index={index}
+
+                                callback={setFieldValue}
+                                selectedDate={values.sellingPlans[index]?.shippingDates[0]}
+                                input={`sellingPlans[${index}].shippingDates`}
+                                existingValues={values.sellingPlans[index]?.shippingDates}
+                                setUpdated={setUpdated}
+                                 />
+                                </div>
+                                <div className="date-list-items">
+                                  {
+                                    values.sellingPlans[index]?.shippingDates.map((date,i)=>(
+                                      <div className="date-input-group">
+                                      <label> Next shipping date: </label>
+                                      <div className="date-item-wrapper">
+                                        <p>{dayjs(date,"YYYY-MM-DD").format("MMM DD, YYYY")}</p>
+                                        <img className="pointer" src={DeleteSVG} onClick={()=>{setFieldValue(`sellingPlans[${index}].shippingDates`,removeDate(values.sellingPlans[index]?.shippingDates,i)); removeSelectedDate('shippingDate',index,values.sellingPlans[index])}} />
+                                      </div>
+                                      </div>
+                                    ))
+                                  }
+                                {
+                                  values.sellingPlans[index]?.shippingDates.length > 0  &&
+                                  <div className="add-date-btn">
+                                  <Button primary onClick={()=>clearDate("shippingDate",index)}>+ Add</Button>
+                                  </div>
+                                }
+                                </div>
+                              </div>
+                          </FormLayout.Group>
                         </FormLayout>
                         <br />
                       </Card>
