@@ -22,7 +22,24 @@ class CustomerService < GraphqlService
         lastName
         email
         phone
-
+        paymentMethods(first: 10) {
+          edges {
+            node {
+              id
+              instrument {
+                ... on CustomerCreditCard {
+                  billingAddress {
+                    address1
+                    city
+                    country
+                    province
+                    zip
+                  }
+                }
+              }
+            }
+          }
+        }
         defaultAddress {
           id
           formatted
@@ -35,6 +52,12 @@ class CustomerService < GraphqlService
 
   def initialize params
     @shop = params[:shop]
+  end
+
+  def get_customer(customer_id)
+    id = "gid://shopify/Customer/#{customer_id}"
+    result = client.query(client.parse(GET_QUERY), variables: { id: id} )
+    result.data.customer
   end
 
   def update info

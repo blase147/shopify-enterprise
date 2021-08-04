@@ -25,7 +25,7 @@ class AppProxy::DashboardController < AppProxyController
     @orders.each do |order|
       @payment_methods[order.payment_details.credit_card_number] = order.payment_details if order.try(:payment_details).present?
     end
-
+    @shopify_customer = CustomerService.new({shop: current_shop}).get_customer(customer_id)
     @payment_methods = @payment_methods.values
   end
 

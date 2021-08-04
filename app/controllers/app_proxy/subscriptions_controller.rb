@@ -73,7 +73,7 @@ class AppProxy::SubscriptionsController < AppProxyController
   end
 
   def update_payment
-    session = Faraday.post('https://elb.deposit.shopifycs.com/sessions', { credit_card: { number: params[:card_number], first_name: params[:name], month: params[:exp_month], year: params[:exp_date], verification_value: params[:verification_value]}}.to_json, "Content-Type" => "application/json")
+    session = Faraday.post('https://elb.deposit.shopifycs.com/sessions', { credit_card: { number: params[:card_number], first_name: params[:name], month: params[:exp_month], year: params[:exp_year], verification_value: params[:verification_value]}}.to_json, "Content-Type" => "application/json")
     if session.status == 200
       session_id = JSON.parse(session.body)['id']
       result = CreditCardUpdateService.new(params[:id], session_id, params).run

@@ -12,6 +12,7 @@
                   path d=("M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z") fill="#DDDDDD" /
             .form-wrapper
               form action="#{action_subscription_contract_path(:update_payment, @customer.shopify_id)}" method='post' data-remote=true enctype="multipart/form-data"
+                input name="payment_method_id" type="hidden" value="#{payment_method.id}"
                 .field
                   div.heading_label
                     label #{@translation.update_payment_popup_card_name.present? ? @translation.update_payment_popup_card_name : 'Name on card'}
@@ -44,39 +45,39 @@
                     div.heading_label
                       label First Name
                       span.red *
-                    input name='address_first_name' type="text" required="required"/
+                    input name='address_first_name' value="#{@customer.first_name}" type="text" required="required"/
                   .field
                     div.heading_label
                       label Last Name
                       span.red *
-                    input name='address_last_name' type="text" required="required"/
+                    input name='address_last_name' value="#{@customer.last_name}" type="text" required="required"/
                 .field
                   div.heading_label
                     label Address
                     span.red *
-                  input name='address' type="text" required="required"/
+                  input name='address'  value="#{billing_address.address1}" type="text" required="required"/
                 .group
                   .field
                     div.heading_label
                       label City
                       span.red *
-                    input name='address_city' type="text" required="required"/
+                    input name='address_city' value="#{billing_address.city}" type="text" required="required"/
                   .field
                     div.heading_label
                       label Country
                       span.red *
-                    input name='address_country' type="text" required="required"/
+                    input name='address_country' value="#{billing_address.country}" type="text" required="required"/
                 .group
                   .field
                     div.heading_label
                       label State
                       span.red *
-                    input name='address_state' type="text" required="required"/
+                    input name='address_state' value="#{billing_address.province}" type="text" required="required"/
                   .field
                     div.heading_label
                       label Zip
                       span.red *
-                    input name='address_zip' type="text" required="required"/
+                    input name='address_zip' value="#{billing_address.zip}" type="text" required="required"/
                 .btn-wrapper
                   button.update-card #{@translation.update_payment_popup_update_card.present? ? @translation.update_payment_popup_update_card : 'Update Card'}
 

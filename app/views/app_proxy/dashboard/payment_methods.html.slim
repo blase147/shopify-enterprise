@@ -22,6 +22,8 @@
             div.notification-banner
               p.Polaris-Heading #{@translation.billing_tab_billing_no_subscriptions_found.present? ? @translation.billing_tab_billing_no_subscriptions_found : 'No subscription have been found for your account'}
         - else
+          - payment_method = @shopify_customer.payment_methods.edges.first&.node
+          - billing_address = @shopify_customer.payment_methods.edges.first&.node&.instrument&.billing_address
           div.content-wrapper
             div
               .Polaris-Header-Title__TitleAndSubtitleWrapper
@@ -53,7 +55,7 @@
               .address-information
                 .header
                   h2.card-heading = "#{@customer.first_name.present? ? @customer.first_name : '-'} #{@customer.last_name.present? ? @customer.last_name : '-'}"
-                  button.edit.card-btn  type="button" data-toggle="modal" data-target="#editAddressModal" #{@translation.billing_tab_edit.present? ? @translation.billing_tab_edit : 'Edit'}
+                  / button.edit.card-btn  type="button" data-toggle="modal" data-target="#editAddressModal" #{@translation.billing_tab_edit.present? ? @translation.billing_tab_edit : 'Edit'}
                 .item
                   h3.card-heading #{@translation.billing_tab_phone.present? ? @translation.billing_tab_phone : 'PHONE'}
                   p.card-text = @customer.phone.present? ? @customer.phone : '-'
@@ -62,9 +64,9 @@
                   p.card-text = @customer.company.present? ? @customer.company : '-'
                 .item
                   h3card-heading #{@translation.billing_tab_address.present? ? @translation.billing_tab_address : 'ADDRESS'}
-                  p.card-text = @customer.address_1.present? ? @customer.address_1 : '-'
-= render 'edit_address_modal'
-= render 'update_payment_modal'
+                  p.card-text = billing_address.present? ? billing_address.address1 : '-'
+/ = render 'edit_address_modal'
+= render 'update_payment_modal', payment_method: payment_method, billing_address: billing_address
 
         / .Polaris-Page-Header.Polaris-Page-Header--isSingleRow.Polaris-Page-Header--noBreadcrumbs.Polaris-Page-Header--mediumTitle
         /   .Polaris-Page-Header__MainContent
