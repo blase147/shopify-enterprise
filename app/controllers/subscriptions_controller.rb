@@ -13,6 +13,7 @@ class SubscriptionsController < AuthenticatedController
   def show
     id = params[:id]
     @customer = Customer.find_by_shopify_id(params[:id])
+    @box_products = @customer.box_items.present? ? ShopifyAPI::Product.where(ids: @customer.box_items, fields: 'id,title,images,variants') : nil
     @subscription = SubscriptionContractService.new(id).run
     products = ProductService.new.list
     @swap_products = products.is_a?(Hash) ? nil : products.select{ |p| p.node.selling_plan_group_count > 0 }
@@ -78,5 +79,13 @@ class SubscriptionsController < AuthenticatedController
     else
       render js: "showToast('notice', 'Subscription is cancelled!'); hideModal();"
     end
+  end
+
+  def remove_box_item
+    @customer = Customer.find_by_shopify_id(params[:id])
+    box_items = @customer.box_items.split(',')
+    box_items.delete(params[:product_id])
+    @customer.update(box_items: box_items.present? ? box_items.join(',') : nil)
+    render js: 'location.reload()'
   end
 end

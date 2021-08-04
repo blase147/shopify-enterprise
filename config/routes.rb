@@ -55,6 +55,7 @@ Rails.application.routes.draw do
         post :upgrade_product
         post :remove_line
         post :skip_schedule
+        post :update_payment
       end
     end
     resources :dashboard, only: [:index] do
@@ -65,6 +66,8 @@ Rails.application.routes.draw do
         get :addresses
         get :payment_methods
         get :settings
+        get :build_a_box
+        post :confirm_box_selection
       end
     end
 
@@ -97,6 +100,7 @@ Rails.application.routes.draw do
       post :remove_line
       post :skip_schedule
       post :pause
+      post :remove_box_item
     end
   end
 

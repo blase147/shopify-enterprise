@@ -187,6 +187,7 @@
   }
 
   $(document).ready(function(){
+    var $ = window.chargezenForShopify.jQuery;
     eraseCookie('box_items');
     if($('fieldset.chargezen-plan-selector').length) {
       initChargeZen();

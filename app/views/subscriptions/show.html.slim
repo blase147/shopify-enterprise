@@ -45,7 +45,11 @@
                   span.Polaris-Button__Content
                     = icon_tag 'edit'
                     span.Polaris-Button__Text Edit
-
+              .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
+                a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/admin/customers/#{@customer.shopify_customer_id}?shop=#{@customer.shop.shopify_domain}" target="_parent"
+                  span.Polaris-Button__Content
+                    = icon_tag 'profile_icon'
+                    span.Polaris-Button__Text Shopify Profile
       .Polaris-Layout__Section.Polaris-Layout__Section--oneHalf
         .Polaris-Card.polaris-product
           .Polaris-Card__Header.car-arrow
@@ -238,7 +242,22 @@
                         th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"= DateTime.parse(order.node.created_at).strftime("%b %d, %H:%M%P")
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= order.node.name
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--numeric $#{order.node.total_received_set.presentment_money.amount}
-
+        - if @box_products.present?
+          br/
+          .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
+            h2.Polaris-Heading.Polaris-TextStyle--variationStrong BUILD-A-BOX CHOICES
+          div.box-items
+            - if @customer.campaign_date.present?
+              div.campaign_date_title
+                h2.Polaris-Heading.Polaris-TextStyle--variationStrong Campaign Name & Date: '#{BuildABoxCampaignGroup.last.internal_name}'
+                span.Polaris-Heading.Polaris-TextStyle--variationStrong.campaign_date &nbsp#{@customer.campaign_date.strftime("%e %B, %Y")}
+            h2.product_choice_label Product choices
+            div.box_images_collection
+              - @box_products.each do |product|
+                div.building-box-product
+                  img.box-image-d src="#{product.images.first&.src}"
+                  = link_to action_subscription_contract_path(:remove_box_item, @subscription.id[/\d+/], "product_id=#{product.id}"), remote: true, method: :post do
+                    = image_pack_tag "media/subscriptionsPlans/removeProduct.svg", class: 'removeIcon'
       .Polaris-Layout__Section.Polaris-Layout__Section--secondary
         .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
           h2.Polaris-Heading.Polaris-TextStyle--variationStrong Billing Information

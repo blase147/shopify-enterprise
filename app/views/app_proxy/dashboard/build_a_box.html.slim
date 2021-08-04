@@ -1,0 +1,163 @@
+- if @box_campaign.present? && @box_campaign.box_subscription_type.present?
+  .checkout-design-1
+    div.box_items_selected.hidden = @customer.box_items
+    p Select Style Options
+    .new-desig-parent
+      .img-sec-parent
+        - @products.each do |product|
+          .add-img-section
+            .img-con
+              img src="#{product.images.first.src}" /
+              button.add data-id="#{product.id}" +
+            p = product.title
+      .img-place-section
+        .top-section
+          h4 Build Your Box
+        .bottom-section
+          .add-img-sec
+            - if @selected_products.present?
+              - @box_campaign.box_quantity_limit.times.each do |index|
+                - if @selected_products[index].present?
+                  .sec data-id="#{@selected_products[index].id}"
+                    .img-crs-sec.cros-img
+                      img src="#{@selected_products[index].images.first.src}" /
+                      .cros-plus.close-img
+                        | x
+                    p Select #{index+1}
+                - else
+                  .sec
+                    .img-crs-sec.cros-img
+                      img.place-img src="" /
+                      .cros-plus.close-img
+                        | x
+                    p Select #{index+1}
+            - else
+              - @box_campaign.box_quantity_limit.times.each do |index|
+                .sec
+                  .img-crs-sec.cros-img
+                    img.place-img src="" /
+                    .cros-plus.close-img
+                      | x
+                  p Select #{index+1}
+          p.error_message.hidden Selection is not complete
+          button.confirm_selection data-subscriptionId="#{@subscription_id}" CONFIRM SELECTION
+        span.box_limit.hidden = @box_campaign.box_quantity_limit
+
+- else
+  span.billing_plan_present.hidden = @box_campaign.present? && (@box_campaign.product_images.present? || @box_campaign.collection_images.present?)
+javascript:
+  $(document).ready(function(){
+    eraseCookie('customer_box_items');
+    if ($('.box_items_selected').text() !== "") {
+      setCookie('customer_box_items', $('.box_items_selected').text(), 1)
+    }
+    $('.checkout-design-1 .add').click(function(){
+      $('.error_message').css('display', 'none');
+      let selectedProducts = getCookie('customer_box_items');
+      if (selectedProducts == null || (selectedProducts.split(',').length <= parseInt($('.box_limit').text()))) {
+        var img=$(this).closest('.add-img-section').find('img');
+        var id=$(this).attr('data-id');
+        var button=$(this);
+        var flag=true;
+        $('.img-place-section').find('.add-img-sec').children('.sec').each(function(index,elem){
+         if(flag && !$(elem).attr('data-id')){
+           $(elem).find('img').attr('src',$(img).attr('src')).removeClass('place-img');
+           $(elem).attr('data-id',id)
+           flag=false;
+           $(button).attr('disabled',true);
+           document.cookie = setCookie('customer_box_items', (getCookie('customer_box_items') ?  (getCookie('customer_box_items') + ',' + id) : id), 1)
+         }
+        })
+      }
+    });
+  })
+
+
+  $(document).on('click','.close-img',function(){
+    var div=$(this).closest('.sec');
+    var id=$(div).attr('data-id');
+    // $(div).remove();
+    var section=$('.img-sec-parent')
+                .find("[data-id='" + id + "']")
+                .closest('.add-img-section')
+                .find('button')
+                .attr('disabled',false);
+    $(div).removeAttr('data-id');
+    $(div).find('img').attr('src','').addClass('place-img');
+    /// Shifting elements
+    let counter=0;
+    let placeholder=null;
+    $('.add-img-sec').children('.sec').each(function(index,elem){
+     if(!$(elem).attr('data-id')){
+      placeholder=$(elem).clone();
+      counter++;
+      $(elem).remove();
+     }
+    });
+    for(let i=0;i<counter;i++){
+      $('.add-img-sec').append($(placeholder).clone());
+    }
+    filterCookieData(id);
+    $('.add-img-sec').children('.sec').each(function(index,elem){
+     $(elem).children('p').html('Select ' + (index + 1));
+    });
+  })
+
+  $(document).on('click','.confirm_selection',function(){
+    let selectedProducts = getCookie('customer_box_items');
+    if (!selectedProducts || (selectedProducts.split(',').length < $('.box_limit').text())) {
+      $('.error_message').css('display', 'block');
+    } else {
+      var subscriptionId = $(this).attr('data-subscriptionId');
+      if (selectedProducts) {
+        $.ajax({
+          url: "/a/chargezen_production/dashboard/confirm_box_selection",
+          type: "POST",
+          data: { product_id: selectedProducts, subscription_id: subscriptionId },
+          success: function(result){
+            window.top.location.href = '/account';
+          }
+        });
+      }
+    }
+  });
+
+  function filterCookieData(id){
+    let products = getCookie('customer_box_items');
+    let split_products = products.split(',');
+    let filtered = split_products.filter(function(value, index, arr){
+        return value != id;
+    });
+    let updated_products = filtered.join(',');
+    eraseCookie('customer_box_items');
+    setCookie('customer_box_items', updated_products, 1);
+  }
+
+  function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+  }
+
+  function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+  }
+
+  function eraseCookie(name) {
+    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  }
+
+  if ($('.billing_plan_present').text() === 'false') {
+    window.top.location.href = '/account';
+  }

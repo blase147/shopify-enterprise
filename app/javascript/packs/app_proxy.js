@@ -22,6 +22,11 @@ require('owl.carousel');
 import 'owl.carousel/dist/assets/owl.carousel.css';
 
 $(document).ready(function () {
+
+  $(document).on('click', 'a#logout-btn', function () {
+    window.top.location = '/account/logout';
+  });
+
   $('.owl-carousel').owlCarousel(
     {
       dots: true,

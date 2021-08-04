@@ -68,7 +68,7 @@ const Smarty = () => {
   }, [selectedTitleTab])
 
   return (
-    <AppLayout typePage="smarty" tabIndex="6">
+    <AppLayout typePage="smarty" tabIndex="7">
       <Frame>
         <Page title="Smarty SMS">
           <Tabs

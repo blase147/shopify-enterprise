@@ -87,7 +87,7 @@ const Integrations = () => {
 
   let lodas= category=="all" && _.groupBy(integerations?.fetchIntegrations,"integrationType") || [];
   return (
-    <AppLayout typePage="integrations" tabIndex="7">
+    <AppLayout typePage="integrations" tabIndex="8">
       <Button>
         <img src={getStart} width="20" />
         <span>Get Started</span>

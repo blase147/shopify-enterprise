@@ -38,6 +38,11 @@ const Nav = (props) => {
       path: '/upsell',
     },
     {
+      content: 'Build a Box Campaigns',
+      id: 'build-a-box',
+      path: '/build-a-box',
+    },
+    {
       content: 'Analytics',
       id: 'analytics',
       path: '/analytics',

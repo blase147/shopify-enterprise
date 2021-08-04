@@ -90,9 +90,16 @@ const NewUpSell = () => {
     { label: 'Top', value: 'top' },
   ];
 
+  const upsellLocationOptions=[
+    { label: 'Customer Portal', value: 'customer_portal' },
+    { label: 'Checkout', value: 'checkout' },
+    { label: 'Thank you page', value: 'thankyou_page' },
+    { label: 'SmartySMS', value: 'smarty_sms' },
+    { label: 'Cart', value: 'cart' },
+  ]
   const initialValues = {
     publicName: '',
-    internalName: '',
+    internalName: 'Customer Portal',
     selectorTitle: '',
     status: '',
     upsellCampaigns: [
@@ -463,6 +470,23 @@ const NewUpSell = () => {
                           </ButtonGroup>
                         </div>
                       </FormLayout.Group>
+                      {/* <FormLayout.Group>
+                        <Select
+                          options={upsellLocationOptions}
+                          label="Select Upsell Location"
+                          value={values.upsellLocation}
+                          error={
+                            touched.upsellLocation &&
+                            errors.upsellLocation
+                          }
+                          onChange={(e) =>
+                            setFieldValue(
+                              `upsellLocation`,
+                              e
+                            )
+                          }
+                        />
+                      </FormLayout.Group> */}
                       {/*<FormLayout.Group>
                         <TextField
                           value={values.selectorTitle}

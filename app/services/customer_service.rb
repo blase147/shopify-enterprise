@@ -98,16 +98,18 @@ class CustomerService < GraphqlService
     else
       address_attr = params[:address].permit!.to_h.deep_transform_keys { |key| key.camelize(:lower) }
     end
-    result = client.query(client.parse(UPDATE_QUERY), variables: { input: {id: params[:id], "addresses": address_attr} })
+    db_customers = Customer.where(shopify_customer_id: params[:id][/\d+/])
+    result = client.query(client.parse(UPDATE_QUERY), variables: { input: {id: "gid://shopify/Customer/#{params[:id]}", "addresses": address_attr} })
     errors = result.data.customer_update.user_errors
     raise errors.first.message if errors.present?
-    db_customer = Customer.find_or_initialize_by(shopify_id: params[:id][/\d+/])
     db_params = params[:address].is_a?(Hash) ? params[:address] : params[:address].permit!
-    db_customer.shop_id = @shop.id
-    db_customer.assign_attributes(db_params)
-    db_customer.save
-    errors = db_customer.errors.full_messages
-    raise errors if errors.present?
+    db_customers.each do |customer|
+      customer.shop_id = @shop.id
+      customer.assign_attributes(db_params)
+      customer.save
+      errors = customer.errors.full_messages
+      raise errors if errors.present?
+    end
   rescue Exception => ex
     p ex.message
     { error: ex.message }

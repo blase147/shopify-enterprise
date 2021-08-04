@@ -396,6 +396,7 @@ DEPENDENCIES
   cocoon
   config
   dotenv-rails
+  faraday
   font-awesome-rails
   graphiql-rails
   graphql

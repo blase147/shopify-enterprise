@@ -61,9 +61,9 @@ namespace :subscriptions do
 
   def process_subscription(subscription)
     return unless subscription.status == 'ACTIVE'
-    billing_date = DateTime.parse subscription.next_billing_date
     subscription_id = subscription.id[/\d+/]
     customer = Customer.find_by(shopify_id: subscription_id)
+    billing_date = get_next_billing_date(subscription, customer.shop)
     if billing_date.utc.beginning_of_day == Time.current.utc.beginning_of_day
       result = SubscriptionBillingAttempService.new(subscription.id).run
       if result[:error].present?
@@ -78,7 +78,8 @@ namespace :subscriptions do
         end
       else
         charge_store(result[:data].id, subscription_id, customer.shop)
-        ScheduleSkipService.new(subscription_id).run
+        upcoming_date = get_upcoming_billing_date(subscription, customer.shop)
+        ScheduleSkipService.new(subscription_id).run(upcoming_date.present? ? { billing_date: upcoming_date } : nil)
         SubscriptionLog.create(billing_status: :success, customer_id: customer.id, shop_id: customer.shop_id, subscription_id: subscription_id)
         email_notification = customer.shop.setting.email_notifications.find_by_name "Recurring Charge Confirmation"
         EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
@@ -109,8 +110,8 @@ namespace :subscriptions do
           # subscription = SubscriptionContractService.new(id).run
         else
           charge_store(result[:data].id, subscription_id, customer.shop)
-          next_schedule_date = (Time.current+subscription.billing_policy.interval_count.days).to_date
-          ScheduleSkipService.new(subscription_id).run({ billing_date: next_schedule_date })
+          upcoming_date = get_upcoming_billing_date(subscription, customer.shop)
+          ScheduleSkipService.new(subscription_id).run(upcoming_date.present? ? { billing_date: upcoming_date } : nil)
           customer.update_columns(failed_at: nil, retry_count: 0)
           subs_log.update(billing_status: :retry_success, executions: false)
           email_notification = customer.shop.setting.email_notifications.find_by_name "Recurring Charge Confirmation"
@@ -176,6 +177,16 @@ namespace :subscriptions do
       selling_plan.billing_dates.include?(current_date.utc.to_date.to_s) ? current_date : DateTime.parse(subscription.next_billing_date)
     else
       DateTime.parse(subscription.next_billing_date)
+    end
+  end
+
+  def get_upcoming_billing_date(subscription, shop)
+    selling_plan_id = subscription.to_h.dig('lines', 'edges', 0, 'node', 'sellingPlanId')
+    return false unless selling_plan_id.present?
+
+    selling_plan = SellingPlan.joins(:selling_plan_group).where(selling_plan_groups: { shop_id: shop.id }).find_by(shopify_id: selling_plan_id)
+    if selling_plan.present? && selling_plan.billing_dates.present?
+      selling_plan.billing_dates.select{ |plan| plan.to_date > Date.today }.sort.first
     end
   end
 
