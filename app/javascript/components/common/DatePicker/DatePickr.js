@@ -21,7 +21,7 @@ export default class DatePickr extends React.Component {
       return { active: !active };
     });
   };
-  
+
 
   render() {
     const { month, year, selected } = this.state;
@@ -29,7 +29,7 @@ export default class DatePickr extends React.Component {
       <>
       <div className="filter-parent" style={{width:'100%'}}>
         <Button
-          
+
           monochrome
           onClick={this.togglePopover}
           disclosure={'down'}
@@ -69,13 +69,14 @@ export default class DatePickr extends React.Component {
   applyFilter=(e)=>{
    e.stopPropagation();
   //  this.togglePopover();
-   this.props.handleDates && this.props.handleDates(this.state.selected,this.state.span)  
+   this.props.handleDates && this.props.handleDates(this.state.selected,this.state.span)
   }
   handleChange = value => {
     this.setState({ selected: value });
     const {date,index,type}=this.props;
     let dates=this.props.existingValues;
-    if(dates){
+    if(!dates?.some(date=>date==dayjs(value.start).format("YYYY-MM-DD"))){
+      if(dates){
         dates.push(dayjs(value.start).format("YYYY-MM-DD"))
       }else{
         dates=[dayjs(value.start).format("YYYY-MM-DD")]
@@ -84,8 +85,9 @@ export default class DatePickr extends React.Component {
     let selected=date;
     selected[index][type]=value.start
     this.props.handleDate(selected);
-    this.setState({active:false})
     this.props.setUpdated(true)
+    }
+    this.setState({active:false})
   };
 
   handleMonthChange = (month, year) => {
