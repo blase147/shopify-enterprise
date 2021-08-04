@@ -18,7 +18,7 @@ const Preview = ({ allProducts, setAllProducts, setUpdated,atIndex }) => {
   };
 
   const handleAllProducts = (title) => {
-    var index = allProducts[atIndex].map(prod => {
+    var index = allProducts.map(prod => {
       return prod.title;
     }).indexOf(title);
     // let hasDestroy=allProducts[index].hasOwnProperty('_destroy')
@@ -29,13 +29,13 @@ const Preview = ({ allProducts, setAllProducts, setUpdated,atIndex }) => {
           // }else{
 
           // }
-          allProducts[atIndex].splice(index, 1);
+          allProducts.splice(index, 1);
           setAllProducts(product => product = allProducts);
           setUpdated && setUpdated(flag => flag = true);
           setRemoveFlag(flag => flag = !removeFlag);
       }
   }
-  const previewCard = allProducts[atIndex]?.map((product) => {
+  const previewCard = allProducts?.map((product) => {
     return (
       <div key={Math.random()} className="preview-item" id={`preview-${product.title.replaceAll(' ', '_')}`}>
         <div className="img">
