@@ -15,6 +15,8 @@ module Types
     field :trial_period, String, null: true
     field :name, String, null: false
     field :active, GraphQL::Types::Boolean, null: false
+    field :product_ids, [Types::ProductType], null: true
+    field :variant_ids, [Types::VariantType], null: true
     field :plan_type, String, null: false
 
     def billing_period

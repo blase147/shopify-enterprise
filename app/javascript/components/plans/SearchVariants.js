@@ -10,7 +10,7 @@ import {
 } from '@shopify/polaris';
 
 const SearchVariants = (props) => {
-  const { value, setFieldValue, fieldName, allVariants, error,atIndex,setAllVarients } = props;
+  const { value, setFieldValue, fieldName, allVariants, error,setAllVarients } = props;
   // Search variant to add
   const GET_VARIANTS = gql`
   query ($query: String!) {
@@ -88,8 +88,8 @@ const SearchVariants = (props) => {
 
         let flag = true;
 
-        for (let i = 0; allVariants?.[atIndex]?.length > i; i++) {
-          if (allVariants[atIndex][i]?.title == variant.value) {
+        for (let i = 0; allVariants?.length > i; i++) {
+          if (allVariants[i]?.title == variant.value) {
             flag = false;
             break;
           } else {
@@ -98,11 +98,11 @@ const SearchVariants = (props) => {
         }
 
         if (flag) {
-        allVariants[atIndex] ? allVariants[atIndex].push({
+        allVariants ? allVariants.push({
             title: variant.value,
             variantId: variant.id,
             image: variant.images[0]
-          }):allVariants[atIndex]=[{
+          }):allVariants=[{
             title: variant.value,
             variantId: variant.id,
             image: variant.images[0]
