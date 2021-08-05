@@ -23,3 +23,7 @@ end
 every 1.days do
   rake 'subscriptions:renewal_reminder'
 end
+
+every 1.hours do
+  rake 'orders:sync_orders'
+end

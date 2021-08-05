@@ -51,6 +51,10 @@ class SubscriptionContractsService < GraphqlService
               interval
               intervalCount
             }
+            deliveryPolicy {
+              interval
+              intervalCount
+            }
           }
         }
       }

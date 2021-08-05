@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_04_055156) do
+ActiveRecord::Schema.define(version: 2021_08_05_075220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -309,6 +309,24 @@ ActiveRecord::Schema.define(version: 2021_08_04_055156) do
     t.string "email_service"
     t.integer "design_type", default: 0
     t.index ["shop_id"], name: "index_settings_on_shop_id", unique: true
+  end
+
+  create_table "ship_engine_orders", force: :cascade do |t|
+    t.string "order_id"
+    t.datetime "order_date"
+    t.json "payment_details"
+    t.json "customer"
+    t.json "ship_to"
+    t.json "order_items"
+    t.json "order_status"
+    t.bigint "shop_id"
+    t.datetime "due_date"
+    t.string "shipping_interval"
+    t.integer "shipping_interval_count"
+    t.integer "status", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["shop_id"], name: "index_ship_engine_orders_on_shop_id"
   end
 
   create_table "shops", force: :cascade do |t|

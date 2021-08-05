@@ -21,6 +21,7 @@ class Shop < ActiveRecord::Base
 
   has_many :upsell_campaign_groups, dependent: :destroy
   has_many :integrations, dependent: :destroy
+  has_many :ship_engine_orders, dependent: :destroy
   has_one :lock_password
   has_one :translation, dependent: :destroy
   after_create :build_setting
