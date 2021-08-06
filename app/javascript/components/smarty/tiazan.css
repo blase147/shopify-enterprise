@@ -1,0 +1,9 @@
+.tizen-page > .Polaris-Layout {
+    display: block;
+    margin-top :0;
+    margin-left: 0;
+}
+.back-button.pointer > span {
+    margin: 0;
+    margin-bottom: 1rem;
+}

@@ -9,6 +9,7 @@ import CustomKeywordsForm from './CustomKeywords/CustomKeywordsForm';
 import CustomMessage from './CustomMessage/CustomMessage';
 import EditSmartyMessage from './SmartyMessage/EditSmartyMessage';
 import SmartyMessage from './SmartyMessage/SmartyMessage';
+import '../smarty/tiazan.css';
 import {
   MobileBackArrowMajor
 } from '@shopify/polaris-icons';
@@ -72,7 +73,7 @@ const Smarty = ({handleBack}) => {
 
   return (
     <Frame>
-        <Page title="Smarty SMS">
+        <Page>
         <Layout>
                 <Layout.Section>
                   <div className="back-button pointer" onClick={handleBack}>
@@ -87,6 +88,7 @@ const Smarty = ({handleBack}) => {
             selected={selectedTitleTab}
             onSelect={handleTabChange}
           >
+            <div className="tizen-page">
             {
               selectedTitleTab===0 &&
               <>
@@ -147,6 +149,7 @@ const Smarty = ({handleBack}) => {
               }
               </>
             }
+            </div>
           </Tabs>
         </Page>
     </Frame>
