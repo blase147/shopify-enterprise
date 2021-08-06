@@ -1,4 +1,4 @@
-import { Frame, Page, Tabs } from '@shopify/polaris';
+import { Frame, Page, Tabs,Layout, Icon } from '@shopify/polaris';
 import React, { useCallback, useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import AppLayout from '../layout/Layout';
@@ -9,8 +9,11 @@ import CustomKeywordsForm from './CustomKeywords/CustomKeywordsForm';
 import CustomMessage from './CustomMessage/CustomMessage';
 import EditSmartyMessage from './SmartyMessage/EditSmartyMessage';
 import SmartyMessage from './SmartyMessage/SmartyMessage';
+import {
+  MobileBackArrowMajor
+} from '@shopify/polaris-icons';
 
-const Smarty = () => {
+const Smarty = ({handleBack}) => {
   const location=useLocation();
   const [selectedTitleTab, setSelectedTitleTab] = useState(location.state?.tabIndex || 0);
 
@@ -68,9 +71,17 @@ const Smarty = () => {
   }, [selectedTitleTab])
 
   return (
-    <AppLayout typePage="smarty" tabIndex="7">
-      <Frame>
+    <Frame>
         <Page title="Smarty SMS">
+        <Layout>
+                <Layout.Section>
+                  <div className="back-button pointer" onClick={handleBack}>
+                    <Icon
+                      source={MobileBackArrowMajor}
+                      color="base" />
+                  </div>
+                </Layout.Section>
+            </Layout>
           <Tabs
             tabs={tabs}
             selected={selectedTitleTab}
@@ -138,8 +149,7 @@ const Smarty = () => {
             }
           </Tabs>
         </Page>
-      </Frame>
-    </AppLayout>
+    </Frame>
   )
 }
 

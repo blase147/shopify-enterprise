@@ -18,11 +18,11 @@ import {
     List,
     Banner,
   } from '@shopify/polaris';
-  
   import {
     DeleteMajor,
     MobilePlusMajor,
     SearchMajor,
+    MobileBackArrowMajor
   } from '@shopify/polaris-icons';
   
   import { gql, useMutation, useQuery } from '@apollo/client';
@@ -114,7 +114,7 @@ const ButtonRemove = (props) => {
       );
     };
     
-    const BuildBox = () => {
+    const BuildBox = ({handleForm,handleBack}) => {
       const history = useHistory();
     
       const GET_UPSELL_CAMPAIGNS = gql`
@@ -212,7 +212,7 @@ const ButtonRemove = (props) => {
             {/* <div className={`${row.status == 'publish' ? 'active' : 'draft'}`}>
               <Badge>{row.status == 'publish' ? 'Active' : 'Draft'}</Badge>
             </div> */}
-            <Link to={`/build-a-box/${row.id}/edit`} key={row.id}>
+            <Link key={row.id} onClick={()=>handleForm(row.id)} >
               {row.internalName}
             </Link>
           </div>,
@@ -254,7 +254,6 @@ const ButtonRemove = (props) => {
       }, [selectedCampaignsForRemove]);
     
       return (
-        <AppLayout typePage="upsell" tabIndex="5">
           <Frame>
             <Page>
               {saveSuccess && (
@@ -279,6 +278,15 @@ const ButtonRemove = (props) => {
                 </>
               )}
               <Layout>
+              <Layout>
+                <Layout.Section>
+                  <div className="back-button pointer" onClick={handleBack}>
+                    <Icon
+                      source={MobileBackArrowMajor}
+                      color="base" />
+                  </div>
+                </Layout.Section>
+              </Layout>
                 <Layout.Section>
                   <Stack>
                     <Stack.Item>
@@ -317,7 +325,7 @@ const ButtonRemove = (props) => {
                         <Button
                           primary
                           icon={MobilePlusMajor}
-                          onClick={() => history.push('/build-a-box/new')}
+                          onClick={() => handleForm("")}
                         >
                           Create Campaign
                         </Button>
@@ -373,7 +381,6 @@ const ButtonRemove = (props) => {
               </Layout>
             </Page>
           </Frame>
-        </AppLayout>
       );
 }
 

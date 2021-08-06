@@ -1,8 +1,5 @@
 import {
   ApolloClient,
-
-
-
   ApolloLink, ApolloProvider,
   HttpLink,
   InMemoryCache
@@ -34,8 +31,8 @@ import Smarty from './smarty/Index';
 import EditSmartyMessage from './smarty/SmartyMessage/EditSmartyMessage';
 import Upsell from './upsell/Index';
 import CreateUpsell from './upsell/New';
-
-
+import Tiazen from './Tiazen/Index'
+import Toolbox from './Toolbox/Index'
 
 
 
@@ -152,6 +149,9 @@ export default function App(props) {
             <Route exact path='/build-a-box' component={BuildBox}/>
             <Route exact path="/build-a-box/:id/edit" component={CreateBuildBox} />
             <Route exact path="/build-a-box/new" component={CreateBuildBox} />
+
+            <Route exact path="/tiazen" component={Tiazen} />
+            <Route exact path="/toolbox" component={Toolbox} />
           </Switch>
         </ApolloProvider>
       </AppProvider>

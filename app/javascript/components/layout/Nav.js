@@ -28,34 +28,45 @@ const Nav = (props) => {
       path: '/customers',
     },
     {
-      content: 'Installation',
-      id: 'installation',
-      path: '/installation',
-    },
-    {
-      content: 'Upsell Campaigns',
-      id: 'upsell',
-      path: '/upsell',
-    },
-    {
-      content: 'Build a Box Campaigns',
-      id: 'build-a-box',
-      path: '/build-a-box',
-    },
-    {
       content: 'Analytics',
       id: 'analytics',
       path: '/analytics',
     },
     {
-      content: 'Smarty SMS',
-      id: 'smarty-sms',
-      path: '/smarty',
+      content: 'Installation',
+      id: 'installation',
+      path: '/installation',
     },
     {
-      content: 'Integration',
-      id: 'integrations',
-      path: '/integrations',
+      content: 'Tiazen',
+      id: 'tiazen',
+      path: '/tiazen',
+    },
+    // {
+    //   content: 'Upsell Campaigns',
+    //   id: 'upsell',
+    //   path: '/upsell',
+    // },
+    // {
+    //   content: 'Build a Box Campaigns',
+    //   id: 'build-a-box',
+    //   path: '/build-a-box',
+    // },
+    
+    // {
+    //   content: 'Smarty SMS',
+    //   id: 'smarty-sms',
+    //   path: '/smarty',
+    // },
+    // {
+    //   content: 'Toolbox',
+    //   id: 'toolbox',
+    //   path: '/toolbox',
+    // },
+    {
+      content: 'Toolbox',
+      id: 'toolbox',
+      path: '/toolbox',
     },
     {
       content: 'Settings',
