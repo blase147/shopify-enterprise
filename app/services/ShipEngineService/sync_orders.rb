@@ -2,6 +2,7 @@ class ShipEngineService::SyncOrders
   def initialize(shop)
     @shop = shop
     @shop.connect
+    @shopify_shop = ShopifyAPI::Shop.current
   end
 
   def sync
@@ -55,6 +56,17 @@ class ShipEngineService::SyncOrders
         "zip": order.shipping_address.zip,
         "country_code": order.shipping_address.country_code
       } : nil,
+      "ship_from": {
+        "company_name": @shopify_shop.name,
+        "name": @shopify_shop.shop_owner,
+        "phone": @shopify_shop.phone,
+        "address1": @shopify_shop.address1,
+        "city": @shopify_shop.city,
+        "state": @shopify_shop.province,
+        "zip": @shopify_shop.zip,
+        "country_code": @shopify_shop.country_code,
+        "province_code": @shopify_shop.province_code
+      },
       "order_items": sale_order_items_data(order)
     }
   end

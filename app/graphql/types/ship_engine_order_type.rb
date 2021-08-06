@@ -6,6 +6,7 @@ module Types
     field :payment_details, Types::PaymentDetailType, null: true
     field :customer, Types::CustomerType, null: true
     field :ship_to, Types::AddressType, null: true
+    field :ship_from, Types::AddressType, null: true
     field :order_items, [Types::OrderItemType], null: true
     field :order_status, Types::OrderStatusType, null: true
     field :due_date, String, null: true
