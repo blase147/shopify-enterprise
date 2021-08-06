@@ -10,6 +10,7 @@ import EmailImage from '../../../assets/images/settings/email.svg'
 import InformationImage from '../../../assets/images/settings/information.svg'
 import Integrations from '../integration/Index';
 import IntegrationDetail from '../integration/Detail';
+import ShippingSuit from '../shippingSuit/index';
 
 const Index = () => {
 
@@ -40,7 +41,7 @@ const Index = () => {
     const settings=
         [
             {
-                key: "",
+                key: "toolbox",
                 title: "Shipping Suite",
                 img: SettingImage,
                 desc: "View and update your SMS details for your store."
@@ -111,7 +112,10 @@ const Index = () => {
                              handleClose={handleCloseEditPage}
                              />
                              }
-                             </>: ''
+                             </>: 
+                             selectedSetting==='toolbox'?
+                             <ShippingSuit />
+                             :''
                          }
                           </Layout.Section>
                         </Layout>
