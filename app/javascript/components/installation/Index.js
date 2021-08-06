@@ -138,7 +138,7 @@ const Installation = () => {
   },[confirmPasswordRes])
 
   return (
-    <AppLayout typePage="Installation" tabIndex='3'>
+    <AppLayout typePage="Installation" tabIndex='4'>
       <Frame>
         { passwordConfirmed
           ? (
