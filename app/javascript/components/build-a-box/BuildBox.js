@@ -24,7 +24,7 @@ import {
     SearchMajor,
     MobileBackArrowMajor
   } from '@shopify/polaris-icons';
-  
+
   import { gql, useMutation, useQuery } from '@apollo/client';
   import _ from 'lodash';
 
@@ -75,12 +75,12 @@ const ButtonRemove = (props) => {
         }
     }
       `;
-    
+
       const [
         deleteUpsellCampaign,
         { loading: deleting, error: deleteError },
       ] = useMutation(DELETE_UPSELL_CAMPAIGN);
-    
+
       const handleRemoveCampaigns = () => {
         if (deleting) return;
         deleteUpsellCampaign({
@@ -101,7 +101,7 @@ const ButtonRemove = (props) => {
           }
         });
       };
-    
+
       return (
         <Button
           destructive
@@ -113,12 +113,12 @@ const ButtonRemove = (props) => {
         </Button>
       );
     };
-    
+
     const BuildBox = ({handleForm,handleBack}) => {
       const history = useHistory();
-    
+
       const GET_UPSELL_CAMPAIGNS = gql`
-      query { 
+      query {
         fetchBuildABoxCampaignGroups {
             id
             internalName
@@ -151,17 +151,17 @@ const ButtonRemove = (props) => {
         }
     }
       `;
-    
-      const [formErrors, setFormErrors] = useState([]); 
+
+      const [formErrors, setFormErrors] = useState([]);
       const [saveSuccess, setSaveSuccess] = useState(false);
       const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
-    
+
       const [campaigns, setCampaigns] = useState([]);
       const [filterCampaigns, setFilterCampaigns] = useState([]);
-    
+
       const [campaignStatus, setCampaignStatus] = useState('');
       const [searchValue, setSearchValue] = useState('');
-    
+
       const filterCampaignsValue = () => {
         const rowsData = campaigns.filter((item) => {
           return (
@@ -176,29 +176,29 @@ const ButtonRemove = (props) => {
               !searchValue)
           );
         });
-    
+
         setFilterCampaigns(formatRows(rowsData));
       };
-    
+
       const optionsCampaigns = [
         { label: 'All Campaigns', value: 'all' },
         { label: 'Active Campaigns', value: 'active' },
         { label: 'Draft Campaigns', value: 'draft' },
       ];
-    
+
       const { data, loading, error, refetch } = useQuery(GET_UPSELL_CAMPAIGNS, {
         fetchPolicy: 'no-cache',
       });
-    
+
       useEffect(() => {
         if (data) {
           let rowsData = formatRows(data.fetchBuildABoxCampaignGroups);
-    
+
           setCampaigns(data.fetchBuildABoxCampaignGroups);
           setFilterCampaigns(rowsData);
         }
       }, [data]);
-    
+
       const formatRows = (rows) => {
         return rows?.map((row) => [
           <Checkbox
@@ -224,17 +224,17 @@ const ButtonRemove = (props) => {
         //   '0 Days',
         ]);
       };
-    
+
       const [selectedCampaignsForRemove, setSelectedCampaignsForRemove] = useState(
         []
       );
-    
+
       const handleChangeCheckedCampaigns = (newChecked, campaignId) => {
         if (newChecked) {
           setSelectedCampaignsForRemove([
             ...selectedCampaignsForRemove,
             campaignId,
-          ]); 
+          ]);
         } else {
           const index = selectedCampaignsForRemove.indexOf(campaignId);
           setSelectedCampaignsForRemove([
@@ -243,16 +243,16 @@ const ButtonRemove = (props) => {
           ]);
         }
       };
-    
+
       useEffect(() => {
         filterCampaignsValue();
         setSelectedCampaignsForRemove([]);
       }, [searchValue, campaignStatus]);
-    
+
       useEffect(() => {
         filterCampaignsValue();
       }, [selectedCampaignsForRemove]);
-    
+
       return (
           <Frame>
             <Page>
@@ -278,7 +278,6 @@ const ButtonRemove = (props) => {
                 </>
               )}
               <Layout>
-              <Layout>
                 <Layout.Section>
                   <div className="back-button pointer" onClick={handleBack}>
                     <Icon
@@ -286,7 +285,6 @@ const ButtonRemove = (props) => {
                       color="base" />
                   </div>
                 </Layout.Section>
-              </Layout>
                 <Layout.Section>
                   <Stack>
                     <Stack.Item>
@@ -346,7 +344,7 @@ const ButtonRemove = (props) => {
                         placeholder="Search for Name"
                       />
                     </div>
-    
+
                     <DataTable
                       columnContentTypes={[
                         'text',

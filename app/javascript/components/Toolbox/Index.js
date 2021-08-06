@@ -17,7 +17,7 @@ const Index = () => {
 
     const [editId, setEditId] = useState("")
     const [showEditPage, setShowEditPage] = useState(false)
-  
+
     const handleBackSetting=useCallback(()=>{
         setSelectedSetting('');
       },[setSelectedSetting])
@@ -26,12 +26,12 @@ const Index = () => {
         setShowEditPage(false);
         setEditId("")
       }, [setShowEditPage, editId])
-    
+
     const handleEditPage = useCallback(ID => {
         setEditId(ID)
         setShowEditPage(true)
       }, [setEditId, setShowEditPage])
-    
+
     useEffect(() => {
         setShowEditPage(false);
         setEditId("")
@@ -50,13 +50,13 @@ const Index = () => {
                 title: "Integrations",
                 img: EmailImage,
                 desc: "Manage upsell settings and customization for you and your customers."
-            },
-            {
-                key: "",
-                title: "Products",
-                img: InformationImage,
-                desc: "Manage the loyalty and referrals settings for your customers."
             }
+            // {
+            //     key: "",
+            //     title: "Products",
+            //     img: InformationImage,
+            //     desc: "Manage the loyalty and referrals settings for your customers."
+            // }
         ]
 
     return (
@@ -86,7 +86,7 @@ const Index = () => {
                                         </div>
                                       </div>
                                     ))}
-                                  </div> 
+                                  </div>
                                 </Card.Section>
                               </Card>
                             </div>
@@ -101,12 +101,12 @@ const Index = () => {
                              selectedSetting==='integerations'?
                              <>
                              {
-                            !showEditPage ? 
-                             <Integrations 
+                            !showEditPage ?
+                             <Integrations
                               handleBack={handleBackSetting}
                               handleForm={handleEditPage}
                              />:
-                             <IntegrationDetail 
+                             <IntegrationDetail
                              id={editId}
                              handleClose={handleCloseEditPage}
                              />

@@ -20,7 +20,7 @@ const Index = () => {
     const [selectedSetting,setSelectedSetting]=useState('');
     const [editId, setEditId] = useState("")
     const [showEditPage, setShowEditPage] = useState(false)
-  
+
     const handleBackSetting=useCallback(()=>{
         setSelectedSetting('');
       },[setSelectedSetting])
@@ -29,12 +29,12 @@ const Index = () => {
       setShowEditPage(false);
       setEditId("")
     }, [setShowEditPage, editId])
-  
+
     const handleEditPage = useCallback(ID => {
       setEditId(ID)
       setShowEditPage(true)
     }, [setEditId, setShowEditPage])
-  
+
     useEffect(() => {
       setShowEditPage(false);
       setEditId("")
@@ -54,12 +54,12 @@ const Index = () => {
           img:EmailImage,
           desc:"Manage upsell settings and customization for you and your customers."
         },
-        {
-            key:"",
-            title:"Loyalty & Referrals",
-            img:InformationImage,
-            desc:"Manage the loyalty and referrals settings for your customers."
-        },
+        // {
+        //     key:"",
+        //     title:"Loyalty & Referrals",
+        //     img:InformationImage,
+        //     desc:"Manage the loyalty and referrals settings for your customers."
+        // },
         {
             key:"build-box",
             title:"Build-a-box Campaign",
@@ -95,7 +95,7 @@ const Index = () => {
                                         </div>
                                       </div>
                                     ))}
-                                  </div> 
+                                  </div>
                                 </Card.Section>
                               </Card>
                             </div>
@@ -109,7 +109,7 @@ const Index = () => {
                          {
                              selectedSetting==='smarty_sms'?
                              <>
-                             <Smarty 
+                             <Smarty
                              handleBack={handleBackSetting}
                              handleForm={handleEditPage}
                              />
@@ -117,12 +117,12 @@ const Index = () => {
                              selectedSetting==='upsells'?
                              <>
                              {
-                             showEditPage ? 
-                             <CreateUpsell 
+                             showEditPage ?
+                             <CreateUpsell
                              id={editId}
                              handleClose={handleCloseEditPage}
                              />:
-                            <Upsell 
+                            <Upsell
                             handleBack={handleBackSetting}
                             handleForm={handleEditPage}
                              />
@@ -132,11 +132,11 @@ const Index = () => {
                              <>
                              {
                                showEditPage ?
-                               <CreateBuildBox 
+                               <CreateBuildBox
                                 id={editId}
                                 handleClose={handleCloseEditPage}
                                 />:
-                               <BuildBox 
+                               <BuildBox
                                handleBack={handleBackSetting}
                                handleForm={handleEditPage} />
                              }

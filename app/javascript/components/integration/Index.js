@@ -90,21 +90,23 @@ const Integrations = ({handleBack,handleForm}) => {
   let lodas= category=="all" && _.groupBy(integerations?.fetchIntegrations,"integrationType") || [];
   return (
       <>
-      <Layout>
-        <Layout.Section>
-          <div className="back-button pointer" style={{float:"left"}} onClick={handleBack}>
-            <Icon
-              source={MobileBackArrowMajor}
-              color="base" />
-          </div>
-        </Layout.Section>
-      </Layout>
-      <Button>
-        <img src={getStart} width="20" />
-        <span>Get Started</span>
-      </Button>
+
       <Page fullWidth title={process.env.APP_TYPE=="public"?"Integrate with ChargeZen":"Integrations"}>
         <Layout>
+
+          <Layout.Section>
+            <div className="back-button pointer" style={{float:"left"}} onClick={handleBack}>
+              <Icon
+                source={MobileBackArrowMajor}
+                color="base" />
+            </div>
+          </Layout.Section>
+          <Layout.Section>
+            <Button>
+              <img src={getStart} width="20" />
+              <span>Get Started</span>
+            </Button>
+          </Layout.Section>
           <Layout.Section>
             <Card>
               <Tabs

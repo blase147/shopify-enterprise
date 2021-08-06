@@ -238,7 +238,7 @@ const Upsell = ({handleBack,handleForm}) => {
             </>
           )}
           <Layout>
-           <Layout>
+
                 <Layout.Section>
                   <div className="back-button pointer" onClick={handleBack}>
                     <Icon
@@ -246,7 +246,6 @@ const Upsell = ({handleBack,handleForm}) => {
                       color="base" />
                   </div>
                 </Layout.Section>
-            </Layout>
             <Layout.Section>
               <Stack>
                 <Stack.Item>
