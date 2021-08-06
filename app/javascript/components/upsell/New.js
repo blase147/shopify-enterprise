@@ -34,7 +34,7 @@ import {
   Autocomplete,
 } from '@shopify/polaris';
 
-const NewUpSell = () => {
+const NewUpSell = ({handleClose}) => {
   const options = [...Array(99).keys()].map((foo) => (foo + 1).toString());
   const [canceledProducts, setCanceledProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
@@ -278,7 +278,6 @@ const NewUpSell = () => {
     }
   `;
 
-  const history = useHistory();
   const [createUpsellCampaign] = useMutation(CREATE_UPSELL_CAMPAIGN);
 
   useEffect(() => {
@@ -289,14 +288,13 @@ const NewUpSell = () => {
   }, [data]);
 
   return (
-    <AppLayout typePage="newUpsell" tabIndex="4">
       <Frame>
         <Page
           title={id ? 'Update Upsell Campaign' : 'Create Upsell Campaign'}
           breadcrumbs={[
             {
               content: 'Upsell Campaigns',
-              onAction: () => history.push('/upsell'),
+              onAction: () => handleClose(),
             },
           ]}
         >
@@ -330,7 +328,7 @@ const NewUpSell = () => {
                         setSubmitting(false);
                       } else {
                         // setSaveSuccess(true);
-                        history.push('/upsell');
+                        handleClose();
                       }
                     })
                     .catch((error) => {
@@ -352,7 +350,7 @@ const NewUpSell = () => {
                         setSubmitting(false);
                       } else {
                         // setSaveSuccess(true);
-                        history.push('/upsell');
+                        handleClose();
                       }
                     })
                     .catch((error) => {
@@ -1103,7 +1101,6 @@ const NewUpSell = () => {
           )}
         </Page>
       </Frame>
-    </AppLayout>
   );
 };
 

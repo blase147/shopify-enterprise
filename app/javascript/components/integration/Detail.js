@@ -25,8 +25,8 @@ import getStart from 'images/get_start.svg';
 import integrations from '../../lib/integrations';
 import _ from 'lodash';
 
-const IntegrationDetail = () => {
-
+const IntegrationDetail = ({id:{id,title,keys},handleClose}) => {
+console.log("id   ---asdad: " ,id)
   const updateQuery=gql`
   mutation ($input: UpdateIntegrationInput!) {
     updateIntegration(input: $input) {
@@ -61,7 +61,7 @@ const IntegrationDetail = () => {
 //   `;
 
   const history = useHistory();
-  let { id, title, keys } = useParams();
+  // let { id, title, keys } = useParams();
 
   
   
@@ -84,7 +84,7 @@ const IntegrationDetail = () => {
     [],
   );
   const location=useLocation();
-  let fieldKeys=keys!="null" && keys.split(",").map(field=>_.camelCase(field)) || [];
+  let fieldKeys=keys ? keys?.split(",").map(field=>_.camelCase(field)) : [];
 
   const [updateMutation,{data,loading}]=useMutation(updateQuery);
   const [formData,setFormData]=useState(/*fieldKeys.reduce((acc,curr)=> (acc[curr]='',acc),{})*/{...location?.state?.credentials})
@@ -111,14 +111,14 @@ const IntegrationDetail = () => {
         })
   }
   return (
-    <AppLayout typePage="integrations" tabIndex='5'>
+    <>
       <Button>
         <img src={getStart} width='20'/>
         <span>Get Started</span>
       </Button>
 
       <Page fullWidth title={process.env.APP_TYPE=="public"?"Integrate with ChargeZen":"Integrations"} breadcrumbs={[{
-        content: title, onAction: () => history.push('/integrations')
+        content: title, onAction: () => handleClose()
       }]}>
         <Layout>
           <Layout.Section>
@@ -186,7 +186,7 @@ const IntegrationDetail = () => {
         </Frame>
         </Layout>
       </Page>
-    </AppLayout>
+    </>
   );
 };
 

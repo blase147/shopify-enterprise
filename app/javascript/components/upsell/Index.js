@@ -18,13 +18,14 @@ import {
   Frame,
   Toast,
   List,
-  Banner,
+  Banner
 } from '@shopify/polaris';
 
 import {
   DeleteMajor,
   MobilePlusMajor,
   SearchMajor,
+  MobileBackArrowMajor
 } from '@shopify/polaris-icons';
 
 import { gql, useMutation, useQuery } from '@apollo/client';
@@ -93,7 +94,7 @@ const ButtonRemove = (props) => {
   );
 };
 
-const Upsell = () => {
+const Upsell = ({handleBack,handleForm}) => {
   const history = useHistory();
 
   const GET_UPSELL_CAMPAIGNS = gql`
@@ -171,7 +172,7 @@ const Upsell = () => {
         <div className={`${row.status == 'publish' ? 'active' : 'draft'}`}>
           <Badge>{row.status == 'publish' ? 'Active' : 'Draft'}</Badge>
         </div>
-        <Link to={`/upsell/${row.id}/edit`} key={row.id}>
+        <Link onClick={()=>handleForm(row.id)} key={row.id}>
           {row.internalName}
         </Link>
       </div>,
@@ -213,8 +214,7 @@ const Upsell = () => {
   }, [selectedCampaignsForRemove]);
 
   return (
-    <AppLayout typePage="upsell" tabIndex="4">
-      <Frame>
+    <Frame>
         <Page>
           {saveSuccess && (
             <Toast
@@ -238,6 +238,15 @@ const Upsell = () => {
             </>
           )}
           <Layout>
+           <Layout>
+                <Layout.Section>
+                  <div className="back-button pointer" onClick={handleBack}>
+                    <Icon
+                      source={MobileBackArrowMajor}
+                      color="base" />
+                  </div>
+                </Layout.Section>
+            </Layout>
             <Layout.Section>
               <Stack>
                 <Stack.Item>
@@ -274,7 +283,7 @@ const Upsell = () => {
                     <Button
                       primary
                       icon={MobilePlusMajor}
-                      onClick={() => history.push('/upsell/new')}
+                      onClick={() => handleForm("")}
                     >
                       Create Campaign
                     </Button>
@@ -330,7 +339,6 @@ const Upsell = () => {
           </Layout>
         </Page>
       </Frame>
-    </AppLayout>
   );
 };
 

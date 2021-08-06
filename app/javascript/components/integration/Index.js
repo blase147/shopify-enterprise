@@ -19,13 +19,15 @@ import {
   Heading,
   Spinner
 } from '@shopify/polaris';
-
+import {
+  MobileBackArrowMajor
+} from '@shopify/polaris-icons';
 import getStart from 'images/get_start.svg';
 import _, { map } from 'lodash';
 import integrations from '../../lib/integrations';
 import { groupBy } from '../common/utils/utils';
 
-const Integrations = () => {
+const Integrations = ({handleBack,handleForm}) => {
 
   const mapCatagory=useMemo(() =>({
     all:"",
@@ -87,7 +89,16 @@ const Integrations = () => {
 
   let lodas= category=="all" && _.groupBy(integerations?.fetchIntegrations,"integrationType") || [];
   return (
-    <AppLayout typePage="integrations" tabIndex="8">
+      <>
+      <Layout>
+        <Layout.Section>
+          <div className="back-button pointer" style={{float:"left"}} onClick={handleBack}>
+            <Icon
+              source={MobileBackArrowMajor}
+              color="base" />
+          </div>
+        </Layout.Section>
+      </Layout>
       <Button>
         <img src={getStart} width="20" />
         <span>Get Started</span>
@@ -127,7 +138,8 @@ const Integrations = () => {
                             <Stack spacing="loose">
                               {lodas[key]?.map((childItem, i) => (
                                 <Link
-                                to={{ pathname: `/integration-detail/${childItem.id}/${childItem.name}/${childItem.keys}`, state: { credentials: childItem.credentials } }}
+                                  // to={{ pathname: `/integration-detail/${childItem.id}/${childItem.name}/${childItem.keys}`, state: { credentials: childItem.credentials } }}
+                                  onClick={()=>handleForm({id:childItem.id,keys:childItem.keys,title:childItem.name})}
                                   className="roundedCard"
                                   key={i}
                                 >
@@ -188,7 +200,7 @@ const Integrations = () => {
           </Layout.Section>
         </Layout>
       </Page>
-    </AppLayout>
+    </>
   );
 };
 

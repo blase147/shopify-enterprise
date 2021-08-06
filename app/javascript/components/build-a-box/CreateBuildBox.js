@@ -40,7 +40,7 @@ import SearchProduct from '../plans/SearchProduct';
 import SearchPlan from '../upsell/SearchPlan';
 import RangePickr from './RangePickr';
 
-const CreateBuildBox = () => {
+const CreateBuildBox = ({id,handleClose}) => {
   const options = [...Array(99).keys()].map((foo) => (foo + 1).toString());
   const [canceledProducts, setCanceledProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
@@ -152,7 +152,7 @@ const CreateBuildBox = () => {
     }
 }
   `;
-  const { id } = useParams();
+  // const { id } = useParams();
 
   const [getUpsell, { data, loading, error }] = useLazyQuery(
     GET_UPSELL_CAMPAIGN,
@@ -291,14 +291,13 @@ const CreateBuildBox = () => {
   }, [data]);
 
   return (
-    <AppLayout typePage="build-a-box" tabIndex="5">
       <Frame>
         <Page
           title={id ? 'Update Build a box Campaign' : 'Create Build a box Campaign'}
           breadcrumbs={[
             {
               content: 'Build a box Campaigns',
-              onAction: () => history.push('/build-a-box'),
+              onAction: () => handleClose(),
             },
           ]}
         >
@@ -335,7 +334,7 @@ const CreateBuildBox = () => {
                         setSubmitting(false);
                       } else {
                         // setSaveSuccess(true);
-                        history.push('/build-a-box');
+                        handleClose();
                       }
                     })
                     .catch((error) => {
@@ -355,7 +354,7 @@ const CreateBuildBox = () => {
                         setSubmitting(false);
                       } else {
                         // setSaveSuccess(true);
-                        history.push('/build-a-box');
+                       handleClose();
                       }
                     })
                     .catch((error) => {
@@ -726,7 +725,6 @@ const CreateBuildBox = () => {
           )}
         </Page>
       </Frame>
-    </AppLayout>
   );
 };
 
