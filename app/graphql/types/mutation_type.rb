@@ -36,5 +36,6 @@ module Types
     field :add_box_campaign, mutation: Mutations::AddBuildABoxCampaignGroup
     field :delete_box_campaigns, mutation: Mutations::DeleteBuildABoxCampaignGroup
     field :update_box_campaign, mutation: Mutations::UpdateBuildABoxCampaignGroup
+    field :update_ship_engine_order, mutation: Mutations::UpdateShipEngineOrder
   end
 end

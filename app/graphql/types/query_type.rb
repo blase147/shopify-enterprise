@@ -31,5 +31,7 @@ module Types
     field :fetch_translation, resolver: Queries::FetchTranslation
     field :fetch_build_a_box_campaign_group, resolver: Queries::FetchBuildABoxCampaignGroup
     field :fetch_build_a_box_campaign_groups, resolver: Queries::FetchBuildABoxCampaignGroups
+    field :fetch_ship_engine_orders, resolver: Queries::FetchShipEngineOrders
+    field :fetch_ship_engine_order, resolver: Queries::FetchShipEngineOrder
   end
 end

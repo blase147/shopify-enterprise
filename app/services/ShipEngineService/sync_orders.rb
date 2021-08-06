@@ -41,12 +41,12 @@ class ShipEngineService::SyncOrders
         "tax": order.total_tax_set.presentment_money.amount.to_f,
         "grand_total": order.total_price_set.presentment_money.amount.to_f
       },
-      "customer": {
+      "customer": defined?(order.customer) ? {
         "name": order.customer.first_name,
         "phone": order.customer.phone,
         "email": order.customer.email
-      },
-      "ship_to": {
+      } : nil,
+      "ship_to": defined?(order.shipping_address) ? {
         "name": order.shipping_address.first_name,
         "phone": order.shipping_address.phone,
         "address1": order.shipping_address.address1,
@@ -54,7 +54,7 @@ class ShipEngineService::SyncOrders
         "state": order.shipping_address.province,
         "zip": order.shipping_address.zip,
         "country_code": order.shipping_address.country_code
-      },
+      } : nil,
       "order_items": sale_order_items_data(order)
     }
   end
