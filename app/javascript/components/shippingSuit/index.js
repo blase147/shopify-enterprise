@@ -32,12 +32,12 @@ const index = () => {
     const history = useHistory();
     // Start Tabs
     const [selectedTab, setSelectedTab] = useState(0);
-  
+
     const handleTabChange = useCallback(
       (selectedTabIndex) => setSelectedTab(selectedTabIndex),
       []
     );
-  
+
     const tabs = [
       {
         id: 'all',
@@ -61,13 +61,13 @@ const index = () => {
       },
     ];
     // End tabs
-  
+
     const [sortOrder,setSortOrder]=useState(0);
-  
+
     const [moneySpent, setMoneySpent] = useState(null);
     const [taggedWith, setTaggedWith] = useState(null);
     const [queryValue, setQueryValue] = useState(null);
-  
+
     const handleMoneySpentChange = useCallback(
       (value) => setMoneySpent(value),
       []
@@ -80,7 +80,7 @@ const index = () => {
       (value) => setQueryValue(value),
       []
     );
-  
+
     const handleMoneySpentRemove = useCallback(() => setMoneySpent(null), []);
     const handleTaggedWithRemove = useCallback(() => setTaggedWith(null), []);
     const handleQueryValueRemove = useCallback(() => setQueryValue(null), []);
@@ -89,7 +89,7 @@ const index = () => {
       handleTaggedWithRemove();
       handleQueryValueRemove();
     }, [handleMoneySpentRemove, handleQueryValueRemove, handleTaggedWithRemove]);
-  
+
     const filters = [
       {
         key: 'taggedWith',
@@ -129,7 +129,7 @@ const index = () => {
         // ),
       },
     ];
-  
+
     const appliedFilters = [];
     if (!isEmpty(moneySpent)) {
       const key = 'moneySpent';
@@ -147,7 +147,7 @@ const index = () => {
         onRemove: handleTaggedWithRemove,
       });
     }
-  
+
     function disambiguateLabel(key, value) {
       switch (key) {
         case 'moneySpent':
@@ -158,7 +158,7 @@ const index = () => {
           return value;
       }
     }
-  
+
     function isEmpty(value) {
       if (Array.isArray(value)) {
         return value.length === 0;
@@ -167,9 +167,9 @@ const index = () => {
       }
     }
     // -------------------
-    const GET_CUSTOMERS = gql`
-    query ($offsetAttributes: OffsetAttributes!) {
-        fetchShipEngineOrders(offsetAttributes: $offsetAttributes) {
+    const GET_Shipping_Orders = gql`
+    query {
+        fetchShipEngineOrders {
                 totalCount
                 shipEngineOrders {
                     orderId
@@ -218,13 +218,13 @@ const index = () => {
         }
     }
     `;
-    const { data, loading, error, refetch } = useQuery(GET_CUSTOMERS, {
+    const { data, loading, error, refetch } = useQuery(GET_Shipping_Orders, {
       fetchPolicy: 'no-cache'
     });
     const [formErrors, setFormErrors] = useState([]);
     const [saveSuccess, setSaveSuccess] = useState(false);
     const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
-  
+
     const [selectedCustomers, setselectedCustomers] = useState([]);
     const handleChangeCheckedCustomers = (newChecked, customerId) => {
       if (newChecked) {
@@ -255,46 +255,26 @@ const index = () => {
               }
             />,
             <a
-              href={`/subscriptions/${row.shopifyId}?shop=${row.shopDomain}`}
-              key={row.id}
-            >{`${row.firstName} ${row.lastName}`}</a>,
+              href=''
+              key={row.orderId}
+            >{`${row.orderId}`}</a>,
             row.createdAt,
-            <div
-              className={
-                row.status === 'PAUSED'
-                  ? 'cancelled'
-                  : row.status === 'ACTIVE'
-                    ? 'active'
-                    : 'future'
-              }
-            >
+            '',
+            '',<div>
               <Badge>{capitalize(row.status)}</Badge>
-            </div>,
-            <div className='subscription'>{row.subscription}</div>,
-            <div>
-              <p className="more">
-                {row.communication}
-              </p>
-              <p>
-                <span className="price">{row.language}</span>
-              </p>
             </div>
           ] : []);
     };
     const [customers, setCustomers] = useState([]);
     const [filterCustomers, setFilterCustomers] = useState([]);
-  
+
     const filterCustomersValue = () => {
       const rowsData = customers.filter((item) => {
         return (
-          (item.subscription === subscriptions[selectedTab] ||
-            (subscriptions[selectedTab] === 'all') || (subscriptions[selectedTab] === 'returning') || (subscriptions[selectedTab] === 'active') || (subscriptions[selectedTab] === 'cancelled') || (subscriptions[selectedTab] === 'new')) &&
-          (item.name?.toLowerCase()?.includes(queryValue?.toLowerCase()) ||
-            !queryValue) &&
-          (item.subscription?.toLowerCase()?.includes(taggedWith) || !taggedWith)
+          item
         );
       });
-  
+
       setFilterCustomers(rowsData);
     };
     useEffect(() => {
@@ -303,19 +283,19 @@ const index = () => {
       }
       // console.log('searchvalue: ', queryValue);
     }, [queryValue, taggedWith, customers]);
-  
+
     // useEffect(() => {
     //   filterCustomersValue();
     // }, [selectedCustomers]);
-  
+
     useEffect(() => {
       if (data && data.fetchShipEngineOrders) {
-        let rowsData = formatRows(data.fetchShipEngineOrders);
-        setCustomers(data.fetchShipEngineOrders);
+        let rowsData = formatRows(data.fetchShipEngineOrders.shipEngineOrders);
+        setCustomers(data.fetchShipEngineOrders.shipEngineOrders);
         // console.log('data: ', data);
       }
     }, [data]);
-  
+
     //export data to csv
     // const headers = [
     //   { label: 'Number', key: 'id' },
@@ -346,7 +326,7 @@ const index = () => {
         key: 'additionalContacts.companyName',
       },
       { label: 'additionalContacts.phone', key: 'additionalContacts.phone' },
-  
+
       { label: 'billingAddress.firstName', key: 'billingAddress.firstName' },
       { label: 'billingAddress.lastName', key: 'billingAddress.lastName' },
       { label: 'billingAddress.email', key: 'billingAddress.email' },
@@ -366,14 +346,14 @@ const index = () => {
       'autoCollection',
       'status',
       'subscription',
-  
+
       'additionalContacts.id',
       'additionalContacts.email',
       'additionalContacts.firstName',
       'additionalContacts.lastName',
       'additionalContacts.companyName',
       'additionalContacts.phone',
-  
+
       'billingAddress.firstName',
       'billingAddress.lastName',
       'billingAddress.email',
@@ -390,33 +370,33 @@ const index = () => {
     ];
     const json2csvParser = new Parser({ fields, transforms });
     let csv = json2csvParser.parse(dataSelected);
-  
+
     //
     // const exportCSV = () => {
     const dataSelected = [...filterCustomers].filter((item) =>
       selectedCustomers.find((select) => select === item.id)
     );
     // };
-  
+
     //import customer by csv:
     const [active, setActive] = useState(false);
     const [checked, setChecked] = useState(false);
-  
+
     const toggleActive = useCallback(() => setActive((active) => !active), []);
-  
+
     const handleCheckbox = useCallback((value) => setChecked(value), []);
-  
+
     //upload file
     const [file, setFile] = useState();
-  
+
     const handleDropZoneDrop = useCallback(
       (_dropFiles, acceptedFiles, _rejectedFiles) =>
         setFile((file) => acceptedFiles[0]),
       []
     );
-  
+
     // const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
-  
+
     const fileUpload = !file && <DropZone.FileUpload />;
     const uploadedFile = file && (
       <Stack>
@@ -427,9 +407,9 @@ const index = () => {
       </Stack>
     );
     //config
-  
+
     const csvData = [];
-  
+
     const parsedata =
       file &&
       Papa.parse(file, {
@@ -446,7 +426,7 @@ const index = () => {
       const tempData = csvData.slice(1);
       tempData?.map((item) => {
         const index = rcs.findIndex((customer) => customer.email == item[3]);
-  
+
         if (index !== -1) {
           rcs[index].additionalContacts.push({
             // id: item[10],
@@ -495,7 +475,7 @@ const index = () => {
           });
         }
       });
-  
+
       createCustomer({
         variables: {
           input: { params: rcs },
@@ -504,7 +484,7 @@ const index = () => {
         // const errors = resp.errors;
         const data = resp.data;
         const errors = data.errors;
-  
+
         if (errors) {
           setFormErrors(errors);
         } else {
@@ -523,14 +503,14 @@ const index = () => {
       }
     `;
     const [createCustomer] = useMutation(CREATE_CUSTOMER);
-  
+
     const isToday = (someDate) => {
       const today = new Date()
       return someDate.getDate() == today.getDate() &&
         someDate.getMonth() == today.getMonth() &&
         someDate.getFullYear() == today.getFullYear()
     }
-  
+
     let activeArr = [],
       newArr = [],
       pausedArr = [],
@@ -554,7 +534,7 @@ const index = () => {
         res.status == 'CANCELLED' && cancelledArr.push(res);
       });
     }
-  
+
     return (
         <>
         <Frame>
@@ -577,45 +557,7 @@ const index = () => {
             <br />
           </>
         )}
-        <Page
-          title="Customer Subscriptions"
-          primaryAction={
-            <ButtonGroup>
-              <Button onClick={() => { }}>
-                {dataSelected.length > 0 ? (
-                  <CSVLink
-                    data={json2csvParser.parse(dataSelected)}
-                    filename={'customers.csv'}
-                  >
-                    Export
-                  </CSVLink>
-                ) : (
-                  'Export'
-                )}
-              </Button>
-              {/*<Button
-                onClick={() => {
-                  toggleActive();
-                  setFile();
-                }}
-              >
-                Import Customer
-              </Button>
-              <div
-                className={`${selectedCustomers.length === 0 ? 'hidden' : ''}`}
-              >
-                <ButtonRemove
-                  selectedCustomers={selectedCustomers}
-                  refetch={refetch}
-                  setselectedCustomers={setselectedCustomers}
-                />
-              </div>
-              <Button primary onClick={() => history.push('/customers/new')}>
-                Add Customer
-              </Button>*/}
-            </ButtonGroup>
-          }
-        >
+        <Page>
           <Card>
             <div className="tabs">
               <Tabs
@@ -692,49 +634,6 @@ const index = () => {
           </Card>
         </Page>
       </Frame>
-      <Modal
-        large
-        open={active}
-        onClose={toggleActive}
-        title="Import customers by CSV"
-        primaryAction={{
-          content: 'Import customers',
-          onAction: () => {
-            toggleActive();
-            handleImportCustomer();
-            // parsedata;
-          },
-        }}
-        secondaryActions={[
-          {
-            content: 'Cancel',
-            onAction: () => {
-              toggleActive();
-              setFile();
-            },
-          },
-        ]}
-      >
-        <Modal.Section>
-          <Stack vertical>
-            <DropZone
-              allowMultiple={false}
-              onDrop={handleDropZoneDrop}
-              accept=".csv"
-              errorOverlayText="File type must be .csv"
-              type="file"
-            >
-              {uploadedFile}
-              {fileUpload}
-            </DropZone>
-            {/* <Checkbox
-              checked={checked}
-              label="Overwrite existing customers that have the same customer ID"
-              onChange={handleCheckbox}
-            /> */}
-          </Stack>
-        </Modal.Section>
-      </Modal>
         </>
     )
 }
