@@ -175,6 +175,10 @@ const index = () => {
                     orderId
                     orderDate
                     dueDate
+                    signatureConfirmation
+                    signatureInsurance
+                    createReturnLabel
+                    containsAlcohol
                     shippingInterval
                     shippingIntervalCount
                     status
@@ -209,10 +213,12 @@ const index = () => {
                         sku
                         unitPrice
                         quantity
-                        grams
+                        weight
+                        weightUnit
                         length
                         width
                         height
+                        dimensionUnit
                     }
                 }
         }
