@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_06_074912) do
+ActiveRecord::Schema.define(version: 2021_08_09_101847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -216,13 +216,13 @@ ActiveRecord::Schema.define(version: 2021_08_06_074912) do
     t.json "product_images"
     t.string "mystery_duration"
     t.string "mystery_duration_value"
+    t.string "delivery_interval_type"
+    t.integer "delivery_interval_count"
     t.integer "box_subscription_type"
     t.boolean "box_is_quantity"
     t.boolean "box_is_quantity_limited"
     t.integer "box_quantity_limit"
     t.json "collection_images"
-    t.string "delivery_interval_type"
-    t.integer "delivery_interval_count"
     t.text "billing_dates", default: [], array: true
     t.text "shipping_dates", default: [], array: true
   end
@@ -327,6 +327,10 @@ ActiveRecord::Schema.define(version: 2021_08_06_074912) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.json "ship_from"
+    t.boolean "signature_confirmation"
+    t.boolean "signature_insurance"
+    t.boolean "create_return_label"
+    t.boolean "contains_alcohol"
     t.index ["shop_id"], name: "index_ship_engine_orders_on_shop_id"
   end
 
@@ -419,7 +423,6 @@ ActiveRecord::Schema.define(version: 2021_08_06_074912) do
     t.boolean "renewal_reminder", default: false
     t.boolean "skip_update_next_charge", default: false
     t.boolean "one_time_upsells", default: false
-    t.boolean "failed_renewal", default: false
     t.boolean "cancel_reactivate_subscription", default: false
     t.boolean "edit_quantity", default: false
     t.boolean "cancel_subscription", default: false
@@ -429,6 +432,7 @@ ActiveRecord::Schema.define(version: 2021_08_06_074912) do
     t.string "renewal_duration"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "failed_renewal"
     t.boolean "opt_in", default: false
     t.boolean "swap_product", default: false
     t.boolean "update_billing", default: false
@@ -646,6 +650,7 @@ ActiveRecord::Schema.define(version: 2021_08_06_074912) do
     t.json "rule_cart_value"
     t.json "product_offer"
     t.json "rule_customer_value"
+    t.json "checkout_products"
   end
 
   add_foreign_key "customers", "reasons_cancels"

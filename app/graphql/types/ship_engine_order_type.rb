@@ -13,6 +13,10 @@ module Types
     field :shipping_interval, String, null: true
     field :shipping_interval_count, Int, null: true
     field :status, String, null: true
+    field :signature_confirmation, GraphQL::Types::Boolean, null: true
+    field :signature_insurance, GraphQL::Types::Boolean, null: true
+    field :create_return_label, GraphQL::Types::Boolean, null: true
+    field :contains_alcohol, GraphQL::Types::Boolean, null: true
     field :created_at, String, null: true
     field :updated_at, String, null: true
   end

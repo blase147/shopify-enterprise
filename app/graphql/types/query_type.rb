@@ -33,5 +33,6 @@ module Types
     field :fetch_build_a_box_campaign_groups, resolver: Queries::FetchBuildABoxCampaignGroups
     field :fetch_ship_engine_orders, resolver: Queries::FetchShipEngineOrders
     field :fetch_ship_engine_order, resolver: Queries::FetchShipEngineOrder
+    field :fetch_estimated_shipping_rates, resolver: Queries::FetchEstimatedShippingRates
   end
 end

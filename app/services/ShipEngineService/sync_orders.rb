@@ -54,7 +54,8 @@ class ShipEngineService::SyncOrders
         "city": order.shipping_address.city,
         "state": order.shipping_address.province,
         "zip": order.shipping_address.zip,
-        "country_code": order.shipping_address.country_code
+        "country_code": order.shipping_address.country_code,
+        "province_code": order.shipping_address.province_code
       } : nil,
       "ship_from": {
         "company_name": @shopify_shop.name,
@@ -79,7 +80,8 @@ class ShipEngineService::SyncOrders
         "sku": line_item.sku,
         "unit_price": line_item.price_set.presentment_money.amount,
         "quantity": line_item.quantity,
-        "grams": (line_item.grams * 0.00220462).to_f.round(2)
+        "weight": line_item.grams.to_f,
+        "weight_unit": 'gram'
       }
       data.push(item_hash)
     end
