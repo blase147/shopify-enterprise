@@ -45,7 +45,8 @@ class ShipEngineService::SyncOrders
       "customer": defined?(order.customer) ? {
         "name": order.customer.first_name,
         "phone": order.customer.phone,
-        "email": order.customer.email
+        "email": order.customer.email,
+        "address": order.customer&.default_address&.address1
       } : nil,
       "ship_to": defined?(order.shipping_address) ? {
         "name": order.shipping_address.first_name,
