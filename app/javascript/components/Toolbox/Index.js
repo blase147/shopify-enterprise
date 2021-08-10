@@ -114,7 +114,9 @@ const Index = () => {
                              }
                              </>:
                              selectedSetting==='toolbox'?
-                             <ShippingSuit />
+                             <ShippingSuit
+                             handleBack={handleBackSetting}
+                             />
                              :''
                          }
                           </Layout.Section>

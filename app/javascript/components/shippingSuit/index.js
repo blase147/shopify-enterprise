@@ -1,173 +1,158 @@
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import {
   Badge,
   Banner, Button,
-  ButtonGroup,
-  Caption, Card,
+  Card,
   Checkbox, ChoiceList, DataTable,
-  DropZone, Filters,
-  Frame, List, Modal, Page,
-  Spinner, Stack,
-  Tabs, Thumbnail,
+  Filters,
+  Frame, Icon, List, Page,
+  Spinner,
+  Tabs,
   Toast
 } from '@shopify/polaris';
-import { DeleteMajor, NoteMinor } from '@shopify/polaris-icons';
-import Papa from 'papaparse';
+import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useState } from 'react';
-import { CSVLink } from 'react-csv';
-import { useHistory } from 'react-router-dom';
 import swapIcon from '../../../assets/images/icons/swap.svg';
-import AppLayout from '../layout/Layout';
+import {
+  MobileBackArrowMajor
+} from '@shopify/polaris-icons';
+import './shippingSuit.css';
 
+const index = ({ handleBack }) => {
+  // Start Tabs
+  const [selectedTab, setSelectedTab] = useState(0);
 
-// import json2csv from 'json2csv';
-const subscriptions = ['all', 'new', 'returning', 'active', 'cancelled'];
+  const handleTabChange = useCallback(
+    (selectedTabIndex) => setSelectedTab(selectedTabIndex),
+    []
+  );
 
-const {
-  Parser,
-  transforms: { unwind },
-} = require('json2csv');
+  const tabs = [
+    {
+      id: 'all',
+      content: 'All',
+    },
+    {
+      id: 'new',
+      content: 'Due Today',
+    },
+    {
+      id: 'returning',
+      content: 'Returning',
+    },
+    {
+      id: 'active',
+      content: 'Unfulfiled',
+    },
+    {
+      id: 'expired',
+      content: 'Fulfiled',
+    },
+  ];
+  // End tabs
 
-const index = () => {
-    const history = useHistory();
-    // Start Tabs
-    const [selectedTab, setSelectedTab] = useState(0);
+  const [sortOrder, setSortOrder] = useState(0);
 
-    const handleTabChange = useCallback(
-      (selectedTabIndex) => setSelectedTab(selectedTabIndex),
-      []
-    );
+  const [moneySpent, setMoneySpent] = useState(null);
+  const [taggedWith, setTaggedWith] = useState(null);
+  const [queryValue, setQueryValue] = useState(null);
 
-    const tabs = [
-      {
-        id: 'all',
-        content: 'All',
-      },
-      {
-        id: 'new',
-        content: 'Due Today',
-      },
-      {
-        id: 'returning',
-        content: 'Returning',
-      },
-      {
-        id: 'active',
-        content: 'Unfulfiled',
-      },
-      {
-        id: 'expired',
-        content: 'Fulfiled',
-      },
-    ];
-    // End tabs
+  const handleTaggedWithChange = useCallback(
+    (value) => setTaggedWith(value),
+    []
+  );
+  const handleFiltersQueryChange = useCallback(
+    (value) => setQueryValue(value),
+    []
+  );
 
-    const [sortOrder,setSortOrder]=useState(0);
+  const handleMoneySpentRemove = useCallback(() => setMoneySpent(null), []);
+  const handleTaggedWithRemove = useCallback(() => setTaggedWith(null), []);
+  const handleQueryValueRemove = useCallback(() => setQueryValue(null), []);
+  const handleFiltersClearAll = useCallback(() => {
+    handleMoneySpentRemove();
+    handleTaggedWithRemove();
+    handleQueryValueRemove();
+  }, [handleMoneySpentRemove, handleQueryValueRemove, handleTaggedWithRemove]);
 
-    const [moneySpent, setMoneySpent] = useState(null);
-    const [taggedWith, setTaggedWith] = useState(null);
-    const [queryValue, setQueryValue] = useState(null);
+  const filters = [
+    {
+      key: 'taggedWith',
+      label: 'Tagged with',
+      filter: (
+        <ChoiceList
+          title="Tagged with"
+          titleHidden
+          choices={[
+            { label: 'Cancelled', value: 'cancelled' },
+            { label: 'Active', value: 'active' },
+            { label: 'In Trial', value: 'inTrial' },
+            { label: 'Future', value: 'future' },
+          ]}
+          selected={taggedWith || []}
+          onChange={handleTaggedWithChange}
+        // allowMultiple
+        />
+      ),
+      shortcut: true,
+    },
+    {
+      key: 'moneySpent',
+      label: 'Money spent',
+      // filter: (
+      //   <RangeSlider
+      //     label="Money spent is between"
+      //     labelHidden
+      //     value={moneySpent || [0, 500]}
+      //     prefix="$"
+      //     output
+      //     min={0}
+      //     max={2000}
+      //     step={1}
+      //     onChange={handleMoneySpentChange}
+      //   />
+      // ),
+    },
+  ];
 
-    const handleMoneySpentChange = useCallback(
-      (value) => setMoneySpent(value),
-      []
-    );
-    const handleTaggedWithChange = useCallback(
-      (value) => setTaggedWith(value),
-      []
-    );
-    const handleFiltersQueryChange = useCallback(
-      (value) => setQueryValue(value),
-      []
-    );
+  const appliedFilters = [];
+  if (!isEmpty(moneySpent)) {
+    const key = 'moneySpent';
+    appliedFilters.push({
+      key,
+      label: disambiguateLabel(key, moneySpent),
+      onRemove: handleMoneySpentRemove,
+    });
+  }
+  if (!isEmpty(taggedWith)) {
+    const key = 'taggedWith';
+    appliedFilters.push({
+      key,
+      label: disambiguateLabel(key, taggedWith),
+      onRemove: handleTaggedWithRemove,
+    });
+  }
 
-    const handleMoneySpentRemove = useCallback(() => setMoneySpent(null), []);
-    const handleTaggedWithRemove = useCallback(() => setTaggedWith(null), []);
-    const handleQueryValueRemove = useCallback(() => setQueryValue(null), []);
-    const handleFiltersClearAll = useCallback(() => {
-      handleMoneySpentRemove();
-      handleTaggedWithRemove();
-      handleQueryValueRemove();
-    }, [handleMoneySpentRemove, handleQueryValueRemove, handleTaggedWithRemove]);
-
-    const filters = [
-      {
-        key: 'taggedWith',
-        label: 'Tagged with',
-        filter: (
-          <ChoiceList
-            title="Tagged with"
-            titleHidden
-            choices={[
-              { label: 'Cancelled', value: 'cancelled' },
-              { label: 'Active', value: 'active' },
-              { label: 'In Trial', value: 'inTrial' },
-              { label: 'Future', value: 'future' },
-            ]}
-            selected={taggedWith || []}
-            onChange={handleTaggedWithChange}
-          // allowMultiple
-          />
-        ),
-        shortcut: true,
-      },
-      {
-        key: 'moneySpent',
-        label: 'Money spent',
-        // filter: (
-        //   <RangeSlider
-        //     label="Money spent is between"
-        //     labelHidden
-        //     value={moneySpent || [0, 500]}
-        //     prefix="$"
-        //     output
-        //     min={0}
-        //     max={2000}
-        //     step={1}
-        //     onChange={handleMoneySpentChange}
-        //   />
-        // ),
-      },
-    ];
-
-    const appliedFilters = [];
-    if (!isEmpty(moneySpent)) {
-      const key = 'moneySpent';
-      appliedFilters.push({
-        key,
-        label: disambiguateLabel(key, moneySpent),
-        onRemove: handleMoneySpentRemove,
-      });
+  function disambiguateLabel(key, value) {
+    switch (key) {
+      case 'moneySpent':
+        return `Money spent is between $${value[0]} and $${value[1]}`;
+      case 'taggedWith':
+        return `Tagged with ${value}`;
+      default:
+        return value;
     }
-    if (!isEmpty(taggedWith)) {
-      const key = 'taggedWith';
-      appliedFilters.push({
-        key,
-        label: disambiguateLabel(key, taggedWith),
-        onRemove: handleTaggedWithRemove,
-      });
-    }
+  }
 
-    function disambiguateLabel(key, value) {
-      switch (key) {
-        case 'moneySpent':
-          return `Money spent is between $${value[0]} and $${value[1]}`;
-        case 'taggedWith':
-          return `Tagged with ${value}`;
-        default:
-          return value;
-      }
+  function isEmpty(value) {
+    if (Array.isArray(value)) {
+      return value.length === 0;
+    } else {
+      return value === '' || value == null;
     }
-
-    function isEmpty(value) {
-      if (Array.isArray(value)) {
-        return value.length === 0;
-      } else {
-        return value === '' || value == null;
-      }
-    }
-    // -------------------
-    const GET_Shipping_Orders = gql`
+  }
+  // -------------------
+  const GET_Shipping_Orders = gql`
     query {
         fetchShipEngineOrders {
                 totalCount
@@ -224,326 +209,140 @@ const index = () => {
         }
     }
     `;
-    const { data, loading, error, refetch } = useQuery(GET_Shipping_Orders, {
-      fetchPolicy: 'no-cache'
-    });
-    const [formErrors, setFormErrors] = useState([]);
-    const [saveSuccess, setSaveSuccess] = useState(false);
-    const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
+  const { data, loading, error, refetch } = useQuery(GET_Shipping_Orders, {
+    fetchPolicy: 'no-cache'
+  });
+  const [formErrors, setFormErrors] = useState([]);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
 
-    const [selectedCustomers, setselectedCustomers] = useState([]);
-    const handleChangeCheckedCustomers = (newChecked, customerId) => {
-      if (newChecked) {
-        setselectedCustomers([...selectedCustomers, customerId]);
-      } else {
-        const index = selectedCustomers.indexOf(customerId);
-        setselectedCustomers([
-          ...selectedCustomers.slice(0, index),
-          ...selectedCustomers.slice(index + 1),
-        ]);
-      }
-    };
-    //upper first letter
-    const capitalize = (s) => {
-      if (typeof s !== 'string') return '';
-      return s.charAt(0).toUpperCase() + s.slice(1);
-    };
-    //each row in data table
-    const formatRows = (rows) => {
-      return rows?.map((row) =>
-        row?.subscription !== null ?
-          [
+  const [selectedCustomers, setselectedCustomers] = useState([]);
+  const handleChangeCheckedCustomers = (newChecked, customerId) => {
+    if (newChecked) {
+      setselectedCustomers([...selectedCustomers, customerId]);
+    } else {
+      const index = selectedCustomers.indexOf(customerId);
+      setselectedCustomers([
+        ...selectedCustomers.slice(0, index),
+        ...selectedCustomers.slice(index + 1),
+      ]);
+    }
+  };
+  //upper first letter
+  const capitalize = (s) => {
+    if (typeof s !== 'string') return '';
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+  //each row in data table
+  const formatRows = (rows) => {
+    return rows?.map((row) =>
+      row?.subscription !== null ?
+        [
+          <div className='orderId'>
             <Checkbox
               label={row.id}
               checked={selectedCustomers.indexOf(row.id) != -1}
               onChange={(newChecked) =>
                 handleChangeCheckedCustomers(newChecked, row.id)
               }
-            />,
+            />
             <a
               href=''
               key={row.orderId}
-            >{`${row.orderId}`}</a>,
-            row.createdAt,
-            '',
-            '',<div>
-              <Badge>{capitalize(row.status)}</Badge>
-            </div>
-          ] : []);
-    };
-    const [customers, setCustomers] = useState([]);
-    const [filterCustomers, setFilterCustomers] = useState([]);
+            >{`${row.orderId}`}</a>
+          </div>
+          ,
+          // row.createdAt,
+          <div>
+            {row?.customer && <>
+              {row?.customer?.name && <h6><b>{capitalize(row?.customer?.name)}</b></h6>}
+              {row?.customer?.address && <p>{row?.customer?.address}</p>}
+              {row?.dueDate && <p>{dayjs(row?.dueDate).format('MMM DD YYYY')}</p>}
+            </>
+            }
+          </div>
+          ,
+          <div>
+            {row?.orderItems?.map(item => <div>
+              {item?.name && <h6><b>{item?.name}</b></h6>}
+              {item?.unitPrice && <p>${item?.unitPrice} USD {row?.shippingIntervalCount ? '/' : ''} {row?.shippingIntervalCount} {row?.shippingInterval ? capitalize(row?.shippingInterval) : ''}</p>}
+              <p>{item?.weight || ''} {item?.weightUnit} {item?.length ? `${item?.length} X` : ''} {item?.width ? `${item?.width} X` : ''} {item?.height ? `${item?.height}` : ''} {item?.dimensionUnit || ''}</p>
+            </div>)}
+          </div>
+          ,
+          <div>
+            {row?.orderItems?.map(item => !item?.dimensionUnit ? <h5>Rates Unavalible</h5> : '')}
+            {/* <h6>{'USPS First-Class Package/Mail Parcel'}</h6>
+              <p>${'3 - 5 days'}</p>
+              <p>"{'Subscription shipping - $4.90'}"</p> */}
+          </div>,
+          <div>
+            <Badge>{capitalize(row.status)}</Badge>
+          </div>,
+          <div className='vieworder'>
+            <Button><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M7.08397 19.7847C8.42274 19.7847 9.50803 18.6994 9.50803 17.3606C9.50803 16.0218 8.42274 14.9366 7.08397 14.9366C5.7452 14.9366 4.65991 16.0218 4.65991 17.3606C4.65991 18.6994 5.7452 19.7847 7.08397 19.7847Z" fill="white"/>
+<path d="M14.8503 14.913C13.505 14.7806 12.3072 15.7639 12.1748 17.1091C12.0424 18.4544 13.0256 19.6523 14.3709 19.7847C14.5303 19.8004 14.6909 19.8004 14.8503 19.7847C16.1956 19.6523 17.1788 18.4544 17.0465 17.1091C16.9321 15.9469 16.0125 15.0274 14.8503 14.913Z" fill="white"/>
+<path d="M19.8397 5.68747C19.7192 5.50715 19.5152 5.40069 19.2984 5.40506H16.6154V5.35799C16.6156 2.51145 14.3082 0.203721 11.4617 0.203537C8.61518 0.203353 6.30746 2.51076 6.30727 5.3573C6.30727 5.35753 6.30727 5.35776 6.30727 5.35799V5.40506H4.30683L3.62433 2.29849C3.54853 1.98247 3.26681 1.75903 2.94183 1.75719H0V3.16927H2.377L4.56571 13.2186C4.62349 13.549 4.91285 13.7884 5.24822 13.7834H17.5568C17.8818 13.7815 18.1635 13.5581 18.2393 13.2421L19.9809 6.27584C20.0319 6.06839 19.9793 5.84909 19.8397 5.68747ZM11.4614 9.09999C9.39472 9.09999 7.71935 7.42462 7.71935 5.35799C7.71935 3.29135 9.39472 1.61598 11.4614 1.61598C13.528 1.61598 15.2034 3.29135 15.2034 5.35799C15.1905 7.41929 13.5227 9.08712 11.4614 9.09999Z" fill="white"/>
+<path d="M10.8965 5.42859L9.60208 4.11065L8.59009 5.0991L10.3787 6.91127C10.5091 7.04429 10.6867 7.12041 10.8729 7.12308C11.0568 7.13209 11.2359 7.06383 11.3672 6.9348L14.3325 4.13419L13.3676 3.09866L10.8965 5.42859Z" fill="white"/>
+</svg> View Order</Button>
+          </div>
+        ] : []);
+  };
+  const [customers, setCustomers] = useState([]);
+  const [filterCustomers, setFilterCustomers] = useState([]);
 
-    const filterCustomersValue = () => {
-      const rowsData = customers.filter((item) => {
-        return (
-          item
-        );
-      });
+  const filterCustomersValue = () => {
+    const rowsData = customers.filter((item) => {
+      return (
+        item
+      );
+    });
 
-      setFilterCustomers(rowsData);
-    };
-    useEffect(() => {
-      if (customers) {
-        filterCustomersValue();
-      }
-      // console.log('searchvalue: ', queryValue);
-    }, [queryValue, taggedWith, customers]);
-
-    // useEffect(() => {
-    //   filterCustomersValue();
-    // }, [selectedCustomers]);
-
-    useEffect(() => {
-      if (data && data.fetchShipEngineOrders) {
-        let rowsData = formatRows(data.fetchShipEngineOrders.shipEngineOrders);
-        setCustomers(data.fetchShipEngineOrders.shipEngineOrders);
-        // console.log('data: ', data);
-      }
-    }, [data]);
-
-    //export data to csv
-    // const headers = [
-    //   { label: 'Number', key: 'id' },
-    //   { label: 'Name', key: 'name' },
-    //   { label: 'Date Created', key: 'createdAt' },
-    //   { label: 'Status', key: 'status' },
-    //   { label: 'Subscription', key: 'subscription' },
-    //   { label: 'additionalContacts', key: 'additionalContacts' },
-    // ];
-    const headers = [
-      { label: 'Number', key: 'id' },
-      { label: 'firstName', key: 'firstName' },
-      { label: 'lastName', key: 'lastName' },
-      { label: 'Date Created', key: 'createdAt' },
-      { label: 'Status', key: 'status' },
-      { label: 'Subscription', key: 'subscription' },
-      { label: 'additionalContacts.email', key: 'additionalContacts.email' },
-      {
-        label: 'additionalContacts.firstName',
-        key: 'additionalContacts.firstName',
-      },
-      {
-        label: 'additionalContacts.lastName',
-        key: 'additionalContacts.lastName',
-      },
-      {
-        label: 'additionalContacts.companyName',
-        key: 'additionalContacts.companyName',
-      },
-      { label: 'additionalContacts.phone', key: 'additionalContacts.phone' },
-
-      { label: 'billingAddress.firstName', key: 'billingAddress.firstName' },
-      { label: 'billingAddress.lastName', key: 'billingAddress.lastName' },
-      { label: 'billingAddress.email', key: 'billingAddress.email' },
-      { label: 'billingAddress.company', key: 'billingAddress.company' },
-      { label: 'billingAddress.phone', key: 'billingAddress.phone' },
-      { label: 'billingAddress.language', key: 'billingAddress.language' },
-      { label: 'billingAddress.city', key: 'billingAddress.city' },
-    ];
-    const fields = [
-      'id',
-      'firstName',
-      'lastName',
-      'email',
-      'communication',
-      'phone',
-      'language',
-      'autoCollection',
-      'status',
-      'subscription',
-
-      'additionalContacts.id',
-      'additionalContacts.email',
-      'additionalContacts.firstName',
-      'additionalContacts.lastName',
-      'additionalContacts.companyName',
-      'additionalContacts.phone',
-
-      'billingAddress.firstName',
-      'billingAddress.lastName',
-      'billingAddress.email',
-      'billingAddress.company',
-      'billingAddress.phone',
-      'billingAddress.address1',
-      'billingAddress.address2',
-      'billingAddress.city',
-      'billingAddress.language',
-      'billingAddress.zipCode',
-    ];
-    const transforms = [
-      unwind({ paths: ['additionalContacts', 'billingAddress'] }),
-    ];
-    const json2csvParser = new Parser({ fields, transforms });
-    let csv = json2csvParser.parse(dataSelected);
-
-    //
-    // const exportCSV = () => {
-    const dataSelected = [...filterCustomers].filter((item) =>
-      selectedCustomers.find((select) => select === item.id)
-    );
-    // };
-
-    //import customer by csv:
-    const [active, setActive] = useState(false);
-    const [checked, setChecked] = useState(false);
-
-    const toggleActive = useCallback(() => setActive((active) => !active), []);
-
-    const handleCheckbox = useCallback((value) => setChecked(value), []);
-
-    //upload file
-    const [file, setFile] = useState();
-
-    const handleDropZoneDrop = useCallback(
-      (_dropFiles, acceptedFiles, _rejectedFiles) =>
-        setFile((file) => acceptedFiles[0]),
-      []
-    );
-
-    // const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
-
-    const fileUpload = !file && <DropZone.FileUpload />;
-    const uploadedFile = file && (
-      <Stack>
-        <Thumbnail size="small" alt={file.name} source={NoteMinor} />
-        <div>
-          {file.name} <Caption>{file.size} bytes</Caption>
-        </div>
-      </Stack>
-    );
-    //config
-
-    const csvData = [];
-
-    const parsedata =
-      file &&
-      Papa.parse(file, {
-        header: false,
-        step: function (result) {
-          csvData.push(result.data);
-        },
-        complete: function (results, file) {
-          // console.log('csvData: ', csvData);
-        },
-      });
-    const handleImportCustomer = () => {
-      const rcs = [];
-      const tempData = csvData.slice(1);
-      tempData?.map((item) => {
-        const index = rcs.findIndex((customer) => customer.email == item[3]);
-
-        if (index !== -1) {
-          rcs[index].additionalContacts.push({
-            // id: item[10],
-            email: item[11],
-            firstName: item[12],
-            lastName: item[13],
-            companyName: item[14],
-            phone: item[15],
-          });
-        } else {
-          rcs.push({
-            // id: item[0],
-            firstName: item[1],
-            lastName: item[2],
-            email: item[3],
-            communication: item[4],
-            phone: item[5],
-            language: item[6],
-            autoCollection: Boolean(item[7]),
-            status: item[8],
-            subscription: item[9],
-            additionalContacts:
-              item[11] === ''
-                ? []
-                : [
-                  {
-                    email: item[11],
-                    firstName: item[12],
-                    lastName: item[13],
-                    companyName: item[14],
-                    phone: item[15],
-                  },
-                ],
-            billingAddress: {
-              firstName: item[16],
-              lastName: item[17],
-              email: item[18],
-              company: item[19],
-              phone: item[20],
-              address1: item[21],
-              address2: item[22],
-              city: item[23],
-              language: item[24],
-              zipCode: item[25],
-            },
-          });
-        }
-      });
-
-      createCustomer({
-        variables: {
-          input: { params: rcs },
-        },
-      }).then((resp) => {
-        // const errors = resp.errors;
-        const data = resp.data;
-        const errors = data.errors;
-
-        if (errors) {
-          setFormErrors(errors);
-        } else {
-          setSaveSuccess(true);
-          refetch();
-        }
-      });
-      setFile();
-      // refetch();
-    };
-    const CREATE_CUSTOMER = gql`
-      mutation($input: AddCustomersInput!) {
-        addCustomers(input: $input) {
-          result
-        }
-      }
-    `;
-    const [createCustomer] = useMutation(CREATE_CUSTOMER);
-
-    const isToday = (someDate) => {
-      const today = new Date()
-      return someDate.getDate() == today.getDate() &&
-        someDate.getMonth() == today.getMonth() &&
-        someDate.getFullYear() == today.getFullYear()
+    setFilterCustomers(rowsData);
+  };
+  useEffect(() => {
+    if (customers) {
+      filterCustomersValue();
     }
+    // console.log('searchvalue: ', queryValue);
+  }, [queryValue, taggedWith, customers]);
 
-    let activeArr = [],
-      newArr = [],
-      pausedArr = [],
-      cancelledArr = [];
-    if (selectedTab == 1 && filterCustomers.length !== 0) {
-      filterCustomers?.map(res => {
-        if (res.createdAt !== null && (new Date(Date.parse(res.createdAt)).toDateString()) === new Date(new Date().getTime()).toDateString()) {
-          newArr.push(res);
-        }
-      });
-    } else if (selectedTab == 2 && filterCustomers.length !== 0) {
-      filterCustomers?.map(res => {
-        res.status == 'PAUSED' && pausedArr.push(res);
-      });
-    } else if (selectedTab == 3 && filterCustomers.length !== 0) {
-      filterCustomers?.map(res => {
-        res.status == 'ACTIVE' && activeArr.push(res);
-      });
-    } else if (selectedTab == 4 && filterCustomers.length !== 0) {
-      filterCustomers?.map(res => {
-        res.status == 'CANCELLED' && cancelledArr.push(res);
-      });
+
+  useEffect(() => {
+    if (data && data.fetchShipEngineOrders) {
+      let rowsData = formatRows(data.fetchShipEngineOrders.shipEngineOrders);
+      setCustomers(data.fetchShipEngineOrders.shipEngineOrders);
     }
+  }, [data]);
 
-    return (
-        <>
-        <Frame>
+  let activeArr = [],
+    newArr = [],
+    pausedArr = [],
+    cancelledArr = [];
+  if (selectedTab == 1 && filterCustomers.length !== 0) {
+    filterCustomers?.map(res => {
+      if (res.dueDate !== null && (new Date(Date.parse(res.dueDate)).toDateString()) === new Date(new Date().getTime()).toDateString()) {
+        newArr.push(res);
+      }
+    });
+  } else if (selectedTab == 2 && filterCustomers.length !== 0) {
+    filterCustomers?.map(res => {
+      res.status == 'PAUSED' && pausedArr.push(res);
+    });
+  } else if (selectedTab == 3 && filterCustomers.length !== 0) {
+    filterCustomers?.map(res => {
+      res.status == 'ACTIVE' && activeArr.push(res);
+    });
+  } else if (selectedTab == 4 && filterCustomers.length !== 0) {
+    filterCustomers?.map(res => {
+      res.status == 'CANCELLED' && cancelledArr.push(res);
+    });
+  }
+
+  return (
+    <>
+      <Frame>
         {saveSuccess && (
           <Toast
             content="Customer data has been saved successfully"
@@ -564,6 +363,13 @@ const index = () => {
           </>
         )}
         <Page>
+          <div>
+            <div className="back-button pointer" onClick={handleBack}>
+              <Icon
+                source={MobileBackArrowMajor}
+                color="base" />
+            </div>
+          </div>
           <Card>
             <div className="tabs">
               <Tabs
@@ -608,17 +414,17 @@ const index = () => {
                   </Button>
                 </div>
               </div>
-              <div className={"table customer-subscription-tbl" + " " + selectedTab}>
+              <div className={`table customer-subscription-tbl ${selectedTab} shippingSuiteTable`}>
                 <DataTable
+                  className={`suitTable`}
                   columnContentTypes={[
                     'text',
-                    'numeric',
-                    'numeric',
-                    'numeric',
+                    'text',
+                    'text',
+                    'text',
                     'text',
                   ]}
                   headings={[
-                    '',
                     'Order',
                     'Details',
                     'Item Details',
@@ -640,8 +446,8 @@ const index = () => {
           </Card>
         </Page>
       </Frame>
-        </>
-    )
+    </>
+  )
 }
 
 export default index

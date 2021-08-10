@@ -1,0 +1,26 @@
+.shippingSuiteTable .TableRow th{
+    vertical-align: middle !important;
+}
+
+.shippingSuiteTable table tbody tr td {
+    vertical-align: middle !important; 
+}
+
+.shippingSuiteTable table tbody tr th {
+    vertical-align: middle !important; 
+}
+.shippingSuiteTable table tbody tr td .vieworder button {
+    border-radius: 4px;
+    background: #007EFF;
+    color: white;
+}
+.shippingSuiteTable table tbody tr th .orderId {
+    vertical-align: middle !important;
+    display: flex;
+    align-items: center;
+}
+
+.shippingSuiteTable table tbody tr th .orderId a {
+    color: #4D506A;
+    text-decoration: none;
+}
