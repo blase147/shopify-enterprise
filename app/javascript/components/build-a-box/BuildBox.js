@@ -255,7 +255,7 @@ const ButtonRemove = (props) => {
 
       return (
           <Frame>
-            <Page>
+            
               {saveSuccess && (
                 <Toast
                   content="Build a box campaign groups is deleted"
@@ -333,6 +333,7 @@ const ButtonRemove = (props) => {
                 </Layout.Section>
                 <Layout.Section>
                   <Card>
+                  <Card.Section>
                     <div className="search">
                       <label className="head-search">
                         {filterCampaigns.length} Campaigns
@@ -374,10 +375,11 @@ const ButtonRemove = (props) => {
                         color="teal"
                       />
                     )}
+                     </Card.Section>
                   </Card>
                 </Layout.Section>
               </Layout>
-            </Page>
+          
           </Frame>
       );
 }

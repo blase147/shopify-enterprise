@@ -91,7 +91,7 @@ const Integrations = ({handleBack,handleForm}) => {
   return (
       <>
 
-      <Page fullWidth title={process.env.APP_TYPE=="public"?"Integrate with ChargeZen":"Integrations"}>
+      <div fullWidth title={process.env.APP_TYPE=="public"?"Integrate with ChargeZen":"Integrations"}>
         <Layout>
 
           <Layout.Section>
@@ -201,7 +201,7 @@ const Integrations = ({handleBack,handleForm}) => {
           }
           </Layout.Section>
         </Layout>
-      </Page>
+      </div>
     </>
   );
 };

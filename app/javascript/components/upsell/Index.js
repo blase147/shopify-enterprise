@@ -215,7 +215,6 @@ const Upsell = ({handleBack,handleForm}) => {
 
   return (
     <Frame>
-        <Page>
           {saveSuccess && (
             <Toast
               content="Upsell campaign groups is deleted"
@@ -292,6 +291,7 @@ const Upsell = ({handleBack,handleForm}) => {
             </Layout.Section>
             <Layout.Section>
               <Card>
+              <Card.Section>
                 <div className="search">
                   <label className="head-search">
                     {filterCampaigns.length} Campaigns
@@ -333,10 +333,11 @@ const Upsell = ({handleBack,handleForm}) => {
                     color="teal"
                   />
                 )}
+                </Card.Section>
               </Card>
             </Layout.Section>
           </Layout>
-        </Page>
+       
       </Frame>
   );
 };

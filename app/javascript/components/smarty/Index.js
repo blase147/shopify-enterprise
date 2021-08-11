@@ -73,7 +73,6 @@ const Smarty = ({handleBack}) => {
 
   return (
     <Frame>
-        <Page>
         <Layout>
                 <Layout.Section>
                   <div className="back-button pointer" onClick={handleBack}>
@@ -151,7 +150,6 @@ const Smarty = ({handleBack}) => {
             }
             </div>
           </Tabs>
-        </Page>
     </Frame>
   )
 }

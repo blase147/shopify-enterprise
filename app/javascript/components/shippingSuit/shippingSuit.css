@@ -1,4 +1,19 @@
-.shippingSuiteTable .TableRow th{
+.filter {
+  justify-content: space-between;
+}
+
+.filter .btn-sort img  {
+    margin-right: 7px;
+}
+
+.filter .btn-sort span  {
+    color: #000;
+}
+
+.module-integrations .filter .Polaris-Button {
+  color: #000;
+}
+.shippingSuiteTable .TableRow th {
     vertical-align: middle !important;
 }
 
@@ -6,14 +21,35 @@
     vertical-align: middle !important; 
 }
 
+.shippingSuiteTable table tbody tr td p {
+    font-size: 12px;
+    color: #a9a9a9;
+}
+
+.shippingSuiteTable table tbody tr td p:last-child {
+    color: #007EFF;
+}
+.shippingSuiteTable table thead tr th {
+    font-weight: 600; 
+}
+
 .shippingSuiteTable table tbody tr th {
     vertical-align: middle !important; 
 }
+
 .shippingSuiteTable table tbody tr td .vieworder button {
     border-radius: 4px;
     background: #007EFF;
     color: white;
 }
+.shippingSuiteTable table tbody tr td .Polaris-Badge {
+  background-color: #B6EDFF;
+}
+
+.shippingSuiteTable table tbody tr td .vieworder .Polaris-Button__Text svg {
+    margin-right: 8px;
+}
+
 .shippingSuiteTable table tbody tr th .orderId {
     vertical-align: middle !important;
     display: flex;
