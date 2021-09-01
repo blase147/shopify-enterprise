@@ -234,6 +234,19 @@ const index = ({ handleBack }) => {
     if (typeof s !== 'string') return '';
     return s.charAt(0).toUpperCase() + s.slice(1);
   };
+
+  const syncOrders = () => {
+    const data_set = document.getElementById('shopify-app-init').dataset;
+    const shop_domain = data_set.shopOrigin;
+
+    $.ajax({
+      url: "/shipping_suites/sync_orders",
+      type: 'post',
+      data: {shop_domain: shop_domain},
+      dataType: 'json'
+    });
+  }
+
   //each row in data table
   const formatRows = (rows) => {
     return rows?.map((row) =>
@@ -366,14 +379,24 @@ const index = ({ handleBack }) => {
             <br />
           </>
         )}
-
-          <div>
+          <div className="sync-order-btn">
+            <Button
+              primary
+              onClick={() =>
+                syncOrders()
+              }
+            >
+              Sync Orders
+            </Button>
+          </div>
+          <div className="shipping-header">
             <div className="back-button pointer" onClick={handleBack}>
               <Icon
                 source={MobileBackArrowMajor}
                 color="base" />
             </div>
           </div>
+
           <Card>
             <div className="tabs">
               <Tabs
