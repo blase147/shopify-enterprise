@@ -251,7 +251,7 @@ module SubscriptionPlan
       # when 'Years'
       #   'YEAR'
       # end
-
+      anchor = plan_anchor(selling_plan)
       info = {
         name: selling_plan.name,
         description: selling_plan.description || '',
@@ -260,6 +260,7 @@ module SubscriptionPlan
         ],
         billingPolicy: {
           recurring: {
+            anchors: anchor,
             interval: selling_plan.interval_type,
             intervalCount: selling_plan.interval_count,
             minCycles: selling_plan.min_fullfilment,
@@ -268,6 +269,7 @@ module SubscriptionPlan
         },
         deliveryPolicy: {
           recurring: {
+            anchors: anchor,
             interval: selling_plan.delivery_interval_type,
             intervalCount: selling_plan.delivery_interval_count
           }
@@ -283,6 +285,25 @@ module SubscriptionPlan
       }
 
       id.nil? ? info : info.merge(id: id)
+    end
+  end
+
+  def plan_anchor(selling_plan)
+    if selling_plan.billing_dates.present? && selling_plan.interval_type != "DAY"
+      shipping_date = Date.parse(selling_plan.billing_dates.first)
+      {
+        type: "#{selling_plan.interval_type}DAY",
+        day: get_day_for_interval(shipping_date, selling_plan.interval_type),
+        month: (date.month if selling_plan.interval_type == "YEAR")
+      }
+    end
+  end
+
+  def get_day_for_interval(date, interval_type)
+    if interval_type == "WEEK"
+      date.cwday
+    else
+      date.mday
     end
   end
 
