@@ -271,7 +271,9 @@ module SubscriptionPlan
           recurring: {
             anchors: anchor,
             interval: selling_plan.delivery_interval_type,
-            intervalCount: selling_plan.delivery_interval_count
+            intervalCount: selling_plan.delivery_interval_count,
+            preAnchorBehavior: selling_plan.first_delivery,
+            cutoff: selling_plan.shipping_cut_off
           }
         },
         pricingPolicies: [

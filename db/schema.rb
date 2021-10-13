@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_09_101847) do
+ActiveRecord::Schema.define(version: 2021_10_13_050418) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -225,6 +225,8 @@ ActiveRecord::Schema.define(version: 2021_08_09_101847) do
     t.integer "delivery_interval_count"
     t.text "billing_dates", default: [], array: true
     t.text "shipping_dates", default: [], array: true
+    t.integer "shipping_cut_off"
+    t.string "first_delivery"
   end
 
   create_table "settings", force: :cascade do |t|

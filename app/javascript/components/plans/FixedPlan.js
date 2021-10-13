@@ -16,7 +16,7 @@ import {
   Spinner,
   ButtonGroup,
 } from '@shopify/polaris';
-import DeleteSVG from '../../../assets/images/delete.svg'
+import DeleteSVG from '../../../assets/images/delete.svg';
 import React, { useState, useCallback, useEffect } from 'react';
 import { Formik } from 'formik';
 import _, { isEmpty } from 'lodash';
@@ -26,7 +26,7 @@ import AppLayout from '../layout/Layout';
 import { gql, useMutation, useLazyQuery } from '@apollo/client';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import DatePickr from '../common/DatePicker/DatePickr';
-import './fixedplan.css'
+import './fixedplan.css';
 import { getDate } from 'javascript-time-ago/gradation';
 import dayjs from 'dayjs';
 import SearchProduct from '../upsell/SearchProduct';
@@ -35,7 +35,7 @@ import SearchVariants from './SearchVariants';
 
 const FixedPlan = () => {
   const GET_SELLING_PLAN = gql`
-    query($id: ID!) {
+    query ($id: ID!) {
       fetchPlanGroup(id: $id) {
         id
         publicName
@@ -73,6 +73,8 @@ const FixedPlan = () => {
           trialIntervalCount
           billingDates
           shippingDates
+          shippingCutOff
+          firstDelivery
           _destroy
         }
       }
@@ -95,6 +97,19 @@ const FixedPlan = () => {
 
   // consts ###
   const options = [...Array(99).keys()].map((foo) => (foo + 1).toString());
+
+  const shippingCutOffOptions = [];
+  [...Array(31).keys()].map((foo) =>
+    shippingCutOffOptions.push({
+      label: `${foo + 1} ${foo == 0 ? 'day' : 'days'}`,
+      value: foo + 1,
+    })
+  );
+
+  const firstDeliveryOptions = [
+    { label: 'ASAP', value: 'ASAP' },
+    { label: 'NEXT', value: 'NEXT' },
+  ];
 
   const optionsWithNone = [...options];
   optionsWithNone.unshift({ value: '', label: 'None' });
@@ -128,8 +143,10 @@ const FixedPlan = () => {
     trialIntervalType: 'DAY',
     trialAdjustmentType: 'FIXED_AMOUNT',
     trialAdjustmentValue: '0',
-    billingDates:[],
-    shippingDates:[],
+    billingDates: [],
+    shippingDates: [],
+    firstDelivery: 'ASAP',
+    shippingCutOff: 1,
     _destroy: false,
   };
 
@@ -149,7 +166,6 @@ const FixedPlan = () => {
   const [allVarients, setAllVarients] = useState([]);
   const [updated, setUpdated] = useState(false);
 
-
   useEffect(() => {
     if (data) {
       setPlanData(data.fetchPlanGroup);
@@ -160,12 +176,10 @@ const FixedPlan = () => {
       //   products.push(plan.productIds || []);
       //   variants.push(plan.variantIds || []);
       // })
-      setAllProducts(data.fetchPlanGroup.productIds || [])
-      setAllVarients(data.fetchPlanGroup.variantIds || [])
+      setAllProducts(data.fetchPlanGroup.productIds || []);
+      setAllVarients(data.fetchPlanGroup.variantIds || []);
     }
   }, [data]);
-
-
 
   const validationSchema = yup.object().shape({
     internalName: yup.string().required().label('Internal name'),
@@ -180,7 +194,7 @@ const FixedPlan = () => {
   });
 
   const UPDATE_SELLING_PLAN = gql`
-    mutation($input: UpdateSellingPlanGroupInput!) {
+    mutation ($input: UpdateSellingPlanGroupInput!) {
       updatePlan(input: $input) {
         plan {
           id
@@ -192,7 +206,7 @@ const FixedPlan = () => {
   const [updateSellingPlan] = useMutation(UPDATE_SELLING_PLAN);
 
   const CREATE_SELLING_PLAN = gql`
-    mutation($input: AddSellingPlanGroupInput!) {
+    mutation ($input: AddSellingPlanGroupInput!) {
       addPlan(input: $input) {
         plan {
           id
@@ -210,59 +224,67 @@ const FixedPlan = () => {
   //   setSelectedBillingDate(date)
   // },[selectedBillingDate])
 
-  const [selectedDate,setSelectedDate]=useState([{shippingDate:"",billingDate:""}]);
-  const setDate=useCallback((date)=>{
-    setSelectedDate(date)
-  },[setSelectedDate])
+  const [selectedDate, setSelectedDate] = useState([
+    { shippingDate: '', billingDate: '' },
+  ]);
+  const setDate = useCallback(
+    (date) => {
+      setSelectedDate(date);
+    },
+    [setSelectedDate]
+  );
 
-  const clearDate =useCallback((type,index)=>{
-    let date=selectedDate[index][type]="";
-    setSelectedDate(date);
-  },[setSelectedDate])
+  const clearDate = useCallback(
+    (type, index) => {
+      let date = (selectedDate[index][type] = '');
+      setSelectedDate(date);
+    },
+    [setSelectedDate]
+  );
 
-  const removeSelectedDate=(type,index,values)=>{
-    if(values[`${type}s`].length<1){
-      let date=selectedDate;
-      date[index][type]="";
+  const removeSelectedDate = (type, index, values) => {
+    if (values[`${type}s`].length < 1) {
+      let date = selectedDate;
+      date[index][type] = '';
       setSelectedDate(date);
     }
-  }
+  };
   //Biiling Dates
-  const getDate=(dates)=>{
-    if(dates){
-      dates.push(dayjs(selectedBillingDate).format('YYYY-MM-DD'))
-    }else{
-      dates=[dayjs(selectedBillingDate).format('YYYY-MM-DD')]
+  const getDate = (dates) => {
+    if (dates) {
+      dates.push(dayjs(selectedBillingDate).format('YYYY-MM-DD'));
+    } else {
+      dates = [dayjs(selectedBillingDate).format('YYYY-MM-DD')];
     }
     return dates;
-  }
+  };
   //Shipping Dates
-  const getShippingDate=(dates)=>{
-    if(dates){
-      dates.push(dayjs(selectedShippingDate).format('YYYY-MM-DD'))
-    }else{
-      dates=[dayjs(selectedShippingDate).format('YYYY-MM-DD')]
+  const getShippingDate = (dates) => {
+    if (dates) {
+      dates.push(dayjs(selectedShippingDate).format('YYYY-MM-DD'));
+    } else {
+      dates = [dayjs(selectedShippingDate).format('YYYY-MM-DD')];
     }
     return dates;
-  }
-const removeDate=(dates,index)=>{
-if(dates){
-  dates.splice(index,1);
-  setUpdated(true);
-}
-return [...dates];
-}
-const handleAddSellingPlan = useCallback((values) => {
-  let dates=selectedDate;
-  dates.push({shippingDate:"",billingDate:""});
-  setSelectedDate(dates);
-  //
-  const plans = [...(values.sellingPlans || [])];
-  initialValues.billingDates=[];
-  initialValues.shippingDates=[];
-  plans.push({ ...initialValues });
-  return plans;
-});
+  };
+  const removeDate = (dates, index) => {
+    if (dates) {
+      dates.splice(index, 1);
+      setUpdated(true);
+    }
+    return [...dates];
+  };
+  const handleAddSellingPlan = useCallback((values) => {
+    let dates = selectedDate;
+    dates.push({ shippingDate: '', billingDate: '' });
+    setSelectedDate(dates);
+    //
+    const plans = [...(values.sellingPlans || [])];
+    initialValues.billingDates = [];
+    initialValues.shippingDates = [];
+    plans.push({ ...initialValues });
+    return plans;
+  });
 
   return (
     <AppLayout typePage="sellingPlanForm" tabIndex={1}>
@@ -295,19 +317,27 @@ const handleAddSellingPlan = useCallback((values) => {
                       publicName: '',
                       active: true,
                       productIds: [],
-                      variantIds:[],
+                      variantIds: [],
                       sellingPlans: [{ ...initialValues }],
                     }
               }
               onSubmit={(values, { setSubmitting, setDirty }) => {
                 values.productIds = allProducts || [];
                 values.variantIds = allVarients || [];
-                values.sellingPlans.forEach((plan,index)=>{
-                  values.sellingPlans[index].deliveryIntervalCount = values.sellingPlans[index].deliveryIntervalCount || initialValues.deliveryIntervalCount ;
-                  values.sellingPlans[index].deliveryIntervalType = values.sellingPlans[index].deliveryIntervalType || initialValues.deliveryIntervalType;
+
+                values.sellingPlans.forEach((plan, index) => {
+                  values.sellingPlans[index].deliveryIntervalCount =
+                    values.sellingPlans[index].deliveryIntervalCount ||
+                    initialValues.deliveryIntervalCount;
+                  values.sellingPlans[index].deliveryIntervalType =
+                    values.sellingPlans[index].deliveryIntervalType ||
+                    initialValues.deliveryIntervalType;
+                  if(!plan.firstDelivery && plan.shippingDates && plan.shippingDates.length > 0){
+                    values.sellingPlans[index].firstDelivery = initialValues.firstDelivery;
+                  }
                   // values.sellingPlans[index].productIds = allProducts[index] || [];
                   // values.sellingPlans[index].variantIds = allVarients[index] || [];
-                })
+                });
                 if (id) {
                   updateSellingPlan({
                     variables: {
@@ -372,7 +402,7 @@ const handleAddSellingPlan = useCallback((values) => {
                 resetForm,
                 dirty,
                 formik,
-                setTouched
+                setTouched,
                 /* and other goodies */
               }) => (
                 <Form onSubmit={handleSubmit}>
@@ -389,9 +419,9 @@ const handleAddSellingPlan = useCallback((values) => {
                         disabled: false,
                       }}
                       discardAction={{
-                        onAction: ()=>{
+                        onAction: () => {
                           resetForm();
-                          setUpdated(flag => flag = false)
+                          setUpdated((flag) => (flag = false));
                         },
                       }}
                     />
@@ -499,64 +529,60 @@ const handleAddSellingPlan = useCallback((values) => {
                           }
                         />
                       </FormLayout.Group>
-                      <br/>
-                          <FormLayout.Group>
-                              <p className="card-offer">PRODUCT</p>
-                              <div></div>
-                            </FormLayout.Group>
+                      <br />
+                      <FormLayout.Group>
+                        <p className="card-offer">PRODUCT</p>
+                        <div></div>
+                      </FormLayout.Group>
 
-                            <FormLayout.Group>
-                              <div className="product-search">
-                                <SearchProduct
-                                  value={values.productIds || [[]]}
-                                  setFieldValue={setFieldValue}
-                                  fieldName={`productIds`}
-                                  allProducts={allProducts || [[]]}
-                                  setAllProducts={setAllProducts}
-                                  error={
-                                    touched.productIds
-                                      ?.productId &&
-                                    errors.productIds
-                                      ?.productId
-                                  }
-                                />
-                              </div>
-                            </FormLayout.Group>
-                            <Preview
-                              isUpdate={!isEmpty(id)}
-                              allProducts={allProducts || [[]]}
-                              setAllProducts={setAllProducts}
-                              setUpdated={setUpdated}
-                            />
+                      <FormLayout.Group>
+                        <div className="product-search">
+                          <SearchProduct
+                            value={values.productIds || [[]]}
+                            setFieldValue={setFieldValue}
+                            fieldName={`productIds`}
+                            allProducts={allProducts || [[]]}
+                            setAllProducts={setAllProducts}
+                            error={
+                              touched.productIds?.productId &&
+                              errors.productIds?.productId
+                            }
+                          />
+                        </div>
+                      </FormLayout.Group>
+                      <Preview
+                        isUpdate={!isEmpty(id)}
+                        allProducts={allProducts || [[]]}
+                        setAllProducts={setAllProducts}
+                        setUpdated={setUpdated}
+                      />
 
-                            <FormLayout.Group>
-                              <p className="card-offer">Variants</p>
-                              <div></div>
-                            </FormLayout.Group>
+                      <FormLayout.Group>
+                        <p className="card-offer">Variants</p>
+                        <div></div>
+                      </FormLayout.Group>
 
-                            <FormLayout.Group>
-                              <div className="product-search">
-                                <SearchVariants
-                                  value={values.variantIds || [[]]}
-                                  setFieldValue={setFieldValue}
-                                  fieldName={`variantIds`}
-                                  allVariants={allVarients || [[]]}
-                                  setAllVarients={setAllVarients}
-                                  error={
-                                    touched.variantIds
-                                      ?.variantId &&
-                                    errors.variantIds
-                                      ?.variantId
-                                  }
-                                />
-                              </div>
-                            </FormLayout.Group>
-                            <Preview
-                              isUpdate={!isEmpty(id)}
-                              allProducts={allVarients || [[]]}
-                              setAllProducts={setAllVarients}
-                              setUpdated={setUpdated}
-                            />
+                      <FormLayout.Group>
+                        <div className="product-search">
+                          <SearchVariants
+                            value={values.variantIds || [[]]}
+                            setFieldValue={setFieldValue}
+                            fieldName={`variantIds`}
+                            allVariants={allVarients || [[]]}
+                            setAllVarients={setAllVarients}
+                            error={
+                              touched.variantIds?.variantId &&
+                              errors.variantIds?.variantId
+                            }
+                          />
+                        </div>
+                      </FormLayout.Group>
+                      <Preview
+                        isUpdate={!isEmpty(id)}
+                        allProducts={allVarients || [[]]}
+                        setAllProducts={setAllVarients}
+                        setUpdated={setUpdated}
+                      />
                     </FormLayout>
                   </Card>
 
@@ -569,20 +595,23 @@ const handleAddSellingPlan = useCallback((values) => {
                         title="Selling Plan"
                         sectioned
                         actions={
-                          ((!id && index != 0) || (id && values.sellingPlans.filter(p=>!p._destroy).length>1))
+                          (!id && index != 0) ||
+                          (id &&
+                            values.sellingPlans.filter((p) => !p._destroy)
+                              .length > 1)
                             ? [
-                              {
-                                content: 'Remove',
-                                onAction: () => {
-                                  setFieldValue(
-                                    `sellingPlans[${index}]._destroy`,
-                                    true
-                                  );
-                                 let dates=selectedDate.slice(index,1);
-                                 setSelectedDate(dates);
+                                {
+                                  content: 'Remove',
+                                  onAction: () => {
+                                    setFieldValue(
+                                      `sellingPlans[${index}]._destroy`,
+                                      true
+                                    );
+                                    let dates = selectedDate.slice(index, 1);
+                                    setSelectedDate(dates);
+                                  },
                                 },
-                              },
-                            ]
+                              ]
                             : []
                         }
                       >
@@ -765,9 +794,6 @@ const handleAddSellingPlan = useCallback((values) => {
                             />
                           </FormLayout.Group>
 
-
-
-
                           <TextContainer>
                             <br />
                             <Subheading>Delivery Rules</Subheading>
@@ -887,86 +913,231 @@ const handleAddSellingPlan = useCallback((values) => {
                             />
                           </FormLayout.Group>
                           <TextContainer>
-                          <br />
-                            <p><strong style={{fontWeight:'600'}}>MANUAL RULES</strong><i> pro</i> </p>
+                            <br />
+                            <p>
+                              <strong style={{ fontWeight: '600' }}>
+                                MANUAL RULES
+                              </strong>
+                              <i> pro</i>{' '}
+                            </p>
                           </TextContainer>
                           <FormLayout.Group>
-                              <div className="muti-input-wrapper">
+                            <div className="muti-input-wrapper">
+                              <div>
                                 <div className="date-input">
-                                <label> Specific billing date </label>
-                                <DatePickr
-
-                                handleDate={setDate}
-                                type={'billingDate'}
-                                index={index}
-                                date={selectedDate}
-
-                                callback={setFieldValue}
-                                selectedDate={values.sellingPlans[index]?.billingDates[0]}
-                                input={`sellingPlans[${index}].billingDates`}
-                                existingValues={values.sellingPlans[index]?.billingDates}
-                                setUpdated={setUpdated}
-                                 />
+                                  <label> Specific billing date </label>
+                                  <DatePickr
+                                    handleDate={setDate}
+                                    type={'billingDate'}
+                                    index={index}
+                                    date={selectedDate}
+                                    callback={setFieldValue}
+                                    selectedDate={
+                                      values.sellingPlans[index]
+                                        ?.billingDates[0]
+                                    }
+                                    input={`sellingPlans[${index}].billingDates`}
+                                    existingValues={
+                                      values.sellingPlans[index]?.billingDates
+                                    }
+                                    setUpdated={setUpdated}
+                                  />
                                 </div>
                                 <div className="date-list-items">
-                                  {
-                                    values.sellingPlans[index]?.billingDates.map((date,i)=>(
+                                  {values.sellingPlans[index]?.billingDates.map(
+                                    (date, i) => (
                                       <div className="date-input-group">
-                                      <label> Next billing date: </label>
-                                      <div className="date-item-wrapper">
-                                        <p>{dayjs(date,"YYYY-MM-DD").format("MMM DD, YYYY")}</p>
-                                        <img className="pointer" src={DeleteSVG} onClick={()=>{setFieldValue(`sellingPlans[${index}].billingDates`,removeDate(values.sellingPlans[index]?.billingDates,i));removeSelectedDate('billingDate',index,values.sellingPlans[index])}} />
+                                        <label> Next billing date: </label>
+                                        <div className="date-item-wrapper">
+                                          <p>
+                                            {dayjs(date, 'YYYY-MM-DD').format(
+                                              'MMM DD, YYYY'
+                                            )}
+                                          </p>
+                                          <img
+                                            className="pointer"
+                                            src={DeleteSVG}
+                                            onClick={() => {
+                                              setFieldValue(
+                                                `sellingPlans[${index}].billingDates`,
+                                                removeDate(
+                                                  values.sellingPlans[index]
+                                                    ?.billingDates,
+                                                  i
+                                                )
+                                              );
+                                              removeSelectedDate(
+                                                'billingDate',
+                                                index,
+                                                values.sellingPlans[index]
+                                              );
+                                            }}
+                                          />
+                                        </div>
                                       </div>
-                                      </div>
-                                    ))
-                                  }
-
+                                    )
+                                  )}
                                 </div>
-                                {
-                                values.sellingPlans[index]?.billingDates.length > 0  &&
-                                <div className="add-date-btn">
-                                <Button primary onClick={()=>clearDate("billingDate",index)}>+ Add</Button>
-                                </div>
-                                }
-
+                                {values.sellingPlans[index]?.billingDates
+                                  .length > 0 && (
+                                  <div className="add-date-btn">
+                                    <Button
+                                      primary
+                                      onClick={() =>
+                                        clearDate('billingDate', index)
+                                      }
+                                    >
+                                      + Add
+                                    </Button>
+                                  </div>
+                                )}
                               </div>
-                              <div className="muti-input-wrapper">
+
+                              {/* <div>
+                                {console.log('Plan', plan)}
+                                <Select
+                                  value={plan.billingCutOff}
+                                  label="Cutoff days"
+                                  error={
+                                    touched.sellingPlans?.[index]
+                                      ?.billingCutOff &&
+                                    errors.sellingPlans?.[index]?.billingCutOff
+                                  }
+                                  onChange={(e) =>
+                                    setFieldValue(
+                                      `sellingPlans[${index}].billingCutOff`,
+                                      e
+                                    )
+                                  }
+                                  options={billingCutOffOptions}
+                                />
+
+                                <Select
+                                  label="First Billing"
+                                  value={plan.firstBilling}
+                                  error={
+                                    touched.sellingPlans?.[index]
+                                      ?.firstBilling &&
+                                    errors.sellingPlans?.[index]?.firstBilling
+                                  }
+                                  onChange={(e) =>
+                                    setFieldValue(
+                                      `sellingPlans[${index}].firstBilling`,
+                                      e
+                                    )
+                                  }
+                                  options={firstBillingOptions}
+                                />
+                              </div> */}
+                            </div>
+                            <div className="muti-input-wrapper">
+                              <div>
                                 <div className="date-input">
-                                <label> Specific shipping date </label>
-                                <DatePickr
-
-                                handleDate={setDate}
-                                type={'shippingDate'}
-                                date={selectedDate}
-                                index={index}
-
-                                callback={setFieldValue}
-                                selectedDate={values.sellingPlans[index]?.shippingDates[0]}
-                                input={`sellingPlans[${index}].shippingDates`}
-                                existingValues={values.sellingPlans[index]?.shippingDates}
-                                setUpdated={setUpdated}
-                                 />
+                                  <label> Specific shipping date </label>
+                                  <DatePickr
+                                    handleDate={setDate}
+                                    type={'shippingDate'}
+                                    date={selectedDate}
+                                    index={index}
+                                    callback={setFieldValue}
+                                    selectedDate={
+                                      values.sellingPlans[index]
+                                        ?.shippingDates[0]
+                                    }
+                                    input={`sellingPlans[${index}].shippingDates`}
+                                    existingValues={
+                                      values.sellingPlans[index]?.shippingDates
+                                    }
+                                    setUpdated={setUpdated}
+                                  />
                                 </div>
                                 <div className="date-list-items">
-                                  {
-                                    values.sellingPlans[index]?.shippingDates.map((date,i)=>(
-                                      <div className="date-input-group">
+                                  {values.sellingPlans[
+                                    index
+                                  ]?.shippingDates.map((date, i) => (
+                                    <div className="date-input-group">
                                       <label> Next shipping date: </label>
                                       <div className="date-item-wrapper">
-                                        <p>{dayjs(date,"YYYY-MM-DD").format("MMM DD, YYYY")}</p>
-                                        <img className="pointer" src={DeleteSVG} onClick={()=>{setFieldValue(`sellingPlans[${index}].shippingDates`,removeDate(values.sellingPlans[index]?.shippingDates,i)); removeSelectedDate('shippingDate',index,values.sellingPlans[index])}} />
+                                        <p>
+                                          {dayjs(date, 'YYYY-MM-DD').format(
+                                            'MMM DD, YYYY'
+                                          )}
+                                        </p>
+                                        <img
+                                          className="pointer"
+                                          src={DeleteSVG}
+                                          onClick={() => {
+                                            setFieldValue(
+                                              `sellingPlans[${index}].shippingDates`,
+                                              removeDate(
+                                                values.sellingPlans[index]
+                                                  ?.shippingDates,
+                                                i
+                                              )
+                                            );
+                                            removeSelectedDate(
+                                              'shippingDate',
+                                              index,
+                                              values.sellingPlans[index]
+                                            );
+                                          }}
+                                        />
                                       </div>
-                                      </div>
-                                    ))
-                                  }
-                                {
-                                  values.sellingPlans[index]?.shippingDates.length > 0  &&
-                                  <div className="add-date-btn">
-                                  <Button primary onClick={()=>clearDate("shippingDate",index)}>+ Add</Button>
-                                  </div>
-                                }
+                                    </div>
+                                  ))}
+                                  {values.sellingPlans[index]?.shippingDates
+                                    .length > 0 && (
+                                    <div className="add-date-btn">
+                                      <Button
+                                        primary
+                                        onClick={() =>
+                                          clearDate('shippingDate', index)
+                                        }
+                                      >
+                                        + Add
+                                      </Button>
+                                    </div>
+                                  )}
+                                </div>
+                                <div>
+                                  <Select
+                                    value={plan.shippingCutOff}
+                                    label="Cutoff days"
+                                    error={
+                                      touched.sellingPlans?.[index]
+                                        ?.shippingCutOff &&
+                                      errors.sellingPlans?.[index]
+                                        ?.shippingCutOff
+                                    }
+                                    onChange={(e) =>
+                                      setFieldValue(
+                                        `sellingPlans[${index}].shippingCutOff`,
+                                        Number(e)
+                                      )
+                                    }
+                                    options={shippingCutOffOptions}
+                                  />
+
+                                  <Select
+                                    label="First Delivery"
+                                    value={plan.firstDelivery}
+                                    error={
+                                      touched.sellingPlans?.[index]
+                                        ?.firstDelivery &&
+                                      errors.sellingPlans?.[index]
+                                        ?.firstDelivery
+                                    }
+                                    onChange={(e) =>
+                                      setFieldValue(
+                                        `sellingPlans[${index}].firstDelivery`,
+                                        e
+                                      )
+                                    }
+                                    options={firstDeliveryOptions}
+                                  />
                                 </div>
                               </div>
+                            </div>
                           </FormLayout.Group>
                         </FormLayout>
                       </Card>
@@ -977,13 +1148,12 @@ const handleAddSellingPlan = useCallback((values) => {
                   <div className="addSellingPlans">
                     <Button
                       plain
-                      onClick={() =>{
+                      onClick={() => {
                         setFieldValue(
                           'sellingPlans',
                           handleAddSellingPlan(values)
                         );
-                      }
-                      }
+                      }}
                     >
                       Add selling plan
                     </Button>
