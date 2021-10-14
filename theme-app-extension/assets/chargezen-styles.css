@@ -1,0 +1,479 @@
+.chargezen-plan-selector {
+  margin-bottom: 1em;
+  border: 0;
+  border-radius: 5px;
+}
+@media (max-width: 810px) and (min-width: 400px) {
+  .chargezen-plan-selector {
+    display: flex;
+    justify-content: center;
+    grid-gap: 20px;
+  }
+}
+.chargezen-plan-selector > legend {
+  display: none;
+  padding: 0 8px 0 6px;
+  font-weight: 700;
+}
+.chargezen-plan-selector .plan-selector-group {
+  margin-bottom: 1rem;
+  border: 1px solid #4d506a;
+  border-radius: 5px;
+  padding: 16px 15px 11px 21px;
+}
+.chargezen-plan-selector .plan-selector-group label {
+  align-items: center;
+  grid-gap: 10px;
+}
+.chargezen-plan-selector .plan-selector-group:not(.group-available) {
+  display: none;
+}
+.chargezen-plan-selector
+  .plan-selector-group:not(.group-selected)
+  > .plan-selector-plan {
+  display: none;
+}
+.chargezen-plan-selector .plan-selector-group input {
+  min-height: 10px;
+}
+.chargezen-plan-selector .plan-selector-plan {
+  padding-left: 20px;
+}
+.chargezen-plan-selector .plan-selector-plan select {
+  width: 100%;
+  margin-bottom: 5px;
+}
+.chargezen-cart-selling-plan {
+  display: block;
+}
+#chargezen-customer-portal-frame {
+  min-height: 125vh;
+}
+#build-a-box-subscription-frame {
+  min-height: 125vh;
+}
+.sec-deisgn {
+  display: flex;
+  justify-content: center;
+  grid-gap: 20px;
+}
+.sec-deisgn .plan-selector-group {
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1.5px solid #e3e4e4;
+  text-align: center;
+}
+.sec-deisgn .plan-selector-group > p {
+  font-weight: 700;
+  line-height: 26px;
+  margin-top: 10px;
+}
+.sec-deisgn .plan-selector-group p {
+  line-height: 20px;
+  margin-bottom: 10px;
+}
+.sec-deisgn .plan-selector-group .best-seller {
+  background-color: #ffb800;
+  padding: 4px 4px 3px 3px;
+  border-radius: 3px;
+  width: 85px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  margin-bottom: 30px;
+}
+.sec-deisgn .plan-selector-group .best-seller span {
+  font-size: 9px;
+  color: #fff;
+  margin-left: 3px;
+  font-weight: 900;
+}
+.sec-deisgn .plan-selector-group .best-seller + p {
+  font-weight: 700;
+}
+.sec-deisgn .plan-selector-group .best-seller + p + p {
+  font-weight: 700;
+}
+.sec-deisgn .plan-selector-group .del-price del {
+  color: #828384;
+  font-size: 12px;
+}
+.sec-deisgn .plan-selector-group .del-price + p {
+  font-weight: 800;
+}
+.sec-deisgn .plan-selector-group input {
+  display: none;
+}
+.sec-deisgn .save-price {
+  position: relative;
+}
+.sec-deisgn .save-price > span {
+  position: absolute;
+  color: #fff;
+  font-size: 9px;
+  top: 3px;
+  left: 42px;
+}
+@media (max-width: 768px) {
+  .three-design {
+    display: flex;
+    flex-direction: column !important;
+    justify-content: flex-start;
+    align-self: start;
+    align-items: flex-start;
+  }
+}
+.three-design .plan-selector-group {
+  border: 0;
+  padding: 0;
+  margin-bottom: 0;
+}
+.three-design .plan-selector-group label {
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+.three-design .plan-selector-group label p {
+  margin-bottom: 0;
+}
+.three-design .plan-selector-group input {
+  opacity: 0;
+  margin: 0;
+}
+.three-design .plan-selector-group .custom-radio-btn {
+  position: relative;
+  display: inline-flex;
+}
+.three-design .plan-selector-group .custom-radio-btn .radio-btnn {
+  position: absolute;
+  top: -0.9rem;
+  left: -2.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+}
+.three-design .plan-selector-group .custom-radio-btn .radio-btnn::before {
+  position: absolute;
+  top: -0.25rem;
+  left: -0.25rem;
+  width: 2rem;
+  height: 2rem;
+  content: ' ';
+  border: 0.1rem solid rgba(151, 151, 151, 0.5);
+  border-radius: 50%;
+}
+.three-design .plan-selector-group .custom-radio-btn .radio-bg {
+  background-color: #a2d4b2;
+}
+.three-design .plan-selector-group .custom-radio-btn .radio-bg::before {
+  border-color: #a2d4b2;
+}
+.three-design .custom-mnakrer {
+  margin-left: 26px;
+  margin-bottom: 10px;
+}
+.three-design .custom-mnakrer li {
+  list-style: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  line-height: 1.1rem;
+}
+.three-design .custom-mnakrer li .image {
+  width: 1.4rem;
+  height: 1rem;
+  margin-right: 0.8rem;
+  background-image: url(//cdn.shopify.com/s/files/1/0586/9125/6512/t/3/assets/tick.png?v=18165543603252604950);
+  background-repeat: no-repeat;
+}
+.three-design .popup-design {
+  margin-left: 26px;
+}
+.three-design .popup-design #myBtn {
+  cursor: pointer;
+  padding-bottom: 0.2rem;
+  font-size: 0.8rem;
+  line-height: 2rem;
+  text-decoration: none;
+  display: inline-block;
+  letter-spacing: 0.011rem;
+  cursor: pointer;
+  border-bottom: 0.1rem solid #979797;
+}
+.three-design .popup-design .modal-subscription {
+  display: none;
+  position: fixed;
+  z-index: 5;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: #000;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: #000;
+}
+.three-design .popup-design .modal-parent {
+  background-color: #fefefe;
+  margin: auto;
+  border: 1px solid #888;
+  max-width: 600px;
+  border-radius: 0.5rem;
+}
+.three-design .popup-design .modal-header {
+  padding: 20px;
+  border-bottom: 1px solid #d3d3d3;
+  text-align: left;
+}
+.three-design .popup-design .modal-header p {
+  font-size: 24px;
+  margin-bottom: 0;
+}
+.three-design .popup-design .modal-content {
+  padding: 2rem 3.8rem;
+  text-align: left;
+  margin: 0;
+}
+.three-design .popup-design .modal-content > ul {
+  margin-bottom: 1.1rem;
+  margin-left: 0;
+}
+.three-design .popup-design .modal-content > ul > li {
+  padding-bottom: 0.8rem;
+  position: relative;
+  padding-left: 1em;
+  letter-spacing: 0.016rem;
+  font-weight: 700;
+  color: #000;
+}
+.three-design .popup-design .modal-content > ul > li p {
+  margin-top: 0.3rem;
+  margin-bottom: -0.4rem;
+  font-size: 1rem;
+  line-height: 1.8rem;
+  letter-spacing: 0.013rem;
+  font-weight: 300;
+}
+.three-design .popup-design .modal-content > ul li {
+  list-style: none;
+  position: relative;
+  display: flex;
+  font-size: 1.1rem;
+  line-height: 1.8rem;
+}
+.three-design .popup-design .modal-content > ul li .check-img {
+  width: 2.4rem;
+  height: 2rem;
+  margin-right: 0.8rem;
+  background-image: url(//cdn.shopify.com/s/files/1/0586/9125/6512/t/3/assets/checktick.png?v=16292913079485381696);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.three-design .popup-design .modal-content > a {
+  padding: 1rem 2.3rem;
+  font-size: 0.9rem;
+  color: #fff;
+  background-color: #a2d4b2;
+  border: 0;
+  border-radius: 0.5rem;
+  display: flex;
+  font-weight: 700;
+  margin: 0 auto;
+  width: 130px;
+}
+.three-design .popup-design .close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: 700;
+}
+.three-design .popup-design .close:hover {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.three-design .popup-design .close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.three-design .discount-section {
+  margin-left: 17px;
+}
+.three-design .discount-section > p {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 2.5rem;
+  letter-spacing: 0.083rem;
+  opacity: 0.56;
+}
+.three-design .discount-section ul {
+  display: flex;
+  margin-top: 0.6rem;
+  margin-bottom: -1rem;
+  list-style: none;
+}
+.three-design .discount-section ul .varint {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0.5rem;
+  margin-bottom: 1rem;
+  width: 120px;
+}
+.three-design .discount-section ul .varint .offer-section {
+  font-size: 1.4rem;
+  line-height: 1.8rem;
+  letter-spacing: 0.016rem;
+}
+.three-design .discount-section ul .varint .offer-section label {
+  display: block;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border: 0.1rem solid rgba(151, 151, 151, 0.3);
+  border-radius: 0.5rem;
+}
+.three-design .discount-section ul .varint .offer-section span {
+  margin-left: 0.4rem;
+  opacity: 0.6;
+  font-size: 14px;
+}
+.three-design .discount-section ul .varint .save-offer {
+  margin-top: 0.3rem;
+  font-size: 0.9rem;
+  line-height: 1.8rem;
+  text-align: center;
+  letter-spacing: 0.012rem;
+}
+.active-check {
+  background-color: #daf1f9;
+}
+.subscription-popup {
+  position: relative;
+  display: inline-block;
+  height: 35px;
+  clear: both;
+}
+.subscription-popup .chrge-logo {
+  display: flex;
+  align-items: center;
+}
+.subscription-popup .chrge-logo a {
+  display: flex;
+  align-items: center;
+}
+.subscription-popup .chrge-logo p {
+  margin-left: 12px;
+  white-space: nowrap;
+  font-size: 16px;
+  margin-bottom: 0;
+}
+@media (max-width: 768px) {
+  .subscription-popup .chrge-logo p {
+    font-size: 13px;
+    white-space: pre-wrap;
+    line-height: 15px;
+  }
+}
+.subscription-popup .chrge-logo svg {
+  width: 105px;
+}
+.subscription-popup .popup-div {
+  position: absolute;
+  display: none;
+  background-color: #474747;
+  width: 300px;
+  padding: 15px;
+  cursor: default;
+  left: 15px;
+  text-align: left;
+  white-space: normal;
+  vertical-align: baseline;
+  z-index: 1;
+  top: 30px;
+  height: 230px;
+}
+.subscription-popup .popup-div::before {
+  content: '';
+  display: block;
+  width: 1px;
+  border: 10px solid transparent;
+  position: absolute;
+  top: -20px;
+  left: 0;
+  border-bottom-color: #474747;
+}
+.subscription-popup .popup-div strong {
+  color: #fff;
+  margin-bottom: 25px;
+  display: inline-block;
+}
+.subscription-popup .popup-div a {
+  color: #4dd6b7;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  display: block;
+}
+.subscription-popup .popup-div p {
+  color: #d3d3d3;
+  white-space: pre-wrap;
+  margin-bottom: 0;
+  line-height: 18px;
+}
+.subscription-popup .popup-div .powered-by {
+  background-color: #007eff;
+  padding: 5px;
+  margin-top: 10px;
+  bottom: 26px;
+  right: 0;
+  width: 190px;
+}
+.subscription-popup .popup-div .powered-by > p {
+  color: #fff;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  grid-gap: 10px;
+  white-space: nowrap;
+}
+.subscription-popup svg:hover + .popup-div {
+  display: block;
+}
+.hide {
+  display: none !important;
+}
+.plan-selector-plan .plan-radio-lable {
+  width: 100%;
+  display: inline-block;
+  padding: 10px;
+  border: 1px solid #666;
+  margin: 5px 0;
+}
+.chargezen-plan-selector .plan-selector-plan {
+  padding-left: 0 !important;
+}
+.chargezen-plan-selector .plan-selector-group {
+  padding: 8px 12px !important;
+  width: 100% !important;
+  max-width: 480px;
+}
+.plan-selector-plan .plan-radio-lable input {
+  margin-right: 10px !important;
+}
+.plan-selector-plan .plan-radio-lable {
+  width: 100%;
+  display: inline-block;
+  padding: 10px;
+  border: 1px solid #666;
+  margin: 5px 0;
+  text-transform: uppercase;
+  color: #323232;
+  font-size: 16px;
+  line-height: 26px !important;
+  max-width: 480px;
+}

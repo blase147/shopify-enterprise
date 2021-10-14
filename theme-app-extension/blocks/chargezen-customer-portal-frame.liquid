@@ -1,0 +1,26 @@
+{% if template contains 'account' %}
+  {% assign cz_params = "customer_id=" | append: customer.id %}
+
+  <script type="text/javascript">
+    window.addEventListener('DOMContentLoaded', () => {
+      var injectInto = document.querySelector('body');
+
+      const linkToDashboard = document.createElement('a');
+      linkToDashboard.innerHTML = `<a href='/a/chargezen_production?{{ cz_params }}'>Manage Subscriptions</a>`
+
+      const wrapper = document.createElement('div')
+      wrapper.classList.add('container')
+      wrapper.append(linkToDashboard)
+
+      injectInto.insertBefore(wrapper, injectInto.querySelector('#shopify-section-footer'))
+    });
+  </script>
+{% endif %}
+<!-- chargezen accounts arslan comeon update plis update -->
+
+{% schema %}
+  {
+    "name": "Chargezen Accounts",
+    "target": "head"
+  }
+{% endschema %}
