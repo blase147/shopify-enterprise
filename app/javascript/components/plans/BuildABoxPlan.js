@@ -363,7 +363,6 @@ const BuildABoxPlan = () => {
 
           {(planData || !id) && (
             <Formik
-              enableReinitialize
               innerRef={formRef}
               validationSchema={validationSchema}
               initialValues={
