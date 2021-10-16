@@ -5,6 +5,8 @@ class AppProxy::DashboardController < AppProxyController
   def index
     products = ProductService.new.list
     @swap_products = products.is_a?(Hash) ? nil : products.select{ |p| p.node.selling_plan_group_count > 0 }
+
+    render 'index', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
   def subscription; end

@@ -15,7 +15,7 @@
       - @products.each do |product|
         .add-img-section
           .img-con
-            img src="#{product.images.first.src}" /
+            img src="#{product.images.first&.src}" /
           p = product.title
           button.add data-id="#{product.id}" Add
 

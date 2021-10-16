@@ -19,7 +19,7 @@ import {
   Spinner,
   Checkbox,
 } from '@shopify/polaris';
-import DeleteSVG from '../../../assets/images/delete.svg'
+import DeleteSVG from '../../../assets/images/delete.svg';
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Formik } from 'formik';
 import _ from 'lodash';
@@ -36,7 +36,7 @@ import removeIcon from '../../../assets/images/subscriptionsPlans/removeProduct.
 const BuildABoxPlan = () => {
   const { id } = useParams();
   const GET_SELLING_PLAN = gql`
-    query($id: ID!) {
+    query ($id: ID!) {
       fetchPlanGroup(id: $id) {
         id
         publicName
@@ -61,31 +61,34 @@ const BuildABoxPlan = () => {
           trialAdjustmentType
           trialIntervalType
           trialIntervalCount
-          boxSubscriptionType,
-          boxIsQuantity,
-          boxIsQuantityLimited,
-          boxQuantityLimit,
+          boxSubscriptionType
+          boxIsQuantity
+          boxIsQuantityLimited
+          boxQuantityLimit
           billingDates
           shippingDates
+          shippingCutOff
+          firstDelivery
           productImages {
             productId
             image
             _destroy
           }
-          collectionImages{
-            collectionId,
-            collectionTitle,
+          collectionImages {
+            collectionId
+            collectionTitle
             products {
               productId
               image
               _destroy
-            },
+            }
             _destroy
           }
         }
       }
     }
   `;
+
   const [getSellingPlan, { data, loading, error }] = useLazyQuery(
     GET_SELLING_PLAN,
     {
@@ -101,6 +104,20 @@ const BuildABoxPlan = () => {
 
   // consts ###
   const options = [...Array(99).keys()].map((foo) => (foo + 1).toString());
+
+  const shippingCutOffOptions = [];
+  [...Array(31).keys()].map((foo) =>
+    shippingCutOffOptions.push({
+      label: `${foo + 1} ${foo == 0 ? 'day' : 'days'}`,
+      value: foo + 1,
+    })
+  );
+
+  const firstDeliveryOptions = [
+    { label: 'ASAP', value: 'ASAP' },
+    { label: 'NEXT', value: 'NEXT' },
+  ];
+
   const optionsWithNone = [...options];
   optionsWithNone.unshift({ value: '', label: 'None' });
   const interOptions = [
@@ -138,7 +155,9 @@ const BuildABoxPlan = () => {
         );
         return defaultOption;
       });
-      setSelectedCollections(data.fetchPlanGroup.sellingPlans[0].collectionImages);
+      setSelectedCollections(
+        data.fetchPlanGroup.sellingPlans[0].collectionImages
+      );
       setSelectedCollectionOptions(() => {
         const defaultOption = [];
         data.fetchPlanGroup.sellingPlans[0].collectionImages?.map(
@@ -168,11 +187,13 @@ const BuildABoxPlan = () => {
     trialAdjustmentType: '',
     trialAdjustmentValue: '0',
     boxSubscriptionType: 0,
-    billingDates:[],
-    shippingDates:[],
+    firstDelivery: 'ASAP',
+    shippingCutOff: 1,
+    billingDates: [],
+    shippingDates: [],
     boxIsQuantity: true,
     boxIsQuantityLimited: true,
-    boxQuantityLimit: 0
+    boxQuantityLimit: 0,
   };
 
   const [productImagesFirst, setProductListFirst] = useState([]);
@@ -190,7 +211,7 @@ const BuildABoxPlan = () => {
   });
 
   const UPDATE_SELLING_PLAN = gql`
-    mutation($input: UpdateSellingPlanGroupInput!) {
+    mutation ($input: UpdateSellingPlanGroupInput!) {
       updatePlan(input: $input) {
         plan {
           id
@@ -202,7 +223,7 @@ const BuildABoxPlan = () => {
   const [updateSellingPlan] = useMutation(UPDATE_SELLING_PLAN);
 
   const CREATE_SELLING_PLAN = gql`
-    mutation($input: AddSellingPlanGroupInput!) {
+    mutation ($input: AddSellingPlanGroupInput!) {
       addPlan(input: $input) {
         plan {
           id
@@ -220,7 +241,9 @@ const BuildABoxPlan = () => {
   const [selectedProductOptions, setSelectedProductOptions] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
 
-  const [selectedCollectionOptions, setSelectedCollectionOptions] = useState([]);
+  const [selectedCollectionOptions, setSelectedCollectionOptions] = useState(
+    []
+  );
   const [selectedCollections, setSelectedCollections] = useState([]);
 
   const handleRemoveProduct = (index) => {
@@ -237,8 +260,10 @@ const BuildABoxPlan = () => {
 
   const handleRemoveCollectionProduct = (collectionIndex, productIndex) => {
     setSelectedCollections(() => {
-      let newSelectedCollection= [...(selectedCollections || [])];
-      newSelectedCollection[collectionIndex].products[productIndex]._destroy = true;
+      let newSelectedCollection = [...(selectedCollections || [])];
+      newSelectedCollection[collectionIndex].products[
+        productIndex
+      ]._destroy = true;
       return newSelectedCollection;
     });
   };
@@ -260,7 +285,8 @@ const BuildABoxPlan = () => {
     if (
       selectedCollections &&
       formRef.current &&
-      formRef.current?.values.sellingPlans[0].collectionImages != selectedCollections
+      formRef.current?.values.sellingPlans[0].collectionImages !=
+        selectedCollections
     ) {
       formRef.current.setFieldValue(
         'sellingPlans[0].collectionImages',
@@ -270,39 +296,47 @@ const BuildABoxPlan = () => {
   }, [selectedCollections]);
 
   const [updated, setUpdated] = useState(false);
-  const [selectedDate,setSelectedDate]=useState([{shippingDate:"",billingDate:""}]);
-  const setDate=useCallback((date)=>{
-    setSelectedDate(date)
-  },[setSelectedDate])
+  const [selectedDate, setSelectedDate] = useState([
+    { shippingDate: '', billingDate: '' },
+  ]);
+  const setDate = useCallback(
+    (date) => {
+      setSelectedDate(date);
+    },
+    [setSelectedDate]
+  );
 
-  const clearDate =useCallback((type,index)=>{
-    let date=selectedDate[index][type]="";
-    setSelectedDate(date);
-  },[setSelectedDate])
+  const clearDate = useCallback(
+    (type, index) => {
+      let date = (selectedDate[index][type] = '');
+      setSelectedDate(date);
+    },
+    [setSelectedDate]
+  );
 
-  const removeSelectedDate=(type,index,values)=>{
-    if(values[`${type}s`].length<1){
-      let date=selectedDate;
-      date[index][type]="";
+  const removeSelectedDate = (type, index, values) => {
+    if (values[`${type}s`].length < 1) {
+      let date = selectedDate;
+      date[index][type] = '';
       setSelectedDate(date);
     }
-  }
+  };
 
-  const removeDate=(dates,index)=>{
-    if(dates){
-      dates.splice(index,1);
+  const removeDate = (dates, index) => {
+    if (dates) {
+      dates.splice(index, 1);
       setUpdated(true);
     }
     return [...dates];
-  }
- const checkDates =(setFieldValue,values,selectedDate,field)=>{
-   if(selectedDate[0]?.billingDate && values.billingDates.length===0){
-     setFieldValue(`${field}.billingDates`,[selectedDate[0].billingDate])
-   }
-   if(selectedDate[0]?.shippingDate && values.shippingDates.length===0){
-    setFieldValue(`${field}.shippingDates`,[selectedDate[0].shippingDate])
-  }
- }
+  };
+  const checkDates = (setFieldValue, values, selectedDate, field) => {
+    if (selectedDate[0]?.billingDate && values.billingDates.length === 0) {
+      setFieldValue(`${field}.billingDates`, [selectedDate[0].billingDate]);
+    }
+    if (selectedDate[0]?.shippingDate && values.shippingDates.length === 0) {
+      setFieldValue(`${field}.shippingDates`, [selectedDate[0].shippingDate]);
+    }
+  };
   return (
     <LayoutIndex typePage="sellingPlanForm" tabIndex={1}>
       <Frame>
@@ -425,7 +459,7 @@ const BuildABoxPlan = () => {
                         onAction: () => {
                           setSelectedProducts(productImagesFirst);
                           resetForm();
-                          setUpdated(flag => flag = false)
+                          setUpdated((flag) => (flag = false));
                         },
                       }}
                     />
@@ -542,18 +576,21 @@ const BuildABoxPlan = () => {
                         title="Selling Plan"
                         sectioned
                         actions={
-                          ((!id && index != 0) || (id && values.sellingPlans.filter(p=>!p._destroy).length>1))
+                          (!id && index != 0) ||
+                          (id &&
+                            values.sellingPlans.filter((p) => !p._destroy)
+                              .length > 1)
                             ? [
-                              {
-                                content: 'Remove',
-                                onAction: () => {
-                                  setFieldValue(
-                                    `sellingPlans[${index}]._destroy`,
-                                    true
-                                  );
+                                {
+                                  content: 'Remove',
+                                  onAction: () => {
+                                    setFieldValue(
+                                      `sellingPlans[${index}]._destroy`,
+                                      true
+                                    );
+                                  },
                                 },
-                              },
-                            ]
+                              ]
                             : []
                         }
                       >
@@ -743,10 +780,16 @@ const BuildABoxPlan = () => {
                           <FormLayout.Group>
                             <Select
                               label="Interval"
-                              value={plan.deliveryIntervalCount === null ? initialValues.deliveryIntervalCount : plan.deliveryIntervalCount }
+                              value={
+                                plan.deliveryIntervalCount === null
+                                  ? initialValues.deliveryIntervalCount
+                                  : plan.deliveryIntervalCount
+                              }
                               error={
-                                touched.sellingPlans?.[index]?.deliveryIntervalCount &&
-                                errors.sellingPlans?.[index]?.deliveryIntervalCount
+                                touched.sellingPlans?.[index]
+                                  ?.deliveryIntervalCount &&
+                                errors.sellingPlans?.[index]
+                                  ?.deliveryIntervalCount
                               }
                               onChange={(e) =>
                                 setFieldValue(
@@ -759,10 +802,16 @@ const BuildABoxPlan = () => {
                             <Select
                               options={interOptions}
                               label="  "
-                              value={plan.deliveryIntervalType === null ? initialValues.deliveryIntervalType : plan.deliveryIntervalType }
+                              value={
+                                plan.deliveryIntervalType === null
+                                  ? initialValues.deliveryIntervalType
+                                  : plan.deliveryIntervalType
+                              }
                               error={
-                                touched.sellingPlans?.[index]?.deliveryIntervalType &&
-                                errors.sellingPlans?.[index]?.deliveryIntervalType
+                                touched.sellingPlans?.[index]
+                                  ?.deliveryIntervalType &&
+                                errors.sellingPlans?.[index]
+                                  ?.deliveryIntervalType
                               }
                               onChange={(e) =>
                                 setFieldValue(
@@ -772,7 +821,7 @@ const BuildABoxPlan = () => {
                               }
                             />
                           </FormLayout.Group>
-                          <br/>
+                          <br />
                           {/* Trial Period */}
                           <TextContainer>
                             <Subheading>TRIAL PERIOD</Subheading>
@@ -860,8 +909,8 @@ const BuildABoxPlan = () => {
                             <Subheading>BUILD-A-BOX CONFIGURATION</Subheading>
                           </TextContainer>
                           <FormLayout.Group>
-                          <div className="box-subscription-detail">
-                                  {/* <Select
+                            <div className="box-subscription-detail">
+                              {/* <Select
                                     className="box-subscription-align"
                                     label="Display Quantity ?"
                                     value={plan.boxIsQuantity}
@@ -877,100 +926,109 @@ const BuildABoxPlan = () => {
                                     }
                                     options={boxQuantityOptions}
                                   /> */}
-                                  <TextField
-                                    label="Limit Options"
-                                    value={plan.boxQuantityLimit.toString()}
-                                    disabled={!plan.boxIsQuantity || !plan.boxIsQuantityLimited}
-                                    error={
-                                      touched.sellingPlans?.[index]?.boxQuantityLimit &&
-                                      errors.sellingPlans?.[index]?.boxQuantityLimit
-                                    }
-                                    type="number"
-                                    onChange={(e) => {
-                                      setFieldValue(
-                                        `sellingPlans[${index}].boxQuantityLimit`,
-                                        parseInt(e)
-                                      )}
-                                    }
-                                    // placeholder="1"
-                                  />
-                                </div>
+                              <TextField
+                                label="Limit Options"
+                                value={plan.boxQuantityLimit.toString()}
+                                disabled={
+                                  !plan.boxIsQuantity ||
+                                  !plan.boxIsQuantityLimited
+                                }
+                                error={
+                                  touched.sellingPlans?.[index]
+                                    ?.boxQuantityLimit &&
+                                  errors.sellingPlans?.[index]?.boxQuantityLimit
+                                }
+                                type="number"
+                                onChange={(e) => {
+                                  setFieldValue(
+                                    `sellingPlans[${index}].boxQuantityLimit`,
+                                    parseInt(e)
+                                  );
+                                }}
+                                // placeholder="1"
+                              />
+                            </div>
                           </FormLayout.Group>
                           <FormLayout.Group>
                             <Checkbox
                               label="Sort box choices by collection"
                               checked={plan.boxSubscriptionType === 1}
                               error={
-                                touched.sellingPlans?.[index]?.boxSubscriptionType &&
-                                errors.sellingPlans?.[index]?.boxSubscriptionType
+                                touched.sellingPlans?.[index]
+                                  ?.boxSubscriptionType &&
+                                errors.sellingPlans?.[index]
+                                  ?.boxSubscriptionType
                               }
                               onChange={(e) => {
                                 setFieldValue(
                                   `sellingPlans[${index}].boxSubscriptionType`,
-                                  (e === true ? 1 : 0)
-                                )}
-                              }
+                                  e === true ? 1 : 0
+                                );
+                              }}
                             />
                             <Checkbox
                               label="Display box choices by products"
                               checked={plan.boxSubscriptionType === 2}
                               error={
-                                touched.sellingPlans?.[index]?.boxSubscriptionType &&
-                                errors.sellingPlans?.[index]?.boxSubscriptionType
+                                touched.sellingPlans?.[index]
+                                  ?.boxSubscriptionType &&
+                                errors.sellingPlans?.[index]
+                                  ?.boxSubscriptionType
                               }
                               onChange={(e) => {
                                 setFieldValue(
                                   `sellingPlans[${index}].boxSubscriptionType`,
-                                  (e === true ? 2 : 0)
-                                )}
-                              }
+                                  e === true ? 2 : 0
+                                );
+                              }}
                             />
-                            </FormLayout.Group>
-                            <FormLayout.Group>
-                              {plan.boxSubscriptionType === 1 && (
-                                <div className="box-subscription-search">
-                                    <TextContainer>Collection</TextContainer>
-                                    <SearchCollection
-                                      selectedOptions={selectedCollectionOptions}
-                                      setSelectedOptions={setSelectedCollectionOptions}
-                                      selectedCollections={selectedCollections}
-                                      setSelectedCollections={setSelectedCollections}
-                                    />
-                                </div>
-                              )}
-                              {plan.boxSubscriptionType === 2 && (
-                                <div className="box-subscription-search">
-                                    <TextContainer>Product</TextContainer>
-                                    <SearchProduct
-                                      selectedOptions={selectedProductOptions}
-                                      setSelectedOptions={setSelectedProductOptions}
-                                      selectedProducts={selectedProducts}
-                                      setSelectedProducts={setSelectedProducts}
-                                    />
-                                </div>
-                              )}
-
-                            </FormLayout.Group>
+                          </FormLayout.Group>
+                          <FormLayout.Group>
                             {plan.boxSubscriptionType === 1 && (
-                              <div className="collection-stack">
-                                {selectedCollections.map(
-                                  (collection, i) =>
-                                    collection._destroy === false && (
-                                      <div
-                                        key={i}
-                                        className="building-box-collection"
-                                      >
-                                        <div>
-                                          {collection?.collectionTitle}
-                                        </div>
-                                        <Stack>
-                                          {collection.products?.map(
-                                            (product, j) =>
-                                              product._destroy === false && (
-                                                <div
-                                                  key={j}
-                                                  className="building-box-product"
-                                                >
+                              <div className="box-subscription-search">
+                                <TextContainer>Collection</TextContainer>
+                                <SearchCollection
+                                  selectedOptions={selectedCollectionOptions}
+                                  setSelectedOptions={
+                                    setSelectedCollectionOptions
+                                  }
+                                  selectedCollections={selectedCollections}
+                                  setSelectedCollections={
+                                    setSelectedCollections
+                                  }
+                                />
+                              </div>
+                            )}
+                            {plan.boxSubscriptionType === 2 && (
+                              <div className="box-subscription-search">
+                                <TextContainer>Product</TextContainer>
+                                <SearchProduct
+                                  selectedOptions={selectedProductOptions}
+                                  setSelectedOptions={setSelectedProductOptions}
+                                  selectedProducts={selectedProducts}
+                                  setSelectedProducts={setSelectedProducts}
+                                />
+                              </div>
+                            )}
+                          </FormLayout.Group>
+                          {plan.boxSubscriptionType === 1 && (
+                            <div className="collection-stack">
+                              {selectedCollections.map(
+                                (collection, i) =>
+                                  collection._destroy === false && (
+                                    <div
+                                      key={i}
+                                      className="building-box-collection"
+                                    >
+                                      <div>{collection?.collectionTitle}</div>
+                                      <Stack>
+                                        {collection.products?.map(
+                                          (product, j) =>
+                                            product._destroy === false && (
+                                              <div
+                                                key={j}
+                                                className="building-box-product"
+                                              >
                                                 <img
                                                   className="product"
                                                   src={product?.image}
@@ -978,130 +1036,246 @@ const BuildABoxPlan = () => {
                                                 <img
                                                   className="removeIcon"
                                                   onClick={() => {
-                                                    handleRemoveCollectionProduct(i, j);
+                                                    handleRemoveCollectionProduct(
+                                                      i,
+                                                      j
+                                                    );
                                                   }}
                                                   src={removeIcon}
                                                 />
-                                                </div>
-                                              )
-                                          )}
-                                        </Stack>
+                                              </div>
+                                            )
+                                        )}
+                                      </Stack>
+                                    </div>
+                                  )
+                              )}
+                            </div>
+                          )}
+                          {plan.boxSubscriptionType === 2 && (
+                            <div className="product-stack">
+                              <div>
+                                Selected products (subscription box options)
+                              </div>
+                              <Stack>
+                                {selectedProducts.map(
+                                  (product, i) =>
+                                    product._destroy === false && (
+                                      <div
+                                        key={i}
+                                        className="building-box-product"
+                                      >
+                                        <img
+                                          className="product"
+                                          src={product?.image}
+                                        />
+                                        <img
+                                          onClick={() => {
+                                            handleRemoveProduct(i);
+                                          }}
+                                          className="removeIcon"
+                                          src={removeIcon}
+                                        />
                                       </div>
                                     )
                                 )}
-                              </div>
-                            )}
-                            {plan.boxSubscriptionType === 2 && (
-                              <div className="product-stack">
-                                <div>Selected products (subscription box options)</div>
-                                <Stack>
-                                  {selectedProducts.map(
-                                    (product, i) =>
-                                      product._destroy === false && (
-                                        <div
-                                          key={i}
-                                          className="building-box-product"
-                                        >
-                                          <img
-                                            className="product"
-                                            src={product?.image}
-                                          />
-                                          <img
-                                            onClick={() => {
-                                              handleRemoveProduct(i);
-                                            }}
-                                            className="removeIcon"
-                                            src={removeIcon}
-                                          />
-                                        </div>
-                                      )
-                                  )}
-                                </Stack>
-                              </div>
-                            )}
+                              </Stack>
+                            </div>
+                          )}
 
                           <TextContainer>
-                          <br />
-                            <p><strong style={{fontWeight:'600'}}>MANUAL RULES</strong><i> pro</i> </p>
+                            <br />
+                            <p>
+                              <strong style={{ fontWeight: '600' }}>
+                                MANUAL RULES
+                              </strong>
+                              <i> pro</i>{' '}
+                            </p>
                           </TextContainer>
                           <FormLayout.Group>
-                              <div className="muti-input-wrapper">
-                                <div className="date-input">
-                                  {checkDates(setFieldValue,values.sellingPlans[index],selectedDate,`sellingPlans[${index}]`)}
+                            <div className="muti-input-wrapper">
+                              <div className="date-input">
+                                {checkDates(
+                                  setFieldValue,
+                                  values.sellingPlans[index],
+                                  selectedDate,
+                                  `sellingPlans[${index}]`
+                                )}
                                 <label> Specific billing date </label>
                                 <DatePickr
-
-                                handleDate={setDate}
-                                type={'billingDate'}
-                                index={index}
-                                date={selectedDate}
-
-                                callback={setFieldValue}
-                                selectedDate={values.sellingPlans[index]?.billingDates[0]}
-                                input={`sellingPlans[${index}].billingDates`}
-                                existingValues={values.sellingPlans[index]?.billingDates}
-                                setUpdated={setUpdated}
-                                 />
-                                </div>
-                                <div className="date-list-items">
-                                  {
-                                    values.sellingPlans[index]?.billingDates.map((date,i)=>(
-                                      <div key={`billing-date-${i}`} className="date-input-group">
+                                  handleDate={setDate}
+                                  type={'billingDate'}
+                                  index={index}
+                                  date={selectedDate}
+                                  callback={setFieldValue}
+                                  selectedDate={
+                                    values.sellingPlans[index]?.billingDates[0]
+                                  }
+                                  input={`sellingPlans[${index}].billingDates`}
+                                  existingValues={
+                                    values.sellingPlans[index]?.billingDates
+                                  }
+                                  setUpdated={setUpdated}
+                                />
+                              </div>
+                              <div className="date-list-items">
+                                {values.sellingPlans[index]?.billingDates.map(
+                                  (date, i) => (
+                                    <div
+                                      key={`billing-date-${i}`}
+                                      className="date-input-group"
+                                    >
                                       <label> Next billing date: </label>
                                       <div className="date-item-wrapper">
-                                        <p>{dayjs(date,"YYYY-MM-DD").format("MMM DD, YYYY")}</p>
-                                        <img className="pointer" src={DeleteSVG} onClick={()=>{setFieldValue(`sellingPlans[${index}].billingDates`,removeDate(values.sellingPlans[index]?.billingDates,i));removeSelectedDate('billingDate',index,values.sellingPlans[index])}} />
+                                        <p>
+                                          {dayjs(date, 'YYYY-MM-DD').format(
+                                            'MMM DD, YYYY'
+                                          )}
+                                        </p>
+                                        <img
+                                          className="pointer"
+                                          src={DeleteSVG}
+                                          onClick={() => {
+                                            setFieldValue(
+                                              `sellingPlans[${index}].billingDates`,
+                                              removeDate(
+                                                values.sellingPlans[index]
+                                                  ?.billingDates,
+                                                i
+                                              )
+                                            );
+                                            removeSelectedDate(
+                                              'billingDate',
+                                              index,
+                                              values.sellingPlans[index]
+                                            );
+                                          }}
+                                        />
                                       </div>
-                                      </div>
-                                    ))
-                                  }
-
-                                </div>
-                                {
-                                values.sellingPlans[index]?.billingDates.length > 0  &&
-                                <div className="add-date-btn">
-                                <Button primary onClick={()=>clearDate("billingDate",index)}>+ Add</Button>
-                                </div>
-                                }
-
+                                    </div>
+                                  )
+                                )}
                               </div>
-                              <div className="muti-input-wrapper">
-                                <div className="date-input">
+                              {values.sellingPlans[index]?.billingDates.length >
+                                0 && (
+                                <div className="add-date-btn">
+                                  <Button
+                                    primary
+                                    onClick={() =>
+                                      clearDate('billingDate', index)
+                                    }
+                                  >
+                                    + Add
+                                  </Button>
+                                </div>
+                              )}
+                            </div>
+                            <div className="muti-input-wrapper">
+                              <div className="date-input">
                                 <label> Specific shipping date </label>
                                 <DatePickr
-
-                                handleDate={setDate}
-                                type={'shippingDate'}
-                                date={selectedDate}
-                                index={index}
-
-                                callback={setFieldValue}
-                                selectedDate={values.sellingPlans[index]?.shippingDates[0]}
-                                input={`sellingPlans[${index}].shippingDates`}
-                                existingValues={values.sellingPlans[index]?.shippingDates}
-                                setUpdated={setUpdated}
-                                 />
-                                </div>
-                                <div className="date-list-items">
-                                  {
-                                    values.sellingPlans[index]?.shippingDates.map((date,i)=>(
-                                      <div key={`shipping-date-${i}`} className="date-input-group">
+                                  handleDate={setDate}
+                                  type={'shippingDate'}
+                                  date={selectedDate}
+                                  index={index}
+                                  callback={setFieldValue}
+                                  selectedDate={
+                                    values.sellingPlans[index]?.shippingDates[0]
+                                  }
+                                  input={`sellingPlans[${index}].shippingDates`}
+                                  existingValues={
+                                    values.sellingPlans[index]?.shippingDates
+                                  }
+                                  setUpdated={setUpdated}
+                                />
+                              </div>
+                              <div className="date-list-items">
+                                {values.sellingPlans[index]?.shippingDates.map(
+                                  (date, i) => (
+                                    <div
+                                      key={`shipping-date-${i}`}
+                                      className="date-input-group"
+                                    >
                                       <label> Next shipping date: </label>
                                       <div className="date-item-wrapper">
-                                        <p>{dayjs(date,"YYYY-MM-DD").format("MMM DD, YYYY")}</p>
-                                        <img className="pointer" src={DeleteSVG} onClick={()=>{setFieldValue(`sellingPlans[${index}].shippingDates`,removeDate(values.sellingPlans[index]?.shippingDates,i)); removeSelectedDate('shippingDate',index,values.sellingPlans[index])}} />
+                                        <p>
+                                          {dayjs(date, 'YYYY-MM-DD').format(
+                                            'MMM DD, YYYY'
+                                          )}
+                                        </p>
+                                        <img
+                                          className="pointer"
+                                          src={DeleteSVG}
+                                          onClick={() => {
+                                            setFieldValue(
+                                              `sellingPlans[${index}].shippingDates`,
+                                              removeDate(
+                                                values.sellingPlans[index]
+                                                  ?.shippingDates,
+                                                i
+                                              )
+                                            );
+                                            removeSelectedDate(
+                                              'shippingDate',
+                                              index,
+                                              values.sellingPlans[index]
+                                            );
+                                          }}
+                                        />
                                       </div>
-                                      </div>
-                                    ))
-                                  }
-                                {
-                                  values.sellingPlans[index]?.shippingDates.length > 0  &&
+                                    </div>
+                                  )
+                                )}
+                                {values.sellingPlans[index]?.shippingDates
+                                  .length > 0 && (
                                   <div className="add-date-btn">
-                                  <Button primary onClick={()=>clearDate("shippingDate",index)}>+ Add</Button>
+                                    <Button
+                                      primary
+                                      onClick={() =>
+                                        clearDate('shippingDate', index)
+                                      }
+                                    >
+                                      + Add
+                                    </Button>
                                   </div>
-                                }
-                                </div>
+                                )}
                               </div>
+                              <div>
+                                <Select
+                                  value={plan.shippingCutOff}
+                                  label="Cutoff days"
+                                  error={
+                                    touched.sellingPlans?.[index]
+                                      ?.shippingCutOff &&
+                                    errors.sellingPlans?.[index]?.shippingCutOff
+                                  }
+                                  onChange={(e) =>
+                                    setFieldValue(
+                                      `sellingPlans[${index}].shippingCutOff`,
+                                      Number(e)
+                                    )
+                                  }
+                                  options={shippingCutOffOptions}
+                                />
+
+                                <Select
+                                  label="First Delivery"
+                                  value={plan.firstDelivery}
+                                  error={
+                                    touched.sellingPlans?.[index]
+                                      ?.firstDelivery &&
+                                    errors.sellingPlans?.[index]?.firstDelivery
+                                  }
+                                  onChange={(e) =>
+                                    setFieldValue(
+                                      `sellingPlans[${index}].firstDelivery`,
+                                      e
+                                    )
+                                  }
+                                  options={firstDeliveryOptions}
+                                />
+                              </div>
+                            </div>
                           </FormLayout.Group>
                         </FormLayout>
                         <br />

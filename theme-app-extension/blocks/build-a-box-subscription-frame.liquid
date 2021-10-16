@@ -1,74 +1,9 @@
 {% if template contains 'build_a_box' %}
   {% assign cz_params = "customer_id=" | append: customer.id %}
 
-  {% unless stylesheet %}
-    {% assign stylesheet = "chargezen-customer-portal-theme.scss.css" %}
-  {% endunless %}
-  {% assign stylesheet = stylesheet | asset_url | url_encode %}
-  {% assign domain = shop.domain | url_encode %}
-  {% assign locale = request.locale.iso_code %}
-
-  <div id="build-a-box-subscription-wrap" class="page-width">
-
-    <iframe
-      id="build-a-box-subscription-frame"
-      style="width: 100%; border: none;"
-    >
-      <p>Loading</p>
-    </iframe>
-  </div>
-
-  <style>
-    @keyframes spin {
-    0% {
-      -ms-transform: rotate(0deg);
-      -webkit-transform: rotate(0deg);
-      transform: rotate(0deg); }
-    100% {
-      -ms-transform: rotate(360deg);
-      -webkit-transform: rotate(360deg);
-      transform: rotate(360deg); } }
-  </style>
-
   <script>
     (function() {
-      function removePreviousNodes(node) {
-        var node = node.previousSibling;
-
-        while (node) {
-          var prev = node.previousSibling;
-          node.remove();
-          node = prev;
-        }
-      }
-
-      function getFrameUrl() {
-        return "/a/chargezen_production/build_a_box?selling_plan_id={{cart.attributes.selling_plan_id}}&{{ cz_params }}";
-      }
-
-      var wrap = document.getElementById('build-a-box-subscription-wrap');
-      var frame = document.getElementById('build-a-box-subscription-frame');
-      var frameUrl = getFrameUrl();
-      if (!frameUrl) {
-        wrap.remove();
-        return;
-      }
-      frame.src = frameUrl;
-
-      removePreviousNodes(wrap);
-
-
-      var header = document.getElementById('shopify-section-header');
-      header.style.display = 'none';
-      window.addEventListener('load', function () {
-        var sectionFooter = document.getElementById('shopify-section-footer');
-        sectionFooter.style.display = 'none';
-
-        var buildaBoxWrap = document.getElementById('build-a-box-subscription-wrap');
-        buildaBoxWrap.style.maxWidth = 'none';
-        buildaBoxWrap.style.padding = '0';
-      });
-
+      window.location.href =  "/a/chargezen_production/build_a_box?selling_plan_id={{cart.attributes.selling_plan_id}}&{{ cz_params }}";
     })();
   </script>
 {% endif %}

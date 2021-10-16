@@ -4,6 +4,23 @@
 window.chargezenForShopify = window.chargezenForShopify || {};
 window.chargezenForShopify.jQuery = jQuery.noConflict(true);
 (function(chargezen) {
+  try{
+    const planSelectorWrapper = document.getElementById('chargezen-plan-selector-os-wrapper');
+    if(planSelectorWrapper){
+      const forms = document.querySelectorAll('form[action="/cart/add"]');
+      const target = forms[forms.length-1];
+      (function insertProperly(target, item, before) {
+        if(before.parentElement == target){
+          target.insertBefore(item, before);
+        } else {
+          insertProperly(target, item, before.parentElement);
+        }
+      })(target, planSelectorWrapper, target.querySelector('button'));
+    }
+  }
+  catch(e){
+    console.log(e)
+  }
   var $ = chargezen.jQuery;
 
   function initChargeZen() {
