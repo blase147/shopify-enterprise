@@ -18,6 +18,8 @@
               = product.title
             p.text.active-text
               = "#{number_to_currency edge.node.current_price.amount} / #{billing_policy.interval_count} #{billing_policy.interval}"
+            p.text.active-text
+              = edge.node.selling_plan_name
           .grid-item
             h4 NEXT CARD CHARGE
             p.text.right.active-text

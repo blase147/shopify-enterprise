@@ -42,20 +42,14 @@ nav.Polaris-Navigation.account
                   span.Polaris-Navigation__Text
                     span class=("#{params[:status] == "cancelled" ? 'sub-active' : ''}") #{@translation.sidebar_cancelled.present? ? @translation.sidebar_cancelled : 'Cancelled'}
 
-      / li.Polaris-Navigation__ListItem
-      /   .Polaris-Navigation__ItemWrapper
-      /     a.Polaris-Navigation__Item class=active_nav('dashboard', 'subscription') href="/a/chargezen_production/dashboard/subscription?customer_id=#{params[:customer_id]}" tabindex="0"
-      /       .Polaris-Navigation__Icon
-      /         span.Polaris-Icon
-      /           svg.Polaris-Icon__Svg aria-hidden="true" fill="none" focusable="false" viewbox=("0 0 20 20")
-      /             path d=("M6.63672 1.84473H19.016") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
-      /             path d=("M6.63672 7.55811H19.016") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
-      /             path d=("M6.63672 13.272H19.016") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
-      /             path d=("M1.875 1.84473H1.88356") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
-      /             path d=("M1.875 7.55811H1.88356") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
-      /             path d=("M1.875 13.272H1.88356") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
+      li.Polaris-Navigation__ListItem
+        .Polaris-Navigation__ItemWrapper
+          a.Polaris-Navigation__Item class=active_nav('pages', 'rewards') href="/pages/rewards" tabindex="0"
+            .Polaris-Navigation__Icon
+                span.Polaris-Icon
+                  = icon_tag 'address'
 
-      /       span.Polaris-Navigation__Text Subscription
+            span.Polaris-Navigation__Text Rewards
       - if @setting.show_delivery_schedule.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper

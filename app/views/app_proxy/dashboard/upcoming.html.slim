@@ -75,6 +75,7 @@
                         span.Polaris-TextStyle--variationStrong style="color: #007EFF" SCHEDULED
                         span.Polaris-TextStyle--variationStrong &nbsp;ORDERS
             - @active_subscriptions.each do |subscription|
+              - next_shiping_date = get_next_shipping_date(subscription.node, @current_shop)
               - if subscription.node.lines.edges.count == 1
                 - shipping_dates = get_all_shipping_dates(subscription.node, @current_shop)
                 - subscription_id = subscription.node.id[/\d+/]
