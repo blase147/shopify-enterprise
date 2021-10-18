@@ -252,6 +252,15 @@ const CustomPortal = (props) => {
             !preview &&
             <>
               <Stack.Item>
+                <TextField
+                  label="Store Name"
+                  value={values.storeName}
+                  error={touched.storeName && errors.storeName}
+                  onChange={(e) => setFieldValue('storeName', e)}
+                  name="store_name"
+                />
+              </Stack.Item>
+              <Stack.Item>
                 <h5 className="customize-text">Customize Styles</h5>
               </Stack.Item>
               <Stack.Item>
@@ -509,7 +518,7 @@ const CustomPortal = (props) => {
                     />
                     <p>&nbsp;</p>
                   </FormLayout.Group>
-                  <FormLayout.Group> 
+                  <FormLayout.Group>
                     <p>Change Variants</p>
                     <Select
                       options={options}

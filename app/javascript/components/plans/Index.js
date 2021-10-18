@@ -303,7 +303,7 @@ const SellingPlans = () => {
                     <Button
                       primary
                       icon={MobilePlusMajor}
-                      onClick={() => setGetStartedModal(true)}
+                      onClick={() => history.push('/fixed-subscription-plans')}
                     >
                       Create Plan
                     </Button>

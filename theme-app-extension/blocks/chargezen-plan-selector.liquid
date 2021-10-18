@@ -330,11 +330,12 @@
 
           });
 
-          fetch('/a/chargezen_production/selling_plans/plan_type?selling_plan_id={{product.selling_plan_groups[0].selling_plans[0].id}}')
+          fetch('/a/chargezen_production/selling_plans/plan_type?product_id={{product.id}}')
           .then(response => response.json())
           .then(data => {
             if (data.success == true) {
               $(".build_a_box_plan_chk").text('true');
+              buildABoxURL = `/a/chargezen_production/build_a_box?selling_plan_id=${data.selling_plan_id}&customer_id={{ customer.id }}`;
             }
           })
         });
@@ -393,7 +394,7 @@
 {% schema %}
   {
     "name": "ChargeZen Plan Selector",
-    "target": "section",
+    "target": "body",
     "templates": ["product"]
   }
 {% endschema %}

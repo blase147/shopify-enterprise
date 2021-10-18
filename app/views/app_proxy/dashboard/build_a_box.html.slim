@@ -115,7 +115,7 @@ javascript:
           type: "POST",
           data: { product_id: selectedProducts, subscription_id: subscriptionId },
           success: function(result){
-            window.top.location.href = '/account';
+            window.top.location.href = `/a/chargezen_production/dashboard?customer_id=${(new URL(window.location.href)).searchParams.get("customer_id")}`;
           }
         });
       }
