@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_13_050418) do
+ActiveRecord::Schema.define(version: 2021_10_20_043952) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,7 +63,9 @@ ActiveRecord::Schema.define(version: 2021_10_13_050418) do
     t.json "selling_plans"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "selling_plan_ids", array: true
     t.index ["build_a_box_campaign_group_id"], name: "index_build_a_box_campaigns_on_build_a_box_campaign_group_id"
+    t.index ["selling_plan_ids"], name: "index_build_a_box_campaigns_on_selling_plan_ids", using: :gin
   end
 
   create_table "custom_keywords", force: :cascade do |t|

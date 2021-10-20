@@ -329,15 +329,36 @@
             parent.addClass("active-check");
 
           });
+          {%- capture selling_plan_ids -%}
+            [
+              {%- for selling_plan_group in product.selling_plan_groups -%}
+                {%- for selling_plan in selling_plan_group.selling_plans -%}
+                  {{ selling_plan.id }},
+                {%- endfor -%}
+              {%- endfor -%}
+            ]
+          {%- endcapture -%}
+          let selling_plan_ids = {{ selling_plan_ids }}
+          if (selling_plan_ids.length > 0){
+            fetch(`/a/chargezen_production/build_a_box/get_build_a_box?${new URLSearchParams({selling_plan_ids}).toString()}`)
+            .then(response => response.json())
+            .then(data => {
+              if (data.success == true) {
+                const form_btn = document.querySelector('form[action="/cart/add"] [type="submit"]');
 
-          fetch('/a/chargezen_production/selling_plans/plan_type?product_id={{product.id}}')
-          .then(response => response.json())
-          .then(data => {
-            if (data.success == true) {
-              $(".build_a_box_plan_chk").text('true');
-              buildABoxURL = `/a/chargezen_production/build_a_box?selling_plan_id=${data.selling_plan_id}&customer_id={{ customer.id }}`;
-            }
-          })
+                form_btn.innerText = "Build a box";
+                form_btn.type = "button";
+                form_btn.dataset.build_a_box_id = data.build_a_box_id;
+
+                form_btn.addEventListener('click', (e) => {
+                  const selling_plan_id = document.querySelector('[name="selling_plan"]').value;
+                  const variant_id = document.querySelector('form[action="/cart/add"] [name="id"]').value;
+                  const buildABoxURL = `/a/chargezen_production/build_a_box?build_a_box_id=${e.target.dataset.build_a_box_id}&selling_plan=${selling_plan_id}&variant_id=${variant_id}`;
+                  window.location.href = buildABoxURL
+                })
+              }
+            })
+          }
         });
         var modal = document.getElementById("myModal");
 

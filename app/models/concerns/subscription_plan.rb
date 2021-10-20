@@ -6,6 +6,27 @@ module SubscriptionPlan
     before_update :update_shopify
     before_destroy :delete_shopify
 
+    UPDATE_ANCHOR_QUERY = <<-GRAPHQL
+      mutation($input: SellingPlanGroupInput!, $id: ID!){
+        sellingPlanGroupUpdate(id: $id, input: $input){
+          sellingPlanGroup {
+            id
+            sellingPlans(first: 10){
+              edges {
+                node {
+                  id
+                }
+              }
+            }
+          }
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+    GRAPHQL
+
     UPDATE_QUERY = <<-GRAPHQL
       mutation($input: SellingPlanGroupInput!, $id: ID!, $deleteProductIds: [ID!]!, $deleteVariantIds: [ID!]!, $addProductIds: [ID!]!, $addVariantIds: [ID!]!){
         sellingPlanGroupUpdate(id: $id, input: $input){
@@ -134,6 +155,37 @@ module SubscriptionPlan
       throw(:abort)
     end
 
+    def update_shopify_anchors(anchor_date)
+      date = Date.parse(anchor_date)
+      input = {
+        sellingPlansToUpdate: self.selling_plans.select{|s|
+          s.billing_dates.size > 1
+        }.map {|s|
+          selling_plan_anchor_update(s, date)
+        }
+      }
+
+      result = ShopifyAPIRetry::GraphQL.retry {
+        client.query(client.parse(UPDATE_ANCHOR_QUERY), variables: {
+          input: input,
+          id: self.shopify_id,
+        })
+      }
+      puts '#####'
+      p result
+
+      error = result.errors.messages["data"][0]rescue nil
+      error ||= result.data.selling_plan_group_update.user_errors.first.message rescue nil
+
+      if error.present?
+        raise error
+      end
+
+    rescue Exception => e
+      errors.add :base, e.message
+      throw(:abort)
+    end
+
     def update_shopify
       input = {
         name: self.public_name,
@@ -234,6 +286,23 @@ module SubscriptionPlan
       self.selling_plans.select {|s| s.id.nil? }.map {|s| selling_plan_info(s) }
     end
 
+    def selling_plan_anchor_update(selling_plan, date)
+      anchor = custom_plan_anchor(selling_plan, date)
+      {
+        id: selling_plan.shopify_id,
+        billingPolicy: {
+          recurring: {
+            anchors: anchor
+          }
+        },
+        deliveryPolicy: {
+          recurring: {
+            anchors: anchor
+          }
+        }
+      }
+    end
+
     def selling_plan_info selling_plan, id=nil
       adjustment_value = if selling_plan.adjustment_type == 'PERCENTAGE'
                           { selling_plan.adjustment_type.downcase => selling_plan.adjustment_value.to_i }
@@ -287,6 +356,17 @@ module SubscriptionPlan
       }
 
       id.nil? ? info : info.merge(id: id)
+    end
+  end
+
+  def custom_plan_anchor(selling_plan, date)
+    if selling_plan.billing_dates.present? && selling_plan.interval_type != "DAY"
+
+      {
+        type: "#{selling_plan.interval_type}DAY",
+        day: get_day_for_interval(date, selling_plan.interval_type),
+        month: (date.month if selling_plan.interval_type == "YEAR")
+      }
     end
   end
 

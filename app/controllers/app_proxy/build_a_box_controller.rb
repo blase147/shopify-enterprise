@@ -1,18 +1,21 @@
 class AppProxy::BuildABoxController < AppProxyController
   layout 'application'
-  before_action :set_customer
+  # before_action :set_customer, except: :get_build_a_box
   before_action :set_shop
   before_action :update_contracts, only: :add_product
 
   def index
     products = nil
-    if params[:selling_plan_id].present?
-      @selling_plan = SellingPlan.joins(:selling_plan_group).where(selling_plan_groups: { shop_id: current_shop.id }).find_by(shopify_id: "gid://shopify/SellingPlan/#{params[:selling_plan_id]}")
-      case @selling_plan&.box_subscription_type
+    if params[:build_a_box_id].present?
+      @box_campaign = BuildABoxCampaign.joins(:build_a_box_campaign_group).where(
+        build_a_box_campaign_groups: { shop_id: @shop.id, location: 'product_page' }
+      ).find_by(id: params[:build_a_box_id])
+      @selling_plan = SellingPlan.find_by(shopify_id: "gid://shopify/SellingPlan/#{@box_campaign.selling_plans.first['sellingPlanId']}")
+      case @box_campaign&.box_subscription_type
       when 'collection'
-        products = @selling_plan.collection_images[0]['products']
+        products = @box_campaign.collection_images[0]['products']
       when 'products'
-        products = @selling_plan.product_images
+        products = @box_campaign.product_images
       end
       fetch_products(products) if products.present?
     end
@@ -25,12 +28,23 @@ class AppProxy::BuildABoxController < AppProxyController
     end
   end
 
-  def set_shop
-    @shop = Shop.find_by(shopify_domain: params[:shop])
-  end
-
   def update_contracts
     Customer.update_contracts(shopify_customer_id, @shop)
+  end
+
+  def get_build_a_box
+    if params[:selling_plan_ids].present?
+      build_a_box = BuildABoxCampaign.joins(:build_a_box_campaign_group).where(
+        build_a_box_campaign_groups: { shop_id: @shop.id, location: 'product_page' }
+      ).where("selling_plan_ids &&  ?", "{#{params[:selling_plan_ids]}}").first
+    else
+      build_a_box = false
+    end
+    if build_a_box
+      render json: { success: true, build_a_box_id: build_a_box.id }
+    else
+      render json: { success: false }
+    end
   end
 
   private
@@ -42,5 +56,9 @@ class AppProxy::BuildABoxController < AppProxyController
 
   def set_customer
     @customer = Customer.find_by_shopify_customer_id(customer_id)
+  end
+
+  def set_shop
+    @shop = Shop.find_by(shopify_domain: params[:shop])
   end
 end

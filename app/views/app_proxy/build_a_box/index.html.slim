@@ -1,42 +1,94 @@
-- if @selling_plan.present? && @selling_plan.box_subscription_type.present?
-  .checkout-design
-    h3 Checkout
-    .select-option
-      p Your selection (Please select options):
-      button.go_to_payment_btn Go to Payment
-    .image-place-section
-      - @selling_plan.box_quantity_limit.times do
-        #img-template.cros-img
-          img src="" /
-          p.close-img x
-
-      span.box_limit.hidden = @selling_plan.box_quantity_limit
-    .img-sec-parent
-      - @products.each do |product|
-        .add-img-section
-          .img-con
-            img src="#{product.images.first&.src}" /
-          p = product.title
-          button.add data-id="#{product.id}" Add
+- if @box_campaign.present? && @box_campaign.box_subscription_type.present?
+  .checkout-design-1
+    p Select Style Options
+    .new-desig-parent
+      .img-sec-parent
+        - @products.each do |product|
+          .add-img-section
+            .img-con
+              img src="#{product.images.first&.src}" /
+              button.add data-id="#{product.id}" +
+            p = product.title
+      .img-place-section
+        .top-section
+          h4 Build Your Box
+        .bottom-section
+          .add-img-sec
+            - if @selected_products.present?
+              - @box_campaign.box_quantity_limit.times.each do |index|
+                - if @selected_products[index].present?
+                  .sec data-id="#{@selected_products[index].id}"
+                    .img-crs-sec.cros-img
+                      img src="#{@selected_products[index].images.first.src}" /
+                      .cros-plus.close-img
+                        | x
+                    p Select #{index+1}
+                - else
+                  .sec
+                    .img-crs-sec.cros-img
+                      img.place-img src="" /
+                      .cros-plus.close-img
+                        | x
+                    p Select #{index+1}
+            - else
+              - @box_campaign.box_quantity_limit.times.each do |index|
+                .sec
+                  .img-crs-sec.cros-img
+                    img.place-img src="" /
+                    .cros-plus.close-img
+                      | x
+                  p Select #{index+1}
+          p.error_message.hidden Selection is not complete
+          button.go_to_payment_btn Go to Payment
+        span.box_limit.hidden = @box_campaign.box_quantity_limit
 
 - else
   span.billing_plan_present.hidden
 javascript:
   $('.go_to_payment_btn').click(function(){
-    window.top.location.href = '/checkout';
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var box_products = [];
+    document.querySelectorAll('.sec').forEach((e) => {
+      if (e.dataset.id)
+        box_products.push(e.dataset.id)
+    });
+    let formData = {
+      'items': [{
+        'id': url.searchParams.get("variant_id"),
+        'quantity': 1,
+        'selling_plan': url.searchParams.get("selling_plan"),
+        'properties': {
+          '_box_product_ids': box_products.join(', ')
+        }
+      }]
+    };
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(response => {
+      return window.top.location.href = '/checkout/';
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
   });
   $(document).ready(function(){
     eraseCookie('box_items');
-    $('.checkout-design .add').click(function(){
+    $('.checkout-design-1 .add').click(function(){
       let selectedProducts = getCookie('box_items');
       if (selectedProducts == null || (selectedProducts.split(',').length <= parseInt($('.box_limit').text()))) {
         var img=$(this).closest('.add-img-section').find('img');
         var id=$(this).attr('data-id');
         var button=$(this);
         var flag=true;
-        $('.image-place-section').children('.cros-img').each(function(index,elem){
+        $('.img-place-section').find('.add-img-sec').children('.sec').each(function(index,elem){
           if(flag && !$(elem).attr('data-id')){
-            $(elem).children('img').attr('src',$(img).attr('src'));
+            $(elem).find('img').attr('src',$(img).attr('src')).removeClass('place-img');
             $(elem).attr('data-id',id)
             flag=false;
             $(button).attr('disabled',true);
@@ -49,7 +101,7 @@ javascript:
 
 
   $(document).on('click','.close-img',function(){
-    var div=$(this).closest('.cros-img');
+    var div=$(this).closest('.sec');
     var id=$(div).attr('data-id');
     // $(div).remove();
     var section=$('.img-sec-parent')
@@ -58,11 +110,11 @@ javascript:
                 .find('button')
                 .attr('disabled',false);
     $(div).removeAttr('data-id');
-    $(div).find('img').attr('src','');
+    $(div).find('img').attr('src','').addClass('place-img');
     /// Shifting elements
     let counter=0;
     let placeholder=null;
-    $('.image-place-section').children('.cros-img').each(function(index,elem){
+    $('.add-img-sec').children('.sec').each(function(index,elem){
      if(!$(elem).attr('data-id')){
       placeholder=$(elem).clone();
       counter++;
@@ -70,7 +122,7 @@ javascript:
      }
     });
     for(let i=0;i<counter;i++){
-      $('.image-place-section').append($(placeholder).clone());
+      $('.add-img-sec').append($(placeholder).clone());
     }
     filterCookieData(id);
   })
@@ -110,6 +162,7 @@ javascript:
   function eraseCookie(name) {
     document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
   }
+
   if ($('.billing_plan_present').text() === 'false') {
     window.top.location.href = '/cart';
   }

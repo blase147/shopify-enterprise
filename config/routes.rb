@@ -31,6 +31,7 @@ Rails.application.routes.draw do
     resources :build_a_box, only: :index do
       collection do
         post :add_product
+        get :get_build_a_box
       end
     end
     resources :selling_plans, only: [] do
