@@ -38,6 +38,10 @@ module Types
       argument :button_text_accept, String, required: false
       argument :button_text_decline, String, required: false
 
+      argument :selling_plans, [Types::Input::RuleCustomerValueInputType], required: false
+      argument :start_date, String, required: false
+      argument :end_date, String, required: false
+
       argument :__typename, String, required: false
       argument :_destroy, GraphQL::Types::Boolean, required: false
     end

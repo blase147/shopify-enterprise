@@ -9,7 +9,7 @@ import {
   AppProvider
 } from '@shopify/polaris';
 import enTranslations from '@shopify/polaris/locales/en.json';
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Analytics from './analytics/Index';
 import BuildBox from './build-a-box/BuildBox';
@@ -61,6 +61,7 @@ export default function App(props) {
     ),
     cache: new InMemoryCache(),
   });
+  const [passwordProtected, setPasswordProtected] = useState(props.enablePassword)
 
   // const client = new ApolloClient({
   //   link: new HttpLink({
@@ -132,7 +133,7 @@ export default function App(props) {
             />
             <Route exact path="/smarty" component={Smarty} />
             <Route exact path="/edit-smarty-message/:id" component={EditSmartyMessage} />
-            <Route exact path="/settings" component={Settings} />
+            <Route exact path="/settings" component={() => <Settings passwordProtected={passwordProtected} setPasswordProtected={setPasswordProtected} />} />
             <Route exact path="/customers" component={Customers} />
             <Route exact path="/customers/new" component={CreateCustomer} />
             <Route
@@ -141,7 +142,7 @@ export default function App(props) {
               component={CreateCustomer}
             />
             <Route exact path="/analytics" component={Analytics} />
-            <Route exact path="/installation" component={Installation} />
+            <Route exact path="/installation" component={() => <Installation shopifyDomain={props.domain} passwordProtected={passwordProtected}/>} />
             <Route exact path="/upsell" component={Upsell} />
             <Route exact path="/upsell/:id/edit" component={CreateUpsell} />
             <Route exact path="/upsell/new" component={CreateUpsell} />

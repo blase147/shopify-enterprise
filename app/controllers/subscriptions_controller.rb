@@ -13,13 +13,16 @@ class SubscriptionsController < AuthenticatedController
   def show
     id = params[:id]
     @customer = Customer.find_by_shopify_id(params[:id])
-    @box_products = @customer.box_items.present? ? ShopifyAPI::Product.where(ids: @customer.box_items, fields: 'id,title,images,variants') : nil
+
     @subscription = SubscriptionContractService.new(id).run
     products = ProductService.new.list
     @swap_products = products.is_a?(Hash) ? nil : products.select{ |p| p.node.selling_plan_group_count > 0 }
     @total = @subscription.orders.edges.map { |order|
       order.node.total_received_set.presentment_money.amount.to_f
     }.sum
+
+    product_ids = @subscription.origin_order.line_items.edges.first.node.custom_attributes.find{|a| a.key == "_box_product_ids"}.value rescue nil
+    @box_products = ShopifyAPI::Product.where(ids: product_ids, fields: 'id,title,images,variants') if product_ids
   end
 
   def update_customer

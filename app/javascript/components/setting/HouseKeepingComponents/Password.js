@@ -2,10 +2,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   MobileBackArrowMajor
 } from '@shopify/polaris-icons';
-import {Banner, Card, ContextualSaveBar, Form, Frame, Layout, List, Page, Spinner, Tabs, Toast, RadioButton,Button, TextField, Stack, Icon} from '@shopify/polaris';
+import {Banner, Card, ContextualSaveBar, Form, Frame, Layout, List, Page, Spinner, Tabs, Toast, RadioButton,Button, TextField, Stack, Icon, Checkbox} from '@shopify/polaris';
 import './ExportComponents/export.css'
 import {gql,useLazyQuery,useMutation} from '@apollo/client'
-const Password = ({handleBack}) => {
+const Password = ({handleBack, passwordProtected, setPasswordProtected}) => {
 
   const updatePasswordMutation = gql`
   mutation ($input: UpdatePasswordInput!) {
@@ -16,7 +16,7 @@ const Password = ({handleBack}) => {
     }
   }
   `;
-
+  const [enablePassword, setEnablePassword] = useState(passwordProtected)
   const [password, setPassword] = useState("")
   const [passwordConfirmation, setPasswordConfirmation] = useState("")
   const [updatePassword, {data1, error1, loading:loadingPssword}] = useMutation(updatePasswordMutation)
@@ -30,13 +30,14 @@ const Password = ({handleBack}) => {
       variables: {
         input: {
           params: {
-            password, passwordConfirmation
+            enablePassword, password, passwordConfirmation
           }
         }
       }
     }).then(res => {
       if (!res.data.errors) {
         setSaveSuccess(true);
+        setPasswordProtected(enablePassword);
       }
       else{
         setFormErrors(res.data.errors);
@@ -61,6 +62,12 @@ const Password = ({handleBack}) => {
           Default Password: <strong>AdminAlaska777</strong>
         </p>
         <div className="password-fields">
+          <Checkbox
+            label="Enable Password?"
+            checked={enablePassword}
+            onChange={setEnablePassword}
+          />
+          <br />
           <TextField
             value={password}
             onChange={value => setPassword(value)}

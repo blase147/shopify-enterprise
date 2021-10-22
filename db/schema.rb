@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_20_043952) do
+ActiveRecord::Schema.define(version: 2021_10_22_051115) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -312,6 +312,7 @@ ActiveRecord::Schema.define(version: 2021_10_20_043952) do
     t.string "pause_subscription"
     t.string "email_service"
     t.integer "design_type", default: 0
+    t.boolean "enable_password", default: false
     t.index ["shop_id"], name: "index_settings_on_shop_id", unique: true
   end
 
@@ -654,6 +655,11 @@ ActiveRecord::Schema.define(version: 2021_10_20_043952) do
     t.json "rule_cart_value"
     t.json "product_offer"
     t.json "rule_customer_value"
+    t.string "selling_plan_ids", array: true
+    t.json "selling_plans"
+    t.date "start_date"
+    t.date "end_date"
+    t.index ["selling_plan_ids"], name: "index_upsell_campaigns_on_selling_plan_ids", using: :gin
   end
 
   add_foreign_key "customers", "reasons_cancels"

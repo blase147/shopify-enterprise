@@ -35,7 +35,7 @@ import * as yup from 'yup';
 import { gql, useMutation, useQuery,useLazyQuery } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 
-const Installation = () => {
+const Installation = ({shopifyDomain, passwordProtected}) => {
   const confirmPasswordQuery=gql`
   query($password:String!)
     {
@@ -93,6 +93,10 @@ const Installation = () => {
         setLoadingAction(null);
       });
   }
+  const addExtension = () => {
+    const url = `https://${shopifyDomain}/admin/themes/${selectedTheme}/editor?context=apps&template=product&activateAppId=f1ee8f54-2fff-44b7-86f2-22e5d6e9aa88/chargezen-main`
+    window.open(url, '_blank').focus()
+  }
 
   const content_4b = ` <select name="id" ...>...</select> `;
   const content_5 = ` {% assign property_size = ... %} `;
@@ -113,7 +117,7 @@ const Installation = () => {
 
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
-  const [passwordConfirmed, setPasswordConfirmed] = useState(false)
+  const [passwordConfirmed, setPasswordConfirmed] = useState(!passwordProtected)
   const [password, setPassword] = useState("")
   const [passwordError,setPasswordError]=useState("")
   const [confirmPassword,{data:confirmPasswordRes,loading:passwordLoading}]=useLazyQuery(confirmPasswordQuery,{fetchPolicy:"network-only"})
@@ -173,47 +177,45 @@ const Installation = () => {
                 </Card.Section>
                 <Card.Section>
                   <TextContainer>
-                    <Heading>2. Install snippets</Heading>
+                    <Heading>2. Enable theme app extensions</Heading>
 
-                    <p>Install Snippets v2.0 in the selected theme:</p>
+                    <p>Enable ChargeZen-main app extensions in the selected theme:</p>
                     <ButtonGroup>
-                      <Button loading={loadingAction == 'install'} primary onClick={(e) => handleInstallation('install')}>
-                        Install Snippets
+                      <Button loading={loadingAction == 'install'} primary onClick={addExtension}>
+                        Enable ChargeZen-main App extension
                       </Button>
-                      <Button>Version History</Button>
                     </ButtonGroup>
                   </TextContainer>
                 </Card.Section>
                 <Card.Section>
                   <TextContainer>
-                    <Heading>3. Add snippet to the theme file</Heading>
+                    <Heading>3. Enable plan selector theme app extension</Heading>
 
                     <p>
-                      Paste the following snippet before the closing &lt;/body&gt; tag
-                      in Layout/theme.liquid:
+                      Our subscription plan selector has 3 different designs, enable one of 3 depending on the design you want for your product page. You can use different designs; but they will be on different product templates.
                     </p>
 
-                    <CodeSnippet code={`{% render 'chargezen-main' %}`} />
+                    {/* <CodeSnippet code={`{% render 'chargezen-main' %}`} /> */}
 
-                    <Button loading={loadingAction == 'add_to_theme'} primary onClick={(e) => handleInstallation('add_to_theme')}>
-                      Install Automatically
+                    <Button loading={loadingAction == 'add_to_theme'} primary onClick={addExtension}>
+                      Enable plan selector
                     </Button>
                   </TextContainer>
                 </Card.Section>
                 <Card.Section>
                   <TextContainer>
                     <Heading>
-                      4. Add selling plan selector to the product page
+                      4. Enable Build-a-box theme app extension
                     </Heading>
 
                     <p>
-                      Localize your product template, usually it's either Sections/product-template.liquid or Snippets/product-form.liquid. Put the following snippet wherever you want to display the plan selector.
+                      This enables the build-a-box feature that displays on the product page. YOu will have to create a theme template called "build_a_box" and assign it to the box subscription page.
                     </p>
 
-                    <CodeSnippet code={`{% render 'chargezen-plan-selector', product: product %}`} />
+                    {/* <CodeSnippet code={`{% render 'chargezen-plan-selector', product: product %}`} /> */}
 
-                    <Button loading={loadingAction == 'add_to_product'} primary onClick={(e) => handleInstallation('add_to_product')}>
-                      Install Automatically
+                    <Button loading={loadingAction == 'add_to_product'} primary onClick={addExtension}>
+                      Enable build-a-box
                     </Button>
                   </TextContainer>
                 </Card.Section>
@@ -253,9 +255,9 @@ const Installation = () => {
                       block:
                     </p>
 
-                    <CodeSnippet code={`{% render 'chargezen-subscriptions-cart-selling-plans', item: item %}`} />
+                    {/* <CodeSnippet code={`{% render 'chargezen-subscriptions-cart-selling-plans', item: item %}`} /> */}
 
-                    <Button loading={loadingAction == 'add_to_cart'} primary onClick={(e) => handleInstallation('add_to_cart')}>
+                    <Button loading={loadingAction == 'add_to_cart'} primary onClick={addExtension}>
                       Install Automatically
                     </Button>
                   </TextContainer>
@@ -265,16 +267,13 @@ const Installation = () => {
                     <Heading>6. Add customer portal to the account page</Heading>
 
                     <p>
-                      Paste the following snippet at the end of
-                      <ThemeLink id={selectedTheme} path="templates/customers/account.liquid">
-                        Templates/customers/account.liquid
-                      </ThemeLink>
+                      Enable the customer portal theme app extension
                     </p>
 
-                    <CodeSnippet code={`{% render 'chargezen-customer-portal-frame' %}`} />
+                    {/* <CodeSnippet code={`{% render 'chargezen-customer-portal-frame' %}`} /> */}
 
-                    <Button loading={loadingAction == 'add_to_account'} primary onClick={(e) => handleInstallation('add_to_account')}>
-                      Install Automatically
+                    <Button loading={loadingAction == 'add_to_account'} primary onClick={addExtension}>
+                      Enable customer portal
                     </Button>
                   </TextContainer>
                 </Card.Section>
@@ -290,9 +289,9 @@ const Installation = () => {
 
                     <CodeSnippet code={`<script>Shopify.Checkout.OrderStatus.addContentBox(<a href="https://{{shop.domain}}/account" style="text-decoration-line:underline;text-decoration-style: solid;">Manage your subscriptions via the customer portal</a>)</script>`} />
 
-                    <Button loading={loadingAction == 'add_to_order_status'} primary onClick={(e) => handleInstallation('add_to_order_status')}>
+                    {/* <Button loading={loadingAction == 'add_to_order_status'} primary onClick={(e) => handleInstallation('add_to_order_status')}>
                       Install Automatically
-                    </Button>
+                    </Button> */}
                   </TextContainer>
                 </Card.Section>
               </Stack>

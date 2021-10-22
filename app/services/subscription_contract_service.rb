@@ -82,6 +82,12 @@ class SubscriptionContractService < GraphqlService
               node {
                 id
                 quantity
+                customAttributes{
+                  ... on Attribute{
+                    key
+                    value
+                  }
+                }
                 sellingPlan {
                   name
                 }

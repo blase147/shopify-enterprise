@@ -159,11 +159,13 @@ module SubscriptionPlan
       date = Date.parse(anchor_date)
       input = {
         sellingPlansToUpdate: self.selling_plans.select{|s|
-          s.billing_dates.size > 1
+          s.billing_dates.size > 1 && s.billing_dates.include?(anchor_date)
         }.map {|s|
           selling_plan_anchor_update(s, date)
         }
       }
+
+      return if input[:sellingPlansToUpdate].size < 1
 
       result = ShopifyAPIRetry::GraphQL.retry {
         client.query(client.parse(UPDATE_ANCHOR_QUERY), variables: {

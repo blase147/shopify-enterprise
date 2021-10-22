@@ -13,5 +13,5 @@ class UpsellCampaign < ApplicationRecord
   enum button_position: %w(top bottom)
   belongs_to :upsell_campaign_group
 
-  validates_presence_of :name, :selector_label
+  # validates_presence_of :name, :selector_label
 end

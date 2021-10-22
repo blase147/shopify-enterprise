@@ -78,6 +78,7 @@ module Types
     field :store_name, String, null: true
     field :store_email, String, null: true
     field :storefront_password, String, null: true
+    field :enable_password, Boolean, null: true
 
     #legal
     field :checkout_subscription_terms, String, null: true

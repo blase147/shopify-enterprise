@@ -35,7 +35,7 @@ import MainExport from './HouseKeepingComponents/ExportComponents/MainExport';
 
 
 
-const Settings = () => { 
+const Settings = ({passwordProtected, setPasswordProtected}) => {
 
   // form data ########################################################
   const [formData, setFormData] = useState(null);
@@ -359,7 +359,7 @@ const Settings = () => {
   },[setSelectedSetting])
 
   // Password confirmation
-  const [passwordConfirmed, setPasswordConfirmed] = useState(false)
+  const [passwordConfirmed, setPasswordConfirmed] = useState(!passwordProtected)
   const [password, setPassword] = useState("")
   const [passwordError,setPasswordError]=useState("")
   const [confirmPassword,{data:confirmPasswordRes,loading:passwordLoading}]=useLazyQuery(confirmPasswordQuery,{fetchPolicy:"network-only"})
@@ -751,7 +751,7 @@ const Settings = () => {
                             </>
                           ) : selectedSetting === 'password' ? (
                             <>
-                              <Password handleBack={handleBackSetting} />
+                              <Password handleBack={handleBackSetting} passwordProtected={passwordProtected} setPasswordProtected={setPasswordProtected} />
                             </>
                           ) : (
                             ''
