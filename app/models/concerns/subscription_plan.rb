@@ -305,13 +305,43 @@ module SubscriptionPlan
       }
     end
 
-    def selling_plan_info selling_plan, id=nil
-      adjustment_value = if selling_plan.adjustment_type == 'PERCENTAGE'
-                          { selling_plan.adjustment_type.downcase => selling_plan.adjustment_value.to_i }
-                        else
-                          { fixedValue: selling_plan.adjustment_value.to_i }
-                        end
+    def calc_adjustment_value(type, value)
+      if type == 'PERCENTAGE'
+        { type.downcase => value.to_i }
+      else
+        { fixedValue: value.to_i }
+      end
+    end
 
+    def selling_plan_info selling_plan, id=nil
+      adjustment_value = calc_adjustment_value(selling_plan.adjustment_type, selling_plan.adjustment_value)
+      trial_adjustment_value = calc_adjustment_value(selling_plan.trial_adjustment_type, selling_plan.trial_adjustment_value)
+      pricing_policies = if selling_plan.trial_interval_count.present?
+                            [
+                              {
+                                fixed: {
+                                  adjustmentType: selling_plan.trial_adjustment_type,
+                                  adjustmentValue: trial_adjustment_value
+                                }
+                              },
+                              {
+                                recurring: {
+                                  adjustmentType: selling_plan.adjustment_type,
+                                  adjustmentValue: adjustment_value,
+                                  afterCycle: selling_plan.trial_interval_count.to_i
+                                }
+                              }
+                            ]
+                          else
+                            [
+                              {
+                                fixed: {
+                                  adjustmentType: selling_plan.adjustment_type,
+                                  adjustmentValue: adjustment_value
+                                }
+                              }
+                            ]
+                          end
       # interval_type = case selling_plan.interval_type
       # when 'Days'
       #   'DAY'
@@ -347,14 +377,7 @@ module SubscriptionPlan
             cutoff: selling_plan.shipping_cut_off
           }
         },
-        pricingPolicies: [
-          {
-            fixed: {
-              adjustmentType: selling_plan.adjustment_type,
-              adjustmentValue: adjustment_value
-            }
-          }
-        ]
+        pricingPolicies: pricing_policies
       }
 
       id.nil? ? info : info.merge(id: id)

@@ -139,7 +139,7 @@ const FixedPlan = () => {
     maxFullfilment: '1',
     adjustmentType: 'FIXED_AMOUNT',
     adjustmentValue: '0',
-    trialIntervalCount: '1',
+    trialIntervalCount: '',
     trialIntervalType: 'DAY',
     trialAdjustmentType: 'FIXED_AMOUNT',
     trialAdjustmentValue: '0',
@@ -837,7 +837,7 @@ const FixedPlan = () => {
                           </TextContainer>
                           <FormLayout.Group>
                             <Select
-                              label="Interval"
+                              label="Trial Cycles"
                               value={plan.trialIntervalCount}
                               error={
                                 touched.sellingPlans?.[index]
@@ -850,9 +850,9 @@ const FixedPlan = () => {
                                   e
                                 )
                               }
-                              options={options}
+                              options={optionsWithNone}
                             />
-                            <Select
+                            {/* <Select
                               options={interOptions}
                               label="  "
                               value={plan.trialIntervalType}
@@ -867,7 +867,7 @@ const FixedPlan = () => {
                                   e
                                 )
                               }
-                            />
+                            /> */}
                           </FormLayout.Group>
                           <FormLayout.Group>
                             <Select
@@ -888,7 +888,7 @@ const FixedPlan = () => {
                               }
                             />
                             <TextField
-                              disabled={plan.trialAdjustmentType == ''}
+                              disabled={plan.trialIntervalCount == ''}
                               type="number"
                               label="Adjustment value"
                               value={plan.trialAdjustmentValue}
@@ -905,10 +905,10 @@ const FixedPlan = () => {
                                 )
                               }
                               prefix={
-                                plan.adjustmentType == 'PERCENTAGE' ? '' : '$'
+                                plan.trialAdjustmentType == 'PERCENTAGE' ? '' : '$'
                               }
                               suffix={
-                                plan.adjustmentType == 'PERCENTAGE' ? '%' : ''
+                                plan.trialAdjustmentType == 'PERCENTAGE' ? '%' : ''
                               }
                             />
                           </FormLayout.Group>
