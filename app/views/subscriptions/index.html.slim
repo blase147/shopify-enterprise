@@ -1,4 +1,4 @@
-div style=("--top-bar-background:#00848e; --top-bar-background-lighter:#1d9ba4; --top-bar-color:#f9fafb; --p-frame-offset:0px;") 
+div style=("--top-bar-background:#00848e; --top-bar-background-lighter:#1d9ba4; --top-bar-color:#f9fafb; --p-frame-offset:0px;")
   .Polaris-Page
     .Polaris-Page-Header
       .Polaris-Page-Header__MainContent
@@ -8,24 +8,24 @@ div style=("--top-bar-background:#00848e; --top-bar-background-lighter:#1d9ba4; 
               .Polaris-Header-Title__TitleAndSubtitleWrapper
                 .Polaris-Header-Title
                   h1.Polaris-DisplayText.Polaris-DisplayText--sizeLarge
-                    span.Polaris-TextStyle--variationStrong Customer Subscriptions
+                    span.Polaris-TextStyle--variationStrong Subscriptions Orders
 
     .Polaris-Page__Content
       .Polaris-Card
         div
           .Polaris-DataTable__Navigation
-            button.Polaris-Button.Polaris-Button--disabled.Polaris-Button--plain.Polaris-Button--iconOnly aria-label=("Scroll table left one column") disabled="" type="button" 
+            button.Polaris-Button.Polaris-Button--disabled.Polaris-Button--plain.Polaris-Button--iconOnly aria-label=("Scroll table left one column") disabled="" type="button"
               span.Polaris-Button__Content
                 span.Polaris-Button__Icon
                   span.Polaris-Icon
-                    svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20") 
-                      path d=("M12 16a.997.997 0 0 1-.707-.293l-5-5a.999.999 0 0 1 0-1.414l5-5a.999.999 0 1 1 1.414 1.414L8.414 10l4.293 4.293A.999.999 0 0 1 12 16z") 
-            button.Polaris-Button.Polaris-Button--plain.Polaris-Button--iconOnly aria-label=("Scroll table right one column") type="button" 
+                    svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
+                      path d=("M12 16a.997.997 0 0 1-.707-.293l-5-5a.999.999 0 0 1 0-1.414l5-5a.999.999 0 1 1 1.414 1.414L8.414 10l4.293 4.293A.999.999 0 0 1 12 16z")
+            button.Polaris-Button.Polaris-Button--plain.Polaris-Button--iconOnly aria-label=("Scroll table right one column") type="button"
               span.Polaris-Button__Content
                 span.Polaris-Button__Icon
                   span.Polaris-Icon
-                    svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20") 
-                      path d=("M8 16a.999.999 0 0 1-.707-1.707L11.586 10 7.293 5.707a.999.999 0 1 1 1.414-1.414l5 5a.999.999 0 0 1 0 1.414l-5 5A.997.997 0 0 1 8 16z") 
+                    svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
+                      path d=("M8 16a.999.999 0 0 1-.707-1.707L11.586 10 7.293 5.707a.999.999 0 1 1 1.414-1.414l5 5a.999.999 0 0 1 0 1.414l-5 5A.997.997 0 0 1 8 16z")
           .Polaris-DataTable
             .Polaris-DataTable__ScrollContainer
               table.Polaris-DataTable__Table
@@ -49,18 +49,18 @@ div style=("--top-bar-background:#00848e; --top-bar-background-lighter:#1d9ba4; 
                     - id = subscription.id[/\d+/]
                     tr.Polaris-DataTable__TableRow
                       th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"
-                        label.Polaris-Choice for="PolarisCheckbox#{id}" 
+                        label.Polaris-Choice for="PolarisCheckbox#{id}"
                           span.Polaris-Choice__Control
                             span.Polaris-Checkbox
                               = check_box_tag :pause_resume, id, false, class: 'Polaris-Checkbox__Input', id: "PolarisCheckbox#{id}"
                               span.Polaris-Checkbox__Backdrop
                               span.Polaris-Checkbox__Icon
                                 span.Polaris-Icon
-                                  svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20") 
-                                    path d=("M8.315 13.859l-3.182-3.417a.506.506 0 0 1 0-.684l.643-.683a.437.437 0 0 1 .642 0l2.22 2.393 4.942-5.327a.436.436 0 0 1 .643 0l.643.684a.504.504 0 0 1 0 .683l-5.91 6.35a.437.437 0 0 1-.642 0") 
+                                  svg.Polaris-Icon__Svg aria-hidden="true" focusable="false" viewbox=("0 0 20 20")
+                                    path d=("M8.315 13.859l-3.182-3.417a.506.506 0 0 1 0-.684l.643-.683a.437.437 0 0 1 .642 0l2.22 2.393 4.942-5.327a.436.436 0 0 1 .643 0l.643.684a.504.504 0 0 1 0 .683l-5.91 6.35a.437.437 0 0 1-.642 0")
                       th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"
                         = link_to id, subscription_path(id: id)
-                      
+
                       td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= subscription.customer.first_name
                       td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= subscription.customer.last_name
 
@@ -69,7 +69,7 @@ div style=("--top-bar-background:#00848e; --top-bar-background-lighter:#1d9ba4; 
                       td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
                         - if subscription.status == 'ACTIVE'
                           span.Polaris-Badge.Polaris-Badge--statusSuccess= subscription.status
-                        - else 
+                        - else
                           span.Polaris-Badge.Polaris-Badge--progressIncomplete= subscription.status
 
                       td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop

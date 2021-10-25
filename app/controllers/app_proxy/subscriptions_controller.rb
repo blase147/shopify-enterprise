@@ -6,6 +6,8 @@ class AppProxy::SubscriptionsController < AppProxyController
     customer_id = "gid://shopify/Customer/#{params[:customer_id]}"
     @data = CustomerSubscriptionContractsService.new(customer_id).run params[:cursor]
     @subscription_contracts = @data[:subscriptions] || []
+
+    render 'index', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
   def show
@@ -17,6 +19,8 @@ class AppProxy::SubscriptionsController < AppProxyController
     unless params[:customer_id] == @subscription.customer.id[/\d+/]
       redirect_to "/a/chargezen_production/subscriptions/?customer_id=#{params[:customer_id]}"
     end
+
+    render 'show', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
   def cancel

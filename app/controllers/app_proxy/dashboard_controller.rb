@@ -9,13 +9,21 @@ class AppProxy::DashboardController < AppProxyController
     render 'index', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
-  def subscription; end
+  def subscription
+    render 'subscription', content_type: 'application/liquid', layout: 'liquid_app_proxy'
+  end
 
-  def upcoming; end
+  def upcoming
+    render 'upcoming', content_type: 'application/liquid', layout: 'liquid_app_proxy'
+  end
 
-  def order_history; end
+  def order_history
+    render 'order_history', content_type: 'application/liquid', layout: 'liquid_app_proxy'
+  end
 
-  def addresses; end
+  def addresses
+    render 'addresses', content_type: 'application/liquid', layout: 'liquid_app_proxy'
+  end
 
   def payment_methods
     @orders = ShopifyAPI::Order.find(:all,
@@ -29,9 +37,11 @@ class AppProxy::DashboardController < AppProxyController
     end
     @shopify_customer = CustomerService.new({shop: current_shop}).get_customer(customer_id)
     @payment_methods = @payment_methods.values
+    render 'payment_methods', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
   def settings
+    render 'settings', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
   def build_a_box
@@ -50,6 +60,7 @@ class AppProxy::DashboardController < AppProxyController
       end
       fetch_products(products) if products.present?
     end
+    render 'build_a_box', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
   def confirm_box_selection

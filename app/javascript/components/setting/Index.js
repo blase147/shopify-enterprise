@@ -61,6 +61,9 @@ const Settings = ({passwordProtected, setPasswordProtected}) => {
       fetchSetting {
         paymentRetries
         paymentDelayRetries
+        maxFailStrategy
+        accountPortalOption
+        activeSubscriptionBtnSeq
 
         styleAccountProfile
         styleSidebar
@@ -162,6 +165,10 @@ const Settings = ({passwordProtected, setPasswordProtected}) => {
         setting {
           paymentRetries
           paymentDelayRetries
+          maxFailStrategy
+          accountPortalOption
+          activeSubscriptionBtnSeq
+
           styleAccountProfile
           styleSidebar
           styleSubscription
@@ -268,6 +275,7 @@ const Settings = ({passwordProtected, setPasswordProtected}) => {
     changeVariant: '1',
     discount: [],
     emailService:'',
+    activeSubscriptionBtnSeq: ['update_choices', 'delivery_schedule', 'swap_subscription', 'delay_next_order', 'edit_subscription'],
     emailNotifications: [
       {
         emailMessage: '',
@@ -422,7 +430,7 @@ const Settings = ({passwordProtected, setPasswordProtected}) => {
     }]:[]),
     {
       key:"billing",
-      title:"Billing",
+      title:"Dunning",
       img:BillingImage,
       desc:"Manage your billing information and view your invoices."
     },

@@ -88,6 +88,15 @@ const CustomPortal = (props) => {
     { label: 'Storeowner and Customer', value: 'storeowner_and_customer' },
     { label: 'Storeowner Only', value: 'customer' },
   ];
+
+  const activeSubscriptionOptions = [
+    { label: 'Update Choices', value: 'update_choices' },
+    { label: 'Delivery Schedule', value: 'delivery_schedule' },
+    { label: 'Swap Subscription', value: 'swap_subscription' },
+    { label: 'Delay Next Order', value: 'delay_next_order' },
+    { label: 'Edit Subscription', value: 'edit_subscription' },
+  ];
+
   const oneTimePurchaseOptions = [
     { label: 'Disabled for everyone', value: 'DisabledForEveryone' }
   ];
@@ -163,6 +172,12 @@ const CustomPortal = (props) => {
     { label: "Show", value: 'true' },
     { label: "Hide", value: 'false' }
   ]
+
+  const accountPortalOptions = [
+    { label: "Keep theme account view", value: 'add_link' },
+    { label: "Use only app customer portal", value: 'redirect' }
+  ]
+
   const {
     values,
     touched,
@@ -252,12 +267,11 @@ const CustomPortal = (props) => {
             !preview &&
             <>
               <Stack.Item>
-                <TextField
-                  label="Store Name"
-                  value={values.storeName}
-                  error={touched.storeName && errors.storeName}
-                  onChange={(e) => setFieldValue('storeName', e)}
-                  name="store_name"
+                <Select
+                  options={accountPortalOptions}
+                  value={values.accountPortalOption}
+                  error={touched.accountPortalOption && errors.accountPortalOption}
+                  onChange={(e) => setFieldValue('accountPortalOption', e)}
                 />
               </Stack.Item>
               <Stack.Item>
@@ -469,7 +483,30 @@ const CustomPortal = (props) => {
                   />
 
               </div>
-
+            <Stack.Item>
+              <Stack vertical>
+                <p className="navigation-text" variation="strong">Active Subscription Actions</p>
+                <FormLayout>
+                    {(values.activeSubscriptionBtnSeq || ['update_choices', 'delivery_schedule', 'swap_subscription', 'delay_next_order', 'edit_subscription']).map((option, i) => {
+                      return (
+                        <FormLayout.Group>
+                          <Select
+                            options={activeSubscriptionOptions}
+                            value={option}
+                            error={touched.swapProduct && errors.swapProduct}
+                            onChange={(e) => {
+                              let updatedSeq = [...values.activeSubscriptionBtnSeq]
+                              updatedSeq[i] = e
+                              setFieldValue('activeSubscriptionBtnSeq', updatedSeq)
+                            }}
+                          />
+                          <br />
+                        </FormLayout.Group>
+                      )
+                    })}
+                </FormLayout>
+              </Stack>
+            </Stack.Item>
             <Stack.Item>
               <Stack vertical>
                 <p className="navigation-text" variation="strong">Subscription Management</p>

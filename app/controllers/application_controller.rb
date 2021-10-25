@@ -15,7 +15,10 @@ class ApplicationController < ActionController::Base
                                                       attempt_billing: false,
                                                       skip_payment: true,
                                                       show_after_checkout: false,
-                                                      email_after_checkout: true )
+                                                      email_after_checkout: true,
+                                                      max_fail_strategy: 'skip',
+                                                      account_portal_option: 'add_link',
+                                                      active_subscription_btn_seq: ['update_choices', 'delivery_schedule', 'swap_subscription', 'delay_next_order', 'edit_subscription'] )
     end
 
     @current_setting

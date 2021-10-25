@@ -342,7 +342,7 @@ const CreateCustomer = () => {
           title={id ? 'Update a Customer' : 'Create a Customer'}
           breadcrumbs={[
             {
-              content: 'Customer Subscriptions',
+              content: 'Subscriptions Orders',
               onAction: () => history.push('/customers'),
             },
           ]}
@@ -609,7 +609,7 @@ const CreateCustomer = () => {
                             <FormLayout.Group>
                               {/* <TextField
                                 prefix={<img src={customerIDICon}></img>}
-                                
+
                                 label="Customer ID"
                                 placeholder="ID used to uniquely identify the customer"
                                 disabled

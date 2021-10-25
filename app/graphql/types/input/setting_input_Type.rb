@@ -3,6 +3,10 @@ module Types
     class SettingInputType < Types::BaseInputObject
       argument :payment_retries, String, required: false
       argument :payment_delay_retries, String, required: false
+      argument :max_fail_strategy, String, required: false
+      argument :active_subscription_btn_seq, [String], required: false
+
+      argument :account_portal_option, String, required: false
 
       argument :__typename, String, required: false
       #customer portal

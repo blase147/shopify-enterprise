@@ -46,6 +46,7 @@ extend('Checkout::PostPurchase::ShouldRender', async (args) => {
 async function getRenderData() {
   return {
     couldBe: 'anything',
+    redirect_url: 'https://hitched-staging.myshopify.com/a/chargezen_production/dashboard/build_a_box?customer_id=5879558340774&subscription_id=1964736678&active_subscriptions_count=2&selling_plan_id=631996582'
   };
 }
 /**

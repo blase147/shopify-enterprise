@@ -14,18 +14,6 @@ import {
 } from '@shopify/polaris';
 
 const Billing = (props) => {
-  const [selectedRetry, setSelectedRetry] = useState('3times');
-  const [selectedDelay, setSelectedDelay] = useState('1day');
-
-  const handleSelectChangeRetry = useCallback(
-    (value) => setSelectedRetry(value),
-    []
-  );
-  const handleSelectChangeDelay = useCallback(
-    (value) => setSelectedDelay(value),
-    []
-  );
-
   const options_retry = [
     { label: '3 Times', value: '3' },
     { label: '4 Times', value: '4' },
@@ -36,6 +24,12 @@ const Billing = (props) => {
     { label: '1 Day', value: '1' },
     { label: '2 Days', value: '2' },
     { label: '3 Days', value: '3' },
+  ];
+
+  const options_strategy = [
+    { label: 'Cancel Subscription', value: 'cancel' },
+    { label: 'Pause Subscription', value: 'pause' },
+    { label: 'Skip Failed Order', value: 'skip' },
   ];
 
   const { values, touched, errors, setFieldValue, handleBack } = props;
@@ -79,6 +73,18 @@ const Billing = (props) => {
                 onChange={(e) => setFieldValue('paymentDelayRetries', e)}
                 options={options_delay}
               />
+              <TextStyle variation="subdued">
+                Specify the interval after which you want to retry card charge.
+              </TextStyle>
+
+              <Select
+                label="If a card charge fails after max tries"
+                value={values.maxFailStrategy}
+                error={touched.maxFailStrategy && errors.maxFailStrategy}
+                onChange={(e) => setFieldValue('maxFailStrategy', e)}
+                options={options_strategy}
+              />
+
             </FormLayout>
           </div>
         </Card.Section>

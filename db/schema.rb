@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_22_051115) do
+ActiveRecord::Schema.define(version: 2021_10_25_085058) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -313,6 +313,9 @@ ActiveRecord::Schema.define(version: 2021_10_22_051115) do
     t.string "email_service"
     t.integer "design_type", default: 0
     t.boolean "enable_password", default: false
+    t.string "max_fail_strategy"
+    t.string "account_portal_option"
+    t.string "active_subscription_btn_seq", array: true
     t.index ["shop_id"], name: "index_settings_on_shop_id", unique: true
   end
 

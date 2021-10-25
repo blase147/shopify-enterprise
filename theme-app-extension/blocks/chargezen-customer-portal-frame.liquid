@@ -2,18 +2,28 @@
   {% assign cz_params = "customer_id=" | append: customer.id %}
 
   <script type="text/javascript">
+
+    {% if shop.metafields.extension.account_portal_option == 'add_link' %}
     window.addEventListener('DOMContentLoaded', () => {
-      var injectInto = document.querySelector('body');
-
-      const linkToDashboard = document.createElement('a');
-      linkToDashboard.innerHTML = `<a href='/a/chargezen_production?{{ cz_params }}'>Manage Subscriptions</a>`
-
-      const wrapper = document.createElement('div')
-      wrapper.classList.add('container')
-      wrapper.append(linkToDashboard)
-
-      injectInto.insertBefore(wrapper, injectInto.querySelector('#shopify-section-footer'))
+      var addresses_link = document.querySelector('a[href="/account/addresses"]');
+      if (addresses_link){
+        var injectInto = addresses_link.closest('div');
+        const linkToDashboard = document.createElement('div');
+        linkToDashboard.innerHTML = `<a href='/a/chargezen_production?{{ cz_params }}'>Manage Subscriptions</a>`;
+        injectInto.append(linkToDashboard);
+      } else {
+        var injectInto = document.querySelector('body');
+        const linkToDashboard = document.createElement('a');
+        linkToDashboard.innerHTML = `<a href='/a/chargezen_production?{{ cz_params }}'>Manage Subscriptions</a>`
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('container');
+        wrapper.append(linkToDashboard);
+        injectInto.insertBefore(wrapper, injectInto.querySelector('#shopify-section-footer'));
+      }
     });
+    {% else %}
+      window.location.href = '/a/chargezen_production?{{ cz_params }}';
+    {% endif %}
   </script>
 {% endif %}
 

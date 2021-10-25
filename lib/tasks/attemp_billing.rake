@@ -85,7 +85,7 @@ namespace :subscriptions do
         EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
       end
     end
-  rescue StabdardError => e
+  rescue StandardError => e
     p e.message
   end
 
@@ -95,7 +95,7 @@ namespace :subscriptions do
     customer = Customer.find_by(shopify_id: subscription_id)
     billing_date = get_next_billing_date(subscription, customer.shop)
     if customer.present? && customer.shop.sms_setting.present? && customer.shop.sms_setting.failed_renewal.present? && customer.retry_count<=customer.shop.setting.payment_retries
-      if billing_date.utc.beginning_of_day == Time.current.utc.beginning_of_day
+      if billing_date.utc.beginning_of_day + ((customer.shop.setting.payment_delay_retries || 0)*customer.retry_count).days == Time.current.utc.beginning_of_day
         result = SubscriptionBillingAttempService.new(subscription.id).run
         if result[:error].present?
           message_service = SmsService::MessageGenerateService.new(shop, customer, subscription)
@@ -104,6 +104,12 @@ namespace :subscriptions do
           customer.update_columns(failed_at: Time.current, retry_count: customer.retry_count.succ)
           if customer.retry_count>=customer.shop.setting.payment_retries
             subs_log.update(billing_status: :churn, executions: false)
+            case shop.setting.max_fail_strategy
+            when 'cancel'
+              SubscriptionContractDeleteService.new(subscription_id).run
+            when 'pause'
+              SubscriptionContractDeleteService.new(subscription_id).run('PAUSED')
+            end
           end
           email_notification = customer.shop.setting.email_notifications.find_by_name "Card declined"
           EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?

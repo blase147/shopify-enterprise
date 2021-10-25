@@ -35,7 +35,22 @@ class Shop < ActiveRecord::Base
   end
 
   def build_setting
-    Setting.find_or_create_by(shop_id: id)
+    setting = Setting.find_or_initialize_by(shop_id: shop.id)
+    unless setting.persisted?
+      setting.update(
+        payment_retries: 3,
+        payment_delay_retries: 1,
+        cancel_enabled: true,
+        pause_resume: true,
+        attempt_billing: false,
+        skip_payment: true,
+        show_after_checkout: false,
+        email_after_checkout: true,
+        max_fail_strategy: 'skip',
+        account_portal_option: 'add_link',
+        active_subscription_btn_seq: ['update_choices', 'delivery_schedule', 'swap_subscription', 'delay_next_order', 'edit_subscription']
+      )
+    end
     SmsSetting.find_or_create_by(shop_id: id)
     Translation.find_or_create_by(shop_id: id)
   end

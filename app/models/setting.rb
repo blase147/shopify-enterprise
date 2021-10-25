@@ -15,6 +15,7 @@ class Setting < ApplicationRecord
   reject_if: :all_blank, allow_destroy: true
 
   after_save :set_design_metafield, if: -> { saved_change_to_design_type? || new_record? }
+  after_save :update_account_portal_option_metafield, if: -> { saved_change_to_account_portal_option? || new_record? }
 
   def style_content
     "#{style_account_profile} #{style_account_profile} #{style_subscription} #{style_upsell} #{style_sidebar_pages}"
@@ -32,6 +33,11 @@ class Setting < ApplicationRecord
     shop.connect
     shop = ShopifyAPI::Shop.current
     shop.add_metafield(ShopifyAPI::Metafield.new({ key: 'plan_selector_type', value: "design_type_#{design_type}", namespace: 'extension', value_type: 'string' }))
+  end
+
+  def update_account_portal_option_metafield
+    shop.connect
+    ShopifyAPI::Metafield.create({ key: 'account_portal_option', value: account_portal_option, namespace: 'extension', value_type: 'string' })
   end
 
   private ##

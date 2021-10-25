@@ -615,7 +615,7 @@ const Customers = () => {
           </>
         )}
         <Page
-          title="Customer Subscriptions"
+          title="Subscriptions Orders"
           primaryAction={
             <ButtonGroup>
               <Button onClick={() => { }}>

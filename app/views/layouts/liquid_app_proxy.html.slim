@@ -1,4 +1,4 @@
-| {%- layout none -%}
+
 
 doctype html
 html
@@ -11,19 +11,23 @@ html
     = javascript_pack_tag 'app_proxy', 'data-turbolinks-track': 'reload'
     link[rel="stylesheet" href="https://unpkg.com/@shopify/polaris@5.8.4/dist/styles.css"]
   body.chargezen-proxy
+    | {% if customer.id ==
+    = params[:customer_id]
+    | %}
+
+    = render 'app_proxy/shared/tabs'
+
     .Polaris-Page
-      = render 'app_proxy/shared/tabs'
       .Polaris-Page__Content
         .Polaris-Layout
           .Polaris-Layout__Section
             .Dashboard_wrapper__3SFrh
-              | {% if customer.id ==
-              = params[:customer_id]
-              | %}
               = yield
-              | {% else %}
-              p You don't have access to view this.
-              | {% endif %}
+    | {% else %}
+    p style="margin-left: 4rem;"
+      | You don't have access to view this. Please make sure you
+      a href="/account/login"  login.
+    | {% endif %}
 
 
 javascript:
