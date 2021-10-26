@@ -10,10 +10,19 @@ html
     = stylesheet_link_tag 'app_proxy', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_pack_tag 'app_proxy', 'data-turbolinks-track': 'reload'
     link[rel="stylesheet" href="https://unpkg.com/@shopify/polaris@5.8.4/dist/styles.css"]
-  body.chargezen-proxy
-    | {% if customer.id ==
-    = params[:customer_id]
-    | %}
+    css:
+      .Polaris-Page {
+        max-width: 95% !important;
+        padding: 0 !important;
+      }
+      div.chargezen-proxy {
+        background: #f4f6f8;
+      }
+  div.chargezen-proxy
+    - unless @skip_auth
+      | {% if customer.id ==
+      = params[:customer_id]
+      | %}
 
     = render 'app_proxy/shared/tabs'
 
@@ -23,11 +32,12 @@ html
           .Polaris-Layout__Section
             .Dashboard_wrapper__3SFrh
               = yield
-    | {% else %}
-    p style="margin-left: 4rem;"
-      | You don't have access to view this. Please make sure you
-      a href="/account/login"  login.
-    | {% endif %}
+    - unless @skip_auth
+      | {% else %}
+      p style="margin-left: 4rem;"
+        | You don't have access to view this. Please make sure you
+        a href="/account/login"  login.
+      | {% endif %}
 
 
 javascript:

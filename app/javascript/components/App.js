@@ -33,6 +33,7 @@ import Upsell from './upsell/Index';
 import CreateUpsell from './upsell/New';
 import Tiazen from './Tiazen/Index'
 import Toolbox from './Toolbox/Index'
+import PowerView from './plans/PowerView';
 
 
 
@@ -61,6 +62,7 @@ export default function App(props) {
     ),
     cache: new InMemoryCache(),
   });
+
   const [passwordProtected, setPasswordProtected] = useState(props.enablePassword)
 
   // const client = new ApolloClient({
@@ -88,6 +90,11 @@ export default function App(props) {
               exact
               path="/fixed-subscription-plans/:id"
               component={FixedPlan}
+            />
+            <Route
+              exact
+              path="/power-view-plan/:id/"
+              component={PowerView}
             />
             <Route
               exact

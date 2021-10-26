@@ -3,6 +3,8 @@ class SellingPlan < ApplicationRecord
   validates_presence_of :name, :selector_label
   enum box_subscription_type: %i[undefined collection products]
 
+  attr_accessor :total_amount, :active_subscriptions, :orders
+
   after_save_commit :check_multiple_anchors
 
   def check_multiple_anchors

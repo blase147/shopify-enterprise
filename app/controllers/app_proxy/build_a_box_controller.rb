@@ -19,6 +19,8 @@ class AppProxy::BuildABoxController < AppProxyController
       end
       fetch_products(products) if products.present?
     end
+    @skip_auth = true
+    render 'index', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
   def add_product

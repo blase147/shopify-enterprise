@@ -38,6 +38,10 @@ module Types
     field :shipping_cut_off, Int, null: true
     field :first_delivery, String, null: true
 
+    field :orders, [Types::SellingPlanOrderType], null: true
+    field :active_subscriptions, Int, null: true
+    field :total_amount, Int, null: true
+
     field :_destroy, GraphQL::Types::Boolean, null: false
 
     def box_subscription_type
