@@ -17,6 +17,7 @@ class SubscriptionContractsPowerService < GraphqlService
             lines(first: 10) {
               edges {
                 node {
+                  id
                   sellingPlanId
                   productId
                   variantId

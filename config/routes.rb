@@ -16,6 +16,14 @@ Rails.application.routes.draw do
   post '/shopify_webhooks/app_uninstalled', to: 'shopify_webhooks#app_uninstalled'
 
   post '/shipping_suites/sync_orders', to: 'shipping_suites#sync_orders'
+
+  resources :power_plans, only: [] do
+    member do
+      post :pause
+      post :cancel
+    end
+  end
+
   namespace :app_proxy do
     resources :account do
       collection do

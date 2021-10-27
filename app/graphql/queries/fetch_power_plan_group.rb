@@ -31,7 +31,7 @@ module Queries
           customer: o.node.customer.display_name,
           displayFulfillmentStatus: o.node.display_fulfillment_status,
           amount: o.node.total_received_set.presentment_money.amount,
-          dateCreated: o.node.created_at
+          createdAt: o.node.created_at
         }}}.flatten
       end
 

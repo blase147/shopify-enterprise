@@ -50,7 +50,12 @@ class SubscriptionContractDeleteService < GraphqlService
     input = {
       status: status
     }
-    id = "gid://shopify/SubscriptionContract/#{@id}"
+
+    id = if @id.include? 'SubscriptionContract'
+      @id
+    else
+      "gid://shopify/SubscriptionContract/#{@id}"
+    end
     result = client.query(client.parse(DELETE_QUERY), variables: { contractId: id } )
     p result
     draft_id = result.data.subscription_contract_update.draft.id

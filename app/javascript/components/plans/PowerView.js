@@ -87,7 +87,7 @@ const PowerView = () => {
 
           totalAmount
           activeSubscriptions
-          orders{
+          orders {
             id
             displayFulfillmentStatus
             name
@@ -170,6 +170,7 @@ const PowerView = () => {
     _destroy: false,
   };
 
+  const [sellingPlanIndex, setSellingPlanIndex] = useState(0);
   const [formErrors, setFormErrors] = useState([]);
   const [planData, setPlanData] = useState(null);
 
@@ -309,29 +310,7 @@ const PowerView = () => {
     plans.push({ ...initialValues });
     return plans;
   });
-  const formatRows = (rows) => {
-    return rows?.map((row) => [
-      <Checkbox
-        label={false}
-        checked={selectedPlansForRemove.indexOf(row.id) != -1}
-        onChange={(newChecked) => handleChangeCheckedPlans(newChecked, row.id)}
-      />,
-      <div className="plans">
-        <div className={`${row.active ? 'active' : 'draft'}`}>
-          <Badge>{row.active ? 'Active' : 'Draft'}</Badge>
-        </div>
-        <Link to={`/${generateLink(row.planType)}/${row.id}`} key={row.id}>
-          {row.name}
-        </Link>
-      </div>,
-      `${row.sellingPlans[0].intervalCount} ${capitalize(row.sellingPlans[0].intervalType)}`,
-      row.price,
-      row.subscriptionModel,
-      row.planType === 'fixed_price'
-        ? '0 Days'
-        : `${row.sellingPlans[0].trialIntervalCount} ${capitalize(row.sellingPlans[0].trialIntervalType)}`,
-    ]);
-  }
+  const plan = planData?.sellingPlans?.[sellingPlanIndex];
   return (
     <AppLayout tabIndex={1}>
       <Frame>
@@ -489,137 +468,196 @@ const PowerView = () => {
                     </>
                   )}
 
-                  {values.sellingPlans.map((plan, index) => (
-                    <div className={'powerItemPlan'} key={index}>
-                      <Layout>
-                        <Layout.Section>
-                          <Card sectioned>
-                            <Stack>
-                              <Stack.Item>
-                                <Heading>{plan.name}</Heading>
-                                <TextStyle variation="subdued">
-                                  Active Since 2 months ago
+                  <div className={'powerItemPlan'}>
+                    <Layout>
+                      <Layout.Section>
+                        <Card sectioned>
+                          <Stack>
+                            <Stack.Item>
+                              <Heading>{plan.name}</Heading>
+                              <TextStyle variation="subdued">
+                                Active Since 2 months ago
+                              </TextStyle>
+                            </Stack.Item>
+                            <Stack.Item fill></Stack.Item>
+                            <Stack.Item>
+                              <>
+                                <TextStyle variation="strong">
+                                  Selling Plan Id:
                                 </TextStyle>
-                              </Stack.Item>
-                              <Stack.Item fill></Stack.Item>
-                              <Stack.Item>
-                                <>
-                                  <TextStyle variation="strong">Selling Plan Id:</TextStyle>
-                                  <br />
-                                  <TextStyle variation="subdued">
-                                    {plan?.shopifyId?.match(/\d+/)?.[0]}
-                                  </TextStyle>
-                                </>
-                              </Stack.Item>
-                            </Stack>
-                            <br />
-                            <div
-                              style={{
+                                <br />
+                                <TextStyle variation="subdued">
+                                  {plan?.shopifyId?.match(/\d+/)?.[0]}
+                                </TextStyle>
+                              </>
+                            </Stack.Item>
+                          </Stack>
+                          <br />
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                            }}
+                          >
+                            <Select
+                              options={allProducts.map((product) => {
+                                return {
+                                  label: product.title,
+                                  value: product.productId,
+                                };
+                              })}
+                              value={selectedProducts[sellingPlanIndex]}
+                              onChange={(e) => {
+                                const temp = [...selectedProducts];
+                                temp[sellingPlanIndex] = e;
+                                setSelectedProducts(temp);
+                              }}
+                            />
+                            <Select
+                              options={values.sellingPlans.map((sp, i) => {
+                                return {
+                                  label: sp.name,
+                                  value: i,
+                                };
+                              })}
+                              value={parseInt(sellingPlanIndex)}
+                              onChange={setSellingPlanIndex}
+                            />
+                          </div>
 
-                                display: 'flex',
-                                justifyContent: 'space-between',
+                          <br />
+                          <Stack>
+                            <Button primary>Swap Product</Button>
+                            <Button outline>Edit Subscription</Button>
+                            <Button
+                              onClick={(e) => {
+                                fetch(`/power_plans/${plan.id}/cancel`, {
+                                  method: 'POST',
+                                })
+                                  .then((response) => response.json())
+                                  .then((data) => {
+                                    if (data.sucess == true) {
+                                      var Toast =
+                                        window['app-bridge'].actions.Toast;
+                                      Toast.create(window.app, {
+                                        message: 'Cancelling',
+                                        duration: 5000,
+                                      }).dispatch(Toast.Action.SHOW);
+                                    }
+                                  });
                               }}
                             >
-                              <Select
-                                options={allProducts.map((product) => {
-                                  return {
-                                    label: product.title,
-                                    value: product.productId,
-                                  };
-                                })}
-                                value={selectedProducts[index]}
-                                onChange={(e) => {
-                                  const temp = [...selectedProducts];
-                                  temp[index] = e;
-                                  setSelectedProducts(temp);
-                                }}
-                              ></Select>
-
-                              <Link>Pause</Link>
-                            </div>
-                            <br />
-                            <Stack>
-                              <Button primary>Swap Product</Button>
-                              <Button outline>Edit Subscription</Button>
-                              <Button>Cancel</Button>
-                            </Stack>
-                          </Card>
-                        </Layout.Section>
-                        <Layout.Section secondary>
-                          <Card title="Total Revenue to Date:" sectioned>
-                            <TextStyle variation="subdued">${plan.totalAmount}</TextStyle>
-                          </Card>
-                        </Layout.Section>
-                      </Layout>
-                      <br />
-                      <br />
-                      <Card sectioned>
-                        <div
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                          }}
-                        >
-                          <Stack>
-                            <img src={ClipboardSVG} />
-                            <>
-                              <Heading>Active Subs</Heading>
-                              <p>{plan.activeSubscriptions}</p>
-                            </>
+                              Cancel
+                            </Button>
+                            <Button
+                              onClick={(e) => {
+                                fetch(`/power_plans/${plan.id}/pause`, {
+                                  method: 'POST',
+                                })
+                                  .then((response) => response.json())
+                                  .then((data) => {
+                                    if (data.sucess == true) {
+                                      var Toast =
+                                        window['app-bridge'].actions.Toast;
+                                      Toast.create(window.app, {
+                                        message: 'Pausing',
+                                        duration: 5000,
+                                      }).dispatch(Toast.Action.SHOW);
+                                    }
+                                  });
+                              }}
+                            >
+                              Pause
+                            </Button>
                           </Stack>
+                        </Card>
+                      </Layout.Section>
+                      <Layout.Section secondary>
+                        <Card title="Total Revenue to Date:" sectioned>
+                          <TextStyle variation="subdued">
+                            ${plan.totalAmount}
+                          </TextStyle>
+                        </Card>
+                      </Layout.Section>
+                    </Layout>
+                    <br />
+                    <br />
+                    <Card sectioned>
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        <Stack>
+                          <img src={ClipboardSVG} />
+                          <>
+                            <Heading>Active Subs</Heading>
+                            <p>{plan.activeSubscriptions}</p>
+                          </>
+                        </Stack>
 
-                          <Stack>
-                            <img src={TotalRevenueSVG} />
-                            <>
-                              <Heading>Total Revenue</Heading>
-                              <p>${plan.totalAmount}</p>
-                            </>
-                          </Stack>
+                        <Stack>
+                          <img src={TotalRevenueSVG} />
+                          <>
+                            <Heading>Total Revenue</Heading>
+                            <p>${plan.totalAmount}</p>
+                          </>
+                        </Stack>
 
-                          <Stack>
-                            <img src={BillingFrequencySVG} />
-                            <>
-                              <Heading>Billing Frequency</Heading>
-                              <p>{plan.intervalCount} {plan.intervalType}</p>
-                            </>
-                          </Stack>
+                        <Stack>
+                          <img src={BillingFrequencySVG} />
+                          <>
+                            <Heading>Billing Frequency</Heading>
+                            <p>
+                              {plan.intervalCount} {plan.intervalType}
+                            </p>
+                          </>
+                        </Stack>
 
-                          <Stack>
-                            <img src={DeliveryScheduleSVG} />
-                            <>
-                              <Heading>Delivery Schedule</Heading>
-                              <p>{plan.deliveryIntervalCount} {plan.deliveryIntervalType}</p>
-                            </>
-                          </Stack>
-                        </div>
-                      </Card>
-                      <br />
-                      <Card sectioned>
-                        <DataTable
-                          columnContentTypes={[
-                            'text',
-                            'text',
-                            'text',
-                            'text',
-                            'text',
-                            'text',
-                          ]}
-                          headings={[
-                            '',
-                            'Number',
-                            'Name',
-                            'Date Created',
-                            'Status',
-                            'Total Spend',
-                          ]}
-                          rows={plan.orders.map(o => ['', o.name, o.customer, o.createdAt, o.displayFulfillmentStatus, `$${o.amount}`])}
-                          sortable={[false, false, true, false, false, false]}
-                          defaultSortDirection="descending"
-                          initialSortColumnIndex={1}
-                        />
-                      </Card>
-                    </div>
-                  ))}
+                        <Stack>
+                          <img src={DeliveryScheduleSVG} />
+                          <>
+                            <Heading>Delivery Schedule</Heading>
+                            <p>
+                              {plan.deliveryIntervalCount}{' '}
+                              {plan.deliveryIntervalType}
+                            </p>
+                          </>
+                        </Stack>
+                      </div>
+                    </Card>
+                    <br />
+                    <Card sectioned>
+                      <DataTable
+                        columnContentTypes={[
+                          'text',
+                          'text',
+                          'text',
+                          'text',
+                          'text',
+                        ]}
+                        headings={[
+                          'Order Number',
+                          'Customer',
+                          'Date Created',
+                          'Status',
+                          'Total Spend',
+                        ]}
+                        rows={plan.orders.map((o) => [
+                          o.name,
+                          o.customer,
+                          new Date(o.createdAt).toLocaleDateString(),
+                          o.displayFulfillmentStatus,
+                          `$${o.amount}`,
+                        ])}
+                        sortable={[false, false, true, false, false, false]}
+                        defaultSortDirection="descending"
+                        initialSortColumnIndex={1}
+                      />
+                    </Card>
+                  </div>
+
                 </Form>
               )}
             </Formik>
