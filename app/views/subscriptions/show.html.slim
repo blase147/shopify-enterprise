@@ -6,7 +6,7 @@
 - address = customer.default_address rescue nil
 - next_billing_date =  get_next_billing_date(@subscription, current_shop)
 
-- formatted = address.formatted.join(', ').titleize rescue nil
+- formatted = address.formatted.join(' ').titleize rescue nil
 - address_id = address.id[/\d+/] rescue nil
 - setting = current_shop.setting
 - subscription_logs = @customer.subscription_logs.order(created_at: :desc).limit(10)
@@ -28,326 +28,331 @@
 
   .Polaris-Page__Content
     .Polaris-Layout
-      .Polaris-Layout__Section.Polaris-Layout__Section--oneHalf
+      .Polaris-Layout__Section
         .Polaris-Card
-          .Polaris-Card__Header
-            h1.Polaris-Heading.Polaris-DisplayText.Polaris-DisplayText--sizeLarge
-              = customer.display_name.titleize
-
           .Polaris-Card__Section
-            p.Polaris-DisplayText #{formatted} . #{customer.email}
-            p Address ID: ##{address_id}
+            div style="display: flex; justify-content: space-between; margin-bottom: 1rem;"
+              div
+                h1.Polaris-Heading
+                  = customer.display_name.titleize
+              div
+                div style="display: flex; justify-content: space-between;"
+                  p.Polaris-TextStyle--variationStrong
+                    | EMAIL
+                  button.Polaris-Button.Polaris-Button--plain type="button" data-toggle='modal' data-target='#customerEditModal'
+                    span.Polaris-Button__Content
+                      span.Polaris-Button__Text Edit
+                p.Polaris-DisplayText.Polaris-TextStyle--variationSubdued #{customer.email}
 
-          .Polaris-Card__Footer.Polaris-Card__LeftJustified
-            .Polaris-ButtonGroup
-              .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                button.Polaris-Button.Polaris-Button--plain.Polaris-Button--textAlignRight type="button" data-toggle='modal' data-target='#customerEditModal'
-                  span.Polaris-Button__Content
-                    = icon_tag 'edit'
-                    span.Polaris-Button__Text Edit
-              .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/admin/customers/#{@customer.shopify_customer_id}?shop=#{@customer.shop.shopify_domain}" target="_parent"
-                  span.Polaris-Button__Content
-                    = icon_tag 'profile_icon'
-                    span.Polaris-Button__Text Shopify Profile
-      .Polaris-Layout__Section.Polaris-Layout__Section--oneHalf
-        .Polaris-Card.polaris-product
-          .Polaris-Card__Header.car-arrow
-            .Polaris-Stack.Polaris-Stack--alignmentBaseline.product-header
-              .Polaris-Stack__Item.Polaris-Stack__Item--fill
-                h4.Polaris-Heading.Polaris-DisplayText.Polaris-DisplayText--sizeSmall Product
-              .Polaris-Stack__Item
-                span.Polaris-DisplayText.Polaris-DisplayText--sizeSmall Qty
-            .Polaris-Card__Section.product-carousel
-              #owl-demo.owl-carousel.owl-theme class=("#{@subscription.lines.edges.count > 1 ? 'owl-items-display' : ''}")
-                - @subscription.lines.edges.each do |line|
-                  - if @subscription.status == 'ACTIVE'
-                    div.item
-                      div.product-qty
-                        .Polaris-Stack__Item.Polaris-Stack__Item--fill
-                          span= line.node.title
-                        - if setting.admin_allowed?('upcoming_quantity')
-                          .Polaris-Stack__Item
-                            form action="#{action_subscription_contract_path(:update_quantity, @subscription.id[/\d+/])}" method='post' data-remote=true enctype="multipart/form-data"
-                              .quantity-field
-                                div
-                                  span.btn-wrapper
-                                    button.minus-quantity type="button"
-                                      svg fill="none" height="8" viewbox=("0 0 7 2") width="8" xmlns="http://www.w3.org/2000/svg"
-                                        path d=("M7 0H0V1.5H7V0Z") fill="#637381" /
 
-                                    input.quatity-val type="number" name="quantity" value="#{line.node.quantity}"/
-                                    button.plus-quantity type="button"
-                                      svg fill="none" height="8" viewbox=("0 0 8 8") width="8" xmlns="http://www.w3.org/2000/svg"
-                                        path d=("M0 3.08V4.508H3.08V7.588H4.508V4.508H7.588V3.08H4.508V0H3.08V3.08H0Z") fill="#212B36" /
-                                    input.prev-quantity type="hidden" value="#{line.node.quantity}"/
-                                  span.update-quantity
-                                    input.hidden type="text" name="line_item_id" value="#{line.node.id}"/
-                                    button type="submit" APPLY
-                        - else
-                          span= line.node.quantity
-                      div.subscription-btns
-                        - if setting.admin_allowed?('swap_product')
-                          div.slider-btns
-                            .Polaris-Stack__Item
-                              .Polaris-ButtonGroup
-                                .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                                  button.Polaris-Button.Polaris-Button--plain type="button" data-toggle='modal' data-target="#swap-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}"
-                                    span.Polaris-Button__Content
-                                      svg fill="none" height="16" viewbox=("0 0 17 16") width="17" xmlns="http://www.w3.org/2000/svg"
-                                        circle cx="8.99268" cy="8" fill="#212B36" r="8" /
-                                        path d=("M13.9278 7.84612L12.6236 6.54184C12.5388 6.45684 12.4012 6.45668 12.3162 6.54145C12.2752 6.58233 12.2522 6.63787 12.2523 6.69574V7.34788H9.64373V4.73933H10.2959C10.4159 4.73956 10.5134 4.64239 10.5136 4.52233C10.5137 4.46446 10.4908 4.40892 10.4498 4.36804L9.1455 3.06377C9.06062 2.97891 8.92302 2.97891 8.83812 3.06377L7.53385 4.36804C7.44884 4.45282 7.44868 4.59046 7.53346 4.67546C7.57424 4.71634 7.62959 4.73931 7.68732 4.73933H8.33946V7.34788H5.73091V6.69574C5.73113 6.57569 5.63396 6.4782 5.51391 6.47797C5.45603 6.47787 5.4005 6.50086 5.35962 6.54184L4.05534 7.84612C3.97048 7.931 3.97048 8.0686 4.05534 8.1535L5.35962 9.45777C5.4444 9.54277 5.58204 9.54294 5.66704 9.45816C5.70792 9.41738 5.73089 9.36203 5.73091 9.3043V8.65216H8.33946V11.2607H7.68732C7.56727 11.2605 7.46977 11.3577 7.46955 11.4777C7.46945 11.5356 7.49243 11.5911 7.53342 11.632L8.83769 12.9363C8.92257 13.0211 9.06017 13.0211 9.14507 12.9363L10.4493 11.632C10.5344 11.5472 10.5345 11.4096 10.4497 11.3246C10.409 11.2837 10.3536 11.2607 10.2959 11.2607H9.64373V8.65216H12.2523V9.3043C12.2521 9.42435 12.3492 9.52184 12.4693 9.52207C12.5272 9.52217 12.5827 9.49918 12.6236 9.4582L13.9278 8.15392C14.0129 8.06915 14.013 7.9315 13.9282 7.8465C13.9281 7.84638 13.928 7.84624 13.9278 7.84612Z") fill="white" /
-                                      span.Polaris-Button__Text Swap Subscription
-                          .Polaris-Stack__Item
-                            .Polaris-ButtonGroup
-                              .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                                button.Polaris-Button.Polaris-Button--plain type="button" data-toggle='modal' data-target="#editSubscriptionModal-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}"
-                                  span.Polaris-Button__Content
-                                    = icon_tag 'edit'
-                                    span.Polaris-Button__Text Edit
-                          - if setting.admin_allowed?('pause_subscription')
-                            .Polaris-Stack__Item
-                              .Polaris-ButtonGroup
-                                .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                                  = link_to action_subscription_contract_path(:pause, @subscription.id[/\d+/]), remote: true, method: :post do
-                                    svg fill="none" height="16" viewbox=("0 0 17 16") width="17" xmlns="http://www.w3.org/2000/svg"
-                                      circle cx="8.99268" cy="8" fill="#212B36" r="8" /
-                                      path d=("M13.9278 7.84612L12.6236 6.54184C12.5388 6.45684 12.4012 6.45668 12.3162 6.54145C12.2752 6.58233 12.2522 6.63787 12.2523 6.69574V7.34788H9.64373V4.73933H10.2959C10.4159 4.73956 10.5134 4.64239 10.5136 4.52233C10.5137 4.46446 10.4908 4.40892 10.4498 4.36804L9.1455 3.06377C9.06062 2.97891 8.92302 2.97891 8.83812 3.06377L7.53385 4.36804C7.44884 4.45282 7.44868 4.59046 7.53346 4.67546C7.57424 4.71634 7.62959 4.73931 7.68732 4.73933H8.33946V7.34788H5.73091V6.69574C5.73113 6.57569 5.63396 6.4782 5.51391 6.47797C5.45603 6.47787 5.4005 6.50086 5.35962 6.54184L4.05534 7.84612C3.97048 7.931 3.97048 8.0686 4.05534 8.1535L5.35962 9.45777C5.4444 9.54277 5.58204 9.54294 5.66704 9.45816C5.70792 9.41738 5.73089 9.36203 5.73091 9.3043V8.65216H8.33946V11.2607H7.68732C7.56727 11.2605 7.46977 11.3577 7.46955 11.4777C7.46945 11.5356 7.49243 11.5911 7.53342 11.632L8.83769 12.9363C8.92257 13.0211 9.06017 13.0211 9.14507 12.9363L10.4493 11.632C10.5344 11.5472 10.5345 11.4096 10.4497 11.3246C10.409 11.2837 10.3536 11.2607 10.2959 11.2607H9.64373V8.65216H12.2523V9.3043C12.2521 9.42435 12.3492 9.52184 12.4693 9.52207C12.5272 9.52217 12.5827 9.49918 12.6236 9.4582L13.9278 8.15392C14.0129 8.06915 14.013 7.9315 13.9282 7.8465C13.9281 7.84638 13.928 7.84624 13.9278 7.84612Z") fill="white" /
-                                    span.pause-btn type="button" Pause
-                          - if setting.admin_allowed?('subscription_cancellation')
-                            .Polaris-Stack__Item
-                              .Polaris-ButtonGroup
-                                .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                                  button.Polaris-Button.Polaris-Button--plain type="button" data-toggle='modal' data-target="#cancel-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}"
-                                    span.Polaris-Button__Content
-                                      / = icon_tag 'edit'
-                                      svg fill="none" height="16" viewbox=("0 0 17 16") width="17" xmlns="http://www.w3.org/2000/svg"
-                                        circle cx="8.99268" cy="8" fill="#212B36" r="8" /
-                                        path d=("M13.9278 7.84612L12.6236 6.54184C12.5388 6.45684 12.4012 6.45668 12.3162 6.54145C12.2752 6.58233 12.2522 6.63787 12.2523 6.69574V7.34788H9.64373V4.73933H10.2959C10.4159 4.73956 10.5134 4.64239 10.5136 4.52233C10.5137 4.46446 10.4908 4.40892 10.4498 4.36804L9.1455 3.06377C9.06062 2.97891 8.92302 2.97891 8.83812 3.06377L7.53385 4.36804C7.44884 4.45282 7.44868 4.59046 7.53346 4.67546C7.57424 4.71634 7.62959 4.73931 7.68732 4.73933H8.33946V7.34788H5.73091V6.69574C5.73113 6.57569 5.63396 6.4782 5.51391 6.47797C5.45603 6.47787 5.4005 6.50086 5.35962 6.54184L4.05534 7.84612C3.97048 7.931 3.97048 8.0686 4.05534 8.1535L5.35962 9.45777C5.4444 9.54277 5.58204 9.54294 5.66704 9.45816C5.70792 9.41738 5.73089 9.36203 5.73091 9.3043V8.65216H8.33946V11.2607H7.68732C7.56727 11.2605 7.46977 11.3577 7.46955 11.4777C7.46945 11.5356 7.49243 11.5911 7.53342 11.632L8.83769 12.9363C8.92257 13.0211 9.06017 13.0211 9.14507 12.9363L10.4493 11.632C10.5344 11.5472 10.5345 11.4096 10.4497 11.3246C10.409 11.2837 10.3536 11.2607 10.2959 11.2607H9.64373V8.65216H12.2523V9.3043C12.2521 9.42435 12.3492 9.52184 12.4693 9.52207C12.5272 9.52217 12.5827 9.49918 12.6236 9.4582L13.9278 8.15392C14.0129 8.06915 14.013 7.9315 13.9282 7.8465C13.9281 7.84638 13.928 7.84624 13.9278 7.84612Z") fill="white" /
-                                      span.Polaris-Button__Text Cancel
-                  - else
-                    - if setting.admin_allowed?('reactive_subscription')
+            - @subscription.lines.edges.each do |line|
+              - if @subscription.status == 'ACTIVE'
+                div.item
+                  div style="margin-bottom: 1rem; display: flex; justify-content: space-between; background: #F2F0F9; padding: 1rem 2rem;"
+                    p style="font-size: 20px; line-height: 24px" = line.node.title
+                    p style="font-size: 20px; line-height: 20px"
+                      |$
+                      = line.node.current_price.amount
+                    div
+                      - if setting.admin_allowed?('pause_subscription')
+                        = link_to action_subscription_contract_path(:pause, @subscription.id[/\d+/]), remote: true, method: :post, style: 'text-decoration: none;' do
+                          button.Polaris-Button.Polaris-Button--plain
+                            span.Polaris-Button__Content
+                              span.Polaris-Button__Text Pause
+                  div style="margin-top: 1.4rem; display: flex; justify-content: space-between;"
+                    div.slider-btns
                       .Polaris-Stack__Item
-                        .Polaris-ButtonGroup.resume
-                          .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                            = link_to action_subscription_contract_path(:resume, @subscription.id[/\d+/]), remote: true, method: :post do
-                              svg fill="none" height="16" viewbox=("0 0 17 16") width="17" xmlns="http://www.w3.org/2000/svg"
-                                circle cx="8.99268" cy="8" fill="#212B36" r="8" /
-                                path d=("M13.9278 7.84612L12.6236 6.54184C12.5388 6.45684 12.4012 6.45668 12.3162 6.54145C12.2752 6.58233 12.2522 6.63787 12.2523 6.69574V7.34788H9.64373V4.73933H10.2959C10.4159 4.73956 10.5134 4.64239 10.5136 4.52233C10.5137 4.46446 10.4908 4.40892 10.4498 4.36804L9.1455 3.06377C9.06062 2.97891 8.92302 2.97891 8.83812 3.06377L7.53385 4.36804C7.44884 4.45282 7.44868 4.59046 7.53346 4.67546C7.57424 4.71634 7.62959 4.73931 7.68732 4.73933H8.33946V7.34788H5.73091V6.69574C5.73113 6.57569 5.63396 6.4782 5.51391 6.47797C5.45603 6.47787 5.4005 6.50086 5.35962 6.54184L4.05534 7.84612C3.97048 7.931 3.97048 8.0686 4.05534 8.1535L5.35962 9.45777C5.4444 9.54277 5.58204 9.54294 5.66704 9.45816C5.70792 9.41738 5.73089 9.36203 5.73091 9.3043V8.65216H8.33946V11.2607H7.68732C7.56727 11.2605 7.46977 11.3577 7.46955 11.4777C7.46945 11.5356 7.49243 11.5911 7.53342 11.632L8.83769 12.9363C8.92257 13.0211 9.06017 13.0211 9.14507 12.9363L10.4493 11.632C10.5344 11.5472 10.5345 11.4096 10.4497 11.3246C10.409 11.2837 10.3536 11.2607 10.2959 11.2607H9.64373V8.65216H12.2523V9.3043C12.2521 9.42435 12.3492 9.52184 12.4693 9.52207C12.5272 9.52217 12.5827 9.49918 12.6236 9.4582L13.9278 8.15392C14.0129 8.06915 14.013 7.9315 13.9282 7.8465C13.9281 7.84638 13.928 7.84624 13.9278 7.84612Z") fill="white" /
-                              span.resume-btn type="button" Resume
+                        - if setting.admin_allowed?('swap_product')
+                          button.Polaris-Button.Polaris-Button--primary type="button" style="margin-right: 1rem;" data-toggle='modal' data-target="#swap-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}"
+                            span.Polaris-Button__Content
+                              span.Polaris-Button__Text.ml-0
+                                | Swap Subscription
+                        button.Polaris-Button type="button" style="margin-right: 1rem;" data-toggle='modal' data-target="#editSubscriptionModal-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}"
+                          span.Polaris-Button__Content
+                            span.Polaris-Button__Text.ml-0
+                              | Edit
+                        - if setting.admin_allowed?('subscription_cancellation')
+                          button.Polaris-Button type="button" style="margin-right: 1rem;"  data-toggle='modal' data-target="#cancel-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}"
+                            span.Polaris-Button__Content
+                              span.Polaris-Button__Text.ml-0
+                                | Cancel
+                    div
+                      a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/admin/customers/#{@customer.shopify_customer_id}?shop=#{@customer.shop.shopify_domain}" target="_parent"
+                        button.Polaris-Button
+                          span.Polaris-Button__Content
+                            span.Polaris-Button__Text.ml-0
+                              | Shopify Profile
 
-        - @subscription.lines.edges.each do |line|
-          - if @subscription.status == 'ACTIVE'
-            - product = ShopifyAPI::Product.find(line.node.product_id[/\d+/])
-            = render 'app_proxy/dashboard/edit_subscription_modal', subscription: @subscription, line_item: line.node, product_image: product.images.first&.src, admin_action: true, setting: setting
-            = render 'app_proxy/dashboard/swap_subscription_modal', subscription: @subscription, line_item: line.node
-            = render 'app_proxy/dashboard/upgrade_subscription_modal', subscription: @subscription, line_item: line.node, selling_plan_id: line.node.selling_plan_id, product: product
-            = render 'app_proxy/dashboard/cancel_subscription_modal', subscription: @subscription, line_item: line.node, lines_count: @subscription.lines.edges.size
+              - else
+                - if setting.admin_allowed?('reactive_subscription')
+                  .Polaris-Stack__Item
+                    .Polaris-ButtonGroup.resume
+                      .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
+                        = link_to action_subscription_contract_path(:resume, @subscription.id[/\d+/]), remote: true, method: :post, style: 'text-decoration: none;' do
+                          span.resume-btn type="button" Resume
 
-  .Polaris-Page__Content.shipment-process
-    .Polaris-Layout
-      .Polaris-Layout__Section.Polaris-Layout__Section--oneSix
+            - @subscription.lines.edges.each do |line|
+              - if @subscription.status == 'ACTIVE'
+                - product = ShopifyAPI::Product.find(line.node.product_id[/\d+/])
+                = render 'app_proxy/dashboard/edit_subscription_modal', subscription: @subscription, line_item: line.node, product_image: product.images.first&.src, admin_action: true, setting: setting
+                = render 'app_proxy/dashboard/swap_subscription_modal', subscription: @subscription, line_item: line.node
+                = render 'app_proxy/dashboard/upgrade_subscription_modal', subscription: @subscription, line_item: line.node, selling_plan_id: line.node.selling_plan_id, product: product
+                = render 'app_proxy/dashboard/cancel_subscription_modal', subscription: @subscription, line_item: line.node, lines_count: @subscription.lines.edges.size
+
+      .Polaris-Layout__Section.Polaris-Layout__Section--secondary
         .Polaris-Card
-          .Polaris-Card__Header
-            span.Polaris-TextStyle--variationStrong USD
           .Polaris-Card__Section
-            span.Polaris-DisplayText= number_to_currency @total
+            div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;"
+              h1.Polaris-Heading Billing Information
+              a data-remote=true style="text-decoration: none;" href=send_update_card_subscription_path(params[:id])
+                button.Polaris-Button.Polaris-Button--plain
+                    span.Polaris-Button__Content Edit
 
-      .Polaris-Layout__Section.Polaris-Layout__Section--oneSix
-        .Polaris-Card
-          .Polaris-Card__Header
-            span.Polaris-TextStyle--variationStrong Order Date
-          .Polaris-Card__Section
-            span.Polaris-DisplayText= DateTime.parse(@subscription.created_at).strftime("%b %d, %H:%M%P")
+            - if api_order.present?
+              - card = api_order.payment_details
+              - billing_address = api_order.billing_address
 
-      .Polaris-Layout__Section.Polaris-Layout__Section--oneSix
-        .Polaris-Card
-          .Polaris-Card__Header
-            span.Polaris-TextStyle--variationStrong Next Charge Date
-          .Polaris-Card__Section
-            span.Polaris-DisplayText= next_billing_date.strftime("%a, %B %e")
+              .Polaris-Stack.visa-section
+                .Polaris-Stack__Item
+                  <svg width="84" height="57" viewBox="0 0 84 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M73.3681 0.340088H10.6319C4.76952 0.340088 0 5.10961 0 10.9719V45.7789C0 51.6412 4.76952 56.4107 10.6319 56.4107H73.3681C79.2305 56.4107 84 51.6412 84 45.7789V10.9719C84 5.10961 79.2305 0.340088 73.3681 0.340088ZM10.6319 5.64582H73.3681C76.305 5.64582 78.6943 8.03506 78.6943 10.9719V13.0647H5.30573V10.9719C5.30573 8.03506 7.69497 5.64582 10.6319 5.64582ZM78.6943 24.9292H5.30573V18.3705H78.6943V24.9292ZM73.3681 51.105H10.6319C7.69497 51.105 5.30573 48.7157 5.30573 45.7789V30.2349H78.6943V45.7789C78.6943 48.7157 76.305 51.105 73.3681 51.105Z" fill="#007EFF"/>
+                    <path d="M69.4492 44.4566C70.9949 44.4566 72.2479 43.2035 72.2479 41.6578C72.2479 40.1121 70.9949 38.859 69.4492 38.859C67.9034 38.859 66.6504 40.1121 66.6504 41.6578C66.6504 43.2035 67.9034 44.4566 69.4492 44.4566Z" fill="#212B36"/>
+                    <path d="M61.6018 44.4566C63.1475 44.4566 64.4005 43.2035 64.4005 41.6578C64.4005 40.1121 63.1475 38.859 61.6018 38.859C60.056 38.859 58.803 40.1121 58.803 41.6578C58.803 43.2035 60.056 44.4566 61.6018 44.4566Z" fill="#212B36"/>
+                  </svg>
 
+                .Polaris-Stack__Item
+                  p
+                    = card.credit_card_company
+                    span.Polaris-TextStyle--variationStrong style="margin-left: 0.5rem;"
+                      = card.credit_card_number[/\d+/]
+                  - if card.respond_to?(:credit_card_expiration_month)
+                    p
+                      | Exp. Date
+                      span.Polaris-TextStyle--variationStrong #{card.credit_card_expiration_month}/#{card.credit_card_expiration_year}
 
-      .Polaris-Layout__Section.Polaris-Layout__Section--oneSix
-        .Polaris-Card
-          .Polaris-Card__Header
-            span.Polaris-TextStyle--variationStrong Billing Frequency
-          .Polaris-Card__Section
-            span.Polaris-DisplayText= "#{billing_policy.interval_count} #{billing_policy.interval}".titleize
+              p style="font-size: 18px; line-height: 18px; margin-top: 1rem; font-family: Avenir LT Std;"
+                i TOTAL SPEND TO DATE:
+                br
+                |$
+                = api_order.customer.total_spent
 
-      .Polaris-Layout__Section.Polaris-Layout__Section--oneSix
-        .Polaris-Card
-          .Polaris-Card__Header
-            span.Polaris-TextStyle--variationStrong Delivery Schedule
-          .Polaris-Card__Section
-            span.Polaris-DisplayText= "#{delivery_policy.interval_count} #{delivery_policy.interval}".titleize
+  .Polaris-Card
+    .Polaris-Card__Section
+      div style="display: flex; justify-content: space-between;"
+        .Polaris-Stack
+          .Polaris-Stack__Item
+            <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="17.5" cy="17.5" r="17.5" fill="#2C6ECB"/>
+              <path d="M21.125 8.25H19.7675C19.51 7.5225 18.815 7 18 7C17.185 7 16.49 7.5225 16.2313 8.25H14.875C14.53 8.25 14.25 8.53 14.25 8.875V11.375C14.25 11.72 14.53 12 14.875 12H21.125C21.47 12 21.75 11.72 21.75 11.375V8.875C21.75 8.53 21.47 8.25 21.125 8.25Z" fill="white"/>
+              <path d="M24.25 9.5H23V11.375C23 12.4088 22.1587 13.25 21.125 13.25H14.875C13.8412 13.25 13 12.4088 13 11.375V9.5H11.75C11.0612 9.5 10.5 10.0612 10.5 10.75V25.75C10.5 26.4513 11.0488 27 11.75 27H24.25C24.9513 27 25.5 26.4513 25.5 25.75V10.75C25.5 10.0488 24.9513 9.5 24.25 9.5ZM17.8175 20.5675L15.3175 23.0675C15.195 23.1888 15.035 23.25 14.875 23.25C14.715 23.25 14.555 23.1888 14.4325 23.0675L13.1825 21.8175C12.9387 21.5738 12.9387 21.1775 13.1825 20.9338C13.4262 20.69 13.8225 20.69 14.0663 20.9338L14.875 21.7413L16.9325 19.6838C17.1762 19.44 17.5725 19.44 17.8163 19.6838C18.06 19.9275 18.0613 20.3225 17.8175 20.5675ZM17.8175 15.5675L15.3175 18.0675C15.195 18.1888 15.035 18.25 14.875 18.25C14.715 18.25 14.555 18.1888 14.4325 18.0675L13.1825 16.8175C12.9387 16.5738 12.9387 16.1775 13.1825 15.9337C13.4262 15.69 13.8225 15.69 14.0663 15.9337L14.875 16.7413L16.9325 14.6837C17.1762 14.44 17.5725 14.44 17.8163 14.6837C18.06 14.9275 18.0613 15.3225 17.8175 15.5675ZM22.375 22H19.875C19.53 22 19.25 21.72 19.25 21.375C19.25 21.03 19.53 20.75 19.875 20.75H22.375C22.72 20.75 23 21.03 23 21.375C23 21.72 22.72 22 22.375 22ZM22.375 17H19.875C19.53 17 19.25 16.72 19.25 16.375C19.25 16.03 19.53 15.75 19.875 15.75H22.375C22.72 15.75 23 16.03 23 16.375C23 16.72 22.72 17 22.375 17Z" fill="white"/>
+            </svg>
+          .Polaris-Stack__Item
+            h2.Polaris-Heading Order Date
+            p = DateTime.parse(@subscription.created_at).strftime("%b %d, %H:%M%P")
+        .Polaris-Stack
+          .Polaris-Stack__Item
+            <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="17.5" cy="17.5" r="17.5" fill="#2C6ECB"/>
+              <g clip-path="url(#clip0_4:1774)">
+              <path d="M9.79688 18.7969H8.58594C8.26207 18.7969 8 19.0589 8 19.3828V26.4141C8 26.7379 8.26207 27 8.58594 27H9.79688C10.7662 27 11.5547 26.2115 11.5547 25.2422V20.5547C11.5547 19.5854 10.7662 18.7969 9.79688 18.7969Z" fill="white"/>
+              <path d="M21.5547 7C18.0039 7 15.1094 9.89449 15.1094 13.4453C15.1094 14.9922 15.6601 16.4101 16.5742 17.5234C17.3125 17.7343 18.0039 18.1093 18.5898 18.625C18.7 18.7077 18.7622 18.7067 18.8828 18.7188H20.9688C21.7773 18.7188 22.4922 19.1171 22.9024 19.75C25.8086 19.1289 28 16.5391 28 13.4453C28 9.89449 25.1055 7 21.5547 7ZM22.1523 16.2695H22.1406V16.9609C22.1406 17.289 21.8829 17.5469 21.5547 17.5469C21.2265 17.5469 20.9688 17.289 20.9688 16.9609V16.2695C20.582 16.1406 20.2187 15.8945 19.9024 15.5078C19.6914 15.2617 19.7266 14.8984 19.9727 14.6875C20.2188 14.4766 20.5938 14.5117 20.793 14.7578C21.1094 15.1328 21.4609 15.2734 21.7539 15.1679C21.9883 15.0859 22.1406 14.8632 22.1406 14.6172C22.1406 14.289 21.8829 14.0312 21.5547 14.0312C20.582 14.0312 19.7969 13.2461 19.7969 12.2734C19.7969 11.5703 20.2188 10.9257 20.875 10.6562C20.8985 10.6445 20.9336 10.6445 20.9688 10.6328V9.92969C20.9688 9.60152 21.2265 9.34375 21.5547 9.34375C21.8829 9.34375 22.1406 9.60152 22.1406 9.92969V10.6328C22.4453 10.7383 22.7383 10.8906 23.0078 11.1484C23.2422 11.3711 23.2422 11.7461 23.0195 11.9805C22.7969 12.2149 22.4219 12.2148 22.1875 11.9922C21.9062 11.7226 21.5899 11.6172 21.332 11.7343C21.1094 11.8281 20.9688 12.0391 20.9688 12.2734C20.9688 12.6015 21.2265 12.8594 21.5547 12.8594C22.5273 12.8594 23.3125 13.6445 23.3125 14.6172C23.3125 15.3555 22.8437 16.0117 22.1523 16.2695Z" fill="white"/>
+              <path d="M27.8242 19.9336C27.7539 19.8164 27.6602 19.7226 27.5547 19.6406C27.1232 19.2631 26.3963 19.2988 25.9727 19.7578L23.3125 22.8281L23.2305 22.9218C22.9024 23.2851 22.4336 23.4843 21.9414 23.4843H17.3555C17.0273 23.4843 16.7695 23.2265 16.7695 22.8984C16.7695 22.5702 17.0273 22.3125 17.3555 22.3125H20.9688C21.6133 22.3125 22.1406 21.7851 22.1406 21.1406V21.1289C22.1289 20.4843 21.6133 19.9687 20.9688 19.9687H18.8086C18.4572 19.9687 18.0806 19.8397 17.7773 19.582C16.3477 18.3281 14.2617 18.246 12.7266 19.3125V26.5195C13.8867 26.8359 15.082 27 16.289 27H21.5547C22.8437 27 24.0625 26.3906 24.8359 25.3593L27.6485 21.6093C28.0588 21.0707 28.0898 20.332 27.8242 19.9336Z" fill="white"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_4:1774">
+                  <rect width="20" height="20" fill="white" transform="translate(8 7)"/>
+                </clipPath>
+              </defs>
+            </svg>
+          .Polaris-Stack__Item
+            p.Polaris-Heading Next Charge Date
+            p = next_billing_date.strftime("%a, %B %e")
+        .Polaris-Stack
+          .Polaris-Stack__Item
+            <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="17.5" cy="17.5" r="17.5" fill="#2C6ECB"/>
+              <path d="M24.9038 7H11.0964C10.7728 7 10.5105 7.26234 10.5105 7.58594V24.6881C10.5105 24.8435 10.5723 24.9925 10.6821 25.1024L12.408 26.8284C12.6369 27.0572 13.0078 27.0572 13.2367 26.8284L14.5483 25.5168L15.8598 26.8284C15.9697 26.9382 16.1187 27 16.2741 27C16.4295 27 16.5786 26.9383 16.6885 26.8284L18 25.5168L19.3116 26.8284C19.4215 26.9382 19.5706 27 19.7259 27C19.8813 27 20.0304 26.9383 20.1402 26.8284L21.4518 25.5168L22.7634 26.8284C22.8778 26.9428 23.0277 27 23.1777 27C23.3276 27 23.4776 26.9428 23.592 26.8284L25.3179 25.1024C25.4278 24.9925 25.4896 24.8435 25.4896 24.6881V7.58594C25.4897 7.26234 25.2273 7 24.9038 7ZM17.414 11.4012V10.724C17.414 10.4004 17.6764 10.138 18 10.138C18.3236 10.138 18.5859 10.4004 18.5859 10.724V11.3932H19.2552C19.5788 11.3932 19.8412 11.6556 19.8412 11.9792C19.8412 12.3028 19.5788 12.5651 19.2552 12.5651H17.5817C17.2126 12.5651 16.9124 12.8653 16.9124 13.2344C16.9124 13.6034 17.2126 13.9037 17.5817 13.9037H18.4185C19.4337 13.9037 20.2597 14.7296 20.2597 15.7448C20.2597 16.7035 19.5229 17.4931 18.5859 17.578V18.2553C18.5859 18.5788 18.3236 18.8412 18 18.8412C17.6764 18.8412 17.414 18.5788 17.414 18.2553V17.5859H16.7448C16.4212 17.5859 16.1588 17.3236 16.1588 17C16.1588 16.6764 16.4212 16.414 16.7448 16.414H18.4185C18.7875 16.414 19.0878 16.1138 19.0878 15.7448C19.0878 15.3758 18.7876 15.0755 18.4185 15.0755H17.5817C16.5664 15.0755 15.7405 14.2496 15.7405 13.2343C15.7406 12.2757 16.4772 11.4862 17.414 11.4012ZM21.1381 21.9792H14.8621C14.5385 21.9792 14.2761 21.7168 14.2761 21.3932C14.2761 21.0696 14.5385 20.8073 14.8621 20.8073H21.1381C21.4616 20.8073 21.724 21.0696 21.724 21.3932C21.724 21.7168 21.4616 21.9792 21.1381 21.9792Z" fill="white"/>
+            </svg>
+          .Polaris-Stack__Item
+            p.Polaris-Heading Billing Frequency
+            p = "#{billing_policy.interval_count} #{billing_policy.interval}".titleize
+        .Polaris-Stack
+          .Polaris-Stack__Item
+            <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="17.5" cy="17.5" r="17.5" fill="#2C6ECB"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M22.2578 11.1803C23.9918 11.5827 24.6551 12.5966 25.4867 13.9922H22.2578V11.1803ZM12.1241 14.1094C12.4637 14.1094 12.7101 14.2733 12.7101 14.6562C12.7101 14.9793 12.4487 15.2413 12.1258 15.2422H8.58594C8.2623 15.2422 8 15.5046 8 15.8281C8 16.1518 8.2623 16.4141 8.58594 16.4141H13.8594C14.1861 16.4141 14.4476 16.6762 14.4476 17C14.4476 17.3236 14.1853 17.5859 13.8617 17.5859H8.58594C8.2623 17.5859 8 17.8482 8 18.1719C8 18.4955 8.2623 18.7578 8.58594 18.7578H9.875V20.5156C9.875 20.8393 10.1373 21.1016 10.4609 21.1016H11.6388C11.8487 22.1358 12.7626 22.8984 13.8398 22.8984C14.9171 22.8984 15.831 22.1358 16.0409 21.1016H21.9903C22.2003 22.1358 23.1141 22.8984 24.1914 22.8984C25.2687 22.8984 26.1825 22.1358 26.3925 21.1016H27.4141C27.7377 21.1016 28 20.8393 28 20.5156V17C28 15.2808 26.1866 15.1667 26.185 15.1641H21.6719C21.3482 15.1641 21.0859 14.9018 21.0859 14.5781V11.0625H10.4609C10.1373 11.0625 9.875 11.3248 9.875 11.6484V12.9375H9.17188C8.84824 12.9375 8.58594 13.1998 8.58594 13.5234C8.58594 13.8471 8.84824 14.1094 9.17188 14.1094H12.1241ZM24.951 19.8928C25.3705 20.3122 25.3705 20.9926 24.951 21.4121C24.2762 22.0868 23.1172 21.6068 23.1172 20.6523C23.1172 19.6981 24.2762 19.218 24.951 19.8928ZM14.5994 19.8928C15.0189 20.3122 15.0189 20.9926 14.5994 21.4121C13.9247 22.0868 12.7656 21.6068 12.7656 20.6523C12.7656 19.6981 13.9247 19.218 14.5994 19.8928Z" fill="white"/>
+            </svg>
 
-      .Polaris-Layout__Section.Polaris-Layout__Section--oneSix
-        .Polaris-Card
-          .Polaris-Card__Header
-            span.Polaris-TextStyle--variationStrong Outbound Shipment Status
-          .Polaris-Card__Section
-            span.Polaris-DisplayText
-              = link_to 'Link', @subscription.app_admin_url
+          .Polaris-Stack__Item
+            p.Polaris-Heading Delivery Schedule
+            p = "#{delivery_policy.interval_count} #{delivery_policy.interval}".titleize
 
   .Polaris-Page__Content
     .Polaris-Layout
       .Polaris-Layout__Section
-        .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
-          h2.Polaris-Heading.Polaris-TextStyle--variationStrong History
-          p All timestamps are in Eastern Time (US)
         .Polaris-Card
-          .Polaris-Card__Section
-            .Polaris-Heading.Polaris-TextStyle--variationStrong= Time.current.year
-            .Polaris-DataTable
+          .Polaris-Card__Section#history-tabs
+            ul.payment-tabs
+              li.active data-target="#history" Histroy
+              li data-target="#payment-history" Payment History
+              - if @box_products.present?
+                li data-target="#box-products" Box Products
+
+
+            .Polaris-DataTable.tab#history style="margin: 1rem"
+              p style="margin: 1rem 0;" All timestamps are in Eastern Time (US)
               .Polaris-DataTable__ScrollContainer
                 table.Polaris-DataTable__Table
+                  thead
+                    tr style="background: #007EFF;"
+                      th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn.Polaris-DataTable__Cell--header scope="col" style="color: #FFFFFF" Status
+                      th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn.Polaris-DataTable__Cell--header scope="col" style="color: #FFFFFF" Description
+                      th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn.Polaris-DataTable__Cell--header scope="col" style="color: #FFFFFF" Date
                   tbody
                     - @subscription.orders.edges.each do |order|
                       - order.node.events.edges.each do |event|
                         tr.Polaris-DataTable__TableRow
-                          th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row" $
-                          td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= raw event.node.message
-                          td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= DateTime.parse(event.node.created_at).strftime("%a, %B %e %T")
-        - if subscription_logs.present?
-          .Polaris-Card
-            .Polaris-Card__Section
-              .Polaris-Heading.Polaris-TextStyle--variationStrong= Time.current.year
-              .Polaris-DataTable
-                .Polaris-DataTable__ScrollContainer
-                  table.Polaris-DataTable__Table
-                    tbody
-                      - subscription_logs.each do |log|
-                        tr.Polaris-DataTable__TableRow
-                          th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row" $
-                          td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= raw log.description&.gsub(',', ' ')&.capitalize
-                          td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= log.created_at.strftime("%a, %B %e %T")
+                          td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"
+                            span.Polaris-Badge.Polaris-Badge--statusSuccess Success
+                          td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop = raw event.node.message
+                          td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop = DateTime.parse(event.node.created_at).strftime("%a, %B %e %T")
 
-        br/
-        .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
-          h2.Polaris-Heading.Polaris-TextStyle--variationStrong Payment History
-        .Polaris-Card
-          .Polaris-Card__Section
-            .Polaris-DataTable
+            .Polaris-DataTable.hidden.tab#payment-history style="margin: 1rem"
+              p style="margin: 1rem 0;" All timestamps are in Eastern Time (US)
               .Polaris-DataTable__ScrollContainer
                 table.Polaris-DataTable__Table
                   thead
-                    tr
-                      th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header aria-sort="none" data-polaris-header-cell="true" scope="col"  Date
-                      th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header aria-sort="none" data-polaris-header-cell="true" scope="col"  Order
-                      th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header.Polaris-DataTable__Cell--numeric aria-sort="none" data-polaris-header-cell="true" scope="col"  Amount
+                    tr style="background: #007EFF;"
+                      th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header aria-sort="none" data-polaris-header-cell="true" scope="col"  style="color: #FFFFFF" Date
+                      th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header aria-sort="none" data-polaris-header-cell="true" scope="col"  style="color: #FFFFFF" Order
+                      th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header.Polaris-DataTable__Cell--numeric aria-sort="none" data-polaris-header-cell="true" scope="col" style="color: #FFFFFF"  Amount
                   tbody
                     - @subscription.orders.edges.each do |order|
                       tr.Polaris-DataTable__TableRow
                         th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"= DateTime.parse(order.node.created_at).strftime("%b %d, %H:%M%P")
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= order.node.name
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--numeric $#{order.node.total_received_set.presentment_money.amount}
-        - if @box_products.present?
-          br/
-          .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
-            h2.Polaris-Heading.Polaris-TextStyle--variationStrong BUILD-A-BOX CHOICES
-          div.box-items
-            - if @customer.campaign_date.present?
-              div.campaign_date_title
-                h2.Polaris-Heading.Polaris-TextStyle--variationStrong Campaign Name & Date: '#{BuildABoxCampaignGroup.last.internal_name}'
-                span.Polaris-Heading.Polaris-TextStyle--variationStrong.campaign_date &nbsp#{@customer.campaign_date.strftime("%e %B, %Y")}
-            h2.product_choice_label Product choices
-            div.box_images_collection
-              - @box_products.each do |product|
-                div.building-box-product
-                  img.box-image-d src="#{product.images.first&.src}"
-                  = link_to action_subscription_contract_path(:remove_box_item, @subscription.id[/\d+/], "product_id=#{product.id}"), remote: true, method: :post do
-                    = image_pack_tag "media/subscriptionsPlans/removeProduct.svg", class: 'removeIcon'
+
+            - if @box_products.present?
+              .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing.hidden.tab#box-products
+                h2.Polaris-Heading.Polaris-TextStyle--variationStrong BUILD-A-BOX CHOICES
+                div.box-items
+                  - if @customer.campaign_date.present?
+                    div.campaign_date_title
+                      h2.Polaris-Heading.Polaris-TextStyle--variationStrong Campaign Name & Date: '#{BuildABoxCampaignGroup.last.internal_name}'
+                      span.Polaris-Heading.Polaris-TextStyle--variationStrong.campaign_date &nbsp#{@customer.campaign_date.strftime("%e %B, %Y")}
+                  - elsif api_order.present?
+                    div
+                      h2.Polaris-Heading.Polaris-TextStyle--variationStrong Box Product: '#{@subscription.lines.edges.first.node.title}'
+                      p.Polaris-Heading.Polaris-TextStyle--variationStrong Choice Date: #{DateTime.parse(api_order.created_at).strftime("%e %B, %Y")}
+                  h2.product_choice_label Product choices
+                  div.box_images_collection
+                    - @box_products.each do |product|
+                      div.building-box-product
+                        img.box-image-d src="#{product.images.first&.src}"
+                        = link_to action_subscription_contract_path(:remove_box_item, @subscription.id[/\d+/], "product_id=#{product.id}"), remote: true, method: :post do
+                          = image_pack_tag "media/subscriptionsPlans/removeProduct.svg", class: 'removeIcon'
+
+        / .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
+        /   h2.Polaris-Heading.Polaris-TextStyle--variationStrong History
+        /   p All timestamps are in Eastern Time (US)
+        / .Polaris-Card
+        /   .Polaris-Card__Section
+        /     .Polaris-Heading.Polaris-TextStyle--variationStrong= Time.current.year
+        /     .Polaris-DataTable
+        /       .Polaris-DataTable__ScrollContainer
+        /         table.Polaris-DataTable__Table
+        /           tbody
+        /             - @subscription.orders.edges.each do |order|
+        /               - order.node.events.edges.each do |event|
+        /                 tr.Polaris-DataTable__TableRow
+        /                   th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row" $
+        /                   td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= raw event.node.message
+        /                   td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= DateTime.parse(event.node.created_at).strftime("%a, %B %e %T")
+        / - if subscription_logs.present?
+        /   .Polaris-Card
+        /     .Polaris-Card__Section
+        /       .Polaris-Heading.Polaris-TextStyle--variationStrong= Time.current.year
+        /       .Polaris-DataTable
+        /         .Polaris-DataTable__ScrollContainer
+        /           table.Polaris-DataTable__Table
+        /             tbody
+        /               - subscription_logs.each do |log|
+        /                 tr.Polaris-DataTable__TableRow
+        /                   th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row" $
+        /                   td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= raw log.description&.gsub(',', ' ')&.capitalize
+        /                   td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= log.created_at.strftime("%a, %B %e %T")
+
+        / br/
+        / .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
+        /   h2.Polaris-Heading.Polaris-TextStyle--variationStrong Payment History
+        / .Polaris-Card
+        /   .Polaris-Card__Section
+        /     .Polaris-DataTable
+        /       .Polaris-DataTable__ScrollContainer
+        /         table.Polaris-DataTable__Table
+        /           thead
+        /             tr
+        /               th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header aria-sort="none" data-polaris-header-cell="true" scope="col"  Date
+        /               th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header aria-sort="none" data-polaris-header-cell="true" scope="col"  Order
+        /               th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header.Polaris-DataTable__Cell--numeric aria-sort="none" data-polaris-header-cell="true" scope="col"  Amount
+        /           tbody
+        /             - @subscription.orders.edges.each do |order|
+        /               tr.Polaris-DataTable__TableRow
+        /                 th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"= DateTime.parse(order.node.created_at).strftime("%b %d, %H:%M%P")
+        /                 td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= order.node.name
+        /                 td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--numeric $#{order.node.total_received_set.presentment_money.amount}
+        / - if @box_products.present?
+        /   br/
+        /   .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
+        /     h2.Polaris-Heading.Polaris-TextStyle--variationStrong BUILD-A-BOX CHOICES
+        /   div.box-items
+        /     - if @customer.campaign_date.present?
+        /       div.campaign_date_title
+        /         h2.Polaris-Heading.Polaris-TextStyle--variationStrong Campaign Name & Date: '#{BuildABoxCampaignGroup.last.internal_name}'
+        /         span.Polaris-Heading.Polaris-TextStyle--variationStrong.campaign_date &nbsp#{@customer.campaign_date.strftime("%e %B, %Y")}
+        /     h2.product_choice_label Product choices
+        /     div.box_images_collection
+        /       - @box_products.each do |product|
+        /         div.building-box-product
+        /           img.box-image-d src="#{product.images.first&.src}"
+        /           = link_to action_subscription_contract_path(:remove_box_item, @subscription.id[/\d+/], "product_id=#{product.id}"), remote: true, method: :post do
+        /             = image_pack_tag "media/subscriptionsPlans/removeProduct.svg", class: 'removeIcon'
       .Polaris-Layout__Section.Polaris-Layout__Section--secondary
-        .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
-          h2.Polaris-Heading.Polaris-TextStyle--variationStrong Billing Information
-          p Card on file
         .Polaris-Card
-          - if api_order.present?
-            - card = api_order.payment_details
-            - billing_address = api_order.billing_address
-            .Polaris-Card__Section
-              .Polaris-Card__Subsection
-                .Polaris-Stack.visa-section
-                  .Polaris-Stack__Item
-                    <svg width="84" height="57" viewBox="0 0 84 57" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M73.3681 0.340088H10.6319C4.76952 0.340088 0 5.10961 0 10.9719V45.7789C0 51.6412 4.76952 56.4107 10.6319 56.4107H73.3681C79.2305 56.4107 84 51.6412 84 45.7789V10.9719C84 5.10961 79.2305 0.340088 73.3681 0.340088ZM10.6319 5.64582H73.3681C76.305 5.64582 78.6943 8.03506 78.6943 10.9719V13.0647H5.30573V10.9719C5.30573 8.03506 7.69497 5.64582 10.6319 5.64582ZM78.6943 24.9292H5.30573V18.3705H78.6943V24.9292ZM73.3681 51.105H10.6319C7.69497 51.105 5.30573 48.7157 5.30573 45.7789V30.2349H78.6943V45.7789C78.6943 48.7157 76.305 51.105 73.3681 51.105Z" fill="#007EFF"/>
-                      <path d="M69.4492 44.4566C70.9949 44.4566 72.2479 43.2035 72.2479 41.6578C72.2479 40.1121 70.9949 38.859 69.4492 38.859C67.9034 38.859 66.6504 40.1121 66.6504 41.6578C66.6504 43.2035 67.9034 44.4566 69.4492 44.4566Z" fill="#212B36"/>
-                      <path d="M61.6018 44.4566C63.1475 44.4566 64.4005 43.2035 64.4005 41.6578C64.4005 40.1121 63.1475 38.859 61.6018 38.859C60.056 38.859 58.803 40.1121 58.803 41.6578C58.803 43.2035 60.056 44.4566 61.6018 44.4566Z" fill="#212B36"/>
-                    </svg>
+          .Polaris-Card__Section
+            h2 style="font-size: 14px;font-weight: 700;line-height: 20px;margin-bottom: 1rem;" BILLING ADDRESS
+            p.Polaris-TextStyle--variationSubdued = formatted
 
-                  .Polaris-Stack__Item
-                    p #{card.credit_card_company} ending in #{card.credit_card_number}
-                    - if card.respond_to?(:credit_card_expiration_month)
-                      p Expires #{card.credit_card_expiration_month}/#{card.credit_card_expiration_year}
-              .Polaris-Card__Subsection.billing-info-text
-                p = billing_address.name&.titleize
-
-                p = billing_address.address1
-
-                p #{billing_address.city} #{billing_address.province} #{billing_address.zip} #{billing_address.country}
-
-                p #{billing_address.phone}
-
-                p #{api_order.contact_email}
-
-            .Polaris-Card__Subsection
-              .Polaris-Stack
-                .Polaris-Stack__Item
-                  .Polaris-ButtonGroup
-                    .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                      / a.Polaris-Button.Polaris-Button--plain href=send_update_card_subscription_path(params[:id]) data-remote=true
-                      /   span.Polaris-Button__Content
-                      /     = icon_tag 'edit'
-                      /     span.Polaris-Button__Text Send Update Link
-                      .billing-actions
-                        .eidt
-                          svg fill="none" height="16" viewbox=("0 0 16 16") width="16" xmlns="http://www.w3.org/2000/svg"
-                            circle cx="8" cy="8" fill="#212B36" r="8" /
-                            path d=("M10.5713 7.89999C10.3583 7.89999 10.1856 8.07268 10.1856 8.28571V11.1428C10.1856 11.2454 10.1025 11.3285 9.9999 11.3285H4.85713C4.75456 11.3285 4.67142 11.2454 4.67142 11.1428V5.4286C4.67142 5.32603 4.75456 5.24288 4.85713 5.24288H8.28566C8.49869 5.24288 8.67137 5.07019 8.67137 4.85716C8.67137 4.64413 8.49868 4.47146 8.28566 4.47146H4.85713C4.32852 4.47146 3.9 4.89999 3.9 5.4286V11.1428C3.9 11.6714 4.32852 12.0999 4.85713 12.0999H9.99992C10.5285 12.0999 10.9571 11.6714 10.9571 11.1428V8.28569C10.9571 8.07267 10.7844 7.89999 10.5713 7.89999Z") fill="white" stroke="white" stroke-width="0.2" /
-                            path d=("M11.6799 4.32049C11.4748 4.11531 11.1965 4.00007 10.9064 4.0001C10.6161 3.99927 10.3376 4.11471 10.133 4.32067L6.36959 8.08375C6.33837 8.11521 6.31482 8.15344 6.30074 8.19546L5.72932 9.90972C5.67945 10.0594 5.76039 10.2212 5.91011 10.2711C5.93915 10.2808 5.96957 10.2857 6.00017 10.2857C6.03084 10.2857 6.06133 10.2808 6.09046 10.2712L7.80472 9.69974C7.84683 9.68568 7.88508 9.66201 7.91644 9.6306L11.6798 5.86723C12.107 5.44013 12.107 4.74763 11.6799 4.32049ZM11.2758 5.46351L7.56158 9.17775L6.45188 9.54831L6.8213 8.44003L10.537 4.7258C10.7412 4.52193 11.0721 4.52227 11.276 4.72654C11.3734 4.82412 11.4283 4.95622 11.4287 5.09408C11.429 5.23268 11.374 5.36567 11.2758 5.46351Z") fill="white" /
-                          a href=send_update_card_subscription_path(params[:id]) data-remote=true Update Card
+          .Polaris-Card__Section
+            h2 style="font-size: 14px;font-weight: 700;line-height: 20px;margin-bottom: 1rem;" DELIVERY ADDRESS
+            p.Polaris-TextStyle--variationSubdued = formatted
 
 
-
-                / .Polaris-Stack__Item
-                /   .Polaris-ButtonGroup
-                /     .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                /       button.Polaris-Button.Polaris-Button--plain type="button"
-                /         span.Polaris-Button__Content
-                /           = icon_tag 'edit'
-                /           span.Polaris-Button__Text Update Card
-                / .Polaris-Stack__Item
-                /   .Polaris-ButtonGroup
-                /     .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                /       a.Polaris-Button.Polaris-Button--plain href=remove_card_subscription_path(params[:id]) data-remote=true
-                /         span.Polaris-Button__Content
-                /           == icon_tag 'cancel'
-                /           span.Polaris-Button__Text Remove
-        br/
         - if setting.admin_allowed?('navigation_delivery')
-          .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
-            h2.Polaris-Heading.Polaris-TextStyle--variationStrongDelivery Delivery schedule
+
           .Polaris-Card
             .Polaris-Card__Section
+              h2.Polaris-Heading.Polaris-TextStyle--variationStrongDelivery style="margin-bottom: 1rem;" Delivery schedule
               .Polaris-Card__Subsection.delivery-schedule
-                p Delivery schedule dates are when your order will be placed. Future deliveries will be added to your schedule as the date approaches.
-              .Polaris-Card__Subsection
-                .Polaris-TextStyle--variationStrong
-                  .text-par
+                .text-par style="display: flex; justify-content: space-between;"
+                  p.text
+                    = next_billing_date.strftime("%B %e, %Y")
+                  = link_to action_subscription_contract_path(:skip_schedule, @subscription.id[/\d+/], "billing_date=#{next_billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post do
+                    button.Polaris-Button.Polaris-Button--plain
+                      span.Polaris-Button__Content
+                        span.Polaris-Button__Text SKIP
+
+                - (1..2).each do |index|
+                  .text-par style="display: flex; justify-content: space-between;"
+                    -  billing_date = next_billing_date.to_date + (index * billing_policy.interval_count).send(billing_policy.interval.downcase)
                     p.text
-                      = next_billing_date.strftime("%B %e, %Y")
-                    = link_to action_subscription_contract_path(:skip_schedule, @subscription.id[/\d+/], "billing_date=#{next_billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post do
-                      = icon_tag 'skip'
-                      span.skip-btn type="button" SKIP
-                  - (1..3).each do |index|
-                    .text-par
-                      -  billing_date = next_billing_date.to_date + (index * billing_policy.interval_count).send(billing_policy.interval.downcase)
-                      p.text
-                        = billing_date.strftime("%B %e, %Y")
-                      = link_to action_subscription_contract_path(:skip_schedule, @subscription.id[/\d+/], "billing_date=#{billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post do
-                        = icon_tag 'skip'
-                        span.skip-btn type="button" SKIP
+                      = billing_date.strftime("%B %e, %Y")
+                    = link_to action_subscription_contract_path(:skip_schedule, @subscription.id[/\d+/], "billing_date=#{billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post do
+                      button.Polaris-Button.Polaris-Button--plain
+                        span.Polaris-Button__Content
+                          span.Polaris-Button__Text SKIP
+
               / p= order&.shipping_address&.formatted&.join(', ')&.titleize
             / .Polaris-Card__Subsection
             /   .Polaris-TextStyle--variationStrong Type
@@ -371,4 +376,16 @@
                 /           span.Polaris-Button__Text Skip
 
     = render 'layouts/shared/footer'
-    = render 'modals'
+
+javascript:
+  $( document ).on('turbolinks:load', function() {
+    document.querySelectorAll('ul.payment-tabs li').forEach(li => {
+      li.addEventListener('click', (e) => {
+        const target = e.currentTarget;
+        document.querySelectorAll('#history-tabs .tab').forEach(t => t.classList.add('hidden'));
+        document.querySelector(`#history-tabs .tab${target.dataset.target}`).classList.remove('hidden');
+        document.querySelector('ul.payment-tabs li.active').classList.remove('active');
+        target.classList.add('active');
+      })
+    })
+  })

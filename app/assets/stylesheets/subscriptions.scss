@@ -357,11 +357,6 @@ div.Polaris-Modal-Dialog__Container {
       margin-bottom: 5px;
     }
 
-    .Polaris-Button--plain {
-      .Polaris-Icon, .Polaris-Button__Text {
-        color: black;
-      }
-    }
 
     .Polaris-FormLayout__Item--firstOne {
       margin-left: 0;
@@ -471,7 +466,9 @@ div.Polaris-Modal-Dialog__Container {
 .product-header {
   margin-right: 100px;
 }
-
+.ml-0 {
+  margin-left: 0 !important;
+}
 .subscription-btns {
   display: flex;
   // align-items: center;
@@ -710,4 +707,34 @@ div.box-items {
 .shopify_profile_btn {
   text-decoration: none;
   color: black;
+}
+
+.payment-tabs {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.payment-tabs li {
+  margin: 1rem;
+  cursor: pointer;
+}
+
+.payment-tabs li.active {
+  border-bottom-color: #3f4eae;
+  border-bottom-width: 2px;
+  border-bottom-style: groove;
+}
+
+.payment-tabs li:hover {
+  border-bottom: 2px groove #cdcdcd;
+}
+.Polaris-Card__Section.tab {
+  padding: 0;
+}
+
+.chargezen-proxy .right {
+  float: none;
+  text-align: right;
 }

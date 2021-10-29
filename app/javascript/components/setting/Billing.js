@@ -1,7 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import {
-  MobileBackArrowMajor
-} from '@shopify/polaris-icons';
+import { MobileBackArrowMajor } from '@shopify/polaris-icons';
 import {
   Card,
   DisplayText,
@@ -38,9 +36,10 @@ const Billing = (props) => {
     <Layout>
       <Layout.Section>
         <div className="back-button pointer" onClick={handleBack}>
-          <Icon
-            source={MobileBackArrowMajor}
-            color="base" />
+          <Icon source={MobileBackArrowMajor} color="base" />
+          <p>
+            <TextStyle variation="subdued">Settings</TextStyle>
+          </p>
         </div>
       </Layout.Section>
       <Card>
@@ -84,7 +83,6 @@ const Billing = (props) => {
                 onChange={(e) => setFieldValue('maxFailStrategy', e)}
                 options={options_strategy}
               />
-
             </FormLayout>
           </div>
         </Card.Section>

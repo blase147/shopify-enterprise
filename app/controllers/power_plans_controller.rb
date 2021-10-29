@@ -12,6 +12,11 @@ class PowerPlansController < AuthenticatedController
     render json: { success: true }
   end
 
+  def swap
+    PowerPlanSwapWorker.perform_async @shop.id, params[:id], params[:original_product], params[:swap_with]
+    render json: { success: true }
+  end
+
   def set_shop
     @shop = Shop.find_by(shopify_domain: current_shopify_domain)
   end

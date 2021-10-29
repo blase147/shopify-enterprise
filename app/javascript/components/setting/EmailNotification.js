@@ -12,9 +12,7 @@ import {
   Heading,
   Icon,
 } from '@shopify/polaris';
-import {
-  MobileBackArrowMajor
-} from '@shopify/polaris-icons';
+import { MobileBackArrowMajor } from '@shopify/polaris-icons';
 import Switch from 'react-switch';
 const EmailNotification = (props) => {
   //SettingToggle
@@ -95,7 +93,8 @@ const EmailNotification = (props) => {
     (value) => setSelectedSetting(value),
     []
   );
-  const { values, touched, errors, setFieldValue, handleSubmit, handleBack } = props;
+  const { values, touched, errors, setFieldValue, handleSubmit, handleBack } =
+    props;
   const listAdditionalSetting = [
     {
       title: 'Send account invite after checkout',
@@ -145,16 +144,19 @@ const EmailNotification = (props) => {
     }
   }, [selectedIndex]);
 
-  const emailOptions=[{label: 'Klaviyo', value: 'Klaviyo'},
-                      {label: 'SendGrid', value: 'SendGrid'}]
+  const emailOptions = [
+    { label: 'Klaviyo', value: 'Klaviyo' },
+    { label: 'SendGrid', value: 'SendGrid' },
+  ];
 
   return (
     <Layout>
       <Layout.Section>
         <div className="back-button pointer" onClick={handleBack}>
-          <Icon
-            source={MobileBackArrowMajor}
-            color="base" />
+          <Icon source={MobileBackArrowMajor} color="base" />
+          <p>
+            <TextStyle variation="subdued">Settings</TextStyle>
+          </p>
         </div>
       </Layout.Section>
       {selectedIndex != null ? (
@@ -186,7 +188,7 @@ const EmailNotification = (props) => {
               <Select
                 label="Email Service"
                 options={emailOptions}
-                onChange={(value)=>setFieldValue("emailService",value)}
+                onChange={(value) => setFieldValue('emailService', value)}
                 value={values.emailService}
               />
               {values.emailNotifications?.map(

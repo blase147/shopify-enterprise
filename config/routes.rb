@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     member do
       post :pause
       post :cancel
+      post :swap
     end
   end
 

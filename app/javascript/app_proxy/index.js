@@ -6,7 +6,7 @@ $( document ).on('turbolinks:load', function() {
       document.querySelector(btn.dataset.target).classList.remove('hidden');
     })
   })
-  document.querySelectorAll("div.close-modal").forEach(btn => {
+  document.querySelectorAll('[data-action="close"]').forEach(btn => {
     btn.addEventListener('click', (e) =>{
       const btn = e.target;
       btn.closest('.Polaris-Modal').classList.add('hidden')

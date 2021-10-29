@@ -69,7 +69,7 @@ nav.Polaris-Navigation.account
       - if @setting.show_order_history.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
-            a.Polaris-Navigation__Item class=active_nav('orders', 'index') href="/a/chargezen_production/orders?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
+            a.Polaris-Navigation__Item class=(active_nav('orders', 'index') || active_nav('orders', 'show')) href="/a/chargezen_production/orders?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
               div style="margin-right: 20px;display: flex;align-items: center;justify-content: center;height: 100%;"
                 span style="display: flex;align-items: center;justify-content: center;"
                   svg fill="none" height="19" viewbox=("0 0 16 19") width="16" xmlns="http://www.w3.org/2000/svg"

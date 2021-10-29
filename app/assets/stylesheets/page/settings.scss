@@ -1,11 +1,14 @@
 .module-settings {
   .back-button{
     padding: 8px;
-    border: 1px solid #0000002e;
     border-radius: 5px;
     margin-bottom: 15px;
     width: fit-content;
-}
+    display: flex;
+    p {
+      margin-left: 0.8rem;
+    }
+  }
   .settings-container{
     margin: 25px;
     margin-left: 100px;

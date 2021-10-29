@@ -21,6 +21,7 @@ import {
   Link,
   Heading,
   TextStyle,
+  Modal,
 } from '@shopify/polaris';
 import DeleteSVG from '../../../assets/images/delete.svg';
 import ClipboardSVG from '../../../assets/images/clipboard.svg';
@@ -114,7 +115,7 @@ const PowerView = () => {
       getSellingPlan();
     }
   }, []);
-  console.log('Aloha from power view');
+
   // consts ###
   const options = [...Array(99).keys()].map((foo) => (foo + 1).toString());
 
@@ -311,6 +312,80 @@ const PowerView = () => {
     return plans;
   });
   const plan = planData?.sellingPlans?.[sellingPlanIndex];
+
+  const [cancelModal, setCancelModal] = useState(false);
+  const handleCancel = () => {
+    setCancelModal(!cancelModal);
+  };
+  const cancelBtn = <Button onClick={handleCancel}>Cancel</Button>;
+
+  const [pauseModal, setPauseModal] = useState(false);
+  const handlePause = () => {
+    setPauseModal(!pauseModal);
+  };
+  const pauseBtn = <Button onClick={handlePause}>Pause</Button>;
+
+  const [swapModal, setSwapModal] = useState(false);
+  const handleSwap = () => {
+    setSwapModal(!swapModal);
+  };
+  const swapBtn = (
+    <Button
+      primary
+      onClick={() => {
+        var ResourcePicker = window['app-bridge'].actions.ResourcePicker;
+        var productPicker = ResourcePicker.create(window.app, {
+          resourceType: ResourcePicker.ResourceType.Product,
+          options: {
+            actionVerb: ResourcePicker.ActionVerb.Select,
+            selectMultiple: false,
+          },
+        });
+        productPicker.dispatch(ResourcePicker.Action.OPEN);
+        productPicker.subscribe(
+          ResourcePicker.Action.SELECT,
+          ({ selection }) => {
+            if (
+              selection &&
+              selection.length > 0 &&
+              selection[0].variants &&
+              selection[0].variants.length > 0
+            ) {
+              fetch(`/power_plans/${plan.id}/swap`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  original_product: selectedProducts[sellingPlanIndex],
+                  swap_with: selection[0].variants[0].id,
+                }),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.success == true) {
+                    var Toast = window['app-bridge'].actions.Toast;
+                    Toast.create(window.app, {
+                      message: 'Swapping',
+                      duration: 5000,
+                    }).dispatch(Toast.Action.SHOW);
+                  }
+                });
+            } else {
+              var Toast = window['app-bridge'].actions.Toast;
+              Toast.create(window.app, {
+                message: 'Select 1 variant',
+                duration: 5000,
+                isError: true,
+              }).dispatch(Toast.Action.SHOW);
+            }
+          }
+        );
+      }}
+    >
+      Swap Product
+    </Button>
+  );
   return (
     <AppLayout tabIndex={1}>
       <Frame>
@@ -475,9 +550,6 @@ const PowerView = () => {
                           <Stack>
                             <Stack.Item>
                               <Heading>{plan.name}</Heading>
-                              <TextStyle variation="subdued">
-                                Active Since 2 months ago
-                              </TextStyle>
                             </Stack.Item>
                             <Stack.Item fill></Stack.Item>
                             <Stack.Item>
@@ -493,43 +565,106 @@ const PowerView = () => {
                             </Stack.Item>
                           </Stack>
                           <br />
-                          <div
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
+                          <Select
+                            options={allProducts.map((product) => {
+                              return {
+                                label: product.title,
+                                value: product.productId,
+                              };
+                            })}
+                            value={selectedProducts[sellingPlanIndex]}
+                            onChange={(e) => {
+                              const temp = [...selectedProducts];
+                              temp[sellingPlanIndex] = e;
+                              setSelectedProducts(temp);
                             }}
-                          >
-                            <Select
-                              options={allProducts.map((product) => {
-                                return {
-                                  label: product.title,
-                                  value: product.productId,
-                                };
-                              })}
-                              value={selectedProducts[sellingPlanIndex]}
-                              onChange={(e) => {
-                                const temp = [...selectedProducts];
-                                temp[sellingPlanIndex] = e;
-                                setSelectedProducts(temp);
-                              }}
-                            />
-                            <Select
-                              options={values.sellingPlans.map((sp, i) => {
-                                return {
-                                  label: sp.name,
-                                  value: i,
-                                };
-                              })}
-                              value={parseInt(sellingPlanIndex)}
-                              onChange={setSellingPlanIndex}
-                            />
-                          </div>
-
+                          />
                           <br />
                           <Stack>
-                            <Button primary>Swap Product</Button>
-                            <Button outline>Edit Subscription</Button>
-                            <Button
+                            <Modal
+                              activator={swapBtn}
+                              open={swapModal}
+                              onClose={handleSwap}
+                              title="This change will affect all Subscriptions that have this selling plan used."
+                              primaryAction={{
+                                content: 'Continue',
+                                onAction: () => {
+                                  fetch(`/power_plans/${plan.id}/swap`, {
+                                    method: 'POST',
+                                  })
+                                    .then((response) => response.json())
+                                    .then((data) => {
+                                      if (data.success == true) {
+                                        var Toast =
+                                          window['app-bridge'].actions.Toast;
+                                        Toast.create(window.app, {
+                                          message: 'Swapping',
+                                          duration: 5000,
+                                        }).dispatch(Toast.Action.SHOW);
+                                        handleSwap();
+                                      }
+                                    });
+                                },
+                              }}
+                              secondaryActions={[
+                                {
+                                  content: 'Back',
+                                  onAction: handleSwap,
+                                },
+                              ]}
+                            >
+                              <Modal.Section>
+                                <TextContainer>
+                                  <p>
+                                    This will cause all Subscriptions that have
+                                    this selling plan to become cancelled.
+                                  </p>
+                                </TextContainer>
+                              </Modal.Section>
+                            </Modal>
+
+                            <Modal
+                              activator={cancelBtn}
+                              open={cancelModal}
+                              onClose={handleCancel}
+                              title="This change will affect all Subscriptions that have this selling plan used."
+                              primaryAction={{
+                                content: 'Continue',
+                                onAction: () => {
+                                  fetch(`/power_plans/${plan.id}/cancel`, {
+                                    method: 'POST',
+                                  })
+                                    .then((response) => response.json())
+                                    .then((data) => {
+                                      if (data.success == true) {
+                                        var Toast =
+                                          window['app-bridge'].actions.Toast;
+                                        Toast.create(window.app, {
+                                          message: 'Cancelling',
+                                          duration: 5000,
+                                        }).dispatch(Toast.Action.SHOW);
+                                        handleCancel();
+                                      }
+                                    });
+                                },
+                              }}
+                              secondaryActions={[
+                                {
+                                  content: 'Back',
+                                  onAction: handleCancel,
+                                },
+                              ]}
+                            >
+                              <Modal.Section>
+                                <TextContainer>
+                                  <p>
+                                    This will cause all Subscriptions that have
+                                    this selling plan to become cancelled.
+                                  </p>
+                                </TextContainer>
+                              </Modal.Section>
+                            </Modal>
+                            {/* <Button
                               onClick={(e) => {
                                 fetch(`/power_plans/${plan.id}/cancel`, {
                                   method: 'POST',
@@ -548,35 +683,60 @@ const PowerView = () => {
                               }}
                             >
                               Cancel
-                            </Button>
-                            <Button
-                              onClick={(e) => {
-                                fetch(`/power_plans/${plan.id}/pause`, {
-                                  method: 'POST',
-                                })
-                                  .then((response) => response.json())
-                                  .then((data) => {
-                                    if (data.sucess == true) {
-                                      var Toast =
-                                        window['app-bridge'].actions.Toast;
-                                      Toast.create(window.app, {
-                                        message: 'Pausing',
-                                        duration: 5000,
-                                      }).dispatch(Toast.Action.SHOW);
-                                    }
-                                  });
+                            </Button> */}
+                            <Modal
+                              activator={pauseBtn}
+                              open={pauseModal}
+                              onClose={handlePause}
+                              title="This change will affect all Subscriptions that have this selling plan used."
+                              primaryAction={{
+                                content: 'Continue',
+                                onAction: () => {
+                                  fetch(`/power_plans/${plan.id}/pause`, {
+                                    method: 'POST',
+                                  })
+                                    .then((response) => response.json())
+                                    .then((data) => {
+                                      if (data.success == true) {
+                                        var Toast =
+                                          window['app-bridge'].actions.Toast;
+                                        Toast.create(window.app, {
+                                          message: 'Pausing',
+                                          duration: 5000,
+                                        }).dispatch(Toast.Action.SHOW);
+                                        handlePause();
+                                      }
+                                    });
+                                },
                               }}
+                              secondaryActions={[
+                                {
+                                  content: 'Back',
+                                  onAction: handlePause,
+                                },
+                              ]}
                             >
-                              Pause
-                            </Button>
+                              <Modal.Section>
+                                <TextContainer>
+                                  <p>
+                                    This will cause all Subscriptions that have
+                                    this selling plan to become Paused.
+                                  </p>
+                                </TextContainer>
+                              </Modal.Section>
+                            </Modal>
+                            <Stack.Item fill></Stack.Item>
+                            <Select
+                              options={values.sellingPlans.map((sp, i) => {
+                                return {
+                                  label: sp.name,
+                                  value: i,
+                                };
+                              })}
+                              value={parseInt(sellingPlanIndex)}
+                              onChange={setSellingPlanIndex}
+                            />
                           </Stack>
-                        </Card>
-                      </Layout.Section>
-                      <Layout.Section secondary>
-                        <Card title="Total Revenue to Date:" sectioned>
-                          <TextStyle variation="subdued">
-                            ${plan.totalAmount}
-                          </TextStyle>
                         </Card>
                       </Layout.Section>
                     </Layout>
@@ -657,7 +817,6 @@ const PowerView = () => {
                       />
                     </Card>
                   </div>
-
                 </Form>
               )}
             </Formik>

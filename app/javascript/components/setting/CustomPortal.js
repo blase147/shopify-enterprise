@@ -1,19 +1,19 @@
 // import RoundCheckbox from 'rn-round-checkbox';
 import {
-  Button, Card,
-
+  Button,
+  Card,
   FormLayout,
-  Layout, Select,
-  Stack, TextField,
-  TextStyle,Icon
+  Layout,
+  Select,
+  Stack,
+  TextField,
+  TextStyle,
+  Icon,
 } from '@shopify/polaris';
-import {
-  MobileBackArrowMajor
-} from '@shopify/polaris-icons';
+import { MobileBackArrowMajor } from '@shopify/polaris-icons';
 import React, { useCallback, useState } from 'react';
 import Trash from '../../../assets/images/settings/trash.svg';
 import ActiveSubscription from './preview/subscription/ActiveSubscription';
-
 
 const CustomPortal = (props) => {
   // const [checkedProTheme, setCheckedProTheme] = useState(false);
@@ -25,28 +25,30 @@ const CustomPortal = (props) => {
   //
   // const handleChangeTheme = useCallback((value) => setSelectedTheme(value), []);
 
-  const [preview, setPreview] = useState(false)
-  const [canPreview, setCanPreview] = useState(false)
+  const [preview, setPreview] = useState(false);
+  const [canPreview, setCanPreview] = useState(false);
 
   const handleChange = (label, e) => {
-    setFieldValue(label, e)
-    setCanPreview(true)
+    setFieldValue(label, e);
+    setCanPreview(true);
     console.log(e.target.value);
-
-  }
+  };
   const applyStyles = (s) => {
-    let exists = document.querySelector("style.dynamic");
-    if (exists)
-      exists.remove();
-    let elem = document.createElement("style");
-    elem.classList.add("dynamic");
+    let exists = document.querySelector('style.dynamic');
+    if (exists) exists.remove();
+    let elem = document.createElement('style');
+    elem.classList.add('dynamic');
     elem.innerHTML = s;
     document.head.appendChild(elem);
-  }
+  };
   const handleApplyStyles = () => {
-    const styles = `${values?.styleSubscription || ''} ${values?.styleUpsell || ''} ${values?.styleSidebarPages || ''} ${values?.styleSidebar || ''} ${values?.styleAccountProfile || ''}`;
-    applyStyles(styles)
-  }
+    const styles = `${values?.styleSubscription || ''} ${
+      values?.styleUpsell || ''
+    } ${values?.styleSidebarPages || ''} ${values?.styleSidebar || ''} ${
+      values?.styleAccountProfile || ''
+    }`;
+    applyStyles(styles);
+  };
   const [valueAccountProfile_CSS, setValueAccountProfile_CSS] = useState();
   const handleChangeAccountProfile_CSS = useCallback(
     (newValue) => setValueAccountProfile_CSS(newValue),
@@ -77,9 +79,8 @@ const CustomPortal = (props) => {
     []
   );
 
-  const [selectedDelivery, setSelectedDelivery] = useState(
-    'Admin and Customer'
-  );
+  const [selectedDelivery, setSelectedDelivery] =
+    useState('Admin and Customer');
   const handleSelectChangeDelivery = useCallback(
     (value) => setSelectedDelivery(value),
     []
@@ -98,15 +99,13 @@ const CustomPortal = (props) => {
   ];
 
   const oneTimePurchaseOptions = [
-    { label: 'Disabled for everyone', value: 'DisabledForEveryone' }
+    { label: 'Disabled for everyone', value: 'DisabledForEveryone' },
   ];
 
   const AllChargeZenProductsOptions = [
-    { label: 'All ChargeZen Products', value: 'AllChargeZenProducts' }
+    { label: 'All ChargeZen Products', value: 'AllChargeZenProducts' },
   ];
-  const Show = [
-    { label: 'Show', value: 'Show' }
-  ];
+  const Show = [{ label: 'Show', value: 'Show' }];
   const [selectedFrequency, setSelectedFrequency] = useState(['hidden']);
   const handleChangeFrequency = useCallback(
     (value) => setSelectedFrequency(value),
@@ -169,14 +168,14 @@ const CustomPortal = (props) => {
     },
   ]);
   const showHideValues = [
-    { label: "Show", value: 'true' },
-    { label: "Hide", value: 'false' }
-  ]
+    { label: 'Show', value: 'true' },
+    { label: 'Hide', value: 'false' },
+  ];
 
   const accountPortalOptions = [
-    { label: "Keep theme account view", value: 'add_link' },
-    { label: "Use only app customer portal", value: 'redirect' }
-  ]
+    { label: 'Keep theme account view', value: 'add_link' },
+    { label: 'Use only app customer portal', value: 'redirect' },
+  ];
 
   const {
     values,
@@ -185,7 +184,7 @@ const CustomPortal = (props) => {
     setFieldValue,
     handleSubmit,
     isSubmitting,
-    handleBack
+    handleBack,
   } = props;
 
   const handleRemoveReasons = useCallback((values, i) => {
@@ -198,13 +197,14 @@ const CustomPortal = (props) => {
   return (
     <Layout>
       <Layout.Section>
-      <Layout.Section>
-        <div className="back-button pointer" onClick={handleBack}>
-          <Icon
-            source={MobileBackArrowMajor}
-            color="base" />
-        </div>
-      </Layout.Section>
+        <Layout.Section>
+          <div className="back-button pointer" onClick={handleBack}>
+            <Icon source={MobileBackArrowMajor} color="base" />
+            <p>
+              <TextStyle variation="subdued">Settings</TextStyle>
+            </p>
+          </div>
+        </Layout.Section>
       </Layout.Section>
       <Card.Section>
         <Stack vertical>
@@ -214,22 +214,28 @@ const CustomPortal = (props) => {
                 Control actions available to your customers after purchase
               </p>
               <div className="purchase-preview">
-                {
-                  !preview &&
-                  <button className={!canPreview ? "preview disabled" : "preview"} disabled={!canPreview} onClick={() => { setPreview(true); handleApplyStyles(); }} >PREVIEW</button>
-                }
-                {
-                  preview &&
-                  <button className="preview" onClick={() => setPreview(false)} >CLOSE PREVIEW</button>
-                }
+                {!preview && (
+                  <button
+                    className={!canPreview ? 'preview disabled' : 'preview'}
+                    disabled={!canPreview}
+                    onClick={() => {
+                      setPreview(true);
+                      handleApplyStyles();
+                    }}
+                  >
+                    PREVIEW
+                  </button>
+                )}
+                {preview && (
+                  <button className="preview" onClick={() => setPreview(false)}>
+                    CLOSE PREVIEW
+                  </button>
+                )}
                 <button className="preview">PUBLISH</button>
               </div>
             </div>
 
-            {preview &&
-              <ActiveSubscription Values={values} />
-            }
-
+            {preview && <ActiveSubscription Values={values} />}
           </Stack.Item>
           {/* <Stack.Item>
             <Stack alignment="center">
@@ -263,14 +269,15 @@ const CustomPortal = (props) => {
               </Stack.Item>
             </Stack>
           </Stack.Item> */}
-          {
-            !preview &&
+          {!preview && (
             <>
               <Stack.Item>
                 <Select
                   options={accountPortalOptions}
                   value={values.accountPortalOption}
-                  error={touched.accountPortalOption && errors.accountPortalOption}
+                  error={
+                    touched.accountPortalOption && errors.accountPortalOption
+                  }
                   onChange={(e) => setFieldValue('accountPortalOption', e)}
                 />
               </Stack.Item>
@@ -283,125 +290,248 @@ const CustomPortal = (props) => {
                     <FormLayout>
                       <div className="account-profile-head">
                         <div className="account-sec">
-                          <p className="applied-classes">Account Profile, Contact box & promo/contact button & portal background</p>
+                          <p className="applied-classes">
+                            Account Profile, Contact box & promo/contact button
+                            & portal background
+                          </p>
                           <TextField
                             label={
-                              <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .info-banner, .profile, .initials,
-                          .full-name, .contact, .btn-discount, .chargezen-proxy</span>   </TextStyle>
+                              <TextStyle variation="subdued">
+                                {' '}
+                                CSS classes available for customization:{' '}
+                                <span className="custom-classes">
+                                  {' '}
+                                  .info-banner, .profile, .initials, .full-name,
+                                  .contact, .btn-discount, .chargezen-proxy
+                                </span>{' '}
+                              </TextStyle>
                             }
                             placeholder=".lorem {font-size: 34px;}"
                             multiline={10}
-                            value={values.styleAccountProfile ? values.styleAccountProfile : ''}
-                            error={touched.styleAccountProfile && errors.styleAccountProfile}
-                            onChange={(e) => handleChange('styleAccountProfile', e)}
+                            value={
+                              values.styleAccountProfile
+                                ? values.styleAccountProfile
+                                : ''
+                            }
+                            error={
+                              touched.styleAccountProfile &&
+                              errors.styleAccountProfile
+                            }
+                            onChange={(e) =>
+                              handleChange('styleAccountProfile', e)
+                            }
                           />
                         </div>
-                        <div className="promo-section" style={{ marginTop: '52px' }}>
+                        <div
+                          className="promo-section"
+                          style={{ marginTop: '52px' }}
+                        >
                           <p>Promo button</p>
                           <div className="promo-discount">
                             <Select
                               options={showHideValues}
-
                               value={values.showPromoButton}
                               error={
-                                touched.showPromoButton && errors.showPromoButton
+                                touched.showPromoButton &&
+                                errors.showPromoButton
                               }
-                              onChange={(e) => handleChange('showPromoButton', e)}
+                              onChange={(e) =>
+                                handleChange('showPromoButton', e)
+                              }
                             />
                             <TextField
                               placeholder="Get $5 OFF"
                               value={values.promoButtonContent}
-                              onChange={(e) => handleChange('promoButtonContent', e)}
-                              error={touched.promoButtonContent && errors.promoButtonContent}
+                              onChange={(e) =>
+                                handleChange('promoButtonContent', e)
+                              }
+                              error={
+                                touched.promoButtonContent &&
+                                errors.promoButtonContent
+                              }
                             />
                           </div>
                           <div className="link-searching">
-                            <p style={{marginBottom:'0px'}}>Link</p>
+                            <p style={{ marginBottom: '0px' }}>Link</p>
                             <TextField
                               placeholder="paste a link or search"
                               value={values.promoButtonUrl}
-                              onChange={(e) => handleChange('promoButtonUrl', e)}
-                              error={touched.promoButtonUrl && errors.promoButtonUrl}
+                              onChange={(e) =>
+                                handleChange('promoButtonUrl', e)
+                              }
+                              error={
+                                touched.promoButtonUrl && errors.promoButtonUrl
+                              }
                             />
-                            <div className="cross-img" onClick={()=>handleChange('promoButtonUrl', '')} >
-                              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M17.0707 2.92929C15.181 1.03956 12.6726 0 10 0C7.32744 0 4.81902 1.03956 2.92929 2.92929C1.03956 4.81902 0 7.32744 0 10C0 12.6726 1.03956 15.181 2.92929 17.0707C4.81902 18.9604 7.32744 20 10 20C12.6726 20 15.181 18.9604 17.0707 17.0707C18.9604 15.181 20 12.6726 20 10C20 7.32744 18.9604 4.81902 17.0707 2.92929ZM16.2668 16.2668C14.5918 17.9419 12.3653 18.8636 10 18.8636C7.63468 18.8636 5.40825 17.9419 3.73316 16.2668C0.277778 12.8114 0.277778 7.18855 3.73316 3.73316C5.40825 2.05808 7.63468 1.13636 10 1.13636C12.3653 1.13636 14.5918 2.05808 16.2668 3.73316C19.7222 7.18855 19.7222 12.8114 16.2668 16.2668Z" fill="#007EFF" />
-                                <path d="M14.4066 5.59369C14.1835 5.37063 13.8258 5.37063 13.6027 5.59369L10 9.19638L6.39732 5.59369C6.17425 5.37063 5.81651 5.37063 5.59345 5.59369C5.37038 5.81675 5.37038 6.1745 5.59345 6.39756L9.19614 10.0003L5.59345 13.603C5.37038 13.826 5.37038 14.1838 5.59345 14.4068C5.70287 14.5163 5.85018 14.5752 5.99328 14.5752C6.13637 14.5752 6.28368 14.5205 6.39311 14.4068L9.9958 10.8041L13.5985 14.4068C13.7079 14.5163 13.8552 14.5752 13.9983 14.5752C14.1456 14.5752 14.2887 14.5205 14.3982 14.4068C14.6212 14.1838 14.6212 13.826 14.3982 13.603L10.8039 10.0003L14.4066 6.39756C14.6296 6.1745 14.6296 5.81675 14.4066 5.59369Z" fill="#007EFF" />
+                            <div
+                              className="cross-img"
+                              onClick={() => handleChange('promoButtonUrl', '')}
+                            >
+                              <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M17.0707 2.92929C15.181 1.03956 12.6726 0 10 0C7.32744 0 4.81902 1.03956 2.92929 2.92929C1.03956 4.81902 0 7.32744 0 10C0 12.6726 1.03956 15.181 2.92929 17.0707C4.81902 18.9604 7.32744 20 10 20C12.6726 20 15.181 18.9604 17.0707 17.0707C18.9604 15.181 20 12.6726 20 10C20 7.32744 18.9604 4.81902 17.0707 2.92929ZM16.2668 16.2668C14.5918 17.9419 12.3653 18.8636 10 18.8636C7.63468 18.8636 5.40825 17.9419 3.73316 16.2668C0.277778 12.8114 0.277778 7.18855 3.73316 3.73316C5.40825 2.05808 7.63468 1.13636 10 1.13636C12.3653 1.13636 14.5918 2.05808 16.2668 3.73316C19.7222 7.18855 19.7222 12.8114 16.2668 16.2668Z"
+                                  fill="#007EFF"
+                                />
+                                <path
+                                  d="M14.4066 5.59369C14.1835 5.37063 13.8258 5.37063 13.6027 5.59369L10 9.19638L6.39732 5.59369C6.17425 5.37063 5.81651 5.37063 5.59345 5.59369C5.37038 5.81675 5.37038 6.1745 5.59345 6.39756L9.19614 10.0003L5.59345 13.603C5.37038 13.826 5.37038 14.1838 5.59345 14.4068C5.70287 14.5163 5.85018 14.5752 5.99328 14.5752C6.13637 14.5752 6.28368 14.5205 6.39311 14.4068L9.9958 10.8041L13.5985 14.4068C13.7079 14.5163 13.8552 14.5752 13.9983 14.5752C14.1456 14.5752 14.2887 14.5205 14.3982 14.4068C14.6212 14.1838 14.6212 13.826 14.3982 13.603L10.8039 10.0003L14.4066 6.39756C14.6296 6.1745 14.6296 5.81675 14.4066 5.59369Z"
+                                  fill="#007EFF"
+                                />
                               </svg>
-
                             </div>
                           </div>
-                          <div className="contact-box" style={{ marginTop: '30px' }}>
-                          <p>Contact Box</p>
-                          <TextField
-                            placeholder="No thanks"
-                            value={values.contactBoxContent}
-                            onChange={(e) => handleChange('contactBoxContent', e)}
-                            error={touched.contactBoxContent && errors.contactBoxContent}
-                          />
-                        </div>
+                          <div
+                            className="contact-box"
+                            style={{ marginTop: '30px' }}
+                          >
+                            <p>Contact Box</p>
+                            <TextField
+                              placeholder="No thanks"
+                              value={values.contactBoxContent}
+                              onChange={(e) =>
+                                handleChange('contactBoxContent', e)
+                              }
+                              error={
+                                touched.contactBoxContent &&
+                                errors.contactBoxContent
+                              }
+                            />
+                          </div>
                         </div>
                         <div className="sec-sec">
-                          <p className="applied-classes">Sidebar menu, promo tagline I, promo tagline II </p>
+                          <p className="applied-classes">
+                            Sidebar menu, promo tagline I, promo tagline II{' '}
+                          </p>
                           <TextField
                             label={
-                              <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .account-sidebar, .promo-tag-I .promo-tag-II</span> </TextStyle>
+                              <TextStyle variation="subdued">
+                                {' '}
+                                CSS classes available for customization:{' '}
+                                <span className="custom-classes">
+                                  {' '}
+                                  .account-sidebar, .promo-tag-I .promo-tag-II
+                                </span>{' '}
+                              </TextStyle>
                             }
                             placeholder="Add Code Here..."
                             multiline={10}
-                            value={values.styleSidebar ? values.styleSidebar : ''}
+                            value={
+                              values.styleSidebar ? values.styleSidebar : ''
+                            }
                             error={touched.styleSidebar && errors.styleSidebar}
                             onChange={(e) => handleChange('styleSidebar', e)}
                           />
                         </div>
-                        <div className="promo-tag" style={{ marginTop: '78px' }}>
-                            <p className="">Promo tagline I</p>
-                            <TextField
-                              placeholder="No thanks ABCD"
-                              value={values.promoTagline1Content}
-                              onChange={(e) => handleChange('promoTagline1Content', e)}
-                              error={touched.promoTagline1Content && errors.promoTagline1Content}
-                              className="textfield-test"
-                            />
-                            <p className="">Promo tagline II</p>
-                            <TextField
-                              placeholder="No thanks"
-                              value={values.promoTagline2Content}
-                              onChange={(e) => handleChange('promoTagline2Content', e)}
-                              error={touched.promoTagline2Content && errors.promoTagline2Content}
-                            />
-                          </div>
-
+                        <div
+                          className="promo-tag"
+                          style={{ marginTop: '78px' }}
+                        >
+                          <p className="">Promo tagline I</p>
+                          <TextField
+                            placeholder="No thanks ABCD"
+                            value={values.promoTagline1Content}
+                            onChange={(e) =>
+                              handleChange('promoTagline1Content', e)
+                            }
+                            error={
+                              touched.promoTagline1Content &&
+                              errors.promoTagline1Content
+                            }
+                            className="textfield-test"
+                          />
+                          <p className="">Promo tagline II</p>
+                          <TextField
+                            placeholder="No thanks"
+                            value={values.promoTagline2Content}
+                            onChange={(e) =>
+                              handleChange('promoTagline2Content', e)
+                            }
+                            error={
+                              touched.promoTagline2Content &&
+                              errors.promoTagline2Content
+                            }
+                          />
+                        </div>
                       </div>
-                      <p className="applied-classes">Active & canceled subscriptions box</p>
+                      <p className="applied-classes">
+                        Active & canceled subscriptions box
+                      </p>
                       <TextField
                         label={
-                          <TextStyle variation="subdued"> CSS classes available for customization: <span className="custom-classes"> .display-text, .account-img,  .active-text, edit-subscription, delivery-schedule , .action-btn,
-                     , btn-wrapper, .minus-quantity, .plus-quantity, .chevron, .edit-address, .notification-banner, .cancel-text </span></TextStyle>
+                          <TextStyle variation="subdued">
+                            {' '}
+                            CSS classes available for customization:{' '}
+                            <span className="custom-classes">
+                              {' '}
+                              .display-text, .account-img, .active-text,
+                              edit-subscription, delivery-schedule ,
+                              .action-btn, , btn-wrapper, .minus-quantity,
+                              .plus-quantity, .chevron, .edit-address,
+                              .notification-banner, .cancel-text{' '}
+                            </span>
+                          </TextStyle>
                         }
                         placeholder="Add Code Here..."
                         multiline={10}
-                        value={values.styleSubscription ? values.styleSubscription : ''}
-                        error={touched.styleSubscription && errors.styleSubscription}
+                        value={
+                          values.styleSubscription
+                            ? values.styleSubscription
+                            : ''
+                        }
+                        error={
+                          touched.styleSubscription && errors.styleSubscription
+                        }
                         onChange={(e) => handleChange('styleSubscription', e)}
                       />
-                      <p className="applied-classes">Delivery schedule, order history, addresses, billings & account pages</p>
+                      <p className="applied-classes">
+                        Delivery schedule, order history, addresses, billings &
+                        account pages
+                      </p>
 
                       <TextField
                         label={
-                          <TextStyle variation="subdued">  CSS classes available for customization: <span className="custom-classes"> .delivery-heading .delivery-text, .delivery-btn, .order-heading, .order-text-heading, .order-text, .btn-view, .btn-invoice, .subscription-text, .edit, .address-text, .address-heading, .main-heading, .card-heading, .payment-img, .card-text, .card-btn, .account-label, .account-input, update-btn </span></TextStyle>
+                          <TextStyle variation="subdued">
+                            {' '}
+                            CSS classes available for customization:{' '}
+                            <span className="custom-classes">
+                              {' '}
+                              .delivery-heading .delivery-text, .delivery-btn,
+                              .order-heading, .order-text-heading, .order-text,
+                              .btn-view, .btn-invoice, .subscription-text,
+                              .edit, .address-text, .address-heading,
+                              .main-heading, .card-heading, .payment-img,
+                              .card-text, .card-btn, .account-label,
+                              .account-input, update-btn{' '}
+                            </span>
+                          </TextStyle>
                         }
                         placeholder="Add Code Here..."
                         multiline={10}
-                        value={values.styleSidebarPages ? values.styleSidebarPages : ''}
-                        error={touched.styleSidebarPages && errors.styleSidebarPages}
+                        value={
+                          values.styleSidebarPages
+                            ? values.styleSidebarPages
+                            : ''
+                        }
+                        error={
+                          touched.styleSidebarPages && errors.styleSidebarPages
+                        }
                         onChange={(e) => handleChange('styleSidebarPages', e)}
                       />
                       <p className="applied-classes">Upsells Carousel</p>
                       <TextField
                         label={
                           <TextStyle variation="subdued">
-                            CSS classes available for customization: <span className="custom-classes"> .offerTitle, .account-carousel, .carousel-img, .carousel-text, .btn-variant</span>
+                            CSS classes available for customization:{' '}
+                            <span className="custom-classes">
+                              {' '}
+                              .offerTitle, .account-carousel, .carousel-img,
+                              .carousel-text, .btn-variant
+                            </span>
                           </TextStyle>
                         }
                         placeholder="Add Code Here..."
@@ -412,104 +542,111 @@ const CustomPortal = (props) => {
                       />
                     </FormLayout>
                   </div>
-
                 </div>
               </Stack.Item>
             </>
-          }
+          )}
         </Stack>
       </Card.Section>
       <Card.Section>
         <Stack vertical>
           <div className="customer-portal">
             <h2 className="portal-heading">Customer Portal Controls</h2>
-              <p className="navigation-text" variation="strong">Navigation</p>
-              <div className="navigation-selectors">
-                  <p>Subscriptions</p>
-                  <Select
-                    options={showHideValues}
-                    value={values.showSubscription}
-                    error={
-                      touched.showSubscription && errors.showSubscription
-                    }
-                    onChange={(e) => handleChange('showSubscription', e)}
-                  />
-                  <p>Delivery Schedule</p>
-                  <Select
-                    options={showHideValues}
-                    value={values.showDeliverySchedule}
-                    error={
-                      touched.showDeliverySchedule && errors.showDeliverySchedule
-                    }
-                    onChange={(e) => handleChange('showDeliverySchedule', e)}
-                  />
+            <p className="navigation-text" variation="strong">
+              Navigation
+            </p>
+            <div className="navigation-selectors">
+              <p>Subscriptions</p>
+              <Select
+                options={showHideValues}
+                value={values.showSubscription}
+                error={touched.showSubscription && errors.showSubscription}
+                onChange={(e) => handleChange('showSubscription', e)}
+              />
+              <p>Delivery Schedule</p>
+              <Select
+                options={showHideValues}
+                value={values.showDeliverySchedule}
+                error={
+                  touched.showDeliverySchedule && errors.showDeliverySchedule
+                }
+                onChange={(e) => handleChange('showDeliverySchedule', e)}
+              />
 
-                  <p>Order History</p>
-                  <Select
-                    options={showHideValues}
-                    value={values.showOrderHistory}
-                    error={
-                      touched.showOrderHistory && errors.showOrderHistory
-                    }
-                    onChange={(e) => handleChange('showOrderHistory', e)}
-                  />
-                  <p>Addresses</p>
-                  <Select
-                    options={showHideValues}
-                    value={values.showAddress}
-                    error={
-                      touched.showAddress && errors.showAddress
-                    }
-                    onChange={(e) => handleChange('showAddress', e)}
-                  />
+              <p>Order History</p>
+              <Select
+                options={showHideValues}
+                value={values.showOrderHistory}
+                error={touched.showOrderHistory && errors.showOrderHistory}
+                onChange={(e) => handleChange('showOrderHistory', e)}
+              />
+              <p>Addresses</p>
+              <Select
+                options={showHideValues}
+                value={values.showAddress}
+                error={touched.showAddress && errors.showAddress}
+                onChange={(e) => handleChange('showAddress', e)}
+              />
 
-                  <p>Billing</p>
-                  <Select
-                    options={showHideValues}
-                    value={values.showBilling}
-                    error={
-                      touched.showBilling && errors.showBilling
-                    }
-                    onChange={(e) => handleChange('showBilling', e)}
-                  />
-                  <p>Account</p>
-                  <Select
-                    options={showHideValues}
-                    value={values.showAccount}
-                    error={
-                      touched.showAccount && errors.showAccount
-                    }
-                    onChange={(e) => handleChange('showAccount', e)}
-                  />
-
-              </div>
+              <p>Billing</p>
+              <Select
+                options={showHideValues}
+                value={values.showBilling}
+                error={touched.showBilling && errors.showBilling}
+                onChange={(e) => handleChange('showBilling', e)}
+              />
+              <p>Account</p>
+              <Select
+                options={showHideValues}
+                value={values.showAccount}
+                error={touched.showAccount && errors.showAccount}
+                onChange={(e) => handleChange('showAccount', e)}
+              />
+            </div>
             <Stack.Item>
               <Stack vertical>
-                <p className="navigation-text" variation="strong">Active Subscription Actions</p>
+                <p className="navigation-text" variation="strong">
+                  Active Subscription Actions
+                </p>
                 <FormLayout>
-                    {(values.activeSubscriptionBtnSeq || ['update_choices', 'delivery_schedule', 'swap_subscription', 'delay_next_order', 'edit_subscription']).map((option, i) => {
-                      return (
-                        <FormLayout.Group>
-                          <Select
-                            options={activeSubscriptionOptions}
-                            value={option}
-                            error={touched.swapProduct && errors.swapProduct}
-                            onChange={(e) => {
-                              let updatedSeq = [...values.activeSubscriptionBtnSeq]
-                              updatedSeq[i] = e
-                              setFieldValue('activeSubscriptionBtnSeq', updatedSeq)
-                            }}
-                          />
-                          <br />
-                        </FormLayout.Group>
-                      )
-                    })}
+                  {(
+                    values.activeSubscriptionBtnSeq || [
+                      'update_choices',
+                      'delivery_schedule',
+                      'swap_subscription',
+                      'delay_next_order',
+                      'edit_subscription',
+                    ]
+                  ).map((option, i) => {
+                    return (
+                      <FormLayout.Group>
+                        <Select
+                          options={activeSubscriptionOptions}
+                          value={option}
+                          error={touched.swapProduct && errors.swapProduct}
+                          onChange={(e) => {
+                            let updatedSeq = [
+                              ...values.activeSubscriptionBtnSeq,
+                            ];
+                            updatedSeq[i] = e;
+                            setFieldValue(
+                              'activeSubscriptionBtnSeq',
+                              updatedSeq
+                            );
+                          }}
+                        />
+                        <br />
+                      </FormLayout.Group>
+                    );
+                  })}
                 </FormLayout>
               </Stack>
             </Stack.Item>
             <Stack.Item>
               <Stack vertical>
-                <p className="navigation-text" variation="strong">Subscription Management</p>
+                <p className="navigation-text" variation="strong">
+                  Subscription Management
+                </p>
 
                 <FormLayout>
                   <FormLayout.Group>
@@ -527,7 +664,9 @@ const CustomPortal = (props) => {
                     <Select
                       options={options}
                       value={values.upcomingQuantity}
-                      error={touched.upcomingQuantity && errors.upcomingQuantity}
+                      error={
+                        touched.upcomingQuantity && errors.upcomingQuantity
+                      }
                       onChange={(e) => setFieldValue('upcomingQuantity', e)}
                     />
                     <p>&nbsp;</p>
@@ -569,7 +708,10 @@ const CustomPortal = (props) => {
                     <p>Cancel Subscription</p>
                     <Select
                       options={options}
-                      value={values.subscriptionCancellation || "storeowner_and_customer"}
+                      value={
+                        values.subscriptionCancellation ||
+                        'storeowner_and_customer'
+                      }
                       error={
                         touched.subscriptionCancellation &&
                         errors.subscriptionCancellation
@@ -584,7 +726,9 @@ const CustomPortal = (props) => {
                     <p>Delivery Schedule</p>
                     <Select
                       options={options}
-                      value={values.navigationDelivery || "storeowner_and_customer"}
+                      value={
+                        values.navigationDelivery || 'storeowner_and_customer'
+                      }
                       error={
                         touched.navigationDelivery && errors.navigationDelivery
                       }
@@ -596,7 +740,9 @@ const CustomPortal = (props) => {
                     <p>Pause Subscription</p>
                     <Select
                       options={options}
-                      value={values.pauseSubscription || "storeowner_and_customer"}
+                      value={
+                        values.pauseSubscription || 'storeowner_and_customer'
+                      }
                       error={
                         touched.pauseSubscription && errors.pauseSubscription
                       }
@@ -608,9 +754,12 @@ const CustomPortal = (props) => {
                     <p>Reactivate Subscription</p>
                     <Select
                       options={options}
-                      value={values.reactiveSubscription || "storeowner_and_customer"}
+                      value={
+                        values.reactiveSubscription || 'storeowner_and_customer'
+                      }
                       error={
-                        touched.reactiveSubscription && errors.reactiveSubscription
+                        touched.reactiveSubscription &&
+                        errors.reactiveSubscription
                       }
                       onChange={(e) => setFieldValue('reactiveSubscription', e)}
                     />
@@ -620,7 +769,7 @@ const CustomPortal = (props) => {
                     <p>Edit Delivery Address</p>
                     <Select
                       options={options}
-                      value={values.shipingAddress || "storeowner_and_customer"}
+                      value={values.shipingAddress || 'storeowner_and_customer'}
                       error={touched.shipingAddress && errors.shipingAddress}
                       onChange={(e) => setFieldValue('shipingAddress', e)}
                     />
@@ -631,13 +780,15 @@ const CustomPortal = (props) => {
             </Stack.Item>
             <Stack.Item>
               <Stack vertical>
-                <p className="navigation-text" variation="strong">Shipment Frequency</p>
+                <p className="navigation-text" variation="strong">
+                  Shipment Frequency
+                </p>
                 <FormLayout>
                   <FormLayout.Group>
                     <p>Skip Shipment</p>
                     <Select
                       options={options}
-                      value={values.shipment || "storeowner_and_customer"}
+                      value={values.shipment || 'storeowner_and_customer'}
                       error={touched.shipment && errors.shipment}
                       onChange={(e) => setFieldValue('shipment', e)}
                     />
@@ -657,7 +808,7 @@ const CustomPortal = (props) => {
                     <p>Delay/Speedup order</p>
                     <Select
                       options={options}
-                      value={values.delayOrder || "storeowner_and_customer"}
+                      value={values.delayOrder || 'storeowner_and_customer'}
                       error={touched.delayOrder && errors.delayOrder}
                       onChange={(e) => setFieldValue('delayOrder', e)}
                     />
@@ -847,7 +998,7 @@ const CustomPortal = (props) => {
         <div className="cancelation-section">
           <Stack vertical>
             <Stack.Item>
-              <p style={{fontSize:'18px'}}>Reasons for Cancellation</p>
+              <p style={{ fontSize: '18px' }}>Reasons for Cancellation</p>
             </Stack.Item>
             {/* {reasonsForCancellationList?.map((item, i) => ( */}
             {values.reasonsCancels?.map((item, i) => (
@@ -863,8 +1014,8 @@ const CustomPortal = (props) => {
                         {item.returnContent}
                       </TextStyle>
                     </Stack.Item>
-                  isSubmitting
-                  <Stack.Item>
+                    isSubmitting
+                    <Stack.Item>
                       <div className="trash">
                         <Button
                           onClick={() =>
@@ -883,7 +1034,7 @@ const CustomPortal = (props) => {
                 </Stack.Item>
               </div>
             ))}
-          {/*   <Button loading={isSubmitting} primary onClick={() => handleSubmit()}>
+            {/*   <Button loading={isSubmitting} primary onClick={() => handleSubmit()}>
                Save
            </Button>*/}
           </Stack>
