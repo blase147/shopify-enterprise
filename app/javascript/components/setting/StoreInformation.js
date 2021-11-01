@@ -127,6 +127,19 @@ const StoreInformation = (props) => {
                 </Stack.Item>
                 <Stack.Item>
                   <TextStyle variation="strong">
+                    Plan Name
+                  </TextStyle>
+                  <br />
+                  <Badge
+                    status={`${
+                      values.plan == 'platinum' ? 'success' : 'info'
+                    }`}
+                  >
+                    {_.capitalize(values.plan) || 'Pending'}
+                  </Badge>
+                </Stack.Item>
+                <Stack.Item>
+                  <TextStyle variation="strong">
                     Subscription Widget Status
                   </TextStyle>
                   <br />

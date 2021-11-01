@@ -97,6 +97,7 @@ const Settings = ({ passwordProtected, setPasswordProtected }) => {
         subscriptionCancellation
         cancellationEmailContact
         allowCancelAfter
+        plan
         reactiveSubscription
         reasonsCancels {
           id

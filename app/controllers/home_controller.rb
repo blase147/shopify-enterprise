@@ -5,7 +5,17 @@ class HomeController < ApplicationController
   include ShopifyApp::RequireKnownShop
 
   def index
-    @shop_origin = current_shopify_domain
-    @enable_password = Shop.find_by(shopify_domain: current_shopify_domain)&.setting&.enable_password
+    if ENV['APP_TYPE'] == 'public' && current_shop.recurring_charge_id.blank?
+      redirect_to select_plan_index_path
+    else
+      @shop_origin = current_shopify_domain
+      @enable_password = current_shop&.setting&.enable_password
+    end
+  end
+
+  private
+
+  def current_shop
+    @current_shop ||= Shop.find_by(shopify_domain: current_shopify_domain)
   end
 end

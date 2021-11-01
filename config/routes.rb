@@ -115,6 +115,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :select_plan, only: [:index, :create]
 
   get 'subscription/charge', to: 'callback#charge'
   get '*path' => 'home#index'

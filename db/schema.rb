@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_25_085058) do
+ActiveRecord::Schema.define(version: 2021_11_01_060147) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -351,6 +351,7 @@ ActiveRecord::Schema.define(version: 2021_10_25_085058) do
     t.string "recurring_charge_id"
     t.string "recurring_charge_status"
     t.string "charge_confirmation_link"
+    t.string "plan"
     t.index ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true
   end
 

@@ -27,7 +27,7 @@ class Shop < ActiveRecord::Base
   after_create :build_setting
   after_create :setup_default_lock_password
   after_create :populate_store_data
-  after_create :set_recurring_charge_id
+  # after_create :set_recurring_charge_id
   after_save :email_confirmation_link, if: -> { saved_change_to_charge_confirmation_link? }
 
   def setup_default_lock_password
@@ -35,7 +35,7 @@ class Shop < ActiveRecord::Base
   end
 
   def build_setting
-    setting = Setting.find_or_initialize_by(shop_id: shop.id)
+    setting = Setting.find_or_initialize_by(shop_id:  id)
     unless setting.persisted?
       setting.update(
         payment_retries: 3,

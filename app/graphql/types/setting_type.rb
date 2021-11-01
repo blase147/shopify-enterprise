@@ -92,10 +92,15 @@ module Types
     #shop_data
     field :recurring_charge_status, String, null: true
     field :charge_confirmation_link, String, null: true
+    field :plan, String, null: true
 
     # def reasons_cancels
     #   object.reasons_cancels
     # end
+
+    def plan
+      object.shop.plan
+    end
 
     def recurring_charge_status
       object.shop.recurring_charge_status
