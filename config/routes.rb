@@ -116,6 +116,7 @@ Rails.application.routes.draw do
   end
 
   resources :select_plan, only: [:index, :create]
+  get '/zip_codes', to: 'zip_codes#index'
 
   get 'subscription/charge', to: 'callback#charge'
   get '*path' => 'home#index'

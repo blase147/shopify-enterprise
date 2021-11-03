@@ -102,6 +102,6 @@ class Customer < ApplicationRecord
         communication: "#{billing_policy.interval_count} #{billing_policy.interval} Pack".titleize,
         shopify_customer_id: item.customer.id[/\d+/]
       )
-    end
+    end if (items && items[:subscriptions] rescue false)
   end
 end

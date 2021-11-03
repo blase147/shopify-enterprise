@@ -4,9 +4,9 @@ class AppProxy::DashboardController < AppProxyController
 
   def index
     products = ProductService.new.list
-    @swap_products = products.is_a?(Hash) ? nil : products.select{ |p| p.node.selling_plan_group_count > 0 }
+    @swap_products = products.is_a?(Hash) ? nil : products&.select{ |p| p.node.selling_plan_group_count > 0 }
 
-    render 'index', content_type: 'application/liquid', layout: 'liquid_app_proxy'
+    render "#{current_setting.portal_theme}index", content_type: 'application/liquid', layout: "#{current_setting.portal_theme}liquid_app_proxy"
   end
 
   def subscription
@@ -82,10 +82,10 @@ class AppProxy::DashboardController < AppProxyController
 
   def load_subscriptions
     @data = CustomerSubscriptionContractsService.new(shopify_customer_id).run
-    @subscription_contracts = @data[:subscriptions] || []
-    @cancelled_subscriptions = @data[:cancelled_subscriptions] || []
-    @active_subscriptions = @data[:active_subscriptions] || []
-    @active_subscriptions_count = params[:active_subscriptions_count].present? ? params[:active_subscriptions_count].to_i : @data[:active_subscriptions].count
+    @subscription_contracts = @data && @data[:subscriptions] || []
+    @cancelled_subscriptions = @data && @data[:cancelled_subscriptions] || []
+    @active_subscriptions = @data && @data[:active_subscriptions] || []
+    @active_subscriptions_count = params[:active_subscriptions_count].present? ? params[:active_subscriptions_count].to_i : (@data && @data[:active_subscriptions].count || 0)
     @cancelled_line_items = RemovedSubscriptionLine.where(customer_id: params[:customer_id])
   end
 end

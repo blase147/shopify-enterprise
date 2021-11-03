@@ -24,9 +24,9 @@ class StoreChargeService
     orders = subscription.orders.edges.select { |order| order.node.created_at.to_date == Date.today }
     if orders.present?
       order_price = orders.sum { |o| o.node.total_received_set.presentment_money.amount.to_f }
-      price = if shop.plan == 'freemium'
+      price = if @shop.plan == 'freemium'
           (0.97 / 100) * order_price
-        elsif shop.plan == 'platinum'
+        elsif @shop.plan == 'platinum'
           (0.79 / 100) * order_price
         end
       if price > 0.5

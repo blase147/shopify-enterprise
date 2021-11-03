@@ -140,7 +140,7 @@ export default function App(props) {
             />
             <Route exact path="/smarty" component={Smarty} />
             <Route exact path="/edit-smarty-message/:id" component={EditSmartyMessage} />
-            <Route exact path="/settings" component={() => <Settings passwordProtected={passwordProtected} setPasswordProtected={setPasswordProtected} />} />
+            <Route exact path="/settings" component={() => <Settings passwordProtected={passwordProtected} setPasswordProtected={setPasswordProtected} domain={props.domain} />} />
             <Route exact path="/customers" component={Customers} />
             <Route exact path="/customers/new" component={CreateCustomer} />
             <Route

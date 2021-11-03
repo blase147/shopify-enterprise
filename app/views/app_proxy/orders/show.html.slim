@@ -75,7 +75,7 @@
                     tr.Polaris-DataTable__TableRow
                       td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
                         - product = ShopifyAPI::Product.find(item.product_id) rescue nil
-                        - if product.present?
+                        - if product.present? && product&.images&.first&.src
                           = image_tag product.images&.first&.src, style: ("object-fit: cover; object-position: center center;"), width: "100"
                       td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
                         = item.title

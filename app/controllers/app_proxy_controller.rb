@@ -14,6 +14,10 @@ class AppProxyController < ApplicationController
     params[:customer_id]
   end
 
+  def current_setting
+    @setting ||= current_shop&.setting
+  end
+
   private ##
 
   def init_session

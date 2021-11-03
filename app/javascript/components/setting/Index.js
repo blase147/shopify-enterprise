@@ -48,8 +48,10 @@ import TranslationImage from '../../../assets/images/settings/translation.svg';
 import Sms from './HouseKeepingComponents/Sms';
 import MainDiscount from './HouseKeepingComponents/DiscountComponents/MainDiscount';
 import MainExport from './HouseKeepingComponents/ExportComponents/MainExport';
+import ZipCodeImage from '../../../assets/images/settings/zip_code.svg'
+import ZipCodes from './ZipCodes'
 
-const Settings = ({ passwordProtected, setPasswordProtected }) => {
+const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
   // form data ########################################################
   const [formData, setFormData] = useState(null);
   const [formErrors, setFormErrors] = useState([]);
@@ -502,6 +504,16 @@ const Settings = ({ passwordProtected, setPasswordProtected }) => {
       img: CustomerImage,
       desc: 'Manage your customer subscription portal.',
     },
+    ...(domain == 'tryworldfare.myshopify.com'
+      ? [
+          {
+            key:"zip_codes",
+            title:"Zip Codes",
+            img:ZipCodeImage,
+            desc:"Add cities for Zip Codes."
+          },
+        ]
+      : [])
   ];
   const tabs = [
     {
@@ -591,6 +603,7 @@ const Settings = ({ passwordProtected, setPasswordProtected }) => {
                 ) => {
                   delete values.recurringChargeStatus;
                   delete values.chargeConfirmationLink;
+                  delete values.plan;
                   const newValues = {
                     ...values,
                     navigationDelivery:
@@ -784,6 +797,10 @@ const Settings = ({ passwordProtected, setPasswordProtected }) => {
                                     <MainExport
                                       handleBack={handleBackSetting}
                                     />
+                                  </>
+                                ) : selectedSetting === 'zip_codes' ? (
+                                  <>
+                                    <ZipCodes handleBack={handleBackSetting} />
                                   </>
                                 ) : selectedSetting === 'sms' ? (
                                   <>
