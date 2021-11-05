@@ -46,6 +46,7 @@
 
 
             - @subscription.lines.edges.each do |line|
+              - selling_plan = SellingPlan.find_by(shopify_id: line.node.selling_plan_id)
               - if @subscription.status == 'ACTIVE'
                 div.item
                   div style="margin-bottom: 1rem; display: flex; justify-content: space-between; background: #F2F0F9; padding: 1rem 2rem;"
@@ -76,6 +77,9 @@
                             span.Polaris-Button__Content
                               span.Polaris-Button__Text.ml-0
                                 | Cancel
+
+                    div
+                      p style="font-size: 2rem; line-height: 1.8;" = selling_plan&.name
                     div
                       a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/admin/customers/#{@customer.shopify_customer_id}?shop=#{@customer.shop.shopify_domain}" target="_parent"
                         button.Polaris-Button
@@ -91,10 +95,10 @@
                         = link_to action_subscription_contract_path(:resume, @subscription.id[/\d+/]), remote: true, method: :post, style: 'text-decoration: none;' do
                           span.resume-btn type="button" Resume
 
-            - @subscription.lines.edges.each do |line|
               - if @subscription.status == 'ACTIVE'
                 - product = ShopifyAPI::Product.find(line.node.product_id[/\d+/])
-                = render 'app_proxy/dashboard/edit_subscription_modal', subscription: @subscription, line_item: line.node, product_image: product.images.first&.src, admin_action: true, setting: setting
+
+                = render 'app_proxy/dashboard/edit_subscription_modal', subscription: @subscription, line_item: line.node, product_image: product.images.first&.src, admin_action: true, setting: setting, selling_plan_id: line.node.selling_plan_id, selling_plan: selling_plan
                 = render 'app_proxy/dashboard/swap_subscription_modal', subscription: @subscription, line_item: line.node
                 = render 'app_proxy/dashboard/upgrade_subscription_modal', subscription: @subscription, line_item: line.node, selling_plan_id: line.node.selling_plan_id, product: product
                 = render 'app_proxy/dashboard/cancel_subscription_modal', subscription: @subscription, line_item: line.node, lines_count: @subscription.lines.edges.size
@@ -138,7 +142,7 @@
 
   .Polaris-Card
     .Polaris-Card__Section
-      div style="display: flex; justify-content: space-between;"
+      div style="display: flex; flex-wrap: wrap; justify-content: space-between;"
         .Polaris-Stack
           .Polaris-Stack__Item
             <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">

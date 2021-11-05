@@ -3,6 +3,7 @@ module Types
     field :id, ID, null: false
     field :start_date, String, null: true
     field :end_date, String, null: true
+    field :display_name, String, null: true
     field :box_quantity_limit, Int, null: true
     field :box_subscription_type, String, null: true
     field :collection_images, [Types::CollectionType], null: true

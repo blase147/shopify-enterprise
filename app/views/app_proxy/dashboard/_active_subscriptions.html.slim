@@ -5,7 +5,8 @@
     - selling_plan_id = selling_plan_ids.reject{|val| val.nil?}&.first
     - selling_plan = SellingPlan.find_by(shopify_id: selling_plan_id)
     - next_billing_date = get_next_billing_date(subscription.node, @current_shop)
-    - box_campaign = @current_shop.build_a_box_campaign_groups.last&.build_a_box_campaign
+
+    - box_campaign = BuildABoxCampaign.joins(:build_a_box_campaign_group).where(build_a_box_campaign_groups: { shop_id: @current_shop.id, location: 'customer_portal' }).where("'#{selling_plan_id[/\d+/]}' = ANY (selling_plan_ids)").first
     / - selling_plan_id = "gid://shopify/SellingPlan/393543886"
     .subscription-contract-products
       - subscription.node.lines.edges.each_with_index do |edge, index|
@@ -31,7 +32,7 @@
               - case btn
                 - when 'update_choices'
                   - if box_campaign && box_campaign_display(box_campaign, selling_plan_id)
-                    = link_to "/a/chargezen_production/dashboard/build_a_box?customer_id=#{params[:customer_id]}&subscription_id=#{subscription.node.id[/\d+/]}&active_subscriptions_count=#{@active_subscriptions.count}&selling_plan_id=#{selling_plan_id[/\d+/]}" do
+                    = link_to "/a/chargezen_production/dashboard/build_a_box?&build_a_box_campaign_id=#{box_campaign.id}&customer_id=#{params[:customer_id]}&subscription_id=#{subscription.node.id[/\d+/]}&active_subscriptions_count=#{@active_subscriptions.count}&selling_plan_id=#{selling_plan_id[/\d+/]}" do
                       button.white-btn.action-btn UPDATE CHOICES
                 - when 'delivery_schedule'
                   - if @setting.customer_allowed?('navigation_delivery')

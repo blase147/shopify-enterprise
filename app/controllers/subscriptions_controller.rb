@@ -17,10 +17,10 @@ class SubscriptionsController < AuthenticatedController
     @subscription = SubscriptionContractService.new(id).run
     products = ProductService.new.list
     @swap_products = products.is_a?(Hash) ? nil : products.select{ |p| p.node.selling_plan_group_count > 0 }
-    @total = @subscription.orders.edges.map { |order|
+    @total = @subscription&.orders&.edges&.map { |order|
       order.node.total_received_set.presentment_money.amount.to_f
-    }.sum
-    @box_products = ShopifyAPI::Product.where(ids: @customer.box_items, fields: 'id,title,images,variants') if  @customer.box_items.present?
+    }&.sum
+    @box_products = ShopifyAPI::Product.where(ids: @customer.box_items, fields: 'id,title,images,variants') if  @customer&.box_items.present?
     unless @box_products
       product_ids = @subscription.origin_order.line_items.edges.map{|e| e.node.custom_attributes.find{|a| a.key == "_box_product_ids"}.value rescue nil}.flatten.compact.join(',') rescue nil
       @box_products = ShopifyAPI::Product.where(ids: product_ids, fields: 'id,title,images,variants') if product_ids.present?
@@ -47,6 +47,7 @@ class SubscriptionsController < AuthenticatedController
     else
       render js: "showToast('notice', 'Subscription is updated!'); hideModal();"
     end
+
   end
 
   def send_update_card

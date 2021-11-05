@@ -12,7 +12,8 @@ ShopifyApp.configure do |config|
   config.shop_session_repository = 'Shop'
   config.allow_jwt_authentication = true
   config.webhooks = [
-    { topic: 'app/uninstalled', address: "#{ENV['HOST']}shopify_webhooks/app_uninstalled" }
+    { topic: 'app/uninstalled', address: "#{ENV['HOST']}shopify_webhooks/app_uninstalled" },
+    { topic: 'orders/create', address: "#{ENV['HOST']}shopify_webhooks/order_create", fields: ["id", "updated_at"]}
   ]
 end
 
@@ -32,10 +33,10 @@ module ShopifyApp
       ActiveSupport::SecurityUtils.secure_compare(
         calculated_signature(query_hash, ShopifyApp.configuration.secret),
         signature
-      ) || ActiveSupport::SecurityUtils.secure_compare(
+      ) || (ShopifyApp.configuration.old_secret.present? && ActiveSupport::SecurityUtils.secure_compare(
         calculated_signature(query_hash, ShopifyApp.configuration.old_secret),
         signature
-      )
+      ))
     end
 
     def calculated_signature(query_hash_without_signature, secret)

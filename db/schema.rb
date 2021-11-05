@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_03_090736) do
+ActiveRecord::Schema.define(version: 2021_11_05_123455) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(version: 2021_11_03_090736) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "selling_plan_ids", array: true
+    t.string "display_name"
     t.index ["build_a_box_campaign_group_id"], name: "index_build_a_box_campaigns_on_build_a_box_campaign_group_id"
     t.index ["selling_plan_ids"], name: "index_build_a_box_campaigns_on_selling_plan_ids", using: :gin
   end
@@ -667,5 +668,16 @@ ActiveRecord::Schema.define(version: 2021_11_03_090736) do
     t.index ["selling_plan_ids"], name: "index_upsell_campaigns_on_selling_plan_ids", using: :gin
   end
 
+  create_table "zip_codes", force: :cascade do |t|
+    t.string "city"
+    t.string "state"
+    t.string "codes", array: true
+    t.bigint "shop_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["shop_id"], name: "index_zip_codes_on_shop_id"
+  end
+
   add_foreign_key "customers", "reasons_cancels"
+  add_foreign_key "zip_codes", "shops"
 end

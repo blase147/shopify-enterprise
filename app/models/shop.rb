@@ -10,6 +10,7 @@ class Shop < ActiveRecord::Base
   has_many :selling_plan_groups, dependent: :destroy
   has_one :setting, dependent: :destroy
   has_many :customers, dependent: :destroy
+  has_many :zip_codes, dependent: :destroy
   has_many :smarty_cancellation_reasons, dependent: :destroy
   has_many :custom_keywords, dependent: :destroy
   has_one :sms_setting, dependent: :destroy

@@ -130,6 +130,7 @@ const CreateBuildBox = ({ id, handleClose }) => {
           id
           startDate
           endDate
+          displayName
           boxQuantityLimit
           boxSubscriptionType
           triggers {
@@ -487,6 +488,25 @@ const CreateBuildBox = ({ id, handleClose }) => {
                       <FormLayout>
                         <FormLayout.Group>
                           <div>
+                            <TextField
+                              value={values?.buildABoxCampaign?.displayName}
+                              label="Display name"
+                              placeholder="Build A Box"
+                              type="text"
+                              error={touched.displayName && errors.displayName}
+                              onChange={(e) => {
+                                setFieldValue(`buildABoxCampaign.displayName`, e);
+                              }}
+                              helpText={
+                                <span>
+                                  Display Name that will appear on build a box page.
+                                </span>
+                              }
+                            />
+                          </div>
+                        </FormLayout.Group>
+                        <FormLayout.Group>
+                          <div>
                             <TextContainer>
                               <h4>
                                 <strong>DISPLAY RULES</strong>
@@ -548,9 +568,7 @@ const CreateBuildBox = ({ id, handleClose }) => {
                               <Subheading>Subscription plan</Subheading>
                             </TextContainer>
                             <Select
-                              options={[
-                                { label: 'is any', value: 'is_any' },
-                              ]}
+                              options={[{ label: 'is any', value: 'is_any' }]}
                               label=""
                               value={'is_any'}
                             />
@@ -558,9 +576,7 @@ const CreateBuildBox = ({ id, handleClose }) => {
                             <div className="search">
                               <SearchPlan
                                 idForTextField={`serchPlan-${Math.random()}`}
-                                value={
-                                  values.buildABoxCampaign?.sellingPlans
-                                }
+                                value={values.buildABoxCampaign?.sellingPlans}
                                 setFieldValue={setFieldValue}
                                 fieldName={`buildABoxCampaign.sellingPlans`}
                                 allSelectedPlans={allSelectedPlans || []}

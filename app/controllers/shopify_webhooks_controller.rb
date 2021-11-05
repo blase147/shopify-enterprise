@@ -15,4 +15,31 @@ class ShopifyWebhooksController < ApplicationController
     end
     head :no_content
   end
+
+  def order_created
+    begin
+      box_product_ids = get_box_product_ids(params[:line_items])
+      if box_product_ids
+        order = ShopifyAPI::Order.new(id: params[:id])
+        order.tags = ShopifyAPI::Product.where(ids: box_product_ids, fields: 'id,title').map(&:title).join(', ')
+        order.save
+      end
+    rescue => e
+      p e
+    end
+
+    head :no_content
+  end
+
+  private
+
+  def get_box_product_ids(line_items)(line_items)
+    line_items.each do |item|
+      ids = item.properties.find{|p| p.name == "_box_product_ids"}
+      return ids.value if ids
+    end
+    nil
+  rescue
+    nil
+  end
 end

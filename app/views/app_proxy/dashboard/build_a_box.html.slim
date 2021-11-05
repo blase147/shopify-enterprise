@@ -8,11 +8,13 @@
           .add-img-section
             .img-con
               img src="#{product.images.first&.src}" /
-              button.add data-id="#{product.id}" +
+              button.add data-id="#{product.id}"
+                p style="margin-bottom: 0.6rem; line-height: 0;"
+                  | +
             p = product.title
       .img-place-section
         .top-section
-          h4 Build Your Box
+          h4 = @box_campaign.display_name || "Build Your Box"
         .bottom-section
           .add-img-sec
             - if @selected_products.present?
@@ -22,14 +24,14 @@
                     .img-crs-sec.cros-img
                       img src="#{@selected_products[index].images.first.src}" /
                       .cros-plus.close-img
-                        | x
+                        p x
                     p Select #{index+1}
                 - else
                   .sec
                     .img-crs-sec.cros-img
                       img.place-img src="" /
                       .cros-plus.close-img
-                        | x
+                        p x
                     p Select #{index+1}
             - else
               - @box_campaign.box_quantity_limit.times.each do |index|
@@ -37,7 +39,7 @@
                   .img-crs-sec.cros-img
                     img.place-img src="" /
                     .cros-plus.close-img
-                      | x
+                      p x
                   p Select #{index+1}
           p.error_message.hidden Selection is not complete
           button.confirm_selection data-subscriptionId="#{@subscription_id}" CONFIRM SELECTION
@@ -125,9 +127,8 @@ javascript:
   function filterCookieData(id){
     let products = getCookie('customer_box_items');
     let split_products = products.split(',');
-    let filtered = split_products.filter(function(value, index, arr){
-        return value != id;
-    });
+    let filtered = [];
+    document.querySelectorAll('.sec').forEach(s => filtered.push(s.dataset.id));
     let updated_products = filtered.join(',');
     eraseCookie('customer_box_items');
     setCookie('customer_box_items', updated_products, 1);

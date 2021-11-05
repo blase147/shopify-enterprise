@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   post '/customers/data_request', to: 'gdpr_webhooks#customer_data_request'
 
   post '/shopify_webhooks/app_uninstalled', to: 'shopify_webhooks#app_uninstalled'
+  post '/shopify_webhooks/order_created', to: 'shopify_webhooks#order_created'
 
   post '/shipping_suites/sync_orders', to: 'shipping_suites#sync_orders'
 
@@ -116,9 +117,11 @@ Rails.application.routes.draw do
   end
 
   resources :select_plan, only: [:index, :create]
-  get '/zip_codes', to: 'zip_codes#index'
 
   get 'subscription/charge', to: 'callback#charge'
+  resources :zip_codes, only: [:index, :create]
+  delete 'zip_codes', to: 'zip_codes#destroy'
+
   get '*path' => 'home#index'
   post 'twilio/sms', 'twilio#sms'
 end

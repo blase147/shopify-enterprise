@@ -50,11 +50,11 @@ class AppProxy::DashboardController < AppProxyController
     @customer = current_shop.customers.find_by_shopify_id(params[:subscription_id])
     if params[:selling_plan_id].present?
       @selling_plan_id = params[:selling_plan_id]
-      @box_campaign = current_shop.build_a_box_campaign_groups.last.build_a_box_campaign
+      @box_campaign = BuildABoxCampaign.find(params[:build_a_box_campaign_id]) # current_shop.build_a_box_campaign_groups.last.build_a_box_campaign
       @selected_products = ShopifyAPI::Product.where(ids: @customer.box_items, fields: 'id,title,images') if @customer.box_items.present?
       case @box_campaign&.box_subscription_type
       when 'collection'
-        products = @box_campaign.collection_images[0]['products']
+        products = @box_campaign.collection_images.map{|ci| ci['products'] unless ci['_destroy']}.flatten.compact
       when 'products'
         products = @box_campaign.product_images
       end
@@ -66,12 +66,20 @@ class AppProxy::DashboardController < AppProxyController
   def confirm_box_selection
     customer = current_shop.customers.find_by(shopify_id: params[:subscription_id])
     customer.update(box_items: params[:product_id], campaign_date: Time.current)
+    begin
+      contract = SubscriptionContractService.new(customer.shopify_id).run
+      order = ShopifyAPI::Order.find contract.origin_order.id[/\d+/]
+      order.tags = ShopifyAPI::Product.where(ids: params[:product_id], fields: 'id,title').map(&:title).join(', ')
+      order.save
+    rescue => e
+      puts e
+    end
   end
 
   private ##
 
   def fetch_products(products)
-    product_ids = products.map {|product| product['product_id'][/\d+/]}.join(',')
+    product_ids = products.map{|product| product['product_id'][/\d+/] unless product["_destroy"]}.compact.join(',')
     @products = ShopifyAPI::Product.where(ids: product_ids, fields: 'id,title,images')
   end
 

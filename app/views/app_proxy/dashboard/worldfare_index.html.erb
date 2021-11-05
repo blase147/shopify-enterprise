@@ -1,5 +1,6 @@
 {{ 'customer.css' | asset_url | stylesheet_tag }}
-<% customer = ShopifyAPI::Customer.find(params[:customer_id]) %>
+<% customer = ShopifyAPI::Customer.find(params[:customer_id]) rescue nil %>
+<% customer_order = ShopifyAPI::Order.find(:last, params: {customer_id: customer.id} ) rescue nil %>
 <style>
   .flex {
     display: flex;
@@ -44,19 +45,105 @@
   .center {
     justify-content: center !important;
   }
+  .portal_product_number {
+    --font-body-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Ubuntu, Helvetica Neue, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+    --font-body-style: normal;
+    --font-body-weight: 400;
+    --font-heading-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Ubuntu, Helvetica Neue, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+    --font-heading-style: normal;
+    --font-heading-weight: 400;
+    --color-base-text: #1A1B18;
+    --color-base-text-rgb: 26, 27, 24;
+    --color-base-background-1: #FFFFFF;
+    --color-base-background-1-rgb: 255, 255, 255;
+    --color-base-background-2: #FAF1E9;
+    --color-base-background-2-rgb: 250, 241, 233;
+    --color-base-solid-button-labels: #FFFFFF;
+    --color-base-solid-button-labels-rgb: 255, 255, 255;
+    --color-base-outline-button-labels: #445958;
+    --color-base-outline-button-labels-rgb: 68, 89, 88;
+    --color-base-accent-1: #445958;
+    --color-base-accent-1-rgb: 68, 89, 88;
+    --color-base-accent-2: #9D572C;
+    --color-base-accent-2-rgb: 157, 87, 44;
+    --color-base-text-opacity-10-percent: #e8e8e8;
+    --color-base-text-opacity-20-percent: #d1d1d1;
+    --color-base-text-opacity-55-percent: #818280;
+    --color-base-text-opacity-85-percent: #3c3d3b;
+    --color-base-accent-1-opacity-10-percent: #eceeee;
+    --color-base-accent-2-opacity-10-percent: #f5eeea;
+    --color-foreground: var(--color-base-text);
+    --color-foreground-rgb: var(--color-base-text-rgb);
+    --color-background: var(--color-base-background-1);
+    --color-background-rbg: var(--color-base-background-1-rgb);
+    --payment-terms-background-color: var(--color-base-background-1);
+    --color-foreground-75: rgba(var(--color-foreground-rgb), 0.75);
+    --color-foreground-70: rgba(var(--color-foreground-rgb), 0.7);
+    --color-foreground-55: rgba(var(--color-foreground-rgb), 0.55);
+    --color-foreground-50: rgba(var(--color-foreground-rgb), 0.5);
+    --color-foreground-40: rgba(var(--color-foreground-rgb), 0.4);
+    --color-foreground-30: rgba(var(--color-foreground-rgb), 0.3);
+    --color-foreground-20: rgba(var(--color-foreground-rgb), 0.2);
+    --color-foreground-10: rgba(var(--color-foreground-rgb), 0.1);
+    --color-foreground-8: rgba(var(--color-foreground-rgb), 0.08);
+    --color-foreground-4: rgba(var(--color-foreground-rgb), 0.04);
+    --color-foreground-3: rgba(var(--color-foreground-rgb), 0.03);
+    --color-link: var(--color-base-outline-button-labels);
+    --color-link-hover: rgba(var(--color-base-outline-button-labels-rgb), 0.85);
+    --color-button-background: var(--color-base-accent-1);
+    --color-button-border: var(--color-base-accent-1);
+    --color-button-text: var(--color-base-solid-button-labels);
+    --color-button-text-rgb: var(--color-base-solid-button-labels-rgb);
+    --color-badge-background: var(--color-background);
+    --color-badge-border: var(--color-foreground-10);
+    --color-card-hover: rgba(var(--color-base-text-rgb), 0.06);
+    --duration-short: 100ms;
+    --duration-default: 200ms;
+    --duration-long: 500ms;
+    list-style: none;
+    cursor: pointer;
+    font: inherit;
+    letter-spacing: .1rem;
+    box-sizing: inherit;
+    -webkit-tap-highlight-color: transparent;
+    display: block;
+    background: #000;
+    font-family: Vulf_Sans;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 85%;
+    text-align: center;
+    color: #fff;
+    width: max-content;
+    margin: 0 auto;
+    padding: 26px 0 26px;
+    border-radius: 50px;
+    min-height: 78px;
+    min-width: 78px;
+    font-size: 24px;
+  }
+  button.sub_button.active {
+    border-color: black;
+  }
 </style>
 <div class="customer account c_account">
 
   <div class="client_profile">
     <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/files/Ellipse.png?v=1631791734">
     <p>Hello, {{ customer.first_name }}<button class="Edit_profile"><img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/files/akar-icons_edit.png?v=1631791848"></button></p>
+    <a href="{{ routes.account_logout_url }}">
+      <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 18 19">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M6 4.5a3 3 0 116 0 3 3 0 01-6 0zm3-4a4 4 0 100 8 4 4 0 000-8zm5.58 12.15c1.12.82 1.83 2.24 1.91 4.85H1.51c.08-2.6.79-4.03 1.9-4.85C4.66 11.75 6.5 11.5 9 11.5s4.35.26 5.58 1.15zM9 10.5c-2.5 0-4.65.24-6.17 1.35C1.27 12.98.5 14.93.5 18v.5h17V18c0-3.07-.77-5.02-2.33-6.15-1.52-1.1-3.67-1.35-6.17-1.35z" fill="currentColor">
+      </svg>
+      {{ 'customer.log_out' | t }}
+    </a>
   </div>
 
 
   <div class="Profile_tab">
-    <button class="Profile_links" onclick="Profile(event, 'Account')" id="defaultOpen">Account</button>
+    <button class="Profile_links" onclick="Profile(event, 'Account')">Account</button>
     <button class="Profile_links" onclick="Profile(event, 'Subscription')">Subscription</button>
-    <button class="Profile_links" onclick="Profile(event, 'Schedule')">Schedule</button>
+    <button class="Profile_links" onclick="Profile(event, 'Schedule')" id="defaultOpen">Schedule</button>
     <button class="Profile_links" onclick="Profile(event, 'Support')">Support</button>
   </div>
 
@@ -114,12 +201,12 @@
               <td colspan="2"><h3 class="t-align-left bolder" >Card Number</h3></td>
             </tr>
             <tr>
-              <td colspan="2"><p class="t-align-left block subdued ft-1">************2791</p></td>
+              <td colspan="2"><p class="t-align-left block subdued ft-1"><%= customer_order&.payment_details&.credit_card_number rescue nil %></p></td>
             </tr><tr>
               <td colspan="2"><h3 class="t-align-left bolder" >Name on Card</h3></td>
             </tr>
             <tr>
-              <td colspan="2"><p class="t-align-left block subdued ft-1">Mike Nicholson</p></td>
+              <td colspan="2"><p class="t-align-left block subdued ft-1"><%= customer_order&.payment_details&.credit_card_name rescue nil %></p></td>
             </tr>
             <tr>
               <td colspan="2"><h3 class="t-align-left bolder">Billing Address</h3></td>
@@ -129,11 +216,11 @@
             </tr>
             <tr>
               <td><h3 class="t-align-left bolder">Expiration Date</h3></td>
-              <td><h3 class="t-align-left bolder">CVC/CVV</h3></td>
+              <td><h3 class="t-align-left bolder">Company</h3></td>
             </tr>
             <tr>
-              <td><p class="t-align-left block subdued ft-1">07/2021</p></td>
-              <td><p class="t-align-left block subdued ft-1">0123</p></td>
+              <td><p class="t-align-left block subdued ft-1"><%= "#{customer_order&.payment_details&.credit_card_expiration_month}/#{customer_order&.payment_details&.credit_card_expiration_year}" rescue nil %></p></td>
+              <td><p class="t-align-left block subdued ft-1"><%= customer_order&.payment_details&.credit_card_company rescue nil %></p></td>
             </tr>
           </tbody>
         </table>
@@ -154,11 +241,55 @@
 
   <div id="Subscription" class="Profile_links_data">
     <h2 class="Trial">My Subscription</h2>
-    <p>Choose your weekly plan.</p>
+    <% if customer_order.line_items.any?{|item| item.name.downcase.include?('trial')} rescue false %>
+      <p>Choose your weekly plan.</p>
+    <% end %>
 
     <div class="sub_box">
       <ul class="sub_list slide_box">
-        <li class="sub_single">
+        <% active_sub = customer_order.line_items.find{|item| item.name.downcase.include?('box')} rescue nil %>
+        <% if active_sub %>
+          {% assign active_sub = <%= active_sub.product_id %> %}
+        <% else %>
+          {% assign active_sub = false %}
+        <% end %>
+
+        <!-- active_sub {{ active_sub }}-->
+        {% assign subcollection = collections['subscriptions'] %}
+        {% for pro in subcollection.products %}
+          {% unless pro.title contains 'Trial' %}
+            <li class="sub_single">
+              <button class="sub_button {% if active_sub == pro.id %}active{% endif %}">
+                <span class="Big">{{pro.title}}</span>
+                <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/files/Vector_20.png?v=1631797836">
+              <div class="product_number_out"><span class="portal_product_number">{{pro.metafields.subscription.dishes_in_week}}</span></div>
+              <span class="sub_duration_2">dishs/week</span>
+                <span class="each_price">{{pro.price | divided_by: pro.metafields.subscription.dishes_in_week | money}}/dish</span>
+                <span class="sub_duration_2 bottom">{{pro.price | money}}/week</span>
+              </button>
+            </li>
+          {% endunless %}
+        <%
+=begin%>
+ <div class="radio_Select {% if pro.selected_or_first_available_variant.id == subid %} active {% else %} {% if forloop.index == 1 and subid == 0 %} active {% endif %} {% endif %}">
+        <input type="radio" id="html" name="subscription_plan" value="{{pro.metafields.subscription.dishes_in_week}}" data-id="{{pro.selected_or_first_available_variant.id}}" data-sellingplan="{{pro.selling_plan_groups[0].selling_plans[0].id}}"  {% if pro.selected_or_first_available_variant.id == subid %} checked {% else %}{% if forloop.index == 1 and subid == 0 %} checked {% endif %}{% endif %}>
+          <div class="radio_data">
+            <div class="sub_data">
+              <h3 class="sub_name">{{pro.title}}</h3>
+
+              <span class="sub_duration">{{pro.metafields.subscription.dishes_in_week}} dishes/week</span>
+
+            </div>
+            <div class="sub_plan">
+            <h3 class="sub_price">{{pro.price | divided_by: pro.metafields.subscription.dishes_in_week | money}}/dish</h3>
+              <span class="sub_duration_2">{% if forloop.index == 1 %}one-time offer{%else%}{{pro.price | money}}/week{%endif%}</span>
+            </div>
+          </div>
+          </div>
+<%
+=end%>
+        {% endfor %}
+        <!-- <li class="sub_single">
           <button class="sub_button">
             <span class="Big">Big Box</span>
             <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/files/Vector_20.png?v=1631797836">
@@ -167,7 +298,6 @@
             <span class="each_price">$12/dish</span>
             <span class="sub_duration_2 bottom">$40.00/week</span>
           </button>
-
         </li>
         <li class="sub_single">
           <button class="sub_button">
@@ -178,7 +308,6 @@
             <span class="each_price">$12/dish</span>
             <span class="sub_duration_2 bottom">$40.00/week</span>
           </button>
-
         </li>
         <li class="sub_single">
           <button class="sub_button">
@@ -189,8 +318,7 @@
             <span class="each_price">$12/dish</span>
             <span class="sub_duration_2 bottom">$40.00/week</span>
           </button>
-
-        </li>
+        </li> -->
       </ul>
       <button class="Update_sub">Update Subscription</button>
       <a href="" class="Cancel_sub">Cancel Subscription</a>
@@ -212,26 +340,24 @@
     </div>
     <h2 class="Trial">Trial Week</h2>
 
-
+    <% created_at = Date.parse(customer_order&.created_at) rescue nil %>
+    <% next_day = created_at + 1.day rescue nil %>
+    <% products = ShopifyAPI::Product.where(ids: customer_order.line_items.map(&:product_id).join(', '), fields: 'id,title,images') rescue nil %>
     <div class="orders">
       <div class="placed_data">
         <p class="placed">Order placed:</p>
-        <p class="placed_dates">June 1, 2021 (edit before June 2nd)</p>
+        <p class="placed_dates"><%= created_at.strftime('%B %d, %Y') rescue nil %> (edit before <%= next_day.strftime('%B %d') rescue nil %>)</p>
       </div>
-  {%- for item in cart.items -%}
-      {% assign collist = "" %}
-      {% for col in item.product.collections  %}
-      {% assign collist = collist | append: col.handle %}
-      {% assign collist = collist | append: ',' %}
-      {% endfor %}
-      {% unless collist contains 'subscriptions' %}
-     <div class="order_inn">
-                  <span class="dish_remove" data-id="{{item.id}}">×</span>
-          <img src="{{ item.image | img_url: '140x' }}">
-            <h5>{{item.title}} ({{item.quantity}})</h5>
+      <% customer_order&.line_items&.each do |line_item| %>
+        <% unless line_item.name.downcase.include?('box') %>
+          <% product = products.find{|p| p.id == line_item.product_id } %>
+          <div class="order_inn">
+            <!-- <span class="dish_remove" data-id="{{item.id}}">×</span> -->
+            <img src="<%= product.images.first.src rescue nil %>">
+            <h5><%= line_item.name %> (<%= line_item.quantity %>)</h5>
           </div>
-     {% endunless %}
-   {% endfor %}
+        <% end %>
+      <% end %>
     </div>
 
       <div class="order_status">
@@ -241,12 +367,34 @@
     </div>
         <div class="Status">
       <p class="s_name">Arriving:</p>
-    	<p class="s_data">June 4, 2021</p>
+    	<p class="s_data subdued">Est. <%= (created_at + 3.days).strftime('%B %d, %Y') rescue nil %></p>
     </div>
-
   </div>
 
 
+  <% (1..2).each do |i| %>
+    <% current_date =  created_at + (7*i).days rescue nil %>
+    <div class="pre_orders">
+      <h2 class="Trial">Week of <%= current_date.strftime('%B %d, %Y') rescue nil %></h2>
+      <div class="placed_data">
+        <p class="placed">Select dishes by:</p>
+        <p class="placed_dates"><%= current_date.strftime('%B %d, %Y') rescue nil %></p>
+      </div>
+
+      <div class="order_add">
+        <ul class="pre_segment">
+          <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
+          <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
+          <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
+          <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
+          <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
+          <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+<%
+=begin%>
 
   <div class="pre_orders">
     <h2 class="Trial">Week of Jun 8, 2021</h2>
@@ -269,28 +417,8 @@
     </div>
 
   </div>
-
-    <div class="pre_orders">
-    <h2 class="Trial">Week of Jun 8, 2021</h2>
-   <div class="placed_data">
-        <p class="placed">Select dishes by:</p>
-        <p class="placed_dates">June 8, 2021</p>
-      </div>
-
-    <div class="order_add">
-      <ul class="pre_segment">
-        <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-      	<li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-        <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-        <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-        <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-        <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-
-      </ul>
-
-    </div>
-
-  </div>
+<%
+=end%>
 
     <button class="submit_pre_order">Save Changes</button>
 

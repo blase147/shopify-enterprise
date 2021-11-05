@@ -48,8 +48,8 @@ import TranslationImage from '../../../assets/images/settings/translation.svg';
 import Sms from './HouseKeepingComponents/Sms';
 import MainDiscount from './HouseKeepingComponents/DiscountComponents/MainDiscount';
 import MainExport from './HouseKeepingComponents/ExportComponents/MainExport';
-import ZipCodeImage from '../../../assets/images/settings/zip_code.svg'
-import ZipCodes from './ZipCodes'
+import ZipCodeImage from '../../../assets/images/settings/zip_code.svg';
+import ZipCodes from './ZipCodes';
 
 const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
   // form data ########################################################
@@ -472,7 +472,7 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
             key: 'export',
             title: 'Export',
             img: ExportImage,
-            desc: "Export data from the app.",
+            desc: 'Export data from the app.',
           },
         ]
       : []),
@@ -507,13 +507,13 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
     ...(domain == 'tryworldfare.myshopify.com'
       ? [
           {
-            key:"zip_codes",
-            title:"Zip Codes",
-            img:ZipCodeImage,
-            desc:"Add cities for Zip Codes."
+            key: 'zip_codes',
+            title: 'Zip Codes',
+            img: ZipCodeImage,
+            desc: 'Add cities for Zip Codes.',
           },
         ]
-      : [])
+      : []),
   ];
   const tabs = [
     {
