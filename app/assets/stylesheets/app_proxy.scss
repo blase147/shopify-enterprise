@@ -2297,8 +2297,8 @@ Customer Build a box .checkout-design-1 {
     height: 50px;
     width: 50px;
     top: 0%;
-    left: 50%;
-    border: 2px solid #3caaa8;
+    left: 100%;
+    border: none;
     color: #3caaa8;
     border-radius: 50%;
     display: grid;
@@ -2306,6 +2306,11 @@ Customer Build a box .checkout-design-1 {
     font-size: 32px;
     transform: translate(-50%, -50%);
     cursor: pointer;
+}
+
+.add svg {
+    width: 2rem;
+    height: 2rem;
 }
 
 .checkout-design-1 .add-img-section button img {

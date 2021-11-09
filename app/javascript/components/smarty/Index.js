@@ -11,6 +11,9 @@ import EditSmartyMessage from './SmartyMessage/EditSmartyMessage';
 import SmartyMessage from './SmartyMessage/SmartyMessage';
 import '../smarty/tiazan.css';
 import { MobileBackArrowMajor } from '@shopify/polaris-icons';
+import CollectSubscribers from './CollectSubscribers';
+import FlowIndex from './Flow';
+import FlowForm from './Flow/form';
 
 const Smarty = ({ handleBack }) => {
   const location = useLocation();
@@ -50,6 +53,14 @@ const Smarty = ({ handleBack }) => {
     {
       id: 'cancellation-reasons',
       content: 'Cancellation Reasons',
+    },
+    {
+      id: 'collect-subscribers',
+      content: 'Collect Subscribers',
+    },
+    {
+      id: 'flow',
+      content: 'Flow',
     },
   ];
 
@@ -123,13 +134,24 @@ const Smarty = ({ handleBack }) => {
           )}
           {selectedTitleTab === (process.env.APP_TYPE == 'public' ? 3 : 1) && (
             <>
-              {showEditPage ? (
+              {showEditPage && (
                 <CancellationReasonForm
                   id={editId}
                   handleClose={handleCloseEditPage}
                 />
+              )}
+              <CancellationReasons handleEditCancellation={handleEditPage} />
+            </>
+          )}
+          {selectedTitleTab === (process.env.APP_TYPE == 'public' ? 4 : 2) && (
+            <CollectSubscribers />
+          )}
+          {selectedTitleTab === (process.env.APP_TYPE == 'public' ? 5 : 3) && (
+            <>
+              {showEditPage ? (
+                <FlowForm id={editId} handleClose={handleCloseEditPage} />
               ) : (
-                <CancellationReasons handleEditCancellation={handleEditPage} />
+                <FlowIndex handleEditFlow={handleEditPage} />
               )}
             </>
           )}

@@ -241,7 +241,7 @@
 
   <div id="Subscription" class="Profile_links_data">
     <h2 class="Trial">My Subscription</h2>
-    <% if customer_order.line_items.any?{|item| item.name.downcase.include?('trial')} rescue false %>
+    <% if (customer_order.line_items.any?{|item| item.name.downcase.include?('trial')} rescue false) %>
       <p>Choose your weekly plan.</p>
     <% end %>
 

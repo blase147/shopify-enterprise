@@ -7,5 +7,7 @@ module Types
     field :updated_at, String, null: true
     field :custom, String, null: true
     field :total_count, Integer, null: true
+    field :created_at, Integer, null: true
+    field :usage_count, Integer, null: true
   end
 end

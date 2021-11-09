@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { gql, useLazyQuery } from '@apollo/client';
 import {
@@ -8,95 +7,187 @@ import {
   TextField,
   Spinner,
   SkeletonDisplayText,
-  Button
+  Button,
+  Stack,
+  DataTable,
+  Pagination,
 } from '@shopify/polaris';
 import dayjs from 'dayjs';
+import ToggleButton from 'react-toggle-button';
 import { useHistory } from 'react-router';
-import Pagination from '../../common/Pagination';
 import TableSkeleton from '../../common/TableSkeleton';
 
-
 const SmartyMessage = ({ handleEditSmartyMessage }) => {
-
-  const fetchQuery=gql`
-  query ($offsetAttributes: OffsetAttributes!, $custom: String, $searchKey: String, $sortColumn: String, $sortDirection: String) {
-    fetchSmartyMessages(offsetAttributes: $offsetAttributes, custom: $custom, searchKey: $searchKey, sortColumn: $sortColumn, sortDirection: $sortDirection) {
-            totalCount
-            smartyMessages {
-                id
-                title
-                description
-                body
-                updatedAt
-            }
+  const fetchQuery = gql`
+    query (
+      $offsetAttributes: OffsetAttributes!
+      $custom: String
+      $searchKey: String
+      $sortColumn: String
+      $sortDirection: String
+    ) {
+      fetchSmartyMessages(
+        offsetAttributes: $offsetAttributes
+        custom: $custom
+        searchKey: $searchKey
+        sortColumn: $sortColumn
+        sortDirection: $sortDirection
+      ) {
+        totalCount
+        smartyMessages {
+          id
+          title
+          description
+          body
+          updatedAt
+          createdAt
+          usageCount
+        }
+      }
     }
-}
-  `
+  `;
 
   const orderOptions = [
-    { label: "Order By Title", value: 'title' },
-    { label: "Last Modified", value: 'updated_at' }
-  ]
-  const history=useHistory();
-  const [searchValue, setSearchValue] = useState("");
-  const [filters,setFilters]=useState({searchValue:"",order:"updated_at",type:"DESC",limit:25,offset:0})
+    { label: 'Order By Title', value: 'title' },
+    { label: 'Last Modified', value: 'updated_at' },
+  ];
+  const history = useHistory();
+  const [searchValue, setSearchValue] = useState('');
+  const [filters, setFilters] = useState({
+    searchValue: '',
+    order: 'updated_at',
+    type: 'DESC',
+    limit: 25,
+    offset: 0,
+  });
 
-  const [getMessages, { loading, data, error }] = useLazyQuery(fetchQuery,{fetchPolicy:"cache-and-network"});
+  const [getMessages, { loading, data, error }] = useLazyQuery(fetchQuery, {
+    fetchPolicy: 'cache-and-network',
+  });
 
   useEffect(() => {
-   getMessages({
-     variables:{
-       offsetAttributes:{limit:filters.limit,offset:filters.offset},
-       custom:"false",
-       searchKey:filters.searchValue,
-       sortColumn:filters.order,
-       sortDirection:filters.type
-     }
-   })
-  }, [filters])
+    getMessages({
+      variables: {
+        offsetAttributes: { limit: filters.limit, offset: filters.offset },
+        custom: 'false',
+        searchKey: filters.searchValue,
+        sortColumn: filters.order,
+        sortDirection: filters.type,
+      },
+    });
+  }, [filters]);
 
-  const count =data?.fetchSmartyMessages?.totalCount;
-  const totalPages=Math.ceil(count / filters.limit);
-  
+  const count = data?.fetchSmartyMessages?.totalCount;
+  const totalPages = Math.ceil(count / filters.limit);
 
-  const handlePageClick = useCallback(data => {
-    let selected = data && data.selected;
-    let _offset = Math.ceil(selected * filters.limit);
-    setFilters({...filters,offset:_offset});
-  }, [setFilters, filters.limit])
+  const handlePageClick = useCallback(
+    (data) => {
+      let selected = data && data.selected;
+      let _offset = Math.ceil(selected * filters.limit);
+      setFilters({ ...filters, offset: _offset });
+    },
+    [setFilters, filters.limit]
+  );
 
   return (
     <Layout>
       <Card>
         <Card.Section>
           <div className="smarty-sms">
-            <p className="customize-text">Customize your SMS Messages</p>
-            <form class="">
-              <div className="message-form">
-                <div class="example">
-                  <TextField
-                    placeholder="Message’s Title"
-                    value={searchValue}
-                    onChange={(value) => setSearchValue(value)}
-                  />
-                  <Button primary onClick={(e)=>{e.stopPropagation();setFilters({...filters,searchValue:searchValue});}} >Search</Button>
-                </div>
+            <Stack>
+              <p className="customize-text">Customize your SMS Messages</p>
+              <Stack.Item fill />
+              <form class="">
+                <div className="message-form">
+                  <div class="example mt-2">
+                    <TextField
+                      placeholder="Message’s Title"
+                      value={searchValue}
+                      onChange={(value) => setSearchValue(value)}
+                    />
+                    <Button
+                      primary
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setFilters({ ...filters, searchValue: searchValue });
+                      }}
+                    >
+                      Search
+                    </Button>
+                  </div>
 
-                {/* <input className="" placeholder="order by title"type="number"/> */}
-                <div class="Polaris-Select order-title">
-                  <Select
-                    options={orderOptions}
-                    value={filters.order}
-                    // error={
-                    //   touched.showOrderHistory && errors.showOrderHistory
-                    // }
-                    onChange={(value) => setFilters({...filters,order:value})}
-                  />
+                  {/* <input className="" placeholder="order by title"type="number"/> */}
+                  {/* <div class="Polaris-Select order-title">
+                    <Select
+                      options={orderOptions}
+                      value={filters.order}
+                      // error={
+                      //   touched.showOrderHistory && errors.showOrderHistory
+                      // }
+                      onChange={(value) => setFilters({...filters,order:value})}
+                    />
+                  </div> */}
                 </div>
-              </div>
-            </form>
+              </form>
+            </Stack>
 
-            <table className="message-table">
+            <DataTable
+              columnContentTypes={[
+                'numeric',
+                'text',
+                'text',
+                'numeric',
+                'numeric',
+                'text',
+                'text',
+                'text',
+              ]}
+              headings={[
+                '#',
+                'Name',
+                'Date created',
+                'Sent',
+                'Clicks',
+                'Revenue',
+                'Status',
+                'Actions',
+              ]}
+              rows={
+                !loading && data
+                  ? data?.fetchSmartyMessages?.smartyMessages?.map((msg, i) => [
+                      i + 1,
+                      msg.title,
+                      dayjs(msg.updatedAt).format('DD MMM HH:mm'),
+                      0,
+                      0,
+                      `$0.00`,
+                      <ToggleButton
+                        inactiveLabel={''}
+                        activeLabel={''}
+                        value={false}
+                        onToggle={(value) => {
+                          console.log('toggle');
+                        }}
+                      />,
+                      <Button
+                        primary
+                        onClick={() => handleEditSmartyMessage(msg.id)}
+                      >
+                        Edit
+                      </Button>,
+                    ])
+                  : []
+              }
+            />
+            {loading && (
+              <Spinner
+                accessibilityLabel="Spinner example"
+                size="large"
+                color="teal"
+              />
+            )}
+
+            {/* <table className="message-table">
               <tr>
                 <th>Name</th>
                 <th>Last modified</th>
@@ -122,12 +213,12 @@ const SmartyMessage = ({ handleEditSmartyMessage }) => {
                           < path d="M12.2416 3.2983L9.07687 0.133553C8.99012 0.0468063 8.87328 0 8.75403 0H4.17376C3.92188 0 3.71737 0.204506 3.71737 0.45639V3.07686H1.09702C0.845131 3.07686 0.640625 3.28125 0.640625 3.53325V14.5436C0.640625 14.7955 0.845131 15 1.09702 15H8.84192C9.09392 15 9.29842 14.7955 9.29842 14.5436V11.9231H11.9188C12.1707 11.9231 12.3752 11.7188 12.3752 11.4668V3.62114C12.3752 3.5051 12.3305 3.38722 12.2416 3.2983ZM11.4624 11.0104H9.29842V6.698C9.29842 6.57978 9.25242 6.46271 9.16476 6.37505L6.00012 3.21041C5.91418 3.12435 5.79756 3.07674 5.67728 3.07674H4.63026V0.912781H8.29764V3.62114C8.29764 3.87302 8.50214 4.07753 8.75403 4.07753H11.4624V11.0104ZM8.38553 14.0872H1.55341V3.98964H5.22078V6.698C5.22078 6.94988 5.42529 7.15439 5.67728 7.15439H8.38553V14.0872ZM6.13367 4.63497L7.7402 6.24149H6.13367V4.63497ZM10.8169 3.16475H9.21042V1.55823C9.41126 1.75896 10.6567 3.00453 10.8169 3.16475Z" fill="#007EFF" />
                         </svg>
                       Duplicate
-                    </div> */}
+                    </div>
                     </td>
                   </tr>
                 ))
               }
-            </table>
+            </table> */}
             <div className="message-pagination">
               {/* <ul class="pagination">
 
@@ -140,21 +231,34 @@ const SmartyMessage = ({ handleEditSmartyMessage }) => {
                 <li><a href="#">Next {'>>'}</a></li>
                 <li><a href="#">Last {'>>'}</a></li>
               </ul> */}
-              {
-              (data && count>filters.limit) &&
-                <Pagination 
-                handlePageClick={handlePageClick}
-                offset={filters.offset}
-                limit={filters.limit}
-                totalPages={totalPages}
+              {data && count > filters.limit && (
+                // <Pagination
+                //   handlePageClick={handlePageClick}
+                //   offset={filters.offset}
+                //   limit={filters.limit}
+                //   totalPages={totalPages}
+                // />
+                <Pagination
+                  hasPrevious={filters.offset > 0}
+                  onPrevious={() => {
+                    handlePageClick({
+                      selected: filters.offset / filters.limit - 1,
+                    });
+                  }}
+                  hasNext={count > filters.offset + filters.limit}
+                  onNext={() => {
+                    handlePageClick({
+                      selected: filters.offset / filters.limit + 1,
+                    });
+                  }}
                 />
-              }
+              )}
             </div>
           </div>
         </Card.Section>
       </Card>
     </Layout>
-  )
-}
+  );
+};
 
-export default SmartyMessage
+export default SmartyMessage;

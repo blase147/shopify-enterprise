@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_05_123455) do
+ActiveRecord::Schema.define(version: 2021_11_09_085352) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -399,6 +399,19 @@ ActiveRecord::Schema.define(version: 2021_11_05_123455) do
     t.index ["customer_id"], name: "index_sms_conversations_on_customer_id"
   end
 
+  create_table "sms_flows", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "sent", default: 0
+    t.integer "clicks", default: 0
+    t.decimal "revenue", default: "0.0"
+    t.boolean "status", default: false
+    t.text "description"
+    t.bigint "shop_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["shop_id"], name: "index_sms_flows_on_shop_id"
+  end
+
   create_table "sms_logs", force: :cascade do |t|
     t.bigint "shop_id"
     t.bigint "customer_id"
@@ -679,5 +692,6 @@ ActiveRecord::Schema.define(version: 2021_11_05_123455) do
   end
 
   add_foreign_key "customers", "reasons_cancels"
+  add_foreign_key "sms_flows", "shops"
   add_foreign_key "zip_codes", "shops"
 end

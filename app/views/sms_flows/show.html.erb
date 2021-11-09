@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @sms_flow.name %>
+</p>
+
+<p>
+  <strong>Sent:</strong>
+  <%= @sms_flow.sent %>
+</p>
+
+<p>
+  <strong>Clicks:</strong>
+  <%= @sms_flow.clicks %>
+</p>
+
+<p>
+  <strong>Revenue:</strong>
+  <%= @sms_flow.revenue %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @sms_flow.status %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @sms_flow.description %>
+</p>
+
+<p>
+  <strong>Shop:</strong>
+  <%= @sms_flow.shop_id %>
+</p>
+
+<%= link_to 'Edit', edit_sms_flow_path(@sms_flow) %> |
+<%= link_to 'Back', sms_flows_path %>
