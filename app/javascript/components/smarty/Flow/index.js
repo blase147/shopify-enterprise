@@ -26,13 +26,13 @@ const FlowIndex = ({ handleEditFlow }) => {
         setLoading(false);
       });
   }, []);
-  console.log('flows: ' + flows);
+
   return (
     <Card sectioned>
       <Stack>
-        <Heading>Collect Subscribers</Heading>
+        <Heading>My Flows</Heading>
         <Stack.Item fill />
-        <Button primary>Create Flow</Button>
+        <Button primary onClick={() => handleEditFlow('')}>Create Flow</Button>
       </Stack>
       <br />
       <DataTable

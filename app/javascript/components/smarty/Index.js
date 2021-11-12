@@ -13,7 +13,9 @@ import '../smarty/tiazan.css';
 import { MobileBackArrowMajor } from '@shopify/polaris-icons';
 import CollectSubscribers from './CollectSubscribers';
 import FlowIndex from './Flow';
-import FlowForm from './Flow/form';
+import FlowForm from './Flow/NewForm';
+import NewFlowForm from './Flow/NewForm';
+import UpdateFlowForm from './Flow/UpdateForm';
 
 const Smarty = ({ handleBack }) => {
   const location = useLocation();
@@ -66,6 +68,7 @@ const Smarty = ({ handleBack }) => {
 
   const [editId, setEditId] = useState('');
   const [showEditPage, setShowEditPage] = useState(false);
+  console.log(editId);
 
   const handleCloseEditPage = useCallback(() => {
     setShowEditPage(false);
@@ -149,7 +152,14 @@ const Smarty = ({ handleBack }) => {
           {selectedTitleTab === (process.env.APP_TYPE == 'public' ? 5 : 3) && (
             <>
               {showEditPage ? (
-                <FlowForm id={editId} handleClose={handleCloseEditPage} />
+                editId ? (
+                  <UpdateFlowForm
+                    id={editId}
+                    handleClose={handleCloseEditPage}
+                  />
+                ) : (
+                  <NewFlowForm handleClose={handleCloseEditPage} />
+                )
               ) : (
                 <FlowIndex handleEditFlow={handleEditPage} />
               )}
