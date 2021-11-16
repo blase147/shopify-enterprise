@@ -397,11 +397,11 @@ module SubscriptionPlan
 
   def plan_anchor(selling_plan)
     if selling_plan.billing_dates.present? && selling_plan.interval_type != "DAY"
-      shipping_date = Date.parse(selling_plan.billing_dates.first)
+      billing_date = Date.parse(selling_plan.billing_dates.first)
       {
         type: "#{selling_plan.interval_type}DAY",
         day: get_day_for_interval(shipping_date, selling_plan.interval_type),
-        month: (date.month if selling_plan.interval_type == "YEAR")
+        month: (billing_date.month if selling_plan.interval_type == "YEAR")
       }
     end
   end

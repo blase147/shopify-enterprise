@@ -21,22 +21,22 @@ const UpdateFlowForm = ({ id, handleClose }) => {
   const [loading, setLoading] = useState(true);
   const [searchValue, setSearchValue] = useState('');
 
-  useEffect(() => {
-    if (id) {
-      fetch(`/sms_flows/${id}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        credentials: 'same-origin',
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setFlow(data);
-          setLoading(false);
-        });
-    }
-  }, [id]);
+  // useEffect(() => {
+  //   if (id) {
+  //     fetch(`/sms_flows/${id}/edit`, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Accept: 'application/json',
+  //       },
+  //       credentials: 'same-origin',
+  //     })
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         setFlow(data);
+  //         setLoading(false);
+  //       });
+  //   }
+  // }, [id]);
   const types = [
     {
       tag: 'abandoned_cart',
@@ -133,8 +133,9 @@ const UpdateFlowForm = ({ id, handleClose }) => {
     },
   ];
   return (
+
     <Card >
-      <FlowTree></FlowTree>
+      <FlowTree id={id}></FlowTree>
     </Card>
   );
 };

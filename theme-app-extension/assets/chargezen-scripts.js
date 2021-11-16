@@ -201,6 +201,7 @@ window.chargezenForShopify.jQuery = jQuery.noConflict(true);
     $(form).change('select, input', function(){
       selectSelectedPlan();
     })
+    $(form).change('select, input', function() { setTimeout(variantChanged, 50); })
 
     $('body').on('DOMSubtreeModified', '.selector-wrapper', function() { setTimeout(variantChanged, 10); });
     variantChanged();

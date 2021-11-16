@@ -74,13 +74,31 @@ const smartyVariables = [
   "@shop_name",
 ];
 
-const FlowTree = () => {
+const FlowTree = ({id}) => {
   const [displayTrigger, setDisplayTrigger] = useState(null);
   const [displayDelay, setDisplayDelay] = useState(false);
   const [modificationId, setModificationId] = useState(false);
   const [displayActions, setDisplayActions] = useState(false);
-  const [basicElements, setBasicElements] = useState([]);
+  const [basicElements, setBasicElements] = useState( [] );
   const [smartyMessage, setSmartyMessage] = useState("");
+  const [flowName, setFlowName] = useState( '' );
+
+  useEffect(() => {
+    if (id) {
+      fetch(`/sms_flows/${id}/edit`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        credentials: 'same-origin',
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setBasicElements(data.content);
+          setFlowName(data.name);
+        });
+    }
+  }, [id]);
 
   const delayOptions = [
     { label: "Minute/s", value: "minutes" },
@@ -840,7 +858,33 @@ const FlowTree = () => {
           />
         </div>
       </div>
+
+      <form className="">
+        <div className="message-form">
+          <div className="example">
+            <TextField
+              placeholder="Flow Name"
+              value={flowName}
+              onChange={(value) => setFlowName(value)}
+            />
+          </div>
+        </div>
+      </form>
+      <button onClick={() => fetch('/sms_flows', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({basicElements, flowName}),
+      })
+        .then((response) => response.json())
+        //Then with the data from the response in JSON...
+        .then((basicElements, flowName) => {
+          console.log('Success:', basicElements, flowName);
+        })}>Submit Flow
+      </button>
     </ElementsContext.Provider>
   );
 };
+
 export default FlowTree;

@@ -1,5 +1,5 @@
 class SmsFlowsController < AuthenticatedController
-  before_action :set_sms_flow, only: [:show, :destroy]
+  before_action :set_sms_flow, only: [:show, :destroy, :edit, :update]
   skip_before_action :verify_authenticity_token
 
   def index
@@ -7,19 +7,27 @@ class SmsFlowsController < AuthenticatedController
     render json: @sms_flows
   end
 
-  def show
+  def new
+    @sms_flow = SmsFlow.new
   end
 
   def create
-    if params[:id]
-      @sms_flow = SmsFlow.find(params[:id])
-      @sms_flow.assign_attributes(sms_flow_params) if @sms_flow.shop_id == current_shop.id
-    else
-      @sms_flow = SmsFlow.new(sms_flow_params)
-      @sms_flow.shop = current_shop
-    end
-
+    @sms_flow = SmsFlow.new(name: params[:flowName], content: params[:basicElements])
+    @sms_flow.shop = current_shop
     if @sms_flow.save
+      render :show, status: :created, location: @sms_flow
+      # redirect_to sms_flow_path
+    else
+      render json: @sms_flow.errors, status: :unprocessable_entity
+    end
+  end
+
+  def edit
+    render json: @sms_flow
+  end
+
+  def update
+    if @sms_flow.update(sms_flow_params)
       render :show, status: :created, location: @sms_flow
     else
       render json: @sms_flow.errors, status: :unprocessable_entity
@@ -27,11 +35,16 @@ class SmsFlowsController < AuthenticatedController
   end
 
   def destroy
-    @sms_flow.destroy
-    respond_to do |format|
-      format.html { redirect_to sms_flows_url, notice: 'Sms flow was successfully destroyed.' }
-      format.json { head :no_content }
+    if @sms_flow.destroy
+      respond_to do |format|
+        format.html { redirect_to sms_flows_url, notice: 'Sms flow was successfully destroyed.' }
+        format.json { head :no_content }
+      end
     end
+  end
+
+  def show
+
   end
 
   private
@@ -42,6 +55,6 @@ class SmsFlowsController < AuthenticatedController
 
     # Only allow a list of trusted parameters through.
     def sms_flow_params
-      params.require(:sms_flow).permit(:name, :status, :description)
+      params.require(:sms_flow).permit(:name, :status, :description, :content)
     end
 end
