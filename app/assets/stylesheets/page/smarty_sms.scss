@@ -547,3 +547,28 @@ $primary: #007EFF;
 .ft-12p {
     font-size: 12px;
 }
+
+.nodrag {
+    cursor: auto !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.mb-1 {
+    margin-bottom: 1rem !important;
+}
+
+.flow-node button.Polaris-Button {
+    background: none;
+}
+
+.Polaris-EmptyState__ImageContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.Polaris-EmptyState__ImageContainer img {
+    width: 50% !important;
+}

@@ -15,7 +15,7 @@ import {
   Checkbox,
 } from '@shopify/polaris';
 
-const NewFlowForm = ({ handleClose }) => {
+const NewFlowForm = ({ handleClose, handleEditFlow }) => {
   const [searchValue, setSearchValue] = useState('');
 
   const types = [
@@ -113,6 +113,7 @@ const NewFlowForm = ({ handleClose }) => {
         'Cross sell specific products based on what your customer has purchased',
     },
   ];
+  debugger
   return (
     <Card sectioned>
       <div class="example">
@@ -172,7 +173,7 @@ const NewFlowForm = ({ handleClose }) => {
                 </p>
               </div>
               <Stack.Item fill />
-              <Button>Create Flow</Button>
+              <Button onClick={() => handleEditFlow(-1)}>Create Flow</Button>
             </Stack>
           </Card>
           <br />

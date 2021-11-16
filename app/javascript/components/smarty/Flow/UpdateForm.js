@@ -14,6 +14,7 @@ import {
   Subheading,
   Checkbox,
 } from '@shopify/polaris';
+import FlowTree from './FlowTree';
 
 const UpdateFlowForm = ({ id, handleClose }) => {
   const [flow, setFlow] = useState([]);
@@ -132,8 +133,8 @@ const UpdateFlowForm = ({ id, handleClose }) => {
     },
   ];
   return (
-    <Card sectioned>
-      <h1>Update Flow Page {id}</h1>
+    <Card >
+      <FlowTree></FlowTree>
     </Card>
   );
 };

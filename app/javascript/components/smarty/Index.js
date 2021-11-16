@@ -158,7 +158,7 @@ const Smarty = ({ handleBack }) => {
                     handleClose={handleCloseEditPage}
                   />
                 ) : (
-                  <NewFlowForm handleClose={handleCloseEditPage} />
+                  <NewFlowForm handleEditFlow={handleEditPage} handleClose={handleCloseEditPage} />
                 )
               ) : (
                 <FlowIndex handleEditFlow={handleEditPage} />
