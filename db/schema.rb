@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_16_054317) do
+ActiveRecord::Schema.define(version: 2021_11_17_111316) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,35 @@ ActiveRecord::Schema.define(version: 2021_11_16_054317) do
     t.string "display_name"
     t.index ["build_a_box_campaign_group_id"], name: "index_build_a_box_campaigns_on_build_a_box_campaign_group_id"
     t.index ["selling_plan_ids"], name: "index_build_a_box_campaigns_on_selling_plan_ids", using: :gin
+  end
+
+  create_table "bundle_groups", force: :cascade do |t|
+    t.bigint "shop_id", null: false
+    t.string "internal_name"
+    t.string "location"
+    t.date "start_date"
+    t.date "end_date"
+    t.string "box_type"
+    t.jsonb "collections"
+    t.jsonb "product_images"
+    t.json "triggers"
+    t.json "selling_plans"
+    t.boolean "fixed_pricing"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["shop_id"], name: "index_bundle_groups_on_shop_id"
+  end
+
+  create_table "bundles", force: :cascade do |t|
+    t.bigint "bundle_group_id", null: false
+    t.integer "quantity_limit"
+    t.decimal "box_price"
+    t.decimal "price_per_item"
+    t.string "label"
+    t.integer "bundle_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["bundle_group_id"], name: "index_bundles_on_bundle_group_id"
   end
 
   create_table "custom_keywords", force: :cascade do |t|
@@ -692,6 +721,8 @@ ActiveRecord::Schema.define(version: 2021_11_16_054317) do
     t.index ["shop_id"], name: "index_zip_codes_on_shop_id"
   end
 
+  add_foreign_key "bundle_groups", "shops"
+  add_foreign_key "bundles", "bundle_groups"
   add_foreign_key "customers", "reasons_cancels"
   add_foreign_key "sms_flows", "shops"
   add_foreign_key "zip_codes", "shops"

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :bundles
+  resources :bundle_groups
   resources :sms_flows
   if Rails.env.development?
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "graphql#execute"
