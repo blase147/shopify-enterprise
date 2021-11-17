@@ -9,6 +9,8 @@ import Upsell from '../upsell/Index';
 import CreateUpsell from '../upsell/New';
 import BuildBox from '../build-a-box/BuildBox';
 import CreateBuildBox from '../build-a-box/CreateBuildBox';
+import Bundles from '../bundles';
+import BundleForm from '../bundles/BundleForm';
 
 const Index = () => {
   const [selectedSetting, setSelectedSetting] = useState('');
@@ -61,6 +63,12 @@ const Index = () => {
       title: 'Build-a-box Campaign',
       img: InformationImage,
       desc: 'Manage the loyalty and referrals settings for your customers.',
+    },
+    {
+      key: 'bundles',
+      title: 'Bundles',
+      img: InformationImage,
+      desc: 'Allow your customers to build bundles.',
     },
   ];
 
@@ -136,6 +144,20 @@ const Index = () => {
                         />
                       ) : (
                         <BuildBox
+                          handleBack={handleBackSetting}
+                          handleForm={handleEditPage}
+                        />
+                      )}
+                    </>
+                  ) : selectedSetting === 'bundles' ? (
+                    <>
+                      {showEditPage ? (
+                        <BundleForm
+                          id={editId}
+                          handleClose={handleCloseEditPage}
+                        />
+                      ) : (
+                        <Bundles
                           handleBack={handleBackSetting}
                           handleForm={handleEditPage}
                         />
