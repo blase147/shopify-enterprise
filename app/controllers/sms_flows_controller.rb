@@ -12,11 +12,15 @@ class SmsFlowsController < AuthenticatedController
   end
 
   def create
-    @sms_flow = SmsFlow.new(name: params[:flowName], content: params[:basicElements])
+    if params[:flowId].present?
+      @sms_flow = SmsFlow.find(params[:flowId])
+    else
+      @sms_flow = SmsFlow.new
+    end
+    @sms_flow.assign_attributes(name: params[:flowName], content: params[:basicElements], status: params[:flowStatus])
     @sms_flow.shop = current_shop
     if @sms_flow.save
-      render :show, status: :created, location: @sms_flow
-      # redirect_to sms_flow_path
+      render json: @sms_flow
     else
       render json: @sms_flow.errors, status: :unprocessable_entity
     end
@@ -27,8 +31,8 @@ class SmsFlowsController < AuthenticatedController
   end
 
   def update
-    if @sms_flow.update(sms_flow_params)
-      render :show, status: :created, location: @sms_flow
+    if @sms_flow.update(status: params[:status])
+      render json: @sms_flow
     else
       render json: @sms_flow.errors, status: :unprocessable_entity
     end

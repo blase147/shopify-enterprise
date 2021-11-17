@@ -68,12 +68,17 @@ window.chargezenForShopify.jQuery = jQuery.noConflict(true);
       var planId = planId ? parseInt(planId) : null;
 
       var price = variant.price;
-      if (planId) {
-        price = variant.selling_plan_allocations[planId].price_formatted
-        updateRecurringPriceLabel(price);
-      } else {
-        $('.one-time-del-price').html('<del>' + variant.compare_at_price + '</del>');
-        updatePriceLabelOneTime(price);
+      try {
+        if (planId) {
+          price = variant.selling_plan_allocations[planId].price_formatted
+          updateRecurringPriceLabel(price);
+        } else {
+          $('.one-time-del-price').html('<del>' + variant.compare_at_price + '</del>');
+          updatePriceLabelOneTime(price);
+        }
+      }
+      catch(e) {
+        console.log(e);
       }
     }
 

@@ -47,7 +47,10 @@ const FlowIndex = ({ handleEditFlow }) => {
       ) : flows.length === 0 ? (
         <EmptyState
           heading="Generate Automated Flows"
-          action={{ content: 'Create Flow', onAction: () => handleEditFlow('')}}
+          action={{
+            content: 'Create Flow',
+            onAction: () => handleEditFlow(''),
+          }}
           image="/not_found.png"
         >
           <p>Create flows and notify customers using SMS.</p>
@@ -65,23 +68,43 @@ const FlowIndex = ({ handleEditFlow }) => {
           headings={['Name', 'Sent', 'Clicks', 'Revenue', 'Status', 'Actions']}
           rows={
             !loading && flows && flows.length > 0
-              ? flows.map((flow) => [
-                  flow.name,
-                  flow.sent,
-                  flow.clicks,
-                  `$${flow.revenue}`,
-                  <ToggleButton
-                    inactiveLabel={''}
-                    activeLabel={''}
-                    value={flow.status}
-                    onToggle={(value) => {
-                      console.log('toggle');
-                    }}
-                  />,
-                  <Button primary onClick={() => handleEditFlow(flow.id)}>
-                    Edit
-                  </Button>,
-                ])
+              ? flows
+                  .sort((a, b) => (b.created_at > a.created_at ? 1 : -1))
+                  .map((flow) => [
+                    flow.name,
+                    flow.sent,
+                    flow.clicks,
+                    `$${flow.revenue}`,
+                    <ToggleButton
+                      inactiveLabel={''}
+                      activeLabel={''}
+                      value={flow.status}
+                      onToggle={(value) => {
+                        console.log('toggle');
+                        const newFlow = { ...flow };
+                        newFlow.status = !value;
+                        fetch(`/sms_flows/${flow.id}`, {
+                          method: 'PUT',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify(newFlow),
+                        })
+                          .then((response) => response.json())
+                          //Then with the data from the response in JSON...
+                          .then((newFlow) => {
+                            console.log('Success:', newFlow);
+                            const newFlows = [...flows];
+                            newFlows.find((f) => f.id == newFlow.id).status =
+                              newFlow.status;
+                            setFlows(newFlows);
+                          });
+                      }}
+                    />,
+                    <Button primary onClick={() => handleEditFlow(flow.id)}>
+                      Edit
+                    </Button>,
+                  ])
               : []
           }
         />

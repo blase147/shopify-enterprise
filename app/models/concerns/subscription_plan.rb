@@ -400,7 +400,7 @@ module SubscriptionPlan
       billing_date = Date.parse(selling_plan.billing_dates.first)
       {
         type: "#{selling_plan.interval_type}DAY",
-        day: get_day_for_interval(shipping_date, selling_plan.interval_type),
+        day: get_day_for_interval(billing_date, selling_plan.interval_type),
         month: (billing_date.month if selling_plan.interval_type == "YEAR")
       }
     end
