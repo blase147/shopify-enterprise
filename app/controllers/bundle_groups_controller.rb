@@ -1,74 +1,55 @@
-class BundleGroupsController < ApplicationController
+class BundleGroupsController < AuthenticatedController
   before_action :set_bundle_group, only: [:show, :edit, :update, :destroy]
+  skip_before_action :verify_authenticity_token
 
-  # GET /bundle_groups
-  # GET /bundle_groups.json
   def index
     @bundle_groups = BundleGroup.all
+    render json: @bundle_groups
   end
 
-  # GET /bundle_groups/1
-  # GET /bundle_groups/1.json
   def show
+    render json: @bundle_group.as_json(include: :bundles)
   end
 
-  # GET /bundle_groups/new
-  def new
-    @bundle_group = BundleGroup.new
-  end
-
-  # GET /bundle_groups/1/edit
-  def edit
-  end
-
-  # POST /bundle_groups
-  # POST /bundle_groups.json
   def create
-    @bundle_group = BundleGroup.new(bundle_group_params)
+    permitted_params = bundle_group_params
+    permitted_params[:bundles_attributes] = params[:bundle_group].delete(:bundles).map{|b| b.permit(:quantity_limit, :box_price, :price_per_item, :label)}
 
-    respond_to do |format|
-      if @bundle_group.save
-        format.html { redirect_to @bundle_group, notice: 'Bundle group was successfully created.' }
-        format.json { render :show, status: :created, location: @bundle_group }
-      else
-        format.html { render :new }
-        format.json { render json: @bundle_group.errors, status: :unprocessable_entity }
-      end
+    @bundle_group = BundleGroup.new(permitted_params)
+    @bundle_group.shop = current_shop
+    if @bundle_group.save
+      render :show, status: :created, location: @bundle_group
+    else
+      render json: @bundle_group.errors, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /bundle_groups/1
-  # PATCH/PUT /bundle_groups/1.json
   def update
-    respond_to do |format|
-      if @bundle_group.update(bundle_group_params)
-        format.html { redirect_to @bundle_group, notice: 'Bundle group was successfully updated.' }
-        format.json { render :show, status: :ok, location: @bundle_group }
+    if @bundle_group.shop_id == current_shop.id
+      permitted_params = bundle_group_params
+      permitted_params[:bundles_attributes] = params[:bundle_group].delete(:bundles).map{|b| b.permit(:quantity_limit, :box_price, :price_per_item, :label)}
+      if @bundle_group.update(permitted_params)
+        render json: @bundle_group, status: :ok, location: @bundle_group
       else
-        format.html { render :edit }
-        format.json { render json: @bundle_group.errors, status: :unprocessable_entity }
+        render json: @bundle_group.errors, status: :unprocessable_entity
       end
+    else
+      render json: {}, status: :unauthorized
     end
   end
 
-  # DELETE /bundle_groups/1
-  # DELETE /bundle_groups/1.json
   def destroy
     @bundle_group.destroy
-    respond_to do |format|
-      format.html { redirect_to bundle_groups_url, notice: 'Bundle group was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+
+    head :no_content
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_bundle_group
       @bundle_group = BundleGroup.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
     def bundle_group_params
-      params.require(:bundle_group).permit(:shop_id, :internal_name, :location, :start_date, :end_date, :box_type, :collections, :product_images, :triggers, :selling_plans, :fixed_pricing)
+      params.require(:bundle_group).permit(:triggers, :fixed_pricing, :internal_name, :location, :start_date, :end_date, :bundle_type, :collection_images => [:collectionId, :collectionTitle, products: [:productId, :image]], :product_images => [:productId, :image], :selling_plans => [:sellingPlanName, :sellingPlanId])
     end
 end

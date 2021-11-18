@@ -65,12 +65,12 @@ const Bundles = ({ handleForm, handleBack }) => {
         ) : (
           <DataTable
             columnContentTypes={['text', 'text', 'text']}
-            headings={['Name', 'Locations', 'Action']}
+            headings={['Name', 'Location', 'Action']}
             rows={
               !loading && bundles && bundles.length > 0
                 ? bundles.map((bundle) => [
-                    bundle.name,
-                    bundle.location,
+                    bundle.internal_name,
+                    bundle?.location?.replace('_', ' '),
                     <Button primary onClick={() => handleForm(bundle.id)}>
                       Edit
                     </Button>,

@@ -6,8 +6,8 @@ class CreateBundleGroups < ActiveRecord::Migration[6.0]
       t.string :location
       t.date :start_date
       t.date :end_date
-      t.string :box_type
-      t.jsonb :collections
+      t.string :bundle_type
+      t.jsonb :collection_images
       t.jsonb :product_images
       t.json :triggers
       t.json :selling_plans
