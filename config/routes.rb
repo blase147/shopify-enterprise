@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :bundles
   resources :bundle_groups
   resources :sms_flows
   if Rails.env.development?

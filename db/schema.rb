@@ -75,8 +75,8 @@ ActiveRecord::Schema.define(version: 2021_11_17_111316) do
     t.string "location"
     t.date "start_date"
     t.date "end_date"
-    t.string "box_type"
-    t.jsonb "collections"
+    t.string "bundle_type"
+    t.jsonb "collection_images"
     t.jsonb "product_images"
     t.json "triggers"
     t.json "selling_plans"
@@ -92,7 +92,6 @@ ActiveRecord::Schema.define(version: 2021_11_17_111316) do
     t.decimal "box_price"
     t.decimal "price_per_item"
     t.string "label"
-    t.integer "bundle_type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["bundle_group_id"], name: "index_bundles_on_bundle_group_id"
