@@ -4,7 +4,7 @@ class RemovedSubscriptionLine < ApplicationRecord
 
   def log_work
     begin
-      customer = Customer.find_by_shopify_id subscription_id
+      customer = CustomerSubscriptionContract.find_by_shopify_id subscription_id
       subscription = SubscriptionContractService.new(subscription_id).run
       product = subscription.lines.edges.select{|s| s if s.node.variant_id == variant_id}.first.node
       note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval

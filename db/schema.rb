@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_17_111316) do
+ActiveRecord::Schema.define(version: 2021_11_20_103710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -109,7 +109,7 @@ ActiveRecord::Schema.define(version: 2021_11_17_111316) do
     t.index ["shop_id"], name: "index_custom_keywords_on_shop_id"
   end
 
-  create_table "customers", force: :cascade do |t|
+  create_table "customer_subscription_contracts", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
     t.string "email"
@@ -143,11 +143,13 @@ ActiveRecord::Schema.define(version: 2021_11_17_111316) do
     t.integer "retry_count", default: 0
     t.bigint "reasons_cancel_id"
     t.datetime "cancelled_at"
-    t.string "biiling_interval"
+    t.string "billing_interval"
     t.string "shopify_customer_id"
     t.string "box_items"
     t.datetime "campaign_date"
-    t.index ["reasons_cancel_id"], name: "index_customers_on_reasons_cancel_id"
+    t.string "api_source"
+    t.json "api_data"
+    t.index ["reasons_cancel_id"], name: "index_customer_subscription_contracts_on_reasons_cancel_id"
   end
 
   create_table "email_notifications", force: :cascade do |t|
@@ -724,7 +726,7 @@ ActiveRecord::Schema.define(version: 2021_11_17_111316) do
 
   add_foreign_key "bundle_groups", "shops"
   add_foreign_key "bundles", "bundle_groups"
-  add_foreign_key "customers", "reasons_cancels"
+  add_foreign_key "customer_subscription_contracts", "reasons_cancels"
   add_foreign_key "sms_flows", "shops"
   add_foreign_key "zip_codes", "shops"
 end

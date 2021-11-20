@@ -13,7 +13,7 @@ class GdprWebhooksController < ApplicationController
 
   def customer_redact
     params.permit!
-    customers = Customer.where(shopify_customer_id: params['customer']['id'])
+    customers = CustomerSubscriptionContract.where(shopify_customer_id: params['customer']['id'])
     if customers.present?
       customers.destroy_all
     end
@@ -22,10 +22,10 @@ class GdprWebhooksController < ApplicationController
 
   def customer_data_request
     params.permit!
-    customers = Customer.where(shopify_customer_id: params['customer']['id'])
+    customers = CustomerSubscriptionContract.where(shopify_customer_id: params['customer']['id'])
     if customers.present?
       save_path = Rails.root.join('app/assets/csvs/customer_data.csv')
-      Customer.to_csv(params['customer']['id'], save_path)
+      CustomerSubscriptionContract.to_csv(params['customer']['id'], save_path)
       shop = customers.first.shop
       if shop.setting.present?
         integration = shop.integrations.find_by(name: 'SendGrid')

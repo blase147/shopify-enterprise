@@ -41,7 +41,7 @@
                           .Polaris-FormLayout--grouped role="group"
                             .Polaris-FormLayout__Items
                               .Polaris-FormLayout__Item
-                                = p_select name: 'gender', label: 'Gender', options: Customer.genders.map { |key, value| [key.humanize, key] }, selected: @customer.try(:gender)
+                                = p_select name: 'gender', label: 'Gender', options: CustomerSubscriptionContract.genders.map { |key, value| [key.humanize, key] }, selected: @customer.try(:gender)
                               .Polaris-FormLayout__Item
                                 = p_text_field name: 'communication', label: 'Communication Preferences', value:  @customer.communication
                           .Polaris-FormLayout--grouped role="group"

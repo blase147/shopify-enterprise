@@ -92,7 +92,7 @@ class SmsService::QuantityService < SmsService::ProcessService
               message_service = SmsService::MessageGenerateService.new(@conversation.customer.shop, @conversation.customer, subscription, {line_item_qty: quantity_message.content.to_i})
               error_message = message_service.content(messages[:failure])
             else
-              customer = Customer.find_by(shopify_id: subscription_message.content[/\d+/])
+              customer = CustomerSubscriptionContract.find_by(shopify_id: subscription_message.content[/\d+/])
               note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
               description = customer.name+",updated quantity to #{quantity_message.content.to_i},"+line.first.node.title
               customer.shop.subscription_logs.sms.quantity.create(subscription_id: subscription_message.content[/\d+/], customer_id: customer.id, product_name: line.first.node.title, note: note, description: description)

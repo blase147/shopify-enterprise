@@ -31,7 +31,7 @@ module SubscriptionConcern
     else
       subscription = SubscriptionContractService.new(params[:id]).run
       product = subscription.lines.edges.select{ |line| line.node.id == line_item_id }.first.node
-      customer = Customer.find_by(shopify_id: params[:id])
+      customer = CustomerSubscriptionContract.find_by(shopify_id: params[:id])
       note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
       description = customer.name+",updated quantity to #{params[:quantity].to_i},"+product.title
       customer.shop.subscription_logs.quantity.create(subscription_id: params[:id], customer_id: customer.id, product_id: line_item_id, product_name: product.title, note: note, description: description)
@@ -101,7 +101,7 @@ module SubscriptionConcern
     if result[:error].present?
       render js: "alert('#{result[:error]}'); hideLoading()"
     else
-      customer = Customer.find_by_shopify_id params[:customer_id]
+      customer = CustomerSubscriptionContract.find_by_shopify_id params[:customer_id]
       customer.update(reasons_cancel_id: params[:reasons_cancel_id]) if !customer.nil? && params[:reasons_cancel_id].present?
       begin
         email_notification = customer.shop.setting.email_notifications.find_by_name "Subscription Cancellation"
@@ -160,6 +160,6 @@ module SubscriptionConcern
   end
 
   def set_customer
-    @customer = Customer.find_by(shopify_id: params[:id])
+    @customer = CustomerSubscriptionContract.find_by(shopify_id: params[:id])
   end
 end

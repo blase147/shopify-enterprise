@@ -28,7 +28,7 @@ namespace :subscriptions do
   end
 
   task :opt_in_success => :environment do
-    customers = Customer.where(opt_in_reminder_at: (Time.current - 10.minutes)..Time.current)
+    customers = CustomerSubscriptionContract.where(opt_in_reminder_at: (Time.current - 10.minutes)..Time.current)
     customers.each do |customer|
       shop = customer.shop
       shop.connect
@@ -62,7 +62,7 @@ namespace :subscriptions do
   def process_subscription(subscription)
     return unless subscription.status == 'ACTIVE'
     subscription_id = subscription.id[/\d+/]
-    customer = Customer.find_by(shopify_id: subscription_id)
+    customer = CustomerSubscriptionContract.find_by(shopify_id: subscription_id)
     billing_date = get_next_billing_date(subscription, customer.shop)
     if billing_date.utc.beginning_of_day == Time.current.utc.beginning_of_day
       result = SubscriptionBillingAttempService.new(subscription.id).run
@@ -92,7 +92,7 @@ namespace :subscriptions do
   def reprocess_subscription(subscription, subs_log)
     return unless subscription.status == 'ACTIVE'
     subscription_id = subscription.id[/\d+/]
-    customer = Customer.find_by(shopify_id: subscription_id)
+    customer = CustomerSubscriptionContract.find_by(shopify_id: subscription_id)
     billing_date = get_next_billing_date(subscription, customer.shop)
     if customer.present? && customer.shop.sms_setting.present? && customer.shop.sms_setting.failed_renewal.present? && customer.retry_count<=customer.shop.setting.payment_retries
       if billing_date.utc.beginning_of_day + ((customer.shop.setting.payment_delay_retries || 0)*customer.retry_count).days == Time.current.utc.beginning_of_day
@@ -132,7 +132,7 @@ namespace :subscriptions do
   def check_for_renewal(subscription)
     return unless subscription.status == 'ACTIVE'
 
-    customer = Customer.find_by(shopify_id: subscription.id[/\d+/])
+    customer = CustomerSubscriptionContract.find_by(shopify_id: subscription.id[/\d+/])
     billing_date = get_next_billing_date(subscription, customer.shop)
     sms_setting = customer.shop.sms_setting
     if customer.present? && sms_setting.present? && sms_setting.renewal_reminder.present? && sms_setting.renewal_duration.present?
@@ -150,7 +150,7 @@ namespace :subscriptions do
   def renewal_reminder(subscription)
     return unless subscription.status == 'ACTIVE'
 
-    customer = Customer.find_by(shopify_id: subscription.id[/\d+/])
+    customer = CustomerSubscriptionContract.find_by(shopify_id: subscription.id[/\d+/])
     billing_date = get_next_billing_date(subscription, customer.shop)
     if billing_date.utc.beginning_of_day.to_date == (Time.current-3.days).utc.beginning_of_day.to_date
       email_notification = customer.shop.setting.email_notifications.find_by_name "Upcoming Charge"

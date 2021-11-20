@@ -1,5 +1,5 @@
-# this should be CustomerOrder
-class Customer < ApplicationRecord
+# this should be SubscriptionContractOrder
+class SubscriptionContract < ApplicationRecord
   enum gender: [:male, :female]
   belongs_to :shop, foreign_key: :shop_id
   belongs_to :reasons_cancel, optional: true
@@ -67,12 +67,12 @@ class Customer < ApplicationRecord
   end
 
   def shopify_identity
-    "gid://shopify/Customer/#{shopify_id}"
+    "gid://shopify/SubscriptionContract/#{shopify_id}"
   end
 
   def self.to_csv(customer_id, save_path)
     attributes = %w{id first_name last_name email phone communication subscription language}
-    customers = Customer.where(shopify_customer_id: customer_id)
+    customers = CustomerSubscriptionContract.where(shopify_customer_id: customer_id)
 
     CSV.open(save_path, 'wb') do |csv|
       csv << attributes
@@ -84,7 +84,7 @@ class Customer < ApplicationRecord
   end
 
   def self.update_contracts(customer_id, shop)
-    items = CustomerSubscriptionContractsService.new(customer_id).run
+    items = SubscriptionContractSubscriptionContractsService.new(customer_id).run
     items[:subscriptions].each do |item|
       billing_policy = item.billing_policy
 

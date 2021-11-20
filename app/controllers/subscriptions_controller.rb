@@ -12,7 +12,7 @@ class SubscriptionsController < AuthenticatedController
 
   def show
     id = params[:id]
-    @customer = Customer.find_by_shopify_id(params[:id])
+    @customer = CustomerSubscriptionContract.find_by_shopify_id(params[:id])
 
     @subscription = SubscriptionContractService.new(id).run
     products = ProductService.new.list
@@ -88,7 +88,7 @@ class SubscriptionsController < AuthenticatedController
   end
 
   def remove_box_item
-    @customer = Customer.find_by_shopify_id(params[:id])
+    @customer = CustomerSubscriptionContract.find_by_shopify_id(params[:id])
     box_items = @customer.box_items.split(',')
     box_items.delete(params[:product_id])
     @customer.update(box_items: box_items.present? ? box_items.join(',') : nil)

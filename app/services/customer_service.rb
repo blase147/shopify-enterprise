@@ -75,7 +75,7 @@ class CustomerService < GraphqlService
     result = client.query(client.parse(UPDATE_QUERY), variables: { input: customer_params })
     errors = result.data.customer_update.user_errors
     raise errors.first.message if errors.present?
-    db_customer = Customer.find_or_initialize_by(shopify_id: info[:id])
+    db_customer = CustomerSubscriptionContract.find_or_initialize_by(shopify_id: info[:id])
     db_params = info.permit(:first_name,
                             :last_name,
                             :email,
@@ -99,7 +99,7 @@ class CustomerService < GraphqlService
 
     result = client.query(client.parse(GET_QUERY), variables: { id: id} )
     customer = result.data.customer
-    db_customer = Customer.find_or_initialize_by(shopify_id: customer_id)
+    db_customer = CustomerSubscriptionContract.find_or_initialize_by(shopify_id: customer_id)
     db_customer.first_name = customer.first_name unless db_customer.first_name.present?
     db_customer.last_name = customer.last_name unless db_customer.last_name.present?
     db_customer.email = customer.email unless db_customer.email.present?
@@ -121,7 +121,7 @@ class CustomerService < GraphqlService
     else
       address_attr = params[:address].permit!.to_h.deep_transform_keys { |key| key.camelize(:lower) }
     end
-    db_customers = Customer.where(shopify_customer_id: params[:id][/\d+/])
+    db_customers = CustomerSubscriptionContract.where(shopify_customer_id: params[:id][/\d+/])
     result = client.query(client.parse(UPDATE_QUERY), variables: { input: {id: "gid://shopify/Customer/#{params[:id]}", "addresses": address_attr} })
     errors = result.data.customer_update.user_errors
     raise errors.first.message if errors.present?

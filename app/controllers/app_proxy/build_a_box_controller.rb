@@ -31,7 +31,7 @@ class AppProxy::BuildABoxController < AppProxyController
   end
 
   def update_contracts
-    Customer.update_contracts(shopify_customer_id, @shop)
+    CustomerSubscriptionContract.update_contracts(shopify_customer_id, @shop)
   end
 
   def get_build_a_box
@@ -57,7 +57,7 @@ class AppProxy::BuildABoxController < AppProxyController
   end
 
   def set_customer
-    @customer = Customer.find_by_shopify_customer_id(customer_id)
+    @customer = CustomerSubscriptionContract.find_by_shopify_customer_id(customer_id)
   end
 
   def set_shop

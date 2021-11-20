@@ -84,7 +84,7 @@ class AppProxy::DashboardController < AppProxyController
   end
 
   def load_customer
-    Customer.update_contracts(shopify_customer_id, current_shop)
+    CustomerSubscriptionContract.update_contracts(shopify_customer_id, current_shop)
     @customer = current_shop.customers.find_by_shopify_customer_id(customer_id)
   end
 

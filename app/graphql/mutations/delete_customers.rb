@@ -7,7 +7,7 @@ module Mutations
       customer_params = params
 
       begin
-         Customer.destroy(customer_params)
+         CustomerSubscriptionContract.destroy(customer_params)
          {result: "ok"}
       rescue ActiveRecord::RecordInvalid => e
         GraphQL::ExecutionError.new("Invalid attributes for #{e.record.class}:"\

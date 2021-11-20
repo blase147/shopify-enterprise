@@ -37,7 +37,7 @@ class SmsService::PauseService < SmsService::ProcessService
             error = true
           else
             subscription_id = subscription_message.content
-            customer = Customer.find_by(shopify_id: subscription_id)
+            customer = CustomerSubscriptionContract.find_by(shopify_id: subscription_id)
             subscription = SubscriptionContractService.new(subscription_id).run
             product = subscription.lines.edges.collect{|c| c.node}.first
             note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval

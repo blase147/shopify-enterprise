@@ -21,7 +21,7 @@ class ScheduleSkipService < GraphqlService
   end
 
   def log_work(subscription)
-    customer = Customer.find_by_shopify_id @id
+    customer = CustomerSubscriptionContract.find_by_shopify_id @id
     product_names = subscription.lines.edges.collect{|c| c.node.title}.to_sentence
     note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
     description = customer.name+",edited delivery date of,"+product_names
@@ -55,7 +55,7 @@ class ScheduleSkipService < GraphqlService
     result = SubscriptionDraftsService.new.update draft_id, input
     p result
     result = SubscriptionDraftsService.new.commit draft_id
-    customer = Customer.find_by(shopify_id: @id)
+    customer = CustomerSubscriptionContract.find_by(shopify_id: @id)
     # customer.shop.subscription_logs.skip.create(subscription_id: @id, customer_id: customer.id)
     p result
     email_notification = customer.shop.setting.email_notifications.find_by_name "Skip Next Order"
