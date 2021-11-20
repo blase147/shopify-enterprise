@@ -6,6 +6,7 @@ class CreateBundles < ActiveRecord::Migration[6.0]
       t.decimal :box_price
       t.decimal :price_per_item
       t.string :label
+      t.string :shopify_variant_id
 
       t.timestamps
     end

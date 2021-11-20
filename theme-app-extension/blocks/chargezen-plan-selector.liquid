@@ -274,6 +274,11 @@
         (function() {
           var $ = window.chargezenForShopify.jQuery;
           var product = {{product | json }};
+          fetch(`/a/chargezen_production/bundles/get?product_id=${product.id}`)
+            .then((response) => response.json())
+            .then(data => {
+              console.log(data)
+            })
           var planProduct = {};
 
           /* get product information */

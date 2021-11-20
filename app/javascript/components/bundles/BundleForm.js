@@ -49,18 +49,15 @@ const BundleForm = ({ id, handleClose }) => {
       })
         .then((response) => response.json())
         .then((data) => {
-          setBundleGroup(data);
+          setSelectedCollections(data.collection_images);
+          setSelectedProducts(data.product_images);
+          setAllSelectedPlans(data.selling_plans);
           setLoading(false);
+          setBundleGroup(data);
         });
     }
   }, []);
-  // const setFieldValue = (key, value) => {
-  //   setBundleGroup(setIn(bundleGroup, key, value));
-  // };
-  const handleSubmit = () => {
-    console.log('handle submit');
-    debugger;
-  };
+
   const locationOptions = [
     { label: 'Customer Portal', value: 'customer_portal' },
     { label: 'Product Page', value: 'product_page' },
@@ -75,21 +72,11 @@ const BundleForm = ({ id, handleClose }) => {
       value: 'customer_is_subscribed_to_subscription_plan',
     },
   ];
-  // const validationSchema = yup.object().shape({
-  //   internal_name: yup.string().required().label('Internal name'),
-  //   location: yup.string().required().label('Select box campaign location'),
-  //   triggers: yup.string().required().label('Triggers'),
-  //   bundles: yup.object().shape({
-  //     boxSubscriptionType: yup
-  //       .string()
-  //       .required()
-  //       .label('box subscription type'),
-  //   }),
-  // })
+
   const handleRemoveProduct = (index) => {
     setSelectedProducts(() => {
       let newSelectedProduct = [...(selectedProducts || [])];
-      newSelectedProduct[index]._destroy = true;
+      newSelectedProduct.splice(index, 1);
       return newSelectedProduct;
     });
     setSelectedProductOptions([
@@ -101,9 +88,7 @@ const BundleForm = ({ id, handleClose }) => {
   const handleRemoveCollectionProduct = (collectionIndex, productIndex) => {
     setSelectedCollections(() => {
       let newSelectedCollection = [...(selectedCollections || [])];
-      newSelectedCollection[collectionIndex].products[
-        productIndex
-      ]._destroy = true;
+      newSelectedCollection[collectionIndex].products.splice(productIndex, 1);
       return newSelectedCollection;
     });
   };
@@ -113,30 +98,7 @@ const BundleForm = ({ id, handleClose }) => {
     );
   };
 
-  useEffect(() => {
-    if (
-      selectedProducts &&
-      formRef.current &&
-      formRef.current?.values.product_images != selectedProducts
-    ) {
-      formRef.current.setFieldValue('product_images', selectedProducts);
-    }
-  }, [selectedProducts]);
-
-  useEffect(() => {
-    if (
-      selectedCollections &&
-      formRef.current &&
-      formRef.current?.values.collection_images != selectedCollections
-    ) {
-      formRef.current.setFieldValue('collection_images', selectedCollections);
-    }
-  }, [selectedCollections]);
-  console.log('bundleGroup: ', bundleGroup);
-  const customFunction = (v) => {
-    debugger;
-    handleSubmit();
-  };
+  const initialValues = { fixed_pricing: true, bundles: [{}] };
   return (
     <>
       <div className="back-button pointer" onClick={handleClose}>
@@ -152,74 +114,53 @@ const BundleForm = ({ id, handleClose }) => {
       {(bundleGroup || !id) && (
         <Formik
           enableReinitialize
-          initialValues={bundleGroup || { bundles: [{}] }}
+          initialValues={bundleGroup || initialValues}
           innerRef={formRef}
           onSubmit={(values, { setSubmitting }) => {
-            // const formData = { ...values };
-            // formData.collection_images = selectedCollections;
-            // formData.product_images = selectedProducts;
-            // formData.selling_plans = allSelectedPlans;
-            // formData.triggers = [
-            //   { name: formData?.triggers },
-            // ]; // Manipulate later
-            // formData.upsellCampaigns[0].productOffer = allProducts;
+            const formData = { ...values };
+            formData.selling_plans = allSelectedPlans;
+            formData.collection_images = selectedCollections;
+            formData.product_images = selectedProducts;
             if (id) {
-              debugger;
               fetch(`/bundle_groups/${id}`, {
                 method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ bundle_group: values }),
+                body: JSON.stringify({ bundle_group: formData }),
               })
                 .then((response) => response.json())
-                //Then with the data from the response in JSON...
-                .then((newFlow) => {
-                  console.log('Success:', newFlow);
-                  const newFlows = [...flows];
-                  newFlows.find((f) => f.id == newFlow.id).status =
-                    newFlow.status;
-                  setFlows(newFlows);
+                .then(() => {
+                  var Toast = window['app-bridge'].actions.Toast;
+                  Toast.create(window.app, {
+                    message: 'Saved',
+                    duration: 5000,
+                  }).dispatch(Toast.Action.SHOW);
+                  handleClose();
+
                 })
                 .catch((error) => {
                   setSubmitting(false);
                   setFormErrors(error);
                 });
             } else {
-              //const variables = formatUpsellCampaignGroup(values);
-              // createUpsellCampaign({
-              //   variables: { input: { params: formData } },
-              // })
-              //   .then((resp) => {
-              //     const data = resp.data;
-              //     const errors = data.errors;
-              //     if (errors) {
-              //       setFormErrors(errors);
-              //       setSubmitting(false);
-              //     } else {
-              //       // setSaveSuccess(true);
-              //       handleClose();
-              //     }
-              //   })
-              //   .catch((error) => {
-              //     setSubmitting(false);
-              //     setFormErrors(error);
-              //   });
               fetch(`/bundle_groups`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ bundle_group: values }),
+                body: JSON.stringify({ bundle_group: formData }),
               })
                 .then((response) => response.json())
                 //Then with the data from the response in JSON...
-                .then((newBundleGroup) => {
-                  console.log('Success:', newBundleGroup);
-                  if (newBundleGroup.errors) {
-                    setFormErrors(newBundleGroup.errors.messages);
-                  }
-                  setSubmitting(false);
+                .then(() => {
+                  var Toast = window['app-bridge'].actions.Toast;
+                  Toast.create(window.app, {
+                    message: 'Saved',
+                    duration: 5000,
+                  }).dispatch(Toast.Action.SHOW);
+
+                  handleClose();
                 })
                 .catch((error) => {
                   setSubmitting(false);
@@ -228,20 +169,7 @@ const BundleForm = ({ id, handleClose }) => {
             }
           }}
         >
-          {({
-            values,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            isSubmitting,
-            setFieldValue,
-            resetForm,
-            dirty,
-            formik,
-            /* and other goodies */
-          }) => (
+          {({ values, handleSubmit, setFieldValue, isSubmitting }) => (
             <Form onSubmit={handleSubmit}>
               <div className="build-a-box-create">
                 <Card title="Box campaign group" sectioned>
@@ -249,19 +177,18 @@ const BundleForm = ({ id, handleClose }) => {
                     <FormLayout.Group>
                       <TextField
                         value={values.internal_name}
-                        label="Internal name"
+                        label="Bundle Name"
                         placeholder="Best Bundle"
                         type="text"
                         onChange={(e) => setFieldValue('internal_name', e)}
                         helpText={
                           <span>
-                            Internal name of the group, used to identify it in
-                            the admin
+                            Name of the Bundle
                           </span>
                         }
                       />
                       <div style={{ display: 'flex', justifyContent: 'end' }}>
-                        <Button primary onClick={handleSubmit}>
+                        <Button primary onClick={handleSubmit} loading={isSubmitting}>
                           Save
                         </Button>
                       </div>
@@ -369,6 +296,14 @@ const BundleForm = ({ id, handleClose }) => {
                       </>
                     )}
                   </FormLayout>
+                  <Checkbox
+                    label="Fixed price bundle"
+                    checked={values?.fixed_pricing}
+                    onChange={(e) => {
+                      setFieldValue('fixed_pricing', e);
+                    }}
+                  />
+
                   <div className="limit-section">
                     <FormLayout.Group>
                       <Checkbox
@@ -418,15 +353,15 @@ const BundleForm = ({ id, handleClose }) => {
                     </FormLayout.Group>
                     {values?.bundle_type === 'collection' && (
                       <div className="collection-stack">
-                        {selectedCollections?.map(
+                        {selectedCollections.map(
                           (collection, i) =>
-                            collection._destroy === false && (
+                            !collection._destroy && (
                               <div key={i} className="building-box-collection">
                                 <div>{collection?.collectionTitle}</div>
                                 <Stack>
                                   {collection.products?.map(
                                     (product, j) =>
-                                      product._destroy === false && (
+                                      !product._destroy && (
                                         <div
                                           key={j}
                                           className="building-box-product"
@@ -460,7 +395,7 @@ const BundleForm = ({ id, handleClose }) => {
                         <Stack>
                           {selectedProducts?.map(
                             (product, i) =>
-                              product._destroy === false && (
+                              !product._destroy && (
                                 <div key={i} className="building-box-product">
                                   <img
                                     className="product"
@@ -489,7 +424,7 @@ const BundleForm = ({ id, handleClose }) => {
                           <FormLayout.Group>
                             <TextField
                               label="Box Size"
-                              value={bundle?.quantity_limit}
+                              value={bundle?.quantity_limit?.toString()}
                               type="number"
                               onChange={(e) =>
                                 setFieldValue(
@@ -510,8 +445,16 @@ const BundleForm = ({ id, handleClose }) => {
                         <FormLayout>
                           <FormLayout.Group>
                             <TextField
-                              label="Price Per Item"
+                              label={
+                                values?.fixed_pricing
+                                  ? 'Price Per Item'
+                                  : 'Discount Per Item'
+                              }
                               value={bundle?.price_per_item}
+                              prefix={values.fixed_pricing ? '$' : ''}
+                              suffix={values.fixed_pricing ? '' : '%'}
+                              min={0}
+                              max={values.fixed_pricing ? null : 100}
                               type="number"
                               onChange={(e) =>
                                 setFieldValue(
@@ -528,16 +471,52 @@ const BundleForm = ({ id, handleClose }) => {
                                   marginLeft: '0.5rem',
                                 }}
                               >
-                                {(bundle?.price_per_item || 0) *
-                                  (bundle?.quantity_limit || 0) || '-'}
+                                {values.fixed_pricing
+                                  ? ((bundle?.price_per_item || 0) *
+                                      (bundle?.quantity_limit || 0) &&
+                                      `$ ${
+                                        (bundle?.price_per_item || 0) *
+                                        (bundle?.quantity_limit || 0)
+                                      }`) ||
+                                    '-'
+                                  : (bundle?.price_per_item &&
+                                      `${100 - bundle?.price_per_item} %`) ||
+                                    '-'}
                               </p>
                             </div>
                           </FormLayout.Group>
+                          <Button
+                            destructive
+                            onClick={() => {
+                              if (bundle.id) {
+                                fetch(`/bundles/${bundle.id}`, {
+                                  method: 'DELETE',
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                  },
+                                })
+                                  .then((response) => response.json())
+                                  .then((data) => {
+                                    if (data.success) {
+                                      const newBundles = [...values.bundles];
+                                      newBundles.splice(index, 1);
+                                      setFieldValue('bundles', newBundles);
+                                    }
+                                  });
+                              } else {
+                                const newBundles = [...values.bundles];
+                                newBundles.splice(index, 1);
+                                setFieldValue('bundles', newBundles);
+                              }
+                            }}
+                          >
+                            Remove Bundle
+                          </Button>
                         </FormLayout>
                       </Card.Section>
                     );
                   })}
-                  <div style={{ marginLeft: '2rem' }}>
+                  <Card.Section>
                     <Button
                       primary
                       onClick={() => {
@@ -546,9 +525,7 @@ const BundleForm = ({ id, handleClose }) => {
                     >
                       Add Bundle Option
                     </Button>
-                    <br />
-                    <br />
-                  </div>
+                  </Card.Section>
                 </Card>
               </div>
             </Form>

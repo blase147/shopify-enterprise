@@ -40,7 +40,9 @@ window.chargezenForShopify.jQuery = jQuery.noConflict(true);
 
     var planSelector = $('fieldset.chargezen-plan-selector');
 
-    var product = JSON.parse(planSelector.attr('plans'));
+    if (planSelector.attr('plans')){
+      var product = JSON.parse(planSelector.attr('plans'));
+    }
     var sellingPlanInput = planSelector.find(':input[name="selling_plan"]');
     var form = planSelector.closest('form')
 

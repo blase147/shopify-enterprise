@@ -18,7 +18,7 @@ class BundleGroupsController < AuthenticatedController
     @bundle_group = BundleGroup.new(permitted_params)
     @bundle_group.shop = current_shop
     if @bundle_group.save
-      render :show, status: :created, location: @bundle_group
+      render json: @bundle_group, status: :created, location: @bundle_group
     else
       render json: @bundle_group.errors, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class BundleGroupsController < AuthenticatedController
   def update
     if @bundle_group.shop_id == current_shop.id
       permitted_params = bundle_group_params
-      permitted_params[:bundles_attributes] = params[:bundle_group].delete(:bundles).map{|b| b.permit(:quantity_limit, :box_price, :price_per_item, :label)}
+      permitted_params[:bundles_attributes] = params[:bundle_group].delete(:bundles).map{|b| b.permit(:id, :bundle_group_id,:quantity_limit, :box_price, :price_per_item, :label)}
       if @bundle_group.update(permitted_params)
         render json: @bundle_group, status: :ok, location: @bundle_group
       else
@@ -39,9 +39,11 @@ class BundleGroupsController < AuthenticatedController
   end
 
   def destroy
-    @bundle_group.destroy
-
-    head :no_content
+    if @bundle_group.destroy
+      render json: {success: true}
+    else
+      render json: {success: false}
+    end
   end
 
   private

@@ -81,6 +81,7 @@ ActiveRecord::Schema.define(version: 2021_11_17_111316) do
     t.json "triggers"
     t.json "selling_plans"
     t.boolean "fixed_pricing"
+    t.string "shopify_product_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["shop_id"], name: "index_bundle_groups_on_shop_id"
@@ -92,6 +93,7 @@ ActiveRecord::Schema.define(version: 2021_11_17_111316) do
     t.decimal "box_price"
     t.decimal "price_per_item"
     t.string "label"
+    t.string "shopify_variant_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["bundle_group_id"], name: "index_bundles_on_bundle_group_id"

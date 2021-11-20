@@ -31,6 +31,24 @@ const Bundles = ({ handleForm, handleBack }) => {
       });
   }, []);
 
+  const removeBundleGroup = (id) => {
+    fetch(`/bundle_groups/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          const newBundles = [...bundles];
+          const removedBundle = newBundles.indexOf(newBundles.find(b => b.id == id))
+          newBundles.splice(removedBundle, 1);
+          setBundles(newBundles);
+        }
+      });
+  }
+
   return (
     <>
       <div className="back-button pointer" onClick={handleBack}>
@@ -65,15 +83,20 @@ const Bundles = ({ handleForm, handleBack }) => {
         ) : (
           <DataTable
             columnContentTypes={['text', 'text', 'text']}
-            headings={['Name', 'Location', 'Action']}
+            headings={['Name', 'Location', '']}
             rows={
               !loading && bundles && bundles.length > 0
                 ? bundles.map((bundle) => [
                     bundle.internal_name,
                     bundle?.location?.replace('_', ' '),
-                    <Button primary onClick={() => handleForm(bundle.id)}>
-                      Edit
-                    </Button>,
+                    <div style={{display: 'flex', justifyContent: 'space-around'}}>
+                      <Button primary onClick={() => handleForm(bundle.id)}>
+                        Edit
+                      </Button>
+                      <Button destructive onClick={() => removeBundleGroup(bundle.id)}>
+                        Delete
+                      </Button>
+                    </div>
                   ])
                 : []
             }

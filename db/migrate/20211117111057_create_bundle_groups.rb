@@ -12,6 +12,7 @@ class CreateBundleGroups < ActiveRecord::Migration[6.0]
       t.json :triggers
       t.json :selling_plans
       t.boolean :fixed_pricing
+      t.string :shopify_product_id
 
       t.timestamps
     end
