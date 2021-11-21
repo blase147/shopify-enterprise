@@ -1,14 +1,14 @@
 # this should be SubscriptionContractOrder
-class SubscriptionContract < ApplicationRecord
+class CustomerSubscriptionContract < ApplicationRecord
   enum gender: [:male, :female]
   belongs_to :shop, foreign_key: :shop_id
   belongs_to :reasons_cancel, optional: true
   mount_uploader :avatar, AvatarUploader
-  has_many :additional_contacts, dependent: :destroy
-  has_one :billing_address, dependent: :destroy
-  has_many :sms_conversations, dependent: :destroy
+  has_many :additional_contacts, foreign_key: 'customer_id', dependent: :destroy
+  has_one :billing_address, foreign_key: 'customer_id', dependent: :destroy
+  has_many :sms_conversations, foreign_key: 'customer_id', dependent: :destroy
   # has_many :sms_logs, dependent: :destroy
-  has_many :subscription_logs, dependent: :destroy
+  has_many :subscription_logs, foreign_key: 'customer_id', dependent: :destroy
 
   # validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   # validates :email, presence: true
@@ -88,7 +88,7 @@ class SubscriptionContract < ApplicationRecord
     items[:subscriptions].each do |item|
       billing_policy = item.billing_policy
 
-      customer = shop.customers.find_or_create_by(shopify_id: item.id[/\d+/])
+      customer = shop.customer_subscription_contracts.find_or_create_by(shopify_id: item.id[/\d+/])
       customer.update_columns(
         first_name: item.customer.first_name,
         last_name: item.customer.last_name,

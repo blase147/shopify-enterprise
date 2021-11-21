@@ -1,5 +1,5 @@
 class SmsConversation < ApplicationRecord
-  belongs_to :customer
+  belongs_to :customer_subscription_contract, class_name: 'CustomerSubscriptionContract', foreign_key: 'customer_id'
   has_many :sms_messages
 
   enum status: [:ongoing, :expired, :stoped]

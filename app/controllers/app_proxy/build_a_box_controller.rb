@@ -23,8 +23,8 @@ class AppProxy::BuildABoxController < AppProxyController
     render 'index', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
-  def add_product
-    customer = @shop.customers.order(created_at: :desc).first
+  def add_product # needs attention
+    customer = @shop.customer_subscription_contracts.order(created_at: :desc).first
     if shopify_customer_id.present? && customer.shopify_customer_id == customer_id && !customer.box_items.present?
       customer.update(box_items: params[:box_products])
     end

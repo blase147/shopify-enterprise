@@ -76,7 +76,7 @@ class CustomerInsightReportService
   end
 
   def logs_customer_count(status, action, range)
-    @shop.customers.joins(:subscription_logs)
+    @shop.customer_subscription_contracts.joins(:subscription_logs)
          .where(customers: { status: status }, subscription_logs: { action_type: action })
          .where('subscription_logs.created_at::date BETWEEN ? AND ?', range.first, range.last).count
   end
@@ -94,7 +94,7 @@ class CustomerInsightReportService
   end
 
   def sub_customers_count
-    @shop.customers.where('shopify_at::date <= ? AND (status = ? OR failed_at IS NOT NULL)', @range.last, 'ACTIVE').count
+    @shop.customer_subscription_contracts.where('shopify_at::date <= ? AND (status = ? OR failed_at IS NOT NULL)', @range.last, 'ACTIVE').count
   end
 
   # def churn_rate
@@ -111,7 +111,7 @@ class CustomerInsightReportService
 
   def customer_at_period_start(subscriptions, range)
     active_subs_before_period = in_period_subscriptions(subscriptions, range.first - 2.year..range.first - 1.day, 'ACTIVE').count
-    cancelled_sub_after_period = @shop.customers.where(status: 'CANCELLED').where('shopify_at::date BETWEEN ? AND ?', range.first - 2.year, range.first - 1.day).where('cancelled_at::date > ?', range.last).count
+    cancelled_sub_after_period = @shop.customer_subscription_contracts.where(status: 'CANCELLED').where('shopify_at::date BETWEEN ? AND ?', range.first - 2.year, range.first - 1.day).where('cancelled_at::date > ?', range.last).count
     active_subs_before_period + cancelled_sub_after_period
   end
 
@@ -120,7 +120,7 @@ class CustomerInsightReportService
   end
 
   def in_period_cancelled_subscriptions(subscriptions, range)
-    subscriptions.select { |subscription| range.cover?(@shop.customers.find_by(status: 'CANCELLED', shopify_id: subscription.node.id[/\d+/])&.cancelled_at) && subscription.node.status == 'CANCELLED' }
+    subscriptions.select { |subscription| range.cover?(@shop.customer_subscription_contracts.find_by(status: 'CANCELLED', shopify_id: subscription.node.id[/\d+/])&.cancelled_at) && subscription.node.status == 'CANCELLED' }
   end
 
   def in_period_hourly_subscriptions(subscriptions, range, status = nil)
@@ -159,12 +159,12 @@ class CustomerInsightReportService
   end
 
   def customers_count(status = nil)
-    @shop.customers.where('shopify_at::date <= ?', @range.last)
+    @shop.customer_subscription_contracts.where('shopify_at::date <= ?', @range.last)
          .where(status.present? ? "status='#{status}'" : 'status IS NOT NULL').count
   end
 
   def dunning_customers_count
-    @shop.customers.where('shopify_at::date BETWEEN ? AND ?', @range.first, @range.last).where.not(failed_at: nil).count
+    @shop.customer_subscription_contracts.where('shopify_at::date BETWEEN ? AND ?', @range.first, @range.last).where.not(failed_at: nil).count
   end
 
   def customers_percentage(status)
@@ -202,7 +202,7 @@ class CustomerInsightReportService
   end
 
   def cancellation_reasons
-    @shop.customers.joins(:reasons_cancel).select('COUNT(*) AS value, reasons_cancels.title AS cancellation_reason')
+    @shop.customer_subscription_contracts.joins(:reasons_cancel).select('COUNT(*) AS value, reasons_cancels.title AS cancellation_reason')
          .group('reasons_cancels.title').order('COUNT(*) DESC')
   end
 

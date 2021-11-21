@@ -23,6 +23,6 @@ class AppProxy::OrdersController < AppProxyController
   end
 
   def set_customer
-    @customer = current_shop.customers.find_by_shopify_customer_id(customer_id)
+    @customer = current_shop.customer_subscription_contracts.find_by_shopify_customer_id(customer_id)
   end
 end

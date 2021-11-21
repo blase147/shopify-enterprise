@@ -14,7 +14,13 @@ class SubscriptionsController < AuthenticatedController
     id = params[:id]
     @customer = CustomerSubscriptionContract.find_by_shopify_id(params[:id])
 
-    @subscription = SubscriptionContractService.new(id).run
+    unless @customer.api_data
+      @customer.api_source = 'shopify'
+      @customer.api_data = SubscriptionContractService.new(id).run.to_h.deep_transform_keys { |key| key.underscore }
+      @customer.save
+    end
+
+    @subscription = JSON.parse(@customer.api_data.to_json, object_class: OpenStruct)
     products = ProductService.new.list
     @swap_products = products.is_a?(Hash) ? nil : products.select{ |p| p.node.selling_plan_group_count > 0 }
     @total = @subscription&.orders&.edges&.map { |order|

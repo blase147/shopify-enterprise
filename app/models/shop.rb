@@ -9,7 +9,7 @@ class Shop < ActiveRecord::Base
 
   has_many :selling_plan_groups, dependent: :destroy
   has_one :setting, dependent: :destroy
-  has_many :customers, dependent: :destroy
+  has_many :customer_subscription_contracts, dependent: :destroy
   has_many :zip_codes, dependent: :destroy
   has_many :smarty_cancellation_reasons, dependent: :destroy
   has_many :custom_keywords, dependent: :destroy
@@ -78,7 +78,7 @@ class Shop < ActiveRecord::Base
     items[:subscriptions].each do |item|
       billing_policy = item.node.billing_policy
 
-      customer = self.customers.find_or_create_by(shopify_id: item.node.id[/\d+/])
+      customer = self.customer_subscription_contracts.find_or_create_by(shopify_id: item.node.id[/\d+/])
       customer.update_columns(
         first_name: item.node.customer.first_name,
         last_name: item.node.customer.last_name,

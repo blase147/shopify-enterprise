@@ -32,7 +32,7 @@ class ReportDataService
 
   def customer_at_period_start(subscriptions, range)
     active_subs_before_period = in_period_subscriptions(subscriptions, range.first - 2.year..range.first - 1.day, 'ACTIVE').count
-    cancelled_sub_after_period = @shop.customers.where(status: 'CANCELLED').where('shopify_at::date BETWEEN ? AND ?', range.first - 2.year, range.first - 1.day).where('cancelled_at::date > ?', range.last).count
+    cancelled_sub_after_period = @shop.customer_subscription_contracts.where(status: 'CANCELLED').where('shopify_at::date BETWEEN ? AND ?', range.first - 2.year, range.first - 1.day).where('cancelled_at::date > ?', range.last).count
     active_subs_before_period + cancelled_sub_after_period
   end
 
@@ -107,7 +107,7 @@ class ReportDataService
   end
 
   def in_period_cancelled_subscriptions(subscriptions, range)
-    subscriptions.select { |subscription| range.cover?(@shop.customers.find_by(status: 'CANCELLED', shopify_id: subscription.node.id[/\d+/])&.cancelled_at) && subscription.node.status == 'CANCELLED' }
+    subscriptions.select { |subscription| range.cover?(@shop.customer_subscription_contracts.find_by(status: 'CANCELLED', shopify_id: subscription.node.id[/\d+/])&.cancelled_at) && subscription.node.status == 'CANCELLED' }
   end
 
   def in_period_hourly_subscriptions(subscriptions, range, status = nil)
@@ -216,16 +216,16 @@ class ReportDataService
   end
 
   def cancelled_customers(range)
-    @shop.customers.where(status: 'CANCELLED').where('cancelled_at::date BETWEEN ? AND ?', range.first - 2.year, range.last).count
+    @shop.customer_subscription_contracts.where(status: 'CANCELLED').where('cancelled_at::date BETWEEN ? AND ?', range.first - 2.year, range.last).count
   end
 
   def cancelled_subscriptions_in_period(range)
-    @shop.customers.where(status: 'CANCELLED').where('cancelled_at::date BETWEEN ? AND ?', range.first, range.last).count
+    @shop.customer_subscription_contracts.where(status: 'CANCELLED').where('cancelled_at::date BETWEEN ? AND ?', range.first, range.last).count
   end
 
   def active_subscriptions(range)
     active_customers_subscriptions = in_period_subscriptions(@subscriptions, (range.first - 2.years)..range.last, 'ACTIVE')
-    cancelled_subscription_ids = @shop.customers.where(status: 'CANCELLED').where('cancelled_at::date > ?', range.last).where('shopify_at::date BETWEEN ? AND ?', range.first - 2.year, range.last).pluck('shopify_id')
+    cancelled_subscription_ids = @shop.customer_subscription_contracts.where(status: 'CANCELLED').where('cancelled_at::date > ?', range.last).where('shopify_at::date BETWEEN ? AND ?', range.first - 2.year, range.last).pluck('shopify_id')
     active_customers_subscriptions + @subscriptions.select{ |sub| cancelled_subscription_ids.include?(sub.node.id[/\d+/]) }
   end
 
@@ -288,7 +288,7 @@ class ReportDataService
   end
 
   def same_day_cancelled
-    @shop.customers.where('shopify_at::date = cancelled_at::date').count
+    @shop.customer_subscription_contracts.where('shopify_at::date = cancelled_at::date').count
   end
 
   def sku_by_revenue

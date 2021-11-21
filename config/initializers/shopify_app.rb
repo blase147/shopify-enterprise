@@ -13,7 +13,9 @@ ShopifyApp.configure do |config|
   config.allow_jwt_authentication = true
   config.webhooks = [
     { topic: 'app/uninstalled', address: "#{ENV['HOST']}shopify_webhooks/app_uninstalled" },
-    { topic: 'orders/create', address: "#{ENV['HOST']}shopify_webhooks/order_create", fields: ["id", "updated_at"]}
+    { topic: 'orders/create', address: "#{ENV['HOST']}shopify_webhooks/order_create", fields: ["id", "updated_at"]},
+    { topic: 'subscription_contracts/create', address: "#{ENV['HOST']}shopify_webhooks/subscription_contract_create", fields: ["id"]},
+    { topic: 'subscription_contracts/update', address: "#{ENV['HOST']}shopify_webhooks/subscription_contract_update", fields: ["id"]}
   ]
 end
 

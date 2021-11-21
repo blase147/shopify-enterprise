@@ -17,7 +17,9 @@ Rails.application.routes.draw do
   post '/customers/data_request', to: 'gdpr_webhooks#customer_data_request'
 
   post '/shopify_webhooks/app_uninstalled', to: 'shopify_webhooks#app_uninstalled'
-  post '/shopify_webhooks/order_created', to: 'shopify_webhooks#order_created'
+  post '/shopify_webhooks/order_create', to: 'shopify_webhooks#order_create'
+  post '/shopify_webhooks/subscription_contract_create', to: 'shopify_webhooks#subscription_contract_create'
+  post '/shopify_webhooks/subscription_contract_update', to: 'shopify_webhooks#subscription_contract_update'
 
   post '/shipping_suites/sync_orders', to: 'shipping_suites#sync_orders'
 
