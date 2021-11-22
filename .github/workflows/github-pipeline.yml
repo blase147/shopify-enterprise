@@ -19,15 +19,8 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           cd ~/chargezen/Chargezen
-<<<<<<< HEAD
-          git reset --hard
-          git pull origin db_rework
-          rails db:migrate
-          yarn install --check-files
-=======
           git pull origin db_rework
           rails db:migrate
           yarn install --check-files
           sudo kill -9 `sudo lsof -t -i:3000`
->>>>>>> 96710a6f5f4b808c9d561c49c5932e47cdfd0b9b
           rails s -d
