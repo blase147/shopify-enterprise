@@ -39,5 +39,5 @@ yarn-debug.log*
 
 .DS_Store
 .env*
-/Gemfile.lock
-/yarn.lock
+/.Gemfile.lock
+/.yarn.lock
