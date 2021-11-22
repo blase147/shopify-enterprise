@@ -25,4 +25,4 @@ jobs:
           if ss -l4n | grep 3000; then
           kill -9 `sudo lsof -t -i:3000`
           fi
-          rails s -d
+          /home/test/.rbenv/shims/rails s -d
