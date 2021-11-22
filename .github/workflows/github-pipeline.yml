@@ -4,7 +4,7 @@ on:
     branches: 'db_rework'
 jobs:
   push_event:
-    runs-on: ubuntu-latesthttps://github.com/Ecomtarget-LLC/Chargezen/tree/db_rework
+    runs-on: ubuntu-latest
     steps:
     - name: Extract branch name
       shell: bash
