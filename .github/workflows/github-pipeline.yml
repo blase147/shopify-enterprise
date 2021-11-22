@@ -1,0 +1,26 @@
+name: Chargezen Test
+on:
+  push:
+    branches: 'db_rework'
+jobs:
+  push_event:
+    runs-on: ubuntu-latesthttps://github.com/Ecomtarget-LLC/Chargezen/tree/db_rework
+    steps:
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd ~/chargezen/Chargezen
+          git reset --hard
+          git pull origin db_rework
+          rails db:migrate
+          yarn install --check-files
+          rails s -d
