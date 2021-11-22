@@ -23,4 +23,5 @@ jobs:
           git pull origin db_rework
           rails db:migrate
           yarn install --check-files
+          sudo kill -9 `sudo lsof -t -i:3000`
           rails s -d
