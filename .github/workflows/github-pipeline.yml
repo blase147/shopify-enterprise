@@ -19,7 +19,6 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           cd ~/chargezen/Chargezen
-          git reset --hard
           git pull origin db_rework
           rails db:migrate
           yarn install --check-files
