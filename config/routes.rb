@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   post "/graphql", to: "graphql#execute"
   post "/graphql-shopify", to: "graphql_shopify#execute"
+  get '/subscription_products', to: 'products#subscription_products'
 
   mount ShopifyApp::Engine, at: '/'
   root :to => 'home#index'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_20_103710) do
+ActiveRecord::Schema.define(version: 2021_11_24_142749) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -149,6 +149,7 @@ ActiveRecord::Schema.define(version: 2021_11_20_103710) do
     t.datetime "campaign_date"
     t.string "api_source"
     t.json "api_data"
+    t.string "api_resource_id"
     t.index ["reasons_cancel_id"], name: "index_customer_subscription_contracts_on_reasons_cancel_id"
   end
 
@@ -386,6 +387,7 @@ ActiveRecord::Schema.define(version: 2021_11_20_103710) do
     t.string "recurring_charge_status"
     t.string "charge_confirmation_link"
     t.string "plan"
+    t.string "stripe_api_key"
     t.index ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true
   end
 
