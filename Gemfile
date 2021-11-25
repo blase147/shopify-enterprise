@@ -89,3 +89,5 @@ gem 'config'
 
 gem "sidekiq-unique-jobs", "~> 7.1"
 gem 'httparty'
+
+gem "stripe", "~> 5.41"
