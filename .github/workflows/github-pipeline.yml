@@ -20,7 +20,9 @@ jobs:
         script: |
           cd ~/chargezen/Chargezen
           git pull origin db_rework
-          rails db:migrate
+          /home/test/.rbenv/shims/rails db:migrate
           yarn install --check-files
-          sudo kill -9 `sudo lsof -t -i:3000`
-          rails s -d
+          if ss -l4n | grep 3000; then
+          kill -9 `sudo lsof -t -i:3000`
+          fi
+          /home/test/.rbenv/shims/rails s -d
