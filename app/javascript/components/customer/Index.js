@@ -230,6 +230,7 @@ const Customers = () => {
         language
         createdAt
         updatedAt
+        apiResourceId
         additionalContacts {
           id
           firstName
@@ -291,7 +292,7 @@ const Customers = () => {
             }
           />,
           <a
-            href={`/subscriptions/${row.shopifyId}?shop=${row.shopDomain}`}
+            href={`/subscriptions/${row.shopifyId}?shop=${row.shopDomain}&local_id=${row.id}`}
             key={row.id}
           >{`${row.firstName} ${row.lastName}`}</a>,
           row.createdAt,

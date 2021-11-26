@@ -12,7 +12,11 @@ class SubscriptionsController < AuthenticatedController
 
   def show
     id = params[:id]
-    @customer = CustomerSubscriptionContract.find_by_shopify_id(params[:id])
+    if params[:local_id]
+      @customer = CustomerSubscriptionContract.find_by(id: params[:local_id])
+    else
+      @customer = CustomerSubscriptionContract.find_by_shopify_id(params[:id])
+    end
 
     unless @customer.api_data
       @customer.api_source = 'shopify'
@@ -31,6 +35,7 @@ class SubscriptionsController < AuthenticatedController
       product_ids = @subscription.origin_order.line_items.edges.map{|e| e.node.custom_attributes.find{|a| a.key == "_box_product_ids"}.value rescue nil}.flatten.compact.join(',') rescue nil
       @box_products = ShopifyAPI::Product.where(ids: product_ids, fields: 'id,title,images,variants') if product_ids.present?
     end
+    render "#{@customer.api_source == 'stripe' ? 'stripe_' : ''}show"
   end
 
   def update_customer

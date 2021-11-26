@@ -1,7 +1,7 @@
 module Types
   class CustomerSubscriptionType < Types::BaseObject
     field :id, ID, null: false
-    field :shopify_id, ID, null: false
+    field :shopify_id, ID, null: true
     field :shop_domain, String, null: true
     field :first_name, String, null: true
     field :last_name, String, null: true
@@ -17,6 +17,8 @@ module Types
     field :billing_address, Types::BillingAddressType, null: true
     field :pack, String, null: true
     field :frequency, String, null: true
+
+    field :api_resource_id, String, null: true
 
     field :created_at, String, null: true
     field :updated_at, String, null: true
