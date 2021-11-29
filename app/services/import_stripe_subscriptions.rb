@@ -7,15 +7,11 @@ class ImportStripeSubscriptions
   end
 
   def run
-    # implement
-    puts "Implement me"
     csv = CSV.parse(File.read(@csv_path), headers: true)
 
-    stubbins = nil
     csv.each do |row|
-      stubbins = row if row["customer_gateway_token"] == 'cus_KMgQDDKZHln2jR'
+      process_row(row)
     end
-    process_row(stubbins)
   end
 
   def process_row(row)
@@ -27,7 +23,7 @@ class ImportStripeSubscriptions
       phone: row['phone'],
       shopify_at: row['purchase_date'],
       shopify_updated_at: row['to_date'],
-      status: (row['active'] == '1' && 'ACTIVE') || (row['is_paused']),
+      status: ((row['is_paused'] == '1' && 'PAUSED' ) || (row['active'] == '1' && 'ACTIVE') || 'CANCELLED'),
       subscription: row['variant_title'],
       language: "$#{row['price']} / #{row['interval_number']} #{row['interval_type']}",
       communication: "#{row['interval_number']} #{row['interval_type']} Pack".titleize,
@@ -71,7 +67,7 @@ end
 
 =begin
 
-shop = Shop.find(2)
+shop = Shop.find_by(shopify_domain: "bagamour.myshopify.com")
 csv_path = Dir.pwd + '/public/ro_export_2021-11-16 4.csv'
 ImportStripeSubscriptions.new(shop, csv_path).run
 
