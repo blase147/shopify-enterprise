@@ -1,4 +1,5 @@
 class ImportStripeSubscriptions
+  BAGAMOUR_ANCHOR = Date.parse('2021-11-01')
 
   def initialize(shop, csv_path)
     @shop = shop
@@ -57,7 +58,7 @@ class ImportStripeSubscriptions
   end
 
   def next_anchor(row)
-    anchor = Date.parse(row['purchase_date'])
+    anchor = BAGAMOUR_ANCHOR
     today = Date.today
     interval = row['interval_number'].to_i.public_send(row['interval_type'].downcase)
     while anchor < today

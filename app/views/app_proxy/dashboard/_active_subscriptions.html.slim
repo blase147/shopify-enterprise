@@ -4,9 +4,9 @@
     - selling_plan_ids = subscription.node.lines.edges.map{|edge| edge.node.selling_plan_id}
     - selling_plan_id = selling_plan_ids.reject{|val| val.nil?}&.first
     - selling_plan = SellingPlan.find_by(shopify_id: selling_plan_id)
+    - next unless selling_plan
     - next_billing_date = get_next_billing_date(subscription.node, @current_shop)
-
-    - box_campaign = BuildABoxCampaign.joins(:build_a_box_campaign_group).where(build_a_box_campaign_groups: { shop_id: @current_shop.id, location: 'customer_portal' }).where("'#{selling_plan_id[/\d+/]}' = ANY (selling_plan_ids)").first
+    - box_campaign = BuildABoxCampaign.joins(:build_a_box_campaign_group).where(build_a_box_campaign_groups: { shop_id: @current_shop.id, location: 'customer_portal' }).where("'#{selling_plan_id[/\d+/]}' = ANY (selling_plan_ids)").first rescue nil
     / - selling_plan_id = "gid://shopify/SellingPlan/393543886"
     .subscription-contract-products
       - subscription.node.lines.edges.each_with_index do |edge, index|

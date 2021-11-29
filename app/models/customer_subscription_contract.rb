@@ -84,7 +84,7 @@ class CustomerSubscriptionContract < ApplicationRecord
   end
 
   def self.update_contracts(customer_id, shop)
-    items = SubscriptionContractSubscriptionContractsService.new(customer_id).run
+    items = CustomerSubscriptionContractsService.new(customer_id).run
     items[:subscriptions].each do |item|
       billing_policy = item.billing_policy
 
