@@ -18,7 +18,7 @@ class SubscriptionsController < AuthenticatedController
       @customer = CustomerSubscriptionContract.find_by_shopify_id(params[:id])
     end
 
-    unless @customer.api_data
+    if @customer.api_source != 'stripe' && !@customer.api_data
       @customer.api_source = 'shopify'
       @customer.api_data = SubscriptionContractService.new(id).run.to_h.deep_transform_keys { |key| key.underscore }
       @customer.save

@@ -10,7 +10,9 @@ class ImportStripeSubscriptions
     csv = CSV.parse(File.read(@csv_path), headers: true)
 
     csv.each do |row|
-      process_row(row)
+      unless CustomerSubscriptionContract.where("import_data->>'order_id' = ?", row['order_id']).first
+        process_row(row)
+      end
     end
   end
 
@@ -27,17 +29,21 @@ class ImportStripeSubscriptions
       subscription: row['variant_title'],
       language: "$#{row['price']} / #{row['interval_number']} #{row['interval_type']}",
       communication: "#{row['interval_number']} #{row['interval_type']} Pack".titleize,
-      shop_id: @shop.id
+      shop_id: @shop.id,
+      api_source: 'stripe',
+      import_data: row.to_h,
+      import_type: 'csv_file'
     )
     if csc.status == 'ACTIVE' && row['price'].to_f > 0
       product = Stripe::Product.create({name: "#{row['product_title']}, #{row['variant_title']}"}, { api_key: @shop.stripe_api_key })
       anchor = next_anchor(row)
       stripe_subscription = Stripe::Subscription.create({
         customer: row['customer_gateway_token'],
+        billing_cycle_anchor: anchor,
         items: [
           {
             price_data: {
-              unit_amount_decimal: (row['price'].to_f + (row['shipping_price'].to_f rescue 0)),
+              unit_amount_decimal: (row['price'].to_f + (row['shipping_price'].to_f rescue 0)).round(3),
               currency: 'usd',
               recurring: {interval: row['interval_type']&.downcase&.singularize, interval_count: row['interval_number']},
               product: product.id
@@ -48,9 +54,14 @@ class ImportStripeSubscriptions
       }, { api_key: @shop.stripe_api_key })
       csc.api_resource_id = stripe_subscription.id
       csc.api_data = stripe_subscription.to_h
-      csc.api_source = 'stripe'
+    else
+      csc.api_data = {}
     end
     csc.save
+  rescue => e
+    puts "Error processing #{row['order_id']}"
+    p e.message
+    p e
   end
 
   def next_anchor(row)
@@ -66,6 +77,12 @@ class ImportStripeSubscriptions
 end
 
 =begin
+
+shop = Shop.find_by(shopify_domain: "bagamour.myshopify.com")
+csv_path = Dir.pwd + '/public/ro_export_2021-11-16 4.csv'
+csv = CSV.parse(File.read(csv_path), headers: true)
+import = ImportStripeSubscriptions.new(shop, csv_path)
+import.process_row(csv.first)
 
 shop = Shop.find_by(shopify_domain: "bagamour.myshopify.com")
 csv_path = Dir.pwd + '/public/ro_export_2021-11-16 4.csv'

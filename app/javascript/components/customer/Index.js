@@ -231,6 +231,7 @@ const Customers = () => {
         createdAt
         updatedAt
         apiResourceId
+        apiSource
         additionalContacts {
           id
           firstName
@@ -307,6 +308,7 @@ const Customers = () => {
           >
             <Badge>{capitalize(row.status)}</Badge>
           </div>,
+          <p className='capitalize'>{row.apiSource || 'shopify'}</p>,
           <div className='subscription'>{row.subscription}</div>,
           <div>
             <p className="more">
@@ -712,6 +714,7 @@ const Customers = () => {
                     'Name',
                     'Date Created',
                     'Status',
+                    'Source',
                     'Product',
                     '',
                   ]}

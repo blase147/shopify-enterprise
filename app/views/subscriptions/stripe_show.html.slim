@@ -1,6 +1,6 @@
 - setting = current_shop.setting
 - api_order = nil
-- anchor = Date.parse(@customer.import_data['purchase_date'])
+- anchor = (Time.at(@customer.api_data['billing_cycle_anchor']).to_date rescue nil) || (Date.parse( @customer.import_data['purchase_date']) rescue nil) rescue Date.yesterday
 - today = Date.today
 - interval = @customer.import_data['interval_number'].to_i.public_send(@customer.import_data['interval_type'].downcase)
 - while anchor < today
@@ -50,7 +50,8 @@
                     = @customer.import_data['price']
                   div
                     - if setting.admin_allowed?('pause_subscription')
-                      = link_to action_subscription_contract_path(:pause, @subscription.id[/\d+/]), remote: true, method: :post, style: 'text-decoration: none;' do
+                      / = link_to action_subscription_contract_path(:pause, @subscription.id[/\d+/]), remote: true, method: :post, style: 'text-decoration: none;' do
+                      = link_to '#' do
                         button.Polaris-Button.Polaris-Button--plain
                           span.Polaris-Button__Content
                             span.Polaris-Button__Text Pause
@@ -86,7 +87,8 @@
                 .Polaris-Stack__Item
                   .Polaris-ButtonGroup.resume
                     .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                      = link_to action_subscription_contract_path(:resume, @subscription.id[/\d+/]), remote: true, method: :post, style: 'text-decoration: none;' do
+                      / = link_to action_subscription_contract_path(:resume, @subscription.id[/\d+/]), remote: true, method: :post, style: 'text-decoration: none;' do
+                      = link_to '#' do
                         span.resume-btn type="button" Resume
 
             - if @subscription.status == 'ACTIVE'
@@ -248,7 +250,8 @@
                     - @box_products.each do |product|
                       div.building-box-product
                         img.box-image-d src="#{product.images.first&.src}"
-                        = link_to action_subscription_contract_path(:remove_box_item, @subscription.id[/\d+/], "product_id=#{product.id}"), remote: true, method: :post do
+                        / = link_to action_subscription_contract_path(:remove_box_item, @subscription.id[/\d+/], "product_id=#{product.id}"), remote: true, method: :post do
+                        = link_to '#' do
                           = image_pack_tag "media/subscriptionsPlans/removeProduct.svg", class: 'removeIcon'
 
       .Polaris-Layout__Section.Polaris-Layout__Section--secondary
@@ -272,7 +275,7 @@
                   p.text
                     = next_billing_date.strftime("%B %e, %Y")
                   / = link_to action_subscription_contract_path(:skip_schedule, @subscription.id[/\d+/], "billing_date=#{next_billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post do
-                  = link_to '/' do
+                  = link_to '#' do
                     button.Polaris-Button.Polaris-Button--plain
                       span.Polaris-Button__Content
                         span.Polaris-Button__Text SKIP
@@ -283,7 +286,7 @@
                     p.text
                       = billing_date.strftime("%B %e, %Y")
                     / = link_to action_subscription_contract_path(:skip_schedule, @subscription.id[/\d+/], "billing_date=#{billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post do
-                    = link_to '' do
+                    = link_to '#' do
                       button.Polaris-Button.Polaris-Button--plain
                         span.Polaris-Button__Content
                           span.Polaris-Button__Text SKIP
