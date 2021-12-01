@@ -50,7 +50,6 @@ class ImportStripeSubscriptions
             }
           }
         ]
-
       }, { api_key: @shop.stripe_api_key })
       csc.api_resource_id = stripe_subscription.id
       csc.api_data = stripe_subscription.to_h

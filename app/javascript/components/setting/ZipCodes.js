@@ -330,14 +330,18 @@ const ZipCodes = ({ handleBack }) => {
             Accept: 'application/json',
           },
           method: 'DELETE',
-          body: JSON.stringify({ids: selectedItems}),
+          body: JSON.stringify({ ids: selectedItems }),
           credentials: 'same-origin',
         })
           .then((response) => response.json())
           .then((data) => {
             if (data.status == true) {
-              setZipCodes(zipCodes.filter(zipCode => !selectedItems.includes(zipCode.id)));
-              setSelectedItems([])
+              setZipCodes(
+                zipCodes.filter(
+                  (zipCode) => !selectedItems.includes(zipCode.id)
+                )
+              );
+              setSelectedItems([]);
             } else {
               setErrorMsg(data.error);
             }

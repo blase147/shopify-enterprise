@@ -4,6 +4,7 @@ class SubscriptionContractService < GraphqlService
       subscriptionContract(id: $id) {
         id
         createdAt
+        updatedAt
         status
         nextBillingDate
         appAdminUrl

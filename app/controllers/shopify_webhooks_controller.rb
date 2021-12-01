@@ -19,10 +19,13 @@ class ShopifyWebhooksController < ApplicationController
   def order_created
     begin
       box_product_ids = get_box_product_ids(params[:line_items])
-      if box_product_ids
-        order = ShopifyAPI::Order.new(id: params[:id])
-        order.tags = ShopifyAPI::Product.where(ids: box_product_ids, fields: 'id,title').map(&:title).join(', ')
-        order.save
+      shop = Shop.find_by(shopify_domain: shop_domain)
+      shop.with_shopify_session do
+        if box_product_ids
+          order = ShopifyAPI::Order.new(id: params[:id])
+          order.tags = ShopifyAPI::Product.where(ids: box_product_ids, fields: 'id,title').map(&:title).join(', ')
+          order.save
+        end
       end
     rescue => e
       p e
@@ -33,52 +36,15 @@ class ShopifyWebhooksController < ApplicationController
 
   # TODO: move into background job
   def subscription_contract_create
-    shop = Shop.find_by(shopify_domain: params[:domain])
-    data = SubscriptionContractService.new(params[:id]).run
-    contract = CustomerSubscriptionContract.create(
-      shop_id: shop.id,
-      first_name: data.node.customer.first_name,
-      last_name: data.node.customer.last_name,
-      email: data.node.customer.email,
-      phone: data.node.customer.phone,
-      shopify_at: data.node.created_at.to_date,
-      shopify_updated_at: data.node.updated_at&.to_date,
-      status: data.node.status,
-      subscription: data.node.lines.edges.first&.node&.title,
-      language: "$#{data.node.lines.edges.first&.node&.current_price&.amount} / #{billing_policy.interval.pluralize}",
-      communication: "#{billing_policy.interval_count} #{billing_policy.interval} Pack".titleize,
-      shopify_customer_id: data.node.customer.id[/\d+/],
-      api_source: 'shopify',
-      api_data: data.to_h.deep_transform_keys { |key| key.underscore }
-    )
+    shop = Shop.find_by(shopify_domain: shop_domain)
+    ShopifyContractCreateWorker.perform_async(shop.id, params[:id])
 
     head :no_content
   end
 
   def subscription_contract_update
-    data = SubscriptionContractService.new(params[:id]).run
-    contract = CustomerSubscriptionContract.find_or_initialize_by(shopify_id: params[:id])
-
-    contract.assign_attributes(
-      first_name: data.node.customer.first_name,
-      last_name: data.node.customer.last_name,
-      email: data.node.customer.email,
-      phone: data.node.customer.phone,
-      shopify_at: data.node.created_at.to_date,
-      shopify_updated_at: data.node.updated_at&.to_date,
-      status: data.node.status,
-      subscription: data.node.lines.edges.first&.node&.title,
-      language: "$#{data.node.lines.edges.first&.node&.current_price&.amount} / #{billing_policy.interval.pluralize}",
-      communication: "#{billing_policy.interval_count} #{billing_policy.interval} Pack".titleize,
-      shopify_customer_id: data.node.customer.id[/\d+/],
-      api_source: 'shopify',
-      api_data: data.to_h.deep_transform_keys { |key| key.underscore }
-    )
-    unless contract.persisted?
-      shop = Shop.find_by(shopify_domain: params[:domain])
-      contract.shop_id = shop.id
-    end
-    contract.save
+    shop = Shop.find_by(shopify_domain: shop_domain)
+    ShopifyContractUpdateWorker.perform_async(shop.id, params[:id])
 
     head :no_content
   end

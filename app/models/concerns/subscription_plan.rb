@@ -170,13 +170,13 @@ module SubscriptionPlan
       result = ShopifyAPIRetry::GraphQL.retry {
         client.query(client.parse(UPDATE_ANCHOR_QUERY), variables: {
           input: input,
-          id: self.shopify_id,
+          id: self.shopify_id
         })
       }
       puts '#####'
       p result
 
-      error = result.errors.messages["data"][0]rescue nil
+      error = result.errors.messages["data"][0] rescue nil
       error ||= result.data.selling_plan_group_update.user_errors.first.message rescue nil
 
       if error.present?

@@ -1,4 +1,3 @@
-# this should be SubscriptionContractOrder
 class CustomerSubscriptionContract < ApplicationRecord
   enum gender: [:male, :female]
   belongs_to :shop, foreign_key: :shop_id

@@ -113,7 +113,7 @@ const NewFlowForm = ({ handleClose, handleEditFlow }) => {
         'Cross sell specific products based on what your customer has purchased',
     },
   ];
-  debugger
+
   return (
     <Card sectioned>
       <div class="example">

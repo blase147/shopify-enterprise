@@ -504,7 +504,7 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
       img: CustomerImage,
       desc: 'Manage your customer subscription portal.',
     },
-    ...(domain == 'tryworldfare.myshopify.com'
+    ...(domain == 'tryworldfare.myshopify.com' || domain == 'hitched-staging.myshopify.com'
       ? [
           {
             key: 'zip_codes',

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_26_091840) do
+ActiveRecord::Schema.define(version: 2021_11_30_095026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -152,7 +152,9 @@ ActiveRecord::Schema.define(version: 2021_11_26_091840) do
     t.string "api_resource_id"
     t.json "import_data"
     t.string "import_type"
+    t.string "selling_plan_id"
     t.index ["reasons_cancel_id"], name: "index_customer_subscription_contracts_on_reasons_cancel_id"
+    t.index ["selling_plan_id"], name: "index_customer_subscription_contracts_on_selling_plan_id"
   end
 
   create_table "email_notifications", force: :cascade do |t|
