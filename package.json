@@ -12,6 +12,7 @@
     "@shopify/polaris": "^5.10.1",
     "@yaireo/tagify": "4.1.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
+    "dagre": "^0.8.5",
     "dayjs": "1.10.4",
     "dotenv": "^8.2.0",
     "dotenv-webpack": "^6.0.0",

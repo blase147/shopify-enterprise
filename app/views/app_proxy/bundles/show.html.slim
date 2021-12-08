@@ -1,0 +1,205 @@
+- if @bundle_group.present? && @bundle_group.bundle_type.present?
+  .checkout-design-1
+    p Select Style Options
+    .new-desig-parent
+      .img-sec-parent
+        - @products.each do |product|
+          .add-img-section
+            .img-con
+              img src="#{product.images.first&.src}" /
+              button.add data-id="#{product.id}"
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" width="512" height="512" x="0" y="0" viewBox="0 0 455.431 455.431" style="enable-background:new 0 0 512 512;fill: #000;" xml:space="preserve" class=""><g>
+                  <path xmlns="http://www.w3.org/2000/svg" d="M405.493,412.764c-69.689,56.889-287.289,56.889-355.556,0c-69.689-56.889-62.578-300.089,0-364.089  s292.978-64,355.556,0S475.182,355.876,405.493,412.764z" fill="#3caaa8" data-original="#8dc640" class=""></path>
+                  <g xmlns="http://www.w3.org/2000/svg" style="opacity:0.2;">
+                    <path style="" d="M229.138,313.209c-62.578,49.778-132.267,75.378-197.689,76.8   c-48.356-82.489-38.4-283.022,18.489-341.333c51.2-52.622,211.911-62.578,304.356-29.867   C377.049,112.676,330.116,232.142,229.138,313.209z" fill="#ffffff" data-original="#ffffff" class=""></path>
+                  </g>
+                  <path xmlns="http://www.w3.org/2000/svg" style="" d="M362.827,227.876c0,14.222-11.378,25.6-25.6,25.6h-85.333v85.333c0,14.222-11.378,25.6-25.6,25.6  c-14.222,0-25.6-11.378-25.6-25.6v-85.333H115.36c-14.222,0-25.6-11.378-25.6-25.6c0-14.222,11.378-25.6,25.6-25.6h85.333v-85.333  c0-14.222,11.378-25.6,25.6-25.6c14.222,0,25.6,11.378,25.6,25.6v85.333h85.333C351.449,202.276,362.827,213.653,362.827,227.876z" fill="#ffffff" data-original="#ffffff" class=""></path>
+                  <g xmlns="http://www.w3.org/2000/svg">
+                  </g>
+                  <g xmlns="http://www.w3.org/2000/svg">
+                  </g>
+                  <g xmlns="http://www.w3.org/2000/svg">
+                  </g>
+                  <g xmlns="http://www.w3.org/2000/svg">
+                  </g>
+                  <g xmlns="http://www.w3.org/2000/svg">
+                  </g>
+                  <g xmlns="http://www.w3.org/2000/svg">
+                  </g>
+                  <g xmlns="http://www.w3.org/2000/svg">
+                  </g>
+                  <g xmlns="http://www.w3.org/2000/svg">
+                  </g>
+                  <g xmlns="http://www.w3.org/2000/svg">
+                  </g>
+                  <g xmlns="http://www.w3.org/2000/svg">
+                  </g>
+                  <g xmlns="http://www.w3.org/2000/svg">
+                  </g>
+                  <g xmlns="http://www.w3.org/2000/svg">
+                  </g>
+                  <g xmlns="http://www.w3.org/2000/svg">
+                  </g>
+                  <g xmlns="http://www.w3.org/2000/svg">
+                  </g>
+                  <g xmlns="http://www.w3.org/2000/svg">
+                  </g>
+                  </g>
+                </svg>
+            p = product.title
+      .img-place-section
+        .top-section
+          h4 = @bundle_group.internal_name || "Bundle"
+        .bottom-section
+          .add-img-sec
+            - if @selected_products.present?
+              - @bundle.quantity_limit.times.each do |index|
+                - if @selected_products[index].present?
+                  .sec data-id="#{@selected_products[index].id}"
+                    .img-crs-sec.cros-img
+                      img src="#{@selected_products[index].images.first.src}" /
+                      .cros-plus.close-img
+                        p x
+                    p Select #{index+1}
+                - else
+                  .sec
+                    .img-crs-sec.cros-img
+                      img.place-img src="" /
+                      .cros-plus.close-img
+                        p x
+                    p Select #{index+1}
+            - else
+              - @bundle.quantity_limit.times.each do |index|
+                .sec
+                  .img-crs-sec.cros-img
+                    img.place-img src="" /
+                    .cros-plus.close-img
+                      p x
+                  p Select #{index+1}
+          p.error_message.hidden Selection is not complete
+          button.go_to_payment_btn Go to Payment
+        span.box_limit.hidden = @bundle.quantity_limit
+
+- else
+  span.billing_plan_present.hidden
+javascript:
+  $('.go_to_payment_btn').click(function(){
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var box_products = [];
+    document.querySelectorAll('.sec').forEach((e) => {
+      if (e.dataset.id)
+        box_products.push(e.dataset.id)
+    });
+    let formData = {
+      'items': [{
+        'id': url.searchParams.get("variant_id"),
+        'quantity': 1,
+        'selling_plan': url.searchParams.get("selling_plan"),
+        'properties': {
+          '_box_product_ids': box_products.join(', ')
+        }
+      }]
+    };
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(response => {
+      return window.top.location.href = '/checkout/';
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  });
+  $(document).ready(function(){
+    eraseCookie('box_items');
+    $('.checkout-design-1 .add').click(function(){
+      let selectedProducts = getCookie('box_items');
+      if (selectedProducts == null || (selectedProducts.split(',').length <= parseInt($('.box_limit').text()))) {
+        var img=$(this).closest('.add-img-section').find('img');
+        var id=$(this).attr('data-id');
+        var button=$(this);
+        var flag=true;
+        $('.img-place-section').find('.add-img-sec').children('.sec').each(function(index,elem){
+          if(flag && !$(elem).attr('data-id')){
+            $(elem).find('img').attr('src',$(img).attr('src')).removeClass('place-img');
+            $(elem).attr('data-id',id)
+            flag=false;
+            $(button).attr('disabled',true);
+            document.cookie = setCookie('box_items', (getCookie('box_items') ?  (getCookie('box_items') + ',' + id) : id), 1)
+          }
+        })
+      }
+    });
+  })
+
+
+  $(document).on('click','.close-img',function(){
+    var div=$(this).closest('.sec');
+    var id=$(div).attr('data-id');
+    // $(div).remove();
+    var section=$('.img-sec-parent')
+                .find("[data-id='" + id + "']")
+                .closest('.add-img-section')
+                .find('button')
+                .attr('disabled',false);
+    $(div).removeAttr('data-id');
+    $(div).find('img').attr('src','').addClass('place-img');
+    /// Shifting elements
+    let counter=0;
+    let placeholder=null;
+    $('.add-img-sec').children('.sec').each(function(index,elem){
+     if(!$(elem).attr('data-id')){
+      placeholder=$(elem).clone();
+      counter++;
+      $(elem).remove();
+     }
+    });
+    for(let i=0;i<counter;i++){
+      $('.add-img-sec').append($(placeholder).clone());
+    }
+    filterCookieData(id);
+  })
+
+  function filterCookieData(id){
+    let products = getCookie('box_items');
+    let split_products = products.split(',');
+    let filtered = [];
+    document.querySelectorAll('.sec').forEach(s => filtered.push(s.dataset.id));
+    let updated_products = filtered.join(',');
+    eraseCookie('box_items');
+    setCookie('box_items', updated_products, 1);
+  }
+
+  function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+  }
+
+  function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+  }
+
+  function eraseCookie(name) {
+    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  }
+
+  if ($('.billing_plan_present').text() === 'false') {
+    window.top.location.href = '/cart';
+  }

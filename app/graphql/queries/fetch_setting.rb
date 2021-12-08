@@ -39,7 +39,7 @@ module Queries
         ]
         @setting.reasons_cancels.create(reason_cancels)
       end
-      # byebug
+
       @setting
     end
   end

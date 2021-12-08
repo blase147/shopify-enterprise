@@ -50,6 +50,11 @@ Rails.application.routes.draw do
         get :get_build_a_box
       end
     end
+    resources :bundles do
+      collection do
+        get :get_bundle
+      end
+    end
     resources :selling_plans, only: [] do
       collection do
         get :plan_type

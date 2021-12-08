@@ -18,6 +18,7 @@ class Shop < ActiveRecord::Base
   has_many :smarty_variables, dependent: :destroy
   has_many :sms_flows, dependent: :destroy
   has_many :build_a_box_campaign_groups, dependent: :destroy
+  has_many :bundle_groups, dependent: :destroy
   # has_many :sms_logs, dependent: :destroy
   has_many :subscription_logs, dependent: :destroy
 

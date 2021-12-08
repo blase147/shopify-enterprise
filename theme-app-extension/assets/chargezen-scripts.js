@@ -3,254 +3,261 @@
 
 window.chargezenForShopify = window.chargezenForShopify || {};
 window.chargezenForShopify.jQuery = jQuery.noConflict(true);
-(function(chargezen) {
-  try{
-    const planSelectorWrapper = document.getElementById('chargezen-plan-selector-os-wrapper');
-    if(planSelectorWrapper){
-      const forms = document.querySelectorAll('form[action="/cart/add"]');
-      const target = forms[forms.length-1];
-      (function insertProperly(target, item, before) {
-        if(before.parentElement == target){
-          target.insertBefore(item, before);
-        } else {
-          insertProperly(target, item, before.parentElement);
-        }
-      })(target, planSelectorWrapper, target.querySelector('button'));
-    }
-  }
-  catch(e){
-    console.log(e)
-  }
-  var $ = chargezen.jQuery;
-
-  function initChargeZen() {
-    var containerSels = [
-      '#ProductPriceOneTime',
-      '#ProductPrice',
-      '#productPrice-product-template',
-      '#ProductPrice-product-template',
-      '#productPrice > .visually-hidden',
-      '.price .price-item--regular',
-      '.product__price .price-item--regular',
-      '.product__price .product__price--reg',
-      '.product__price .product__current-price',
-      '.product-single__price',
-      '[id^=productPrice-]'
-    ].join(',');
-
-    var planSelector = $('fieldset.chargezen-plan-selector');
-
-    if (planSelector.attr('plans')){
-      var product = JSON.parse(planSelector.attr('plans'));
-    }
-    var sellingPlanInput = planSelector.find(':input[name="selling_plan"]');
-    var form = planSelector.closest('form')
-
-    function findInDOMTree(node, selector) {
-      const element = node.parent().find(selector)
-      if(element[0])
-        return element
-      else
-        return findInDOMTree(node.parent(), selector)
-    }
-
-    if (!form[0]){
-      form = findInDOMTree(planSelector, 'form')
-    }
-
-    function updateDescription(planId) {
-      var planId = planId ? parseInt(planId) : null;
-      var desc = planId ? (product.plans[planId].description || '') : '';
-      planSelector.find('.plan-selector-description').html(desc);
-    }
-
-    function updatePrice(planId) {
-      var variantId = parseInt(form.find(':input[name="id"]').val());
-      var variant = product.variants[variantId];
-      var planId = planId ? parseInt(planId) : null;
-
-      var price = variant.price;
-      try {
-        if (planId) {
-          price = variant.selling_plan_allocations[planId].price_formatted
-          updateRecurringPriceLabel(price);
-        } else {
-          $('.one-time-del-price').html('<del>' + variant.compare_at_price + '</del>');
-          updatePriceLabelOneTime(price);
-        }
-      }
-      catch(e) {
-        console.log(e);
-      }
-    }
-
-    function updatePriceLabelOneTime(price){
-      var $container = $(containerSels);
-      $container.html(price);
-      if ($('.cart_custom_text_subscribe').length) {
-        $(".cart_data_text").text($('.cart_custom_text_one_time').text());
-      }
-    }
-
-    function updateRecurringPriceLabel(price){
-      $('#ProductPriceSubscribe').html(price);
-      if ($('.cart_custom_text_subscribe').length) {
-        $(".cart_data_text").text($('.cart_custom_text_subscribe').text());
-      }
-    }
-
-    function filterGroupsForVariant(variantId) {
-      var variant = product.variants[variantId];
-
-      planSelector.find('.plan-selector-group').each(function() {
-        var groupId = $(this).find('[name=plan-selector-group]').val();
-        var isAvailable = groupId
-          ? (variant.available_group_ids[groupId] || false)
-          : (!product.requires_selling_plan);
-        $(this).toggleClass('group-available', isAvailable);
-      });
-
-      selectPlan(getSelectedOrFirstAvailablePlanId());
-    }
-
-    function variantChanged() {
-      var variantId = form.find(':input[name="id"]').val();
-      variantId = variantId ? parseInt(variantId) : null;
-
-      if (!variantChanged.previousId || variantChanged.previousId !== variantId) {
-        filterGroupsForVariant(variantId);
-      }
-
-      variantChanged.previousId = variantId;
-    }
-
-    function getSelectedOrFirstAvailablePlanId() {
-      var group = planSelector.find('.group-available.group-selected').first();
-
-      if (!group.length) {
-        group = planSelector.find('.group-available').first();
-      }
-
-      return group.find('select').val();
-    }
-
-    function selectPlan(planId) {
-      var groupId = planId ? product.plans[parseInt(planId)].selling_plan_group_id : '';
-
-      console.log(groupId)
-      var group = $(':input[name="plan-selector-group"][value="' + groupId + '"]')
-        .closest('.plan-selector-group');
-
-      group
-        .find('.plan-selector-plan select')
-        .val(planId);
-
-      group
-        .addClass('group-selected')
-        .find(':input[name="plan-selector-group"]').prop('checked', true);
-
-      group
-        .siblings()
-        .removeClass('group-selected');
-
-      sellingPlanInput.val(planId);
-
-      updateDescription(planId);
-      updatePrice(planId);
-    }
-
-    function selectSelectedPlan() {
-      var planId = $(':input[name="plan-selector-group"]:checked')
-        .closest('.plan-selector-group')
-        .find('select')
-        .val();
-      setSellingPlanAttr(planId);
-      if (planId) {
-        getPlanType(planId);
-      } else {
-        $(".build_a_box_btn").unbind();
-        $(".btn.product-form__cart-submit > span").text('ADD TO CART');
-        $(".btn.product-form__cart-submit").removeClass('build_a_box_btn');
-      }
-      selectPlan(planId);
-    }
-
-    function setSellingPlanAttr(val) {
-      fetch('/cart/update.js', {
-        method: "POST",
-        body: {attributes: {'selling_plan_id': val} }
-      });
-    }
-
-    function getPlanType(planId) {
-      var groupId = planId ? product.plans[parseInt(planId)].selling_plan_group_id : '';
-      if ($('.build_a_box_plan_chk').text() == 'true') {
-        setupBuildABox(groupId);
-      }
-    }
-
-    function setupBuildABox(groupId){
-      $(".btn.product-form__cart-submit > span").text('Build a Box');
-      $(".btn.product-form__cart-submit").addClass('build_a_box_btn');
-      $(".build_a_box_btn").click(function(event){
-        event.preventDefault();
-        let quantity = 1;
-        if ($("[name='quantity']")) {
-          quantity = parseInt($("[name='quantity']").val())
-        }
-
-        jQuery.post('/cart/add', {id: $("form select[name='id']").val(), quantity: quantity, selling_plan: $("[name='selling_plan']").val(), 'plan-selector-group': groupId}, function(data, status) {
-          window.location.href="/pages/build-a-box";
-        });
-      });
-    }
-
-    $(form).change('select, input', function(){
-      selectSelectedPlan();
-    })
-    $(form).change('select, input', function() { setTimeout(variantChanged, 50); })
-
-    $('body').on('DOMSubtreeModified', '.selector-wrapper', function() { setTimeout(variantChanged, 10); });
-    variantChanged();
-
-    if (product.selected_selling_plan) {
-      selectPlan(product.selected_selling_plan.id.toString());
-    }
-
-    setTimeout(selectSelectedPlan, 30);
-    planSelector.show();
-
-    $('.variant-input-wrap input:radio').change(function() {
-      var variantId = parseInt(form.find(':input[name="id"]').val());
-      var variant = product.variants[variantId];
-      if (variant.compare_at_price > variant.price) {
-        $('.one-time-del-price').html('<del>' + variant.compare_at_price + '</del>');
-        updatePriceLabelOneTime(variant.price);
-      }
-    });
-
-  }
-
-  $(document).ready(function(){
-    var $ = window.chargezenForShopify.jQuery;
-    eraseCookie('box_items');
-    if($('fieldset.chargezen-plan-selector').length) {
-      initChargeZen();
-    }
-    if (location.pathname == '/pages/build-a-box') {
-      setIframePageSize()
-    }
-    function setIframePageSize() {
-      $('.page-width').css('max-width', '100%');
-    }
-
-    function eraseCookie(name) {
-      document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    }
-  })
-})(window.chargezenForShopify);
 
 try{
+  (function(chargezen) {
+    try{
+      const planSelectorWrapper = document.getElementById('chargezen-plan-selector-os-wrapper');
+      if(planSelectorWrapper){
+        const forms = document.querySelectorAll('form[action="/cart/add"]');
+        const target = forms[forms.length-1];
+        (function insertProperly(target, item, before) {
+          if(before.parentElement == target){
+            target.insertBefore(item, before);
+          } else {
+            insertProperly(target, item, before.parentElement);
+          }
+        })(target, planSelectorWrapper, target.querySelector('button'));
+      }
+    }
+    catch(e){
+      console.log(e)
+    }
+    var $ = chargezen.jQuery;
+
+    function initChargeZen() {
+      var containerSels = [
+        '#ProductPriceOneTime',
+        '#ProductPrice',
+        '#productPrice-product-template',
+        '#ProductPrice-product-template',
+        '#productPrice > .visually-hidden',
+        '.price .price-item--regular',
+        '.product__price .price-item--regular',
+        '.product__price .product__price--reg',
+        '.product__price .product__current-price',
+        '.product-single__price',
+        '[id^=productPrice-]'
+      ].join(',');
+
+      var planSelector = $('fieldset.chargezen-plan-selector');
+      var product = JSON.parse(planSelector.attr('plans'));
+
+      var sellingPlanInput = planSelector.find(':input[name="selling_plan"]');
+      var form = planSelector.closest('form')
+
+      function findInDOMTree(node, selector) {
+        const element = node.parent().find(selector)
+        if(element[0])
+          return element
+        else
+          return findInDOMTree(node.parent(), selector)
+      }
+
+      if (!form[0]){
+        form = findInDOMTree(planSelector, 'form')
+      }
+
+      function updateDescription(planId) {
+        var planId = planId ? parseInt(planId) : null;
+        var desc = planId ? (product.plans[planId].description || '') : '';
+        planSelector.find('.plan-selector-description').html(desc);
+      }
+
+      function updatePrice(planId) {
+        var variantId = parseInt(form.find(':input[name="id"]').val());
+        var variant = product.variants[variantId];
+        var planId = planId ? parseInt(planId) : null;
+
+        var price = variant.price;
+        try {
+          if (planId) {
+            price = variant.selling_plan_allocations[planId].price_formatted
+            updateRecurringPriceLabel(price);
+          } else {
+            $('.one-time-del-price').html('<del>' + variant.compare_at_price + '</del>');
+            updatePriceLabelOneTime(price);
+          }
+        }
+        catch(e) {
+          console.log(e);
+        }
+      }
+
+      function updatePriceLabelOneTime(price){
+        var $container = $(containerSels);
+        $container.html(price);
+        if ($('.cart_custom_text_subscribe').length) {
+          $(".cart_data_text").text($('.cart_custom_text_one_time').text());
+        }
+      }
+
+      function updateRecurringPriceLabel(price){
+        $('#ProductPriceSubscribe').html(price);
+        if ($('.cart_custom_text_subscribe').length) {
+          $(".cart_data_text").text($('.cart_custom_text_subscribe').text());
+        }
+      }
+
+      function filterGroupsForVariant(variantId) {
+        var variant = product.variants[variantId];
+
+        planSelector.find('.plan-selector-group').each(function() {
+          var groupId = $(this).find('[name=plan-selector-group]').val();
+          var isAvailable = groupId
+            ? (variant.available_group_ids[groupId] || false)
+            : (!product.requires_selling_plan);
+          $(this).toggleClass('group-available', isAvailable);
+        });
+
+        selectPlan(getSelectedOrFirstAvailablePlanId());
+      }
+
+      function variantChanged() {
+        var variantId = form.find(':input[name="id"]').val();
+        variantId = variantId ? parseInt(variantId) : null;
+
+        if (!variantChanged.previousId || variantChanged.previousId !== variantId) {
+          filterGroupsForVariant(variantId);
+        }
+
+        variantChanged.previousId = variantId;
+      }
+
+      function getSelectedOrFirstAvailablePlanId() {
+        var group = planSelector.find('.group-available.group-selected').first();
+
+        if (!group.length) {
+          group = planSelector.find('.group-available').first();
+        }
+
+        return group.find('select').val();
+      }
+
+      function selectPlan(planId) {
+        var groupId = planId ? product.plans[parseInt(planId)].selling_plan_group_id : '';
+
+        console.log(groupId)
+        var group = $(':input[name="plan-selector-group"][value="' + groupId + '"]')
+          .closest('.plan-selector-group');
+
+        group
+          .find('.plan-selector-plan select')
+          .val(planId);
+
+        group
+          .addClass('group-selected')
+          .find(':input[name="plan-selector-group"]').prop('checked', true);
+
+        group
+          .siblings()
+          .removeClass('group-selected');
+
+        sellingPlanInput.val(planId);
+
+        updateDescription(planId);
+        updatePrice(planId);
+      }
+
+      function selectSelectedPlan() {
+        var planId = $(':input[name="plan-selector-group"]:checked')
+          .closest('.plan-selector-group')
+          .find('select')
+          .val();
+        setSellingPlanAttr(planId);
+        if (planId) {
+          getPlanType(planId);
+        } else {
+          $(".build_a_box_btn").unbind();
+          $(".btn.product-form__cart-submit > span").text('ADD TO CART');
+          $(".btn.product-form__cart-submit").removeClass('build_a_box_btn');
+        }
+        selectPlan(planId);
+      }
+
+      function setSellingPlanAttr(val) {
+        fetch('/cart/update.js', {
+          method: "POST",
+          body: {attributes: {'selling_plan_id': val} }
+        });
+      }
+
+      function getPlanType(planId) {
+        var groupId = planId ? product.plans[parseInt(planId)].selling_plan_group_id : '';
+        if ($('.build_a_box_plan_chk').text() == 'true') {
+          setupBuildABox(groupId);
+        }
+      }
+
+      function setupBuildABox(groupId){
+        $(".btn.product-form__cart-submit > span").text('Build a Box');
+        $(".btn.product-form__cart-submit").addClass('build_a_box_btn');
+        $(".build_a_box_btn").click(function(event){
+          event.preventDefault();
+          let quantity = 1;
+          if ($("[name='quantity']")) {
+            quantity = parseInt($("[name='quantity']").val())
+          }
+
+          jQuery.post('/cart/add', {id: $("form select[name='id']").val(), quantity: quantity, selling_plan: $("[name='selling_plan']").val(), 'plan-selector-group': groupId}, function(data, status) {
+            window.location.href="/pages/build-a-box";
+          });
+        });
+      }
+
+      $(form).change('select, input', function(){
+        selectSelectedPlan();
+      })
+      $(form).change('select, input', function() { setTimeout(variantChanged, 50); })
+
+      $('body').on('DOMSubtreeModified', '.selector-wrapper', function() { setTimeout(variantChanged, 10); });
+      variantChanged();
+
+      if (product.selected_selling_plan) {
+        selectPlan(product.selected_selling_plan.id.toString());
+      }
+
+      setTimeout(selectSelectedPlan, 30);
+      planSelector.show();
+
+      $('.variant-input-wrap input:radio').change(function() {
+        var variantId = parseInt(form.find(':input[name="id"]').val());
+        var variant = product.variants[variantId];
+        if (variant.compare_at_price > variant.price) {
+          $('.one-time-del-price').html('<del>' + variant.compare_at_price + '</del>');
+          updatePriceLabelOneTime(variant.price);
+        }
+      });
+    }
+
+    $(document).ready(function(){
+      var $ = window.chargezenForShopify.jQuery;
+      eraseCookie('box_items');
+      if($('fieldset.chargezen-plan-selector').length) {
+        try{
+          initChargeZen()
+        }
+        catch(e){
+          console.log(e)
+        }
+      }
+      if (location.pathname == '/pages/build-a-box') {
+        setIframePageSize()
+      }
+      function setIframePageSize() {
+        $('.page-width').css('max-width', '100%');
+      }
+
+      function eraseCookie(name) {
+        document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      }
+    })
+  })(window.chargezenForShopify);
+} catch(e){
+  console.log(e);
+}
+
+try {
   chargezenPlanSelectorJS()
 } catch(e){
   console.log(e);

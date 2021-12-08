@@ -37,15 +37,19 @@ class ImportStripeSubscriptions
     if csc.status == 'ACTIVE' && row['price'].to_f > 0
       product = Stripe::Product.create({name: "#{row['product_title']}, #{row['variant_title']}"}, { api_key: @shop.stripe_api_key })
       anchor = next_anchor(row)
+      calc_price = ((row['price'].to_f rescue 0)+ (row['shipping_price'].to_f rescue 0)).round(2) * 100
       stripe_subscription = Stripe::Subscription.create({
         customer: row['customer_gateway_token'],
         billing_cycle_anchor: anchor,
         items: [
           {
             price_data: {
-              unit_amount_decimal: (row['price'].to_f + (row['shipping_price'].to_f rescue 0)).round(3),
+              unit_amount_decimal: calc_price,
               currency: 'usd',
-              recurring: {interval: row['interval_type']&.downcase&.singularize, interval_count: row['interval_number']},
+              recurring: {
+                interval: row['interval_type']&.downcase&.singularize,
+                interval_count: row['interval_number']
+              },
               product: product.id
             }
           }
@@ -87,4 +91,33 @@ shop = Shop.find_by(shopify_domain: "bagamour.myshopify.com")
 csv_path = Dir.pwd + '/public/ro_export_2021-11-16 4.csv'
 ImportStripeSubscriptions.new(shop, csv_path).run
 
+=end
+
+
+=begin
+
+csv_path = './recurring_orders_inactive_customer_export_2021-12-06.csv'
+csv = CSV.parse(File.read(csv_path), headers: true)
+
+subscription_ids = csv.pluck("Subscription ID")
+
+active = 0
+list = []
+CustomerSubscriptionContract.where(api_source: 'stripe', status: 'ACTIVE').each do |csc|
+  if subscription_ids.include?(csc.import_data['order_id'])
+    active += 1
+    list << csc
+  end
+end
+active
+
+list.each do |csc|
+  if csc.status == 'ACTIVE'
+    Stripe::Subscription.delete(
+      csc.api_data['id'], nil,
+      {api_key: shop.stripe_api_key}
+    )
+    csc.update(status:  'CANCELLED')
+  end
+end
 =end

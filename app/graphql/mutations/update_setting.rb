@@ -10,7 +10,6 @@ module Mutations
         setting_params[:email_notifications_attributes] = setting_params.delete(:email_notifications)
         setting_params[:reasons_cancels_attributes] = setting_params.delete(:reasons_cancels)
         setting = current_shop.setting
-        # byebug
         setting.update!(setting_params)
 
         { setting: setting }

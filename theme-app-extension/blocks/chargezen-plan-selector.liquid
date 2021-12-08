@@ -274,11 +274,6 @@
         (function() {
           var $ = window.chargezenForShopify.jQuery;
           var product = {{product | json }};
-          fetch(`/a/chargezen_production/bundles/get?product_id=${product.id}`)
-            .then((response) => response.json())
-            .then(data => {
-              console.log(data)
-            })
           var planProduct = {};
 
           /* get product information */
@@ -415,6 +410,33 @@
       }
     </script>
   {% endif %}
+  <script>
+    var product = {{product | json }};
+    fetch(`/a/chargezen_production/bundles/get_bundle?product_id=${product.id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      }
+    })
+      .then((response) => response.json())
+      .then(data => {
+        if(data.success) {
+          let buttons = document.querySelector('.product-form__buttons');
+          const classes = buttons.children[0].classList;
+          buttons.children.forEach((c) => c.remove());
+          buttons.children.forEach((c) => c.remove());
+          const selectedVariant = document.querySelector('form [name="id"]').value;
+
+          let bundle_button = document.createElement('button');
+          bundle_button.addEventListener('click', () => {
+            window.location.href = `/a/chargezen_production/bundles/${data.bundle_group.id}?variant_id=${selectedVariant}`
+          })
+          bundle_button.classList = classes;
+          bundle_button.innerText = 'Select Bundle Products';
+          buttons.appendChild(bundle_button);
+        }
+      })
+  </script>
 </div>
 
 {% schema %}

@@ -5,6 +5,9 @@ class HomeController < ApplicationController
   include ShopifyApp::RequireKnownShop
 
   def index
+    unless session[:shop_id] # ensure cookie session as well
+      session[:shop_id] = Shop.find_by(shopify_domain: current_shopify_domain).id
+    end
     if ENV['APP_TYPE'] == 'public' && current_shop.recurring_charge_id.blank?
       redirect_to select_plan_index_path
     else

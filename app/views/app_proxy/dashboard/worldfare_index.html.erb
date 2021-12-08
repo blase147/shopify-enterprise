@@ -1,6 +1,29 @@
 {{ 'customer.css' | asset_url | stylesheet_tag }}
 <% customer = ShopifyAPI::Customer.find(params[:customer_id]) rescue nil %>
 <% customer_order = ShopifyAPI::Order.find(:last, params: {customer_id: customer.id} ) rescue nil %>
+
+<% active_sub = customer_order.line_items.find{|item| item.name.downcase.include?('box')} rescue nil %>
+<% if active_sub %>
+  {% assign active_sub = <%= active_sub.product_id %> %}
+<% else %>
+  {% assign active_sub = false %}
+<% end %>
+
+{% assign current_subscription = false %}
+
+<!-- active_sub {{ active_sub }}-->
+{% assign subcollection = collections['subscriptions'] %}
+{% for product in subcollection.products %}
+  {% if active_sub == product.id %}
+    {% assign current_subscription = product %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+{% assign is_trail = false %}
+{% if current_subscription.title contains 'Trial' %}
+  {% assign is_trail = true %}
+{% endif %}
+
 <style>
   .flex {
     display: flex;
@@ -42,8 +65,23 @@
   .w-30{
     width: 30%;
   }
+  .br-14{
+    border-radius: 14px;
+  }
   .center {
     justify-content: center !important;
+  }
+  .ta-l{
+    text-align: left !important;
+  }
+  .p-2{
+    padding: 2rem;
+  }
+  .jc-l{
+    justify-content: left !important;
+  }
+  .op-05{
+    opacity: 0.5;
   }
   .portal_product_number {
     --font-body-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Ubuntu, Helvetica Neue, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
@@ -125,9 +163,23 @@
   button.sub_button.active {
     border-color: black;
   }
+  .f-42 {
+    font-size: 42px !important;
+  }
+  .f-16 {
+    font-size: 16px !important;
+  }
+  .white-t p{
+    color: #FFFFFF !important;
+  }
+  .d2d06c-t p{
+    color: #D2D06C !important;
+  }
+  .c63666A-t p{
+    color: #63666A !important;
+  }
 </style>
 <div class="customer account c_account">
-
   <div class="client_profile">
     <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/files/Ellipse.png?v=1631791734">
     <p>Hello, {{ customer.first_name }}<button class="Edit_profile"><img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/files/akar-icons_edit.png?v=1631791848"></button></p>
@@ -139,12 +191,233 @@
     </a>
   </div>
 
-
   <div class="Profile_tab">
+    <button class="Profile_links" onclick="Profile(event, 'Overview')" id="defaultOpen">Overview</button>
     <button class="Profile_links" onclick="Profile(event, 'Account')">Account</button>
     <button class="Profile_links" onclick="Profile(event, 'Subscription')">Subscription</button>
-    <button class="Profile_links" onclick="Profile(event, 'Schedule')" id="defaultOpen">Schedule</button>
+    <button class="Profile_links" onclick="Profile(event, 'Schedule')">Schedule</button>
     <button class="Profile_links" onclick="Profile(event, 'Support')">Support</button>
+  </div>
+
+  <div id="Overview" class="Profile_links_data">
+    <div class="plan_detail_outer">
+      <div class="plan_title_btn">
+        <h1>Your <br>current plan:</h1>
+        <a href="" class="plan_up">
+          {% if current_subscription %}
+            Upgrade
+          {% else %}
+            Choose
+          {% endif %} Subscription
+        </a>
+      </div>
+      <div class="plan_detail">
+        <p class="choose_plan_boxes_namber_of_dish">
+          {% if current_subscription %}
+            {{ current_subscription.metafields.subscription.dishes_in_week }}-Dish Box
+          {% else %}
+            None
+          {% endif %}
+        </p>
+        <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/files/Vector_5.png?v=1637752683">
+        {% if current_subscription %}
+          <span class="choose_plan_boxes_price">{{current_subscription.price | divided_by: current_subscription.metafields.subscription.dishes_in_week | money}}/dish</span>
+          <span class="choose_plan_boxes_duration bottom">{{current_subscription.price | money}}/week</span>
+        {% endif %}
+      </div>
+    </div>
+    {% if is_trail %}
+      <p>Oops!<br>No data found</p>
+    {% else %}
+      {% unless current_subscription %}
+        <p>Oops!<br>No data found</p>
+      {% endunless %}
+    {% endif %}
+    <br>
+    <div style="margin: 0 5%;" class="flex space-around {% if is_trail %} op-05{% else %}{% unless current_subscription %} op-05{% endunless %}{% endif %}">
+      <div class="w-30 br-14 ta-l p-2" style="background-color: #D2D06C">
+        <svg width="47" height="46" viewBox="0 0 39 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 5.39887V24.6011C0.00529495 24.7279 0.0477186 24.8501 0.121892 24.952C0.196066 25.0539 0.298449 25.1307 0.415931 25.1726L15.7181 29.9732C15.8308 30.0089 15.9515 30.0089 16.0641 29.9732L38.5839 25.1726C38.7013 25.1307 38.8039 25.0539 38.8781 24.952C38.9523 24.8501 38.9947 24.7279 39 24.6011V5.39887C38.9953 5.27192 38.953 5.14939 38.8787 5.04737C38.8045 4.94536 38.7017 4.86872 38.5839 4.82736L23.2817 0.0267982C23.169 -0.00893275 23.0483 -0.00893275 22.9357 0.0267982L0.415931 4.82736C0.298449 4.86925 0.196066 4.94613 0.121892 5.04803C0.0477186 5.14993 0.00529495 5.27208 0 5.39887ZM37.8219 24.1546L16.4803 28.5844V10.646L37.8219 6.21612V24.1546ZM15.3022 28.5844L1.17808 24.1546V6.20718L15.3022 10.6371V28.5844ZM36.4116 5.39451L15.889 9.56535L2.59267 5.39451L23.111 1.22345L36.4116 5.39451Z" fill="#63666A"/>
+        </svg>
+        <div class="flex space-between">
+          <div class="c63666A-t">
+            <p class="f-42 jc-l">0</p>
+            <p class="f-16 jc-l ta-l">Dishes Purchased</p>
+          </div>
+
+          <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="41.9998" cy="42.0002" r="31.4055" transform="rotate(-120 41.9998 42.0002)" stroke="#63666A" stroke-opacity="0.4" stroke-width="2"/>
+            <ellipse cx="42" cy="42" rx="31" ry="31" transform="rotate(-180 42 42)" fill="#D2D06C"/>
+            <path d="M36.4007 43.844H40.9007V45.338H36.4007V43.844ZM43.098 43.844H47.598V45.338H43.098V43.844Z" fill="#63666A"/>
+          </svg>
+
+        </div>
+      </div>
+      <div class="w-30 br-14 ta-l p-2" style="background-color: #2B4F3E">
+        <svg width="47" height="46" viewBox="0 0 47 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.33182 19.1148L20.5091 25.1219M8.33182 19.1148L1.35256 23.1556C0.720992 23.5212 0.681149 24.4184 1.27782 24.8386L10.1477 31.0853M8.33182 19.1148L17.049 16.5883M20.5091 25.1219L10.8018 31.1053C10.5994 31.2301 10.3421 31.2222 10.1477 31.0853V31.0853M20.5091 25.1219L27.022 32.8057C27.2826 33.1132 27.7024 33.2342 28.0867 33.1125L38.9886 29.6608M20.5091 25.1219L40.1636 20.48M20.5091 25.1219L20.7227 44.2353M40.1636 20.48L45.8006 25.9586C46.343 26.4857 46.1265 27.4008 45.4055 27.6291L38.9886 29.6608M40.1636 20.48L31.3333 16.5883M20.7227 44.2353L10.5108 35.7977C10.2809 35.6077 10.1477 35.3251 10.1477 35.0268V31.0853M20.7227 44.2353L37.4606 37.8967C37.8089 37.7648 38.0551 37.4503 38.0994 37.0805L38.9886 29.6608" stroke="#D2D06C" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M22.2638 3.62291L23.8591 4.98182C23.9185 5.03245 24.0053 5.03469 24.0672 4.98718L26.1395 3.39843C28.4743 1.60846 31.8542 2.31196 33.2809 4.88483C33.8101 5.83911 33.9994 6.94481 33.818 8.0208L33.666 8.92253C33.421 10.3753 32.7496 11.7224 31.7371 12.7926L25.6026 19.2766C24.7133 20.2166 23.215 20.2107 22.3332 19.2637L16.1399 12.6128C15.25 11.6571 14.6435 10.4727 14.3883 9.19202L14.2198 8.34645C13.966 7.07292 14.2242 5.75069 14.9383 4.66613C16.5704 2.18753 20.0047 1.69845 22.2638 3.62291Z" stroke="#D2D06C" stroke-width="1.5"/>
+        </svg>
+
+        <div class="flex space-between">
+          <div class="d2d06c-t">
+            <p class="f-42 jc-l">0</p>
+            <p class="f-16 jc-l ta-l">Donations made</p>
+          </div>
+          <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="41.9998" cy="42.0002" r="31.4055" transform="rotate(-120 41.9998 42.0002)" stroke="#d2d06c" stroke-opacity="0.4" stroke-width="2"/>
+            <ellipse cx="42" cy="42" rx="31" ry="31" transform="rotate(-180 42 42)" fill="#2B4F3E"/>
+            <path d="M36.4007 43.844H40.9007V45.338H36.4007V43.844ZM43.098 43.844H47.598V45.338H43.098V43.844Z" fill="#d2d06c"/>
+          </svg>
+        </div>
+      </div>
+      <div class="w-30 br-14 ta-l p-2" style="background-color: #63666A">
+        <svg width="47" height="44" viewBox="0 0 47 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M25.8604 2.60445C25.4472 2.59978 25.1058 2.93252 25.0979 3.34766C25.09 3.76279 25.4185 4.10311 25.8317 4.10778L25.8604 2.60445ZM8.22249 18.6101L8.78682 18.112C8.65296 17.9586 8.46217 17.8673 8.25856 17.859C8.05494 17.8508 7.85613 17.9264 7.70809 18.0683L8.22249 18.6101ZM3.07893 22.5069C2.7788 22.7946 2.76579 23.2705 3.04989 23.5697C3.33398 23.869 3.80759 23.8783 4.10772 23.5905L3.07893 22.5069ZM12.0157 24.1009C12.2871 24.4118 12.7597 24.4409 13.0714 24.1658C13.3831 23.8907 13.4157 23.4156 13.1444 23.1047L12.0157 24.1009ZM18.8463 28.0818C18.5616 28.385 18.5736 28.8607 18.8731 29.1443C19.1726 29.428 19.6463 29.4121 19.931 29.109L18.8463 28.0818ZM26.1285 9.425C26.1285 9.00985 25.7935 8.67597 25.3802 8.67926C24.967 8.68255 24.632 9.02175 24.632 9.4369L26.1285 9.425ZM25.0539 22.5634L24.5116 22.0498L25.0539 22.5634ZM25.3802 21.7401L24.632 21.7461L25.3802 21.7401ZM25.8317 4.10778C29.1688 4.14552 32.4199 5.20247 35.1638 7.14406L36.0321 5.91267C33.0448 3.79885 29.5016 2.64562 25.8604 2.60445L25.8317 4.10778ZM35.1638 7.14406C37.9079 9.08575 40.0179 11.8226 41.2193 15.0012L42.6189 14.4578C41.3133 11.0034 39.0192 8.02638 36.0321 5.91267L35.1638 7.14406ZM41.2193 15.0012C42.4207 18.1798 42.6574 21.652 41.8997 24.9678L43.3582 25.2932C44.1824 21.6866 43.9246 17.9122 42.6189 14.4578L41.2193 15.0012ZM41.8997 24.9678C41.142 28.2835 39.4251 31.2891 36.9733 33.5968L37.992 34.6901C40.6653 32.1738 42.534 28.8999 43.3582 25.2932L41.8997 24.9678ZM36.9733 33.5968C34.5217 35.9043 31.4473 37.4087 28.1479 37.9161L28.363 39.4022C31.9641 38.8483 35.3185 37.2064 37.992 34.6901L36.9733 33.5968ZM28.1479 37.9161C24.8485 38.4236 21.4741 37.9112 18.4612 36.4432L17.7995 37.7969C21.082 39.3962 24.7619 39.9561 28.363 39.4022L28.1479 37.9161ZM18.4612 36.4432C15.4481 34.9751 12.9352 32.6188 11.2493 29.6779L9.95092 30.4359C11.7836 33.6329 14.5172 36.1976 17.7995 37.7969L18.4612 36.4432ZM11.2493 29.6779C9.57828 26.763 8.7408 22.0852 8.9691 18.6543L7.47587 18.5659C7.2323 22.2262 8.10329 27.2129 9.95092 30.4359L11.2493 29.6779ZM7.70809 18.0683L3.07893 22.5069L4.10772 23.5905L8.73689 19.1519L7.70809 18.0683ZM7.65815 19.1082L12.0157 24.1009L13.1444 23.1047L8.78682 18.112L7.65815 19.1082ZM24.5116 22.0498L18.8463 28.0818L19.931 29.109L25.5963 23.0769L24.5116 22.0498ZM26.1285 21.7342L26.1285 9.425L24.632 9.4369L24.632 21.7461L26.1285 21.7342ZM25.5963 23.0769C25.938 22.7131 26.1285 22.2324 26.1285 21.7342L24.632 21.7461C24.632 21.8588 24.5889 21.9675 24.5116 22.0498L25.5963 23.0769Z" fill="white"/>
+          <path d="M25.1074 31.6463L25.1074 33.8653" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M32.1899 28.8707L33.7306 30.4397" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M36 21.1071L38.1788 21.1071" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M32.1899 13.2447L33.7306 11.6757" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+
+        <div class="flex space-between">
+          <div class="white-t">
+            <p class="f-42 jc-l">0</p>
+            <p class="f-16 jc-l ta-l">Hours saved</p>
+          </div>
+          <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="41.9998" cy="42.0002" r="31.4055" transform="rotate(-120 41.9998 42.0002)" stroke="#fff" stroke-opacity="0.4" stroke-width="2"/>
+            <ellipse cx="42" cy="42" rx="31" ry="31" transform="rotate(-180 42 42)" fill="#63666A"/>
+            <path d="M36.4007 43.844H40.9007V45.338H36.4007V43.844ZM43.098 43.844H47.598V45.338H43.098V43.844Z" fill="#fff"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <br>
+    <h2 style="font-size: 42px; weight: 400; margin: 0 10%;">Choose a subscription to track your dishes orders per week</h2>
+    <br>
+    <div style="margin: 0 10%;" class="flex space-around">
+      <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g >
+        <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
+        <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
+        <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
+        <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
+        <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
+        <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+        <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+        <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+        <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+        <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+        <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+        <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+        </g>
+      </svg>
+      <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g >
+      <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
+      <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
+      <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
+      <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
+      <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
+      <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      </g>
+      </svg>
+
+      <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g >
+      <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
+      <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
+      <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
+      <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
+      <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
+      <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      </g>
+      </svg>
+
+      <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g >
+      <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
+      <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
+      <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
+      <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
+      <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
+      <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      </g>
+      </svg>
+
+
+      <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g >
+      <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
+      <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
+      <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
+      <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
+      <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
+      <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      </g>
+      </svg>
+
+
+      <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g >
+      <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
+      <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
+      <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
+      <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
+      <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
+      <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      </g>
+      </svg>
+
+      <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g >
+      <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
+      <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
+      <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
+      <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
+      <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
+      <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+      </g>
+      </svg>
+
+    </div>
   </div>
 
   <div id="Account" class="Profile_links_data">
@@ -269,56 +542,7 @@
               </button>
             </li>
           {% endunless %}
-        <%
-=begin%>
- <div class="radio_Select {% if pro.selected_or_first_available_variant.id == subid %} active {% else %} {% if forloop.index == 1 and subid == 0 %} active {% endif %} {% endif %}">
-        <input type="radio" id="html" name="subscription_plan" value="{{pro.metafields.subscription.dishes_in_week}}" data-id="{{pro.selected_or_first_available_variant.id}}" data-sellingplan="{{pro.selling_plan_groups[0].selling_plans[0].id}}"  {% if pro.selected_or_first_available_variant.id == subid %} checked {% else %}{% if forloop.index == 1 and subid == 0 %} checked {% endif %}{% endif %}>
-          <div class="radio_data">
-            <div class="sub_data">
-              <h3 class="sub_name">{{pro.title}}</h3>
-
-              <span class="sub_duration">{{pro.metafields.subscription.dishes_in_week}} dishes/week</span>
-
-            </div>
-            <div class="sub_plan">
-            <h3 class="sub_price">{{pro.price | divided_by: pro.metafields.subscription.dishes_in_week | money}}/dish</h3>
-              <span class="sub_duration_2">{% if forloop.index == 1 %}one-time offer{%else%}{{pro.price | money}}/week{%endif%}</span>
-            </div>
-          </div>
-          </div>
-<%
-=end%>
         {% endfor %}
-        <!-- <li class="sub_single">
-          <button class="sub_button">
-            <span class="Big">Big Box</span>
-            <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/files/Vector_20.png?v=1631797836">
-          <div class="product_number_out"><span class="product_number">8</span></div>
-          <span class="sub_duration_2">dishs/week</span>
-            <span class="each_price">$12/dish</span>
-            <span class="sub_duration_2 bottom">$40.00/week</span>
-          </button>
-        </li>
-        <li class="sub_single">
-          <button class="sub_button">
-            <span class="Big">Big Box</span>
-            <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/files/Vector_20.png?v=1631797836">
-          <div class="product_number_out"><span class="product_number">10</span></div>
-          <span class="sub_duration_2">dishs/week</span>
-            <span class="each_price">$12/dish</span>
-            <span class="sub_duration_2 bottom">$40.00/week</span>
-          </button>
-        </li>
-        <li class="sub_single">
-          <button class="sub_button">
-            <span class="Big">Big Box</span>
-            <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/files/Vector_20.png?v=1631797836">
-          <div class="product_number_out"><span class="product_number">7</span></div>
-          <span class="sub_duration_2">dishs/week</span>
-            <span class="each_price">$12/dish</span>
-            <span class="sub_duration_2 bottom">$40.00/week</span>
-          </button>
-        </li> -->
       </ul>
       <button class="Update_sub">Update Subscription</button>
       <a href="" class="Cancel_sub">Cancel Subscription</a>
@@ -330,13 +554,12 @@
   <div id="Schedule" class="Profile_links_data">
     <div class="sort_by">
       <p>Sort by:</p>
-    <select name="orders" id="orders">
-  <option value="Current">Current Orders</option>
-  <option value="Old">Old Orders</option>
-  <option value="New">New Orders</option>
-  <option value="All">All</option>
-</select>
-
+      <select name="orders" id="orders">
+        <option value="Current">Current Orders</option>
+        <option value="Old">Old Orders</option>
+        <option value="New">New Orders</option>
+        <option value="All">All</option>
+      </select>
     </div>
     <h2 class="Trial">Trial Week</h2>
 
@@ -360,215 +583,63 @@
       <% end %>
     </div>
 
-      <div class="order_status">
-    <div class="Status">
-      <p class="s_name">Status:</p>
-    	<p class="s_data">Pending</p>
-    </div>
-        <div class="Status">
-      <p class="s_name">Arriving:</p>
-    	<p class="s_data subdued">Est. <%= (created_at + 3.days).strftime('%B %d, %Y') rescue nil %></p>
-    </div>
-  </div>
-
-
-  <% (1..2).each do |i| %>
-    <% current_date =  created_at + (7*i).days rescue nil %>
-    <div class="pre_orders">
-      <h2 class="Trial">Week of <%= current_date.strftime('%B %d, %Y') rescue nil %></h2>
-      <div class="placed_data">
-        <p class="placed">Select dishes by:</p>
-        <p class="placed_dates"><%= current_date.strftime('%B %d, %Y') rescue nil %></p>
+    <div class="order_status">
+      <div class="Status">
+        <p class="s_name">Status:</p>
+        <p class="s_data">Pending</p>
       </div>
-
-      <div class="order_add">
-        <ul class="pre_segment">
-          <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-          <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-          <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-          <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-          <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-          <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-        </ul>
+      <div class="Status">
+        <p class="s_name">Arriving:</p>
+        <p class="s_data subdued">Est. <%= (created_at + 3.days).strftime('%B %d, %Y') rescue nil %></p>
       </div>
     </div>
-  <% end %>
-<%
-=begin%>
 
-  <div class="pre_orders">
-    <h2 class="Trial">Week of Jun 8, 2021</h2>
-   <div class="placed_data">
-        <p class="placed">Select dishes by:</p>
-        <p class="placed_dates">June 8, 2021</p>
+    <% (1..2).each do |i| %>
+      <% current_date =  created_at + (7*i).days rescue nil %>
+      <div class="pre_orders">
+        <h2 class="Trial">Week of <%= current_date.strftime('%B %d, %Y') rescue nil %></h2>
+        <div class="placed_data">
+          <p class="placed">Select dishes by:</p>
+          <p class="placed_dates"><%= current_date.strftime('%B %d, %Y') rescue nil %></p>
+        </div>
+        <div class="order_add">
+          <ul class="pre_segment">
+            <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
+            <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
+            <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
+            <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
+            <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
+            <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
+          </ul>
+        </div>
       </div>
-
-    <div class="order_add">
-      <ul class="pre_segment">
-        <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-      	<li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-        <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-        <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-        <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-        <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-
-      </ul>
-
-    </div>
-
-  </div>
-<%
-=end%>
-
+    <% end %>
     <button class="submit_pre_order">Save Changes</button>
-
   </div>
 
-   <div id="Support" class="Profile_links_data">
+  <div id="Support" class="Profile_links_data">
     <h3>Support</h3>
     <p>Tokyo is the capital of Japan.</p>
   </div>
-
-
-
-
-  <%
-=begin%>
- <div class="account_orignal">
-    <h1>{{ 'customer.account.title' | t }}</h1>
-    <a href="{{ routes.account_logout_url }}">
-      <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 18 19">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M6 4.5a3 3 0 116 0 3 3 0 01-6 0zm3-4a4 4 0 100 8 4 4 0 000-8zm5.58 12.15c1.12.82 1.83 2.24 1.91 4.85H1.51c.08-2.6.79-4.03 1.9-4.85C4.66 11.75 6.5 11.5 9 11.5s4.35.26 5.58 1.15zM9 10.5c-2.5 0-4.65.24-6.17 1.35C1.27 12.98.5 14.93.5 18v.5h17V18c0-3.07-.77-5.02-2.33-6.15-1.52-1.1-3.67-1.35-6.17-1.35z" fill="currentColor">
-      </svg>
-      {{ 'customer.log_out' | t }}
-    </a>
-  </div>
-
-  <div class="order_history">
-    <div>
-      <h2>{{ 'customer.orders.title' | t }}</h2>
-
-      {% paginate customer.orders by 20 %}
-        {%- if customer.orders.size > 0 -%}
-          <table role="table" class="order-history">
-            <caption class="visually-hidden">{{ 'customer.orders.title' | t }}</caption>
-            <thead role="rowgroup">
-              <tr role="row">
-                <th id="ColumnOrder" scope="col" role="columnheader">{{ 'customer.orders.order_number' | t }}</th>
-                <th id="ColumnDate" scope="col" role="columnheader">{{ 'customer.orders.date' | t }}</th>
-                <th id="ColumnPayment" scope="col" role="columnheader">{{ 'customer.orders.payment_status' | t }}</th>
-                <th id="ColumnFulfillment" scope="col" role="columnheader">{{ 'customer.orders.fulfillment_status' | t }}</th>
-                <th id="ColumnTotal" scope="col" role="columnheader">{{ 'customer.orders.total' | t }}</th>
-              </tr>
-            </thead>
-            <tbody role="rowgroup">
-              {%- for order in customer.orders -%}
-                <tr role="row">
-                  <td
-                    id="RowOrder"
-                    role="cell"
-                    headers="ColumnOrder"
-                    data-label="{{ 'customer.orders.order_number' | t }}"
-                  >
-                    <a href="{{ order.customer_url }}" aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}">
-                      {{ order.name }}
-                    </a>
-                  </td>
-                  <td headers="RowOrder ColumnDate" role="cell" data-label="{{ 'customer.orders.date' | t }}">
-                    {{ order.created_at | time_tag: format: 'date' }}
-                  </td>
-                  <td headers="RowOrder ColumnPayment" role="cell" data-label="{{ 'customer.orders.payment_status' | t }}">
-                    {{ order.financial_status_label }}
-                  </td>
-                  <td headers="RowOrder ColumnFulfillment" role="cell" data-label="{{ 'customer.orders.fulfillment_status' | t }}">
-                    {{ order.fulfillment_status_label }}
-                  </td>
-                  <td headers="RowOrder ColumnTotal" role="cell" data-label="{{ 'customer.orders.total' | t }}">
-                    {{ order.total_price | money_with_currency }}</td>
-                </tr>
-              {%- endfor -%}
-            </tbody>
-          </table>
-        {%- else -%}
-          <p>{{ 'customer.orders.none' | t }}</p>
-        {%- endif -%}
-
-        {%- if paginate.pages > 1 -%}
-          {%- if paginate.parts.size > 0 -%}
-              <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
-                <ul role="list">
-                {%- if paginate.previous -%}
-                  <li>
-                    <a href="{{ paginate.previous.url }}" aria-label="{{ 'general.pagination.previous' | t }}">
-                      <svg aria-hidden="true" focusable="false" viewBox="0 0 10 6">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z" fill="currentColor">
-                      </svg>
-                    </a>
-                  </li>
-                {%- endif -%}
-
-                {%- for part in paginate.parts -%}
-                  <li>
-                    {%- if part.is_link -%}
-                      <a href="{{ part.url }}" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
-                    {%- else -%}
-                      {%- if part.title == paginate.current_page -%}
-                        <span aria-current="page" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</span>
-                      {%- else -%}
-                        <span>{{ part.title }}</span>
-                      {%- endif -%}
-                    {%- endif -%}
-                  </li>
-                {%- endfor -%}
-
-                {%- if paginate.next -%}
-                  <li>
-                    <a href="{{ paginate.next.url }}" aria-label="{{ 'general.pagination.next' | t }}" >
-                      <svg aria-hidden="true" focusable="false" viewBox="0 0 10 6">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z" fill="currentColor">
-                      </svg>
-                    </a>
-                  </li>
-                {%- endif -%}
-                </ul>
-              </nav>
-          {%- endif -%}
-        {%- endif -%}
-      {% endpaginate %}
-    </div>
-
-    <div>
-      <h2>{{ 'customer.account.details' | t }}</h2>
-
-      {{ customer.default_address | format_address }}
-
-      <a href="{{ routes.account_addresses_url }}">
-        {{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})
-      </a>
-    </div>
-
-  </div>
-<%
-=end%>
 </div>
 
 
 
 <script>
-function Profile(evt, usr_tab) {
-  var i, Profile_links_data, Profile_links;
-  Profile_links_data = document.getElementsByClassName("Profile_links_data");
-  for (i = 0; i < Profile_links_data.length; i++) {
-    Profile_links_data[i].style.display = "none";
+  function Profile(evt, usr_tab) {
+    var i, Profile_links_data, Profile_links;
+    Profile_links_data = document.getElementsByClassName("Profile_links_data");
+    for (i = 0; i < Profile_links_data.length; i++) {
+      Profile_links_data[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("Profile_links");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(usr_tab).style.display = "block";
+    evt.currentTarget.className += " active";
   }
-  tablinks = document.getElementsByClassName("Profile_links");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-  document.getElementById(usr_tab).style.display = "block";
-  evt.currentTarget.className += " active";
-}
 
-// Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();
+  // Get the element with id="defaultOpen" and click on it
+  document.getElementById("defaultOpen").click();
 </script>

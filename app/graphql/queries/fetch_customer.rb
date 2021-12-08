@@ -4,7 +4,6 @@ module Queries
     argument :id, ID, required: true
 
     def resolve(id:)
-      # byebug
       current_shop.customer_subscription_contracts.find(id)
     end
   end

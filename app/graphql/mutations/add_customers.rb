@@ -5,7 +5,6 @@ module Mutations
 
     def resolve(params:)
       begin
-        # byebug
         customers = []
         params.each do |item|
           customer_params =  Hash item
