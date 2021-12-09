@@ -208,3 +208,35 @@ rescue => e
 end
 
 =end
+
+
+=begin
+
+Stripe::Subscription.update(
+  'sub_1K187JK3XXGN7m9uzWWUxVN5',
+  {
+    trial_end: 1667242800,
+    proration_behavior: 'none',
+  },
+  {
+    api_key: shop.stripe_api_key
+  }
+)
+
+subs.each do |sub|
+  csc = CustomerSubscriptionContract.where("import_data->>'order_id' = ?", sub).first
+  if csc&.api_resource_id
+    Stripe::Subscription.update(
+      csc.api_resource_id,
+      {
+        trial_end: 1651345200,
+        proration_behavior: 'none',
+      },
+      {
+        api_key: shop.stripe_api_key
+      }
+    )
+  end
+end
+
+=end

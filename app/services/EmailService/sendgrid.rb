@@ -5,8 +5,12 @@ class EmailService::Sendgrid < EmailService::Base
   def initialize(email_notification)
     init_session(email_notification.setting.shop)
     @email_notification = email_notification
-    email_notification.setting.shop.with_shopify_session do
-      @shopify_shop = ShopifyAPI::Shop.current
+    shopify_shop
+  end
+
+  def shopify_shop
+    @shopify_shop ||= @email_notification.setting.shop.with_shopify_session do        `   ` ````  ~ ` ``    `
+      ShopifyAPI::Shop.current
     end
   end
 
@@ -22,11 +26,12 @@ class EmailService::Sendgrid < EmailService::Base
     return unless subject_str
     context_hash = context(object)
     to = object[:customer]&.email
-    to = @shopify_shop.email if @email_notification.slug == 'store_owner'
-    from = SendGrid::Email.new(email: @email_notification.from_email)
+    to = shopify_shop.email if @email_notification.slug == 'store_owner'
+    from = SendGrid::Email.new(email: 'notifications@chargezen.com', name: (@email_notification.from_name || @email_notification.setting.store_name || shopify_shop.name))
     to = SendGrid::Email.new(email: to)
     content = SendGrid::Content.new(type: 'text/html', value: email_body(context_hash))
     mail = SendGrid::Mail.new(from, subject_str, to, content)
+    mail.reply_to = SendGrid::Email.new(email: @email_notification.from_email, name: (@email_notification.from_name || @email_notification.setting.store_name || shopify_shop.name))
 
     response = @sg.client.mail._('send').post(request_body: mail.to_json)
     # puts response.status_code
