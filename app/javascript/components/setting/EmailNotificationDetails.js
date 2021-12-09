@@ -18,6 +18,11 @@ import Switch from 'react-switch';
 import {
   CircleLeftMajor
 } from '@shopify/polaris-icons';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
+import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 const emailNotificationsDetails = (props) => {
   const [valueFromName, setValueFromName] = useState();
@@ -26,6 +31,7 @@ const emailNotificationsDetails = (props) => {
     []
   );
   const [selectedSettingEnabled, setSelectedSettingEnabled] = useState(false);
+  const [editorState, setEditorState] = React.useState(EditorState.createEmpty())
 
   const handleSelectChangeSettingEnabled = useCallback(
     (value) => setSelectedSettingEnabled(value),
@@ -56,6 +62,15 @@ const emailNotificationsDetails = (props) => {
     await handleSubmit();
     setSelectedIndex(null);
   }
+  useEffect(() => {
+    const contentBlock = htmlToDraft(values.emailNotifications[index]?.emailMessage || '');
+    if (contentBlock) {
+      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+      const editorState = EditorState.createWithContent(contentState);
+      setEditorState(editorState)
+    }
+  }, [])
+
   return (
     <div className="noti-detail">
       <div className="container-left">
@@ -123,7 +138,25 @@ const emailNotificationsDetails = (props) => {
                   }
                   name="email_subject"
                 />
-                <TextField
+
+                <label>Email Message</label>
+                <Editor
+                  editorState={editorState}
+                  defaultContentState={values.emailNotifications[index]?.emailMessage}
+                  toolbarClassName="toolbarClassName"
+                  wrapperClassName="wrapperClassName"
+                  editorClassName="draftEditorWrapper"
+                  onEditorStateChange={(e) => {
+                    setEditorState(e)
+                    setFieldValue(
+                      `emailNotifications[${index}].emailMessage`,
+                      draftToHtml(convertToRaw(e.getCurrentContent()))
+                    )
+                  }}
+                  multiline={15}
+                />
+
+                {/* <TextField
                   label="Email Message"
                   placeholder={html_text}
                   value={values.emailNotifications[index]?.emailMessage}
@@ -135,7 +168,7 @@ const emailNotificationsDetails = (props) => {
                   }
                   multiline={15}
                   name="email_message"
-                />
+                /> */}
               </FormLayout>
             </Stack.Item>
             <Stack.Item>

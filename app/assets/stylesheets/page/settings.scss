@@ -1,433 +1,451 @@
 .module-settings {
-  .back-button{
-    padding: 8px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    width: fit-content;
-    display: flex;
-    p {
-      margin-left: 0.8rem;
-    }
-  }
-  .settings-container{
-    margin: 25px;
-    margin-left: 100px;
-    h1 {
-      font-size: 30px;
-      padding-bottom: 20px;
-  }
-  }
-  .Polaris-Card__Section {
-    margin-bottom: 20px;
-    background: linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
-    box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06),
-      0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
-    border-radius: 20px;
-  }
-
-  .Polaris-Page {
-    .Polaris-Select__Backdrop {
-      background: #ffffff;
-      border: 1px solid #d2d5d8;
-      box-sizing: border-box;
-      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    .Polaris-Tabs__Wrapper {
-      background: #007eff;
-      border-bottom: unset;
-      .Polaris-Tabs__Title {
-        color: white;
-        margin-top: 10px;
-        height: 33px;
-        line-height: 0px;
-      }
-      .Polaris-Tabs__Tab.Polaris-Tabs__Tab--selected .Polaris-Tabs__Title {
-        background: white;
-        color: #000000;
-        border-bottom: unset;
-        border-radius: 5px 5px 0px 0px;
-        padding: 13px 11px 15px 14px;
-      }
-      #dunning,#legal {
-        display: none;
-      }
-
-    }
-  }
-  //Billing
-
-  .billing {
-    width: 65%;
-  }
-
-  //CUstom portal
-  .choise-themes {
-    .Polaris-ChoiceList__Choices {
-      display: flex;
-    }
-    .Polaris-Choice {
-      margin-right: 15px;
-    }
-  }
-  .protheme {
-    align-items: center;
-    display: flex;
-    .Polaris-Choice {
-      padding-right: 5px;
-    }
-    .Polaris-Badge--statusSuccess {
-      background: #37fb7a;
-      color: #ffffff;
-    }
-  }
-  .Polaris-Layout {
-    display: contents;
-  }
-  .Polaris-FormLayout--grouped {
-    .Polaris-FormLayout__Item {
-      // margin-left: unset;
-      align-items: center;
-      display: flex;
-      div {
-        width: 100%;
-      }
-    }
-  }
-  .Polaris-Stack--vertical {
-    .Polaris-TextStyle--variationStrong {
-      a {
-        color: #007eff;
-      }
-    }
-  }
-  .trash {
-    .Polaris-Button {
-      border: unset;
-      margin-right: 40px;
-    }
-  }
-
-  //Email Notification
-  .EmailNotification {
-    .Polaris-Stack--distributionEqualSpacing {
-      .Polaris-Stack__Item {
-        .Polaris-Button--primary {
-          margin-right: 40px;
+    .back-button {
+        padding: 8px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        width: fit-content;
+        display: flex;
+        p {
+            margin-left: 0.8rem;
         }
-        .Polaris-Button {
-          margin-right: 40px;
+    }
+    .settings-container {
+        margin: 25px;
+        margin-left: 100px;
+        h1 {
+            font-size: 30px;
+            padding-bottom: 20px;
         }
-      }
     }
-    .container-left {
-      width: 70%;
+    .Polaris-Card__Section {
+        margin-bottom: 20px;
+        background: linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
+        box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+        border-radius: 20px;
     }
-    .container-right {
-      width: 28%;
-    }
-    .switch {
-      margin-right: 40px;
-    }
-    // email notification details
-    .noti-detail {
-      display: flex;
-      justify-content: space-between;
-    }
-    .Polaris-Button {
-      &.Polaris-Button--plain {
-        &.Polaris-Button--textAlignLeft {
-          background: transparent;
+    .Polaris-Page {
+        .Polaris-Select__Backdrop {
+            background: #ffffff;
+            border: 1px solid #d2d5d8;
+            box-sizing: border-box;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
         }
-      }
+        .Polaris-Tabs__Wrapper {
+            background: #007eff;
+            border-bottom: unset;
+            .Polaris-Tabs__Title {
+                color: white;
+                margin-top: 10px;
+                height: 33px;
+                line-height: 0px;
+            }
+            .Polaris-Tabs__Tab.Polaris-Tabs__Tab--selected .Polaris-Tabs__Title {
+                background: white;
+                color: #000000;
+                border-bottom: unset;
+                border-radius: 5px 5px 0px 0px;
+                padding: 13px 11px 15px 14px;
+            }
+            #dunning,
+            #legal {
+                display: none;
+            }
+        }
     }
-  }
-  // Dunning tab
-  .dunning {
-    .Polaris-Banner {
-      box-shadow: unset;
-      width: 80%;
-      background: #e2f5ff;
+    //Billing
+    .billing {
+        width: 65%;
+    }
+    //CUstom portal
+    .choise-themes {
+        .Polaris-ChoiceList__Choices {
+            display: flex;
+        }
+        .Polaris-Choice {
+            margin-right: 15px;
+        }
+    }
+    .protheme {
+        align-items: center;
+        display: flex;
+        .Polaris-Choice {
+            padding-right: 5px;
+        }
+        .Polaris-Badge--statusSuccess {
+            background: #37fb7a;
+            color: #ffffff;
+        }
+    }
+    .Polaris-Layout {
+        display: contents;
+    }
+    .Polaris-FormLayout--grouped {
+        .Polaris-FormLayout__Item {
+            // margin-left: unset;
+            align-items: center;
+            display: flex;
+            div {
+                width: 100%;
+            }
+        }
     }
     .Polaris-Stack--vertical {
-      .Polaris-Layout__Section {
-        display: flex;
-        align-items: center;
-        background: #e2f5ff;
-        justify-content: space-around;
-        .Polaris-Button--primary {
-          height: 50%;
+        .Polaris-TextStyle--variationStrong {
+            a {
+                color: #007eff;
+            }
         }
-      }
-      .Polaris-Icon--colorInkLighter:before {
-        background: #fffefc;
-      }
     }
-    .Polaris-TextStyle--variationSubdued {
-      display: flex;
-      align-items: center;
+    .trash {
+        .Polaris-Button {
+            border: unset;
+            margin-right: 40px;
+        }
     }
-    .Polaris-Icon__Svg {
-      fill: #637381;
+    //Email Notification
+    .EmailNotification {
+        .Polaris-Stack--distributionEqualSpacing {
+            .Polaris-Stack__Item {
+                .Polaris-Button--primary {
+                    margin-right: 40px;
+                }
+                .Polaris-Button {
+                    margin-right: 40px;
+                }
+            }
+        }
+        .container-left {
+            width: 70%;
+        }
+        .container-right {
+            width: 28%;
+        }
+        .switch {
+            margin-right: 40px;
+        }
+        // email notification details
+        .noti-detail {
+            display: flex;
+            justify-content: space-between;
+        }
+        .Polaris-Button {
+            &.Polaris-Button--plain {
+                &.Polaris-Button--textAlignLeft {
+                    background: transparent;
+                }
+            }
+        }
     }
-    .item_content {
-      display: flex;
-      justify-content: space-between;
-      a {
-        width: 80%;
-      }
+    // Dunning tab
+    .dunning {
+        .Polaris-Banner {
+            box-shadow: unset;
+            width: 80%;
+            background: #e2f5ff;
+        }
+        .Polaris-Stack--vertical {
+            .Polaris-Layout__Section {
+                display: flex;
+                align-items: center;
+                background: #e2f5ff;
+                justify-content: space-around;
+                .Polaris-Button--primary {
+                    height: 50%;
+                }
+            }
+            .Polaris-Icon--colorInkLighter:before {
+                background: #fffefc;
+            }
+        }
+        .Polaris-TextStyle--variationSubdued {
+            display: flex;
+            align-items: center;
+        }
+        .Polaris-Icon__Svg {
+            fill: #637381;
+        }
+        .item_content {
+            display: flex;
+            justify-content: space-between;
+            a {
+                width: 80%;
+            }
+        }
     }
-  }
-
-  // store information - legal
-  .storeInfomation {
-    display: flex;
-    justify-content: space-between;
-    .container-left {
-      width: 65%;
+    // store information - legal
+    .storeInfomation {
+        display: flex;
+        justify-content: space-between;
+        .container-left {
+            width: 65%;
+        }
+        .container-right {
+            width: 33%;
+        }
     }
-    .container-right {
-      width: 33%;
-    }
-  }
 }
 
 .app-content .Polaris-Page {
-  max-width: 89%;
+    max-width: 89%;
 }
-div#sms-panel {
-  position: relative;
-}
-.sms-options {
-	.Polaris-Card__Section {
-		display: grid;
-		grid-template-columns: auto auto auto auto;
-	}
-}
-.sms-config {
-	.Polaris-DisplayText--sizeSmall {
-		font-size: 1.7rem;
-		margin-bottom: 17px;
-	}
-	.Polaris-Button {
-		background: #007EFF;
-		color: white;
-		padding: 13px 30px;
-		&:hover {
-			background: #007EFF;
-			color: white;
-			padding: 13px 30px;
-		}
-	}
-	.custom-text-field {
-		margin-left: 65px;
-	}
-	input {
-		padding: 8px 10px;
-	}
-	.Polaris-Layout__Section {
-		&:first-child {
-			margin-bottom: 39px;
-		}
-	}
-}
-.faq-sms {
-	h1 {
-		font-size: 18px;
-		font-weight: 600;
-		margin-bottom: 15px;
-	}
-  h2 {
-    font-size: 14px;
-  }
-}
-.sms-tab {
-	.Polaris-Card {
-		margin-bottom: 20px;
-	}
-}
-.tab-section {
-  background-color: white;
-  padding-top:42px;
-  padding-left: 15px;
-  padding-bottom: 50px;
-	.Polaris-Tabs__Wrapper {
-		display: inline-block;
-	}
 
-  button {
-    span {
-      font-size: 16px;
-    }
-  }
+div#sms-panel {
+    position: relative;
 }
-.tabs-btn {
-  margin-bottom: 20px;
-  button {
-    &:first-child {
-      background: #007EFF;
-      color: white;
-      padding: 13px 30px;
-      width: 127px;
-      border: 0;
-      border-radius: 3px !important;
-      &:hover {
+
+.sms-options {
+    .Polaris-Card__Section {
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+    }
+}
+
+.sms-config {
+    .Polaris-DisplayText--sizeSmall {
+        font-size: 1.7rem;
+        margin-bottom: 17px;
+    }
+    .Polaris-Button {
         background: #007EFF;
         color: white;
-      }
+        padding: 13px 30px;
+        &:hover {
+            background: #007EFF;
+            color: white;
+            padding: 13px 30px;
+        }
     }
-    &:nth-child(2) {
-      background: #4D506A;
-      color: white;
-      padding: 13px 30px;
-      width: 114px;
-      margin-left: 14px;
-      border: 0;
-      border-radius: 3px;
-      &:hover {
-        background: #4D506A;
-        color: white;
-      }
+    .custom-text-field {
+        margin-left: 65px;
     }
-
-
-  }
+    input {
+        padding: 8px 10px;
+    }
+    .Polaris-Layout__Section {
+        &:first-child {
+            margin-bottom: 39px;
+        }
+    }
 }
+
+.faq-sms {
+    h1 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+    h2 {
+        font-size: 14px;
+    }
+}
+
+.sms-tab {
+    .Polaris-Card {
+        margin-bottom: 20px;
+    }
+}
+
+.tab-section {
+    background-color: white;
+    padding-top: 42px;
+    padding-left: 15px;
+    padding-bottom: 50px;
+    .Polaris-Tabs__Wrapper {
+        display: inline-block;
+    }
+    button {
+        span {
+            font-size: 16px;
+        }
+    }
+}
+
+.tabs-btn {
+    margin-bottom: 20px;
+    button {
+        &:first-child {
+            background: #007EFF;
+            color: white;
+            padding: 13px 30px;
+            width: 127px;
+            border: 0;
+            border-radius: 3px !important;
+            &:hover {
+                background: #007EFF;
+                color: white;
+            }
+        }
+        &:nth-child(2) {
+            background: #4D506A;
+            color: white;
+            padding: 13px 30px;
+            width: 114px;
+            margin-left: 14px;
+            border: 0;
+            border-radius: 3px;
+            &:hover {
+                background: #4D506A;
+                color: white;
+            }
+        }
+    }
+}
+
 .smarty-sms-number {
-	display: grid;
-	grid-template-columns: 65% auto;
-	p {
-		font-size: 18px;
-		font-weight: 600;
-		margin-bottom: 25px;
-	}
-	label {
-		margin-right: 23px;
-	}
-	span {
-		&:nth-child(1) {
-			color: #6CC56C;
-		}
-	}
+    display: grid;
+    grid-template-columns: 65% auto;
+    p {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 25px;
+    }
+    label {
+        margin-right: 23px;
+    }
+    span {
+        &:nth-child(1) {
+            color: #6CC56C;
+        }
+    }
 }
 
 .tabs-sms {
-  font-size: 0;
-  // max-width:100%;
+    font-size: 0;
+    // max-width:100%;
 }
-.tabs-sms > input[type="radio"] {
-  display: none;
+
+.tabs-sms>input[type="radio"] {
+    display: none;
 }
-.tabs-sms > div {
-  display: none;
-  padding: 10px 15px;
-  font-size: 16px;
+
+.tabs-sms>div {
+    display: none;
+    padding: 10px 15px;
+    font-size: 16px;
 }
-#tab-btn-1:checked ~ #content-1,
-#tab-btn-2:checked ~ #content-2,
-#tab-btn-3:checked ~ #content-3,
-#tab-btn-4:checked ~ #content-4,
-#tab-btn-5:checked ~ #content-5,
-#tab-btn-6:checked ~ #password {
-  display: block;
+
+#tab-btn-1:checked~#content-1,
+#tab-btn-2:checked~#content-2,
+#tab-btn-3:checked~#content-3,
+#tab-btn-4:checked~#content-4,
+#tab-btn-5:checked~#content-5,
+#tab-btn-6:checked~#password {
+    display: block;
 }
+
 
 /********************
  * Password tab
  ********************/
+
 #password .tabs-btn {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
-.tabs-sms > label {
-  border-radius: 5px 5px 0px 0px;
-  display: inline-block;
-  text-align: center;
-  vertical-align: middle;
-  user-select: none;
-  background-color: #F5F5F5;
-  border: 1px solid #E0E0E0;
-  padding: 15px 8px;
-  width:113px;
-  font-size: 16px;
-  line-height: 1.5;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
-  cursor: pointer;
-  position: relative;
-  top: 1px;
+.tabs-sms>label {
+    border-radius: 5px 5px 0px 0px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    background-color: #F5F5F5;
+    border: 1px solid #E0E0E0;
+    padding: 15px 8px;
+    width: 113px;
+    font-size: 16px;
+    line-height: 1.5;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    cursor: pointer;
+    position: relative;
+    top: 1px;
 }
-.tabs-sms > label:not(:first-of-type) {
-  border-left: none;
+
+.tabs-sms>label:not(:first-of-type) {
+    border-left: none;
 }
-.tabs-sms > input[type="radio"]:checked + label {
-  background-color: #fff;
-  border-bottom: 1px solid #fff;
+
+.tabs-sms>input[type="radio"]:checked+label {
+    background-color: #fff;
+    border-bottom: 1px solid #fff;
 }
+
 .tab-parent {
-  display: flex;
-}
-.smarty-card-section {
-  .img-sectoin {
-    background-color: #5C5F62;
-    width: 291px;
-    height: 143px;
-  }
-}
-.back-btn-container{
-  display:flex;
-  flex-direction:row;
-  width:100px;
-  cursor:pointer;
-  > span{
-    margin-left: 0;
-    margin-right: 8px;
-
-    > svg{
-      fill:#007eff;
-    }
-
-  }
-}
-
-.product-extention{
-  width: 100% !important;
-  .Polaris-Card {
-    width: 100% !important;
-}
-}
-.setting-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  padding: 33px 37px;
-  grid-row-gap: 40px;
-}
-.tabs-parents {
-  display: flex;
-  grid-gap: 16px;
-}
-.tab-info{
-  max-width: 65%;
-}
-.setting-grid .tabs-parents .tab-info h4 {
-  margin: 0;
-  color: #007EFF;
-  font-size: 17px;
-}
-.setting-grid .tabs-parents .tab-info p {
-  margin: 6px 0px;
-}
-.pointer{
-  cursor: pointer;
-}
-.store-info-container{
-  p.pointer{
-    position: absolute;
-      height: 30px;
-      top: 12px;
-      left: 12px;
-  }
-  .module-settings .storeInfomation {
     display: flex;
-    justify-content: space-between;
-    margin-top: 45px;
-  }
+}
+
+.smarty-card-section {
+    .img-sectoin {
+        background-color: #5C5F62;
+        width: 291px;
+        height: 143px;
+    }
+}
+
+.back-btn-container {
+    display: flex;
+    flex-direction: row;
+    width: 100px;
+    cursor: pointer;
+    >span {
+        margin-left: 0;
+        margin-right: 8px;
+        >svg {
+            fill: #007eff;
+        }
+    }
+}
+
+.product-extention {
+    width: 100% !important;
+    .Polaris-Card {
+        width: 100% !important;
+    }
+}
+
+.setting-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 33px 37px;
+    grid-row-gap: 40px;
+}
+
+.tabs-parents {
+    display: flex;
+    grid-gap: 16px;
+}
+
+.tab-info {
+    max-width: 65%;
+}
+
+.setting-grid .tabs-parents .tab-info h4 {
+    margin: 0;
+    color: #007EFF;
+    font-size: 17px;
+}
+
+.setting-grid .tabs-parents .tab-info p {
+    margin: 6px 0px;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.store-info-container {
+    p.pointer {
+        position: absolute;
+        height: 30px;
+        top: 12px;
+        left: 12px;
+    }
+    .module-settings .storeInfomation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 45px;
+    }
+}
+
+.draftEditorWrapper {
+    border: 1px solid #F1F1F1;
 }

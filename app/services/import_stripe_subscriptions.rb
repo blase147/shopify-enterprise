@@ -121,3 +121,90 @@ list.each do |csc|
   end
 end
 =end
+
+
+=begin
+
+tally = {found: 0, not_found: 0}
+not_found = []
+shop = Shop.find_by(shopify_domain: 'bagamour.myshopify.com')
+shop.customer_subscription_contracts.where(api_source: 'stripe', status: 'ACTIVE').each do |contract|
+  if contract.api_data.present?
+    selling_plan = if contract.import_data['variant_title']&.include?('Annual')
+      SellingPlan.find(7)
+    else
+      SellingPlan.find(3)
+    end
+    calc_price = (((contract.import_data['price'].to_f rescue 0)+ (contract.import_data['shipping_price'].to_f rescue 0)).round(2) * 100).to_i
+    unless calc_price == contract.api_data['items']['data'][0]['price']['unit_amount']
+      price = Stripe::Price.create({
+        recurring: {interval: selling_plan.interval_type.downcase, interval_count: selling_plan.interval_count},
+        unit_amount: calc_price,
+        currency: 'usd',
+        product: contract.api_data['items']['data'][0]['price']['product']
+      }, { api_key: shop.stripe_api_key })
+      subscription = Stripe::Subscription.update(
+        contract.api_resource_id,
+        {
+          proration_behavior: 'none',
+          items: [
+            {
+              id: contract.api_data['items']['data'][0]['id'],
+              price: price.id
+            }
+          ]
+        },
+        { api_key: shop.stripe_api_key }
+      )
+      contract.api_data = subscription.to_h
+      contract.save
+    end
+  end
+rescue => e
+  puts e
+  puts contract.id
+end
+
+BAGAMOUR_ANCHOR = Date.parse('2021-11-01')
+def next_anchor(selling_plan)
+  anchor = BAGAMOUR_ANCHOR
+  today = Date.today
+  interval = selling_plan.interval_count.to_i.public_send(selling_plan.interval_type.downcase)
+  while anchor < today
+    anchor += interval
+  end
+  anchor.to_datetime.to_i
+end
+selling_plan = SellingPlan.find(3)
+count = 0
+shop.customer_subscription_contracts.where(api_resource_id: ids).each do |contract|
+  product = Stripe::Product.create({name: "#{contract.import_data['product_title']}, #{contract.import_data['variant_title']}"}, { api_key: shop.stripe_api_key })
+  anchor = next_anchor(selling_plan)
+  calc_price = (((contract.import_data['price'].to_f rescue 0)+ (contract.import_data['shipping_price'].to_f rescue 0)).round(2) * 100).to_i
+  stripe_subscription = Stripe::Subscription.create({
+    customer: contract.import_data['customer_gateway_token'],
+    billing_cycle_anchor: anchor,
+    items: [
+      {
+        price_data: {
+          unit_amount_decimal: calc_price,
+          currency: 'usd',
+          recurring: {
+            interval: selling_plan.interval_type.downcase,
+            interval_count: selling_plan.interval_count
+          },
+          product: product.id
+        }
+      }
+    ]
+  }, { api_key: shop.stripe_api_key })
+  contract.api_resource_id = stripe_subscription.id
+  contract.api_data = stripe_subscription.to_h
+  contract.save
+rescue => e
+  count +=1
+  puts e
+  puts contract.id
+end
+
+=end
