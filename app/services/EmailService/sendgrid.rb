@@ -9,7 +9,7 @@ class EmailService::Sendgrid < EmailService::Base
   end
 
   def shopify_shop
-    @shopify_shop ||= @email_notification.setting.shop.with_shopify_session do        `   ` ````  ~ ` ``    `
+    @shopify_shop ||= @email_notification.setting.shop.with_shopify_session do
       ShopifyAPI::Shop.current
     end
   end

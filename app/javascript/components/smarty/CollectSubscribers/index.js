@@ -31,7 +31,7 @@ import QrGeneratorImage from '../../../../assets/images/collect_subscribers/qr_g
 const CollectSubscribers = () => {
   return (
     <Card sectioned>
-      <h2 style={{marginLeft: '1rem'}}>
+      <h2 style={{ marginLeft: '1rem' }}>
         <Subheading>Collect Subscribers</Subheading>{' '}
       </h2>
       <div
