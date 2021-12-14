@@ -16,7 +16,7 @@ class ShopifyWebhooksController < ApplicationController
     head :no_content
   end
 
-  def order_created
+  def order_create
     begin
       box_product_ids = get_box_product_ids(params[:line_items])
       shop = Shop.find_by(shopify_domain: shop_domain)
@@ -61,3 +61,14 @@ class ShopifyWebhooksController < ApplicationController
     nil
   end
 end
+
+=begin
+
+webhooks.each do |webhook|
+  if webhook.address.include?('ngrok')
+    webhook.address.gsub!('https://98f6-72-255-40-54.ngrok.io/', ENV['HOST'])
+    webhook.save
+  end
+end
+
+=end

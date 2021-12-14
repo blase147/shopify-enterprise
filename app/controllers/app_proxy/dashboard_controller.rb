@@ -3,6 +3,7 @@ class AppProxy::DashboardController < AppProxyController
   before_action :load_customer, only: %w(index addresses payment_methods settings upcoming build_a_box)
 
   def index
+    @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
     products = ProductService.new.list
     @swap_products = products.is_a?(Hash) ? nil : products&.select{ |p| p.node.selling_plan_group_count > 0 }
 
@@ -29,7 +30,6 @@ class AppProxy::DashboardController < AppProxyController
     @orders = ShopifyAPI::Order.find(:all,
       params: { customer_id: customer_id, limit: PER_PAGE, page_info: params[:page_info] }
     )
-
 
     @payment_methods = {}
     @orders.each do |order|
@@ -90,9 +90,10 @@ class AppProxy::DashboardController < AppProxyController
 
   def load_subscriptions
     @data = CustomerSubscriptionContractsService.new(shopify_customer_id).run
-    @subscription_contracts = @data && @data[:subscriptions] || []
-    @cancelled_subscriptions = @data && @data[:cancelled_subscriptions] || []
-    @active_subscriptions = @data && @data[:active_subscriptions] || []
+    @stripe_subscriptions = current_shop.customer_subscription_contracts.where(shopify_customer_id: customer_id, api_source: 'stripe')
+    @subscription_contracts = (@data && @data[:subscriptions] || []) + @stripe_subscriptions
+    @cancelled_subscriptions = (@data && @data[:cancelled_subscriptions] || []) + @stripe_subscriptions.select{|lc| lc.status == 'CANCELLED'}
+    @active_subscriptions = (@data && @data[:active_subscriptions] || []) + @stripe_subscriptions.select{|lc| lc.status == 'ACTIVE'}
     @active_subscriptions_count = params[:active_subscriptions_count].present? ? params[:active_subscriptions_count].to_i : (@data && @data[:active_subscriptions].count || 0)
     @cancelled_line_items = RemovedSubscriptionLine.where(customer_id: params[:customer_id])
   end

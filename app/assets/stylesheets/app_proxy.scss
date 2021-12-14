@@ -1877,7 +1877,7 @@ body.chargezen-proxy {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 // .add_weekly_box {
@@ -2455,4 +2455,8 @@ Customer Build a box .checkout-design-1 {
     .add-img-section {
         max-width: 28%;
     }
+}
+
+span.cancel-text {
+    color: #000 !important;
 }

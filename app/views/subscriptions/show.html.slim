@@ -4,9 +4,12 @@
 - delivery_policy = @subscription.delivery_policy
 - api_order = ShopifyAPI::Order.find(@subscription.origin_order.id[/\d+/]) rescue nil
 - address = customer.default_address rescue nil
+- billing_address = api_order.billing_address
+- baddress = billing_address.address1 + " " + billing_address.city + " " +billing_address.province + " " +billing_address.zip + " " +billing_address.country
 - next_billing_date =  get_next_billing_date(@subscription, current_shop)
 
 - formatted = address.formatted.join(' ').titleize rescue nil
+- formatted_billing_address = baddress
 - address_id = address.id[/\d+/] rescue nil
 - setting = current_shop.setting
 - subscription_logs = @customer.subscription_logs.order(created_at: :desc).limit(10)
@@ -328,7 +331,7 @@
         .Polaris-Card
           .Polaris-Card__Section
             h2 style="font-size: 14px;font-weight: 700;line-height: 20px;margin-bottom: 1rem;" BILLING ADDRESS
-            p.Polaris-TextStyle--variationSubdued = formatted
+            p.Polaris-TextStyle--variationSubdued = formatted_billing_address
 
           .Polaris-Card__Section
             h2 style="font-size: 14px;font-weight: 700;line-height: 20px;margin-bottom: 1rem;" DELIVERY ADDRESS

@@ -1,6 +1,7 @@
 - if (@cancelled_subscriptions.present? || @cancelled_line_items.present?) && (params[:status].present? ? params[:status] == 'cancelled' : true)
   .subscription-contract-products
     - @cancelled_subscriptions.each do |subscription|
+      - next if (subscription.api_source == 'stripe' rescue true)
       - billing_policy = subscription.node.billing_policy
       - subscription.node.lines.edges.each do |edge|
         - product = ShopifyAPI::Product.find(edge.node.product_id[/\d+/])

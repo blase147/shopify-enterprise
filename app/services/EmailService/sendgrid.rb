@@ -30,7 +30,7 @@ class EmailService::Sendgrid < EmailService::Base
     from = SendGrid::Email.new(email: 'notifications@chargezen.com', name: (@email_notification.from_name || @email_notification.setting.store_name || shopify_shop.name))
     to = SendGrid::Email.new(email: to)
     content = SendGrid::Content.new(type: 'text/html', value: email_body(context_hash))
-    mail = SendGrid::Mail.new(from, subject_str, to, content)
+    mail = SendGrid::Mail.new(from, (@email_notification.email_subject || subject_str), to, content)
     mail.reply_to = SendGrid::Email.new(email: @email_notification.from_email, name: (@email_notification.from_name || @email_notification.setting.store_name || shopify_shop.name))
 
     response = @sg.client.mail._('send').post(request_body: mail.to_json)
@@ -38,5 +38,8 @@ class EmailService::Sendgrid < EmailService::Base
     # puts response.body
     # puts response.parsed_body
     response.status_code.to_i > 200 && response.status_code.to_i < 300
+  rescue => e
+    puts e
+    false
   end
 end

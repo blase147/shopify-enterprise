@@ -2,7 +2,7 @@ module SubscriptionConcern
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_draft_contract, only: [:add_product, :update_quantity, :update_shiping_detail, :swap_product, :upgrade_product, :remove_line]
+    before_action :set_draft_contract, only: [:add_product, :update_quantity, :update_shiping_detail, :swap_product, :upgrade_product]
     before_action :set_customer, only: %i[add_product swap_product upgrade_product]
   end
 
@@ -92,28 +92,44 @@ module SubscriptionConcern
   end
 
   def remove_line
-    if params[:lines_count].to_i > 1
-      result = SubscriptionDraftsService.new.remove(@draft_id, params[:line_id])
-      RemovedSubscriptionLine.create(subscription_id: params[:id], customer_id: params[:customer_id], variant_id: params[:variant_id], quantity: params[:quantity] )
-    else
-      result = SubscriptionContractDeleteService.new(params[:id]).run
-    end
-    if result[:error].present?
-      render js: "alert('#{result[:error]}'); hideLoading()"
-    else
-      customer = CustomerSubscriptionContract.find_by_shopify_id params[:customer_id]
-      customer.update(reasons_cancel_id: params[:reasons_cancel_id]) if !customer.nil? && params[:reasons_cancel_id].present?
+    if params[:stripe_subscription]
+      csc = CustomerSubscriptionContract.find(params[:id])
+      Stripe::SubscriptionCancel.new(csc.api_resource_id, current_shop).delete
+      csc.update(status: 'CANCELLED', reasons_cancel_id: params[:reasons_cancel_id]) if !csc.nil? && params[:reasons_cancel_id].present?
       begin
-        email_notification = customer.shop.setting.email_notifications.find_by_name "Subscription Cancellation"
-        EmailService::Send.new(email_notification).send_email({customer: customer, line_name: params[:line_name]}) unless email_notification.nil?
-        owner_email_notification = customer.shop.setting.email_notifications.find_by_name "Cancellation Alert"
-        EmailService::Send.new(owner_email_notification).send_email({customer: customer, line_name: params[:line_name]}) unless owner_email_notification.nil?
+        email_notification = csc.shop.setting.email_notifications.find_by_name "Subscription Cancellation"
+        EmailService::Send.new(email_notification).send_email({customer: csc, line_name: params[:line_name]}) unless email_notification.nil?
+        owner_email_notification = csc.shop.setting.email_notifications.find_by_name "Cancellation Alert"
+        EmailService::Send.new(owner_email_notification).send_email({customer: csc, line_name: params[:line_name]}) unless owner_email_notification.nil?
       rescue => e
         puts "Could not send email. #{e.message}"
       end
-      SubscriptionDraftsService.new.commit @draft_id
-      render js: 'location.reload()'
+    else
+      set_draft_contract
+      if params[:lines_count].to_i > 1
+        result = SubscriptionDraftsService.new.remove(@draft_id, params[:line_id])
+        RemovedSubscriptionLine.create(subscription_id: params[:id], customer_id: params[:customer_id], variant_id: params[:variant_id], quantity: params[:quantity] )
+      else
+        result = SubscriptionContractDeleteService.new(params[:id]).run
+      end
+      if result[:error].present?
+        render js: "alert('#{result[:error]}'); hideLoading()"
+      else
+        customer = CustomerSubscriptionContract.find_by_shopify_id params[:customer_id]
+        customer.update(reasons_cancel_id: params[:reasons_cancel_id]) if !customer.nil? && params[:reasons_cancel_id].present?
+        begin
+          email_notification = customer.shop.setting.email_notifications.find_by_name "Subscription Cancellation"
+          EmailService::Send.new(email_notification).send_email({customer: customer, line_name: params[:line_name]}) unless email_notification.nil?
+          owner_email_notification = customer.shop.setting.email_notifications.find_by_name "Cancellation Alert"
+          EmailService::Send.new(owner_email_notification).send_email({customer: customer, line_name: params[:line_name]}) unless owner_email_notification.nil?
+        rescue => e
+          puts "Could not send email. #{e.message}"
+        end
+        SubscriptionDraftsService.new.commit @draft_id
+      end
     end
+
+    render js: 'location.reload()'
   end
 
   def skip_schedule
