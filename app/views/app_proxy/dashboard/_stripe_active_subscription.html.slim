@@ -1,6 +1,8 @@
 .subscription-contract-products
-  - box_campaign = false
   - product = ShopifyAPI::Product.find(subscription.import_data['product_id'])
+  - selling_plan = SellingPlan.find(subscription.selling_plan_id) rescue nil
+  - selling_plan_id = selling_plan.shopify_id rescue ''
+  - box_campaign = BuildABoxCampaign.joins(:build_a_box_campaign_group).where(build_a_box_campaign_groups: { shop_id: @current_shop.id, location: 'customer_portal' }).where("'#{selling_plan_id[/\d+/]}' = ANY (selling_plan_ids)").first rescue nil
   .grid
     .grid-item
       .img.account-img
@@ -10,7 +12,7 @@
       p.text.active-text
         = "#{number_to_currency(((subscription.api_data['items']['data'][0]['price']['unit_amount']/100) rescue 0))} / #{subscription.api_data['items']['data'][0]['price']['recurring']['interval_count']} #{subscription.api_data['items']['data'][0]['price']['recurring']['interval']}"
       p.text.active-text
-        = edge.node.selling_plan_name rescue ''
+        = selling_plan.name rescue ''
     .grid-item
       h4 NEXT CARD CHARGE
       p.text.right.active-text
@@ -22,7 +24,7 @@
         - case btn
           - when 'update_choices'
             - if box_campaign && box_campaign_display(box_campaign, selling_plan_id)
-              = link_to "/a/chargezen_production/dashboard/build_a_box?&build_a_box_campaign_id=#{box_campaign.id}&customer_id=#{params[:customer_id]}&subscription_id=#{subscription.id}&active_subscriptions_count=#{@active_subscriptions.count}&selling_plan_id=#{selling_plan_id[/\d+/]}" do
+              = link_to "/a/chargezen_production/dashboard/build_a_box?&build_a_box_campaign_id=#{box_campaign.id}&customer_id=#{params[:customer_id]}&subscription_id=#{subscription.id}&stripe_subscription=true&active_subscriptions_count=#{@active_subscriptions.count}&selling_plan_id=#{selling_plan_id[/\d+/]}" do
                 button.white-btn.action-btn UPDATE CHOICES
           - when 'delivery_schedule'
             - if @setting.customer_allowed?('navigation_delivery')
@@ -39,8 +41,9 @@
       / = render 'delay_order_modal', subscription: subscription.node, next_billing_date: next_billing_date
       = render 'stripe_edit_subscription_modal', subscription: subscription, product: product, setting: @setting
       - if @setting.customer_allowed?('swap_product')
-        / = render 'swap_subscription_modal', subscription: subscription.node, line_item: edge.node
-      / = render 'upgrade_subscription_modal', subscription: subscription.node, line_item: edge.node, selling_plan_id: edge.node.selling_plan_id, product: product
+        = render 'stripe_swap_subscription_modal', subscription: subscription, product: product
+        / = render 'swap_subscription_modal', subscription: subscription, line_item: edge.node
+      / = render 'upgrade_subscription_modal', subscription: subscription, line_item: edge.node, selling_plan_id: selling_plan_id, product: product
       = render 'stripe_cancel_subscription_modal', subscription: subscription, product: product
   - if @setting.customer_allowed?('upcoming_quantity')
     .quantity-wrapper

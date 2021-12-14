@@ -180,7 +180,7 @@ count = 0
 shop.customer_subscription_contracts.where(api_resource_id: ids).each do |contract|
   product = Stripe::Product.create({name: "#{contract.import_data['product_title']}, #{contract.import_data['variant_title']}"}, { api_key: shop.stripe_api_key })
   anchor = next_anchor(selling_plan)
-  calc_price = (((contract.import_data['price'].to_f rescue 0)+ (contract.import_data['shipping_price'].to_f rescue 0)).round(2) * 100).to_i
+  calc_price = (((contract.import_data['price'].to_f rescue 0) + (contract.import_data['shipping_price'].to_f rescue 0)).round(2) * 100).to_i
   stripe_subscription = Stripe::Subscription.create({
     customer: contract.import_data['customer_gateway_token'],
     billing_cycle_anchor: anchor,
@@ -209,7 +209,6 @@ end
 
 =end
 
-
 =begin
 
 Stripe::Subscription.update(
@@ -236,6 +235,25 @@ subs.each do |sub|
         api_key: shop.stripe_api_key
       }
     )
+  end
+end
+
+=end
+
+
+=begin
+
+tally = {found: 0, not_found: 0}
+not_found = []
+shop = Shop.find_by(shopify_domain: 'bagamour.myshopify.com')
+shop.customer_subscription_contracts.where(api_source: 'stripe', status: 'ACTIVE').each do |contract|
+if contract.import_data.present?
+    selling_plan = if contract.import_data['variant_title']&.include?('Annual')
+      SellingPlan.find(7)
+    else
+      SellingPlan.find(3)
+    end
+    contract.update(selling_plan_id: selling_plan.id)
   end
 end
 

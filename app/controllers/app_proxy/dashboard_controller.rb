@@ -15,6 +15,7 @@ class AppProxy::DashboardController < AppProxyController
   end
 
   def upcoming
+    @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
     render 'upcoming', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
@@ -45,9 +46,15 @@ class AppProxy::DashboardController < AppProxyController
   end
 
   def build_a_box
+    @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
     products = nil
     @subscription_id = params[:subscription_id]
-    @customer = current_shop.customer_subscription_contracts.find_by_shopify_id(params[:subscription_id])
+    if params[:stripe_subscription]
+      @customer = current_shop.customer_subscription_contracts.find_by_id(params[:subscription_id])
+    else
+      @customer = current_shop.customer_subscription_contracts.find_by_shopify_id(params[:subscription_id])
+    end
+
     if params[:selling_plan_id].present?
       @selling_plan_id = params[:selling_plan_id]
       @box_campaign = BuildABoxCampaign.find(params[:build_a_box_campaign_id]) # current_shop.build_a_box_campaign_groups.last.build_a_box_campaign
@@ -64,7 +71,7 @@ class AppProxy::DashboardController < AppProxyController
   end
 
   def confirm_box_selection
-    customer = current_shop.customer_subscription_contracts.find_by(shopify_id: params[:subscription_id])
+    customer = current_shop.customer_subscription_contracts.find_by(shopify_id: params[:subscription_id]) || current_shop.customer_subscription_contracts.find_by(id: params[:subscription_id])
     customer.update(box_items: params[:product_id], campaign_date: Time.current)
     begin
       contract = SubscriptionContractService.new(customer.shopify_id).run

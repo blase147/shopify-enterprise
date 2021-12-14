@@ -2,7 +2,7 @@ module SubscriptionConcern
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_draft_contract, only: [:add_product, :update_quantity, :update_shiping_detail, :swap_product, :upgrade_product]
+    before_action :set_draft_contract, only: [:add_product, :update_quantity, :update_shiping_detail, :upgrade_product]
     before_action :set_customer, only: %i[add_product swap_product upgrade_product]
   end
 
@@ -52,21 +52,52 @@ module SubscriptionConcern
   end
 
   def swap_product
-    variant = ShopifyAPI::Variant.find(params[:variant_id][/\d+/])
-    product = ProductService.new(variant.product_id).run
-    result = SubscriptionDraftsService.new.line_update @draft_id, params[:line_id], { 'productVariantId': params[:variant_id], 'quantity': 1, 'currentPrice': variant.price }
-    SubscriptionDraftsService.new.commit @draft_id
-    if result[:error].present?
-      flash[:error] = result[:error]
-      render js: "alert('#{result[:error]}'); hideLoading()"
+    if @customer.nil? && @customer = CustomerSubscriptionContract.find_by(id: params[:subscription_id])
+      variant = ShopifyAPI::Variant.find(params[:variant_id][/\d+/])
+      product = ProductService.new(variant.product_id).run
+      calc_price = (((variant.price.to_f rescue 0) + (@customer.import_data['shipping_price'].to_f rescue 0)).round(2) * 100).to_i
+      unless calc_price == @customer.api_data['items']['data'][0]['price']['unit_amount']
+        price = Stripe::Price.create({
+          unit_amount: calc_price,
+          currency: 'usd',
+          product: @customer.api_data['items']['data'][0]['price']['product']
+        }, { api_key: shop.stripe_api_key })
+        subscription = Stripe::Subscription.update(
+          @customer.api_resource_id,
+          {
+            proration_behavior: 'none',
+            items: [
+              {
+                id: @customer.api_data['items']['data'][0]['id'],
+                price: price.id
+              }
+            ]
+          },
+          { api_key: current_shop.stripe_api_key }
+        )
+        @customer.api_data = subscription.to_h
+      end
+      @customer.import_data['product_id'] = variant.product_id
+      @customer.import_data['variant_id'] = variant.id
+      @customer.save
     else
-      # current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id)
-      subscription = SubscriptionContractService.new(params[:id]).run
-      note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
-      description = @customer.name+",swaped,"+variant.title
-      # amount = (product.quantity * variant.price.to_f).round(2).to_s
-      current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id, product_name: variant.title, note: note, description: description, product_id: params[:variant_id], swaped_product_id: variant.product_id)
-      render js: 'location.reload()'
+      set_draft_contract
+      variant = ShopifyAPI::Variant.find(params[:variant_id][/\d+/])
+      product = ProductService.new(variant.product_id).run
+      result = SubscriptionDraftsService.new.line_update @draft_id, params[:line_id], { 'productVariantId': params[:variant_id], 'quantity': 1, 'currentPrice': variant.price }
+      SubscriptionDraftsService.new.commit @draft_id
+      if result[:error].present?
+        flash[:error] = result[:error]
+        render js: "alert('#{result[:error]}'); hideLoading()"
+      else
+        # current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id)
+        subscription = SubscriptionContractService.new(params[:id]).run
+        note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
+        description = @customer.name+",swaped,"+variant.title
+        # amount = (product.quantity * variant.price.to_f).round(2).to_s
+        current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id, product_name: variant.title, note: note, description: description, product_id: params[:variant_id], swaped_product_id: variant.product_id)
+        render js: 'location.reload()'
+      end
     end
   end
 
