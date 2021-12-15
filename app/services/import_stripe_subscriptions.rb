@@ -280,3 +280,48 @@ end
 shop.customer_subscription_contracts.where.gt(updated_at: 1.hour.ago).count
 
 =end
+
+=begin
+
+shop = Shop.find_by(shopify_domain: 'bagamour.myshopify.com')
+shop.customer_subscription_contracts.where(api_source: 'stripe', status: 'ACTIVE').each do |contract|
+  if contract.api_data.present?
+    calc_price = if contract.selling_plan_id == '7'
+      5499
+    elsif contract.selling_plan_id == '3'
+      5999
+    end
+    selling_plan = SellingPlan.find contract.selling_plan_id
+    unless calc_price == contract.api_data['items']['data'][0]['price']['unit_amount']
+      price = Stripe::Price.create({
+        recurring: {interval: selling_plan.interval_type.downcase, interval_count: selling_plan.interval_count},
+        unit_amount: calc_price,
+        currency: 'usd',
+        product: contract.api_data['items']['data'][0]['price']['product']
+      }, { api_key: shop.stripe_api_key })
+      subscription = Stripe::Subscription.update(
+        contract.api_resource_id,
+        {
+          proration_behavior: 'none',
+          items: [
+            {
+              id: contract.api_data['items']['data'][0]['id'],
+              price: price.id
+            }
+          ]
+        },
+        { api_key: shop.stripe_api_key }
+      )
+      contract.api_data = subscription.to_h
+      contract.save
+    end
+  end
+rescue => e
+  puts e
+  puts contract.id
+end
+
+=end
+
+# shop = Shop.find_by(shopify_domain: 'bagamour.myshopify.com')
+# shop.customer_subscription_contracts.where(api_source: 'stripe', status: 'ACTIVE').pluck(:shopify_customer_id).uniq.size

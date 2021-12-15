@@ -1,7 +1,5 @@
-class StripeWebhooksController < ApplicationController
+class StripeWebhooksController < ActionController::Base
   skip_before_action :verify_authenticity_token
-
-
 
   def subscription
     payload = request.body.read
