@@ -176,22 +176,36 @@ module SubscriptionConcern
 
   def pause
     id = params[:id]
-    result = SubscriptionContractDeleteService.new(id).run 'PAUSED'
-    if result[:error].present?
-      render js: "alert('#{result[:error]}');"
-    else
+    if params[:stripe_subscription]
+      Stripe::SubscriptionPause.new(id, current_shop).pause
+      csc = CustomerSubscriptionContract.find(id)
+      csc.update(status: 'PAUSED')
       render js: 'location.reload()'
+    else
+      result = SubscriptionContractDeleteService.new(id).run 'PAUSED'
+      if result[:error].present?
+        render js: "alert('#{result[:error]}');"
+      else
+        render js: 'location.reload()'
+      end
     end
   end
 
   def resume
     id = params[:id]
-    result = SubscriptionContractDeleteService.new(id).run 'ACTIVE'
-
-    if result[:error].present?
-      render js: "alert('#{result[:error]}');"
-    else
+    if params[:stripe_subscription]
+      Stripe::SubscriptionPause.new(id, current_shop).resume
+      csc = CustomerSubscriptionContract.find(id)
+      csc.update(status: 'ACTIVE')
       render js: 'location.reload()'
+    else
+      result = SubscriptionContractDeleteService.new(id).run 'ACTIVE'
+
+      if result[:error].present?
+        render js: "alert('#{result[:error]}');"
+      else
+        render js: 'location.reload()'
+      end
     end
   end
 

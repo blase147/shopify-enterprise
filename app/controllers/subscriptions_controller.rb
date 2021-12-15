@@ -40,6 +40,8 @@ class SubscriptionsController < AuthenticatedController
       product_ids = @subscription.origin_order.line_items.edges.map{|e| e.node.custom_attributes.find{|a| a.key == "_box_product_ids"}.value rescue nil}.flatten.compact.join(',') rescue nil
       @box_products = ShopifyAPI::Product.where(ids: product_ids, fields: 'id,title,images,variants') if product_ids.present?
     end
+
+    @translation = current_shop&.translation
     render "#{@customer.api_source == 'stripe' ? 'stripe_' : ''}show"
   end
 

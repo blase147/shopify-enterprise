@@ -7,6 +7,7 @@
   - anchor += interval
 - formatted = "#{@customer.import_data['address1']}, #{@customer.import_data['address2']}, #{@customer.import_data['city']}, #{@customer.import_data['province']}, #{@customer.import_data['country']}, #{@customer.import_data['zip']}"
 - next_billing_date = anchor.to_datetime
+- selling_plan = SellingPlan.find(@customer.selling_plan_id) rescue nil
 .Polaris-Page
   .Polaris-Page-Header.Polaris-Page-Header--isSingleRow.Polaris-Page-Header--hasNavigation.Polaris-Page-Header--mobileView.Polaris-Page-Header--mediumTitle
     .Polaris-Page-Header__Navigation
@@ -50,8 +51,7 @@
                     = @customer.import_data['price']
                   div
                     - if setting.admin_allowed?('pause_subscription')
-                      / = link_to action_subscription_contract_path(:pause, @subscription.id[/\d+/]), remote: true, method: :post, style: 'text-decoration: none;' do
-                      = link_to '#' do
+                      = link_to action_subscription_contract_path(:pause, @customer.id, 'stripe_subscription=true'), remote: true, method: :post, style: 'text-decoration: none;' do
                         button.Polaris-Button.Polaris-Button--plain
                           span.Polaris-Button__Content
                             span.Polaris-Button__Text Pause
@@ -59,22 +59,22 @@
                   div.slider-btns
                     .Polaris-Stack__Item
                       - if setting.admin_allowed?('swap_product')
-                        button.Polaris-Button.Polaris-Button--primary type="button" style="margin-right: 1rem;" data-toggle='modal' data-target="#swap"
+                        button.Polaris-Button.Polaris-Button--primary type="button" style="margin-right: 1rem;" data-toggle='modal' data-target="#swap-#{@customer.id}"
                           span.Polaris-Button__Content
                             span.Polaris-Button__Text.ml-0
                               | Swap Subscription
-                      button.Polaris-Button type="button" style="margin-right: 1rem;" data-toggle='modal' data-target="#editSubscriptionModal"
+                      button.Polaris-Button type="button" style="margin-right: 1rem;" data-toggle='modal' data-target="#editSubscriptionModal-#{@customer.id}"
                         span.Polaris-Button__Content
                           span.Polaris-Button__Text.ml-0
                             | Edit
                       - if setting.admin_allowed?('subscription_cancellation')
-                        button.Polaris-Button type="button" style="margin-right: 1rem;"  data-toggle='modal' data-target="#cancel"
+                        button.Polaris-Button type="button" style="margin-right: 1rem;"  data-toggle='modal' data-target="#cancel-#{@customer.id}"
                           span.Polaris-Button__Content
                             span.Polaris-Button__Text.ml-0
                               | Cancel
 
                   div
-                    p style="font-size: 2rem; line-height: 1.8;" = (selling_plan&.name rescue nil)
+                    p style="font-size: 1.5rem; line-height: 2.4;" = (selling_plan&.name rescue nil)
                   div
                     a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/admin/customers/#{@customer.shopify_customer_id}?shop=#{@customer.shop.shopify_domain}" target="_parent"
                       button.Polaris-Button
@@ -87,17 +87,15 @@
                 .Polaris-Stack__Item
                   .Polaris-ButtonGroup.resume
                     .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                      / = link_to action_subscription_contract_path(:resume, @subscription.id[/\d+/]), remote: true, method: :post, style: 'text-decoration: none;' do
-                      = link_to '#' do
+                      = link_to action_subscription_contract_path(:resume, @customer.id, 'stripe_subscription=true'), remote: true, method: :post, style: 'text-decoration: none;' do
                         span.resume-btn type="button" Resume
 
-            - if @subscription.status == 'ACTIVE'
-              - product = ShopifyAPI::Product.find(line.node.product_id[/\d+/])
-
-              = render 'app_proxy/dashboard/edit_subscription_modal', subscription: @subscription, line_item: line.node, product_image: product.images.first&.src, admin_action: true, setting: setting, selling_plan_id: line.node.selling_plan_id, selling_plan: selling_plan
-              = render 'app_proxy/dashboard/swap_subscription_modal', subscription: @subscription, line_item: line.node
-              = render 'app_proxy/dashboard/upgrade_subscription_modal', subscription: @subscription, line_item: line.node, selling_plan_id: line.node.selling_plan_id, product: product
-              = render 'app_proxy/dashboard/cancel_subscription_modal', subscription: @subscription, line_item: line.node, lines_count: @subscription.lines.edges.size
+            - if @subscription.status == 'active'
+              - product = ShopifyAPI::Product.find(@customer.import_data['product_id'])
+              = render 'app_proxy/dashboard/stripe_edit_subscription_modal', subscription: @customer, product: product, setting: current_shop.setting
+              = render 'app_proxy/dashboard/stripe_swap_subscription_modal', subscription: @customer, product: product
+              / = render 'app_proxy/dashboard/upgrade_subscription_modal', subscription: @subscription, line_item: line.node, selling_plan_id: line.node.selling_plan_id, product: product
+              = render 'app_proxy/dashboard/stripe_cancel_subscription_modal', subscription: @customer, product: product
 
       .Polaris-Layout__Section.Polaris-Layout__Section--secondary
         .Polaris-Card

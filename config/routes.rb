@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   post '/shopify_webhooks/subscription_contract_create', to: 'shopify_webhooks#subscription_contract_create'
   post '/shopify_webhooks/subscription_contract_update', to: 'shopify_webhooks#subscription_contract_update'
 
+  post '/webhooks/stripe/subscription', to: 'stripe_webhooks#subscription'
+
   post '/shipping_suites/sync_orders', to: 'shipping_suites#sync_orders'
 
   resources :power_plans, only: [] do

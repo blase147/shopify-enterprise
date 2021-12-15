@@ -258,3 +258,25 @@ if contract.import_data.present?
 end
 
 =end
+
+=begin
+count = 0
+shop = Shop.find_by(shopify_domain: 'bagamour.myshopify.com')
+shop.customer_subscription_contracts.where(api_source: 'stripe', status: 'ACTIVE').each do |contract|
+  stripe_subscription = Stripe::Subscription.retrieve(contract.api_resource_id, {api_key: shop.stripe_api_key})
+  if stripe_subscription.status == 'canceled' && contract.status != 'CANCELLED'
+    count += 1
+    contract.update(
+      cancelled_at: stripe_subscription.canceled_at,
+      status: 'CANCELLED',
+      api_data: stripe_subscription.to_h
+    )
+  end
+rescue => e
+  puts e
+  next
+end
+
+shop.customer_subscription_contracts.where.gt(updated_at: 1.hour.ago).count
+
+=end
