@@ -34,7 +34,6 @@ class ShopifyWebhooksController < ApplicationController
     head :no_content
   end
 
-  # TODO: move into background job
   def subscription_contract_create
     shop = Shop.find_by(shopify_domain: shop_domain)
     ShopifyContractCreateWorker.perform_async(shop.id, params[:id])
@@ -48,6 +47,14 @@ class ShopifyWebhooksController < ApplicationController
 
     head :no_content
   end
+
+  def order_cancel
+    shop = Shop.find_by(shopify_domain: shop_domain)
+    ShopifyOrderCancelWorker.perform_async(shop.id, params[:id])
+
+    head :no_content
+  end
+
 
   private
 

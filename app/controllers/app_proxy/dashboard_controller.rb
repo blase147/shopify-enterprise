@@ -3,7 +3,7 @@ class AppProxy::DashboardController < AppProxyController
   before_action :load_customer, only: %w(index addresses payment_methods settings upcoming build_a_box)
 
   def index
-    @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
+    # @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
     products = ProductService.new.list
     @swap_products = products.is_a?(Hash) ? nil : products&.select{ |p| p.node.selling_plan_group_count > 0 }
 

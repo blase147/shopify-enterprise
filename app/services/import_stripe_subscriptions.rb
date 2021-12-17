@@ -325,3 +325,21 @@ end
 
 # shop = Shop.find_by(shopify_domain: 'bagamour.myshopify.com')
 # shop.customer_subscription_contracts.where(api_source: 'stripe', status: 'ACTIVE').pluck(:shopify_customer_id).uniq.size
+
+
+=begin
+
+subs = ['6425090', '6494842', '6663278', '6766114', '6963006']
+
+subs.each do |sub|
+  csc = CustomerSubscriptionContract.where("import_data->>'order_id' = ?", sub).first
+  if csc&.api_resource_id
+    Stripe::Charge.create({
+      amount: 5499,
+      currency: 'usd',
+      customer: 'cus_InMCGIuzHCmll4'
+    }, {api_key: shop.stripe_api_key})
+  end
+end
+
+=end

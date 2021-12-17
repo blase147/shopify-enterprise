@@ -178,7 +178,15 @@
   .c63666A-t p{
     color: #63666A !important;
   }
+  .Profile_links_data {
+    margin: 0 5%;
+  }
+  .all_select{
+    display: flex;
+    justify-content: center;
+  }
 </style>
+
 <div class="customer account c_account">
   <div class="client_profile">
     <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/files/Ellipse.png?v=1631791734">
@@ -421,7 +429,7 @@
   </div>
 
   <div id="Account" class="Profile_links_data">
-    <div class="flex space-between">
+    <div class="flex space-between" style="margin-left: 8%">
       <div>
         <h1 class="t-align-left">Personal Info</h1>
         <% address = customer&.try(:default_address) || customer&.addresses&.first rescue nil %>
@@ -624,6 +632,7 @@
 </div>
 
 
+{% section 'Account_slider' %}
 
 <script>
   function Profile(evt, usr_tab) {
