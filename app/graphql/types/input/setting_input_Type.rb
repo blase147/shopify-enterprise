@@ -10,6 +10,10 @@ module Types
 
       argument :__typename, String, required: false
       #customer portal
+      argument :order_cancel_option, String, required: false
+      argument :eligible_weekdays_for_delivery, String, required: false
+      argument :delivery_interval_after_production, String, required: false
+      argument :day_of_production, String, required: false
       argument :themes, String, required: false
       argument :style_header, String, required: false
       argument :style_footer, String, required: false

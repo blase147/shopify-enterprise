@@ -75,6 +75,10 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
         paymentRetries
         paymentDelayRetries
         maxFailStrategy
+        orderCancelOption
+        dayOfProduction
+        deliveryIntervalAfterProduction
+        eligibleWeekdaysForDelivery
         accountPortalOption
         activeSubscriptionBtnSeq
 
@@ -180,6 +184,10 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
           paymentRetries
           paymentDelayRetries
           maxFailStrategy
+          orderCancelOption
+          dayOfProduction
+          deliveryIntervalAfterProduction
+          eligibleWeekdaysForDelivery
           accountPortalOption
           activeSubscriptionBtnSeq
 

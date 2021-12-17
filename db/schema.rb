@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_30_095026) do
+ActiveRecord::Schema.define(version: 2021_12_17_072814) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -355,6 +355,10 @@ ActiveRecord::Schema.define(version: 2021_11_30_095026) do
     t.string "account_portal_option"
     t.string "active_subscription_btn_seq", array: true
     t.string "portal_theme"
+    t.string "order_cancel_option"
+    t.string "day_of_production"
+    t.string "delivery_interval_after_production"
+    t.string "eligible_weekdays_for_delivery"
     t.index ["shop_id"], name: "index_settings_on_shop_id", unique: true
   end
 

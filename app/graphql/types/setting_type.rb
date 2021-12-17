@@ -8,6 +8,10 @@ module Types
     field :active_subscription_btn_seq, [String], null: true
 
     #customer portal
+    field :order_cancel_option, String, null: true
+    field :day_of_production, String, null: true
+    field :delivery_interval_after_production, String, null: true
+    field :eligible_weekdays_for_delivery, String, null: true
     field :themes, String, null: true
     field :style_header, String, null: true
     field :style_footer, String, null: true
