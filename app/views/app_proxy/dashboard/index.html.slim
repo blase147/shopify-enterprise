@@ -36,7 +36,13 @@
               span.canceled CANCELLED &nbsp;
               span #{(@cancelled_subscriptions.count + @cancelled_line_items.count) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION'}
         = render partial: 'cancelled_subscriptions'
-
+      - if !params[:status].present? || (params[:status].present? && params[:status] == 'paused')
+        div.display-text.cancel-text
+          p
+            span MY &nbsp;
+            span.canceled PAUSED &nbsp;
+            span #{(@paused_subscriptions.count) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION'}
+        = render partial: 'paused_subscriptions'
 javascript:
   $('.owl-carousel').owlCarousel(
     {

@@ -15,7 +15,7 @@ class AppProxy::DashboardController < AppProxyController
   end
 
   def upcoming
-    @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
+    # @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
     render 'upcoming', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
@@ -46,7 +46,7 @@ class AppProxy::DashboardController < AppProxyController
   end
 
   def build_a_box
-    @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
+    # @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
     products = nil
     @subscription_id = params[:subscription_id]
     if params[:stripe_subscription]
@@ -99,6 +99,7 @@ class AppProxy::DashboardController < AppProxyController
     @data = CustomerSubscriptionContractsService.new(shopify_customer_id).run
     @stripe_subscriptions = current_shop.customer_subscription_contracts.where(shopify_customer_id: customer_id, api_source: 'stripe')
     @subscription_contracts = (@data && @data[:subscriptions] || []) + @stripe_subscriptions
+    @paused_subscriptions = (@data && @data[:paused_subscriptions] || []) + @stripe_subscriptions.select{|lc| lc.status == 'PAUSED'}
     @cancelled_subscriptions = (@data && @data[:cancelled_subscriptions] || []) + @stripe_subscriptions.select{|lc| lc.status == 'CANCELLED'}
     @active_subscriptions = (@data && @data[:active_subscriptions] || []) + @stripe_subscriptions.select{|lc| lc.status == 'ACTIVE'}
     @active_subscriptions_count = params[:active_subscriptions_count].present? ? params[:active_subscriptions_count].to_i : (@data && @data[:active_subscriptions].count || 0)

@@ -177,8 +177,8 @@ module SubscriptionConcern
   def pause
     id = params[:id]
     if params[:stripe_subscription]
-      Stripe::SubscriptionPause.new(id, current_shop).pause
       csc = CustomerSubscriptionContract.find(id)
+      Stripe::SubscriptionPause.new(csc.api_resource_id, current_shop).pause
       csc.update(status: 'PAUSED')
       render js: 'location.reload()'
     else
@@ -194,8 +194,8 @@ module SubscriptionConcern
   def resume
     id = params[:id]
     if params[:stripe_subscription]
-      Stripe::SubscriptionPause.new(id, current_shop).resume
       csc = CustomerSubscriptionContract.find(id)
+      Stripe::SubscriptionPause.new(csc.api_resource_id, current_shop).resume
       csc.update(status: 'ACTIVE')
       render js: 'location.reload()'
     else
