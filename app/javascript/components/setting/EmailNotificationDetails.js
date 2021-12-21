@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import AppLayout from '../layout/Layout';
 import {
   Card,
@@ -25,7 +25,9 @@ import htmlToDraft from 'html-to-draftjs';
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 const emailNotificationsDetails = (props) => {
+  const codeTextArea = useRef(null);
   const [valueFromName, setValueFromName] = useState();
+  const [showEditorCode, setShowEditorCode] = useState(false);
   const handleChangeFormName = useCallback(
     (newValue) => setValueFromName(newValue),
     []
@@ -70,6 +72,19 @@ const emailNotificationsDetails = (props) => {
       setEditorState(editorState)
     }
   }, [])
+
+  const toggleEditorCode = () => {
+    setShowEditorCode(!showEditorCode)
+  };
+
+  const ShowEditorCode = () => (
+    <div
+      className="rdw-option-wrapper"
+      onClick={toggleEditorCode}
+    >
+      {"</>"}
+    </div>
+  )
 
   return (
     <div className="noti-detail">
@@ -146,6 +161,7 @@ const emailNotificationsDetails = (props) => {
                   toolbarClassName="toolbarClassName"
                   wrapperClassName="wrapperClassName"
                   editorClassName="draftEditorWrapper"
+                  editorClassName={showEditorCode ? "editorHide" : "editor" }
                   onEditorStateChange={(e) => {
                     setEditorState(e)
                     setFieldValue(
@@ -153,8 +169,27 @@ const emailNotificationsDetails = (props) => {
                       draftToHtml(convertToRaw(e.getCurrentContent()))
                     )
                   }}
+                  toolbarCustomButtons={[<ShowEditorCode />]}
                   multiline={15}
                 />
+                {showEditorCode && (
+                  <textarea
+                    ref={codeTextArea}
+                    value={values.emailNotifications[index]?.emailMessage}
+                    style={{
+                      width: '100%',
+                      border: 'none',
+                      height: '10rem'
+                    }}
+                    onChange={(e) => {
+                      setEditorState(e)
+                      setFieldValue(
+                        `emailNotifications[${index}].emailMessage`,
+                        draftToHtml(convertToRaw(e.getCurrentContent()))
+                      )
+                    }}
+                  />
+                )}
 
                 {/* <TextField
                   label="Email Message"

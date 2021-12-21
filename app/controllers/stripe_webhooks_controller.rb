@@ -34,6 +34,10 @@ class StripeWebhooksController < ActionController::Base
       if csc
         csc.update(api_data: subscription.to_h)
       end
+    when 'invoice.payment_succeeded'
+      subscription = event.data.object.subscription
+      csc = CustomerSubscriptionContract.find_by(api_resource_id: subscription)
+      Stripe::OrderCreate.new(csc).create
     else
       puts "Unhandled event type: #{event.type}"
     end

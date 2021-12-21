@@ -32,11 +32,6 @@ const EmailNotification = (props) => {
         'Sent to customers when they cancel all subscription and become inactive',
     },
     {
-      name: 'Order Cancellation',
-      content:
-        'Sent to customers when the order is cancelled',
-    },
-    {
       name: 'Recurring Charge Confirmation',
       content: 'Sent to customers when their recurring payment is processed',
     },
