@@ -9,8 +9,8 @@
               img src=product.images.first&.src alt=""
             p.text.cancel-text
               = product.title
-            p.text.cancel-text
-              = "#{number_to_currency(((subscription.api_data['items']['data'][0]['price']['unit_amount']/100) rescue 0))} / #{subscription.api_data['items']['data'][0]['price']['recurring']['interval_count']} #{subscription.api_data['items']['data'][0]['price']['recurring']['interval']}"
+            / p.text.cancel-text
+            /   = "#{number_to_currency(((subscription.api_data['items']['data'][0]['price']['unit_amount']/100) rescue 0))} / #{subscription.api_data['items']['data'][0]['price']['recurring']['interval_count']} #{subscription.api_data['items']['data'][0]['price']['recurring']['interval']}"
           .grid-item
           - if @setting.customer_allowed?('reactive_subscription')
             .grid-item

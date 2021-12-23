@@ -386,11 +386,10 @@ module SubscriptionPlan
 
   def custom_plan_anchor(selling_plan, date)
     if selling_plan.billing_dates.present? && selling_plan.interval_type != "DAY"
-
       {
-        type: "#{selling_plan.interval_type}DAY",
-        day: get_day_for_interval(date, selling_plan.interval_type),
-        month: (date.month if selling_plan.interval_type == "YEAR")
+        type: "YEARDAY",
+        day: date.mday,
+        month: date.month
       }
     end
   end
@@ -399,9 +398,9 @@ module SubscriptionPlan
     if selling_plan.billing_dates.present? && selling_plan.interval_type != "DAY"
       billing_date = Date.parse(selling_plan.billing_dates.first)
       {
-        type: "#{selling_plan.interval_type}DAY",
-        day: get_day_for_interval(billing_date, selling_plan.interval_type),
-        month: (billing_date.month if selling_plan.interval_type == "YEAR")
+        type: "YEARDAY",
+        day: billing_date.mday,
+        month: billing_date.month
       }
     end
   end

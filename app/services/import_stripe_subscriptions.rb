@@ -41,6 +41,7 @@ class ImportStripeSubscriptions
       stripe_subscription = Stripe::Subscription.create({
         customer: row['customer_gateway_token'],
         billing_cycle_anchor: anchor,
+        proration_behavior: 'none',
         items: [
           {
             price_data: {
@@ -341,5 +342,65 @@ subs.each do |sub|
     }, {api_key: shop.stripe_api_key})
   end
 end
+
+=end
+
+
+=begin
+
+
+emails = ["mindygp1@comcast.net", "jenn1000@hotmail.com", "michelekel@solsticedesigns.com", "stephaniemartin2015@gmail.com", "lovelylou52@gmail.com"]
+
+emails.each do |email|
+  csc = CustomerSubscriptionContract.find_by(email: email)
+  csc.import_data['is_paused'] = 0
+  csc.import_data['active'] = 1
+  csc.status = 'ACTIVE'
+  row = csc.import_data
+  if csc.status == 'ACTIVE'
+    product = Stripe::Product.create({name: "#{row['product_title']}, #{row['variant_title']}"}, { api_key: @shop.stripe_api_key })
+    anchor = ImportStripeSubscriptions.new(nil,nil).next_anchor(row)
+    selling_plan = if csc.import_data['variant_title']&.include?('Annual')
+      SellingPlan.find(7)
+    else
+      SellingPlan.find(3)
+    end
+    csc.update(selling_plan_id: selling_plan.id)
+    calc_price = if csc.selling_plan_id == '7'
+      5499
+    elsif csc.selling_plan_id == '3'
+      5999
+    end
+
+    stripe_subscription = Stripe::Subscription.create({
+      customer: row['customer_gateway_token'],
+      billing_cycle_anchor: anchor,
+      items: [
+        {
+          price_data: {
+            unit_amount_decimal: calc_price,
+            currency: 'usd',
+            recurring: {
+              interval: row['interval_type']&.downcase&.singularize,
+              interval_count: row['interval_number']
+            },
+            product: product.id
+          }
+        }
+      ],
+      proration_behavior: 'none'
+    }, { api_key: @shop.stripe_api_key })
+
+    csc.api_resource_id = stripe_subscription.id
+    csc.api_data = stripe_subscription.to_h
+  else
+    csc.api_data = {}
+  end
+  csc.save
+rescue => e
+  puts e
+  puts email
+end
+
 
 =end

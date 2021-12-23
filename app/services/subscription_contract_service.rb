@@ -117,7 +117,7 @@ class SubscriptionContractService < GraphqlService
   end
 
   def run
-    id = if @id.include? 'SubscriptionContract'
+    id = if @id.is_a?(String) && @id.include?('SubscriptionContract')
       @id
     else
       "gid://shopify/SubscriptionContract/#{@id}"

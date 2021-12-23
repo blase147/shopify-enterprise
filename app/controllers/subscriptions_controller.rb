@@ -19,7 +19,7 @@ class SubscriptionsController < AuthenticatedController
     end
 
     if id && !@customer
-      ShopifyContractCreateWorker.new.perform(shop.id, id)
+      ShopifyContractCreateWorker.new.perform(current_shop.id, id)
       @customer = CustomerSubscriptionContract.find_by_shopify_id(id)
     end
 
@@ -31,7 +31,7 @@ class SubscriptionsController < AuthenticatedController
 
     @subscription = JSON.parse(@customer.api_data.to_json, object_class: OpenStruct)
     products = ProductService.new.list
-    @swap_products = products.is_a?(Hash) ? nil : products.select{ |p| p.node.selling_plan_group_count > 0 }
+    @swap_products = products.is_a?(Hash) ? nil : products&.select{ |p| p.node.selling_plan_group_count > 0 }
     @total = @subscription&.orders&.edges&.map { |order|
       order.node.total_received_set.presentment_money.amount.to_f
     }&.sum

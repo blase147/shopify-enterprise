@@ -181,7 +181,7 @@ module SubscriptionConcern
       Stripe::SubscriptionPause.new(csc.api_resource_id, current_shop).pause
       csc.update(status: 'PAUSED')
 
-      email_notification = customer.shop.setting.email_notifications.find_by_name "Pause Subscription"
+      email_notification = csc.shop.setting.email_notifications.find_by_name "Pause Subscription"
       EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
       render js: 'location.reload()'
     else
@@ -189,7 +189,7 @@ module SubscriptionConcern
       if result[:error].present?
         render js: "alert('#{result[:error]}');"
       else
-        email_notification = customer.shop.setting.email_notifications.find_by_name "Pause Subscription"
+        email_notification = csc.shop.setting.email_notifications.find_by_name "Pause Subscription"
         EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
         render js: 'location.reload()'
       end
@@ -200,9 +200,48 @@ module SubscriptionConcern
     id = params[:id]
     csc = CustomerSubscriptionContract.find(id)
     if params[:stripe_subscription]
-      Stripe::SubscriptionPause.new(csc.api_resource_id, current_shop).resume
-      csc.update(status: 'ACTIVE')
-      email_notification = customer.shop.setting.email_notifications.find_by_name "Pause Subscription"
+      if csc.status == 'CANCELLED'
+        row = csc.import_data
+        product = Stripe::Product.create({name: "#{row['product_title']}, #{row['variant_title']}"}, { api_key: current_shop.stripe_api_key })
+        anchor = ImportStripeSubscriptions.new(nil,nil).next_anchor(row)
+        selling_plan = if csc.import_data['variant_title']&.include?('Annual')
+          SellingPlan.joins(:selling_plan_group).where(selling_plan_groups: { shop_id: current_shop.id }).find_by(selector_label: 'Annual')
+        else
+          SellingPlan.joins(:selling_plan_group).where(selling_plan_groups: { shop_id: current_shop.id }).find_by(selector_label: 'Quarterly')
+        end
+        csc.selling_plan_id = selling_plan.id
+        calc_price = if selling_plan.selector_label == 'Annual'
+          5499
+        elsif selling_plan.selector_label == 'Quarterly'
+          5999
+        end
+
+        stripe_subscription = Stripe::Subscription.create({
+          customer: row['customer_gateway_token'],
+          billing_cycle_anchor: anchor,
+          proration_behavior: 'none',
+          items: [
+            {
+              price_data: {
+                unit_amount_decimal: calc_price,
+                currency: 'usd',
+                recurring: {
+                  interval: selling_plan.interval_type.downcase,
+                  interval_count: selling_plan.interval_count
+                },
+                product: product.id
+              }
+            }
+          ]
+        }, { api_key: current_shop.stripe_api_key })
+        csc.api_resource_id = stripe_subscription.id
+        csc.api_data = stripe_subscription.to_h
+      elsif csc.status == 'PAUSED'
+        Stripe::SubscriptionPause.new(csc.api_resource_id, current_shop).resume
+      end
+      csc.status = 'ACTIVE'
+      csc.save
+      email_notification = csc.shop.setting.email_notifications.find_by_name "Resume Subscription"
       EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
       render js: 'location.reload()'
     else
@@ -211,7 +250,7 @@ module SubscriptionConcern
       if result[:error].present?
         render js: "alert('#{result[:error]}');"
       else
-        email_notification = customer.shop.setting.email_notifications.find_by_name "Pause Subscription"
+        email_notification = csc.shop.setting.email_notifications.find_by_name "Resume Subscription"
         EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
         render js: 'location.reload()'
       end

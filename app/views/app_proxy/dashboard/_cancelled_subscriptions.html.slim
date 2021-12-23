@@ -2,7 +2,7 @@
   .subscription-contract-products
     - @cancelled_subscriptions.each do |subscription|
       - if (subscription.api_source == 'stripe' rescue false)
-        - next unless subscription.api_data.present?
+        / - next unless subscription.api_data.present?
         - product = ShopifyAPI::Product.find(subscription.import_data['product_id'])
         .grid
           .grid-item
@@ -10,8 +10,8 @@
               img src=product.images.first&.src alt=""
             p.text.cancel-text
               = product.title
-            p.text.cancel-text
-              = "#{number_to_currency(((subscription.api_data['items']['data'][0]['price']['unit_amount']/100) rescue 0))} / #{subscription.api_data['items']['data'][0]['price']['recurring']['interval_count']} #{subscription.api_data['items']['data'][0]['price']['recurring']['interval']}"
+            / p.text.cancel-text
+            /   = "#{number_to_currency(((subscription.api_data['items']['data'][0]['price']['unit_amount']/100) rescue 0))} / #{subscription.api_data['items']['data'][0]['price']['recurring']['interval_count']} #{subscription.api_data['items']['data'][0]['price']['recurring']['interval']}"
           .grid-item
           - if @setting.customer_allowed?('reactive_subscription')
             .grid-item
