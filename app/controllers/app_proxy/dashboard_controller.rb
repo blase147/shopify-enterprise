@@ -1,6 +1,6 @@
 class AppProxy::DashboardController < AppProxyController
   before_action :load_subscriptions, except: [:build_a_box, :confirm_box_selection]
-  before_action :load_customer, only: %w(index addresses payment_methods settings upcoming build_a_box)
+  before_action :load_customer, only: %w(index addresses payment_methods settings upcoming build_a_box track_order)
 
   def index
     # @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
@@ -17,6 +17,10 @@ class AppProxy::DashboardController < AppProxyController
   def upcoming
     # @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
     render 'upcoming', content_type: 'application/liquid', layout: 'liquid_app_proxy'
+  end
+
+  def track_order
+    render 'track_order', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
   def order_history

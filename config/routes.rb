@@ -93,6 +93,7 @@ Rails.application.routes.draw do
         get :settings
         get :build_a_box
         post :confirm_box_selection
+        get :track_order
       end
     end
 

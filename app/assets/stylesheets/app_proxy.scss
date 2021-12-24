@@ -2460,3 +2460,51 @@ Customer Build a box .checkout-design-1 {
 span.cancel-text {
     color: #000 !important;
 }
+.rem2{
+  margin: 3rem;
+}
+.track-order-button{
+  border: 1px solid;
+  padding: 0.7rem 4rem;
+  background: transparent;
+  margin-bottom: 1rem;
+  font-size: 1.7rem;
+  color: black;
+  text-decoration: none;
+  text-align: center;
+}
+.m-top-3{
+  margin-top: 3rem;
+}
+.m-top-7{
+  margin-top: 7rem;
+}
+.elipse-style{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 9rem;
+  text-align: center;
+}
+.hr-dotted{
+  border: none;
+  border-top: 2px dotted black;
+  color: #fff;
+  background-color: #fff;
+  height: 1px;
+  width: 7rem;
+  margin: 8rem -4rem 0 -4rem;
+}
+.hr-dotted-2{
+  border: none;
+  border-top: 2px dotted black;
+  color: #fff;
+  background-color: #fff;
+  height: 1px;
+  width: 6rem;
+  margin: 8rem -4rem 0 -4rem;
+}
+.mt-1{
+  margin-top: 1rem !important;
+}

@@ -50,6 +50,21 @@ nav.Polaris-Navigation.account
                   = icon_tag 'address'
 
             span.Polaris-Navigation__Text Rewards
+
+      li.Polaris-Navigation__ListItem
+        .Polaris-Navigation__ItemWrapper
+          a.Polaris-Navigation__Item class=active_nav('pages', 'Track Order') href="/a/chargezen_production/dashboard/track_order?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
+            .Polaris-Navigation__Icon
+              span.Polaris-Icon
+                svg fill="none" height="18" viewbox=("0 0 22 18") width="22" xmlns="http://www.w3.org/2000/svg"
+                  g clip-path="url(#clip0)"
+                    path d=("M18.8089 1.80762H4.08168C3.17794 1.80762 2.44531 2.59112 2.44531 3.55762V14.0576C2.44531 15.0241 3.17794 15.8076 4.08168 15.8076H18.8089C19.7127 15.8076 20.4453 15.0241 20.4453 14.0576V3.55762C20.4453 2.59112 19.7127 1.80762 18.8089 1.80762Z") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill='#E5E5E5' /
+                    path d=("M2.44531 6.80762H20.4453") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
+                  defs
+                    clippath#clip0
+                      rect height="17" transform=("translate(0.753906 0.556641)") width="21" /
+            span.Polaris-Navigation__Text Track Order
+
       - if @setting.show_delivery_schedule.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper

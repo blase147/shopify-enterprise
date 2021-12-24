@@ -1,0 +1,162 @@
+<%# customer_orders = ShopifyAPI::Order.find(:all, params: {customer_id: params[:customer_id], limit: 10} ) rescue [] %>
+<div class="Polaris-Frame" data-has-navigation="true" data-polaris-layer="true">
+<!--  <div>-->
+<!--    <div id="AppFrameNav">-->
+      <%#= render 'app_proxy/shared/dashboard_nav' %>
+<!--    </div>-->
+<!--  </div>-->
+
+  <div class="Polaris-Frame__ContextualSaveBar Polaris-Frame-CSSAnimation--startFade">
+  </div>
+
+
+  <main class="Polaris-Frame__Main" data-has-global-ribbon="false" id="AppFrameMain">
+    <a id="AppFrameMainContent" tabindex="-1">
+    </a>
+    <div class="Polaris-Frame__Content">
+      <div class="Polaris-Page">
+        <%# if @active_subscriptions_count == 0 || params[:active_subscriptions_count].to_i == 0 %>
+          <div class="content-wrapper">
+            <div>
+              <div>
+                <p><b>Seasonal Timeline</b></p>
+              </div>
+              <div style="display: flex;flex-direction: row; flex-wrap: wrap;">
+                <div class="rem2 m-top-7 elipse-style" style="margin-top: 5rem;">
+                  <%= image_tag 'Ellipse32.png' %>
+                  <p class="mt-1">Season Starts</p>
+                </div>
+                <hr class="hr-dotted-2">
+                <div class="rem2 m-top-7 elipse-style">
+                  <%= image_tag 'Ellipse32.png' %>
+                  <p class="mt-1">Add-Ons Nov. 1</p>
+                </div>
+                <hr class="hr-dotted-2">
+                <div class="rem2 m-top-7 elipse-style">
+                  <%= image_tag 'Ellipse32.png' %>
+                  <p class="mt-1">Customization Nov. 2</p>
+                </div>
+                <hr class="hr-dotted-2">
+                <div class="rem2 m-top-7 elipse-style">
+                  <%= image_tag 'Ellipse32.png' %>
+                  <p class="mt-1">Between Windows</p>
+                </div>
+                <hr class="hr-dotted-2">
+                <div class="rem2 m-top-7 elipse-style">
+                  <%= image_tag 'Ellipse32.png' %>
+                  <p class="mt-1">Add-Ons Nov. 15</p>
+                </div>
+                <hr class="hr-dotted-2">
+                <div class="rem2 m-top-7 elipse-style">
+                  <%= image_tag 'Ellipse32.png' %>
+                  <p class="mt-1">Customization Nov. 16</p>
+                </div>
+                <hr class="hr-dotted-2">
+                <div class="rem2 m-top-7 elipse-style">
+                  <%= image_tag 'Ellipse_blue.png' %>
+                  <p class="mt-1">Look Out For Flash Sales</p>
+                </div>
+                <hr class="hr-dotted-2">
+                <div class="rem2 m-top-7 elipse-style"  style="margin-top: 5rem;">
+                  <%= image_tag 'Ellipse32.png' %>
+                  <p class="mt-1">Season Ends</p>
+                </div>
+                <div style="display: flex; flex-direction: column; margin-top: 5rem;">
+                  <a style="font-size: 1.4rem;color: white;background: #007EFF;" class="track-order-button" href="/a/chargezen_production/dashboard?customer_id=<%=params[:customer_id] %>" >
+                    SEND A FREE BOX
+                  </a>
+                  <a STYLE="font-size: 1.4rem;" class="track-order-button" href="/a/chargezen_production/dashboard?customer_id=<%=params[:customer_id] %>" >
+                    ADD TO CALENDER
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <hr>
+            <% # customer_orders.each do |order| %>
+            {% for order in customer.orders %}
+              <% # product = ShopifyAPI::Product.find(order.line_items.first.product_id) %>
+              {% assign line_item = order.line_items | first %}
+              <div>
+                <div>
+                  <p><b>{{ line_item.title }} Status</b></p>
+                </div>
+                <div style="display: flex;flex-direction: row; flex-wrap: wrap;">
+                  <div class="rem2 m-top-3">
+                    {{ line_item.product.featured_image | img_tag }}
+                  </div>
+                  <div class="rem2 m-top-7 elipse-style">
+                    {% if order.fulfillment_status == 'unfulfilled' %}
+                      <%= image_tag 'Ellipse_blue.png' %>
+                    {% else %}
+                      <%= image_tag 'Ellipse32.png' %>
+                    {% endif %}
+                    <p class="mt-1">Box Not Processed</p>
+                  </div>
+                  <hr class="hr-dotted">
+                  <div class="rem2 m-top-7 elipse-style">
+                    <%= image_tag 'Ellipse32.png' %>
+                    <p class="mt-1">Box order saved</p>
+                  </div>
+                  <hr class="hr-dotted">
+                  <div class="rem2 m-top-7 elipse-style">
+                    <%= image_tag 'Ellipse32.png' %>
+                    <p class="mt-1">Preparing to ship</p>
+                  </div>
+                  <hr class="hr-dotted">
+                  <div class="rem2 m-top-7 elipse-style">
+                    {% if order.fulfillment_status == 'fulfilled' %}
+                      <%= image_tag 'Ellipse_blue.png' %>
+                    {% else %}
+                      <%= image_tag 'Ellipse32.png' %>
+                    {% endif %}
+                    <p class="mt-1">Order Shipped</p>
+                  </div>
+                  <div style="display: flex; flex-direction: column; margin-top: 2rem;">
+                    <a class="track-order-button" href="/a/chargezen_production/dashboard?customer_id=<%=params[:customer_id] %>" >
+                      MY ACCOUNT
+                    </a>
+                    <a class="track-order-button" href="/a/chargezen_production/dashboard?customer_id=<%=params[:customer_id] %>" >
+                      MY BOX
+                    </a>
+                    <a class="track-order-button" href="/a/chargezen_production/orders?customer_id=<%= params[:customer_id] %>&active_subscriptions_count=<%= @active_subscriptions_count %>" >
+                      ORDER HISTORY
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column">
+                <p style="font-size: 2.8rem;margin-bottom: 10px;">{{ order.fulfillment_status_label }}</p>
+                <div style="display: flex; flex-direction: row">
+                <%= image_tag 'truck.png', style: 'width: 30px;' %>
+                <p style="font-weight: 500;margin-top: 7px;margin-left: 10px;;">Your order is on the way!</p>
+                </div>
+                <a style="color: gray;" href="{{ order.order_status_url }}">Show more</a>
+                <p style="color: red">Tracking Number</p>
+                {% if line_item.fulfillment.tracking_number %}
+                  <p>{{ line_item.fulfillment.tracking_number }}</p>
+                {% endif %}
+              </div>
+              <br>
+              <hr>
+              <br>
+            {% endfor %}
+            <% #end %>
+          </div>
+          <%# end %>
+      </div>
+    </div>
+  </main>
+
+</div>
+
+
+
+
+<script>
+  $('.btn-link').click(function (event) {
+    $(this).attr('disabled', 'disabled');
+    event.preventDefault();
+  });
+
+</script>
