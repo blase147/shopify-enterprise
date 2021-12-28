@@ -1,10 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
-import ReactFlow, { Handle, ReactFlowProvider, } from "react-flow-renderer";
-import { PlusMinor, DeleteMinor, EditMinor } from "@shopify/polaris-icons";
-import Tags from "@yaireo/tagify/dist/react.tagify";
-import {triggerList, actionList, conditionOptions, conditions} from './layout/triggerList'
-import {updateElementList, makeElementSelected} from './FlowComponents/util'
-import AndOrComponent from './FlowComponents/AndOrComponent'
+import React, { useContext, useEffect, useState } from 'react';
+import ReactFlow, { Handle, ReactFlowProvider } from 'react-flow-renderer';
+import { PlusMinor, DeleteMinor, EditMinor } from '@shopify/polaris-icons';
+import Tags from '@yaireo/tagify/dist/react.tagify';
+import {
+  triggerList,
+  actionList,
+  conditionOptions,
+  conditions,
+} from './layout/triggerList';
+import { updateElementList, makeElementSelected } from './FlowComponents/util';
+import AndOrComponent from './FlowComponents/AndOrComponent';
 import {
   Button,
   Card,
@@ -14,78 +19,78 @@ import {
   Subheading,
   TextField,
   TextStyle,
-} from "@shopify/polaris";
-import LayoutFlow, {getLayoutedElements} from "./layout/Layout";
-import ModalComp from "./FlowComponents/modal";
-import "@yaireo/tagify/dist/tagify.css";
-
+} from '@shopify/polaris';
+import LayoutFlow, { getLayoutedElements } from './layout/Layout';
+import ModalComp from './FlowComponents/modal';
+import '@yaireo/tagify/dist/tagify.css';
 
 const edgeType = 'smoothstep';
 const customNodeStyles1 = {
-  border: "1px solid #9CA8B3",
-  color: "#000",
+  border: '1px solid #9CA8B3',
+  color: '#000',
   padding: 10,
-  minWidth: "20rem",
-  maxWidth: "20rem",
+  minWidth: '20rem',
+  maxWidth: '20rem',
 };
-const highlightCls1= {
-  border: "1px solid red",
-  color: "#000",
+const highlightCls1 = {
+  border: '1px solid red',
+  color: '#000',
   padding: 10,
-  minWidth: "20rem",
-  maxWidth: "20rem",
+  minWidth: '20rem',
+  maxWidth: '20rem',
 };
 const highlightCls = {
-  cursor: "pointer",
-    zIndex: "99999",
-    background: "rgb(255, 255, 255)",
-    borderWidth: "1px 1px 3px",
-    borderStyle: "solid",
-    borderColor: "red red rgb(200, 111, 221)",
-    borderImage: "initial",
-    borderRadius: "0.3rem",
-    position: "relative",
-    textAlign: "center",
-    boxShadow: "rgb(0 0 0 / 20%) 0px 0px 4px 0px",
-    padding: 10,
-    minWidth: "20rem",
-    maxWidth: "20rem",
-}
+  cursor: 'pointer',
+  zIndex: '99999',
+  background: 'rgb(255, 255, 255)',
+  borderWidth: '1px 1px 3px',
+  borderStyle: 'solid',
+  borderColor: 'red red rgb(200, 111, 221)',
+  borderImage: 'initial',
+  borderRadius: '0.3rem',
+  position: 'relative',
+  textAlign: 'center',
+  boxShadow: 'rgb(0 0 0 / 20%) 0px 0px 4px 0px',
+  padding: 10,
+  minWidth: '20rem',
+  maxWidth: '20rem',
+};
 const customNodeStyles = {
-  cursor: "pointer",
-  zIndex: "99999",
-  background: "rgb(255, 255, 255)",
-    borderBottom: "3px solid rgb(225, 113, 34)",
-    borderRadius: "0.3rem",
-    position: "relative",
-    textAlign: "center",
-    boxShadow: "rgb(0 0 0 / 40%) 0px 0px 6px 0px",
-    padding: 10,
-  minWidth: "20rem",
-  maxWidth: "20rem",
-}
+  cursor: 'pointer',
+  zIndex: '99999',
+  background: 'rgb(255, 255, 255)',
+  borderBottom: '3px solid rgb(225, 113, 34)',
+  borderRadius: '0.3rem',
+  position: 'relative',
+  textAlign: 'center',
+  boxShadow: 'rgb(0 0 0 / 40%) 0px 0px 6px 0px',
+  padding: 10,
+  minWidth: '20rem',
+  maxWidth: '20rem',
+};
 
 const addStepStyles = {
-  border: "1px solid #9CA8B3",
-  color: "#000",
+  border: '1px solid #9CA8B3',
+  color: '#000',
   padding: 10,
-  minWidth: "20rem",
-  maxWidth: "20rem",
+  minWidth: '20rem',
+  maxWidth: '20rem',
 };
 
 const addConditonStyles = {
-  border: "1px solid #9CA8B3",
-  color: "#000",
+  border: '1px solid #9CA8B3',
+  color: '#000',
   padding: 10,
-  fontSize: "0.8em",
+  fontSize: '0.8em',
   height: '100px',
 };
 const elipses = {
   textAlign: 'center',
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
-    width: '18rem'
-}
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  width: '18rem',
+  whiteSpace: 'nowrap',
+};
 
 const ElementsContext = React.createContext();
 
@@ -115,39 +120,41 @@ const FlowComponent = ({ id, data }) => {
 };
 
 const smartyVariables = [
-  "card_brand - card_last4",
-  "card_exp_month/card_exp_year",
-  "subscription_title",
-  "subscription_charge_date",
-  "delay_weeks",
-  "shop_email",
-  "first_name",
-  "old_charge_date",
-  "line_item_qty",
-  "line_item_list",
-  "line_item_name",
-  "manage_subscriptions_url",
-  "cancellation_reasons",
-  "shop_name",
-  "@shop_email",
-  "@shop_name",
+  'card_brand - card_last4',
+  'card_exp_month/card_exp_year',
+  'subscription_title',
+  'subscription_charge_date',
+  'delay_weeks',
+  'shop_email',
+  'first_name',
+  'old_charge_date',
+  'line_item_qty',
+  'line_item_list',
+  'line_item_name',
+  'manage_subscriptions_url',
+  'cancellation_reasons',
+  'shop_name',
+  '@shop_email',
+  '@shop_name',
 ];
 
 const flowStatusOptions = [
-  { label: "Active", value: true },
-  { label: "Draft", value: false }
-]
+  { label: 'Active', value: true },
+  { label: 'Draft', value: false },
+];
 
 const FlowTree = ({ id }) => {
   const [displayTrigger, setDisplayTrigger] = useState(null);
   const [displayDelay, setDisplayDelay] = useState(false);
   const [modificationId, setModificationId] = useState(false);
   const [displayActions, setDisplayActions] = useState(false);
+  const [displayCondition, setDisplayCondition] = useState(false);
   const [basicElements, setBasicElements] = useState([]);
+  const [outputElements, setOutputElements] = useState([]);
   const [smartyMessage, setSmartyMessage] = useState('');
   const [flowName, setFlowName] = useState('');
-  const [flowStatus, setFlowStatus] = useState( false );
-  const [flowId, setFlowId] = useState( '' );
+  const [flowStatus, setFlowStatus] = useState(false);
+  const [flowId, setFlowId] = useState('');
 
   useEffect(() => {
     if (id && id > 0) {
@@ -163,19 +170,19 @@ const FlowTree = ({ id }) => {
           setBasicElements(data.content);
           setFlowName(data.name);
           setFlowStatus(data.status);
-          setFlowId(data.id)
+          setFlowId(data.id);
         });
     }
   }, [id]);
 
   const delayOptions = [
-    { label: "Minute/s", value: "minutes" },
-    { label: "Hour/s", value: "hours" },
-    { label: "Day/s", value: "days" },
+    { label: 'Minute/s', value: 'minutes' },
+    { label: 'Hour/s', value: 'hours' },
+    { label: 'Day/s', value: 'days' },
   ];
 
   const removeNode = (id, elements) => {
-    if (id == "1") {
+    if (id == '1') {
       setDisplayTrigger(null);
       setBasicElements([]);
     } else {
@@ -195,13 +202,15 @@ const FlowTree = ({ id }) => {
   const removeAllConnectedNodes = (id, elements) => {
     const elementToRemove = elements.find((e) => e.id == id);
     const insertionIndex = elements.indexOf(elementToRemove);
-    if(elementToRemove.type=== 'condition') {
-      const removeConnectedNodes =  [];
+    if (elementToRemove.type === 'condition') {
+      const removeConnectedNodes = [];
       const childConnections = getAllConnectedChildList(id, elements);
-      elements.forEach(pinItem => {
+      elements.forEach((pinItem) => {
         const condValI = pinItem.parent == id;
-        const exist = childConnections.find(itemSkip => itemSkip.id === pinItem.id);
-        if(exist === undefined) {
+        const exist = childConnections.find(
+          (itemSkip) => itemSkip.id === pinItem.id
+        );
+        if (exist === undefined) {
           removeConnectedNodes.push(pinItem);
         }
       });
@@ -211,8 +220,8 @@ const FlowTree = ({ id }) => {
       removeConnectedNodes[updateIndex] = {
         parent: removeConnectedNodes[updateIndex].parent,
         id: removeConnectedNodes[updateIndex].id,
-        type: "end",
-      }
+        type: 'end',
+      };
       setBasicElements(removeConnectedNodes);
     }
     setDisplayDelay(false);
@@ -220,9 +229,9 @@ const FlowTree = ({ id }) => {
   };
 
   const getAllConnectedChildList = (id, elements) => {
-    let parentNodeList = []
-    elements.filter(item => {
-      if(item.parent === id) {
+    let parentNodeList = [];
+    elements.filter((item) => {
+      if (item.parent === id) {
         parentNodeList.push(item);
         const list = getAllConnectedChildList(item.id, elements);
         parentNodeList = [...parentNodeList, ...list];
@@ -231,20 +240,20 @@ const FlowTree = ({ id }) => {
     return parentNodeList;
   };
 
-  const generateID = ()=> Math.random().toString(36).substr(2, 5);
+  const generateID = () => Math.random().toString(36).substr(2, 5);
 
   const addStep = (id, elements) => {
-    const basicElementId = id.split("-")[0];
+    const basicElementId = id.split('-')[0];
     const newElements = [...elements];
-    const newId = (elements.length+1).toString()+generateID();
-      const insertBefore = newElements.find((e) => e.id == basicElementId);
-      const insertionIndex = newElements.indexOf(insertBefore);
-    if (['yes','no'].includes(id.split("-")[1])) {
+    const newId = (elements.length + 1).toString() + generateID();
+    const insertBefore = newElements.find((e) => e.id == basicElementId);
+    const insertionIndex = newElements.indexOf(insertBefore);
+    if (['yes', 'no'].includes(id.split('-')[1])) {
       newElements[insertionIndex].type = 'chooseNext';
       const endNode = {
         parent: newElements[insertionIndex].id,
         id: newId,
-        type: "end",
+        type: 'end',
       };
       newElements.push(endNode);
       setBasicElements(newElements);
@@ -252,7 +261,7 @@ const FlowTree = ({ id }) => {
       newElements.splice(insertionIndex, 0, {
         parent: insertBefore.parent,
         id: newId,
-        type: "chooseNext",
+        type: 'chooseNext',
       });
 
       insertBefore.parent = newId;
@@ -268,18 +277,32 @@ const FlowTree = ({ id }) => {
       setDisplayActions(false);
     };
   };
-  const sortList = (list) =>{
-    return list.sort((pin,pinI)=>pinI.id > pin.id)
-  }
+  const sortList = (list) => {
+    return list.sort((pin, pinI) => pinI.id > pin.id);
+  };
 
   const chooseAction = (id, elements, nodeData) => {
-    console.log("choose action");
+    console.log('choose action');
     toggleLeftPanels(id, 'action');
+    if (
+      nodeData &&
+      nodeData.selectedActionId &&
+      nodeData.selectedActionId === displayActions.selectedAction
+    ) {
+      setSmartyMessage(nodeData.msg);
+      setDisplayActions({
+        selectedAction: nodeData.selectedActionId,
+        title: nodeData.title,
+      });
+    } else {
+      setSmartyMessage('');
+      setDisplayActions({});
+    }
     // setDisplayDelay(false);
-    setDisplayActions({});
+    // setDisplayActions({});
   };
   const chooseDelay = (id, elements, nodeData) => {
-    console.log("choose action");
+    console.log('choose action');
     toggleLeftPanels(id, 'delay');
     setDisplayDelay(nodeData);
   };
@@ -289,63 +312,63 @@ const FlowTree = ({ id }) => {
       <>
         <div
           style={{
-            padding: "0 3rem",
-            display: "flex",
-            justifyContent: "center",
+            padding: '0 3rem',
+            display: 'flex',
+            justifyContent: 'center',
           }}
         >
-          <div style={{
-          display:'flex',
-          flexWrap: 'nowrap',
-          justifyContent: "center",
-          alignItems: "center"
-        }}>
-          <TextStyle variation="subdued">Action </TextStyle>
-          <div
-          style={{marginRight: "0.5rem", cursor: "pointer"}}
-          onClick={()=>chooseAction(id, elements, nodeData)}
-        >
-          <Icon source={EditMinor} color="#9CA8B3" />
-        </div>
-        </div>
           <div
             style={{
-              position: "absolute",
-              right: "0",
-              marginRight: "0.5rem",
-              cursor: "pointer",
+              display: 'flex',
+              flexWrap: 'nowrap',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <TextStyle variation="subdued">Action </TextStyle>
+            <div
+              style={{ marginRight: '0.5rem', cursor: 'pointer' }}
+              onClick={() => chooseAction(id, elements, nodeData)}
+            >
+              <Icon source={EditMinor} color="#9CA8B3" />
+            </div>
+          </div>
+          <div
+            style={{
+              position: 'absolute',
+              right: '0',
+              marginRight: '0.5rem',
+              cursor: 'pointer',
             }}
             onClick={() => removeNode(id, elements)}
           >
             <Icon source={DeleteMinor} color="#9CA8B3" />
           </div>
         </div>
-        {nodeData && nodeData.msg.length > 0 && <ModalComp
-        title={ <p title={nodeData.msg} style={{ ...elipses }} id={id}>
-        {nodeData?.msg
-          ? `${nodeData.msg}`
-          : "Write Msg"}
-      </p>}
-        AddBtn={false}
-        nodeData={nodeData}
-        content={<p id={id}>
-        {nodeData?.msg
-          ? `${nodeData.msg}`
-          : "Write Msg"}
-      </p>}
-        />}
+        {nodeData && nodeData.msg.length > 0 && (
+          <ModalComp
+            title={
+              <p title={nodeData.msg} style={{ ...elipses }} id={id}>
+                {nodeData?.msg ? `${nodeData.msg}` : 'Write Msg'}
+              </p>
+            }
+            AddBtn={false}
+            nodeData={nodeData}
+            content={
+              <p id={id}>{nodeData?.msg ? `${nodeData.msg}` : 'Write Msg'}</p>
+            }
+          />
+        )}
         <div
           style={{
-            border: "1px solid #9CA8B3",
-            margin: "1rem 0 0 0",
-            padding: "0.5rem",
-            cursor: "pointer",
+            border: '1px solid #9CA8B3',
+            margin: '1rem 0 0 0',
+            padding: '0.5rem',
+            cursor: 'pointer',
           }}
         >
-          <p style={{ textAlign: "center" }}>
-            {nodeData?.notify
-              ? `To ${nodeData.notify}`
-              : "Choose Action"}
+          <p style={{ textAlign: 'center' }}>
+            {nodeData?.notify ? `To ${nodeData.notify}` : 'Choose Action'}
           </p>
         </div>
       </>
@@ -353,70 +376,105 @@ const FlowTree = ({ id }) => {
   };
 
   const addConditionNodeChild = ({ id, elements, nodeData }) => {
-    return <>
-      <div
-        style={{
-          padding: "0 3rem",
-          justifyContent: "center",
-          maxHeight:"100px",
-          overflow: "auto",
-          display: "flex",
-          flexDirection: "column"
-        }}
-      >
-        <div style={{
-          display:'flex',
-          flexWrap: 'nowrap',
-          justifyContent: "center",
-          alignItems: "center"
-        }}>
-          <TextStyle variation="subdued">Check IF </TextStyle>
-          <div
-          style={{marginRight: "0.5rem", cursor: "pointer"}}
-          onClick={()=>onNodeClick(id, elements, nodeData)}
-        >
-          <Icon source={EditMinor} color="#9CA8B3" />
-        </div>
-        </div>
+    return (
+      <>
         <div
           style={{
-            position: "absolute",
-            right: "0",
-            marginRight: "0.5rem",
-            cursor: "pointer",
+            padding: '0 3rem',
+            justifyContent: 'center',
+            maxHeight: '100px',
+            overflow: 'auto',
+            display: 'flex',
+            flexDirection: 'column',
           }}
-          onClick={() => removeAllConnectedNodes(id, elements)}
         >
-          <Icon source={DeleteMinor} color="#9CA8B3" />
-        </div>
-        <div style={{display:"flex"}}>
-        {nodeData && nodeData.length > 0 && <ModalComp
-        title='Conditions'
-        addBtn={true}
-        nodeData={nodeData}
-        content={nodeData.map((orItem,key)=>{
-          return <><div style={{margin:"1%", border:"1px solid lightgrey", overflow:"auto"}}>
-          {orItem.map((andItem, index) =>{
-            return <><h5>
-              {andItem && andItem.length > 0 && andItem.map(finalItem => {
-                return <>{finalItem.conditionValue} {` ${finalItem.condition} ${finalItem.value}`}</>
-              })}
-            </h5>
-            {andItem && index!==orItem.length-1 && <h3 style={{fontWeight: "bolder"}}>And</h3>}
-            </>
-          })}
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'nowrap',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <TextStyle variation="subdued">Check IF </TextStyle>
+            <div
+              style={{ marginRight: '0.5rem', cursor: 'pointer' }}
+              onClick={() => onNodeClick(id, elements, nodeData)}
+            >
+              <Icon source={EditMinor} color="#9CA8B3" />
+            </div>
           </div>
-          {key!==nodeData.length-1 && <h3 style={{fontWeight: "bolder"}}>Or</h3>}
-          </>
-        })} />}
+          <div
+            style={{
+              position: 'absolute',
+              right: '0',
+              marginRight: '0.5rem',
+              cursor: 'pointer',
+            }}
+            onClick={() => removeAllConnectedNodes(id, elements)}
+          >
+            <Icon source={DeleteMinor} color="#9CA8B3" />
+          </div>
+          <div style={{ display: 'flex' }}>
+            {nodeData && nodeData.length > 0 && (
+              <ModalComp
+                title="Conditions"
+                addBtn={true}
+                nodeData={nodeData}
+                content={nodeData.map((orItem, key) => {
+                  return (
+                    <>
+                      <div
+                        style={{
+                          margin: '1%',
+                          padding: '1%',
+                          border: '1px solid lightgrey',
+                          overflow: 'auto',
+                        }}
+                      >
+                        {orItem.map((andItem, index) => {
+                          return (
+                            <>
+                              {andItem &&
+                              andItem.length > 0 &&
+                              andItem.map((finalItem) => {
+                                return (
+                                  <>
+                                    <h5>
+                                      {finalItem &&
+                                      finalItem.conditionTitle != '' &&
+                                      `${finalItem.conditionTitle},`}
+                                    </h5>
+                                  </>
+                                );
+                              })}
+                              {andItem && andItem.length > 0 && (
+                                <h3 style={{ fontWeight: 'bolder' }}>
+                                  of Value: {andItem[0].value}
+                                </h3>
+                              )}
+                              {andItem && index !== orItem.length - 1 && (
+                                <h3 style={{ fontWeight: 'bolder' }}>And</h3>
+                              )}
+                            </>
+                          );
+                        })}
+                      </div>
+                      {key !== nodeData.length - 1 && (
+                        <h3 style={{ fontWeight: 'bolder' }}>Or</h3>
+                      )}
+                    </>
+                  );
+                })}
+              />
+            )}
+          </div>
         </div>
-      </div>
-      <p style={{ textAlign: "center" }} id={id} data-id={id}>
-        {nodeData?.msg
-          ? `${nodeData.msg}`
-          : ""}
-      </p>
-    </>;
+        <p style={{ textAlign: 'center' }} id={id} data-id={id}>
+          {nodeData?.msg ? `${nodeData.msg}` : ''}
+        </p>
+      </>
+    );
   };
 
   const addDelayNodeChild = ({ id, elements, nodeData }) => {
@@ -424,31 +482,33 @@ const FlowTree = ({ id }) => {
       <>
         <div
           style={{
-            padding: "0 3rem",
-            display: "flex",
-            justifyContent: "center",
+            padding: '0 3rem',
+            display: 'flex',
+            justifyContent: 'center',
           }}
         >
-          <div style={{
-          display:'flex',
-          flexWrap: 'nowrap',
-          justifyContent: "center",
-          alignItems: "center"
-        }}>
-          <TextStyle variation="subdued">Delay </TextStyle>
-          <div
-          style={{marginRight: "0.5rem", cursor: "pointer"}}
-          onClick={()=>chooseDelay(id, elements, nodeData)}
-        >
-          <Icon source={EditMinor} color="#9CA8B3" />
-        </div>
-        </div>
           <div
             style={{
-              position: "absolute",
-              right: "0",
-              marginRight: "0.5rem",
-              cursor: "pointer",
+              display: 'flex',
+              flexWrap: 'nowrap',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <TextStyle variation="subdued">Delay </TextStyle>
+            <div
+              style={{ marginRight: '0.5rem', cursor: 'pointer' }}
+              onClick={() => chooseDelay(id, elements, nodeData)}
+            >
+              <Icon source={EditMinor} color="#9CA8B3" />
+            </div>
+          </div>
+          <div
+            style={{
+              position: 'absolute',
+              right: '0',
+              marginRight: '0.5rem',
+              cursor: 'pointer',
             }}
             onClick={() => removeNode(id, elements)}
           >
@@ -457,18 +517,24 @@ const FlowTree = ({ id }) => {
         </div>
         <div
           style={{
-            border: "1px solid #9CA8B3",
-            margin: "1rem 0 0 0",
-            padding: "0.5rem",
-            cursor: "pointer",
+            border: '1px solid #9CA8B3',
+            margin: '1rem 0 0 0',
+            padding: '0.5rem',
+            cursor: 'pointer',
+            display: 'flex',
           }}
           onClick={setDelay(id, elements)}
         >
-          <p style={{ textAlign: "center" }}>
-            {nodeData
-              ? `${nodeData.duration} ${nodeData.interval}`
-              : "Set Up Delay"}
-          </p>
+          {nodeData && (
+            <p
+              title={nodeData.duration}
+              style={{ textAlign: 'center', ...elipses, width: '70%' }}
+            >
+              {nodeData.duration}
+            </p>
+          )}
+          {nodeData && <p>{nodeData.interval}</p>}
+          {nodeData ? '' : <p>{'Set Up Delay & interval'}</p>}
         </div>
       </>
     );
@@ -476,19 +542,23 @@ const FlowTree = ({ id }) => {
 
   const addStepNodeChild = ({ id, elements }) => {
     return (
-       <>
-      <div
-        style={{ padding: "0 3rem", display: "flex", justifyContent: "center" }}
-      >
-      <Button onClick={() => addStep(id, elements)} plain fullWidth>
-        <div style={{ display: "flex" }}>
-          <div style={{ width: "12px", marginTop: "1px" }}>
-            <PlusMinor />
-          </div>
-          Add Step
+      <>
+        <div
+          style={{
+            padding: '0 3rem',
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <Button onClick={() => addStep(id, elements)} plain fullWidth>
+            <div style={{ display: 'flex' }}>
+              <div style={{ width: '12px', marginTop: '1px' }}>
+                <PlusMinor />
+              </div>
+              Add Step
+            </div>
+          </Button>
         </div>
-      </Button>
-      </div>
       </>
     );
   };
@@ -496,18 +566,18 @@ const FlowTree = ({ id }) => {
   const triggerNodeChild = ({ id, selectedTrigger, elements }) => (
     <>
       <div
-        style={{ padding: "0 3rem", display: "flex", justifyContent: "center" }}
+        style={{ padding: '0 3rem', display: 'flex', justifyContent: 'center' }}
         onClick={() => setModificationId(id)}
       >
-        <p>
-          <TextStyle variation="subdued">Trigger</TextStyle>
+        <p style={{ ...elipses }}>
+          {selectedTrigger ? selectedTrigger.title : 'Trigger'}
         </p>
         <div
           style={{
-            position: "absolute",
-            right: "0",
-            marginRight: "0.5rem",
-            cursor: "pointer",
+            position: 'absolute',
+            right: '0',
+            marginRight: '0.5rem',
+            cursor: 'pointer',
           }}
           onClick={() => removeNode(id, elements)}
         >
@@ -516,14 +586,14 @@ const FlowTree = ({ id }) => {
       </div>
       <div
         style={{
-          border: "1px solid #9CA8B3",
-          margin: "1rem 0 0 0",
-          padding: "0.5rem",
-          ...(displayTrigger ? {} : { cursor: "pointer" }),
+          border: '1px solid #9CA8B3',
+          margin: '1rem 0 0 0',
+          padding: '0.5rem',
+          ...(displayTrigger ? {} : { cursor: 'pointer' }),
         }}
       >
-        <p style={{ textAlign: "center" }}>
-          {selectedTrigger ? selectedTrigger.title : "Add Trigger"}
+        <p style={{ textAlign: 'center', ...elipses, width: '95%' }}>
+          {selectedTrigger ? selectedTrigger.title : 'Add Trigger'}
         </p>
       </div>
     </>
@@ -532,17 +602,17 @@ const FlowTree = ({ id }) => {
   const chooseNextNodeChild = ({ id, elements }) => (
     <>
       <div
-        style={{ padding: "0 3rem", display: "flex", justifyContent: "center" }}
+        style={{ padding: '0 3rem', display: 'flex', justifyContent: 'center' }}
       >
         <p>
           <TextStyle variation="subdued">Choose Next</TextStyle>
         </p>
         <div
           style={{
-            position: "absolute",
-            right: "0",
-            marginRight: "0.5rem",
-            cursor: "pointer",
+            position: 'absolute',
+            right: '0',
+            marginRight: '0.5rem',
+            cursor: 'pointer',
           }}
           onClick={() => removeNode(id, elements)}
         >
@@ -551,43 +621,43 @@ const FlowTree = ({ id }) => {
       </div>
       <div
         style={{
-          border: "1px solid #9CA8B3",
-          margin: "1rem 0 0 0",
-          padding: "0.5rem",
-          cursor: "pointer",
+          border: '1px solid #9CA8B3',
+          margin: '1rem 0 0 0',
+          padding: '0.5rem',
+          cursor: 'pointer',
         }}
-        onClick={transformInto(id, "condition", elements)}
+        onClick={transformInto(id, 'condition', elements)}
       >
-        <p style={{ textAlign: "center" }}>Add Condition</p>
+        <p style={{ textAlign: 'center' }}>Add Condition</p>
       </div>
       <div
         style={{
-          border: "1px solid #9CA8B3",
-          margin: "1rem 0 0 0",
-          padding: "0.5rem",
-          cursor: "pointer",
+          border: '1px solid #9CA8B3',
+          margin: '1rem 0 0 0',
+          padding: '0.5rem',
+          cursor: 'pointer',
         }}
-        onClick={transformInto(id, "action", elements)}
+        onClick={transformInto(id, 'action', elements)}
       >
-        <p style={{ textAlign: "center" }}>Add Action</p>
+        <p style={{ textAlign: 'center' }}>Add Action</p>
       </div>
       <div
         style={{
-          border: "1px solid #9CA8B3",
-          margin: "1rem 0 0 0",
-          padding: "0.5rem",
-          cursor: "pointer",
+          border: '1px solid #9CA8B3',
+          margin: '1rem 0 0 0',
+          padding: '0.5rem',
+          cursor: 'pointer',
         }}
-        onClick={transformInto(id, "delay", elements)}
+        onClick={transformInto(id, 'delay', elements)}
       >
-        <p style={{ textAlign: "center" }}>Add Delay</p>
+        <p style={{ textAlign: 'center' }}>Add Delay</p>
       </div>
     </>
   );
 
   const endNodeChild = (id) => (
     <div
-      style={{ padding: "0 3rem", display: "flex", justifyContent: "center" }}
+      style={{ padding: '0 3rem', display: 'flex', justifyContent: 'center' }}
     >
       <p>
         <TextStyle variation="strong">End</TextStyle>
@@ -596,19 +666,19 @@ const FlowTree = ({ id }) => {
   );
 
   const notifyOptions = [
-    { label: "Customer", value: "customer" },
-    { label: "Admin", value: "admin" },
+    { label: 'Customer', value: 'customer' },
+    { label: 'Admin', value: 'admin' },
   ];
 
   const triggerModifier = () => (
     <>
-      <div style={{ padding: "1rem", borderBottom: "1px solid #cdcdcd" }}>
+      <div style={{ padding: '1rem', borderBottom: '1px solid #cdcdcd' }}>
         <p>Select a trigger to start your workflow</p>
       </div>
       {triggerList.map((trigger, i) => {
         return (
-          <div style={{ padding: "1rem" }} key={i}>
-            <div style={{ marginBottom: "1rem" }}>
+          <div style={{ padding: '1rem' }} key={i}>
+            <div style={{ marginBottom: '1rem' }}>
               <Subheading>{trigger.title}</Subheading>
             </div>
             {trigger.events.map((event, i) => {
@@ -623,7 +693,7 @@ const FlowTree = ({ id }) => {
                   }}
                 >
                   <Card sectioned key={i}>
-                    <div style={{ marginBottom: "1rem" }}>
+                    <div style={{ marginBottom: '1rem' }}>
                       <Subheading>{event.title}</Subheading>
                     </div>
                     <p>{event.description}</p>
@@ -638,42 +708,46 @@ const FlowTree = ({ id }) => {
   );
 
   const delayModifier = () => {
-    return displayDelay && <>
-      <div style={{ padding: "1rem", borderBottom: "1px solid #cdcdcd" }}>
-        <p>Set up delay details</p>
-      </div>
-      <div style={{ padding: "1rem" }}>
-        <Select
-          label="Delay Interval"
-          options={delayOptions}
-          value={displayDelay.interval}
-          placeholder="Select Interval"
-          onChange={(value) => {
-            const newDelay = { ...displayDelay };
-            newDelay.interval = value;
-            setDisplayDelay(newDelay);
-            updateDelayNode(newDelay);
-          }}
-        ></Select>
-        <TextField
-          type="number"
-          label="Delay Duration"
-          value={displayDelay.duration}
-          onChange={(value) => {
-            const newDelay = { ...displayDelay };
-            newDelay.duration = value;
-            setDisplayDelay(newDelay);
-            updateDelayNode(newDelay);
-          }}
-        ></TextField>
-      </div>
-    </>
+    return (
+      displayDelay && (
+        <>
+          <div style={{ padding: '1rem', borderBottom: '1px solid #cdcdcd' }}>
+            <p>Set up delay details</p>
+          </div>
+          <div style={{ padding: '1rem' }}>
+            <Select
+              label="Delay Interval"
+              options={delayOptions}
+              value={displayDelay.interval}
+              placeholder="Select Interval"
+              onChange={(value) => {
+                const newDelay = { ...displayDelay };
+                newDelay.interval = value;
+                setDisplayDelay(newDelay);
+                updateDelayNode(newDelay);
+              }}
+            ></Select>
+            <TextField
+              type="number"
+              label="Delay Duration"
+              value={displayDelay.duration}
+              onChange={(value) => {
+                const newDelay = { ...displayDelay };
+                newDelay.duration = value;
+                setDisplayDelay(newDelay);
+                updateDelayNode(newDelay);
+              }}
+            ></TextField>
+          </div>
+        </>
+      )
+    );
   };
 
   const actionModifier = () => {
     return displayActions.selectedAction ? (
       <div>
-        <div style={{ padding: "1rem", borderBottom: "1px solid #cdcdcd" }}>
+        <div style={{ padding: '1rem', borderBottom: '1px solid #cdcdcd' }}>
           <Stack>
             <p>Set Up Action</p>
             <Stack.Item fill />
@@ -682,20 +756,23 @@ const FlowTree = ({ id }) => {
             </Button>
           </Stack>
         </div>
-        <div style={{ padding: "1rem" }}>
+        <div style={{ padding: '1rem' }}>
           <Card sectioned>
             <Stack>
               <Subheading>Text Message</Subheading>
               <Stack.Item fill />
-              <Button plain onClick={() => console.log("preview message")}>
+              <Button plain onClick={() => console.log('preview message')}>
                 Preview
               </Button>
             </Stack>
             <div className="var-auto-complition">
-               <TextField
+              <TextField
                 label="add variables"
                 value={smartyMessage}
-                onChange={(value)=>{onChangeUpdateElements(value, 'msg');setSmartyMessage(value)}}
+                onChange={(value) => {
+                  onChangeUpdateElements(value, 'msg');
+                  setSmartyMessage(value);
+                }}
                 autoComplete="off"
               />
               <p>
@@ -709,7 +786,7 @@ const FlowTree = ({ id }) => {
                 label="Notify"
                 name="Notify"
                 options={notifyOptions}
-                onChange={(value)=>onChangeUpdateElements(value, 'notify')}
+                onChange={(value) => onChangeUpdateElements(value, 'notify')}
                 value={modificationNode?.nodeData?.notify || 'customer'}
               />
             </div>
@@ -718,21 +795,24 @@ const FlowTree = ({ id }) => {
       </div>
     ) : (
       <>
-        <div style={{ padding: "1rem", borderBottom: "1px solid #cdcdcd" }}>
+        <div style={{ padding: '1rem', borderBottom: '1px solid #cdcdcd' }}>
           <p>Select an Action</p>
         </div>
         {actionList.map((action, i) => {
           return (
             <div
-              style={{ margin: "1rem" }}
+              style={{ margin: '1rem' }}
               key={i}
               className="cursor-pointer"
               onClick={() => {
-                setDisplayActions({ selectedAction: action.id });
+                setDisplayActions({
+                  selectedAction: action.id,
+                  title: action.title,
+                });
               }}
             >
               <Card sectioned key={i}>
-                <div style={{ marginBottom: "1rem" }}>
+                <div style={{ marginBottom: '1rem' }}>
                   <Subheading>{action.title}</Subheading>
                 </div>
                 <p>{action.description}</p>
@@ -745,8 +825,9 @@ const FlowTree = ({ id }) => {
   };
 
   const conditionModifier = () => {
-    return (<div>
-        <div style={{ padding: "1rem", borderBottom: "1px solid #cdcdcd" }}>
+    return (
+      <div>
+        <div style={{ padding: '1rem', borderBottom: '1px solid #cdcdcd' }}>
           <Stack>
             <p>Set Up Condition</p>
             <Stack.Item fill />
@@ -755,22 +836,36 @@ const FlowTree = ({ id }) => {
             </Button>
           </Stack>
         </div>
-        <div style={{ padding: "1rem" }}>
-        <AndOrComponent input={displayCondition} updateHandle={updateCondtionSecion}></AndOrComponent>
+        <div style={{ padding: '1rem' }}>
+          <AndOrComponent
+            input={displayCondition}
+            updateHandle={updateCondtionSecion}
+          ></AndOrComponent>
         </div>
-      </div>)
+      </div>
+    );
   };
 
   const updateCondtionSecion = (conditionList) => {
     const newElements = [...basicElements];
     const element = newElements.find((e) => e.id == modificationId);
     element.nodeData = [...conditionList];
-
     setBasicElements(newElements);
   };
 
   const onChangeUpdateElements = (value, field) => {
-    const newElements = updateElementList(basicElements, value, modificationId, field);
+    const newElements = updateElementList(
+      basicElements,
+      value,
+      modificationId,
+      field
+    );
+    const element = newElements.find((e) => e.id == modificationId);
+    if (!element.nodeData) {
+      element.nodeData = {};
+    }
+    element.nodeData.title = displayActions.title;
+    element.nodeData.selectedActionId = displayActions.selectedAction;
     setBasicElements(makeElementSelected(newElements, modificationId));
   };
 
@@ -813,7 +908,7 @@ const FlowTree = ({ id }) => {
       data: {
         child: addConditionNodeChild,
         styles: customNodeStyles,
-        className:"boxDiv"
+        className: 'boxDiv',
       },
       modifier: conditionModifier,
     },
@@ -839,20 +934,20 @@ const FlowTree = ({ id }) => {
     },
     yes: {
       data: {
-        child: ()=><p>Yes</p>,
+        child: () => <p>Yes</p>,
         styles: customNodeStyles,
       },
       marginBottom: 120,
-      marginRight: -120
+      marginRight: -120,
     },
     no: {
       data: {
-        child: ()=><p>No</p>,
+        child: () => <p>No</p>,
         styles: customNodeStyles,
       },
       marginBottom: 120,
-      marginRight: 320
-    }
+      marginRight: 320,
+    },
   };
 
   const transformInto = (id, type, elements) => {
@@ -860,7 +955,7 @@ const FlowTree = ({ id }) => {
       const newElements = [...elements];
       const insertAt = newElements.find((e) => e.id == id);
       const insertionIndex = newElements.indexOf(insertAt);
-      const newId = id ;
+      const newId = id;
       // (
       //   Math.max.apply(
       //     Math,
@@ -873,103 +968,147 @@ const FlowTree = ({ id }) => {
         type: type,
       };
 
-      if (type === "condition") {
-        let prevEndNode = newElements.find((e) => e.parent == id &&
-        e.type==='end');
-        if (prevEndNode===undefined) {
+      if (type === 'condition') {
+        let prevEndNode = newElements.find(
+          (e) => e.parent == id && e.type === 'end'
+        );
+        if (prevEndNode === undefined) {
           const adjustNode = newElements.find((e) => e.parent == id);
           const adjustIndexNode = newElements.indexOf(adjustNode);
           const yesElement = {
             parent: adjustNode.parent,
             id: `${adjustNode.id}Y`,
-            type: 'yes'
+            type: 'yes',
           };
           prevEndNode = adjustNode;
           newElements[adjustIndexNode].parent = yesElement.id;
           newElements.splice(adjustIndexNode, 0, yesElement);
-        }else{
+        } else {
           const prevEndNodeIndex = newElements.indexOf(prevEndNode);
           newElements[prevEndNodeIndex] = {
             parent: newId,
             id: `${prevEndNode.id}Y`,
-            type: 'yes'
+            type: 'yes',
           };
         }
-        const newElementsPoint = newElements.length-1;
-        newElements[newElementsPoint+1] = {
+        const newElementsPoint = newElements.length - 1;
+        newElements[newElementsPoint + 1] = {
           parent: newId,
-          id: `${+newElementsPoint+1}N`,
-          type: 'no'
+          id: `${+newElementsPoint + 1}N`,
+          type: 'no',
         };
 
-        newElements[newElementsPoint+2] = {
-          parent: `${+newElementsPoint+1}N`,
-          id: `${+newElementsPoint+2}`,
-          type: 'end'
+        newElements[newElementsPoint + 2] = {
+          parent: `${+newElementsPoint + 1}N`,
+          id: `${+newElementsPoint + 2}`,
+          type: 'end',
         };
 
         if (prevEndNode !== undefined) {
-          newElements[newElementsPoint+3] = {
+          newElements[newElementsPoint + 3] = {
             parent: `${prevEndNode.id}Y`,
-            id: `${+newElementsPoint+3}`,
-            type: 'end'
+            id: `${+newElementsPoint + 3}`,
+            type: 'end',
           };
         }
-
       }
 
-      const elementsUpdated = makeElementSelected(newElements,id);
+      const elementsUpdated = makeElementSelected(newElements, id);
       toggleLeftPanels(id, type);
       setBasicElements(elementsUpdated);
-
     };
   };
-  const toggleLeftPanels = (id, type) =>{
-    if (type == "delay") {
+  const toggleLeftPanels = (id, type) => {
+    if (type == 'delay') {
       setDisplayDelay({});
       setModificationId(id);
       setDisplayActions(false);
       setDisplayCondition(false);
-    } else if (type == "action") {
+    } else if (type == 'action') {
       setDisplayDelay(false);
       setDisplayActions({});
       setModificationId(id);
       setDisplayCondition(false);
-    }else if (type == "condition") {
+    } else if (type == 'condition') {
       setDisplayCondition({});
       setDisplayDelay(false);
       setDisplayActions(false);
       setModificationId(id);
     }
-  }
+  };
 
   useEffect(() => {
     if (basicElements.length < 1) {
       setBasicElements([
         {
-          id: "1",
-          type: "trigger",
+          id: '1',
+          type: 'trigger',
         },
       ]);
-      setModificationId("1");
+      setModificationId('1');
     } else if (displayTrigger && basicElements.length == 1) {
       setBasicElements([
         {
-          id: "1",
-          type: "trigger",
+          id: '1',
+          type: 'trigger',
+          nodeData: displayTrigger,
         },
         {
-          parent: "1",
-          id: "2",
-          type: "chooseNext",
+          parent: '1',
+          id: '2',
+          type: 'chooseNext',
         },
         {
-          parent: "2",
-          id: "3",
-          type: "end",
+          parent: '2',
+          id: '3',
+          type: 'end',
         },
       ]);
     }
+    
+    const outPutElements = JSON.parse(JSON.stringify(basicElements));
+    const updatetedList = outPutElements.map((eleObj) => {
+      const item = { ...eleObj };
+      if (item.type === 'condition') {
+        if (item.nodeData && item.nodeData.length > 0) {
+          item.nodeData = item.nodeData.map((itemData, index) => {
+            itemData = itemData.map((itemDataI, indexI) => {
+              itemDataI = itemDataI.map((itemDataII, indexII) => {
+                if (itemDataII.options) {
+                  const exist = itemDataII.options.find(
+                    (opt) => opt.value === itemDataII.conditionValue
+                  );
+                  if (exist) {
+                    delete exist.subOptions;
+                    itemDataII.selectedOption = exist;
+                  } else {
+                    if (indexII == 0 && itemDataII.options) {
+                      const existI = itemDataII.options[0].options.find(
+                        (opt) => opt.value === itemDataII.conditionValue
+                      );
+                      if (existI) {
+                        delete existI.subOptions;
+                        itemDataII.selectedOption = existI;
+                      }
+                    }
+                  }
+                  delete itemDataII.options;
+                  delete itemDataII.handle;
+                  delete itemDataII.updateSubOption;
+                }
+                return itemDataII;
+              });
+              return itemDataI;
+            });
+
+            return itemData;
+          });
+        }
+      }
+      return item;
+    });
+
+    setOutputElements(updatetedList);
   }, [displayTrigger, basicElements]);
 
   const generateFlowElements = (basicElements) => {
@@ -980,7 +1119,7 @@ const FlowTree = ({ id }) => {
 
     basicElements.forEach((basicElement, i) => {
       if (i > 0) {
-        if(!['yes', 'no'].includes(basicElement.type)){
+        if (!['yes', 'no'].includes(basicElement.type)) {
           const addStepMapData = basicElementMap.addStep;
           // let positionValue = {
           //   x: addStepMapData.marginRight
@@ -992,11 +1131,15 @@ const FlowTree = ({ id }) => {
           flowElements.push({
             id: `${basicElement.id}-as`,
             parent: basicElement.parent,
-            type: "flowNode",
-            actualType: "addStep",
+            type: 'flowNode',
+            actualType: 'addStep',
             data: addStepMapData.data,
             position: position,
-            style: {justifyContent: 'center', display:"flex", alignItems: 'center'}
+            style: {
+              justifyContent: 'center',
+              display: 'flex',
+              alignItems: 'center',
+            },
           });
           // graphY += addStepMapData.marginBottom;
 
@@ -1005,14 +1148,14 @@ const FlowTree = ({ id }) => {
             source: basicElement.parent,
             target: `${basicElement.id}-as`,
             type: edgeType,
-            animated: true
+            animated: true,
           });
           flowElements2.push({
             id: `e${basicElement.id}-as-${basicElement.id}`,
             source: `${basicElement.id}-as`,
             target: basicElement.id,
             type: edgeType,
-            animated: true
+            animated: true,
           });
         }
       }
@@ -1025,21 +1168,28 @@ const FlowTree = ({ id }) => {
       flowElements.push({
         id: basicElement.id,
         parent: basicElement.parent,
-        type: "flowNode",
+        type: 'flowNode',
         actualType: basicElement.type,
-        data: { ...mapData.data, nodeData: basicElement.nodeData, styles:basicElement.selected==true?{...mapData.styles, ...highlightCls}:{...mapData.data.styles}},
-        position: position
+        data: {
+          ...mapData.data,
+          nodeData: basicElement.nodeData,
+          styles:
+            basicElement.selected == true
+              ? { ...mapData.styles, ...highlightCls }
+              : { ...mapData.data.styles },
+        },
+        position: position,
       });
 
       graphY += mapData.marginBottom;
-      if(['yes', 'no'].includes(basicElement.type)){
+      if (['yes', 'no'].includes(basicElement.type)) {
         //condition to yes/No
         flowElements2.push({
           id: `eup${basicElement.parent}-${basicElement.id}-${basicElement.type}`,
           source: basicElement.parent,
           target: `${basicElement.id}`,
           type: edgeType,
-          animated:true
+          animated: true,
         });
         // flowElements.push({
         //   id: `${basicElement.id}-${basicElement.type}`,
@@ -1059,7 +1209,7 @@ const FlowTree = ({ id }) => {
         // });
       }
     });
-    return [...flowElements,...flowElements2];
+    return [...flowElements, ...flowElements2];
   };
 
   const updateDelayNode = (delayData) => {
@@ -1073,19 +1223,20 @@ const FlowTree = ({ id }) => {
   };
 
   const onSelectNode = (event) => {
-    const {id}=event.target;
-    if(id) {
+    const { id } = event.target;
+    if (id) {
       const newElements = [...basicElements];
       setModificationId(id);
-      setBasicElements(makeElementSelected(newElements, id))
+      setBasicElements(makeElementSelected(newElements, id));
     }
   };
 
   const onNodeClick = (id, elements, nodeData) => {
-    if(id) {
+    if (id) {
+      const showCondition = nodeData ? nodeData : {};
       const newElements = [...basicElements];
       toggleLeftPanels(id, 'condition');
-      setDisplayCondition(nodeData);
+      setDisplayCondition(showCondition);
       setBasicElements(makeElementSelected(newElements, id));
     }
   };
@@ -1094,19 +1245,19 @@ const FlowTree = ({ id }) => {
   let modificationNode;
   if (modificationId) {
     modificationNode = basicElements.find((e) => e.id == modificationId);
-    if(modificationNode)
-    modifier = basicElementMap[modificationNode.type].modifier;
+    if (modificationNode)
+      modifier = basicElementMap[modificationNode.type].modifier;
   }
 
   return (
     <ElementsContext.Provider value={basicElements}>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: 'flex' }}>
         <div
           style={{
-            width: "30%",
-            borderRight: "1px solid #cdcdcd",
-            height: "100vh",
-            overflowY: "auto",
+            width: '30%',
+            borderRight: '1px solid #cdcdcd',
+            height: '100vh',
+            overflowY: 'auto',
           }}
         >
           {modificationId && modifier != undefined && modifier()}
@@ -1265,10 +1416,8 @@ const FlowTree = ({ id }) => {
             ))} */}
         </div>
 
-        <div style={{ width: "70%" }}>
-
-
-<div
+        <div style={{ width: '70%' }}>
+          <div
             className="flex"
             style={{
               padding: '1rem',
@@ -1296,7 +1445,12 @@ const FlowTree = ({ id }) => {
                   headers: {
                     'Content-Type': 'application/json',
                   },
-                  body: JSON.stringify({basicElements, flowName, flowStatus, flowId}),
+                  body: JSON.stringify({
+                    basicElements: outputElements,
+                    flowName,
+                    flowStatus,
+                    flowId,
+                  }),
                 })
                   .then((response) => response.json())
                   //Then with the data from the response in JSON...
@@ -1312,22 +1466,24 @@ const FlowTree = ({ id }) => {
               Save
             </Button>
           </div>
-        <div className="layoutflow" style={{height:"100%"}}>
-          <ReactFlowProvider>
-            <ReactFlow
-              nodesConnectable={false}
-              nodesDraggable={true}
-              elements={getLayoutedElements(generateFlowElements(sortList(basicElements)))}
-              connectionLineType="smoothstep"
-              zoomOnScroll={false}
-              panOnScroll={true}
-              nodeTypes={{
-                flowNode: FlowComponent,
-              }}
-              onElementClick={onSelectNode}
-            />
-          </ReactFlowProvider>
-      </div>
+          <div className="layoutflow" style={{ height: '100%' }}>
+            <ReactFlowProvider>
+              <ReactFlow
+                nodesConnectable={false}
+                nodesDraggable={false}
+                elements={getLayoutedElements(
+                  generateFlowElements(sortList(basicElements))
+                )}
+                connectionLineType="smoothstep"
+                zoomOnScroll={false}
+                panOnScroll={true}
+                nodeTypes={{
+                  flowNode: FlowComponent,
+                }}
+                onElementClick={onSelectNode}
+              />
+            </ReactFlowProvider>
+          </div>
         </div>
       </div>
     </ElementsContext.Provider>

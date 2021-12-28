@@ -24,7 +24,8 @@ const ConditionManager = (props) => {
   const existHandle = (exit, index, itemKey, parentKey) =>{
     if(exit){
       const input = {
-        conditionValue : '',
+        conditionValue: '',
+        conditionTitle: '',
         condition: '',
         value: '',
         itemKey: itemKey,
@@ -42,6 +43,7 @@ const ConditionManager = (props) => {
         updateSection.push(input);
       }
       updateSection[index].conditionValue = exit.value;
+      updateSection[index].conditionTitle = exit.label;
       setSections(updateSection);
     }else{
      
@@ -68,7 +70,7 @@ const ConditionManager = (props) => {
        const exit = section[index].options.find((optionItem) => {
         return optionItem.value === value;
       });
-      existHandle(exit, index);
+      existHandle(exit, index, itemKey, parentKey);
     }
     // props.handle()
   }

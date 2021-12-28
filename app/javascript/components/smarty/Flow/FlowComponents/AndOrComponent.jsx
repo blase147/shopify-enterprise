@@ -19,10 +19,14 @@ const [conditionModal, setConditionModal] = useState([]);
 const [subOptions,setSubOptions] = useState(conditions);
 
 useEffect(()=>{
-if(props.input != false && Object.keys(props.input).length > 0){
+if(props.input && props.input != false){
+  if(Object.keys(props.input).length > 0){
   setConditionModal(props.input);
+  }else if(Object.keys(props.input).length === 0){
+    setConditionModal([]);
+  }
 }
-},[props.input])
+},[props.input]);
 
 const generateAndOr = () => {
 const input = [{
@@ -52,7 +56,7 @@ const generateORNode = () => {
   generateAndOr();
 }
 
-const handleChange = (mainObj, itemKey, parentKey, inputValue) => {
+const handleChange = (mainObj, itemKey, parentKey, outputValue) => {
   const updateConditionModal = [...conditionModal];
   updateConditionModal[parentKey][itemKey] = [...mainObj];
   setConditionModal(updateConditionModal);

@@ -111,7 +111,7 @@ const Smarty = ({ handleBack }) => {
               )}
             </>
           )}
-          {selectedTitleTab === (process.env.APP_TYPE == 'public' ? 1 : 2) && (
+          {selectedTitleTab === (process.env.APP_TYPE == 'public' && 1 ) && (
             <>
               {showEditPage ? (
                 <EditSmartyMessage
@@ -123,7 +123,7 @@ const Smarty = ({ handleBack }) => {
               )}
             </>
           )}
-          {selectedTitleTab === (process.env.APP_TYPE == 'public' ? 2 : 3) && (
+          {selectedTitleTab === (process.env.APP_TYPE == 'public' && 2 ) && (
             <>
               {showEditPage ? (
                 <CustomKeywordsForm
