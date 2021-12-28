@@ -7,4 +7,3 @@ class SmsFlowActionWorker
     SmsFlowService.new(sms_flow).process_flow(node,index) # this will continue the sms flow service from where it left
   end
 end
-2
