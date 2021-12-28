@@ -13,12 +13,15 @@ class SmsFlowsController < AuthenticatedController
 
   def create
     if params[:flowId].present?
+
       @sms_flow = SmsFlow.find(params[:flowId])
     else
       @sms_flow = SmsFlow.new
     end
     @sms_flow.assign_attributes(name: params[:flowName], content: params[:basicElements], status: params[:flowStatus])
     @sms_flow.shop = current_shop
+
+    @sms_flow.trigger = @sms_flow.content[0]['nodeData']['id']
     if @sms_flow.save
       render json: @sms_flow
     else

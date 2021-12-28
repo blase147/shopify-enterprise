@@ -1065,7 +1065,7 @@ const FlowTree = ({ id }) => {
         },
       ]);
     }
-    
+
     const outPutElements = JSON.parse(JSON.stringify(basicElements));
     const updatetedList = outPutElements.map((eleObj) => {
       const item = { ...eleObj };
