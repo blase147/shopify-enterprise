@@ -1,15 +1,34 @@
-import React, {useCallback, useState} from 'react';
-import {Button, Modal, TextContainer} from '@shopify/polaris';
+import React, { useCallback, useState } from 'react';
+import { Button, Modal, TextContainer } from '@shopify/polaris';
 
 export default function ModalComp(props) {
   const [active, setActive] = useState(false);
 
   const handleChange = useCallback(() => setActive(!active), [active]);
 
-  const activator = props.addBtn==true?<div><Button onClick={handleChange}>{props.title} {props.nodeData.length}</Button></div>:<div onClick={handleChange}>{props.title}{props.addBtn}</div>;
+  const activator =
+    props.addBtn == true ? (
+      <div>
+        <Button onClick={handleChange}>
+          {props.title} {props.nodeData.length}
+        </Button>
+      </div>
+    ) : (
+      <div onClick={handleChange}>
+        {props.title}
+        {props.addBtn}
+      </div>
+    );
 
   return (
-    <div style={{display:"flex", justifyContent:"center", alignItems:"center", width: '19rem'}}>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '19rem',
+      }}
+    >
       <Modal
         activator={activator}
         open={active}
@@ -27,9 +46,7 @@ export default function ModalComp(props) {
         // ]}
       >
         <Modal.Section>
-          <TextContainer>
-           {props.content}
-          </TextContainer>
+          <TextContainer>{props.content}</TextContainer>
         </Modal.Section>
       </Modal>
     </div>

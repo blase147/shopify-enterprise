@@ -112,6 +112,7 @@ Rails.application.routes.draw do
     collection do
       post :update_subscription
       post :update_customer
+      get :sync_stripe
     end
 
     member do

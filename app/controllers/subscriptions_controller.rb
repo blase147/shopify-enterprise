@@ -3,6 +3,11 @@ class SubscriptionsController < AuthenticatedController
   layout 'subscriptions'
   include SubscriptionConcern
 
+  def sync_stripe
+    StripeSubscriptionSyncWorker.perform_async(current_shop.id, false)
+    head :no_content
+  end
+
   def index
     redirect_to subscription_path(id: params[:id]) if params[:id].present?
 

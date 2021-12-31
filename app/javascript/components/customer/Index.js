@@ -73,7 +73,7 @@ const ButtonRemove = (props) => {
   );
 };
 
-const Customers = () => {
+const Customers = (shopifyDomain) => {
   const history = useHistory();
   // Start Tabs
   const [selectedTab, setSelectedTab] = useState(0);
@@ -633,6 +633,35 @@ const Customers = () => {
                   'Export'
                 )}
               </Button>
+              {shopifyDomain == "bagamour.myshopify.com" &&
+                <Button onClick={() => {
+                  fetch(`/subscriptions/sync_stripe`, {
+                    headers: {
+                      'Content-Type': 'application/json',
+                      Accept: 'application/json',
+                    },
+                    credentials: 'same-origin',
+                  })
+                    .then((response) => response.json())
+                    .then(() => {
+                      try{
+                        var Toast = window['app-bridge'].actions.Toast;
+                        Toast.create(window.app, {
+                          message: 'Syncing Stripe Subscriptions',
+                          duration: 5000,
+                        }).dispatch(Toast.Action.SHOW);
+                      }
+                      catch(e){
+                        console.error('Error syncing data: ', e);
+                      }
+                    })
+                    .catch((error) => {
+                      console.error('Error syncing data: ', error);
+                    })
+                }}>
+                  Sync Stripe Subscriptions
+                </Button>
+              }
               {/*<Button
                 onClick={() => {
                   toggleActive();

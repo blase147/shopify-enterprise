@@ -33,7 +33,6 @@ export const getLayoutedElements = (elements, direction = 'TB') => {
       el.targetPosition = isHorizontal ? 'left' : 'top';
       el.sourcePosition = isHorizontal ? 'right' : 'bottom';
 
-
       el.position = {
         x: nodeWithPosition.x - nodeWidth / 2 + Math.random() / 1000,
         y: nodeWithPosition.y - nodeHeight / 2,
@@ -62,7 +61,7 @@ const LayoutFlow = () => {
   );
 
   return (
-    <div className="layoutflow" style={{height:"500px"}}>
+    <div className="layoutflow" style={{ height: '500px' }}>
       <ReactFlowProvider>
         <ReactFlow
           elements={elements}
@@ -70,10 +69,10 @@ const LayoutFlow = () => {
           onElementsRemove={onElementsRemove}
           connectionLineType="smoothstep"
         />
-          <div className="controls">
-            <button onClick={() => onLayout('TB')}>vertical layout</button>
-            <button onClick={() => onLayout('LR')}>horizontal layout</button>
-          </div>
+        <div className="controls">
+          <button onClick={() => onLayout('TB')}>vertical layout</button>
+          <button onClick={() => onLayout('LR')}>horizontal layout</button>
+        </div>
       </ReactFlowProvider>
     </div>
   );

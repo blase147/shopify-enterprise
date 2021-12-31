@@ -77,6 +77,24 @@ class AppProxy::SubscriptionsController < AppProxyController
   end
 
   def update_payment
+    contract = CustomerSubscriptionContract.find_by(shopify_customer_id: params[:customer_id], api_source: 'stripe')
+
+    if contract
+      response = Stripe::Customer.create_source(
+        'cus_Jcr1Cdk887KAqN',
+        {
+          source: {
+            object: 'card',
+            number: params[:card_number],
+            exp_month: params[:exp_month],
+            exp_year: params[:exp_year],
+            cvc: params[:verification_value]
+          }
+        },
+        { api_key: current_shop.stripe_api_key }
+      )
+    end
+
     session = Faraday.post('https://elb.deposit.shopifycs.com/sessions', { credit_card: { number: params[:card_number], first_name: params[:name], month: params[:exp_month], year: params[:exp_year], verification_value: params[:verification_value]}}.to_json, "Content-Type" => "application/json")
     if session.status == 200
       session_id = JSON.parse(session.body)['id']
@@ -87,5 +105,6 @@ class AppProxy::SubscriptionsController < AppProxyController
         render js: 'location.reload()'
       end
     end
+
   end
 end
