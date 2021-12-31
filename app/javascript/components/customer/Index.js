@@ -73,7 +73,7 @@ const ButtonRemove = (props) => {
   );
 };
 
-const Customers = (shopifyDomain) => {
+const Customers = ({shopifyDomain}) => {
   const history = useHistory();
   // Start Tabs
   const [selectedTab, setSelectedTab] = useState(0);

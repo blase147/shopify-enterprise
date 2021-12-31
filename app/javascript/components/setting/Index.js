@@ -762,6 +762,7 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                                     refetch={refetch}
                                     isSubmitting={isSubmitting}
                                     handleBack={handleBackSetting}
+                                    domain={domain}
                                   />
                                 ) : selectedSetting === 'email_notification' ? (
                                   <div className="EmailNotification">
