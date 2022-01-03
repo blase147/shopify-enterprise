@@ -36,8 +36,12 @@ class StripeWebhooksController < ActionController::Base
       end
     when 'invoice.payment_succeeded'
       subscription = event.data.object.subscription
-      csc = CustomerSubscriptionContract.find_by(api_resource_id: subscription)
-      Stripe::OrderCreate.new(csc).create
+      if event.data.object.total > 100
+        csc = CustomerSubscriptionContract.find_by(api_resource_id: subscription)
+        Stripe::OrderCreate.new(csc).create
+      else
+        puts "OrderCreate rejected: total=$#{event.data.object.total}"
+      end
     else
       puts "Unhandled event type: #{event.type}"
     end
