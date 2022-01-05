@@ -20,17 +20,26 @@ import { post } from 'jquery';
 
 const EnableDebug = ({ handleBack }) => {
   const [active, setActive] = useState(false);
-  const handleToggle = useCallback(() => setActive((active) => !active), []);
+  const handleToggle = () => {
+    fetch('/debug_mode?status='+(!active),{
+      method: 'POST',
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      setActive(!active);
+    })
+  }
 
   useEffect(()=>{
-    const status = $.get('/debug_mode/index');
-    setActive(status.debug_mode);
+    fetch('/debug_mode',{
+      method: 'GET',
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      setActive(data.debug_mode);
+    })
   },[])
 
-  useEffect(()=>{
-    $.post('/debug_mode/create', {status: active});
-  },[active])
-  
   return (
     <>
       <Layout>

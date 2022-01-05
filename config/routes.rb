@@ -131,8 +131,7 @@ Rails.application.routes.draw do
     end
   end
 
-  post 'debug_mode/create', to: 'debug_mode#create'
-  get 'debug_mode/index', to: 'debug_mode#index'
+  resources :debug_mode, only: [:index, :create]
 
   resources :select_plan, only: [:index, :create]
 
