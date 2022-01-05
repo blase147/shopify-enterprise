@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_05_073748) do
+ActiveRecord::Schema.define(version: 2022_01_05_103452) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -155,13 +155,6 @@ ActiveRecord::Schema.define(version: 2022_01_05_073748) do
     t.string "selling_plan_id"
     t.index ["reasons_cancel_id"], name: "index_customer_subscription_contracts_on_reasons_cancel_id"
     t.index ["selling_plan_id"], name: "index_customer_subscription_contracts_on_selling_plan_id"
-  end
-
-  create_table "debug_mode_statuses", force: :cascade do |t|
-    t.integer "shop_id"
-    t.boolean "status"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "email_notifications", force: :cascade do |t|
@@ -390,6 +383,13 @@ ActiveRecord::Schema.define(version: 2022_01_05_073748) do
     t.boolean "create_return_label"
     t.boolean "contains_alcohol"
     t.index ["shop_id"], name: "index_ship_engine_orders_on_shop_id"
+  end
+
+  create_table "shop_settings", force: :cascade do |t|
+    t.integer "shop_id"
+    t.boolean "debug_mode"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "shops", force: :cascade do |t|

@@ -21,13 +21,15 @@ import { post } from 'jquery';
 const EnableDebug = ({ handleBack }) => {
   const [active, setActive] = useState(false);
   const handleToggle = useCallback(() => setActive((active) => !active), []);
-  const contentStatus = active ? 'Deactivate' : 'Activate';
-  const textStatus = active ? 'activated' : 'deactivated';
 
   useEffect(()=>{
-    $.post('/debug_mode/create', active);
-    console.log(textStatus, active);
-  },[textStatus])
+    const status = $.get('/debug_mode/index');
+    setActive(status.debug_mode);
+  },[])
+
+  useEffect(()=>{
+    $.post('/debug_mode/create', {status: active});
+  },[active])
   
   return (
     <>
@@ -49,12 +51,12 @@ const EnableDebug = ({ handleBack }) => {
                 </DisplayText>
                 <SettingToggle
                   action={{
-                    content: contentStatus,
+                    content: active ? 'Deactivate' : 'Activate',
                     onAction: handleToggle,
                   }}
                   enabled={active}
                 >
-                  Debugging mode is <TextStyle variation="strong">{textStatus}</TextStyle>.
+                  Debugging mode is <TextStyle variation="strong">{ active ? 'activated' : 'deactivated' }</TextStyle>.
                 </SettingToggle>
               </FormLayout>
             </div>
