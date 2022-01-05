@@ -1,0 +1,5 @@
+# tunnel: d0001c1c-a2ac-47d5-af1c-771743114963
+# credentials-file: /Users/mac/.cloudflared/d0001c1c-a2ac-47d5-af1c-771743114963.json
+tunnel: 92732e99-5b8d-4e99-ab2b-f49ac221ea04
+credentials-file: /Users/mac/.cloudflared/92732e99-5b8d-4e99-ab2b-f49ac221ea04.json
+noTLSVerify: true

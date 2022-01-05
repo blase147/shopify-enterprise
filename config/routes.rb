@@ -131,6 +131,8 @@ Rails.application.routes.draw do
     end
   end
 
+  post 'debug_mode/create', to: 'debug_mode#create'
+
   resources :select_plan, only: [:index, :create]
 
   get 'subscription/charge', to: 'callback#charge'

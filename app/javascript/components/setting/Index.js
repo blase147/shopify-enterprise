@@ -50,6 +50,7 @@ import MainDiscount from './HouseKeepingComponents/DiscountComponents/MainDiscou
 import MainExport from './HouseKeepingComponents/ExportComponents/MainExport';
 import ZipCodeImage from '../../../assets/images/settings/zip_code.svg';
 import ZipCodes from './ZipCodes';
+import EnableDebug from './EnableDebug';
 
 const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
   // form data ########################################################
@@ -514,15 +515,21 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
     },
     ...(domain == 'tryworldfare.myshopify.com' || domain == 'hitched-staging.myshopify.com'
       ? [
-          {
-            key: 'zip_codes',
-            title: 'Zip Codes',
-            img: ZipCodeImage,
-            desc: 'Add cities for Zip Codes.',
-          },
-        ]
+        {
+          key: 'zip_codes',
+          title: 'Zip Codes',
+          img: ZipCodeImage,
+          desc: 'Add cities for Zip Codes.',
+        },
+      ]
       : []),
-  ];
+      {
+        key: 'enable_debug_mode',
+        title: 'Enable Debug Mode',
+        img: PasswordImage,
+        desc: 'Enable the debugging mode.',
+      },
+    ];
   const tabs = [
     {
       id: 'house',
@@ -810,6 +817,10 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                                 ) : selectedSetting === 'zip_codes' ? (
                                   <>
                                     <ZipCodes handleBack={handleBackSetting} />
+                                  </>
+                                ) : selectedSetting === 'enable_debug_mode' ? (
+                                  <>
+                                    <EnableDebug handleBack={handleBackSetting} />
                                   </>
                                 ) : selectedSetting === 'sms' ? (
                                   <>
