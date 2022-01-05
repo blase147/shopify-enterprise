@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-D:\\ubuntu_work\\cf\\cloudflared.exe tunnel --config .cloudflared/config.yml --url localhost:3000 run zdev
