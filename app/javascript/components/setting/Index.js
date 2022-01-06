@@ -49,6 +49,7 @@ import Sms from './HouseKeepingComponents/Sms';
 import MainDiscount from './HouseKeepingComponents/DiscountComponents/MainDiscount';
 import MainExport from './HouseKeepingComponents/ExportComponents/MainExport';
 import ZipCodeImage from '../../../assets/images/settings/zip_code.svg';
+import DebugImage from '../../../assets/images/settings/code.svg';
 import ZipCodes from './ZipCodes';
 import EnableDebug from './EnableDebug';
 
@@ -526,7 +527,7 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
       {
         key: 'enable_debug_mode',
         title: 'Enable Debug Mode',
-        img: PasswordImage,
+        img: DebugImage,
         desc: 'Enable the debugging mode.',
       },
     ];

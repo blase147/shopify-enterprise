@@ -19,6 +19,7 @@ import CreateCustomer from './customer/New';
 // pages ####
 import Dashboard from './home/Index';
 import Installation from './installation/Index';
+import LoyaltyRewards from './loyalty-rewards/Index';
 import IntegrationDetail from './integration/Detail';
 import Integrations from './integration/Index';
 import BuildABoxPlan from './plans/BuildABoxPlan';
@@ -149,6 +150,7 @@ export default function App(props) {
             />
             <Route exact path="/analytics" component={Analytics} />
             <Route exact path="/installation" component={() => <Installation shopifyDomain={props.domain} passwordProtected={passwordProtected}/>} />
+            <Route exact path="/loyalty-rewards" component={LoyaltyRewards} />
             <Route exact path="/upsell" component={Upsell} />
             <Route exact path="/upsell/:id/edit" component={CreateUpsell} />
             <Route exact path="/upsell/new" component={CreateUpsell} />

@@ -11,6 +11,7 @@ import BuildBox from '../build-a-box/BuildBox';
 import CreateBuildBox from '../build-a-box/CreateBuildBox';
 import Bundles from '../bundles';
 import BundleForm from '../bundles/BundleForm';
+import LoyaltyRewards from '../loyalty-rewards/Index';
 
 const Index = () => {
   const [selectedSetting, setSelectedSetting] = useState('');
@@ -69,6 +70,12 @@ const Index = () => {
       title: 'Bundles',
       img: InformationImage,
       desc: 'Allow your customers to build bundles.',
+    },
+    {
+      key: 'referrals',
+      title: 'Loyalty & Rewards',
+      img: InformationImage,
+      desc: 'Manage the loyalty and rewards for your customers.',
     },
   ];
 
@@ -163,6 +170,10 @@ const Index = () => {
                         />
                       )}
                     </>
+                  ) : selectedSetting === 'referrals' ? (
+                    <LoyaltyRewards 
+                      handleBack={handleBackSetting}
+                    />
                   ) : (
                     ''
                   )}
