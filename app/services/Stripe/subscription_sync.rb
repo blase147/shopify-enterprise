@@ -60,12 +60,13 @@ class Stripe::SubscriptionSync
           purchase_date: Time.at(stripe_subscription.created)
         },
         import_type: 'stripe_subscription',
-        api_data: stripe_subscription.to_h
+        api_data: stripe_subscription.to_h,
+        api_resource_id: stripe_subscription.id
       )
       csc.save
     end
   rescue => e
-    puts "Error syncing subscription #{subscription.id}"
+    puts "Error syncing subscription #{stripe_subscription.id}"
     puts e
   end
 end
