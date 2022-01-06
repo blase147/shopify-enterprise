@@ -40,7 +40,7 @@ class StripeWebhooksController < ActionController::Base
         csc = CustomerSubscriptionContract.find_by(api_resource_id: subscription)
         Stripe::OrderCreate.new(csc).create
       else
-        puts "OrderCreate rejected: total=$#{event.data.object.total}"
+        puts "OrderCreate rejected: total=$#{event.data.object.total/100.to_f}"
       end
     else
       puts "Unhandled event type: #{event.type}"
