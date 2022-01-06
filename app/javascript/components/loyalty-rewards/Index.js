@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import {FilterContextProvider} from '../common/Contexts/AnalyticsFilterContext';
-import Customize from './customize';
-import Campaigns from './campaigns';
+import Customize from './Customize';
+import Campaigns from './Campaigns';
+import LoyaltyPerformance from './LoyaltyPerformance';
 import { MobileBackArrowMajor } from '@shopify/polaris-icons';
 import {
   Card,
@@ -26,7 +27,7 @@ const LoyaltyRewards = ({handleBack}) => {
       (selectedTabIndex) => setSelectedTitleTab(selectedTabIndex),
       []
     );
-    
+
     const tabLoyaltyRewards = [
         {
             id: 'customize',
@@ -37,12 +38,12 @@ const LoyaltyRewards = ({handleBack}) => {
             content: 'Campaigns',
         },
         {
-            id: 'program-roi',
-            content: 'Program ROI',
-        },
-        {
             id: 'loyalty-performance',
             content: 'Loyalty Performance',
+        },
+        {
+            id: 'program-roi',
+            content: 'Program ROI',
         },
         {
             id: 'referral-performance',
@@ -77,15 +78,15 @@ const LoyaltyRewards = ({handleBack}) => {
                         </div>
                     ) 
                     : selectedTitleTab === 2 ? (
+                        <div className="loyalty-performance">
+                            <LoyaltyPerformance /> 
+                        </div>
+                    )
+                    : selectedTitleTab === 3 ? (
                         <div className="program-roi">
                             <></> 
                         </div>
                     ) 
-                    : selectedTitleTab === 3 ? (
-                        <div className="loyalty-performance">
-                            <></> 
-                        </div>
-                    )
                     : selectedTitleTab === 4 ? (
                         <div className="referral-performance">
                             <></> 
