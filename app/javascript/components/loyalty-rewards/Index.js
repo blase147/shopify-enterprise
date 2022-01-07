@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import {FilterContextProvider} from '../common/Contexts/AnalyticsFilterContext';
-import Customize from './Customize';
-import Campaigns from './Campaigns';
+import Customize from './customize';
+import Campaigns from './campaigns';
 import LoyaltyPerformance from './LoyaltyPerformance';
 import { MobileBackArrowMajor } from '@shopify/polaris-icons';
 import {
