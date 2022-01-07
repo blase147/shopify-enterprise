@@ -4,6 +4,7 @@ import {FilterContextProvider} from '../common/Contexts/AnalyticsFilterContext';
 import Customize from './Customize';
 import Campaigns from './Campaigns';
 import LoyaltyPerformance from './LoyaltyPerformance';
+import EmailTriggers from './EmailTriggers';
 import { MobileBackArrowMajor } from '@shopify/polaris-icons';
 import {
   Card,
@@ -42,8 +43,8 @@ const LoyaltyRewards = ({handleBack}) => {
             content: 'Loyalty Performance',
         },
         {
-            id: 'program-roi',
-            content: 'Program ROI',
+            id: 'email-triggers',
+            content: 'Email Triggers',
         },
         {
             id: 'referral-performance',
@@ -83,8 +84,8 @@ const LoyaltyRewards = ({handleBack}) => {
                         </div>
                     )
                     : selectedTitleTab === 3 ? (
-                        <div className="program-roi">
-                            <></> 
+                        <div className="email-triggers">
+                            <EmailTriggers /> 
                         </div>
                     ) 
                     : selectedTitleTab === 4 ? (
