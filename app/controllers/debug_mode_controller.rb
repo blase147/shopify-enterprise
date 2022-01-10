@@ -3,12 +3,13 @@ class DebugModeController < AuthenticatedController
 
   def index
     debug_setting = ShopSetting.find_by(shop_id: current_shop.id)
-    render json: { debug_mode: debug_setting.debug_mode }
+    ENV['DEBUG'] = debug_setting&.debug_mode
+    render json: { debug_mode: debug_setting&.debug_mode }
   end
 
   def create
     debug_settings = ShopSetting.find_by(shop_id: current_shop.id)
-    
+
     if debug_settings.present?
       debug_settings.update(debug_mode: params[:status])
     else

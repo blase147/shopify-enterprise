@@ -1,8 +1,12 @@
 .subscription-contract-products
-  - product = ShopifyAPI::Product.find(subscription.import_data['product_id'])
+  - begin
+    - product = ShopifyAPI::Product.find(subscription.import_data['product_id'])
+  - rescue
+    - next
   - selling_plan = SellingPlan.find(subscription.selling_plan_id) rescue nil
   - selling_plan_id = selling_plan.shopify_id rescue ''
   - box_campaign = BuildABoxCampaign.joins(:build_a_box_campaign_group).where(build_a_box_campaign_groups: { shop_id: @current_shop.id, location: 'customer_portal' }).where("'#{selling_plan_id[/\d+/]}' = ANY (selling_plan_ids)").first rescue nil
+
   .grid
     .grid-item
       .img.account-img
