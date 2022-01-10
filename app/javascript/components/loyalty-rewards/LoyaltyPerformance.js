@@ -26,9 +26,6 @@ const LoyaltyPerformance = () => {
           <Heading element="h5">Has Account</Heading>
         </div>
       </Card>
-        <DisplayText size="large">Loyalty Performance</DisplayText>
-        <DisplayText size="large">Referred Customers</DisplayText>
-        <DisplayText size="large">Reactived Customers</DisplayText>
     </FormLayout>
   );
 }
