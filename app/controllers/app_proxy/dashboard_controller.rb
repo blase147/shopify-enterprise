@@ -42,6 +42,14 @@ class AppProxy::DashboardController < AppProxyController
     end
     @shopify_customer = CustomerService.new({shop: current_shop}).get_customer(customer_id)
     @payment_methods = @payment_methods.values
+    @payment_type = 'SHOPIFY'
+    if @payment_methods.empty?
+      @payment_type = 'STRIPE'
+      @stripe_customer = Stripe::Customer.retrieve('cus_KuoO0dOQqFtmpY', {api_key: current_shop.stripe_api_key})
+      @stripe_card_info = Stripe::Customer.retrieve_source('cus_KuoO0dOQqFtmpY', "card_1KEymWC7z9MXtseXLz4Nk5rf", {api_key: current_shop.stripe_api_key})
+      # binding.pry
+      # render 'stripe_update_payment_modal', content_type: 'application/liquid', layout: 'liquid_app_proxy'
+    end
     render 'payment_methods', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 

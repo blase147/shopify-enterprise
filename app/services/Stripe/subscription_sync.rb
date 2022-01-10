@@ -65,7 +65,8 @@ class Stripe::SubscriptionSync
           country: shopify_customer_address.nil? ? '' : shopify_customer_address&.country,
           interval_number: stripe_subscription.plan.interval_count,
           interval_type: stripe_subscription.plan.interval.upcase,
-          purchase_date: Time.at(stripe_subscription.created)
+          purchase_date: Time.at(stripe_subscription.created),
+          stripe_customer_id: !stripe_customer.nil? && !stripe_customer.id.nil? ? stripe_customer.id : ''
         },
         import_type: 'stripe_subscription',
         api_data: stripe_subscription.to_h,
