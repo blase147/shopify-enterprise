@@ -2,19 +2,11 @@ class ShopifyContractCreateWorker
   include Sidekiq::Worker
 
   def perform(shop_id, id)
-    # find subscription from db, if not found
-    #   get the subscription detail from shopify
-    #
-    #
-    # ShopifyAPI::Webhook
-    # return
     unless CustomerSubscriptionContract.find_by(shopify_id: id)
       shop = Shop.find(shop_id)
       data = shop.with_shopify_session do
         SubscriptionContractService.new(id).run
       end
-      p data
-
       selling_plan = SellingPlan.find_by(shopify_id: data&.lines&.edges.first&.node&.selling_plan_id)
       contract = CustomerSubscriptionContract.create(
         shopify_id: id,
