@@ -18,7 +18,8 @@ jobs:
       id: date
       run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag bagamour-production:${{ steps.date.outputs.date }}
+      run: docker build . --file Dockerfile --tag codilitydeploy/bagamour:latest
+      #run: docker build . --file Dockerfile --tag bagamour-production:${{ steps.date.outputs.date }}
     - name: Login to Docker Hub
       run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 #TODO:
@@ -27,6 +28,7 @@ jobs:
 #             username: ${{ secrets.DOCKERHUB_USERNAME }}
 #             password: ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Push to Dockerhub
-      run: docker push bagamour-production:${{ steps.date.outputs.date }}
+      run: docker push codilitydeploy/bagamour:latest
+      #run: docker push bagamour-production:${{ steps.date.outputs.date }}
     - name: Cleanup
       run: docker image prune -f
