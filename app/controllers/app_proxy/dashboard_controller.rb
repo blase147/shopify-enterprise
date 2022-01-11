@@ -55,8 +55,8 @@ class AppProxy::DashboardController < AppProxyController
   end
 
   def update_stripe_source
-    Stripe::Customer.create_source(params[:stripe_customer_id],{ source: params[:source]})
-    Stripe::Customer.update( params[:stripe_customer_id], {default_source: params[:source]})
+    Stripe::Customer.create_source(params[:stripe_customer_id],{ source: params[:source]}, api_key: current_shop.stripe_api_key)
+    Stripe::Customer.update( params[:stripe_customer_id], {default_source: params[:source]}, api_key: current_shop.stripe_api_key)
     render :json => { status: :ok, message: "Success", show_notification: true }
   end
 
