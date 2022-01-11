@@ -1,0 +1,111 @@
+.Polaris-Modal.hidden id=("stripe-update-payment")
+  .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"
+    .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1"
+      .Polaris-Modal-Dialog__Modal
+        .Polaris-Modal__BodyWrapper
+          .Polaris-Modal__Body.Polaris-Scrollable.Polaris-Scrollable--vertical.update-payment-card-modal data-polaris-scrollable="true"
+            .header
+              div
+                h2 Payment Card
+              div.close-modal aria-hidden="true" tabindex="-1" data-action='close'
+                svg fill="none" height="20" viewbox=("0 0 18 20") width="18" xmlns="http://www.w3.org/2000/svg"
+                  path d=("M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z") fill="#DDDDDD" /
+            .form-wrapper
+              form action="javascript:void(0)" id="update_source" method='post'
+                input id="stripe_customer_id" type="hidden" value="#{@stripe_customer.id}"
+                input id="stripe_publish_key" type="hidden" value="#{current_shop.stripe_publish_key}"
+                div
+                  label for="card-element"
+                    strong Card Details
+                  br/
+                  br/
+                  div.card-element id="card-element"
+                br/
+                br/
+
+                .field
+                  div.heading_label
+                    label Name on card
+                    span.red *
+                  input name='name' value="#{@stripe_customer.name.present? ? @stripe_customer.name : ''}" type="text" placeholder="Name" required="required"/
+
+                h3.billing_address_label Billing Address
+                .group
+                  .field
+                    div.heading_label
+                      label First Name
+                      span.red *
+                    input name='address_first_name' value="#{@customer.first_name}" type="text" required="required"/
+                  .field
+                    div.heading_label
+                      label Last Name
+                      span.red *
+                    input name='address_last_name' value="#{@customer.last_name}" type="text" required="required"/
+                .field
+                  div.heading_label
+                    label Address
+                    span.red *
+                  input name='address'  value="#{@stripe_card_owner.address.line1.present? ? @stripe_card_owner.address.line1 : ''}" type="text" required="required"/
+                .group
+                  .field
+                    div.heading_label
+                      label City
+                      span.red *
+                    input name='address_city' value="#{@stripe_card_owner.address.city.present? ? @stripe_card_owner.address.city : ''}" type="text" required="required"/
+                  .field
+                    div.heading_label
+                      label Country
+                      span.red *
+                    input name='address_country' value="#{@stripe_card_owner.address.country.present? ? @stripe_card_owner.address.country : ''}" type="text" required="required"/
+                .group
+                  .field
+                    div.heading_label
+                      label State
+                      span.red *
+                    input name='address_state' value="#{@stripe_card_owner.address.state.present? ? @stripe_card_owner.address.state : ''}" type="text" required="required"/
+
+                .btn-wrapper
+                  button.update-card id="update-card-btn" Update Card
+
+
+  .Polaris-Backdrop
+
+
+javascript:
+  let stripe = Stripe( $('#stripe_publish_key').val() );
+  let elements = stripe.elements({
+      fonts: [
+          {cssSrc: 'https://fonts.googleapis.com/css?family=Roboto'},
+      ],
+      locale: 'auto'
+  });
+  let cardElement = elements.create('card');
+  cardElement.mount('#card-element');
+  cardElement.on('change', function(event) {});
+
+  function submit(){
+    stripe
+    .createSource(cardElement, {
+      type: 'card',
+      currency: 'usd',
+      owner: {
+        name: $('input[name="name"]').val(),
+        address: {city: $('input[name="address_city"]').val(), line1: $('input[name="address"]').val(), line2: '', state: $('input[name="address_state"]').val(), country: $('input[name="address_country"]').val()}
+      },
+    })
+    .then(function(result) {
+      $.ajax({
+        url: "/a/chargezen_production/dashboard/update_stripe_source",
+        type: "POST",
+        data: {stripe_customer_id: $('#stripe_customer_id').val(), source: result.source.id},
+        success: function(){window.location.reload();}
+      })
+    });
+  }
+
+  $(document).ready(function(){
+    $("#update-card-btn").on('click',function(e){
+      e.preventDefault();
+      submit();
+    })
+  })

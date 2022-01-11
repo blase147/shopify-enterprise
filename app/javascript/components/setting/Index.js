@@ -448,19 +448,19 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
     },
     ...(process.env.APP_TYPE == 'public'
       ? [
-          {
-            key: 'store_information',
-            title: 'Store Information',
-            img: InformationImage,
-            desc: 'Manage the information your customers can view on your store.',
-          },
-          {
-            key: 'discount',
-            title: 'Discount',
-            img: DiscountImage,
-            desc: "Enable and manage your store's discount.",
-          },
-        ]
+        {
+          key: 'store_information',
+          title: 'Store Information',
+          img: InformationImage,
+          desc: 'Manage the information your customers can view on your store.',
+        },
+        {
+          key: 'discount',
+          title: 'Discount',
+          img: DiscountImage,
+          desc: "Enable and manage your store's discount.",
+        },
+      ]
       : []),
     {
       key: 'billing',
@@ -470,20 +470,20 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
     },
     ...(process.env.APP_TYPE == 'public'
       ? [
-          {
-            key: 'legal',
-            title: 'Legal',
-            img: LegalImage,
-            desc: "Manage your store's legal pages.",
-            commingSoon: true,
-          },
-          {
-            key: 'export',
-            title: 'Export',
-            img: ExportImage,
-            desc: 'Export data from the app.',
-          },
-        ]
+        {
+          key: 'legal',
+          title: 'Legal',
+          img: LegalImage,
+          desc: "Manage your store's legal pages.",
+          commingSoon: true,
+        },
+        {
+          key: 'export',
+          title: 'Export',
+          img: ExportImage,
+          desc: 'Export data from the app.',
+        },
+      ]
       : []),
     {
       key: 'sms',
@@ -493,13 +493,13 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
     },
     ...(process.env.APP_TYPE == 'public'
       ? [
-          {
-            key: 'translation',
-            title: 'Translation',
-            img: TranslationImage,
-            desc: 'Add and change translations for the app.',
-          },
-        ]
+        {
+          key: 'translation',
+          title: 'Translation',
+          img: TranslationImage,
+          desc: 'Add and change translations for the app.',
+        },
+      ]
       : []),
     {
       key: 'password',
@@ -523,13 +523,13 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
         },
       ]
       : []),
-      {
-        key: 'enable_debug_mode',
-        title: 'Enable Debug Mode',
-        img: PasswordImage,
-        desc: 'Enable the debugging mode.',
-      },
-    ];
+    {
+      key: 'enable_debug_mode',
+      title: 'Enable Debug Mode',
+      img: PasswordImage,
+      desc: 'Enable the debugging mode.',
+    },
+  ];
   const tabs = [
     {
       id: 'house',
@@ -553,11 +553,11 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
     // },
     ...(process.env.APP_TYPE == 'public'
       ? [
-          {
-            id: 'store-information',
-            content: 'StoreInformation',
-          },
-        ]
+        {
+          id: 'store-information',
+          content: 'StoreInformation',
+        },
+      ]
       : []),
     // {
     //   id: 'legal',
@@ -665,20 +665,20 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                 }}
               >
                 {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  isSubmitting,
-                  setFieldValue,
-                  resetForm,
-                  dirty,
-                  setDirty,
-                  formik,
-                  /* and other goodies */
-                }) => (
+                    values,
+                    errors,
+                    touched,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    isSubmitting,
+                    setFieldValue,
+                    resetForm,
+                    dirty,
+                    setDirty,
+                    formik,
+                    /* and other goodies */
+                  }) => (
                   <Form onSubmit={handleSubmit}>
                     {dirty && (
                       <ContextualSaveBar
