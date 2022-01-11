@@ -37,11 +37,6 @@ const Nav = (props) => {
       id: 'installation',
       path: '/installation',
     },
-    // {
-    //   content: 'Loyalty & Rewards',
-    //   id: 'loyalty_rewards',
-    //   path: '/loyalty-rewards',
-    // },
     {
       content: 'Tiazen',
       id: 'tiazen',
