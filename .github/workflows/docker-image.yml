@@ -1,0 +1,24 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ db_rework ]
+  pull_request:
+    branches: [ db_rework ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag bagamour-production:$(date +%s)
+    - name: Login Docker
+      run: docker login
+    - name: Push to ockerhub
+      run: docker push bagamour-production:$(date +%s)
+    - name: Cleanup
+      run: docker image prune -f
