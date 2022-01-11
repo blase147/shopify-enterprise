@@ -45,12 +45,19 @@ class AppProxy::DashboardController < AppProxyController
     @payment_type = 'SHOPIFY'
     if @payment_methods.empty?
       @payment_type = 'STRIPE'
-      @stripe_customer = Stripe::Customer.retrieve('cus_KuoO0dOQqFtmpY', {api_key: current_shop.stripe_api_key})
-      @stripe_card_info = Stripe::Customer.retrieve_source('cus_KuoO0dOQqFtmpY', "card_1KEymWC7z9MXtseXLz4Nk5rf", {api_key: current_shop.stripe_api_key})
-      # binding.pry
+      @stripe_customer = Stripe::Customer.list({}, api_key: current_shop.stripe_api_key).data.filter{|c| c.email = @shopify_customer.email}[0]
+      stripe_card = Stripe::Customer.retrieve_source(@stripe_customer.id, @stripe_customer.default_source, api_key: current_shop.stripe_api_key)
+      @stripe_card_info = stripe_card.card
+      @stripe_card_owner = stripe_card.owner
       # render 'stripe_update_payment_modal', content_type: 'application/liquid', layout: 'liquid_app_proxy'
     end
     render 'payment_methods', content_type: 'application/liquid', layout: 'liquid_app_proxy'
+  end
+
+  def update_stripe_source
+    Stripe::Customer.create_source(params[:stripe_customer_id],{ source: params[:source]})
+    Stripe::Customer.update( params[:stripe_customer_id], {default_source: params[:source]})
+    render :json => { status: :ok, message: "Success", show_notification: true }
   end
 
   def settings

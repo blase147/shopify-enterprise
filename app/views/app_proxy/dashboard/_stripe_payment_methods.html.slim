@@ -1,58 +1,40 @@
 div.content-wrapper
-            div
-              .Polaris-Header-Title__TitleAndSubtitleWrapper
-                .Polaris-Header-Title
-                  h2.Polaris-DisplayText.main-heading
-                    / - if @translation.billing_tab_billing_information.present?
-                    /   span.Polaris-TextStyle--variationStrong #{@translation.billing_tab_billing_information}
-                    / - else
-                  span.Polaris-TextStyle--variationStrong MY&nbsp;
-                  span.Polaris-TextStyle--variationStrong style="color: #007EFF" BILLING
-                  span.Polaris-TextStyle--variationStrong &nbsp;INFORMATION
-            .billing-details-tile
-              .card-information
-                h2.card-heading #{'CARD ON FILE'}
-                .card-details
-                  .img.payment-img
-                    svg fill="none" height="31" viewbox=("0 0 50 31") width="50" xmlns="http://www.w3.org/2000/svg"
-                      path d=("M15.4235 30.8852C23.9375 30.8852 30.8394 23.9739 30.8394 15.4484C30.8394 6.92284 23.9375 0.0115356 15.4235 0.0115356C6.90956 0.0115356 0.00762939 6.92284 0.00762939 15.4484C0.00762939 23.9739 6.90956 30.8852 15.4235 30.8852Z") fill="#EE0005" /
-                      path d=("M34.5759 30.8842C43.0899 30.8842 49.9918 23.9729 49.9918 15.4473C49.9918 6.9218 43.0899 0.010498 34.5759 0.010498C26.062 0.010498 19.16 6.9218 19.16 15.4473C19.16 23.9729 26.062 30.8842 34.5759 30.8842Z") fill="#F9A000" /
-                      path d=("M19.1603 15.4471C19.1603 20.3486 21.4421 24.7161 24.9995 27.5438C28.5569 24.716 30.8388 20.3486 30.8388 15.4471C30.8388 10.5456 28.557 6.17813 24.9995 3.35046C21.4422 6.17837 19.1603 10.5457 19.1603 15.4471Z") fill="#FF6300" /
+  div
+    .Polaris-Header-Title__TitleAndSubtitleWrapper
+      .Polaris-Header-Title
+        h2.Polaris-DisplayText.main-heading
+          / - if @translation.billing_tab_billing_information.present?
+          /   span.Polaris-TextStyle--variationStrong #{@translation.billing_tab_billing_information}
+          / - else
+        span.Polaris-TextStyle--variationStrong MY&nbsp;
+        span.Polaris-TextStyle--variationStrong style="color: #007EFF" BILLING
+        span.Polaris-TextStyle--variationStrong &nbsp;INFORMATION
+  .billing-details-tile
+    .card-information
+      h2.card-heading #{'CARD ON FILE'}
+      .card-details
+        .img.payment-img
+          svg fill="none" height="31" viewbox=("0 0 50 31") width="50" xmlns="http://www.w3.org/2000/svg"
+            path d=("M15.4235 30.8852C23.9375 30.8852 30.8394 23.9739 30.8394 15.4484C30.8394 6.92284 23.9375 0.0115356 15.4235 0.0115356C6.90956 0.0115356 0.00762939 6.92284 0.00762939 15.4484C0.00762939 23.9739 6.90956 30.8852 15.4235 30.8852Z") fill="#EE0005" /
+            path d=("M34.5759 30.8842C43.0899 30.8842 49.9918 23.9729 49.9918 15.4473C49.9918 6.9218 43.0899 0.010498 34.5759 0.010498C26.062 0.010498 19.16 6.9218 19.16 15.4473C19.16 23.9729 26.062 30.8842 34.5759 30.8842Z") fill="#F9A000" /
+            path d=("M19.1603 15.4471C19.1603 20.3486 21.4421 24.7161 24.9995 27.5438C28.5569 24.716 30.8388 20.3486 30.8388 15.4471C30.8388 10.5456 28.557 6.17813 24.9995 3.35046C21.4422 6.17837 19.1603 10.5457 19.1603 15.4471Z") fill="#FF6300" /
 
-                  .details
-                    p.card-text
-                      span &#42;&#42;&#42;&#42; &#42;&#42;&#42;&#42; &#42;&#42;&#42;&#42;&nbsp;
-                      span = @stripe_card_info.last4
-                    p.card-text Expires 
-                    p = "#{@stripe_card_info.exp_month}/#{@stripe_card_info.exp_year}"
-                .btn-wrapper
-                  button.white.card-btn type="button" data-toggle="modal" data-target="#update-payment" #{@translation.billing_tab_update.present? ? @translation.billing_tab_update : 'UPDATE CARD'}
-              .address-information
-                .header
-                  h2.card-heading = "#{@stripe_customer.name.present? ? @stripe_customer.name : '-'}"
-                  / button.edit.card-btn  type="button" data-toggle="modal" data-target="#editAddressModal" #{@translation.billing_tab_edit.present? ? @translation.billing_tab_edit : 'Edit'}
-                .item
-                  h3.card-heading #{@translation.billing_tab_phone.present? ? @translation.billing_tab_phone : 'PHONE'}
-                  p.card-text = @stripe_customer.phone.present? ? @stripe_customer.phone : '-'
+        .details
+          p.card-text
+            span &#42;&#42;&#42;&#42; &#42;&#42;&#42;&#42; &#42;&#42;&#42;&#42;&nbsp;
+            span = @stripe_card_info.last4
+          p.card-text Expires 
+          p = "#{@stripe_card_info.exp_month}/#{@stripe_card_info.exp_year}"
+      .btn-wrapper
+        button.white.card-btn type="button" data-toggle="modal" data-target="#stripe-update-payment" #{@translation.billing_tab_update.present? ? @translation.billing_tab_update : 'UPDATE CARD'}
+    .address-information
+      .header
+        h2.card-heading = "#{@stripe_customer.name.present? ? @stripe_customer.name : '-'}"
+        / button.edit.card-btn  type="button" data-toggle="modal" data-target="#editAddressModal" #{@translation.billing_tab_edit.present? ? @translation.billing_tab_edit : 'Edit'}
+      .item
+        h3.card-heading #{@translation.billing_tab_phone.present? ? @translation.billing_tab_phone : 'PHONE'}
+        p.card-text = @stripe_customer.phone.present? ? @stripe_customer.phone : '-'
+
+ 
 
 script src="https://js.stripe.com/v3/"
-script 
-  var stripe = Stripe('pk_test_51IK7GSC7z9MXtseXYkHVpUcbxtRN3ZyrSaDB6mPpEV60R6fUjMfX9Sj2vhBRje9unZzQVkDHydZQRDTvWzza1Tcm00NPNnTqrU');
-  var secret_key = 'sk_test_51IK7GSC7z9MXtseXSXQI8IUuv0sAN1wSlQFFpBzRJxfb356kDm8NPRRkOtACrpaqjfpwudwyYCSE7FdTvCsKLBxt00PffDMpby';
-  var elements = stripe.elements({
-    clientSecret: secret_key,
-  });
-  var cardElement = elements.getElement('card');
-  var myPostalCodeField = document.querySelector('input[name="my-postal-code"]');
-  myPostalCodeField.addEventListener('change', function(event) {
-    cardElement.update({value: {postalCode: event.target.value}});
-  });
-
-  // Dynamically change the styles of an element
-  window.addEventListener('resize', function(event) {
-    if (window.innerWidth <= 320) {
-      cardElement.update({style: {base: {fontSize: '13px'}}});
-    } else {
-      cardElement.update({style: {base: {fontSize: '16px'}}});
-    }
-  });
