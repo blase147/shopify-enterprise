@@ -49,7 +49,6 @@ class AppProxy::DashboardController < AppProxyController
       stripe_card = Stripe::Customer.retrieve_source(@stripe_customer.id, @stripe_customer.default_source, api_key: current_shop.stripe_api_key)
       @stripe_card_info = stripe_card.card
       @stripe_card_owner = stripe_card.owner
-      # render 'stripe_update_payment_modal', content_type: 'application/liquid', layout: 'liquid_app_proxy'
     end
     render 'payment_methods', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
