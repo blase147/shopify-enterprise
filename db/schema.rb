@@ -359,6 +359,17 @@ ActiveRecord::Schema.define(version: 2022_01_11_131728) do
     t.string "day_of_production"
     t.string "delivery_interval_after_production"
     t.string "eligible_weekdays_for_delivery"
+    t.string "name"
+    t.string "email"
+    t.string "business_name"
+    t.string "industry_category"
+    t.string "selling"
+    t.boolean "have_customers"
+    t.boolean "subscription_for_client"
+    t.boolean "policy"
+    t.string "learn_about_chargezen"
+    t.string "phone"
+    t.boolean "onboarding", default: false
     t.index ["shop_id"], name: "index_settings_on_shop_id", unique: true
   end
 
@@ -403,6 +414,7 @@ ActiveRecord::Schema.define(version: 2022_01_11_131728) do
     t.string "charge_confirmation_link"
     t.string "plan"
     t.string "stripe_api_key"
+    t.boolean "onboarding", default: false
     t.text "stripe_publish_key"
     t.index ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true
   end
@@ -733,6 +745,28 @@ ActiveRecord::Schema.define(version: 2022_01_11_131728) do
     t.index ["selling_plan_ids"], name: "index_upsell_campaigns_on_selling_plan_ids", using: :gin
   end
 
+  create_table "user_shops", force: :cascade do |t|
+    t.bigint "shop_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["shop_id", "user_id"], name: "index_user_shops_on_shop_id_and_user_id", unique: true
+    t.index ["shop_id"], name: "index_user_shops_on_shop_id"
+    t.index ["user_id"], name: "index_user_shops_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
   create_table "zip_codes", force: :cascade do |t|
     t.string "city"
     t.string "state"
@@ -747,5 +781,7 @@ ActiveRecord::Schema.define(version: 2022_01_11_131728) do
   add_foreign_key "bundles", "bundle_groups"
   add_foreign_key "customer_subscription_contracts", "reasons_cancels"
   add_foreign_key "sms_flows", "shops"
+  add_foreign_key "user_shops", "shops"
+  add_foreign_key "user_shops", "users"
   add_foreign_key "zip_codes", "shops"
 end
