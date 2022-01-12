@@ -24,7 +24,7 @@ div.content-wrapper
             p.card-text Expires
             p = "#{@stripe_card_info&.exp_month}/#{@stripe_card_info&.exp_year}"
       .btn-wrapper
-        button.white.card-btn type="button" data-toggle="modal" data-target="#stripe-update-payment" #{@translation.billing_tab_update.present? ? @translation.billing_tab_update : 'UPDATE CARD'}
+        button.white.card-btn type="button" data-toggle="modal" data-target="#stripe-update-payment" style="color: #000" UPDATE CARD
     - if @stripe_customer.present?
       .address-information
         .header

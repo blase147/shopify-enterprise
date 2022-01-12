@@ -64,8 +64,15 @@
                       span.red *
                     input name='address_state' value="#{@stripe_card_owner.present? && @stripe_card_owner.address.present? && @stripe_card_owner.address.state.present? ? @stripe_card_owner.address.state : ''}" type="text" required="required"/
 
+                div.show_loading.hide
+                  br/
+                  .prx-loader &nbsp;
+                  br/
+                  strong.update_card_message
+                br/
                 .btn-wrapper
                   button.update-card id="update-card-btn" Update Card
+                
 
 
   .Polaris-Backdrop
@@ -84,6 +91,8 @@ javascript:
   cardElement.on('change', function(event) {});
 
   function submit(){
+    $('.show_loading').removeClass('hide');
+    $('.update_card_message').html("Please wait, updating card settings.");
     stripe
     .createSource(cardElement, {
       type: 'card',
