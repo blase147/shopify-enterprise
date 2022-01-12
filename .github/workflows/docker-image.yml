@@ -14,11 +14,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        ref: db_rework
     - name: Get current date
       id: date
       run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
     - name: Build the Docker image
-      run: docker build --tag codilitymohsin/bagamour:latest https://github.com/Ecomtarget-LLC/Chargezen.git#db_rework
+      run: docker build . --file Dockerfile --tag codilitymohsin/bagamour:latest
       #run: docker build . --file Dockerfile --tag bagamour-production:${{ steps.date.outputs.date }}
     - name: Login to Docker Hub
       run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
