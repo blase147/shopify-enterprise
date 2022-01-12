@@ -134,6 +134,13 @@ Rails.application.routes.draw do
 
   resources :debug_mode, only: [:index, :create]
 
+  resources :settings do
+    collection do
+      get :stripe_settings
+      post :update_stripe_settings
+    end
+  end
+
   resources :select_plan, only: [:index, :create]
 
   get 'subscription/charge', to: 'callback#charge'
