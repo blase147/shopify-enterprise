@@ -13,7 +13,7 @@
             .form-wrapper
               form action="javascript:void(0)" id="update_source" method='post'
                 input id="stripe_customer_id" type="hidden" value="#{@stripe_customer.id}"
-                input id="stripe_publish_key" type="hidden" value="#{current_shop.stripe_publish_key}"
+                input id="stripe_publish_key" type="hidden" value="#{@current_shop.stripe_publish_key}"
                 div
                   label for="card-element"
                     strong Card Details

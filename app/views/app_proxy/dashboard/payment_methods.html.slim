@@ -70,7 +70,7 @@
 / = render 'edit_address_modal'
 - if @payment_type == 'SHOPIFY'
   = render 'update_payment_modal', payment_method: payment_method, billing_address: billing_address
-- else 
+- elsif @stripe_customer.present?
   = render 'stripe_update_payment_modal', stripe_customer: @stripe_customer, stripe_card_info: @stripe_card_info
 
         / .Polaris-Page-Header.Polaris-Page-Header--isSingleRow.Polaris-Page-Header--noBreadcrumbs.Polaris-Page-Header--mediumTitle
