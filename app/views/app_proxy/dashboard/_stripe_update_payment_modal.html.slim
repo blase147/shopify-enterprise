@@ -45,24 +45,24 @@
                   div.heading_label
                     label Address
                     span.red *
-                  input name='address'  value="#{@stripe_card_owner.address.line1.present? ? @stripe_card_owner.address.line1 : ''}" type="text" required="required"/
+                  input name='address'  value="#{@stripe_card_owner.present? && @stripe_card_owner.address.present? && @stripe_card_owner.address.line1.present? ? @stripe_card_owner.address.line1 : ''}" type="text" required="required"/
                 .group
                   .field
                     div.heading_label
                       label City
                       span.red *
-                    input name='address_city' value="#{@stripe_card_owner.address.city.present? ? @stripe_card_owner.address.city : ''}" type="text" required="required"/
+                    input name='address_city' value="#{@stripe_card_owner.present? && @stripe_card_owner.address.present? && @stripe_card_owner.address.city.present? ? @stripe_card_owner.address.city : ''}" type="text" required="required"/
                   .field
                     div.heading_label
                       label Country
                       span.red *
-                    input name='address_country' value="#{@stripe_card_owner.address.country.present? ? @stripe_card_owner.address.country : ''}" type="text" required="required"/
+                    input name='address_country' value="#{@stripe_card_owner.present? && @stripe_card_owner.address.present? && @stripe_card_owner.address.country.present? ? @stripe_card_owner.address.country : ''}" type="text" required="required"/
                 .group
                   .field
                     div.heading_label
                       label State
                       span.red *
-                    input name='address_state' value="#{@stripe_card_owner.address.state.present? ? @stripe_card_owner.address.state : ''}" type="text" required="required"/
+                    input name='address_state' value="#{@stripe_card_owner.present? && @stripe_card_owner.address.present? && @stripe_card_owner.address.state.present? ? @stripe_card_owner.address.state : ''}" type="text" required="required"/
 
                 .btn-wrapper
                   button.update-card id="update-card-btn" Update Card
