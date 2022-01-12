@@ -43,6 +43,7 @@ import ExportImage from '../../../assets/images/settings/export.svg';
 import InformationImage from '../../../assets/images/settings/information.svg';
 import LegalImage from '../../../assets/images/settings/legal.svg';
 import PasswordImage from '../../../assets/images/settings/password.svg';
+import DebugImage from '../../../assets/images/settings/code.svg';
 import SMSImage from '../../../assets/images/settings/sms.svg';
 import TranslationImage from '../../../assets/images/settings/translation.svg';
 import Sms from './HouseKeepingComponents/Sms';
@@ -51,6 +52,7 @@ import MainExport from './HouseKeepingComponents/ExportComponents/MainExport';
 import ZipCodeImage from '../../../assets/images/settings/zip_code.svg';
 import ZipCodes from './ZipCodes';
 import EnableDebug from './EnableDebug';
+import StripeSettings from './StripeSettings';
 
 const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
   // form data ########################################################
@@ -526,8 +528,14 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
     {
       key: 'enable_debug_mode',
       title: 'Enable Debug Mode',
-      img: PasswordImage,
+      img: DebugImage,
       desc: 'Enable the debugging mode.',
+    },
+    {
+      key: 'stripe_settings',
+      title: 'Stripe Settings',
+      img: SettingImage,
+      desc: 'Manage Stripe Settings for your App.',
     },
   ];
   const tabs = [
@@ -821,6 +829,10 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                                 ) : selectedSetting === 'enable_debug_mode' ? (
                                   <>
                                     <EnableDebug handleBack={handleBackSetting} />
+                                  </>
+                                ) : selectedSetting === 'stripe_settings' ? (
+                                  <>
+                                    <StripeSettings handleBack={handleBackSetting} />
                                   </>
                                 ) : selectedSetting === 'sms' ? (
                                   <>
