@@ -17,11 +17,12 @@ div.content-wrapper
             path d=("M19.1603 15.4471C19.1603 20.3486 21.4421 24.7161 24.9995 27.5438C28.5569 24.716 30.8388 20.3486 30.8388 15.4471C30.8388 10.5456 28.557 6.17813 24.9995 3.35046C21.4422 6.17837 19.1603 10.5457 19.1603 15.4471Z") fill="#FF6300" /
 
         .details
-          p.card-text
-            span &#42;&#42;&#42;&#42; &#42;&#42;&#42;&#42; &#42;&#42;&#42;&#42;&nbsp;
-            span = @stripe_card_info.last4
-          p.card-text Expires
-          p = "#{@stripe_card_info.exp_month}/#{@stripe_card_info.exp_year}"
+          - if @stripe_card_info.present?
+            p.card-text
+              span &#42;&#42;&#42;&#42; &#42;&#42;&#42;&#42; &#42;&#42;&#42;&#42;&nbsp;
+              span = @stripe_card_info&.last4
+            p.card-text Expires
+            p = "#{@stripe_card_info&.exp_month}/#{@stripe_card_info&.exp_year}"
       .btn-wrapper
         button.white.card-btn type="button" data-toggle="modal" data-target="#stripe-update-payment" #{@translation.billing_tab_update.present? ? @translation.billing_tab_update : 'UPDATE CARD'}
     .address-information

@@ -33,7 +33,7 @@ class AppProxy::DashboardController < AppProxyController
 
   def payment_methods
     @orders = ShopifyAPI::Order.find(:all,
-      params: { customer_id: customer_id, limit: PER_PAGE, page_info: params[:page_info] }
+      params: { customer_id: 5796293443755, limit: 6, page_info: nil }
     )
 
     @payment_methods = {}
@@ -42,13 +42,13 @@ class AppProxy::DashboardController < AppProxyController
     end
     @shopify_customer = CustomerService.new({shop: current_shop}).get_customer(customer_id)
     @payment_methods = @payment_methods.values
-    @payment_type = 'SHOPIFY'
+    @payment_type = :SHOPIFY.to_s
     if @payment_methods.empty?
-      @payment_type = 'STRIPE'
+      @payment_type = :STRIPE.to_s
       @stripe_customer = Stripe::Customer.list({}, api_key: current_shop.stripe_api_key).data.filter{|c| c.email = @shopify_customer.email}[0]
       stripe_card = Stripe::Customer.retrieve_source(@stripe_customer.id, @stripe_customer.default_source, api_key: current_shop.stripe_api_key)
-      @stripe_card_info = stripe_card.card
-      @stripe_card_owner = stripe_card.owner
+      @stripe_card_info = stripe_card&.card
+      @stripe_card_owner = stripe_card&.owner
     end
     render 'payment_methods', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
