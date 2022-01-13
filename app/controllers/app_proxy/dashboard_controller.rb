@@ -46,16 +46,18 @@ class AppProxy::DashboardController < AppProxyController
     if @payment_methods.empty?
       @current_shop = current_shop
       @payment_type = :STRIPE.to_s
-      @stripe_customer = Stripe::Customer.list({}, api_key: current_shop.stripe_api_key).data.filter{|c| c.email = @shopify_customer.email}[0]
-      stripe_card = Stripe::Customer.retrieve_source(@stripe_customer.id, @stripe_customer.default_source, api_key: current_shop.stripe_api_key)
+      @stripe_customer = Stripe::Customer.list({}, api_key: current_shop.stripe_api_key).data.filter{|c| c.email == @shopify_customer.email}[0]
       @stripe_card_info = []
-      begin
-        @stripe_card_info = stripe_card.card
-      rescue => e
-        puts e
-      end
+      unless @stripe_customer.nil?
+        stripe_card = Stripe::Customer.retrieve_source(@stripe_customer.id, @stripe_customer.default_source, api_key: current_shop.stripe_api_key)
+        begin
+          @stripe_card_info = stripe_card.card
+        rescue => e
+          puts e
+        end
 
-      @stripe_card_owner = stripe_card&.owner
+        @stripe_card_owner = stripe_card&.owner
+      end
     end
     render 'payment_methods', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
