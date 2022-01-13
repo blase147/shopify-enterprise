@@ -8,36 +8,38 @@ import {
   Select,
   TextStyle,
   Stack,
-  Icon
+  Icon,
 } from '@shopify/polaris';
-import {
-  MobileBackArrowMajor
-} from '@shopify/polaris-icons';
-const ProductExtention = ({ values, touched, errors, setFieldValue, handleBack }) => {
-
-    const options = [
-      { label: 'Design I', value: 'one' },
-      { label: 'Design II', value: 'two' },
-      { label: 'Design III', value: 'three' }
-    ];
-    return (
-      <div className="product-extention">
-        <Layout>
+import { MobileBackArrowMajor } from '@shopify/polaris-icons';
+const ProductExtention = ({
+  values,
+  touched,
+  errors,
+  setFieldValue,
+  handleBack,
+}) => {
+  const options = [
+    { label: 'Design I', value: 'one' },
+    { label: 'Design II', value: 'two' },
+    { label: 'Design III', value: 'three' },
+  ];
+  return (
+    <div className="product-extention">
+      <Layout>
         <Layout.Section>
-        <div className="back-button pointer" onClick={handleBack}>
-          <Icon
-            source={MobileBackArrowMajor}
-            color="base" />
-        </div>
-      </Layout.Section>
+          <div className="back-button pointer" onClick={handleBack}>
+            <Icon source={MobileBackArrowMajor} color="base" />
+            <p>
+              <TextStyle variation="subdued">Settings</TextStyle>
+            </p>
+          </div>
+        </Layout.Section>
         <Card>
           <Card.Section>
             <div className="billing">
               <FormLayout>
                 <DisplayText size="small" element="h6">
-                  <TextStyle variation="subdued">
-                    Product Extention
-                  </TextStyle>
+                  <TextStyle variation="subdued">Product Extention</TextStyle>
                 </DisplayText>
                 <Select
                   label="Design"
@@ -46,15 +48,13 @@ const ProductExtention = ({ values, touched, errors, setFieldValue, handleBack }
                   onChange={(e) => setFieldValue('designType', e)}
                   options={options}
                 />
-
               </FormLayout>
             </div>
           </Card.Section>
         </Card>
       </Layout>
-      </div>
-    )
-}
+    </div>
+  );
+};
 
-
-export default ProductExtention
+export default ProductExtention;

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_09_101847) do
+ActiveRecord::Schema.define(version: 2022_01_11_131728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,7 +63,40 @@ ActiveRecord::Schema.define(version: 2021_08_09_101847) do
     t.json "selling_plans"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "selling_plan_ids", array: true
+    t.string "display_name"
     t.index ["build_a_box_campaign_group_id"], name: "index_build_a_box_campaigns_on_build_a_box_campaign_group_id"
+    t.index ["selling_plan_ids"], name: "index_build_a_box_campaigns_on_selling_plan_ids", using: :gin
+  end
+
+  create_table "bundle_groups", force: :cascade do |t|
+    t.bigint "shop_id", null: false
+    t.string "internal_name"
+    t.string "location"
+    t.date "start_date"
+    t.date "end_date"
+    t.string "bundle_type"
+    t.jsonb "collection_images"
+    t.jsonb "product_images"
+    t.json "triggers"
+    t.json "selling_plans"
+    t.boolean "fixed_pricing"
+    t.string "shopify_product_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["shop_id"], name: "index_bundle_groups_on_shop_id"
+  end
+
+  create_table "bundles", force: :cascade do |t|
+    t.bigint "bundle_group_id", null: false
+    t.integer "quantity_limit"
+    t.decimal "box_price"
+    t.decimal "price_per_item"
+    t.string "label"
+    t.string "shopify_variant_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["bundle_group_id"], name: "index_bundles_on_bundle_group_id"
   end
 
   create_table "custom_keywords", force: :cascade do |t|
@@ -76,7 +109,7 @@ ActiveRecord::Schema.define(version: 2021_08_09_101847) do
     t.index ["shop_id"], name: "index_custom_keywords_on_shop_id"
   end
 
-  create_table "customers", force: :cascade do |t|
+  create_table "customer_subscription_contracts", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
     t.string "email"
@@ -110,11 +143,18 @@ ActiveRecord::Schema.define(version: 2021_08_09_101847) do
     t.integer "retry_count", default: 0
     t.bigint "reasons_cancel_id"
     t.datetime "cancelled_at"
-    t.string "biiling_interval"
+    t.string "billing_interval"
     t.string "shopify_customer_id"
     t.string "box_items"
     t.datetime "campaign_date"
-    t.index ["reasons_cancel_id"], name: "index_customers_on_reasons_cancel_id"
+    t.string "api_source"
+    t.json "api_data"
+    t.string "api_resource_id"
+    t.json "import_data"
+    t.string "import_type"
+    t.string "selling_plan_id"
+    t.index ["reasons_cancel_id"], name: "index_customer_subscription_contracts_on_reasons_cancel_id"
+    t.index ["selling_plan_id"], name: "index_customer_subscription_contracts_on_selling_plan_id"
   end
 
   create_table "email_notifications", force: :cascade do |t|
@@ -225,6 +265,8 @@ ActiveRecord::Schema.define(version: 2021_08_09_101847) do
     t.integer "delivery_interval_count"
     t.text "billing_dates", default: [], array: true
     t.text "shipping_dates", default: [], array: true
+    t.integer "shipping_cut_off"
+    t.string "first_delivery"
   end
 
   create_table "settings", force: :cascade do |t|
@@ -308,6 +350,26 @@ ActiveRecord::Schema.define(version: 2021_08_09_101847) do
     t.string "pause_subscription"
     t.string "email_service"
     t.integer "design_type", default: 0
+    t.boolean "enable_password", default: false
+    t.string "max_fail_strategy"
+    t.string "account_portal_option"
+    t.string "active_subscription_btn_seq", array: true
+    t.string "portal_theme"
+    t.string "order_cancel_option"
+    t.string "day_of_production"
+    t.string "delivery_interval_after_production"
+    t.string "eligible_weekdays_for_delivery"
+    t.string "name"
+    t.string "email"
+    t.string "business_name"
+    t.string "industry_category"
+    t.string "selling"
+    t.boolean "have_customers"
+    t.boolean "subscription_for_client"
+    t.boolean "policy"
+    t.string "learn_about_chargezen"
+    t.string "phone"
+    t.boolean "onboarding", default: false
     t.index ["shop_id"], name: "index_settings_on_shop_id", unique: true
   end
 
@@ -334,6 +396,13 @@ ActiveRecord::Schema.define(version: 2021_08_09_101847) do
     t.index ["shop_id"], name: "index_ship_engine_orders_on_shop_id"
   end
 
+  create_table "shop_settings", force: :cascade do |t|
+    t.integer "shop_id"
+    t.boolean "debug_mode"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "shops", force: :cascade do |t|
     t.string "shopify_domain", null: false
     t.string "shopify_token", null: false
@@ -343,6 +412,10 @@ ActiveRecord::Schema.define(version: 2021_08_09_101847) do
     t.string "recurring_charge_id"
     t.string "recurring_charge_status"
     t.string "charge_confirmation_link"
+    t.string "plan"
+    t.string "stripe_api_key"
+    t.boolean "onboarding", default: false
+    t.text "stripe_publish_key"
     t.index ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true
   end
 
@@ -386,6 +459,21 @@ ActiveRecord::Schema.define(version: 2021_08_09_101847) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["customer_id"], name: "index_sms_conversations_on_customer_id"
+  end
+
+  create_table "sms_flows", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "sent", default: 0
+    t.integer "clicks", default: 0
+    t.decimal "revenue", default: "0.0"
+    t.boolean "status", default: false
+    t.text "description"
+    t.bigint "shop_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.json "content"
+    t.string "trigger"
+    t.index ["shop_id"], name: "index_sms_flows_on_shop_id"
   end
 
   create_table "sms_logs", force: :cascade do |t|
@@ -650,7 +738,50 @@ ActiveRecord::Schema.define(version: 2021_08_09_101847) do
     t.json "rule_cart_value"
     t.json "product_offer"
     t.json "rule_customer_value"
+    t.string "selling_plan_ids", array: true
+    t.json "selling_plans"
+    t.date "start_date"
+    t.date "end_date"
+    t.index ["selling_plan_ids"], name: "index_upsell_campaigns_on_selling_plan_ids", using: :gin
   end
 
-  add_foreign_key "customers", "reasons_cancels"
+  create_table "user_shops", force: :cascade do |t|
+    t.bigint "shop_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["shop_id", "user_id"], name: "index_user_shops_on_shop_id_and_user_id", unique: true
+    t.index ["shop_id"], name: "index_user_shops_on_shop_id"
+    t.index ["user_id"], name: "index_user_shops_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "zip_codes", force: :cascade do |t|
+    t.string "city"
+    t.string "state"
+    t.string "codes", array: true
+    t.bigint "shop_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["shop_id"], name: "index_zip_codes_on_shop_id"
+  end
+
+  add_foreign_key "bundle_groups", "shops"
+  add_foreign_key "bundles", "bundle_groups"
+  add_foreign_key "customer_subscription_contracts", "reasons_cancels"
+  add_foreign_key "sms_flows", "shops"
+  add_foreign_key "user_shops", "shops"
+  add_foreign_key "user_shops", "users"
+  add_foreign_key "zip_codes", "shops"
 end

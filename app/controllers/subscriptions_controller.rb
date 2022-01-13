@@ -3,6 +3,11 @@ class SubscriptionsController < AuthenticatedController
   layout 'subscriptions'
   include SubscriptionConcern
 
+  def sync_stripe
+    StripeSubscriptionSyncWorker.perform_async(current_shop.id, false)
+    head :no_content
+  end
+
   def index
     redirect_to subscription_path(id: params[:id]) if params[:id].present?
 
@@ -12,14 +17,37 @@ class SubscriptionsController < AuthenticatedController
 
   def show
     id = params[:id]
-    @customer = Customer.find_by_shopify_id(params[:id])
-    @box_products = @customer.box_items.present? ? ShopifyAPI::Product.where(ids: @customer.box_items, fields: 'id,title,images,variants') : nil
-    @subscription = SubscriptionContractService.new(id).run
+    if params[:local_id]
+      @customer = CustomerSubscriptionContract.find_by(id: params[:local_id])
+    else
+      @customer = CustomerSubscriptionContract.find_by_shopify_id(params[:id])
+    end
+
+    if id && !@customer
+      ShopifyContractCreateWorker.new.perform(current_shop.id, id)
+      @customer = CustomerSubscriptionContract.find_by_shopify_id(id)
+    end
+
+    if @customer.api_source != 'stripe' && !@customer.api_data
+      @customer.api_source = 'shopify'
+      @customer.api_data = SubscriptionContractService.new(id).run.to_h.deep_transform_keys { |key| key.underscore }
+      @customer.save
+    end
+
+    @subscription = JSON.parse(@customer.api_data.to_json, object_class: OpenStruct)
     products = ProductService.new.list
-    @swap_products = products.is_a?(Hash) ? nil : products.select{ |p| p.node.selling_plan_group_count > 0 }
-    @total = @subscription.orders.edges.map { |order|
+    @swap_products = products.is_a?(Hash) ? nil : products&.select{ |p| p.node.selling_plan_group_count > 0 }
+    @total = @subscription&.orders&.edges&.map { |order|
       order.node.total_received_set.presentment_money.amount.to_f
-    }.sum
+    }&.sum
+    @box_products = ShopifyAPI::Product.where(ids: @customer.box_items, fields: 'id,title,images,variants') if  @customer&.box_items.present?
+    unless @box_products
+      product_ids = @subscription.origin_order.line_items.edges.map{|e| e.node.custom_attributes.find{|a| a.key == "_box_product_ids"}.value rescue nil}.flatten.compact.join(',') rescue nil
+      @box_products = ShopifyAPI::Product.where(ids: product_ids, fields: 'id,title,images,variants') if product_ids.present?
+    end
+
+    @translation = current_shop&.translation
+    render "#{@customer.api_source == 'stripe' ? 'stripe_' : ''}show"
   end
 
   def update_customer
@@ -42,6 +70,7 @@ class SubscriptionsController < AuthenticatedController
     else
       render js: "showToast('notice', 'Subscription is updated!'); hideModal();"
     end
+
   end
 
   def send_update_card
@@ -82,7 +111,7 @@ class SubscriptionsController < AuthenticatedController
   end
 
   def remove_box_item
-    @customer = Customer.find_by_shopify_id(params[:id])
+    @customer = CustomerSubscriptionContract.find_by_shopify_id(params[:id])
     box_items = @customer.box_items.split(',')
     box_items.delete(params[:product_id])
     @customer.update(box_items: box_items.present? ? box_items.join(',') : nil)

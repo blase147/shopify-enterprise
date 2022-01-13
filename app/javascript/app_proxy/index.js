@@ -1,5 +1,17 @@
 $( document ).on('turbolinks:load', function() {
   initAppProxy();
+  document.querySelectorAll("button[data-target][data-toggle]").forEach(btn => {
+    btn.addEventListener('click', (e) =>{
+      const btn = e.target;
+      document.querySelector(btn.dataset.target).classList.remove('hidden');
+    })
+  })
+  document.querySelectorAll('[data-action="close"]').forEach(btn => {
+    btn.addEventListener('click', (e) =>{
+      const btn = e.target;
+      btn.closest('.Polaris-Modal').classList.add('hidden')
+    })
+  })
 })
 function initAppProxy(){
   $('button[data-url]').click(function(){

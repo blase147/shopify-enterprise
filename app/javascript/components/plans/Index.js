@@ -129,6 +129,7 @@ const SellingPlans = () => {
     }
   `;
 
+  const [viewType, setViewType] = useState('regular');
   const [formErrors, setFormErrors] = useState([]);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
@@ -161,6 +162,11 @@ const SellingPlans = () => {
     { label: 'Draft Plans', value: 'draft' },
   ];
 
+  const viewTypes = [
+    { label: 'Regular View', value: 'regular' },
+    { label: 'Power View', value: 'power' }
+  ];
+
   const [getStartedModal, setGetStartedModal] = useState(false);
   const { data, loading, error } = useQuery(GET_SELLING_PLANS, {
     fetchPolicy: 'no-cache',
@@ -175,6 +181,9 @@ const SellingPlans = () => {
   }, [data]);
 
   const generateLink = (type) => {
+    if (viewType == 'power') {
+      return 'power-view-plan';
+    }
     switch (type) {
       case 'fixed_price': {
         return 'fixed-subscription-plans';
@@ -237,7 +246,7 @@ const SellingPlans = () => {
   useEffect(() => {
     filterPlansValue();
     setSelectedPlansForRemove([]);
-  }, [searchValue, planStatus]);
+  }, [searchValue, planStatus, viewType]);
 
   useEffect(() => {
     filterPlansValue();
@@ -282,6 +291,15 @@ const SellingPlans = () => {
                     value={planStatus}
                   />
                 </Stack.Item>
+                <Stack.Item>
+                  <Select
+                    label="View"
+                    labelInline
+                    options={viewTypes}
+                    onChange={setViewType}
+                    value={viewType}
+                  />
+                </Stack.Item>
                 <Stack.Item fill></Stack.Item>
                 <Stack.Item>
                   <Stack>
@@ -303,7 +321,7 @@ const SellingPlans = () => {
                     <Button
                       primary
                       icon={MobilePlusMajor}
-                      onClick={() => setGetStartedModal(true)}
+                      onClick={() => history.push('/fixed-subscription-plans')}
                     >
                       Create Plan
                     </Button>

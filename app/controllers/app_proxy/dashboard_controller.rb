@@ -1,25 +1,40 @@
 class AppProxy::DashboardController < AppProxyController
   before_action :load_subscriptions, except: [:build_a_box, :confirm_box_selection]
-  before_action :load_customer, only: %w(index addresses payment_methods settings upcoming build_a_box)
+  before_action :load_customer, only: %w(index addresses payment_methods settings upcoming build_a_box track_order)
 
   def index
+    # @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
     products = ProductService.new.list
-    @swap_products = products.is_a?(Hash) ? nil : products.select{ |p| p.node.selling_plan_group_count > 0 }
+    @swap_products = products.is_a?(Hash) ? nil : products&.select{ |p| p.node.selling_plan_group_count > 0 }
+
+    render "#{current_setting.portal_theme}index", content_type: 'application/liquid', layout: "#{current_setting.portal_theme}liquid_app_proxy"
   end
 
-  def subscription; end
+  def subscription
+    render 'subscription', content_type: 'application/liquid', layout: 'liquid_app_proxy'
+  end
 
-  def upcoming; end
+  def upcoming
+    # @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
+    render 'upcoming', content_type: 'application/liquid', layout: 'liquid_app_proxy'
+  end
 
-  def order_history; end
+  def track_order
+    render 'track_order', content_type: 'application/liquid', layout: 'liquid_app_proxy'
+  end
 
-  def addresses; end
+  def order_history
+    render 'order_history', content_type: 'application/liquid', layout: 'liquid_app_proxy'
+  end
+
+  def addresses
+    render 'addresses', content_type: 'application/liquid', layout: 'liquid_app_proxy'
+  end
 
   def payment_methods
     @orders = ShopifyAPI::Order.find(:all,
-      params: { customer_id: customer_id, limit: PER_PAGE, page_info: params[:page_info] }
+      params: { customer_id: 5796293443755, limit: 6, page_info: nil }
     )
-
 
     @payment_methods = {}
     @orders.each do |order|
@@ -27,52 +42,94 @@ class AppProxy::DashboardController < AppProxyController
     end
     @shopify_customer = CustomerService.new({shop: current_shop}).get_customer(customer_id)
     @payment_methods = @payment_methods.values
+    @payment_type = :SHOPIFY.to_s
+    if @payment_methods.empty?
+      @current_shop = current_shop
+      @payment_type = :STRIPE.to_s
+      @stripe_customer = Stripe::Customer.list({}, api_key: current_shop.stripe_api_key).data.filter{|c| c.email == @shopify_customer.email}[0]
+      @stripe_card_info = []
+      unless @stripe_customer.nil?
+        stripe_card = Stripe::Customer.retrieve_source(@stripe_customer.id, @stripe_customer.default_source, api_key: current_shop.stripe_api_key)
+        begin
+          @stripe_card_info = stripe_card.card
+        rescue => e
+          puts e
+        end
+
+        @stripe_card_owner = stripe_card&.owner
+      end
+    end
+    render 'payment_methods', content_type: 'application/liquid', layout: 'liquid_app_proxy'
+  end
+
+  def update_stripe_source
+    Stripe::Customer.create_source(params[:stripe_customer_id],{ source: params[:source]}, api_key: current_shop.stripe_api_key)
+    Stripe::Customer.update( params[:stripe_customer_id], {default_source: params[:source]}, api_key: current_shop.stripe_api_key)
+    render :json => { status: :ok, message: "Success", show_notification: true }
   end
 
   def settings
+    render 'settings', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
   def build_a_box
+    # @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
     products = nil
     @subscription_id = params[:subscription_id]
-    @customer = current_shop.customers.find_by_shopify_id(params[:subscription_id])
+    if params[:stripe_subscription]
+      @customer = current_shop.customer_subscription_contracts.find_by_id(params[:subscription_id])
+    else
+      @customer = current_shop.customer_subscription_contracts.find_by_shopify_id(params[:subscription_id])
+    end
+
     if params[:selling_plan_id].present?
       @selling_plan_id = params[:selling_plan_id]
-      @box_campaign = current_shop.build_a_box_campaign_groups.last.build_a_box_campaign
+      @box_campaign = BuildABoxCampaign.find(params[:build_a_box_campaign_id]) # current_shop.build_a_box_campaign_groups.last.build_a_box_campaign
       @selected_products = ShopifyAPI::Product.where(ids: @customer.box_items, fields: 'id,title,images') if @customer.box_items.present?
       case @box_campaign&.box_subscription_type
       when 'collection'
-        products = @box_campaign.collection_images[0]['products']
+        products = @box_campaign.collection_images.map{|ci| ci['products'] unless ci['_destroy']}.flatten.compact
       when 'products'
         products = @box_campaign.product_images
       end
       fetch_products(products) if products.present?
     end
+    render 'build_a_box', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
   def confirm_box_selection
-    customer = current_shop.customers.find_by(shopify_id: params[:subscription_id])
+    customer = current_shop.customer_subscription_contracts.find_by(shopify_id: params[:subscription_id]) || current_shop.customer_subscription_contracts.find_by(id: params[:subscription_id])
     customer.update(box_items: params[:product_id], campaign_date: Time.current)
+    begin
+      contract = SubscriptionContractService.new(customer.shopify_id).run
+      order = ShopifyAPI::Order.find contract.origin_order.id[/\d+/]
+      order.tags = ShopifyAPI::Product.where(ids: params[:product_id], fields: 'id,title').map(&:title).join(', ')
+      order.save
+    rescue => e
+      puts e
+    end
   end
 
   private ##
 
   def fetch_products(products)
-    product_ids = products.map {|product| product['product_id'][/\d+/]}.join(',')
+    product_ids = products.map{|product| product['product_id'][/\d+/] unless product["_destroy"]}.compact.join(',')
     @products = ShopifyAPI::Product.where(ids: product_ids, fields: 'id,title,images')
   end
 
   def load_customer
-    Customer.update_contracts(shopify_customer_id, current_shop)
-    @customer = current_shop.customers.find_by_shopify_customer_id(customer_id)
+    CustomerSubscriptionContract.update_contracts(shopify_customer_id, current_shop)
+    @customer = current_shop.customer_subscription_contracts.find_by_shopify_customer_id(customer_id)
   end
 
   def load_subscriptions
     @data = CustomerSubscriptionContractsService.new(shopify_customer_id).run
-    @subscription_contracts = @data[:subscriptions] || []
-    @cancelled_subscriptions = @data[:cancelled_subscriptions] || []
-    @active_subscriptions = @data[:active_subscriptions] || []
-    @active_subscriptions_count = params[:active_subscriptions_count].present? ? params[:active_subscriptions_count].to_i : @data[:active_subscriptions].count
+    @stripe_subscriptions = current_shop.customer_subscription_contracts.where(shopify_customer_id: customer_id, api_source: 'stripe')
+    @subscription_contracts = (@data && @data[:subscriptions] || []) + @stripe_subscriptions
+    @paused_subscriptions = (@data && @data[:paused_subscriptions] || []) + @stripe_subscriptions.select{|lc| lc.status == 'PAUSED'}
+    @cancelled_subscriptions = (@data && @data[:cancelled_subscriptions] || []) + @stripe_subscriptions.select{|lc| lc.status == 'CANCELLED'}
+    @active_subscriptions = (@data && @data[:active_subscriptions] || []) + @stripe_subscriptions.select{|lc| lc.status == 'ACTIVE'}
+    @active_subscriptions_count = params[:active_subscriptions_count].present? ? params[:active_subscriptions_count].to_i : (@data && @data[:active_subscriptions].count || 0)
     @cancelled_line_items = RemovedSubscriptionLine.where(customer_id: params[:customer_id])
   end
 end

@@ -1,13 +1,13 @@
-class Customer < ApplicationRecord
+class CustomerSubscriptionContract < ApplicationRecord
   enum gender: [:male, :female]
   belongs_to :shop, foreign_key: :shop_id
   belongs_to :reasons_cancel, optional: true
   mount_uploader :avatar, AvatarUploader
-  has_many :additional_contacts, dependent: :destroy
-  has_one :billing_address, dependent: :destroy
-  has_many :sms_conversations, dependent: :destroy
+  has_many :additional_contacts, foreign_key: 'customer_id', dependent: :destroy
+  has_one :billing_address, foreign_key: 'customer_id', dependent: :destroy
+  has_many :sms_conversations, foreign_key: 'customer_id', dependent: :destroy
   # has_many :sms_logs, dependent: :destroy
-  has_many :subscription_logs, dependent: :destroy
+  has_many :subscription_logs, foreign_key: 'customer_id', dependent: :destroy
 
   # validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   # validates :email, presence: true
@@ -50,8 +50,11 @@ class Customer < ApplicationRecord
   end
 
   def activation_email
-    email_notification = shop.setting.email_notifications.find_by_name "Subscription Activation"
-    EmailService::Send.new(email_notification).send_email({customer: self}) if email_notification.present? && shop.setting.email_service.present?
+    unless import_type == "stripe_subscription"
+      email_notification = shop.setting.email_notifications.find_by_name "Subscription Activation"
+      EmailService::Send.new(email_notification).send_email({customer: self}) if email_notification.present? && shop.setting.email_service.present?
+      puts "activation email"
+    end
   end
 
   def charge_store
@@ -66,12 +69,12 @@ class Customer < ApplicationRecord
   end
 
   def shopify_identity
-    "gid://shopify/Customer/#{shopify_id}"
+    "gid://shopify/SubscriptionContract/#{shopify_id}"
   end
 
   def self.to_csv(customer_id, save_path)
     attributes = %w{id first_name last_name email phone communication subscription language}
-    customers = Customer.where(shopify_customer_id: customer_id)
+    customers = CustomerSubscriptionContract.where(shopify_customer_id: customer_id)
 
     CSV.open(save_path, 'wb') do |csv|
       csv << attributes
@@ -87,7 +90,7 @@ class Customer < ApplicationRecord
     items[:subscriptions].each do |item|
       billing_policy = item.billing_policy
 
-      customer = shop.customers.find_or_create_by(shopify_id: item.id[/\d+/])
+      customer = shop.customer_subscription_contracts.find_or_create_by(shopify_id: item.id[/\d+/])
       customer.update_columns(
         first_name: item.customer.first_name,
         last_name: item.customer.last_name,
@@ -101,6 +104,6 @@ class Customer < ApplicationRecord
         communication: "#{billing_policy.interval_count} #{billing_policy.interval} Pack".titleize,
         shopify_customer_id: item.customer.id[/\d+/]
       )
-    end
+    end if (items && items[:subscriptions] rescue false)
   end
 end

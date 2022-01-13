@@ -34,6 +34,14 @@ module Types
     field :selector_label, String, null: true
     field :billing_dates, [String], null: true
     field :shipping_dates, [String], null: true
+
+    field :shipping_cut_off, Int, null: true
+    field :first_delivery, String, null: true
+
+    field :orders, [Types::SellingPlanOrderType], null: true
+    field :active_subscriptions, Int, null: true
+    field :total_amount, Int, null: true
+
     field :_destroy, GraphQL::Types::Boolean, null: false
 
     def box_subscription_type

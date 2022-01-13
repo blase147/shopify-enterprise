@@ -23,6 +23,9 @@ module Queries
           {name: 'Error Charge Processed', description: 'Sent to storeowner when a recurring payment is processed', status: true, slug: "store_owner" },
           {name: 'Variant not found', description: 'Sent to storeowner when variant not found error occurs in an order', status: true, slug: "store_owner"},
           {name: 'Customer Action Log', description: 'Sent to storeowner, daily log of customer’s actions', status: true, slug: "store_owner" },
+          {name: 'Order Cancellation', description: 'Sent to store owner when the order is cancelled', status: false, slug: "store_owner" },
+          {name: 'Pause Subscription', description: 'Sent to store owner when subscription is paused', status: false, slug: "store_owner" },
+          {name: 'Resume Subscription', description: 'Sent to store owner when subscription is resumed', status: false, slug: "store_owner" },
         ]
         email_notifications.push({name: 'Store Charge Confirmation', description: 'Sent to storeowner to confirm their recurring charges', status: true, slug: "store_owner" }) if ENV['APP_TYPE'] == 'public'
         @setting.email_notifications.create(email_notifications)
@@ -39,7 +42,7 @@ module Queries
         ]
         @setting.reasons_cancels.create(reason_cancels)
       end
-      # byebug
+
       @setting
     end
   end

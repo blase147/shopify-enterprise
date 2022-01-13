@@ -1,4 +1,4 @@
-.Polaris-Modal id=("upgrade-#{line_item.id.split("gid://shopify/SubscriptionLine/")[1]}")
+.Polaris-Modal.hidden id=("upgrade-#{line_item.id.split("gid://shopify/SubscriptionLine/")[1]}")
   - selling_plan_group = SellingPlanGroup.joins(:selling_plans).where(selling_plans: {shopify_id: selling_plan_id}).first
   - previous_interval = subscription.billing_policy.interval.downcase
   .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"

@@ -69,6 +69,61 @@ class ProductService < GraphqlService
     }
   GRAPHQL
 
+  GET_SUBSCRIPTION_PRODUCTS_QUERY = <<-GRAPHQL
+    query($sellingPlanGroupCursor: String, $productCursor: String){
+      sellingPlanGroups(first: 5, after: $sellingPlanGroupCursor){
+        edges{
+          cursor
+          node{
+            id
+            productCount
+            options
+            sellingPlans(first: 10){
+              edges{
+                node{
+                  id
+                  name
+                  options
+                }
+              }
+            }
+            products (first: 5, after: $productCursor) {
+              edges {
+                cursor
+                node {
+                  id
+                  title
+                  images (first: 1) {
+                    edges {
+                      node {
+                        originalSrc
+                      }
+                    }
+                  }
+                  variants ( first: 20) {
+                    edges {
+                      node {
+                        id
+                        title
+                        price
+                      }
+                    }
+                  }
+                }
+              }
+              pageInfo{
+                hasNextPage
+              }
+            }
+          }
+        }
+        pageInfo{
+          hasNextPage
+        }
+      }
+    }
+  GRAPHQL
+
   def initialize(id = nil)
     @id = id
   end
@@ -94,6 +149,18 @@ class ProductService < GraphqlService
   def list
     result = ShopifyAPIRetry::GraphQL.retry { client.query(client.parse(GET_PRODUCTS_QUERY)) }
     result.data&.products&.edges
+  rescue Exception => ex
+    p ex.message
+    { error: ex.message }
+  end
+
+  def list_subscribable(cursor=nil)
+    variables = {}
+    if cursor.present?
+      variables = {sellingPlanGroupCursor: cursor}
+    end
+    result = ShopifyAPIRetry::GraphQL.retry { client.query(client.parse(GET_SUBSCRIPTION_PRODUCTS_QUERY), variables: variables) }
+    result.data rescue []
   rescue Exception => ex
     p ex.message
     { error: ex.message }

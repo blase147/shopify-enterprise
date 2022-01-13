@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import AppLayout from '../layout/Layout';
 import {
   Card,
@@ -12,20 +12,28 @@ import {
   FormLayout,
   Layout,
   TextContainer,
-  Icon
+  Icon,
 } from '@shopify/polaris';
 import Switch from 'react-switch';
-import {
-  CircleLeftMajor
-} from '@shopify/polaris-icons';
+import { CircleLeftMajor } from '@shopify/polaris-icons';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
+import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 const emailNotificationsDetails = (props) => {
+  const codeTextArea = useRef(null);
   const [valueFromName, setValueFromName] = useState();
+  const [showEditorCode, setShowEditorCode] = useState(false);
   const handleChangeFormName = useCallback(
     (newValue) => setValueFromName(newValue),
     []
   );
   const [selectedSettingEnabled, setSelectedSettingEnabled] = useState(false);
+  const [editorState, setEditorState] = React.useState(
+    EditorState.createEmpty()
+  );
 
   const handleSelectChangeSettingEnabled = useCallback(
     (value) => setSelectedSettingEnabled(value),
@@ -52,23 +60,58 @@ const emailNotificationsDetails = (props) => {
     handleSubmit,
   } = props;
 
-  const submit=async ()=>{
+  const submit = async () => {
     await handleSubmit();
     setSelectedIndex(null);
-  }
+  };
+  useEffect(() => {
+    const contentBlock = htmlToDraft(
+      values.emailNotifications[index]?.emailMessage || ''
+    );
+    if (contentBlock) {
+      const contentState = ContentState.createFromBlockArray(
+        contentBlock.contentBlocks
+      );
+      const editorState = EditorState.createWithContent(contentState);
+      setEditorState(editorState);
+    }
+  }, []);
+
+  const toggleEditorCode = () => {
+    if (showEditorCode) {
+      const contentBlock = htmlToDraft(
+        values.emailNotifications[index]?.emailMessage || ''
+      );
+      if (contentBlock) {
+        const contentState = ContentState.createFromBlockArray(
+          contentBlock.contentBlocks
+        );
+        const editorState = EditorState.createWithContent(contentState);
+        setEditorState(editorState);
+      }
+    }
+    setShowEditorCode(!showEditorCode);
+  };
+
+  const ShowEditorCode = () => (
+    <div className="rdw-option-wrapper" onClick={toggleEditorCode}>
+      {'</>'}
+    </div>
+  );
+
   return (
     <div className="noti-detail">
       <div className="container-left">
         <Card.Section>
           <Stack vertical>
             <Stack.Item>
-              <div className="back-btn-container" onClick={()=>setSelectedIndex(null)} >
-              <Icon
-                source={CircleLeftMajor}
-                color="base" />
+              <div
+                className="back-btn-container"
+                onClick={() => setSelectedIndex(null)}
+              >
+                <Icon source={CircleLeftMajor} color="base" />
                 <p>Go Back</p>
               </div>
-
             </Stack.Item>
             <Stack.Item>
               <Heading>{values.emailNotifications[index]?.name}</Heading>
@@ -123,7 +166,46 @@ const emailNotificationsDetails = (props) => {
                   }
                   name="email_subject"
                 />
-                <TextField
+
+                <label>Email Message</label>
+                <Editor
+                  editorState={editorState}
+                  defaultContentState={
+                    values.emailNotifications[index]?.emailMessage
+                  }
+                  toolbarClassName="toolbarClassName"
+                  wrapperClassName="wrapperClassName"
+                  editorClassName="draftEditorWrapper"
+                  editorClassName={showEditorCode ? 'editorHide' : 'editor'}
+                  onEditorStateChange={(e) => {
+                    setEditorState(e);
+                    setFieldValue(
+                      `emailNotifications[${index}].emailMessage`,
+                      draftToHtml(convertToRaw(e.getCurrentContent()))
+                    );
+                  }}
+                  toolbarCustomButtons={[<ShowEditorCode />]}
+                  multiline={15}
+                />
+                {showEditorCode && (
+                  <textarea
+                    ref={codeTextArea}
+                    value={values.emailNotifications[index]?.emailMessage}
+                    style={{
+                      width: '100%',
+                      border: 'none',
+                      height: '10rem',
+                    }}
+                    onChange={(e) => {
+                      setFieldValue(
+                        `emailNotifications[${index}].emailMessage`,
+                        e.target.value
+                      );
+                    }}
+                  />
+                )}
+
+                {/* <TextField
                   label="Email Message"
                   placeholder={html_text}
                   value={values.emailNotifications[index]?.emailMessage}
@@ -135,7 +217,7 @@ const emailNotificationsDetails = (props) => {
                   }
                   multiline={15}
                   name="email_message"
-                />
+                /> */}
               </FormLayout>
             </Stack.Item>
             <Stack.Item>
@@ -185,21 +267,19 @@ const emailNotificationsDetails = (props) => {
           </TextContainer>
         </Card.Section>
 
-        {
-          process.env.APP_TYPE=="public" &&
+        {process.env.APP_TYPE == 'public' && (
           <Card.Section>
             <TextContainer>
               <Heading h4>Need help with ChargeZen variables?</Heading>
               <br />
               <TextStyle variation="subdued">
-                We’ve compiled a list of all available CharegeZen variables along
-                with additional information and help. You can check out the guide
-                here.
-           </TextStyle>
+                We’ve compiled a list of all available CharegeZen variables
+                along with additional information and help. You can check out
+                the guide here.
+              </TextStyle>
             </TextContainer>
           </Card.Section>
-        }
-
+        )}
 
         <Card.Section>
           <TextContainer>

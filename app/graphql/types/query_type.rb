@@ -11,6 +11,7 @@ module Types
     field :fetch_campaign, resolver: Queries::FetchUpsellCampaignGroup
     field :fetch_selling_plan_by_name, resolver: Queries::FetchSellingPlanByName
     field :fetch_dashboard_report, resolver: Queries::FetchDashboardReport
+    field :fetch_power_plan_group, resolver: Queries::FetchPowerPlanGroup
     field :fetch_revenue_trend, resolver: Queries::FetchRevenueTrend
     field :fetch_report, resolver: Queries::FetchReport
     field :fetch_report_log, resolver: Queries::FetchReportLog

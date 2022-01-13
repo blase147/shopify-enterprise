@@ -31,10 +31,14 @@ module Types
       twilio_client = TwilioServices::SendSms.new({}).twilio_client(object.shop)
       @list = twilio_client.usage.records.list
       @list.sum { |l| l.count_unit == 'messages' ? l.count.to_i : 0 }
+    rescue
+      0
     end
 
     def sms_charge_amount
       @list.sum { |l| l.count_unit == 'messages' ? l.price.to_f : 0 }
+    rescue
+      0
     end
 
     def delivery_start_time

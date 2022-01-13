@@ -4,6 +4,7 @@ class SubscriptionContractService < GraphqlService
       subscriptionContract(id: $id) {
         id
         createdAt
+        updatedAt
         status
         nextBillingDate
         appAdminUrl
@@ -82,6 +83,12 @@ class SubscriptionContractService < GraphqlService
               node {
                 id
                 quantity
+                customAttributes{
+                  ... on Attribute{
+                    key
+                    value
+                  }
+                }
                 sellingPlan {
                   name
                 }
@@ -110,7 +117,11 @@ class SubscriptionContractService < GraphqlService
   end
 
   def run
-    id = "gid://shopify/SubscriptionContract/#{@id}"
+    id = if @id.is_a?(String) && @id.include?('SubscriptionContract')
+      @id
+    else
+      "gid://shopify/SubscriptionContract/#{@id}"
+    end
     result = ShopifyAPIRetry::GraphQL.retry { client.query(client.parse(GET_QUERY), variables: { id: id} ) }
     return result.data.subscription_contract
   rescue Exception => ex

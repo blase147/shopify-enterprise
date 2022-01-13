@@ -3,9 +3,17 @@ module Types
     class SettingInputType < Types::BaseInputObject
       argument :payment_retries, String, required: false
       argument :payment_delay_retries, String, required: false
+      argument :max_fail_strategy, String, required: false
+      argument :active_subscription_btn_seq, [String], required: false
+
+      argument :account_portal_option, String, required: false
 
       argument :__typename, String, required: false
       #customer portal
+      argument :order_cancel_option, String, required: false
+      argument :eligible_weekdays_for_delivery, String, required: false
+      argument :delivery_interval_after_production, String, required: false
+      argument :day_of_production, String, required: false
       argument :themes, String, required: false
       argument :style_header, String, required: false
       argument :style_footer, String, required: false
@@ -48,6 +56,7 @@ module Types
       argument :delay_order, String, required: false
       argument :pause_subscription, String, required: false
       argument :design_type, String, required: false
+      argument :plan, String, required: false
 
       #email notification
       argument :email_notifications, [Types::Input::EmailNotificationInputType], required: false

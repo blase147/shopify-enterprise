@@ -36,6 +36,10 @@ module Types
     field :button_text_accept, String, null: true
     field :button_text_decline, String, null: true
 
+    field :selling_plans, [Types::RuleCustomerValueType], null: true
+    field :start_date, String, null: true
+    field :end_date, String, null: true
+
     field :_destroy, GraphQL::Types::Boolean, null: false
   end
 end

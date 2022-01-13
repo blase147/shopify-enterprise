@@ -1,43 +1,38 @@
-import { Icon, Layout, Stack } from '@shopify/polaris'
-import { isEmpty } from 'lodash'
-import React, { useCallback, useState } from 'react'
-import Export from './Export'
+import { Icon, Layout, Stack, TextStyle } from '@shopify/polaris';
+import { isEmpty } from 'lodash';
+import React, { useCallback, useState } from 'react';
+import Export from './Export';
 import ExportForm from './ExportForm';
-import {
-  MobileBackArrowMajor
-} from '@shopify/polaris-icons';
+import { MobileBackArrowMajor } from '@shopify/polaris-icons';
 
-const MainExport = ({handleBack}) => {
+const MainExport = ({ handleBack }) => {
+  const [showForm, setShowForm] = useState(false);
+  const [exportData, setExportData] = useState(null);
 
-  const [showForm,setShowForm]=useState(false)
-  const [exportData,setExportData]=useState(null);
-
-  const handleShowForm=useCallback(
-    () => {
-     setShowForm(true)
+  const handleShowForm = useCallback(() => {
+    setShowForm(true);
+  }, [setShowForm]);
+  const handleCloseForm = useCallback(
+    (data, filters) => {
+      setShowForm(false);
+      if (!isEmpty(data) && !isEmpty(filters)) {
+        setExportData({ data: data, filters: filters });
+      }
     },
     [setShowForm]
-  )
-  const handleCloseForm=useCallback(
-    (data,filters) => {
-     setShowForm(false);
-     if(!isEmpty(data) && !isEmpty(filters)){
-      setExportData({data:data,filters:filters})
-     }
-    },
-    [setShowForm]
-  )
+  );
 
   return (
     <>
       <Layout>
-      <Layout.Section>
-        <div className="back-button pointer" onClick={handleBack}>
-          <Icon
-            source={MobileBackArrowMajor}
-            color="base" />
-        </div>
-      </Layout.Section>
+        <Layout.Section>
+          <div className="back-button pointer" onClick={handleBack}>
+            <Icon source={MobileBackArrowMajor} color="base" />
+            <p>
+              <TextStyle variation="subdued">Settings</TextStyle>
+            </p>
+          </div>
+        </Layout.Section>
       </Layout>
       {showForm ? (
         <ExportForm handleCloseForm={handleCloseForm} />
@@ -46,6 +41,6 @@ const MainExport = ({handleBack}) => {
       )}
     </>
   );
-}
+};
 
-export default MainExport
+export default MainExport;

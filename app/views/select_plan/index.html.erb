@@ -1,0 +1,63 @@
+<div id="root">
+  <div
+    style="--top-bar-background:#00848e; --top-bar-background-lighter:#1d9ba4; --top-bar-color:#f9fafb; --p-frame-offset:0px;">
+    <div class="Polaris-Page">
+      <div
+        class="Polaris-Page-Header Polaris-Page-Header--isSingleRow Polaris-Page-Header--noBreadcrumbs Polaris-Page-Header--mediumTitle">
+        <div class="Polaris-Page-Header__MainContent">
+          <div class="Polaris-Page-Header__TitleActionMenuWrapper">
+            <div class="Polaris-Page-Header__TitleWrapper">
+              <div>
+                <div class="Polaris-Header-Title__TitleAndSubtitleWrapper">
+                  <div class="Polaris-Header-Title">
+                    <h1 class="Polaris-DisplayText Polaris-DisplayText--sizeLarge"><span
+                        class="Polaris-TextStyle--variationStrong">Choose Plan</span></h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="Polaris-Page__Content">
+        <div class="Polaris-Layout">
+          <div class="Polaris-Layout__Section Polaris-Layout__Section--oneHalf">
+            <div class="Polaris-Card">
+              <div class="Polaris-Card__Header">
+                <h2 class="Polaris-Heading">Freemium</h2>
+              </div>
+              <div class="Polaris-Card__Section">
+								<%= form_with url: select_plan_index_path, local: false do |form| %>
+									<p>$0/month + 0.97% subscriptions transaction fee.</p>
+									<br>
+									<%= form.hidden_field :plan, value: 'freemium' %>
+									<button class="Polaris-Button Polaris-Button--primary" type="submit">
+										<span class="Polaris-Button__Content"><span class="Polaris-Button__Text">Select</span></span>
+									</button>
+								<% end %>
+              </div>
+            </div>
+          </div>
+          <div class="Polaris-Layout__Section Polaris-Layout__Section--oneHalf">
+            <div class="Polaris-Card">
+              <div class="Polaris-Card__Header">
+                <h2 class="Polaris-Heading">Platinum</h2>
+              </div>
+              <div class="Polaris-Card__Section">
+								<%= form_with url: select_plan_index_path, local: false do |form| %>
+									<p>$199/month + 0.79% subscriptions transaction fee.</p>
+									<br>
+									<%= form.hidden_field :plan, value: 'platinum' %>
+									<button class="Polaris-Button Polaris-Button--primary" type="submit">
+										<span class="Polaris-Button__Content"><span class="Polaris-Button__Text">Select</span></span>
+									</button>
+								<% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="PolarisPortalsContainer"></div>
+  </div>
+</div>

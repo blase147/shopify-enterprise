@@ -9,13 +9,16 @@ class Shop < ActiveRecord::Base
 
   has_many :selling_plan_groups, dependent: :destroy
   has_one :setting, dependent: :destroy
-  has_many :customers, dependent: :destroy
+  has_many :customer_subscription_contracts, dependent: :destroy
+  has_many :zip_codes, dependent: :destroy
   has_many :smarty_cancellation_reasons, dependent: :destroy
   has_many :custom_keywords, dependent: :destroy
   has_one :sms_setting, dependent: :destroy
   has_many :smarty_messages, dependent: :destroy
   has_many :smarty_variables, dependent: :destroy
+  has_many :sms_flows, dependent: :destroy
   has_many :build_a_box_campaign_groups, dependent: :destroy
+  has_many :bundle_groups, dependent: :destroy
   # has_many :sms_logs, dependent: :destroy
   has_many :subscription_logs, dependent: :destroy
 
@@ -27,7 +30,7 @@ class Shop < ActiveRecord::Base
   after_create :build_setting
   after_create :setup_default_lock_password
   after_create :populate_store_data
-  after_create :set_recurring_charge_id
+  # after_create :set_recurring_charge_id
   after_save :email_confirmation_link, if: -> { saved_change_to_charge_confirmation_link? }
 
   def setup_default_lock_password
@@ -35,7 +38,22 @@ class Shop < ActiveRecord::Base
   end
 
   def build_setting
-    Setting.find_or_create_by(shop_id: id)
+    setting = Setting.find_or_initialize_by(shop_id:  id)
+    unless setting.persisted?
+      setting.update(
+        payment_retries: 3,
+        payment_delay_retries: 1,
+        cancel_enabled: true,
+        pause_resume: true,
+        attempt_billing: false,
+        skip_payment: true,
+        show_after_checkout: false,
+        email_after_checkout: true,
+        max_fail_strategy: 'skip',
+        account_portal_option: 'add_link',
+        active_subscription_btn_seq: ['update_choices', 'delivery_schedule', 'swap_subscription', 'delay_next_order', 'edit_subscription']
+      )
+    end
     SmsSetting.find_or_create_by(shop_id: id)
     Translation.find_or_create_by(shop_id: id)
   end
@@ -61,7 +79,7 @@ class Shop < ActiveRecord::Base
     items[:subscriptions].each do |item|
       billing_policy = item.node.billing_policy
 
-      customer = self.customers.find_or_create_by(shopify_id: item.node.id[/\d+/])
+      customer = self.customer_subscription_contracts.find_or_create_by(shopify_id: item.node.id[/\d+/])
       customer.update_columns(
         first_name: item.node.customer.first_name,
         last_name: item.node.customer.last_name,

@@ -1,10 +1,14 @@
 Rails.application.routes.draw do
+  resources :bundles, only: [:destroy]
+  resources :bundle_groups
+  resources :sms_flows
   if Rails.env.development?
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "graphql#execute"
   end
 
   post "/graphql", to: "graphql#execute"
   post "/graphql-shopify", to: "graphql_shopify#execute"
+  get '/subscription_products', to: 'products#subscription_products'
 
   mount ShopifyApp::Engine, at: '/'
   root :to => 'home#index'
@@ -14,6 +18,21 @@ Rails.application.routes.draw do
   post '/customers/data_request', to: 'gdpr_webhooks#customer_data_request'
 
   post '/shopify_webhooks/app_uninstalled', to: 'shopify_webhooks#app_uninstalled'
+  post '/shopify_webhooks/order_create', to: 'shopify_webhooks#order_create'
+  post '/shopify_webhooks/subscription_contract_create', to: 'shopify_webhooks#subscription_contract_create'
+  post '/shopify_webhooks/subscription_contract_update', to: 'shopify_webhooks#subscription_contract_update'
+
+  post '/webhooks/stripe/subscription', to: 'stripe_webhooks#subscription'
+
+  post '/shipping_suites/sync_orders', to: 'shipping_suites#sync_orders'
+
+  resources :power_plans, only: [] do
+    member do
+      post :pause
+      post :cancel
+      post :swap
+    end
+  end
 
   namespace :app_proxy do
     resources :account do
@@ -30,6 +49,12 @@ Rails.application.routes.draw do
     resources :build_a_box, only: :index do
       collection do
         post :add_product
+        get :get_build_a_box
+      end
+    end
+    resources :bundles do
+      collection do
+        get :get_bundle
       end
     end
     resources :selling_plans, only: [] do
@@ -68,6 +93,8 @@ Rails.application.routes.draw do
         get :settings
         get :build_a_box
         post :confirm_box_selection
+        get :track_order
+        post :update_stripe_source
       end
     end
 
@@ -86,6 +113,7 @@ Rails.application.routes.draw do
     collection do
       post :update_subscription
       post :update_customer
+      get :sync_stripe
     end
 
     member do
@@ -104,8 +132,21 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :debug_mode, only: [:index, :create]
+
+  resources :settings do
+    collection do
+      get :stripe_settings
+      post :update_stripe_settings
+    end
+  end
+
+  resources :select_plan, only: [:index, :create]
 
   get 'subscription/charge', to: 'callback#charge'
+  resources :zip_codes, only: [:index, :create]
+  delete 'zip_codes', to: 'zip_codes#destroy'
+
   get '*path' => 'home#index'
   post 'twilio/sms', 'twilio#sms'
 end

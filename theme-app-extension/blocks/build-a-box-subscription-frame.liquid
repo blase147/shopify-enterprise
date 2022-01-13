@@ -1,0 +1,16 @@
+{% if template contains 'build_a_box' %}
+  {% assign cz_params = "customer_id=" | append: customer.id %}
+
+  <script>
+    (function() {
+      window.location.href =  "/a/chargezen_production/build_a_box?selling_plan_id={{cart.attributes.selling_plan_id}}&{{ cz_params }}";
+    })();
+  </script>
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Build a box",
+    "target": "body"
+  }
+{% endschema %}

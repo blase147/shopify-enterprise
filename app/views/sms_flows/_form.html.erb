@@ -1,0 +1,52 @@
+<%= form_with(model: sms_flow, local: true) do |form| %>
+  <% if sms_flow.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(sms_flow.errors.count, "error") %> prohibited this sms_flow from being saved:</h2>
+
+      <ul>
+        <% sms_flow.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :sent %>
+    <%= form.number_field :sent %>
+  </div>
+
+  <div class="field">
+    <%= form.label :clicks %>
+    <%= form.number_field :clicks %>
+  </div>
+
+  <div class="field">
+    <%= form.label :revenue %>
+    <%= form.number_field :revenue %>
+  </div>
+
+  <div class="field">
+    <%= form.label :status %>
+    <%= form.check_box :status %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div class="field">
+    <%= form.label :shop_id %>
+    <%= form.text_field :shop_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

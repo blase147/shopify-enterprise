@@ -14,9 +14,15 @@ class AppProxyController < ApplicationController
     params[:customer_id]
   end
 
+  def current_setting
+    @setting ||= current_shop&.setting
+  end
+
   private ##
 
   def init_session
+    shop_setting = ShopSetting.find_by(shop_id: current_shop.id)
+    @skip_auth = shop_setting.nil? || shop_setting.debug_mode.nil? ? false : shop_setting.debug_mode
     current_shop.connect
     @setting = current_shop&.setting
     @translation = current_shop&.translation

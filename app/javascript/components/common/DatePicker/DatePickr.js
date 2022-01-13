@@ -82,10 +82,10 @@ export default class DatePickr extends React.Component {
         dates=[dayjs(value.start).format("YYYY-MM-DD")]
       }
     this.props.callback && this.props.callback(this.props.input,dates)
+    this.props.setUpdated(true)
     let selected=date;
     selected[index][type]=value.start
     this.props.handleDate(selected);
-    this.props.setUpdated(true)
     }
     this.setState({active:false})
   };

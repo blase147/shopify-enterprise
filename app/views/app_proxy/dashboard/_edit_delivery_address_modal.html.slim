@@ -1,4 +1,4 @@
-.Polaris-Modal#deliveryEditModal
+.Polaris-Modal.hidden#deliveryEditModal
   .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"
     = simple_form_for :address, url: "#{action_subscription_contract_path(:update_shiping_detail, subscription.id[/\d+/])}", method: :post, remote: true do |f|
       .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1"

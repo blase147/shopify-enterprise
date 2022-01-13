@@ -18,7 +18,7 @@
 }
 
 .shippingSuiteTable table tbody tr td {
-    vertical-align: middle !important; 
+    vertical-align: middle !important;
 }
 
 .shippingSuiteTable table tbody tr td p {
@@ -30,11 +30,11 @@
     color: #007EFF;
 }
 .shippingSuiteTable table thead tr th {
-    font-weight: 600; 
+    font-weight: 600;
 }
 
 .shippingSuiteTable table tbody tr th {
-    vertical-align: middle !important; 
+    vertical-align: middle !important;
 }
 
 .shippingSuiteTable table tbody tr td .vieworder button {
@@ -59,4 +59,12 @@
 .shippingSuiteTable table tbody tr th .orderId a {
     color: #4D506A;
     text-decoration: none;
+}
+
+.shipping-header {
+  margin-bottom: 25px;
+}
+
+.sync-order-btn {
+  float: right;
 }

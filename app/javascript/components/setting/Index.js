@@ -1,5 +1,21 @@
 import { gql, useMutation, useQuery, useLazyQuery } from '@apollo/client';
-import { Banner, Card, ContextualSaveBar, Form, Frame, List, Page, Spinner, Tabs, Toast, Layout, FormLayout, TextField, Button } from '@shopify/polaris';
+import {
+  Banner,
+  Card,
+  ContextualSaveBar,
+  Form,
+  Frame,
+  List,
+  Page,
+  Spinner,
+  Tabs,
+  Toast,
+  Layout,
+  FormLayout,
+  TextField,
+  Button,
+  Badge,
+} from '@shopify/polaris';
 import { Formik } from 'formik';
 import { isEmpty } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -18,49 +34,56 @@ import StoreInfomation from './StoreInformation';
 import Translation from './HouseKeepingComponents/Translation';
 import Legal from './HouseKeepingComponents/Legal';
 //Settings Images
-import SettingImage from '../../../assets/images/settings/setting.svg'
-import BillingImage from '../../../assets/images/settings/billing.svg'
-import CustomerImage from '../../../assets/images/settings/customer.svg'
-import DiscountImage from '../../../assets/images/settings/discount.svg'
-import EmailImage from '../../../assets/images/settings/email.svg'
-import ExportImage from '../../../assets/images/settings/export.svg'
-import InformationImage from '../../../assets/images/settings/information.svg'
-import LegalImage from '../../../assets/images/settings/legal.svg'
-import PasswordImage from '../../../assets/images/settings/password.svg'
-import SMSImage from '../../../assets/images/settings/sms.svg'
-import TranslationImage from '../../../assets/images/settings/translation.svg'
+import SettingImage from '../../../assets/images/settings/setting.svg';
+import BillingImage from '../../../assets/images/settings/billing.svg';
+import CustomerImage from '../../../assets/images/settings/customer.svg';
+import DiscountImage from '../../../assets/images/settings/discount.svg';
+import EmailImage from '../../../assets/images/settings/email.svg';
+import ExportImage from '../../../assets/images/settings/export.svg';
+import InformationImage from '../../../assets/images/settings/information.svg';
+import LegalImage from '../../../assets/images/settings/legal.svg';
+import PasswordImage from '../../../assets/images/settings/password.svg';
+import DebugImage from '../../../assets/images/settings/code.svg';
+import SMSImage from '../../../assets/images/settings/sms.svg';
+import TranslationImage from '../../../assets/images/settings/translation.svg';
 import Sms from './HouseKeepingComponents/Sms';
 import MainDiscount from './HouseKeepingComponents/DiscountComponents/MainDiscount';
 import MainExport from './HouseKeepingComponents/ExportComponents/MainExport';
+import ZipCodeImage from '../../../assets/images/settings/zip_code.svg';
+import ZipCodes from './ZipCodes';
+import EnableDebug from './EnableDebug';
+import StripeSettings from './StripeSettings';
 
-
-
-const Settings = () => { 
-
+const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
   // form data ########################################################
   const [formData, setFormData] = useState(null);
   const [formErrors, setFormErrors] = useState([]);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
 
-
   const validationSchema = yup.object().shape({
     // internalName: yup.string().required().label('Internal name'),
   });
 
-  const confirmPasswordQuery=gql`
-  query($password:String!)
-    {
-      confirmPassword(password:$password) {
-              success
+  const confirmPasswordQuery = gql`
+    query ($password: String!) {
+      confirmPassword(password: $password) {
+        success
+      }
     }
-  }
   `;
   const GET_DATA = gql`
     query {
       fetchSetting {
         paymentRetries
         paymentDelayRetries
+        maxFailStrategy
+        orderCancelOption
+        dayOfProduction
+        deliveryIntervalAfterProduction
+        eligibleWeekdaysForDelivery
+        accountPortalOption
+        activeSubscriptionBtnSeq
 
         styleAccountProfile
         styleSidebar
@@ -83,6 +106,7 @@ const Settings = () => {
         subscriptionCancellation
         cancellationEmailContact
         allowCancelAfter
+        plan
         reactiveSubscription
         reasonsCancels {
           id
@@ -152,16 +176,24 @@ const Settings = () => {
     }
   `;
   let { id } = useParams();
-  const [getData,{ data, loading, error, refetch }] = useLazyQuery(GET_DATA, {
+  const [getData, { data, loading, error, refetch }] = useLazyQuery(GET_DATA, {
     fetchPolicy: 'network-only',
   });
 
   const UPDATE_SETTING = gql`
-    mutation($input: UpdateSettingInput!) {
+    mutation ($input: UpdateSettingInput!) {
       updateSetting(input: $input) {
         setting {
           paymentRetries
           paymentDelayRetries
+          maxFailStrategy
+          orderCancelOption
+          dayOfProduction
+          deliveryIntervalAfterProduction
+          eligibleWeekdaysForDelivery
+          accountPortalOption
+          activeSubscriptionBtnSeq
+
           styleAccountProfile
           styleSidebar
           styleSubscription
@@ -254,7 +286,6 @@ const Settings = () => {
   `;
   const [updateSetting] = useMutation(UPDATE_SETTING);
 
-
   useEffect(() => {
     if (data) {
       setFormData(data.fetchSetting);
@@ -267,7 +298,14 @@ const Settings = () => {
     cancellationEmailContact: '',
     changeVariant: '1',
     discount: [],
-    emailService:'',
+    emailService: '',
+    activeSubscriptionBtnSeq: [
+      'update_choices',
+      'delivery_schedule',
+      'swap_subscription',
+      'delay_next_order',
+      'edit_subscription',
+    ],
     emailNotifications: [
       {
         emailMessage: '',
@@ -348,125 +386,158 @@ const Settings = () => {
     delayOrder: 'storeowner_and_customer',
     pauseSubscription: 'storeowner_and_customer',
     _destroy: false,
-    designType:'one'
+    designType: 'one',
   };
   // form data #####################################################
 
   const [selectedTitleTab, setSelectedTitleTab] = useState(0);
-  const [selectedSetting,setSelectedSetting]=useState('');
-  const handleBackSetting=useCallback(()=>{
+  const [selectedSetting, setSelectedSetting] = useState('');
+  const handleBackSetting = useCallback(() => {
     setSelectedSetting('');
-  },[setSelectedSetting])
+  }, [setSelectedSetting]);
 
   // Password confirmation
-  const [passwordConfirmed, setPasswordConfirmed] = useState(false)
-  const [password, setPassword] = useState("")
-  const [passwordError,setPasswordError]=useState("")
-  const [confirmPassword,{data:confirmPasswordRes,loading:passwordLoading}]=useLazyQuery(confirmPasswordQuery,{fetchPolicy:"network-only"})
+  const [passwordConfirmed, setPasswordConfirmed] = useState(
+    !passwordProtected
+  );
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [
+    confirmPassword,
+    { data: confirmPasswordRes, loading: passwordLoading },
+  ] = useLazyQuery(confirmPasswordQuery, { fetchPolicy: 'network-only' });
 
-  const verifyPassword =()=>{
-    if(!isEmpty(password)){
+  const verifyPassword = () => {
+    if (!isEmpty(password)) {
       confirmPassword({
-        variables:{
-          password:password
-        }
-      })
+        variables: {
+          password: password,
+        },
+      });
     }
-  }
+  };
 
-  useEffect(()=>{
-    if(passwordConfirmed){
+  useEffect(() => {
+    if (passwordConfirmed) {
       getData();
     }
-  },[passwordConfirmed])
+  }, [passwordConfirmed]);
 
-
-  useEffect(()=>{
-      if(confirmPasswordRes?.confirmPassword?.success)
-      {
-        setPasswordConfirmed(true);
-      }else{
-        setPasswordError(confirmPasswordRes?.errors[0]?.message)
-      }
-  },[confirmPasswordRes])
+  useEffect(() => {
+    if (confirmPasswordRes?.confirmPassword?.success) {
+      setPasswordConfirmed(true);
+    } else {
+      setPasswordError(confirmPasswordRes?.errors[0]?.message);
+    }
+  }, [confirmPasswordRes]);
 
   const handleTabChange = useCallback(
     (selectedTabIndex) => setSelectedTitleTab(selectedTabIndex),
     []
   );
-  const settings=[
+  const settings = [
     {
-      key:"product_extention",
-      title:"Product Extension",
-      img:SettingImage,
-      desc:"Manage your product extentions."
+      key: 'product_extention',
+      title: 'Product Extension',
+      img: SettingImage,
+      desc: 'Manage your product extentions.',
     },
     {
-      key:"email_notification",
-      title:"Email Notifications",
-      img:EmailImage,
-      desc:"Manage email notifications sent to you and your customers."
+      key: 'email_notification',
+      title: 'Email Notifications',
+      img: EmailImage,
+      desc: 'Manage email notifications sent to you and your customers.',
     },
-    ...(process.env.APP_TYPE=="public" ?
-    [{
-      key:"store_information",
-      title:"Store Information",
-      img:InformationImage,
-      desc:"Manage the information your customers can view on your store."
+    ...(process.env.APP_TYPE == 'public'
+      ? [
+        {
+          key: 'store_information',
+          title: 'Store Information',
+          img: InformationImage,
+          desc: 'Manage the information your customers can view on your store.',
+        },
+        {
+          key: 'discount',
+          title: 'Discount',
+          img: DiscountImage,
+          desc: "Enable and manage your store's discount.",
+        },
+      ]
+      : []),
+    {
+      key: 'billing',
+      title: 'Dunning',
+      img: BillingImage,
+      desc: 'Manage your billing information and view your invoices.',
+    },
+    ...(process.env.APP_TYPE == 'public'
+      ? [
+        {
+          key: 'legal',
+          title: 'Legal',
+          img: LegalImage,
+          desc: "Manage your store's legal pages.",
+          commingSoon: true,
+        },
+        {
+          key: 'export',
+          title: 'Export',
+          img: ExportImage,
+          desc: 'Export data from the app.',
+        },
+      ]
+      : []),
+    {
+      key: 'sms',
+      title: 'SMS',
+      img: SMSImage,
+      desc: 'View and update your store details.',
+    },
+    ...(process.env.APP_TYPE == 'public'
+      ? [
+        {
+          key: 'translation',
+          title: 'Translation',
+          img: TranslationImage,
+          desc: 'Add and change translations for the app.',
+        },
+      ]
+      : []),
+    {
+      key: 'password',
+      title: 'Password',
+      img: PasswordImage,
+      desc: 'Manage your Password information.',
     },
     {
-      key:"discount",
-      title:"Discount",
-      img:DiscountImage,
-      desc:"Enable and manage your store's discount."
-    }]:[]),
-    {
-      key:"billing",
-      title:"Billing",
-      img:BillingImage,
-      desc:"Manage your billing information and view your invoices."
+      key: 'customer-portal',
+      title: 'Customer Portal',
+      img: CustomerImage,
+      desc: 'Manage your customer subscription portal.',
     },
-    ...(process.env.APP_TYPE=="public" ?
-    [
+    ...(domain == 'tryworldfare.myshopify.com' || domain == 'hitched-staging.myshopify.com'
+      ? [
+        {
+          key: 'zip_codes',
+          title: 'Zip Codes',
+          img: ZipCodeImage,
+          desc: 'Add cities for Zip Codes.',
+        },
+      ]
+      : []),
     {
-      key:"legal",
-      title:"Legal",
-      img:LegalImage,
-      desc:"Manage your store's legal pages."
-    },
-    {
-      key:"export",
-      title:"Export",
-      img:ExportImage,
-      desc:"Enable and manage your store's discount."
-    }]:[]),
-    {
-      key:"sms",
-      title:"SMS",
-      img:SMSImage,
-      desc:"View and update your store details."
-    },
-    ...(process.env.APP_TYPE=="public" ?
-    [
-    {
-      key:"translation",
-      title:"Translation",
-      img:TranslationImage,
-      desc:"View and update your customer’s portal details."
-    }]:[]),
-    {
-      key:"password",
-      title:"Password",
-      img:PasswordImage,
-      desc:"Manage your Password information."
+      key: 'enable_debug_mode',
+      title: 'Enable Debug Mode',
+      img: DebugImage,
+      desc: 'Enable the debugging mode.',
     },
     {
-      key:"customer-portal",
-      title:"Customer Portal",
-      img:CustomerImage,
-      desc:"Manage your customer information."
-    }
-  ]
+      key: 'stripe_settings',
+      title: 'Stripe Settings',
+      img: SettingImage,
+      desc: 'Manage Stripe Settings for your App.',
+    },
+  ];
   const tabs = [
     {
       id: 'house',
@@ -488,12 +559,14 @@ const Settings = () => {
     //   id: 'dunning',
     //   content: 'Dunning',
     // },
-    ...(process.env.APP_TYPE=="public" ?
-    [{
-      id: 'store-information',
-      content: 'StoreInformation',
-    }]:[])
-    ,
+    ...(process.env.APP_TYPE == 'public'
+      ? [
+        {
+          id: 'store-information',
+          content: 'StoreInformation',
+        },
+      ]
+      : []),
     // {
     //   id: 'legal',
     //   content: 'Legal',
@@ -553,6 +626,7 @@ const Settings = () => {
                 ) => {
                   delete values.recurringChargeStatus;
                   delete values.chargeConfirmationLink;
+                  delete values.plan;
                   const newValues = {
                     ...values,
                     navigationDelivery:
@@ -599,20 +673,20 @@ const Settings = () => {
                 }}
               >
                 {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  isSubmitting,
-                  setFieldValue,
-                  resetForm,
-                  dirty,
-                  setDirty,
-                  formik,
-                  /* and other goodies */
-                }) => (
+                    values,
+                    errors,
+                    touched,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    isSubmitting,
+                    setFieldValue,
+                    resetForm,
+                    dirty,
+                    setDirty,
+                    formik,
+                    /* and other goodies */
+                  }) => (
                   <Form onSubmit={handleSubmit}>
                     {dirty && (
                       <ContextualSaveBar
@@ -638,12 +712,10 @@ const Settings = () => {
                     <>
                       {/* new settings bar */}
                       <div className="settings-container">
-                      {!selectedSetting && (
-                        <>
+                        {!selectedSetting && (
+                          <>
                             <div>
-                              <h1>
-                                Settings
-                              </h1>
+                              <h1>Settings</h1>
                             </div>
                             <div>
                               <Card>
@@ -654,6 +726,7 @@ const Settings = () => {
                                         key={Math.random()}
                                         class="tabs-parents pointer"
                                         onClick={() =>
+                                          !setting.commingSoon &&
                                           setSelectedSetting(setting.key)
                                         }
                                       >
@@ -661,7 +734,14 @@ const Settings = () => {
                                           <img src={setting.img} />
                                         </div>
                                         <div class="tab-info">
-                                          <h4>{setting.title}</h4>
+                                          <h4>
+                                            {setting.title}
+                                            {setting.commingSoon && (
+                                              <Badge status="attention">
+                                                Comming Soon
+                                              </Badge>
+                                            )}
+                                          </h4>
                                           <p>{setting.desc}</p>
                                         </div>
                                       </div>
@@ -670,96 +750,121 @@ const Settings = () => {
                                 </Card.Section>
                               </Card>
                             </div>
-                        </>
-                      )}
-                      {/* settings layout */}
-                      {selectedSetting && (
-                        <>
-                        <Layout>
-                          <Layout.Section>
-                          {selectedSetting === 'house_keeping' ? (
-                            <HouseKeeping />
-                          ) : selectedSetting === 'billing' ? (
-                            <Billing
-                              values={values}
-                              touched={touched}
-                              errors={errors}
-                              setFieldValue={setFieldValue}
-                              handleBack={handleBackSetting}
-                            />
-                          ) : selectedSetting === 'customer-portal' ? (
-                            <CustomPortal
-                              values={values}
-                              touched={touched}
-                              errors={errors}
-                              setFieldValue={setFieldValue}
-                              handleSubmit={handleSubmit}
-                              refetch={refetch}
-                              isSubmitting={isSubmitting}
-                              handleBack={handleBackSetting}
-                            />
-                          ) : selectedSetting === 'email_notification' ? (
-                            <div className="EmailNotification">
-                              <EmailNotification
-                                values={values}
-                                touched={touched}
-                                errors={errors}
-                                setFieldValue={setFieldValue}
-                                handleSubmit={handleSubmit}
-                                handleBack={handleBackSetting}
-                              />
-                            </div>
-                          ) : selectedSetting === 'store_information' ? (
-                              <StoreInfomation
-                                values={values}
-                                touched={touched}
-                                errors={errors}
-                                setFieldValue={setFieldValue}
-                                handleSubmit={handleSubmit}
-                                handleBack={handleBackSetting}
-                              />
-                          ) : selectedSetting === 'product_extention' ? (
-                            <div className="storeInfomation">
-                              <ProductExtention
-                                values={values}
-                                touched={touched}
-                                errors={errors}
-                                setFieldValue={setFieldValue}
-                                handleSubmit={handleSubmit}
-                                handleBack={handleBackSetting}
-                              />
-                            </div>
-                          ) : selectedSetting === 'discount' ? (
-                            <>
-                              <MainDiscount handleBack={handleBackSetting} />
-                            </>
-                          ) : selectedSetting === 'export' ? (
-                            <>
-                              <MainExport handleBack={handleBackSetting} />
-                            </>
-                          ) : selectedSetting === 'sms' ? (
-                            <>
-                              <Sms handleBack={handleBackSetting} />
-                            </>
-                          ) : selectedSetting === 'legal' ? (
-                            <>
-                              <Legal handleBack={handleBackSetting} />
-                            </>
-                          ) : selectedSetting === 'translation' ? (
-                            <>
-                              <Translation handleBack={handleBackSetting} />
-                            </>
-                          ) : selectedSetting === 'password' ? (
-                            <>
-                              <Password handleBack={handleBackSetting} />
-                            </>
-                          ) : (
-                            ''
-                          )}
-                          </Layout.Section>
-                        </Layout>
-                        </>
-                      )}
+                          </>
+                        )}
+                        {/* settings layout */}
+                        {selectedSetting && (
+                          <>
+                            <Layout>
+                              <Layout.Section>
+                                {selectedSetting === 'house_keeping' ? (
+                                  <HouseKeeping />
+                                ) : selectedSetting === 'billing' ? (
+                                  <Billing
+                                    values={values}
+                                    touched={touched}
+                                    errors={errors}
+                                    setFieldValue={setFieldValue}
+                                    handleBack={handleBackSetting}
+                                  />
+                                ) : selectedSetting === 'customer-portal' ? (
+                                  <CustomPortal
+                                    values={values}
+                                    touched={touched}
+                                    errors={errors}
+                                    setFieldValue={setFieldValue}
+                                    handleSubmit={handleSubmit}
+                                    refetch={refetch}
+                                    isSubmitting={isSubmitting}
+                                    handleBack={handleBackSetting}
+                                    domain={domain}
+                                  />
+                                ) : selectedSetting === 'email_notification' ? (
+                                  <div className="EmailNotification">
+                                    <EmailNotification
+                                      values={values}
+                                      touched={touched}
+                                      errors={errors}
+                                      setFieldValue={setFieldValue}
+                                      handleSubmit={handleSubmit}
+                                      handleBack={handleBackSetting}
+                                    />
+                                  </div>
+                                ) : selectedSetting === 'store_information' ? (
+                                  <StoreInfomation
+                                    values={values}
+                                    touched={touched}
+                                    errors={errors}
+                                    setFieldValue={setFieldValue}
+                                    handleSubmit={handleSubmit}
+                                    handleBack={handleBackSetting}
+                                  />
+                                ) : selectedSetting === 'product_extention' ? (
+                                  <div className="storeInfomation">
+                                    <ProductExtention
+                                      values={values}
+                                      touched={touched}
+                                      errors={errors}
+                                      setFieldValue={setFieldValue}
+                                      handleSubmit={handleSubmit}
+                                      handleBack={handleBackSetting}
+                                    />
+                                  </div>
+                                ) : selectedSetting === 'discount' ? (
+                                  <>
+                                    <MainDiscount
+                                      handleBack={handleBackSetting}
+                                    />
+                                  </>
+                                ) : selectedSetting === 'export' ? (
+                                  <>
+                                    <MainExport
+                                      handleBack={handleBackSetting}
+                                    />
+                                  </>
+                                ) : selectedSetting === 'zip_codes' ? (
+                                  <>
+                                    <ZipCodes handleBack={handleBackSetting} />
+                                  </>
+                                ) : selectedSetting === 'enable_debug_mode' ? (
+                                  <>
+                                    <EnableDebug handleBack={handleBackSetting} />
+                                  </>
+                                ) : selectedSetting === 'stripe_settings' ? (
+                                  <>
+                                    <StripeSettings handleBack={handleBackSetting} />
+                                  </>
+                                ) : selectedSetting === 'sms' ? (
+                                  <>
+                                    <Sms handleBack={handleBackSetting} />
+                                  </>
+                                ) : selectedSetting === 'legal' ? (
+                                  <>
+                                    <Legal handleBack={handleBackSetting} />
+                                  </>
+                                ) : selectedSetting === 'translation' ? (
+                                  <>
+                                    <Translation
+                                      handleBack={handleBackSetting}
+                                    />
+                                  </>
+                                ) : selectedSetting === 'password' ? (
+                                  <>
+                                    <Password
+                                      handleBack={handleBackSetting}
+                                      passwordProtected={passwordProtected}
+                                      setPasswordProtected={
+                                        setPasswordProtected
+                                      }
+                                    />
+                                  </>
+                                ) : (
+                                  ''
+                                )}
+                              </Layout.Section>
+                            </Layout>
+                          </>
+                        )}
                       </div>
                     </>
                   </Form>

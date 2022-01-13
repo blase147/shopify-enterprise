@@ -6,10 +6,14 @@ class AppProxy::OrdersController < AppProxyController
     @orders = ShopifyAPI::Order.find(:all,
       params: { customer_id: customer_id, limit: PER_PAGE, page_info: params[:page_info] }
     )
+
+    render 'index', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
   def show
     @order = ShopifyAPI::Order.find(params[:id])
+
+    render 'show', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
   private
@@ -19,6 +23,6 @@ class AppProxy::OrdersController < AppProxyController
   end
 
   def set_customer
-    @customer = Customer.find_by_shopify_id(customer_id)
+    @customer = current_shop.customer_subscription_contracts.find_by_shopify_customer_id(customer_id)
   end
 end

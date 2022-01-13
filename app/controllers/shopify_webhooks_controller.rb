@@ -15,4 +15,67 @@ class ShopifyWebhooksController < ApplicationController
     end
     head :no_content
   end
+
+  def order_create
+    begin
+      box_product_ids = get_box_product_ids(params[:line_items])
+      shop = Shop.find_by(shopify_domain: shop_domain)
+      shop.with_shopify_session do
+        if box_product_ids
+          order = ShopifyAPI::Order.new(id: params[:id])
+          order.tags = ShopifyAPI::Product.where(ids: box_product_ids, fields: 'id,title').map(&:title).join(', ')
+          order.save
+        end
+      end
+    rescue => e
+      p e
+    end
+
+    head :no_content
+  end
+
+  def subscription_contract_create
+    shop = Shop.find_by(shopify_domain: shop_domain)
+    ShopifyContractCreateWorker.perform_async(shop.id, params[:id])
+
+    head :no_content
+  end
+
+  def subscription_contract_update
+    shop = Shop.find_by(shopify_domain: shop_domain)
+    ShopifyContractUpdateWorker.perform_async(shop.id, params[:id])
+
+    head :no_content
+  end
+
+  def order_cancel
+    shop = Shop.find_by(shopify_domain: shop_domain)
+    ShopifyOrderCancelWorker.perform_async(shop.id, params[:id])
+
+    head :no_content
+  end
+
+
+  private
+
+  def get_box_product_ids(line_items)(line_items)
+    line_items.each do |item|
+      ids = item.properties.find{|p| p.name == "_box_product_ids"}
+      return ids.value if ids
+    end
+    nil
+  rescue
+    nil
+  end
 end
+
+=begin
+
+webhooks.each do |webhook|
+  if webhook.address.include?('ngrok')
+    webhook.address.gsub!('https://98f6-72-255-40-54.ngrok.io/', ENV['HOST'])
+    webhook.save
+  end
+end
+
+=end

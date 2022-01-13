@@ -5,6 +5,7 @@ module Types
 
       argument :start_date, String, required: false
       argument :end_date, String, required: false
+      argument :display_name, String, required: false
       argument :box_quantity_limit, Int, required: false
       argument :box_subscription_type, String, required: false
       argument :product_images, [Types::Input::ProductInputType], required: false

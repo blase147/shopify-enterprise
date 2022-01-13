@@ -9,6 +9,8 @@ import offerImg from '../../../assets/images/upsell/offerImage.svg';
 import SearchProduct from './SearchProduct';
 import SearchPlan from './SearchPlan';
 import Preview from './preview';
+import RangePickr from '../build-a-box/RangePickr';
+import DeleteSVG from '../../../assets/images/delete.svg';
 
 import {
   Card,
@@ -34,7 +36,7 @@ import {
   Autocomplete,
 } from '@shopify/polaris';
 
-const NewUpSell = ({handleClose}) => {
+const NewUpSell = ({id, handleClose}) => {
   const options = [...Array(99).keys()].map((foo) => (foo + 1).toString());
   const [canceledProducts, setCanceledProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
@@ -45,6 +47,13 @@ const NewUpSell = ({handleClose}) => {
     { label: 'Week(s)', value: 'week' },
     { label: 'Month(s)', value: 'month' },
     { label: 'Year(s)', value: 'year' },
+  ];
+
+  const triggerOptions = [
+    {
+      label: 'Customer is subscribed to subscription plan',
+      value: 'customer_is_subscribed_to_subscription_plan',
+    },
   ];
 
   const cartConditionOptions = [{ label: 'contains any', value: 'cart_any' }];
@@ -115,6 +124,9 @@ const NewUpSell = ({handleClose}) => {
           productId: '',
           title: '',
         },
+        startDate: '',
+        endDate: '',
+        sellingPlans: [],
         ruleCustomer: false,
         ruleCustomerCondition: '',
         ruleCustomerValue: {
@@ -166,23 +178,23 @@ const NewUpSell = ({handleClose}) => {
 
   const validationSchema = yup.object().shape({
     internalName: yup.string().required().label('Internal name'),
-    publicName: yup.string().required().label('Public name'),
-    selectorTitle: yup.string().required().label('Campaign selector title'),
-    upsellCampaigns: yup.array().of(
-      yup.object().shape({
-        name: yup.string().required().label('Name'),
-        selectorLabel: yup.string().required().label('Plan selector label'),
-        // ruleCartValue: yup.object().shape({
-        //   productId: yup.string().label('Only select'),
-        // }),
-        // productOffer: yup.object().shape({
-        //   productId: yup.string().required().label('Only select'),
-        // }),
-        // ruleCustomerValue: yup.object().shape({
-        //   sellingPlanId: yup.string().required().label('Only select'),
-        // }),
-      })
-    ),
+    // publicName: yup.string().required().label('Public name'),
+    // selectorTitle: yup.string().required().label('Campaign selector title'),
+    // upsellCampaigns: yup.array().of(
+    //   yup.object().shape({
+    //     // name: yup.string().required().label('Name'),
+    //     // selectorLabel: yup.string().required().label('Plan selector label'),
+    //     // ruleCartValue: yup.object().shape({
+    //     //   productId: yup.string().label('Only select'),
+    //     // }),
+    //     // productOffer: yup.object().shape({
+    //     //   productId: yup.string().required().label('Only select'),
+    //     // }),
+    //     // ruleCustomerValue: yup.object().shape({
+    //     //   sellingPlanId: yup.string().required().label('Only select'),
+    //     // }),
+    //   })
+    // ),
   });
 
   const GET_UPSELL_CAMPAIGN = gql`
@@ -200,6 +212,12 @@ const NewUpSell = ({handleClose}) => {
           description
           intervalType
           intervalCount
+          sellingPlans {
+            sellingPlanId
+            sellingPlanName
+          }
+          startDate
+          endDate
           ruleCart
           ruleCartCondition
           ruleCartValue {
@@ -239,7 +257,7 @@ const NewUpSell = ({handleClose}) => {
       }
     }
   `;
-  const { id } = useParams();
+  // const { id } = useParams();
 
   const [getUpsell, { data, loading, error }] = useLazyQuery(
     GET_UPSELL_CAMPAIGN,
@@ -278,12 +296,31 @@ const NewUpSell = ({handleClose}) => {
     }
   `;
 
+  const history = useHistory();
   const [createUpsellCampaign] = useMutation(CREATE_UPSELL_CAMPAIGN);
 
+  const [allSelectedPlans, setAllSelectedPlans] = useState([]);
+
+  const handleRemovePlan = (id) => {
+    setUpdated(true);
+    setAllSelectedPlans(
+      allSelectedPlans.filter((plan) => plan.sellingPlanId !== id)
+    );
+  };
+
   useEffect(() => {
-    if (data) {
+    if (data && data?.fetchCampaign) {
+      data.fetchCampaign.upsellCampaigns.endDate =
+        data.fetchCampaign.upsellCampaigns[0].endDate || '';
+      data.fetchCampaign.upsellCampaigns.startDate =
+        data.fetchCampaign.upsellCampaigns[0].startDate || '';
+      data.fetchCampaign.upsellCampaigns.sellingPlans =
+        data.fetchCampaign.upsellCampaigns[0].sellingPlans || [];
       setCampaignData(data.fetchCampaign);
       setAllProducts(data.fetchCampaign.upsellCampaigns[0].productOffer);
+      setAllSelectedPlans(
+        data.fetchCampaign.upsellCampaigns[0].sellingPlans
+      );
     }
   }, [data]);
 
@@ -311,6 +348,7 @@ const NewUpSell = ({handleClose}) => {
               initialValues={campaignData || initialValues}
               onSubmit={(values, { setSubmitting }) => {
                 const formData = { ...values };
+                formData.upsellCampaigns[0].sellingPlans = allSelectedPlans;
                 formData.upsellCampaigns[0].productOffer = allProducts;
                 if (id) {
                   updateUpsellCampaign({
@@ -620,14 +658,14 @@ const NewUpSell = ({handleClose}) => {
                             />
                             <p> </p>
                           </FormLayout.Group>*/}
-                          <TextContainer>
+                          {/* <TextContainer>
                             <Subheading>DISPLAY RULES</Subheading>
                             <TextStyle variation="subdued">
                               Show these offers when any of the following
                               individual criteria are met
                             </TextStyle>
-                          </TextContainer>
-                          <FormLayout.Group>
+                          </TextContainer> */}
+                          {/* <FormLayout.Group>
                             <Select
                               label="Interval"
                               value={campaign.intervalCount}
@@ -660,7 +698,7 @@ const NewUpSell = ({handleClose}) => {
                                 )
                               }
                             />
-                          </FormLayout.Group>
+                          </FormLayout.Group> */}
 
                           {/* <div className="when-cart">
                             <Stack>
@@ -713,7 +751,7 @@ const NewUpSell = ({handleClose}) => {
                             </div>
                           </div> */}
 
-                          <div className="when-cart">
+                          {/* <div className="when-cart">
                             <Stack>
                               <Checkbox
                                 label="When customer"
@@ -769,7 +807,104 @@ const NewUpSell = ({handleClose}) => {
                                 disabled={!campaign.ruleCustomer ? true : false}
                               />
                             </div>
+                          </div> */}
+                        <FormLayout.Group>
+                          <div>
+                            <TextContainer>
+                              <h4>
+                                <strong>DISPLAY RULES</strong>
+                              </h4>
+                              <h5>
+                                Show these offers when any of the following
+                                individual criteria are met
+                              </h5>
+                            </TextContainer>
+                            <br />
+                            <div className="date-range-label">
+                              <TextContainer>
+                                <Subheading element="h3">
+                                  Campaign Duration:
+                                </Subheading>
+                              </TextContainer>
+                            </div>
+                            <RangePickr
+                              startLabel={`upsellCampaigns[${index}].startDate`}
+                              endLabel={`upsellCampaigns[${index}].endDate`}
+                              setFieldValue={setFieldValue}
+                              start={campaign?.startDate || ''}
+                              end={campaign?.endDate || ''}
+                            />
                           </div>
+                          <br />
+                        </FormLayout.Group>
+                        <Card.Section>
+                          <FormLayout>
+                            <Select
+                              options={triggerOptions}
+                              label="Triggers"
+                              helpText={
+                                <span>
+                                  Add a trigger to target the box campaign to
+                                  specific customers and orders.
+                                </span>
+                              }
+                            />
+                          </FormLayout>
+                        </Card.Section>
+                        <FormLayout.Group>
+                          <div className="build-box-search">
+                            <TextContainer>
+                              <Subheading>Subscription plan</Subheading>
+                            </TextContainer>
+                            <Select
+                              options={[
+                                { label: 'is any', value: 'is_any' },
+                              ]}
+                              label=""
+                              value={'is_any'}
+                            />
+
+                            <div className="search">
+                              <SearchPlan
+                                idForTextField={`serchPlan-${Math.random()}`}
+                                value={
+                                  campaign?.sellingPlans || []
+                                }
+                                setFieldValue={setFieldValue}
+                                fieldName={`upsellCampaigns[${index}].sellingPlans`}
+                                allSelectedPlans={allSelectedPlans || []}
+                                setAllSelectedPlans={setAllSelectedPlans}
+                                error={
+                                  values.campaign?.sellingPlans &&
+                                  touched.campaign?.sellingPlans
+                                    ?.sellingPlanId &&
+                                  errors.campaign?.sellingPlans
+                                    ?.sellingPlanId
+                                }
+                              />
+                            </div>
+                          </div>
+                        </FormLayout.Group>
+                        <FormLayout.Group>
+                          <Stack vertical={true}>
+                            {allSelectedPlans &&
+                              allSelectedPlans?.map((plan) => (
+                                <Stack.Item>
+                                  <div className="selected-plan-container">
+                                    <span>{plan?.sellingPlanName}</span>
+                                    <img
+                                      src={DeleteSVG}
+                                      onClick={() =>
+                                        handleRemovePlan(plan.sellingPlanId)
+                                      }
+                                      alt="Delete"
+                                    />
+                                  </div>
+                                </Stack.Item>
+                              ))}
+                          </Stack>
+                        </FormLayout.Group>
+
                           {/*
                           <div className="when-order">
                             <Checkbox
@@ -901,6 +1036,7 @@ const NewUpSell = ({handleClose}) => {
                                 setFieldValue={setFieldValue}
                                 fieldName={`upsellCampaigns[${index}].productOffer`}
                                 allProducts={allProducts}
+                                setAllProducts={setAllProducts}
                                 error={
                                   touched.upsellCampaigns?.[index]?.productOffer
                                     ?.productId &&

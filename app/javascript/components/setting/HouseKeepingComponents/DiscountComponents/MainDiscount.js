@@ -1,38 +1,30 @@
-import { Icon, Layout, Stack } from '@shopify/polaris'
-import React, { useCallback, useState } from 'react'
-import Discount from './Discount'
-import DiscountForm from './DiscountForm'
-import {
-  MobileBackArrowMajor
-} from '@shopify/polaris-icons';
+import { Icon, Layout, Stack, TextStyle } from '@shopify/polaris';
+import React, { useCallback, useState } from 'react';
+import Discount from './Discount';
+import DiscountForm from './DiscountForm';
+import { MobileBackArrowMajor } from '@shopify/polaris-icons';
 
-const MainDiscount = ({handleBack}) => {
+const MainDiscount = ({ handleBack }) => {
+  const [showForm, setShowForm] = useState(false);
 
-  const [showForm,setShowForm]=useState(false)
-
-  const handleShowForm=useCallback(
-    () => {
-     setShowForm(true)
-    },
-    [setShowForm]
-  )
-  const handleCloseForm=useCallback(
-    () => {
-     setShowForm(false);
-    },
-    [setShowForm]
-  )
+  const handleShowForm = useCallback(() => {
+    setShowForm(true);
+  }, [setShowForm]);
+  const handleCloseForm = useCallback(() => {
+    setShowForm(false);
+  }, [setShowForm]);
 
   return (
     <>
       <Layout>
-      <Layout.Section>
-        <div className="back-button pointer" onClick={handleBack}>
-          <Icon
-            source={MobileBackArrowMajor}
-            color="base" />
-        </div>
-      </Layout.Section>
+        <Layout.Section>
+          <div className="back-button pointer" onClick={handleBack}>
+            <Icon source={MobileBackArrowMajor} color="base" />
+            <p>
+              <TextStyle variation="subdued">Settings</TextStyle>
+            </p>
+          </div>
+        </Layout.Section>
       </Layout>
       {showForm ? (
         <DiscountForm handleCloseForm={handleCloseForm} />
@@ -41,6 +33,6 @@ const MainDiscount = ({handleBack}) => {
       )}
     </>
   );
-}
+};
 
-export default MainDiscount
+export default MainDiscount;

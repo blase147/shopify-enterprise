@@ -2,7 +2,7 @@ module SubscriptionConcern
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_draft_contract, only: [:add_product, :update_quantity, :update_shiping_detail, :swap_product, :upgrade_product, :remove_line]
+    before_action :set_draft_contract, only: [:add_product, :update_quantity, :update_shiping_detail, :upgrade_product]
     before_action :set_customer, only: %i[add_product swap_product upgrade_product]
   end
 
@@ -31,7 +31,7 @@ module SubscriptionConcern
     else
       subscription = SubscriptionContractService.new(params[:id]).run
       product = subscription.lines.edges.select{ |line| line.node.id == line_item_id }.first.node
-      customer = Customer.find_by(shopify_id: params[:id])
+      customer = CustomerSubscriptionContract.find_by(shopify_id: params[:id])
       note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
       description = customer.name+",updated quantity to #{params[:quantity].to_i},"+product.title
       customer.shop.subscription_logs.quantity.create(subscription_id: params[:id], customer_id: customer.id, product_id: line_item_id, product_name: product.title, note: note, description: description)
@@ -52,21 +52,52 @@ module SubscriptionConcern
   end
 
   def swap_product
-    variant = ShopifyAPI::Variant.find(params[:variant_id][/\d+/])
-    product = ProductService.new(variant.product_id).run
-    result = SubscriptionDraftsService.new.line_update @draft_id, params[:line_id], { 'productVariantId': params[:variant_id], 'quantity': 1, 'currentPrice': variant.price }
-    SubscriptionDraftsService.new.commit @draft_id
-    if result[:error].present?
-      flash[:error] = result[:error]
-      render js: "alert('#{result[:error]}'); hideLoading()"
+    if @customer.nil? && @customer = CustomerSubscriptionContract.find_by(id: params[:subscription_id])
+      variant = ShopifyAPI::Variant.find(params[:variant_id][/\d+/])
+      product = ProductService.new(variant.product_id).run
+      calc_price = (((variant.price.to_f rescue 0) + (@customer.import_data['shipping_price'].to_f rescue 0)).round(2) * 100).to_i
+      unless calc_price == @customer.api_data['items']['data'][0]['price']['unit_amount']
+        price = Stripe::Price.create({
+          unit_amount: calc_price,
+          currency: 'usd',
+          product: @customer.api_data['items']['data'][0]['price']['product']
+        }, { api_key: shop.stripe_api_key })
+        subscription = Stripe::Subscription.update(
+          @customer.api_resource_id,
+          {
+            proration_behavior: 'none',
+            items: [
+              {
+                id: @customer.api_data['items']['data'][0]['id'],
+                price: price.id
+              }
+            ]
+          },
+          { api_key: current_shop.stripe_api_key }
+        )
+        @customer.api_data = subscription.to_h
+      end
+      @customer.import_data['product_id'] = variant.product_id
+      @customer.import_data['variant_id'] = variant.id
+      @customer.save
     else
-      # current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id)
-      subscription = SubscriptionContractService.new(params[:id]).run
-      note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
-      description = @customer.name+",swaped,"+variant.title
-      # amount = (product.quantity * variant.price.to_f).round(2).to_s
-      current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id, product_name: variant.title, note: note, description: description, product_id: params[:variant_id], swaped_product_id: variant.product_id)
-      render js: 'location.reload()'
+      set_draft_contract
+      variant = ShopifyAPI::Variant.find(params[:variant_id][/\d+/])
+      product = ProductService.new(variant.product_id).run
+      result = SubscriptionDraftsService.new.line_update @draft_id, params[:line_id], { 'productVariantId': params[:variant_id], 'quantity': 1, 'currentPrice': variant.price }
+      SubscriptionDraftsService.new.commit @draft_id
+      if result[:error].present?
+        flash[:error] = result[:error]
+        render js: "alert('#{result[:error]}'); hideLoading()"
+      else
+        # current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id)
+        subscription = SubscriptionContractService.new(params[:id]).run
+        note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
+        description = @customer.name+",swaped,"+variant.title
+        # amount = (product.quantity * variant.price.to_f).round(2).to_s
+        current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id, product_name: variant.title, note: note, description: description, product_id: params[:variant_id], swaped_product_id: variant.product_id)
+        render js: 'location.reload()'
+      end
     end
   end
 
@@ -92,24 +123,44 @@ module SubscriptionConcern
   end
 
   def remove_line
-    if params[:lines_count].to_i > 1
-      result = SubscriptionDraftsService.new.remove(@draft_id, params[:line_id])
-      RemovedSubscriptionLine.create(subscription_id: params[:id], customer_id: params[:customer_id], variant_id: params[:variant_id], quantity: params[:quantity] )
+    if params[:stripe_subscription]
+      csc = CustomerSubscriptionContract.find(params[:id])
+      Stripe::SubscriptionCancel.new(csc.api_resource_id, current_shop).delete
+      csc.update(status: 'CANCELLED', reasons_cancel_id: params[:reasons_cancel_id]) if !csc.nil? && params[:reasons_cancel_id].present?
+      begin
+        email_notification = csc.shop.setting.email_notifications.find_by_name "Subscription Cancellation"
+        EmailService::Send.new(email_notification).send_email({customer: csc, line_name: params[:line_name]}) unless email_notification.nil?
+        owner_email_notification = csc.shop.setting.email_notifications.find_by_name "Cancellation Alert"
+        EmailService::Send.new(owner_email_notification).send_email({customer: csc, line_name: params[:line_name]}) unless owner_email_notification.nil?
+      rescue => e
+        puts "Could not send email. #{e.message}"
+      end
     else
-      result = SubscriptionContractDeleteService.new(params[:id]).run
+      set_draft_contract
+      if params[:lines_count].to_i > 1
+        result = SubscriptionDraftsService.new.remove(@draft_id, params[:line_id])
+        RemovedSubscriptionLine.create(subscription_id: params[:id], customer_id: params[:customer_id], variant_id: params[:variant_id], quantity: params[:quantity] )
+      else
+        result = SubscriptionContractDeleteService.new(params[:id]).run
+      end
+      if result[:error].present?
+        render js: "alert('#{result[:error]}'); hideLoading()"
+      else
+        customer = CustomerSubscriptionContract.find_by_shopify_id params[:customer_id]
+        customer.update(reasons_cancel_id: params[:reasons_cancel_id]) if !customer.nil? && params[:reasons_cancel_id].present?
+        begin
+          email_notification = customer.shop.setting.email_notifications.find_by_name "Subscription Cancellation"
+          EmailService::Send.new(email_notification).send_email({customer: customer, line_name: params[:line_name]}) unless email_notification.nil?
+          owner_email_notification = customer.shop.setting.email_notifications.find_by_name "Cancellation Alert"
+          EmailService::Send.new(owner_email_notification).send_email({customer: customer, line_name: params[:line_name]}) unless owner_email_notification.nil?
+        rescue => e
+          puts "Could not send email. #{e.message}"
+        end
+        SubscriptionDraftsService.new.commit @draft_id
+      end
     end
-    if result[:error].present?
-      render js: "alert('#{result[:error]}'); hideLoading()"
-    else
-      customer = Customer.find_by_shopify_id params[:customer_id]
-      customer.update(reasons_cancel_id: params[:reasons_cancel_id]) if !customer.nil? && params[:reasons_cancel_id].present?
-      email_notification = customer.shop.setting.email_notifications.find_by_name "Subscription Cancellation"
-      EmailService::Send.new(email_notification).send_email({customer: customer, line_name: params[:line_name]}) unless email_notification.nil?
-      owner_email_notification = customer.shop.setting.email_notifications.find_by_name "Cancellation Alert"
-      EmailService::Send.new(owner_email_notification).send_email({customer: customer, line_name: params[:line_name]}) unless owner_email_notification.nil?
-      SubscriptionDraftsService.new.commit @draft_id
-      render js: 'location.reload()'
-    end
+
+    render js: 'location.reload()'
   end
 
   def skip_schedule
@@ -125,22 +176,84 @@ module SubscriptionConcern
 
   def pause
     id = params[:id]
-    result = SubscriptionContractDeleteService.new(id).run 'PAUSED'
-    if result[:error].present?
-      render js: "alert('#{result[:error]}');"
-    else
+    csc = CustomerSubscriptionContract.find(id)
+    if params[:stripe_subscription]
+      Stripe::SubscriptionPause.new(csc.api_resource_id, current_shop).pause
+      csc.update(status: 'PAUSED')
+
+      email_notification = csc.shop.setting.email_notifications.find_by_name "Pause Subscription"
+      EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
       render js: 'location.reload()'
+    else
+      result = SubscriptionContractDeleteService.new(id).run 'PAUSED'
+      if result[:error].present?
+        render js: "alert('#{result[:error]}');"
+      else
+        email_notification = csc.shop.setting.email_notifications.find_by_name "Pause Subscription"
+        EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
+        render js: 'location.reload()'
+      end
     end
   end
 
   def resume
     id = params[:id]
-    result = SubscriptionContractDeleteService.new(id).run 'ACTIVE'
+    csc = CustomerSubscriptionContract.find(id)
+    if params[:stripe_subscription]
+      if csc.status == 'CANCELLED'
+        row = csc.import_data
+        product = Stripe::Product.create({name: "#{row['product_title']}, #{row['variant_title']}"}, { api_key: current_shop.stripe_api_key })
+        anchor = ImportStripeSubscriptions.new(nil,nil).next_anchor(row)
+        selling_plan = if csc.import_data['variant_title']&.include?('Annual')
+          SellingPlan.joins(:selling_plan_group).where(selling_plan_groups: { shop_id: current_shop.id }).find_by(selector_label: 'Annual')
+        else
+          SellingPlan.joins(:selling_plan_group).where(selling_plan_groups: { shop_id: current_shop.id }).find_by(selector_label: 'Quarterly')
+        end
+        csc.selling_plan_id = selling_plan.id
+        calc_price = if selling_plan.selector_label == 'Annual'
+          5499
+        elsif selling_plan.selector_label == 'Quarterly'
+          5999
+        end
 
-    if result[:error].present?
-      render js: "alert('#{result[:error]}');"
-    else
+        stripe_subscription = Stripe::Subscription.create({
+          customer: row['customer_gateway_token'],
+          billing_cycle_anchor: anchor,
+          proration_behavior: 'none',
+          items: [
+            {
+              price_data: {
+                unit_amount_decimal: calc_price,
+                currency: 'usd',
+                recurring: {
+                  interval: selling_plan.interval_type.downcase,
+                  interval_count: selling_plan.interval_count
+                },
+                product: product.id
+              }
+            }
+          ]
+        }, { api_key: current_shop.stripe_api_key })
+        csc.api_resource_id = stripe_subscription.id
+        csc.api_data = stripe_subscription.to_h
+      elsif csc.status == 'PAUSED'
+        Stripe::SubscriptionPause.new(csc.api_resource_id, current_shop).resume
+      end
+      csc.status = 'ACTIVE'
+      csc.save
+      email_notification = csc.shop.setting.email_notifications.find_by_name "Resume Subscription"
+      EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
       render js: 'location.reload()'
+    else
+      result = SubscriptionContractDeleteService.new(id).run 'ACTIVE'
+
+      if result[:error].present?
+        render js: "alert('#{result[:error]}');"
+      else
+        email_notification = csc.shop.setting.email_notifications.find_by_name "Resume Subscription"
+        EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
+        render js: 'location.reload()'
+      end
     end
   end
 
@@ -156,6 +269,6 @@ module SubscriptionConcern
   end
 
   def set_customer
-    @customer = Customer.find_by(shopify_id: params[:id])
+    @customer = CustomerSubscriptionContract.find_by(shopify_id: params[:id])
   end
 end

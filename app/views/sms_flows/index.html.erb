@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Sms Flows</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Sent</th>
+      <th>Clicks</th>
+      <th>Revenue</th>
+      <th>Status</th>
+      <th>Description</th>
+      <th>Shop</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sms_flows.each do |sms_flow| %>
+      <tr>
+        <td><%= sms_flow.name %></td>
+        <td><%= sms_flow.sent %></td>
+        <td><%= sms_flow.clicks %></td>
+        <td><%= sms_flow.revenue %></td>
+        <td><%= sms_flow.status %></td>
+        <td><%= sms_flow.description %></td>
+        <td><%= sms_flow.shop_id %></td>
+        <td><%= link_to 'Show', sms_flow %></td>
+        <td><%= link_to 'Edit', edit_sms_flow_path(sms_flow) %></td>
+        <td><%= link_to 'Destroy', sms_flow, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Sms Flow', new_sms_flow_path %>

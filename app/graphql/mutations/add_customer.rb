@@ -9,7 +9,7 @@ module Mutations
       customer_params[:billing_address_attributes] = customer_params.delete(:billing_address)
 
       begin
-        customer = current_shop.customers.create!(customer_params)
+        customer = current_shop.customer_subscription_contracts.create!(customer_params)
         { customer: customer }
       rescue ActiveRecord::RecordInvalid => e
         GraphQL::ExecutionError.new("Invalid attributes for #{e.record.class}:"\

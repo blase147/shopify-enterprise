@@ -7,8 +7,8 @@ module Queries
     argument :sort_direction, String, required: false
 
     def resolve(**args)
-      current_shop.sync_contracts
-      current_shop.customers.where(where_data(args[:status] || 'all')).order(order_by(args))
+      #current_shop.sync_contracts
+      current_shop.customer_subscription_contracts.includes(:shop, :additional_contacts, :billing_address).where(where_data(args[:status] || 'all')).order(order_by(args))
     end
 
     def where_data(status)

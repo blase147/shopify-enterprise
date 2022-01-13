@@ -5,6 +5,8 @@ module Mutations
 
     def resolve(params:)
       lock_password_params = Hash params
+
+      current_shop.setting.update(enable_password: lock_password_params[:enable_password])
       begin
         lock_password = current_shop.lock_password
         if lock_password_params[:password] != lock_password_params[:password_confirmation]

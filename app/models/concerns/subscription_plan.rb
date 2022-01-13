@@ -6,6 +6,27 @@ module SubscriptionPlan
     before_update :update_shopify
     before_destroy :delete_shopify
 
+    UPDATE_ANCHOR_QUERY = <<-GRAPHQL
+      mutation($input: SellingPlanGroupInput!, $id: ID!){
+        sellingPlanGroupUpdate(id: $id, input: $input){
+          sellingPlanGroup {
+            id
+            sellingPlans(first: 10){
+              edges {
+                node {
+                  id
+                }
+              }
+            }
+          }
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+    GRAPHQL
+
     UPDATE_QUERY = <<-GRAPHQL
       mutation($input: SellingPlanGroupInput!, $id: ID!, $deleteProductIds: [ID!]!, $deleteVariantIds: [ID!]!, $addProductIds: [ID!]!, $addVariantIds: [ID!]!){
         sellingPlanGroupUpdate(id: $id, input: $input){
@@ -134,6 +155,39 @@ module SubscriptionPlan
       throw(:abort)
     end
 
+    def update_shopify_anchors(anchor_date)
+      date = Date.parse(anchor_date)
+      input = {
+        sellingPlansToUpdate: self.selling_plans.select{|s|
+          s.billing_dates.size > 1 && s.billing_dates.include?(anchor_date)
+        }.map {|s|
+          selling_plan_anchor_update(s, date)
+        }
+      }
+
+      return if input[:sellingPlansToUpdate].size < 1
+
+      result = ShopifyAPIRetry::GraphQL.retry {
+        client.query(client.parse(UPDATE_ANCHOR_QUERY), variables: {
+          input: input,
+          id: self.shopify_id
+        })
+      }
+      puts '#####'
+      p result
+
+      error = result.errors.messages["data"][0] rescue nil
+      error ||= result.data.selling_plan_group_update.user_errors.first.message rescue nil
+
+      if error.present?
+        raise error
+      end
+
+    rescue Exception => e
+      errors.add :base, e.message
+      throw(:abort)
+    end
+
     def update_shopify
       input = {
         name: self.public_name,
@@ -234,13 +288,60 @@ module SubscriptionPlan
       self.selling_plans.select {|s| s.id.nil? }.map {|s| selling_plan_info(s) }
     end
 
-    def selling_plan_info selling_plan, id=nil
-      adjustment_value = if selling_plan.adjustment_type == 'PERCENTAGE'
-                          { selling_plan.adjustment_type.downcase => selling_plan.adjustment_value.to_i }
-                        else
-                          { fixedValue: selling_plan.adjustment_value.to_i }
-                        end
+    def selling_plan_anchor_update(selling_plan, date)
+      anchor = custom_plan_anchor(selling_plan, date)
+      {
+        id: selling_plan.shopify_id,
+        billingPolicy: {
+          recurring: {
+            anchors: anchor
+          }
+        },
+        deliveryPolicy: {
+          recurring: {
+            anchors: anchor
+          }
+        }
+      }
+    end
 
+    def calc_adjustment_value(type, value)
+      if type == 'PERCENTAGE'
+        { type.downcase => value.to_i }
+      else
+        { fixedValue: value.to_i }
+      end
+    end
+
+    def selling_plan_info selling_plan, id=nil
+      adjustment_value = calc_adjustment_value(selling_plan.adjustment_type, selling_plan.adjustment_value)
+      trial_adjustment_value = calc_adjustment_value(selling_plan.trial_adjustment_type, selling_plan.trial_adjustment_value)
+      pricing_policies = if selling_plan.trial_interval_count.present?
+                            [
+                              {
+                                fixed: {
+                                  adjustmentType: selling_plan.trial_adjustment_type,
+                                  adjustmentValue: trial_adjustment_value
+                                }
+                              },
+                              {
+                                recurring: {
+                                  adjustmentType: selling_plan.adjustment_type,
+                                  adjustmentValue: adjustment_value,
+                                  afterCycle: selling_plan.trial_interval_count.to_i
+                                }
+                              }
+                            ]
+                          else
+                            [
+                              {
+                                fixed: {
+                                  adjustmentType: selling_plan.adjustment_type,
+                                  adjustmentValue: adjustment_value
+                                }
+                              }
+                            ]
+                          end
       # interval_type = case selling_plan.interval_type
       # when 'Days'
       #   'DAY'
@@ -251,7 +352,7 @@ module SubscriptionPlan
       # when 'Years'
       #   'YEAR'
       # end
-
+      anchor = plan_anchor(selling_plan)
       info = {
         name: selling_plan.name,
         description: selling_plan.description || '',
@@ -260,6 +361,7 @@ module SubscriptionPlan
         ],
         billingPolicy: {
           recurring: {
+            anchors: anchor,
             interval: selling_plan.interval_type,
             intervalCount: selling_plan.interval_count,
             minCycles: selling_plan.min_fullfilment,
@@ -268,21 +370,46 @@ module SubscriptionPlan
         },
         deliveryPolicy: {
           recurring: {
+            anchors: anchor,
             interval: selling_plan.delivery_interval_type,
-            intervalCount: selling_plan.delivery_interval_count
+            intervalCount: selling_plan.delivery_interval_count,
+            preAnchorBehavior: selling_plan.first_delivery,
+            cutoff: selling_plan.shipping_cut_off
           }
         },
-        pricingPolicies: [
-          {
-            fixed: {
-              adjustmentType: selling_plan.adjustment_type,
-              adjustmentValue: adjustment_value
-            }
-          }
-        ]
+        pricingPolicies: pricing_policies
       }
 
       id.nil? ? info : info.merge(id: id)
+    end
+  end
+
+  def custom_plan_anchor(selling_plan, date)
+    if selling_plan.billing_dates.present? && selling_plan.interval_type != "DAY"
+      {
+        type: "YEARDAY",
+        day: date.mday,
+        month: date.month
+      }
+    end
+  end
+
+  def plan_anchor(selling_plan)
+    if selling_plan.billing_dates.present? && selling_plan.interval_type != "DAY"
+      billing_date = Date.parse(selling_plan.billing_dates.first)
+      {
+        type: "YEARDAY",
+        day: billing_date.mday,
+        month: billing_date.month
+      }
+    end
+  end
+
+  def get_day_for_interval(date, interval_type)
+    if interval_type == "WEEK"
+      date.cwday
+    else
+      date.mday
     end
   end
 

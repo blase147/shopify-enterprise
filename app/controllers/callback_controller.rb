@@ -1,17 +1,22 @@
-class CallbackController < ActionController::Base
+class CallbackController < AuthenticatedController
   skip_before_action :verify_authenticity_token
 
   def charge
-    @shop = Shop.find_by_recurring_charge_id(params[:charge_id])
-    return unless @shop.present?
+    return unless current_shop.present?
 
-    @shop.connect
     @recurring_application_charge = ShopifyAPI::RecurringApplicationCharge.find(params[:charge_id])
     if @recurring_application_charge.status == 'active'
-      @recurring_application_charge.activate
-      @shop.update(recurring_charge_status: 'active')
+      current_shop.recurring_charge_status = 'active'
+      current_shop.recurring_charge_id = params[:charge_id]
+      price = @recurring_application_charge.price.to_f
+      current_shop.plan = if price == 199
+                            'platinum'
+                          elsif price == 0
+                            'freemium'
+                          end
+      current_shop.save
     end
 
-    redirect_to "https://#{@shop.shopify_domain}"
+    redirect_to "https://#{current_shop.shopify_domain}/admin/apps/"
   end
 end

@@ -17,7 +17,8 @@ html[lang="en"]
     meta[name="viewport" content="width=device-width, initial-scale=1"]
     link[rel="stylesheet" href="https://unpkg.com/@shopify/polaris@5.8.4/dist/styles.css"]
   body.chargezen class=page_class
-    = render 'layouts/shared/nav'
+    - unless controller_name == 'select_plan'
+      = render 'layouts/shared/nav'
     = render 'layouts/shared/flash_messages'
     = yield
 

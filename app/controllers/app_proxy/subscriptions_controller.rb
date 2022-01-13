@@ -6,6 +6,8 @@ class AppProxy::SubscriptionsController < AppProxyController
     customer_id = "gid://shopify/Customer/#{params[:customer_id]}"
     @data = CustomerSubscriptionContractsService.new(customer_id).run params[:cursor]
     @subscription_contracts = @data[:subscriptions] || []
+
+    render 'index', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
   def show
@@ -17,6 +19,8 @@ class AppProxy::SubscriptionsController < AppProxyController
     unless params[:customer_id] == @subscription.customer.id[/\d+/]
       redirect_to "/a/chargezen_production/subscriptions/?customer_id=#{params[:customer_id]}"
     end
+
+    render 'show', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
   def cancel
@@ -73,6 +77,24 @@ class AppProxy::SubscriptionsController < AppProxyController
   end
 
   def update_payment
+    contract = CustomerSubscriptionContract.find_by(shopify_customer_id: params[:customer_id], api_source: 'stripe')
+
+    if contract
+      response = Stripe::Customer.create_source(
+        'cus_Jcr1Cdk887KAqN',
+        {
+          source: {
+            object: 'card',
+            number: params[:card_number],
+            exp_month: params[:exp_month],
+            exp_year: params[:exp_year],
+            cvc: params[:verification_value]
+          }
+        },
+        { api_key: current_shop.stripe_api_key }
+      )
+    end
+
     session = Faraday.post('https://elb.deposit.shopifycs.com/sessions', { credit_card: { number: params[:card_number], first_name: params[:name], month: params[:exp_month], year: params[:exp_year], verification_value: params[:verification_value]}}.to_json, "Content-Type" => "application/json")
     if session.status == 200
       session_id = JSON.parse(session.body)['id']
@@ -83,5 +105,6 @@ class AppProxy::SubscriptionsController < AppProxyController
         render js: 'location.reload()'
       end
     end
+
   end
 end

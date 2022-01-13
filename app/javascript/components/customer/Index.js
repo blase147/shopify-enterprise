@@ -73,7 +73,7 @@ const ButtonRemove = (props) => {
   );
 };
 
-const Customers = () => {
+const Customers = ({shopifyDomain}) => {
   const history = useHistory();
   // Start Tabs
   const [selectedTab, setSelectedTab] = useState(0);
@@ -230,6 +230,8 @@ const Customers = () => {
         language
         createdAt
         updatedAt
+        apiResourceId
+        apiSource
         additionalContacts {
           id
           firstName
@@ -291,7 +293,7 @@ const Customers = () => {
             }
           />,
           <a
-            href={`/subscriptions/${row.shopifyId}?shop=${row.shopDomain}`}
+            href={`/subscriptions/${row.shopifyId}?shop=${row.shopDomain}&local_id=${row.id}`}
             key={row.id}
           >{`${row.firstName} ${row.lastName}`}</a>,
           row.createdAt,
@@ -306,6 +308,7 @@ const Customers = () => {
           >
             <Badge>{capitalize(row.status)}</Badge>
           </div>,
+          <p className='capitalize'>{row.apiSource || 'shopify'}</p>,
           <div className='subscription'>{row.subscription}</div>,
           <div>
             <p className="more">
@@ -615,7 +618,7 @@ const Customers = () => {
           </>
         )}
         <Page
-          title="Customer Subscriptions"
+          title="Subscriptions Orders"
           primaryAction={
             <ButtonGroup>
               <Button onClick={() => { }}>
@@ -630,6 +633,35 @@ const Customers = () => {
                   'Export'
                 )}
               </Button>
+              {shopifyDomain == "bagamour.myshopify.com" &&
+                <Button onClick={() => {
+                  fetch(`/subscriptions/sync_stripe`, {
+                    headers: {
+                      'Content-Type': 'application/json',
+                      Accept: 'application/json',
+                    },
+                    credentials: 'same-origin',
+                  })
+                    .then((response) => response.json())
+                    .then(() => {
+                      try{
+                        var Toast = window['app-bridge'].actions.Toast;
+                        Toast.create(window.app, {
+                          message: 'Syncing Stripe Subscriptions',
+                          duration: 5000,
+                        }).dispatch(Toast.Action.SHOW);
+                      }
+                      catch(e){
+                        console.error('Error syncing data: ', e);
+                      }
+                    })
+                    .catch((error) => {
+                      console.error('Error syncing data: ', error);
+                    })
+                }}>
+                  Sync Stripe Subscriptions
+                </Button>
+              }
               {/*<Button
                 onClick={() => {
                   toggleActive();
@@ -711,6 +743,7 @@ const Customers = () => {
                     'Name',
                     'Date Created',
                     'Status',
+                    'Source',
                     'Product',
                     '',
                   ]}

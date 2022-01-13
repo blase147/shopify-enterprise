@@ -1,6 +1,6 @@
 class SmsService::MessageGenerateService
   def initialize(shop, customer, subscription, custom_data = nil)
-    @shopify_shop = ShopifyAPI::Shop.current
+    @shopify_shop = ShopifyAPIRetry::REST.retry { ShopifyAPI::Shop.current }
     @shop = shop
     @customer = customer
     @subscription = subscription

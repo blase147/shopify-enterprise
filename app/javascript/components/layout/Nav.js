@@ -23,7 +23,7 @@ const Nav = (props) => {
       path: '/subscription-plans',
     },
     {
-      content: 'Customer Subscriptions',
+      content: 'Subscriptions Orders',
       id: 'customers',
       path: '/customers',
     },
@@ -52,7 +52,7 @@ const Nav = (props) => {
     //   id: 'build-a-box',
     //   path: '/build-a-box',
     // },
-    
+
     // {
     //   content: 'Smarty SMS',
     //   id: 'smarty-sms',

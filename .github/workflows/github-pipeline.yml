@@ -1,0 +1,28 @@
+name: Chargezen Test
+on:
+  push:
+    branches: 'db_rework'
+jobs:
+  push_event:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd ~/chargezen/Chargezen
+          git pull origin db_rework
+          /home/test/.rbenv/shims/rails db:migrate
+          yarn install --check-files
+          if ss -l4n | grep 3000; then
+          kill -9 `sudo lsof -t -i:3000`
+          fi
+          /home/test/.rbenv/shims/rails s -d

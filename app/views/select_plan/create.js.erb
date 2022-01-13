@@ -1,0 +1,3 @@
+var Redirect = window['app-bridge'].actions.Redirect;
+redirect = Redirect.create(window.app)
+redirect.dispatch(Redirect.Action.REMOTE, "<%= @recurring_application_charge.confirmation_url %>");

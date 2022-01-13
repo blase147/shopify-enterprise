@@ -1,0 +1,43 @@
+doctype html
+html
+  head
+    meta[charset="utf-8"]
+    title = "#{@current_shop.setting.store_name} Customer portal"
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag 'app_proxy', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_pack_tag 'app_proxy', 'data-turbolinks-track': 'reload'
+    link[rel="stylesheet" href="https://unpkg.com/@shopify/polaris@5.8.4/dist/styles.css"]
+    css:
+      .Polaris-Page {
+        max-width: 95% !important;
+        padding: 0 !important;
+      }
+      div.chargezen-proxy {
+        background: #f4f6f8;
+      }
+  div.chargezen-proxy
+    - unless @skip_auth
+      | {% if customer.id ==
+      = params[:customer_id]
+      | %}
+
+    = render 'app_proxy/shared/tabs'
+
+    .Polaris-Page
+      .Polaris-Page__Content
+        .Polaris-Layout
+          .Polaris-Layout__Section
+            .Dashboard_wrapper__3SFrh
+              = yield
+    - unless @skip_auth
+      | {% else %}
+      p style="margin-left: 4rem;"
+        | You don't have access to view this. Please make sure you
+        a href="/account/login"  login.
+      | {% endif %}
+
+
+javascript:
+  const addCSS = s => document.head.appendChild(document.createElement("style")).innerHTML=s;
+  addCSS("#{@current_shop&.setting&.style_content.squish}")

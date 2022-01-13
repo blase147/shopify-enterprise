@@ -122,6 +122,7 @@ class CustomerSubscriptionContractsService < GraphqlService
       subscriptions: subscriptions.map(&:node),
       active_subscriptions: subscriptions.select { |subscription| subscription.node.status == 'ACTIVE' },
       cancelled_subscriptions: subscriptions.select { |subscription| subscription.node.status == 'CANCELLED' },
+      paused_subscriptions: subscriptions.select { |subscription| subscription.node.status == 'PAUSED' },
       has_next_page: data.subscription_contracts.page_info.has_next_page,
       has_previous_page: data.subscription_contracts.page_info.has_previous_page,
       next_cursor: subscriptions.last&.cursor,

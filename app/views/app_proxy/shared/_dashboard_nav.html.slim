@@ -42,20 +42,29 @@ nav.Polaris-Navigation.account
                   span.Polaris-Navigation__Text
                     span class=("#{params[:status] == "cancelled" ? 'sub-active' : ''}") #{@translation.sidebar_cancelled.present? ? @translation.sidebar_cancelled : 'Cancelled'}
 
-      / li.Polaris-Navigation__ListItem
-      /   .Polaris-Navigation__ItemWrapper
-      /     a.Polaris-Navigation__Item class=active_nav('dashboard', 'subscription') href="/a/chargezen_production/dashboard/subscription?customer_id=#{params[:customer_id]}" tabindex="0"
-      /       .Polaris-Navigation__Icon
-      /         span.Polaris-Icon
-      /           svg.Polaris-Icon__Svg aria-hidden="true" fill="none" focusable="false" viewbox=("0 0 20 20")
-      /             path d=("M6.63672 1.84473H19.016") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
-      /             path d=("M6.63672 7.55811H19.016") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
-      /             path d=("M6.63672 13.272H19.016") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
-      /             path d=("M1.875 1.84473H1.88356") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
-      /             path d=("M1.875 7.55811H1.88356") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
-      /             path d=("M1.875 13.272H1.88356") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
+      li.Polaris-Navigation__ListItem
+        .Polaris-Navigation__ItemWrapper
+          a.Polaris-Navigation__Item class=active_nav('pages', 'rewards') href="/pages/rewards" tabindex="0"
+            .Polaris-Navigation__Icon
+                span.Polaris-Icon
+                  = icon_tag 'address'
 
-      /       span.Polaris-Navigation__Text Subscription
+            span.Polaris-Navigation__Text Rewards
+
+      li.Polaris-Navigation__ListItem
+        .Polaris-Navigation__ItemWrapper
+          a.Polaris-Navigation__Item class=active_nav('pages', 'Track Order') href="/a/chargezen_production/dashboard/track_order?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
+            .Polaris-Navigation__Icon
+              span.Polaris-Icon
+                svg fill="none" height="18" viewbox=("0 0 22 18") width="22" xmlns="http://www.w3.org/2000/svg"
+                  g clip-path="url(#clip0)"
+                    path d=("M18.8089 1.80762H4.08168C3.17794 1.80762 2.44531 2.59112 2.44531 3.55762V14.0576C2.44531 15.0241 3.17794 15.8076 4.08168 15.8076H18.8089C19.7127 15.8076 20.4453 15.0241 20.4453 14.0576V3.55762C20.4453 2.59112 19.7127 1.80762 18.8089 1.80762Z") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill='#E5E5E5' /
+                    path d=("M2.44531 6.80762H20.4453") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
+                  defs
+                    clippath#clip0
+                      rect height="17" transform=("translate(0.753906 0.556641)") width="21" /
+            span.Polaris-Navigation__Text Track Order
+
       - if @setting.show_delivery_schedule.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
@@ -75,7 +84,7 @@ nav.Polaris-Navigation.account
       - if @setting.show_order_history.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
-            a.Polaris-Navigation__Item class=active_nav('orders', 'index') href="/a/chargezen_production/orders?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
+            a.Polaris-Navigation__Item class=(active_nav('orders', 'index') || active_nav('orders', 'show')) href="/a/chargezen_production/orders?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
               div style="margin-right: 20px;display: flex;align-items: center;justify-content: center;height: 100%;"
                 span style="display: flex;align-items: center;justify-content: center;"
                   svg fill="none" height="19" viewbox=("0 0 16 19") width="16" xmlns="http://www.w3.org/2000/svg"

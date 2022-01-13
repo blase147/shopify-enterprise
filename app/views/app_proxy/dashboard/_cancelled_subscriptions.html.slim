@@ -1,21 +1,21 @@
 - if (@cancelled_subscriptions.present? || @cancelled_line_items.present?) && (params[:status].present? ? params[:status] == 'cancelled' : true)
   .subscription-contract-products
     - @cancelled_subscriptions.each do |subscription|
-      - billing_policy = subscription.node.billing_policy
-      - subscription.node.lines.edges.each do |edge|
-        - product = ShopifyAPI::Product.find(edge.node.product_id[/\d+/])
+      - if (subscription.api_source == 'stripe' rescue false)
+        / - next unless subscription.api_data.present?
+        - product = ShopifyAPI::Product.find(subscription.import_data['product_id'])
         .grid
           .grid-item
             .img.account-img
               img src=product.images.first&.src alt=""
             p.text.cancel-text
               = product.title
-            p.text.cancel-text
-              = "#{number_to_currency edge.node.current_price.amount} / #{billing_policy.interval_count} #{billing_policy.interval}"
+            / p.text.cancel-text
+            /   = "#{number_to_currency(((subscription.api_data['items']['data'][0]['price']['unit_amount']/100) rescue 0))} / #{subscription.api_data['items']['data'][0]['price']['recurring']['interval_count']} #{subscription.api_data['items']['data'][0]['price']['recurring']['interval']}"
           .grid-item
           - if @setting.customer_allowed?('reactive_subscription')
             .grid-item
-              = link_to action_subscription_contract_path(:resume, subscription.node.id[/\d+/]), class: 'btn-link', method: :post, remote: true do
+              = link_to action_subscription_contract_path(:resume, subscription.id, 'stripe_subscription=true'), class: 'btn-link', method: :post, remote: true do
                 button.blue-btn.action-btn type='submit' RE-ACTIVATE
         .quantity-wrapper
           form
@@ -30,11 +30,46 @@
           .item
             p #{@translation.cancelled_tab_start_date.present? ? @translation.cancelled_tab_start_date : 'start date'}
             p
-              = DateTime.parse(subscription.node.created_at).strftime("%a, %B %e")
+              = subscription.created_at.strftime("%a, %B %e")
           .item
             p #{@translation.cancelled_tab_quantity.present? ? @translation.cancelled_tab_quantity : 'quantity'}
             p
-              = edge.node.quantity
+              = subscription.import_data['quantity']
+      - else
+        - billing_policy = subscription.node.billing_policy
+        - subscription.node.lines.edges.each do |edge|
+          - product = ShopifyAPI::Product.find(edge.node.product_id[/\d+/])
+          .grid
+            .grid-item
+              .img.account-img
+                img src=product.images.first&.src alt=""
+              p.text.cancel-text
+                = product.title
+              p.text.cancel-text
+                = "#{number_to_currency edge.node.current_price.amount} / #{billing_policy.interval_count} #{billing_policy.interval}"
+            .grid-item
+            - if @setting.customer_allowed?('reactive_subscription')
+              .grid-item
+                = link_to action_subscription_contract_path(:resume, subscription.node.id[/\d+/]), class: 'btn-link', method: :post, remote: true do
+                  button.blue-btn.action-btn type='submit' RE-ACTIVATE
+          .quantity-wrapper
+            form
+              .quantity-field
+                div
+                div
+                  div.chevron
+                    svg fill="none" height="30" viewbox=("0 0 30 30") width="30" xmlns="http://www.w3.org/2000/svg"
+                      circle cx="15" cy="15" r="14" stroke="#007EFF" stroke-width="2" /
+                      path d=("M7.5 12L14.5 19L21.5 12") stroke="#007EFF" stroke-width="2" /
+          .slide-down
+            .item
+              p #{@translation.cancelled_tab_start_date.present? ? @translation.cancelled_tab_start_date : 'start date'}
+              p
+                = DateTime.parse(subscription.node.created_at).strftime("%a, %B %e")
+            .item
+              p #{@translation.cancelled_tab_quantity.present? ? @translation.cancelled_tab_quantity : 'quantity'}
+              p
+                = edge.node.quantity
     - @cancelled_line_items.each do |line_item|
       - subscription = @active_subscriptions.select{|sub| sub.node.status == "ACTIVE" && sub.node.id == "gid://shopify/SubscriptionContract/#{line_item.subscription_id}"}
       - if subscription.present?

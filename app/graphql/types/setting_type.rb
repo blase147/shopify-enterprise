@@ -1,9 +1,17 @@
 module Types
   class SettingType < Types::BaseObject
+    field :account_portal_option, String, null: true
     #billing
     field :payment_retries, String, null: true
     field :payment_delay_retries, String, null: true
+    field :max_fail_strategy, String, null: true
+    field :active_subscription_btn_seq, [String], null: true
+
     #customer portal
+    field :order_cancel_option, String, null: true
+    field :day_of_production, String, null: true
+    field :delivery_interval_after_production, String, null: true
+    field :eligible_weekdays_for_delivery, String, null: true
     field :themes, String, null: true
     field :style_header, String, null: true
     field :style_footer, String, null: true
@@ -78,6 +86,7 @@ module Types
     field :store_name, String, null: true
     field :store_email, String, null: true
     field :storefront_password, String, null: true
+    field :enable_password, Boolean, null: true
 
     #legal
     field :checkout_subscription_terms, String, null: true
@@ -87,10 +96,15 @@ module Types
     #shop_data
     field :recurring_charge_status, String, null: true
     field :charge_confirmation_link, String, null: true
+    field :plan, String, null: true
 
     # def reasons_cancels
     #   object.reasons_cancels
     # end
+
+    def plan
+      object.shop.plan
+    end
 
     def recurring_charge_status
       object.shop.recurring_charge_status

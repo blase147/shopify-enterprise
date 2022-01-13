@@ -8,11 +8,11 @@ module Mutations
       id = params[:id]
 
       begin
-        
+
         customer_params[:additional_contacts_attributes] = customer_params.delete(:additional_contacts)
         customer_params[:billing_address_attributes] = customer_params.delete(:billing_address)
-        # byebug
-        customer = current_shop.customers.find_by(id: params[:id])
+
+        customer = current_shop.customer_subscription_contracts.find_by(id: params[:id])
         customer.update!(customer_params)
         { customer: customer }
       rescue ActiveRecord::RecordInvalid => e

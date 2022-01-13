@@ -1,8 +1,9 @@
 module Types
   module Input
     class PasswordInputType < Types::BaseInputObject
-      argument :password, String, required: true
-      argument :password_confirmation, String, required: true
+      argument :enable_password, Boolean, required: true
+      argument :password, String, required: false
+      argument :password_confirmation, String, required: false
     end
   end
 end

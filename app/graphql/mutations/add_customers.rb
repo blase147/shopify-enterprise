@@ -5,7 +5,6 @@ module Mutations
 
     def resolve(params:)
       begin
-        # byebug
         customers = []
         params.each do |item|
           customer_params =  Hash item
@@ -15,7 +14,7 @@ module Mutations
           customers << customer_params
         end
         ActiveRecord::Base.transaction do
-          customer =  current_shop.customers.create!(customers)
+          customer =  current_shop.customer_subscription_contracts.create!(customers)
         end
         {result: "OK"}
       rescue  ActiveRecord::RecordInvalid => e
