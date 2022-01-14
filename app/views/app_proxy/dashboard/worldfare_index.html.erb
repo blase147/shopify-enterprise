@@ -598,35 +598,38 @@
       </div>
       <div class="Status">
         <p class="s_name">Arriving:</p>
-        <p class="s_data subdued">Est. <%= (created_at + 3.days).strftime('%B %d, %Y') rescue nil %></p>
+        <!-- <p class="s_data subdued">Est. <%= (created_at + 3.days).strftime('%B %d, %Y') rescue nil %></p> -->
       </div>
     </div>
 
     <% current_date = Date.today %>
     <% (1..2).each do |i| %>
       <% if i == 1
-          week = current_date.next_week(:monday) 
+          week_day = current_date.next_week(:monday) 
         else
-          week = week.next_week(:monday)          
+          week_day = current_date.next_week(:monday).next_week(:monday)          
         end
       %>
       <div class="pre_orders" data-product="<%= products.first.to_json %>"  data-customer_order="<%= customer_order.present? ? customer_order.to_json : '' %>">
-        <h2 class="Trial">Week of <%= week.strftime('%B %d, %Y') rescue nil %></h2>
+        <h2 class="Trial">Week of <%= week_day.strftime('%B %d, %Y') rescue nil %></h2>
         <div class="placed_data">
           <p class="placed">Select dishes by:</p>
-          <p class="placed_dates"><%= week.strftime('%B %d, %Y') rescue nil %></p>
+          <p class="placed_dates"><%= week_day.strftime('%B %d, %Y') rescue nil %></p>
         </div>
         <div class="order_add">
           <ul class="pre_segment">
-            <% customer_order&.line_items&.each do |line_item| %>
-              <% if true %>
-                <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-              <% else %>
-                <% product = products.find{|p| p.id == line_item.product_id } %>
-                <div class="order_inn">
-                  <img src="<%= product.images.first.src rescue nil %>">
-                  <h5><%= line_item.name %> (<%= line_item.quantity %>)</h5>
-                </div>
+            <% customer_order&.line_items&.each do |line_item| %>  
+              <% unless line_item.name.downcase.include?('box') %>
+                <% unless params[:product_ids].present? %>
+                  <li class="pre_segment_order"><a href="https://worldfare.com/collections/the-menu-customers?week=<%= i %>"><button><span>+</span><p>Add Meal</p></button></a></li>
+                <% else %>
+                  <% selected_products = ShopifyAPI::Product.where(ids: params[:product_ids], fields: 'id,title,images') rescue nil %>
+                  <% selected_product = selected_products.find{|p| params[:product_ids].split(',').include?(p.id) } %>
+                  <div class="order_inn">
+                    <img src="<%= selected_product.images.first.src rescue nil %>">
+                    <h5><%= selected_product.title rescue nil %> </h5>
+                  </div>
+                <% end %>
               <% end %>
             <% end %>
           </ul>
@@ -662,4 +665,10 @@
 
   // Get the element with id="defaultOpen" and click on it
   document.getElementById("defaultOpen").click();
+
+  $(document).ready(function (){
+    <% if params[:tab] == 'Schedule' %>
+      Profile(event, 'Schedule')
+    <% end %>
+  })
 </script>
