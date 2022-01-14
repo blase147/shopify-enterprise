@@ -77,7 +77,7 @@ class AppProxy::DashboardController < AppProxyController
       sub_pre_order.update( products: params[:products] )
     end
     sub_pre_order.save
-    render json: { status: :ok, message: 'Success', show_notification: true }
+    render json: { status: :ok, customer_id: params[:customer_id], message: 'Success', show_notification: true }
   end
 
   def settings

@@ -694,7 +694,7 @@
         data: JSON.stringify($(this).data('pre_order')),
         contentType: 'application/json',
         success: function(response) {
-          window.location = '/a/chargezen_production?customer_id=' + response.params.customer_id;
+          window.location = '/a/chargezen_production?customer_id=' + response.customer_id;
         },
         error: function(response) {}
       });
