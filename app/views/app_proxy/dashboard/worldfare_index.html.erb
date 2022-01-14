@@ -610,10 +610,10 @@
     <% (1..2).each do |i| %>
       <% if i == 1
           week_day = current_date.next_week(:monday)
-          week_days << week_day.strftime('%Y%M%D')
+          week_days << week_day.strftime('%Y%m%d')
         else
           week_day = current_date.next_week(:monday).next_week(:monday)
-          week_days << week_day.strftime('%Y%M%D')
+          week_days << week_day.strftime('%Y%m%d')
         end
       %>
       <div class="pre_orders">
@@ -676,12 +676,10 @@
   $(document).ready(function (){
     $(".submit_pre_order").on('click', function(e){
       $.ajax({
-        url:'/a/chargezen_production/subscriptions/pre_order',
+        url: '/a/chargezen_production/dashboard/pre_order',
         type: 'POST',
-        cache: false,
-        data: $(this).data('pre_order'),
+        data: JSON.stringify($(this).data('pre_order')),
         contentType: 'application/json',
-        crossDomain: true,
         success: function(response) {
           console.log(response);
         },

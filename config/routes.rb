@@ -95,6 +95,7 @@ Rails.application.routes.draw do
         post :confirm_box_selection
         get :track_order
         post :update_stripe_source
+        post :pre_order
       end
     end
 

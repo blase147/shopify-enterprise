@@ -68,6 +68,18 @@ class AppProxy::DashboardController < AppProxyController
     render :json => { status: :ok, message: "Success", show_notification: true }
   end
 
+  # worldfare
+  def pre_order
+    sub_pre_order = WorldfarePreOrder.find_by(customer_id: params[:customer_id], week: params[:week])
+    if sub_pre_order.nil?
+      sub_pre_order = WorldfarePreOrder.create(shop_id: current_shop.id, customer_id: params[:customer_id], week: params[:week], products: params[:products])
+    else
+      sub_pre_order.update( products: params[:products] )
+    end
+    sub_pre_order.save
+    render json: { status: :ok, message: 'Success', show_notification: true }
+  end
+
   def settings
     render 'settings', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end

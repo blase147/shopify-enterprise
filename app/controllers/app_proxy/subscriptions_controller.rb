@@ -110,9 +110,4 @@ class AppProxy::SubscriptionsController < AppProxyController
       end
     end
   end
-
-  # worldfare
-  def pre_order
-    render json: { status: :ok, params: params, message: 'Success', show_notification: true }
-  end
 end
