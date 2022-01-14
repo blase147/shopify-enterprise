@@ -615,6 +615,11 @@
           week_day = current_date.next_week(:monday).next_week(:monday)
           week_days << week_day.strftime('%Y%m%d')
         end
+         week_subscription = WorldfarePreOrder.find_by( customer_id: params[:customer_id], week: week_days.last )
+         week_subscription_products = nil
+         if week_subscription.present?
+           week_subscription_products = ShopifyAPI::Product.where(ids: week_subscription.products, fields: 'id,title,images') rescue nil
+         end
       %>
       <div class="pre_orders">
         <h2 class="Trial">Week of <%= week_day.strftime('%B %d, %Y') rescue nil %></h2>
@@ -631,6 +636,14 @@
                   <div class="order_inn center" >
                     <img src="<%= selected_product.images.first.src rescue nil %>">
                     <h5><%= selected_product.title rescue nil %> </h5>
+                    <h6><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>">Edit</a></h6>
+                  </div>
+                <% elsif week_subscription_products.present? %>
+                  <% week_subscription_product = week_subscription_products[key-1].present? ? week_subscription_products[key-1] : nil %>
+                  <div class="order_inn center" >
+                    <img src="<%= week_subscription_product.images.first.src rescue nil %>">
+                    <h5><%= week_subscription_product.title rescue nil %> </h5>
+                    <h6><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>">Edit</a></h6>
                   </div>
                 <% else %>
                   <li class="pre_segment_order"><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>"><button><span>+</span><p>Add Meal</p></button></a></li>
@@ -681,7 +694,7 @@
         data: JSON.stringify($(this).data('pre_order')),
         contentType: 'application/json',
         success: function(response) {
-          console.log(response);
+          window.location = '/a/chargezen_production?customer_id=' + response.params.customer_id;
         },
         error: function(response) {}
       });
