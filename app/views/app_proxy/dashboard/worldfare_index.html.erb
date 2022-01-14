@@ -603,32 +603,37 @@
     </div>
 
     <% current_date = Date.today %>
+    <% if params[:product_ids].present? %>
+      <% selected_products = ShopifyAPI::Product.where(ids: params[:product_ids], fields: 'id,title,images') rescue nil %>
+    <% end %>
+    <% week_days = [] %>
     <% (1..2).each do |i| %>
       <% if i == 1
-          week_day = current_date.next_week(:monday) 
+          week_day = current_date.next_week(:monday)
+          week_days << week_day.strftime('%Y%M%D')
         else
-          week_day = current_date.next_week(:monday).next_week(:monday)          
+          week_day = current_date.next_week(:monday).next_week(:monday)
+          week_days << week_day.strftime('%Y%M%D')
         end
       %>
-      <div class="pre_orders" data-product="<%= products.first.to_json %>"  data-customer_order="<%= customer_order.present? ? customer_order.to_json : '' %>">
+      <div class="pre_orders">
         <h2 class="Trial">Week of <%= week_day.strftime('%B %d, %Y') rescue nil %></h2>
         <div class="placed_data">
           <p class="placed">Select dishes by:</p>
-          <p class="placed_dates"><%= week_day.strftime('%B %d, %Y') rescue nil %></p>
+          <p class="placed_dates"><%= (week_day-2).strftime('%B %d, %Y') rescue nil %></p>
         </div>
         <div class="order_add">
           <ul class="pre_segment">
-            <% customer_order&.line_items&.each do |line_item| %>  
+            <% customer_order&.line_items&.each_with_index do |line_item, key| %>
               <% unless line_item.name.downcase.include?('box') %>
-                <% unless params[:product_ids].present? %>
-                  <li class="pre_segment_order"><a href="https://worldfare.com/collections/the-menu-customers?week=<%= i %>"><button><span>+</span><p>Add Meal</p></button></a></li>
-                <% else %>
-                  <% selected_products = ShopifyAPI::Product.where(ids: params[:product_ids], fields: 'id,title,images') rescue nil %>
-                  <% selected_product = selected_products.find{|p| params[:product_ids].split(',').include?(p.id) } %>
-                  <div class="order_inn">
+                <% if params[:product_ids].present? && params[:week].present? && params[:week].to_i == i.to_i %>
+                  <% selected_product = selected_products[key-1].present? ? selected_products[key-1] : nil %>
+                  <div class="order_inn center" >
                     <img src="<%= selected_product.images.first.src rescue nil %>">
                     <h5><%= selected_product.title rescue nil %> </h5>
                   </div>
+                <% else %>
+                  <li class="pre_segment_order"><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>"><button><span>+</span><p>Add Meal</p></button></a></li>
                 <% end %>
               <% end %>
             <% end %>
@@ -636,7 +641,9 @@
         </div>
       </div>
     <% end %>
-    <button class="submit_pre_order">Save Changes</button>
+    <% if params[:product_ids].present? && params[:week] %>
+    <button data-pre_order="<%= { customer_id: params[:customer_id],week: week_days[params[:week].to_i-1], products: params[:product_ids] }.to_json %>" class="submit_pre_order">Save Changes</button>
+    <% end %>
   </div>
 
   <div id="Support" class="Profile_links_data">
@@ -667,8 +674,24 @@
   document.getElementById("defaultOpen").click();
 
   $(document).ready(function (){
+    $(".submit_pre_order").on('click', function(e){
+      $.ajax({
+        url:'/a/chargezen_production/subscriptions/pre_order',
+        type: 'POST',
+        cache: false,
+        data: $(this).data('pre_order'),
+        contentType: 'application/json',
+        crossDomain: true,
+        success: function(response) {
+          console.log(response);
+        },
+        error: function(response) {}
+      });
+    });
+
     <% if params[:tab] == 'Schedule' %>
       Profile(event, 'Schedule')
     <% end %>
-  })
+
+  });
 </script>
