@@ -602,22 +602,33 @@
       </div>
     </div>
 
+    <% current_date = Date.today %>
     <% (1..2).each do |i| %>
-      <% current_date =  created_at + (7*i).days rescue nil %>
-      <div class="pre_orders">
-        <h2 class="Trial">Week of <%= current_date.strftime('%B %d, %Y') rescue nil %></h2>
+      <% if i == 1
+          week = current_date.next_week(:monday) 
+        else
+          week = week.next_week(:monday)          
+        end
+      %>
+      <div class="pre_orders" data-product="<%= products.first.to_json %>"  data-customer_order="<%= customer_order.present? ? customer_order.to_json : '' %>">
+        <h2 class="Trial">Week of <%= week.strftime('%B %d, %Y') rescue nil %></h2>
         <div class="placed_data">
           <p class="placed">Select dishes by:</p>
-          <p class="placed_dates"><%= current_date.strftime('%B %d, %Y') rescue nil %></p>
+          <p class="placed_dates"><%= week.strftime('%B %d, %Y') rescue nil %></p>
         </div>
         <div class="order_add">
           <ul class="pre_segment">
-            <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-            <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-            <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-            <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-            <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-            <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
+            <% customer_order&.line_items&.each do |line_item| %>
+              <% if true %>
+                <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
+              <% else %>
+                <% product = products.find{|p| p.id == line_item.product_id } %>
+                <div class="order_inn">
+                  <img src="<%= product.images.first.src rescue nil %>">
+                  <h5><%= line_item.name %> (<%= line_item.quantity %>)</h5>
+                </div>
+              <% end %>
+            <% end %>
           </ul>
         </div>
       </div>
