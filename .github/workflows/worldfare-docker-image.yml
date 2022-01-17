@@ -2,9 +2,9 @@ name: Worldfare Docker Image CI
 
 on:
   push:
-    branches: [ worldfare_mealbox_update ]
+    branches: [ worldfare ]
   pull_request:
-    branches: [ worldfare_mealbox_update ]
+    branches: [ worldfare ]
 
 jobs:
 
@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: worldfare_mealbox_update
+        ref: worldfare
     - name: Get current date
       id: date
       run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
