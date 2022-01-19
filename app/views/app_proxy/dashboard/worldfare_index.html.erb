@@ -1,6 +1,6 @@
 {{ 'customer.css' | asset_url | stylesheet_tag }}
 <% customer = ShopifyAPI::Customer.find(params[:customer_id]) rescue nil %>
-<% customer_order = ShopifyAPI::Order.find(:last, params: {customer_id: customer.id} ) rescue nil %>
+<% customer_order = ShopifyAPI::Order.find(:first, params: {customer_id: customer.id} ) rescue nil %>
 
 <% active_sub = customer_order.line_items.find{|item| item.name.downcase.include?('box')} rescue nil %>
 <% if active_sub %>
@@ -203,7 +203,7 @@
     <button class="Profile_links" onclick="Profile(event, 'Overview')" id="defaultOpen">Overview</button>
     <button class="Profile_links" onclick="Profile(event, 'Account')">Account</button>
     <button class="Profile_links" onclick="Profile(event, 'Subscription')">Subscription</button>
-    <button class="Profile_links" onclick="Profile(event, 'Schedule')">Schedule</button>
+    <button class="Profile_links schedule_tab" onclick="Profile(event, 'Schedule')">Schedule</button>
     <button class="Profile_links" onclick="Profile(event, 'Support')">Support</button>
   </div>
 
@@ -569,7 +569,12 @@
         <option value="All">All</option>
       </select>
     </div>
-    <h2 class="Trial">Trial Week</h2>
+    <% if customer_order&.line_items.count > 5 %>
+      <h2 class="Trial">Current Week</h2>
+      <% else %>
+      <h2 class="Trial">Trial Week</h2>
+      <% end %>
+
 
     <% created_at = Date.parse(customer_order&.created_at) rescue nil %>
     <% next_day = created_at + 1.day rescue nil %>
@@ -579,6 +584,7 @@
         <p class="placed">Order placed:</p>
         <p class="placed_dates"><%= created_at.strftime('%B %d, %Y') rescue nil %> (edit before <%= next_day.strftime('%B %d') rescue nil %>)</p>
       </div>
+
       <% customer_order&.line_items&.each do |line_item| %>
         <% unless line_item.name.downcase.include?('box') %>
           <% product = products.find{|p| p.id == line_item.product_id } %>
@@ -609,10 +615,10 @@
     <% week_days = [] %>
     <% (1..2).each do |i| %>
       <% if i == 1
-          week_day = current_date.next_week(:monday)
+          week_day = current_date + 7.days
           week_days << week_day.strftime('%Y%m%d')
         else
-          week_day = current_date.next_week(:monday).next_week(:monday)
+          week_day = current_date + 14.days
           week_days << week_day.strftime('%Y%m%d')
         end
          week_subscription = WorldfarePreOrder.find_by( customer_id: params[:customer_id], week: week_days.last )
@@ -669,7 +675,7 @@
 {% section 'Account_slider' %}
 
 <script>
-  function Profile(evt, usr_tab) {
+  function Profile(evt, usr_tab,make_active = true) {
     var i, Profile_links_data, Profile_links;
     Profile_links_data = document.getElementsByClassName("Profile_links_data");
     for (i = 0; i < Profile_links_data.length; i++) {
@@ -680,7 +686,8 @@
       tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
     document.getElementById(usr_tab).style.display = "block";
-    evt.currentTarget.className += " active";
+    if (make_active)
+      evt.currentTarget.className += " active";
   }
 
   // Get the element with id="defaultOpen" and click on it
@@ -701,7 +708,11 @@
     });
 
     <% if params[:tab] == 'Schedule' %>
-      Profile(event, 'Schedule')
+
+    Profile($('.schedule_tab'), 'Schedule',false)
+    $('.schedule_tab').addClass('active');
+      <% else %>
+    document.getElementById("defaultOpen").click();
     <% end %>
 
   });
