@@ -1,3 +1,7 @@
+
+![CI workflow](https://github.com/Ecomtarget-LLC/Chargezen/actions/workflows/worldfare-docker-image.yml/badge.svg)
+
+
 # README
 
 This README would normally document whatever steps are necessary to get the
