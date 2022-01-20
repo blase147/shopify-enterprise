@@ -53,6 +53,7 @@ import ZipCodeImage from '../../../assets/images/settings/zip_code.svg';
 import ZipCodes from './ZipCodes';
 import EnableDebug from './EnableDebug';
 import StripeSettings from './StripeSettings';
+import DeliveryOption from "./DeliveryOption";
 
 const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
   // form data ########################################################
@@ -537,6 +538,12 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
       img: SettingImage,
       desc: 'Manage Stripe Settings for your App.',
     },
+    {
+      key: 'delivery_options',
+      title: 'Delivery Options',
+      img: DebugImage,
+      desc: 'Set Delivery Options.',
+    }
   ];
   const tabs = [
     {
@@ -858,7 +865,16 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                                       }
                                     />
                                   </>
-                                ) : (
+                                ) : selectedSetting === 'delivery_options' ? (
+                                  <>
+                                    <DeliveryOption
+                                      values={values}
+                                      touched={touched}
+                                      errors={errors}
+                                      setFieldValue={setFieldValue}
+                                      handleBack={handleBackSetting} />
+                                  </>
+                                )  : (
                                   ''
                                 )}
                               </Layout.Section>
