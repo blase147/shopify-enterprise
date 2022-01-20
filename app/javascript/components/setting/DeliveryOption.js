@@ -242,7 +242,7 @@ const DeliveryOption = ( {handleBack} ) => {
 
                 <Select
                   label="Delivery Options"
-                  value={sundayProd}
+                  value={deliveryOptions}
                   onChange={useCallback((newChecked) => setDeliveryOptions(newChecked), [])}
                   options={d_options}
                 />
