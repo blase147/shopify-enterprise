@@ -47,6 +47,8 @@ const DeliveryOption = ( {handleBack} ) => {
   const [sundayTime, setSundayTime] = useState('');
   const [sundayProd, setSundayProd] = useState('');
 
+  const [deliveryOptions, setDeliveryOptions] = useState('3');
+
   const day_of_production_options = [
     { label: 'Sunday', value: 'sunday' },
     { label: 'Monday', value: 'monday' },
@@ -64,6 +66,14 @@ const DeliveryOption = ( {handleBack} ) => {
     { label: '3 business days', value: '3 business days' },
     { label: '4 business days', value: '4 business days' },
     { label: '5 business days', value: '5 business days' },
+  ];
+
+  const d_options = [
+    { label: '1', value: '1' },
+    { label: '2', value: '2' },
+    { label: '3', value: '3' },
+    { label: '4', value: '4' },
+    { label: '5', value: '5' },
   ];
 
   const eligible_weekdays_for_delivery_options = [
@@ -96,13 +106,13 @@ const DeliveryOption = ( {handleBack} ) => {
                   onChange={useCallback((newChecked) => setMonday(newChecked), [])}
                 />
                 <Select
-                  label="Cut off Day"
+                  label="Cutoff Day"
                   value={mondayProd}
                   onChange={useCallback((newChecked) => setMondayProd(newChecked), [])}
                   options={day_of_production_options}
                 />
                 <TextField
-                  label="Store name"
+                  label="Cutoff Time"
                   value={mondayTime}
                   onChange={useCallback((newChecked) => setMondayTime(newChecked), [])}
                   autoComplete="off"
@@ -116,13 +126,13 @@ const DeliveryOption = ( {handleBack} ) => {
                   onChange={useCallback((newChecked) => setTuesday(newChecked), [])}
                 />
                 <Select
-                  label="Cut off Day"
+                  label="Cutoff Day"
                   value={tuesdayProd}
                   onChange={useCallback((newChecked) => setTuesdayProd(newChecked), [])}
                   options={day_of_production_options}
                 />
                 <TextField
-                  label="Store name"
+                  label="Cutoff Time"
                   value={tuesdayTime}
                   onChange={useCallback((newChecked) => setTuesdayTime(newChecked), [])}
                   autoComplete="off"
@@ -136,13 +146,13 @@ const DeliveryOption = ( {handleBack} ) => {
                   onChange={useCallback((newChecked) => setWednesday(newChecked), [])}
                 />
                 <Select
-                  label="Cut off Day"
+                  label="Cutoff Day"
                   value={wednesdayProd}
                   onChange={useCallback((newChecked) => setWednesdayProd(newChecked), [])}
                   options={day_of_production_options}
                 />
                 <TextField
-                  label="Store name"
+                  label="Cutoff Time"
                   value={wednesdayTime}
                   onChange={useCallback((newChecked) => setWednesdayTime(newChecked), [])}
                   autoComplete="off"
@@ -156,13 +166,13 @@ const DeliveryOption = ( {handleBack} ) => {
                   onChange={useCallback((newChecked) => setThursday(newChecked), [])}
                 />
                 <Select
-                  label="Cut off Day"
+                  label="Cutoff Day"
                   value={thursdayProd}
                   onChange={useCallback((newChecked) => setThursdayProd(newChecked), [])}
                   options={day_of_production_options}
                 />
                 <TextField
-                  label="Store name"
+                  label="Cutoff Time"
                   value={thursdayTime}
                   onChange={useCallback((newChecked) => setThursdayTime(newChecked), [])}
                   autoComplete="off"
@@ -176,13 +186,13 @@ const DeliveryOption = ( {handleBack} ) => {
                   onChange={useCallback((newChecked) => setFriday(newChecked), [])}
                 />
                 <Select
-                  label="Cut off Day"
+                  label="Cutoff Day"
                   value={fridayProd}
                   onChange={useCallback((newChecked) => setFridayProd(newChecked), [])}
                   options={day_of_production_options}
                 />
                 <TextField
-                  label="Store name"
+                  label="Cutoff Time"
                   value={fridayTime}
                   onChange={useCallback((newChecked) => setFridayTime(newChecked), [])}
                   autoComplete="off"
@@ -196,13 +206,13 @@ const DeliveryOption = ( {handleBack} ) => {
                   onChange={useCallback((newChecked) => setSaturday(newChecked), [])}
                 />
                 <Select
-                  label="Cut off Day"
+                  label="Cutoff Day"
                   value={saturdayProd}
                   onChange={useCallback((newChecked) => setSaturdayProd(newChecked), [])}
                   options={day_of_production_options}
                 />
                 <TextField
-                  label="Store name"
+                  label="Cutoff Time"
                   value={saturdayTime}
                   onChange={useCallback((newChecked) => setSaturdayTime(newChecked), [])}
                   autoComplete="off"
@@ -216,13 +226,13 @@ const DeliveryOption = ( {handleBack} ) => {
                   onChange={useCallback((newChecked) => setSunday(newChecked), [])}
                 />
                 <Select
-                  label="Cut off Day"
+                  label="Cutoff Day"
                   value={sundayProd}
                   onChange={useCallback((newChecked) => setSundayProd(newChecked), [])}
                   options={day_of_production_options}
                 />
                 <TextField
-                  label="Store name"
+                  label="Cutoff Time"
                   value={sundayTime}
                   onChange={useCallback((newChecked) => setSundayTime(newChecked), [])}
                   autoComplete="off"
@@ -230,6 +240,12 @@ const DeliveryOption = ( {handleBack} ) => {
                 />
                 <hr/>
 
+                <Select
+                  label="Delivery Options"
+                  value={sundayProd}
+                  onChange={useCallback((newChecked) => setDeliveryOptions(newChecked), [])}
+                  options={d_options}
+                />
                 {/* <Select
                   label="day of production options"
                   value={values.dayOfProduction}
