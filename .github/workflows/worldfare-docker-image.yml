@@ -9,9 +9,10 @@ on:
 jobs:
 
   build:
-
+    env:
+      MSG: ${{ github.event.head_commit.message }}
+      AUTHOR: ${{ github.actor }}
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
       with:
@@ -28,3 +29,6 @@ jobs:
       run: docker push codilitymohsin/worldfare:release
     - name: Cleanup
       run: docker image prune -f
+
+    - name: Send Notification
+      run: 'curl -X POST --data-urlencode "payload={\"channel\": \"#chargezen-github\", \"username\": \"webhookbot\", \"text\": \"Commit: ${{env.MSG}}\nAuthor: ${{env.AUTHOR}}\nWorldfare Docker image is ready to deploy. (https://github.com/Ecomtarget-LLC/Chargezen/actions)\", \"icon_emoji\": \":ghost:\"}" https://hooks.slack.com/services/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'
