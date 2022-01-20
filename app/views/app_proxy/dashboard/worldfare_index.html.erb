@@ -569,7 +569,7 @@
         <option value="All">All</option>
       </select>
     </div>
-    <% if customer_order&.line_items.count > 5 %>
+    <% if customer_order&.line_items.present? && customer_order&.line_items.count > 5 %>
       <h2 class="Trial">Current Week</h2>
       <% else %>
       <h2 class="Trial">Trial Week</h2>
@@ -584,17 +584,18 @@
         <p class="placed">Order placed:</p>
         <p class="placed_dates"><%= created_at.strftime('%B %d, %Y') rescue nil %> (edit before <%= next_day.strftime('%B %d') rescue nil %>)</p>
       </div>
-
+      <div class="product_section">
       <% customer_order&.line_items&.each do |line_item| %>
         <% unless line_item.name.downcase.include?('box') %>
           <% product = products.find{|p| p.id == line_item.product_id } %>
           <div class="order_inn">
-            <!-- <span class="dish_remove" data-id="{{item.id}}">×</span> -->
+<!--             <span class="dish_remove" data-id="{{item.id}}">×</span>-->
             <img src="<%= product.images.first.src rescue nil %>">
             <h5><%= line_item.name %> (<%= line_item.quantity %>)</h5>
           </div>
         <% end %>
       <% end %>
+      </div>
     </div>
 
     <div class="order_status">
@@ -652,7 +653,7 @@
                     <h6><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>">Edit</a></h6>
                   </div>
                 <% else %>
-                  <li class="pre_segment_order"><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>"><button><span>+</span><p>Add Meal</p></button></a></li>
+                  <li class="pre_segment_order"><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>"><button><span>+</span><p>Add to box</p></button></a></li>
                 <% end %>
               <% end %>
             <% end %>
