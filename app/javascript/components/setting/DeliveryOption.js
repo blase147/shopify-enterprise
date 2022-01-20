@@ -18,27 +18,34 @@ import {
 } from '@shopify/polaris';
 import { post } from 'jquery';
 
-const DeliveryOption = ( props ) => {
-  const [active, setActive] = useState(false);
-  const handleToggle = () => {
-    fetch('/debug_mode?status='+(!active),{
-      method: 'POST',
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      setActive(!active);
-    })
-  }
+const DeliveryOption = ( {handleBack} ) => {
+  const [monday, setMonday] = useState(false);
+  const [mondayTime, setMondayTime] = useState('');
+  const [mondayProd, setMondayProd] = useState('');
 
-  useEffect(()=>{
-    fetch('/debug_mode',{
-      method: 'GET',
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      setActive(data.debug_mode);
-    })
-  },[])
+  const [tuesday, setTuesday] = useState(false);
+  const [tuesdayTime, setTuesdayTime] = useState('');
+  const [tuesdayProd, setTuesdayProd] = useState('');
+
+  const [wednesday, setWednesday] = useState(false);
+  const [wednesdayTime, setWednesdayTime] = useState('');
+  const [wednesdayProd, setWednesdayProd] = useState('');
+
+  const [thursday, setThursday] = useState(false);
+  const [thursdayTime, setThursdayTime] = useState('');
+  const [thursdayProd, setThursdayProd] = useState('');
+
+  const [friday, setFriday] = useState(false);
+  const [fridayTime, setFridayTime] = useState('');
+  const [fridayProd, setFridayProd] = useState('');
+
+  const [saturday, setSaturday] = useState(false);
+  const [saturdayTime, setSaturdayTime] = useState('');
+  const [saturdayProd, setSaturdayProd] = useState('');
+
+  const [sunday, setSunday] = useState(false);
+  const [sundayTime, setSundayTime] = useState('');
+  const [sundayProd, setSundayProd] = useState('');
 
   const day_of_production_options = [
     { label: 'Sunday', value: 'sunday' },
@@ -67,9 +74,6 @@ const DeliveryOption = ( props ) => {
     { label: 'Tuesday to thursday', value: 'tuesday to thursday' },
   ];
 
-  const [checked, setChecked] = useState(false);
-  const handleChange = useCallback((newChecked) => setChecked(newChecked), []);
-  const { values, touched, errors, setFieldValue, handleBack } = props;
   return (
     <>
       <Layout>
@@ -77,7 +81,7 @@ const DeliveryOption = ( props ) => {
           <div className="back-button pointer" onClick={handleBack}>
             <Icon source={MobileBackArrowMajor} color="base" />
             <p>
-              <TextStyle variation="subdued">Settings</TextStyle>
+              <TextStyle variation="subdued">Delivery Options</TextStyle>
             </p>
           </div>
         </Layout.Section>
@@ -88,54 +92,145 @@ const DeliveryOption = ( props ) => {
 
                 <Checkbox
                   label="Monday"
-                  onChange={handleChange}/>
-
-
+                  checked={monday}
+                  onChange={useCallback((newChecked) => setMonday(newChecked), [])}
+                />
                 <Select
-                  label="Cut off day"
-                  value={values.dayOfProduction}
-                  error={touched.dayOfProduction && errors.dayOfProduction}
-                  onChange={(e) => setFieldValue('dayOfProduction', e)}
+                  label="Cut off Day"
+                  value={mondayProd}
+                  onChange={useCallback((newChecked) => setMondayProd(newChecked), [])}
                   options={day_of_production_options}
                 />
-
-                <TextField label={'Time (PST)'} type={'time'} />
-
+                <TextField
+                  label="Store name"
+                  value={mondayTime}
+                  onChange={useCallback((newChecked) => setMondayTime(newChecked), [])}
+                  autoComplete="off"
+                  type="time"
+                />
                 <hr/>
 
                 <Checkbox
                   label="Tuesday"
-                  onChange={handleChange}/>
-
-
+                  checked={tuesday}
+                  onChange={useCallback((newChecked) => setTuesday(newChecked), [])}
+                />
                 <Select
-                  label="Cut off day"
-                  value={values.dayOfProduction}
-                  error={touched.dayOfProduction && errors.dayOfProduction}
-                  onChange={(e) => setFieldValue('dayOfProduction', e)}
+                  label="Cut off Day"
+                  value={tuesdayProd}
+                  onChange={useCallback((newChecked) => setTuesdayProd(newChecked), [])}
                   options={day_of_production_options}
                 />
-
-                <TextField label={'Time (PST)'} type={'time'} autoComplete='off' />
-
+                <TextField
+                  label="Store name"
+                  value={tuesdayTime}
+                  onChange={useCallback((newChecked) => setTuesdayTime(newChecked), [])}
+                  autoComplete="off"
+                  type="time"
+                />
                 <hr/>
+
                 <Checkbox
                   label="Wednesday"
-                  onChange={handleChange}/>
-
-
+                  checked={wednesday}
+                  onChange={useCallback((newChecked) => setWednesday(newChecked), [])}
+                />
                 <Select
-                  label="Cut off day"
-                  value={values.dayOfProduction}
-                  error={touched.dayOfProduction && errors.dayOfProduction}
-                  onChange={(e) => setFieldValue('dayOfProduction', e)}
+                  label="Cut off Day"
+                  value={wednesdayProd}
+                  onChange={useCallback((newChecked) => setWednesdayProd(newChecked), [])}
                   options={day_of_production_options}
                 />
+                <TextField
+                  label="Store name"
+                  value={wednesdayTime}
+                  onChange={useCallback((newChecked) => setWednesdayTime(newChecked), [])}
+                  autoComplete="off"
+                  type="time"
+                />
+                <hr/>
 
-                <TextField label={'Time (PST)'} type={'time'} />
-
-               
+                <Checkbox
+                  label="Thursday"
+                  checked={thursday}
+                  onChange={useCallback((newChecked) => setThursday(newChecked), [])}
+                />
                 <Select
+                  label="Cut off Day"
+                  value={thursdayProd}
+                  onChange={useCallback((newChecked) => setThursdayProd(newChecked), [])}
+                  options={day_of_production_options}
+                />
+                <TextField
+                  label="Store name"
+                  value={thursdayTime}
+                  onChange={useCallback((newChecked) => setThursdayTime(newChecked), [])}
+                  autoComplete="off"
+                  type="time"
+                />
+                <hr/>
+
+                <Checkbox
+                  label="Friday"
+                  checked={friday}
+                  onChange={useCallback((newChecked) => setFriday(newChecked), [])}
+                />
+                <Select
+                  label="Cut off Day"
+                  value={fridayProd}
+                  onChange={useCallback((newChecked) => setFridayProd(newChecked), [])}
+                  options={day_of_production_options}
+                />
+                <TextField
+                  label="Store name"
+                  value={fridayTime}
+                  onChange={useCallback((newChecked) => setFridayTime(newChecked), [])}
+                  autoComplete="off"
+                  type="time"
+                />
+                <hr/>
+
+                <Checkbox
+                  label="Saturday"
+                  checked={saturday}
+                  onChange={useCallback((newChecked) => setSaturday(newChecked), [])}
+                />
+                <Select
+                  label="Cut off Day"
+                  value={saturdayProd}
+                  onChange={useCallback((newChecked) => setSaturdayProd(newChecked), [])}
+                  options={day_of_production_options}
+                />
+                <TextField
+                  label="Store name"
+                  value={saturdayTime}
+                  onChange={useCallback((newChecked) => setSaturdayTime(newChecked), [])}
+                  autoComplete="off"
+                  type="time"
+                />
+                <hr/>
+
+                <Checkbox
+                  label="Sunday"
+                  checked={sunday}
+                  onChange={useCallback((newChecked) => setSunday(newChecked), [])}
+                />
+                <Select
+                  label="Cut off Day"
+                  value={sundayProd}
+                  onChange={useCallback((newChecked) => setSundayProd(newChecked), [])}
+                  options={day_of_production_options}
+                />
+                <TextField
+                  label="Store name"
+                  value={sundayTime}
+                  onChange={useCallback((newChecked) => setSundayTime(newChecked), [])}
+                  autoComplete="off"
+                  type="time"
+                />
+                <hr/>
+
+                {/* <Select
                   label="day of production options"
                   value={values.dayOfProduction}
                   error={touched.dayOfProduction && errors.dayOfProduction}
@@ -165,7 +260,7 @@ const DeliveryOption = ( props ) => {
                   error={touched.eligibleWeekdaysForDelivery && errors.eligibleWeekdaysForDelivery}
                   onChange={(e) => setFieldValue('eligibleWeekdaysForDelivery', e)}
                   options={eligible_weekdays_for_delivery_options}
-                />
+                />*/}
               </FormLayout>
             </div>
           </Card.Section>
