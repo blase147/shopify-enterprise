@@ -139,6 +139,8 @@ Rails.application.routes.draw do
     collection do
       get :stripe_settings
       post :update_stripe_settings
+      post :delivery_options
+      get  :delivery_options, to: 'settings#get_delivery_option'
     end
   end
 

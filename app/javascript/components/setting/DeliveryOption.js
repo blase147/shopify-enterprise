@@ -17,6 +17,7 @@ import {
   SettingToggle, Checkbox
 } from '@shopify/polaris';
 import { post } from 'jquery';
+import {Text} from "html-react-parser";
 
 const DeliveryOption = ( {handleBack} ) => {
   const [monday, setMonday] = useState(false);
@@ -50,6 +51,7 @@ const DeliveryOption = ( {handleBack} ) => {
   const [deliveryOptions, setDeliveryOptions] = useState('3');
 
   const day_of_production_options = [
+    { label: 'Select', value: '' },
     { label: 'Sunday', value: 'sunday' },
     { label: 'Monday', value: 'monday' },
     { label: 'Tuesday', value: 'tuesday' },
@@ -84,6 +86,137 @@ const DeliveryOption = ( {handleBack} ) => {
     { label: 'Tuesday to thursday', value: 'tuesday to thursday' },
   ];
 
+  const [errorMsg, setErrorMsg] = useState('')
+  const toastMarkup = function(msg){ setErrorMsg(msg); }
+
+  const submission = function (){
+    var delivery_sets = {
+      delivery_option: deliveryOptions
+    };
+
+    var settings = [];
+    setErrorMsg('');
+    if( monday ){
+      if( mondayProd == '' || mondayTime == '' ){
+        toastMarkup('Please select cutoff day/time for Monday.')
+        return false;
+      }
+      settings[settings.length] = {delivery: 'monday', cutoff_day: mondayProd, cutoff_time: mondayTime};
+    }
+    if( tuesday ){
+      if( tuesdayProd == '' || tuesdayTime == '' ){
+        toastMarkup('Please select cutoff day/time for Tuesday.')
+        return false;
+      }
+      settings[settings.length] = {delivery: 'tuesday', cutoff_day: tuesdayProd, cutoff_time: tuesdayTime};
+    }
+    if( wednesday ){
+      if( wednesdayProd == '' || wednesdayTime == '' ){
+        toastMarkup('Please select cutoff day/time for Wednesday.')
+        return false;
+      }
+      settings[settings.length] = {delivery: 'wednesday', cutoff_day: wednesdayProd, cutoff_time: wednesdayTime};
+    }
+    if( thursday ){
+      if( thursdayProd == '' || thursdayTime == '' ){
+        toastMarkup('Please select cutoff day/time for Thursday.')
+        return false;
+      }
+      settings[settings.length] = {delivery: 'thursday', cutoff_day: thursdayProd, cutoff_time: thursdayTime};
+    }
+    if( friday ){
+      if( fridayTime == '' || fridayProd == '' ){
+        toastMarkup('Please select cutoff day/time for Friday.')
+        return false;
+      }
+      settings[settings.length] = {delivery: 'friday', cutoff_day: fridayProd, cutoff_time: fridayTime};
+    }
+    if( saturday ){
+      if( saturdayProd == '' || saturdayTime == '' ){
+        toastMarkup('Please select cutoff day/time for Saturday.')
+        return false;
+      }
+      settings[settings.length] = {delivery: 'saturday', cutoff_day: saturdayProd, cutoff_time: saturdayTime};
+    }
+    if( sunday ){
+      if( sundayProd == '' || sundayProd == '' ){
+        toastMarkup('Please select cutoff day/time for Sunday.')
+        return false;
+      }
+      settings[settings.length] = {delivery: 'sunday', cutoff_day: sundayProd, cutoff_time: sundayProd};
+    }
+    delivery_sets.settings = settings;
+
+    console.log('Setting: ', delivery_sets);
+
+    fetch('/settings/delivery_options', {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(delivery_sets),
+      credentials: 'same-origin',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setErrorMsg('Delivery option settings updated successfully.');
+      })
+      .catch((error) => {
+        console.error('Error Fetching data: ', error);
+      });
+  }
+
+  useEffect(()=>{
+    fetch('/settings/delivery_options', {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      method: 'GET',
+      credentials: 'same-origin',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if( data.options && data.options.settings != null ){
+          let settings = data.options.settings;
+          for( let i = 0; i < settings.length; i++ ){
+            if( settings[i].delivery == 'monday' ){
+              setMonday(true);
+              setMondayProd( settings[i].cutoff_day );
+              setMondayTime(settings[i].cutoff_time);
+            }else if( settings[i].delivery == 'tuesday' ){
+              setTuesday(true);
+              setTuesdayProd( settings[i].cutoff_day );
+              setTuesdayTime(settings[i].cutoff_time);
+            }else if( settings[i].delivery == 'wednesday' ){
+              setWednesday(true);
+              setWednesdayProd( settings[i].cutoff_day );
+              setWednesdayTime(settings[i].cutoff_time);
+            }else if( settings[i].delivery == 'thursday' ){
+              setThursday(true);
+              setThursdayProd( settings[i].cutoff_day );
+              setThursdayTime(settings[i].cutoff_time);
+            }else if( settings[i].delivery == 'friday' ){
+              setFriday(true);
+              setFridayProd( settings[i].cutoff_day );
+              setFridayTime(settings[i].cutoff_time);
+            }else if( settings[i].delivery == 'saturday' ){
+              setSaturday(true);
+              setSaturdayProd( settings[i].cutoff_day );
+              setSaturdayTime(settings[i].cutoff_time);
+            }else if( settings[i].delivery == 'sunday' ){
+              setSunday(true);
+              setSundayProd( settings[i].cutoff_day );
+              setSundayTime(settings[i].cutoff_time);
+            }
+          }
+        }
+      })
+      .catch((error) => {
+        console.error('Error Fetching data: ', error);
+      });
+  }, [])
   return (
     <>
       <Layout>
@@ -246,37 +379,13 @@ const DeliveryOption = ( {handleBack} ) => {
                   onChange={useCallback((newChecked) => setDeliveryOptions(newChecked), [])}
                   options={d_options}
                 />
-                {/* <Select
-                  label="day of production options"
-                  value={values.dayOfProduction}
-                  error={touched.dayOfProduction && errors.dayOfProduction}
-                  onChange={(e) => setFieldValue('dayOfProduction', e)}
-                  options={day_of_production_options}
-                />
 
-                <TextStyle variation="subdued">
-                  delivery interval after production options
-                </TextStyle>
+                <DisplayText size="small">{errorMsg}</DisplayText>
+                <Button
 
-                <Select
-                  label="delivery interval after production options"
-                  value={values.deliveryIntervalAfterProduction}
-                  error={touched.deliveryIntervalAfterProduction && errors.deliveryIntervalAfterProduction}
-                  onChange={(e) => setFieldValue('deliveryIntervalAfterProduction', e)}
-                  options={delivery_interval_after_production_options}
-                />
-
-                <TextStyle variation="subdued">
-                  eligible weekdays for delivery options
-                </TextStyle>
-
-                <Select
-                  label="eligible weekdays for delivery options"
-                  value={values.eligibleWeekdaysForDelivery}
-                  error={touched.eligibleWeekdaysForDelivery && errors.eligibleWeekdaysForDelivery}
-                  onChange={(e) => setFieldValue('eligibleWeekdaysForDelivery', e)}
-                  options={eligible_weekdays_for_delivery_options}
-                />*/}
+                  class="primary"
+                onClick={submission}
+                >Submit</Button>
               </FormLayout>
             </div>
           </Card.Section>

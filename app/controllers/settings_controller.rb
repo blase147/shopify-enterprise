@@ -11,8 +11,29 @@ class SettingsController < AuthenticatedController
     render json: { status: :ok }
   end
 
+  def delivery_options
+    options = DeliveryOption.find_by(shop_id: current_shop.id)
+
+    if options.nil?
+      options = DeliveryOption.create( shop_id: current_shop.id, delivery_option: params[:delivery_option], settings: params[:settings].to_json )
+    else
+      options.delivery_option = params[:delivery_option]
+      options.settings = params[:settings].to_json
+      options.save
+    end
+    render json: { status: :ok, options: options}
+  end
+
+  def get_delivery_option
+    render json: { status: :ok, options: DeliveryOption.find_by(shop_id: current_shop.id)&.api_response}
+  end
+
   private
   def stripe_key_params
     params.permit(:stripe_api_key, :stripe_publish_key)
+  end
+
+  def delivery_option_params
+    params.permit( :delivery_option, :settings, :shop_id )
   end
 end
