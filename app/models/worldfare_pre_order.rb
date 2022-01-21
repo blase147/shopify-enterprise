@@ -1,0 +1,2 @@
+class WorldfarePreOrder < ApplicationRecord
+end

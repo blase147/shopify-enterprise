@@ -33,7 +33,7 @@ class AppProxy::DashboardController < AppProxyController
 
   def payment_methods
     @orders = ShopifyAPI::Order.find(:all,
-      params: { customer_id: customer_id, limit: PER_PAGE, page_info: params[:page_info] }
+      params: { customer_id: 5796293443755, limit: 6, page_info: nil }
     )
 
     @payment_methods = {}
@@ -42,7 +42,42 @@ class AppProxy::DashboardController < AppProxyController
     end
     @shopify_customer = CustomerService.new({shop: current_shop}).get_customer(customer_id)
     @payment_methods = @payment_methods.values
+    @payment_type = :SHOPIFY.to_s
+    if @payment_methods.empty?
+      @current_shop = current_shop
+      @payment_type = :STRIPE.to_s
+      @stripe_customer = Stripe::Customer.list({}, api_key: current_shop.stripe_api_key).data.filter{|c| c.email == @shopify_customer.email}[0]
+      @stripe_card_info = []
+      unless @stripe_customer.nil?
+        stripe_card = Stripe::Customer.retrieve_source(@stripe_customer.id, @stripe_customer.default_source, api_key: current_shop.stripe_api_key)
+        begin
+          @stripe_card_info = stripe_card.card
+        rescue => e
+          puts e
+        end
+
+        @stripe_card_owner = stripe_card&.owner
+      end
+    end
     render 'payment_methods', content_type: 'application/liquid', layout: 'liquid_app_proxy'
+  end
+
+  def update_stripe_source
+    Stripe::Customer.create_source(params[:stripe_customer_id],{ source: params[:source]}, api_key: current_shop.stripe_api_key)
+    Stripe::Customer.update( params[:stripe_customer_id], {default_source: params[:source]}, api_key: current_shop.stripe_api_key)
+    render :json => { status: :ok, message: "Success", show_notification: true }
+  end
+
+  # worldfare
+  def pre_order
+    sub_pre_order = WorldfarePreOrder.find_by(customer_id: params[:customer_id], week: params[:week])
+    if sub_pre_order.nil?
+      sub_pre_order = WorldfarePreOrder.create(shop_id: current_shop.id, customer_id: params[:customer_id], week: params[:week], products: params[:products])
+    else
+      sub_pre_order.update( products: params[:products] )
+    end
+    sub_pre_order.save
+    render json: { status: :ok, customer_id: params[:customer_id], message: 'Success', show_notification: true }
   end
 
   def settings

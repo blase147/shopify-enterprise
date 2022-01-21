@@ -28,9 +28,9 @@ class AppProxy::SubscriptionsController < AppProxyController
     result = SubscriptionContractDeleteService.new(id).run
 
     if result[:error].present?
-      render :json => { error: result[:error] }
+      render json: { error: result[:error] }
     else
-      render js: "location.reload();"
+      render js: 'location.reload();'
     end
   end
 
@@ -39,15 +39,19 @@ class AppProxy::SubscriptionsController < AppProxyController
     result = CardUpdateService.new(id).run
 
     if result.is_a?(Hash)
-      render :json => { error: result[:error] }
+      render json: { error: result[:error] }
     else
-      render :json => { status: :ok, message: "Success", show_notification: true }
+      render json: { status: :ok, message: 'Success', show_notification: true }
     end
   end
 
   def update_subscription
     if params[:subscription].present?
-      date = params[:subscription][:next_billing_date].to_date rescue nil
+      date = begin
+               params[:subscription][:next_billing_date].to_date
+             rescue StandardError
+               nil
+             end
       if date.nil?
         splitted_date = params[:subscription][:next_billing_date].split('/')
         params[:subscription][:next_billing_date] = [splitted_date[2], splitted_date[0], splitted_date[1]].join('-')
@@ -60,7 +64,7 @@ class AppProxy::SubscriptionsController < AppProxyController
       flash[:error] = result[:error]
       render js: "alert('#{result[:error]}'); hideLoading()"
     else
-      render js: "location.reload();"
+      render js: 'location.reload();'
     end
   end
 
@@ -95,7 +99,7 @@ class AppProxy::SubscriptionsController < AppProxyController
       )
     end
 
-    session = Faraday.post('https://elb.deposit.shopifycs.com/sessions', { credit_card: { number: params[:card_number], first_name: params[:name], month: params[:exp_month], year: params[:exp_year], verification_value: params[:verification_value]}}.to_json, "Content-Type" => "application/json")
+    session = Faraday.post('https://elb.deposit.shopifycs.com/sessions', { credit_card: { number: params[:card_number], first_name: params[:name], month: params[:exp_month], year: params[:exp_year], verification_value: params[:verification_value] } }.to_json, 'Content-Type' => 'application/json')
     if session.status == 200
       session_id = JSON.parse(session.body)['id']
       result = CreditCardUpdateService.new(params[:id], session_id, params).run
@@ -105,6 +109,5 @@ class AppProxy::SubscriptionsController < AppProxyController
         render js: 'location.reload()'
       end
     end
-
   end
 end

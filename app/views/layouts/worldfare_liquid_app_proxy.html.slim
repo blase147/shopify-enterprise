@@ -11,7 +11,7 @@ html
       = params[:customer_id]
       | %}
 
-      = yield
+    = yield
     - unless @skip_auth
       | {% else %}
       p style="margin-left: 4rem;"

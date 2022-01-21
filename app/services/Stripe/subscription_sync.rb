@@ -25,7 +25,15 @@ class Stripe::SubscriptionSync
       stripe_customer = Stripe::Customer.retrieve(stripe_subscription.customer, {api_key: shop.stripe_api_key})
       shopify_customer = ShopifyAPI::Customer.find(:first, params: {email: stripe_customer.email})
 
+      raise "Skipping::::#{stripe_customer.email} not exists: #{shopify_customer}" if shopify_customer.nil?
+      begin
+        shopify_customer_address = shopify_customer.default_address
+      rescue
+        shopify_customer_address = nil
+      end
       product_title, variant_title = stripe_product.name.split(', ')
+
+
       csc = CustomerSubscriptionContract.new(
         shopify_customer_id: shopify_customer.id,
         first_name: shopify_customer.first_name,
@@ -46,18 +54,19 @@ class Stripe::SubscriptionSync
           customer_email: shopify_customer.email,
           product_title: product_title,
           price: stripe_subscription.items.data.first.price.unit_amount/100.to_f,
-          product_id: PRODUCT_MAP[product_title][:id],
-          variant_id: PRODUCT_MAP[product_title][:variants][variant_title],
+          product_id: PRODUCT_MAP[product_title].nil? ? '' :  PRODUCT_MAP[product_title][:id],
+          variant_id:PRODUCT_MAP[product_title].nil? ?  '' : PRODUCT_MAP[product_title][:variants][variant_title],
           quantity: stripe_subscription.items.data.first.quantity,
-          address1: shopify_customer.default_address.address1,
-          address2: shopify_customer.default_address.address2,
-          city: shopify_customer.default_address.city,
-          province: shopify_customer.default_address.province,
-          zip: shopify_customer.default_address.zip,
-          country: shopify_customer.default_address.country,
+          address1: shopify_customer_address.nil? ? '' : shopify_customer_address&.address1,
+          address2: shopify_customer_address.nil? ? '' : shopify_customer_address&.address2,
+          city: shopify_customer_address.nil? ? '' : shopify_customer_address&.city,
+          province: shopify_customer_address.nil? ? '' : shopify_customer_address&.province,
+          zip: shopify_customer_address.nil? ? '' : shopify_customer_address&.zip,
+          country: shopify_customer_address.nil? ? '' : shopify_customer_address&.country,
           interval_number: stripe_subscription.plan.interval_count,
           interval_type: stripe_subscription.plan.interval.upcase,
-          purchase_date: Time.at(stripe_subscription.created)
+          purchase_date: Time.at(stripe_subscription.created),
+          stripe_customer_id: !stripe_customer.nil? && !stripe_customer.id.nil? ? stripe_customer.id : ''
         },
         import_type: 'stripe_subscription',
         api_data: stripe_subscription.to_h,
@@ -68,5 +77,6 @@ class Stripe::SubscriptionSync
   rescue => e
     puts "Error syncing subscription #{stripe_subscription.id}"
     puts e
+    puts ([e.message]+e.backtrace).join($/)
   end
 end

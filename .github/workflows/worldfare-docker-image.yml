@@ -1,0 +1,34 @@
+name: Worldfare Docker Image CI
+
+on:
+  push:
+    branches: [ worldfare ]
+  pull_request:
+    branches: [ worldfare ]
+
+jobs:
+
+  build:
+    env:
+      MSG: ${{ github.event.head_commit.message }}
+      AUTHOR: ${{ github.actor }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: worldfare
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag codilitymohsin/worldfare:release
+    - name: Login to Docker Hub
+      run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+    - name: Push to Dockerhub
+      run: docker push codilitymohsin/worldfare:release
+    - name: Cleanup
+      run: docker image prune -f
+
+    - name: Send Notification
+      run: 'curl -X POST --data-urlencode "payload={\"channel\": \"#chargezen-github\", \"username\": \"webhookbot\", \"text\": \"Commit: ${{env.MSG}}\nAuthor: ${{env.AUTHOR}}\nWorldfare Docker image is ready to deploy. (https://github.com/Ecomtarget-LLC/Chargezen/actions)\", \"icon_emoji\": \":ghost:\"}" https://hooks.slack.com/services/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'

@@ -1,6 +1,6 @@
 {{ 'customer.css' | asset_url | stylesheet_tag }}
 <% customer = ShopifyAPI::Customer.find(params[:customer_id]) rescue nil %>
-<% customer_order = ShopifyAPI::Order.find(:last, params: {customer_id: customer.id} ) rescue nil %>
+<% customer_order = ShopifyAPI::Order.find(:first, params: {customer_id: customer.id} ) rescue nil %>
 
 <% active_sub = customer_order.line_items.find{|item| item.name.downcase.include?('box')} rescue nil %>
 <% if active_sub %>
@@ -203,7 +203,7 @@
     <button class="Profile_links" onclick="Profile(event, 'Overview')" id="defaultOpen">Overview</button>
     <button class="Profile_links" onclick="Profile(event, 'Account')">Account</button>
     <button class="Profile_links" onclick="Profile(event, 'Subscription')">Subscription</button>
-    <button class="Profile_links" onclick="Profile(event, 'Schedule')">Schedule</button>
+    <button class="Profile_links schedule_tab" onclick="Profile(event, 'Schedule')">Schedule</button>
     <button class="Profile_links" onclick="Profile(event, 'Support')">Support</button>
   </div>
 
@@ -569,7 +569,12 @@
         <option value="All">All</option>
       </select>
     </div>
-    <h2 class="Trial">Trial Week</h2>
+    <% if customer_order&.line_items.present? && customer_order&.line_items.count > 5 %>
+      <h2 class="Trial">Current Week</h2>
+      <% else %>
+      <h2 class="Trial">Trial Week</h2>
+      <% end %>
+
 
     <% created_at = Date.parse(customer_order&.created_at) rescue nil %>
     <% next_day = created_at + 1.day rescue nil %>
@@ -579,16 +584,18 @@
         <p class="placed">Order placed:</p>
         <p class="placed_dates"><%= created_at.strftime('%B %d, %Y') rescue nil %> (edit before <%= next_day.strftime('%B %d') rescue nil %>)</p>
       </div>
+      <div class="product_section">
       <% customer_order&.line_items&.each do |line_item| %>
         <% unless line_item.name.downcase.include?('box') %>
           <% product = products.find{|p| p.id == line_item.product_id } %>
           <div class="order_inn">
-            <!-- <span class="dish_remove" data-id="{{item.id}}">×</span> -->
+<!--             <span class="dish_remove" data-id="{{item.id}}">×</span>-->
             <img src="<%= product.images.first.src rescue nil %>">
             <h5><%= line_item.name %> (<%= line_item.quantity %>)</h5>
           </div>
         <% end %>
       <% end %>
+      </div>
     </div>
 
     <div class="order_status">
@@ -598,31 +605,65 @@
       </div>
       <div class="Status">
         <p class="s_name">Arriving:</p>
-        <p class="s_data subdued">Est. <%= (created_at + 3.days).strftime('%B %d, %Y') rescue nil %></p>
+        <!-- <p class="s_data subdued">Est. <%= (created_at + 3.days).strftime('%B %d, %Y') rescue nil %></p> -->
       </div>
     </div>
 
+    <% current_date = Date.today %>
+    <% if params[:product_ids].present? %>
+      <% selected_products = ShopifyAPI::Product.where(ids: params[:product_ids], fields: 'id,title,images') rescue nil %>
+    <% end %>
+    <% week_days = [] %>
     <% (1..2).each do |i| %>
-      <% current_date =  created_at + (7*i).days rescue nil %>
+      <% if i == 1
+          week_day = current_date + 7.days
+          week_days << week_day.strftime('%Y%m%d')
+        else
+          week_day = current_date + 14.days
+          week_days << week_day.strftime('%Y%m%d')
+        end
+         week_subscription = WorldfarePreOrder.find_by( customer_id: params[:customer_id], week: week_days.last )
+         week_subscription_products = nil
+         if week_subscription.present?
+           week_subscription_products = ShopifyAPI::Product.where(ids: week_subscription.products, fields: 'id,title,images') rescue nil
+         end
+      %>
       <div class="pre_orders">
-        <h2 class="Trial">Week of <%= current_date.strftime('%B %d, %Y') rescue nil %></h2>
+        <h2 class="Trial">Week of <%= week_day.strftime('%B %d, %Y') rescue nil %></h2>
         <div class="placed_data">
           <p class="placed">Select dishes by:</p>
-          <p class="placed_dates"><%= current_date.strftime('%B %d, %Y') rescue nil %></p>
+          <p class="placed_dates"><%= (week_day-2).strftime('%B %d, %Y') rescue nil %></p>
         </div>
         <div class="order_add">
           <ul class="pre_segment">
-            <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-            <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-            <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-            <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-            <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
-            <li class="pre_segment_order"><button><span>+</span><p>Add Meal</p></button></li>
+            <% customer_order&.line_items&.each_with_index do |line_item, key| %>
+              <% unless line_item.name.downcase.include?('box') %>
+                <% if params[:product_ids].present? && params[:week].present? && params[:week].to_i == i.to_i %>
+                  <% selected_product = selected_products[key-1].present? ? selected_products[key-1] : nil %>
+                  <div class="order_inn center" >
+                    <img src="<%= selected_product.images.first.src rescue nil %>">
+                    <h5><%= selected_product.title rescue nil %> </h5>
+                    <h6><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>">Edit</a></h6>
+                  </div>
+                <% elsif week_subscription_products.present? %>
+                  <% week_subscription_product = week_subscription_products[key-1].present? ? week_subscription_products[key-1] : nil %>
+                  <div class="order_inn center" >
+                    <img src="<%= week_subscription_product.images.first.src rescue nil %>">
+                    <h5><%= week_subscription_product.title rescue nil %> </h5>
+                    <h6><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>">Edit</a></h6>
+                  </div>
+                <% else %>
+                  <li class="pre_segment_order"><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>"><button><span>+</span><p>Add to box</p></button></a></li>
+                <% end %>
+              <% end %>
+            <% end %>
           </ul>
         </div>
       </div>
     <% end %>
-    <button class="submit_pre_order">Save Changes</button>
+    <% if params[:product_ids].present? && params[:week] %>
+    <button data-pre_order="<%= { customer_id: params[:customer_id],week: week_days[params[:week].to_i-1], products: params[:product_ids] }.to_json %>" class="submit_pre_order">Save Changes</button>
+    <% end %>
   </div>
 
   <div id="Support" class="Profile_links_data">
@@ -635,7 +676,7 @@
 {% section 'Account_slider' %}
 
 <script>
-  function Profile(evt, usr_tab) {
+  function Profile(evt, usr_tab,make_active = true) {
     var i, Profile_links_data, Profile_links;
     Profile_links_data = document.getElementsByClassName("Profile_links_data");
     for (i = 0; i < Profile_links_data.length; i++) {
@@ -646,9 +687,34 @@
       tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
     document.getElementById(usr_tab).style.display = "block";
-    evt.currentTarget.className += " active";
+    if (make_active)
+      evt.currentTarget.className += " active";
   }
 
   // Get the element with id="defaultOpen" and click on it
   document.getElementById("defaultOpen").click();
+
+  $(document).ready(function (){
+    $(".submit_pre_order").on('click', function(e){
+      $.ajax({
+        url: '/a/chargezen_production/dashboard/pre_order',
+        type: 'POST',
+        data: JSON.stringify($(this).data('pre_order')),
+        contentType: 'application/json',
+        success: function(response) {
+          window.location = '/a/chargezen_production?customer_id=' + response.customer_id;
+        },
+        error: function(response) {}
+      });
+    });
+
+    <% if params[:tab] == 'Schedule' %>
+
+    Profile($('.schedule_tab'), 'Schedule',false)
+    $('.schedule_tab').addClass('active');
+      <% else %>
+    document.getElementById("defaultOpen").click();
+    <% end %>
+
+  });
 </script>

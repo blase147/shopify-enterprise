@@ -7,7 +7,9 @@
     a#AppFrameMainContent tabindex="-1"
     .Polaris-Frame__Content
       .Polaris-Page
-        - if @active_subscriptions_count == 0
+        -if @payment_type == 'STRIPE'
+          = render "stripe_payment_methods"
+        - elsif @active_subscriptions_count == 0
           div.content-wrapper
             div
               .Polaris-Header-Title__TitleAndSubtitleWrapper
@@ -66,7 +68,10 @@
                   h3card-heading #{@translation.billing_tab_address.present? ? @translation.billing_tab_address : 'ADDRESS'}
                   p.card-text = billing_address.present? ? billing_address.address1 : '-'
 / = render 'edit_address_modal'
-= render 'update_payment_modal', payment_method: payment_method, billing_address: billing_address
+- if @payment_type == 'SHOPIFY'
+  = render 'update_payment_modal', payment_method: payment_method, billing_address: billing_address
+- elsif @stripe_customer.present?
+  = render 'stripe_update_payment_modal', stripe_customer: @stripe_customer, stripe_card_info: @stripe_card_info
 
         / .Polaris-Page-Header.Polaris-Page-Header--isSingleRow.Polaris-Page-Header--noBreadcrumbs.Polaris-Page-Header--mediumTitle
         /   .Polaris-Page-Header__MainContent

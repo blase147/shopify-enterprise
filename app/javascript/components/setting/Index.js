@@ -43,6 +43,7 @@ import ExportImage from '../../../assets/images/settings/export.svg';
 import InformationImage from '../../../assets/images/settings/information.svg';
 import LegalImage from '../../../assets/images/settings/legal.svg';
 import PasswordImage from '../../../assets/images/settings/password.svg';
+import DebugImage from '../../../assets/images/settings/code.svg';
 import SMSImage from '../../../assets/images/settings/sms.svg';
 import TranslationImage from '../../../assets/images/settings/translation.svg';
 import Sms from './HouseKeepingComponents/Sms';
@@ -51,6 +52,8 @@ import MainExport from './HouseKeepingComponents/ExportComponents/MainExport';
 import ZipCodeImage from '../../../assets/images/settings/zip_code.svg';
 import ZipCodes from './ZipCodes';
 import EnableDebug from './EnableDebug';
+import StripeSettings from './StripeSettings';
+import DeliveryOption from "./DeliveryOption";
 
 const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
   // form data ########################################################
@@ -448,19 +451,19 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
     },
     ...(process.env.APP_TYPE == 'public'
       ? [
-          {
-            key: 'store_information',
-            title: 'Store Information',
-            img: InformationImage,
-            desc: 'Manage the information your customers can view on your store.',
-          },
-          {
-            key: 'discount',
-            title: 'Discount',
-            img: DiscountImage,
-            desc: "Enable and manage your store's discount.",
-          },
-        ]
+        {
+          key: 'store_information',
+          title: 'Store Information',
+          img: InformationImage,
+          desc: 'Manage the information your customers can view on your store.',
+        },
+        {
+          key: 'discount',
+          title: 'Discount',
+          img: DiscountImage,
+          desc: "Enable and manage your store's discount.",
+        },
+      ]
       : []),
     {
       key: 'billing',
@@ -470,20 +473,20 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
     },
     ...(process.env.APP_TYPE == 'public'
       ? [
-          {
-            key: 'legal',
-            title: 'Legal',
-            img: LegalImage,
-            desc: "Manage your store's legal pages.",
-            commingSoon: true,
-          },
-          {
-            key: 'export',
-            title: 'Export',
-            img: ExportImage,
-            desc: 'Export data from the app.',
-          },
-        ]
+        {
+          key: 'legal',
+          title: 'Legal',
+          img: LegalImage,
+          desc: "Manage your store's legal pages.",
+          commingSoon: true,
+        },
+        {
+          key: 'export',
+          title: 'Export',
+          img: ExportImage,
+          desc: 'Export data from the app.',
+        },
+      ]
       : []),
     {
       key: 'sms',
@@ -493,13 +496,13 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
     },
     ...(process.env.APP_TYPE == 'public'
       ? [
-          {
-            key: 'translation',
-            title: 'Translation',
-            img: TranslationImage,
-            desc: 'Add and change translations for the app.',
-          },
-        ]
+        {
+          key: 'translation',
+          title: 'Translation',
+          img: TranslationImage,
+          desc: 'Add and change translations for the app.',
+        },
+      ]
       : []),
     {
       key: 'password',
@@ -523,13 +526,25 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
         },
       ]
       : []),
-      {
-        key: 'enable_debug_mode',
-        title: 'Enable Debug Mode',
-        img: PasswordImage,
-        desc: 'Enable the debugging mode.',
-      },
-    ];
+    {
+      key: 'enable_debug_mode',
+      title: 'Enable Debug Mode',
+      img: DebugImage,
+      desc: 'Enable the debugging mode.',
+    },
+    {
+      key: 'stripe_settings',
+      title: 'Stripe Settings',
+      img: SettingImage,
+      desc: 'Manage Stripe Settings for your App.',
+    },
+    {
+      key: 'delivery_options',
+      title: 'Delivery Options',
+      img: DebugImage,
+      desc: 'Set Delivery Options.',
+    }
+  ];
   const tabs = [
     {
       id: 'house',
@@ -553,11 +568,11 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
     // },
     ...(process.env.APP_TYPE == 'public'
       ? [
-          {
-            id: 'store-information',
-            content: 'StoreInformation',
-          },
-        ]
+        {
+          id: 'store-information',
+          content: 'StoreInformation',
+        },
+      ]
       : []),
     // {
     //   id: 'legal',
@@ -665,20 +680,20 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                 }}
               >
                 {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  isSubmitting,
-                  setFieldValue,
-                  resetForm,
-                  dirty,
-                  setDirty,
-                  formik,
-                  /* and other goodies */
-                }) => (
+                    values,
+                    errors,
+                    touched,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    isSubmitting,
+                    setFieldValue,
+                    resetForm,
+                    dirty,
+                    setDirty,
+                    formik,
+                    /* and other goodies */
+                  }) => (
                   <Form onSubmit={handleSubmit}>
                     {dirty && (
                       <ContextualSaveBar
@@ -822,6 +837,10 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                                   <>
                                     <EnableDebug handleBack={handleBackSetting} />
                                   </>
+                                ) : selectedSetting === 'stripe_settings' ? (
+                                  <>
+                                    <StripeSettings handleBack={handleBackSetting} />
+                                  </>
                                 ) : selectedSetting === 'sms' ? (
                                   <>
                                     <Sms handleBack={handleBackSetting} />
@@ -846,7 +865,16 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                                       }
                                     />
                                   </>
-                                ) : (
+                                ) : selectedSetting === 'delivery_options' ? (
+                                  <>
+                                    <DeliveryOption
+                                      values={values}
+                                      touched={touched}
+                                      errors={errors}
+                                      setFieldValue={setFieldValue}
+                                      handleBack={handleBackSetting} />
+                                  </>
+                                )  : (
                                   ''
                                 )}
                               </Layout.Section>

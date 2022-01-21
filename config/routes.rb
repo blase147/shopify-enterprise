@@ -94,6 +94,8 @@ Rails.application.routes.draw do
         get :build_a_box
         post :confirm_box_selection
         get :track_order
+        post :update_stripe_source
+        post :pre_order
       end
     end
 
@@ -132,6 +134,15 @@ Rails.application.routes.draw do
   end
 
   resources :debug_mode, only: [:index, :create]
+
+  resources :settings do
+    collection do
+      get :stripe_settings
+      post :update_stripe_settings
+      post :delivery_options
+      get  :delivery_options, to: 'settings#get_delivery_option'
+    end
+  end
 
   resources :select_plan, only: [:index, :create]
 
