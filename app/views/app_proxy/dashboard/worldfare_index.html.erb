@@ -614,14 +614,21 @@
       <% selected_products = ShopifyAPI::Product.where(ids: params[:product_ids], fields: 'id,title,images') rescue nil %>
     <% end %>
     <% week_days = [] %>
-    <% (1..2).each do |i| %>
+    <%
+      delivery_settings = DeliveryOption.find_by( shop_id: @current_shop.id )&.api_response
+      cutoff = delivery_settings[:settings].filter{  |day| day['delivery'] == customer_order.note.downcase }[0] rescue nil
+      (1..2).each do |i| %>
       <% if i == 1
-          week_day = current_date + 7.days
+          # week_day = current_date + 7.days
+          week_day = current_date.next_week(customer_order.note.downcase.to_sym)
           week_days << week_day.strftime('%Y%m%d')
+          cutoff_date = cutoff.nil? ? (week_day-2) : current_date.next_week(cutoff['cutoff_day'].downcase.to_sym)
         else
-          week_day = current_date + 14.days
+          week_day = current_date.next_week(:monday).next_week(customer_order.note.downcase.to_sym)
           week_days << week_day.strftime('%Y%m%d')
+          cutoff_date = cutoff.nil? ? (week_day-2) : current_date.next_week(:monday).next_week(cutoff['cutoff_day'].downcase.to_sym)
         end
+         select_by = cutoff_date.strftime("%B %d, %Y #{cutoff.nil? ? '00:00' : cutoff['cutoff_time']}")
          week_subscription = WorldfarePreOrder.find_by( customer_id: params[:customer_id], week: week_days.last )
          week_subscription_products = nil
          if week_subscription.present?
@@ -632,7 +639,7 @@
         <h2 class="Trial">Week of <%= week_day.strftime('%B %d, %Y') rescue nil %></h2>
         <div class="placed_data">
           <p class="placed">Select dishes by:</p>
-          <p class="placed_dates"><%= (week_day-2).strftime('%B %d, %Y') rescue nil %></p>
+          <p class="placed_dates"><%= select_by rescue nil %></p>
         </div>
         <div class="order_add">
           <ul class="pre_segment">
@@ -643,17 +650,17 @@
                   <div class="order_inn center" >
                     <img src="<%= selected_product.images.first.src rescue nil %>">
                     <h5><%= selected_product.title rescue nil %> </h5>
-                    <h6><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>">Edit</a></h6>
+                    <h6><a href="/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>">Edit</a></h6>
                   </div>
                 <% elsif week_subscription_products.present? %>
                   <% week_subscription_product = week_subscription_products[key-1].present? ? week_subscription_products[key-1] : nil %>
                   <div class="order_inn center" >
                     <img src="<%= week_subscription_product.images.first.src rescue nil %>">
                     <h5><%= week_subscription_product.title rescue nil %> </h5>
-                    <h6><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>">Edit</a></h6>
+                    <h6><a href="/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>">Edit</a></h6>
                   </div>
                 <% else %>
-                  <li class="pre_segment_order"><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>"><button><span>+</span><p>Add to box</p></button></a></li>
+                  <li class="pre_segment_order"><a href="/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>"><button><span>+</span><p>Add to box</p></button></a></li>
                 <% end %>
               <% end %>
             <% end %>
@@ -718,3 +725,5 @@
 
   });
 </script>
+
+

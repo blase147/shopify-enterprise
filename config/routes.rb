@@ -96,6 +96,8 @@ Rails.application.routes.draw do
         get :track_order
         post :update_stripe_source
         post :pre_order
+        get :get_delivery_option
+        get :submit_delivery_option
       end
     end
 

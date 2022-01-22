@@ -33,7 +33,7 @@ class AppProxy::DashboardController < AppProxyController
 
   def payment_methods
     @orders = ShopifyAPI::Order.find(:all,
-      params: { customer_id: 5796293443755, limit: 6, page_info: nil }
+      params: { customer_id: params[:customer_id], limit: 6, page_info: nil }
     )
 
     @payment_methods = {}
@@ -120,6 +120,27 @@ class AppProxy::DashboardController < AppProxyController
     rescue => e
       puts e
     end
+  end
+
+  def get_delivery_option
+    if current_shop.present? && current_shop.id.present?
+      options = DeliveryOption.find_by(shop_id: current_shop.id)&.api_response
+    else
+      options = DeliveryOption.find_by(shop_id: params[:shop_id])&.api_response
+    end
+    render json: { status: :ok, options: options}
+  end
+
+  def submit_delivery_option
+    current_shop.connect
+    if params[:order_id].present?
+      order = ShopifyAPI::Order.find(params[:order_id]) rescue nil
+      if order.present?
+        order.note = params[:note]
+        order.save
+      end
+    end
+    render json: { status: :ok, options: (order.nil? ? [] : order)}
   end
 
   private ##
