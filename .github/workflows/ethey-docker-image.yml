@@ -1,4 +1,4 @@
-name: Worldfare Docker Image CI
+name: Ethey Docker Image CI
 
 on:
   push:
