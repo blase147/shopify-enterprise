@@ -21,31 +21,31 @@ import {Text} from "html-react-parser";
 
 const DeliveryOption = ( {handleBack} ) => {
   const [monday, setMonday] = useState(false);
-  const [mondayTime, setMondayTime] = useState('');
+  const [mondayTime, setMondayTime] = useState('00:00');
   const [mondayProd, setMondayProd] = useState('');
 
   const [tuesday, setTuesday] = useState(false);
-  const [tuesdayTime, setTuesdayTime] = useState('');
+  const [tuesdayTime, setTuesdayTime] = useState('00:00');
   const [tuesdayProd, setTuesdayProd] = useState('');
 
   const [wednesday, setWednesday] = useState(false);
-  const [wednesdayTime, setWednesdayTime] = useState('');
+  const [wednesdayTime, setWednesdayTime] = useState('00:00');
   const [wednesdayProd, setWednesdayProd] = useState('');
 
   const [thursday, setThursday] = useState(false);
-  const [thursdayTime, setThursdayTime] = useState('');
+  const [thursdayTime, setThursdayTime] = useState('00:00');
   const [thursdayProd, setThursdayProd] = useState('');
 
   const [friday, setFriday] = useState(false);
-  const [fridayTime, setFridayTime] = useState('');
+  const [fridayTime, setFridayTime] = useState('00:00');
   const [fridayProd, setFridayProd] = useState('');
 
   const [saturday, setSaturday] = useState(false);
-  const [saturdayTime, setSaturdayTime] = useState('');
+  const [saturdayTime, setSaturdayTime] = useState('00:00');
   const [saturdayProd, setSaturdayProd] = useState('');
 
   const [sunday, setSunday] = useState(false);
-  const [sundayTime, setSundayTime] = useState('');
+  const [sundayTime, setSundayTime] = useState('00:00');
   const [sundayProd, setSundayProd] = useState('');
 
   const [deliveryOptions, setDeliveryOptions] = useState('3');
