@@ -128,7 +128,30 @@ class AppProxy::DashboardController < AppProxyController
     else
       options = DeliveryOption.find_by(shop_id: params[:shop_id])&.api_response
     end
-    render json: { status: :ok, options: options}
+    link = ''
+    begin
+      customer_id = "gid://shopify/Customer/#{params[:customer_id]}"
+      @data = CustomerSubscriptionContractsService.new(customer_id).run params[:cursor]
+      @subscription_contracts = @data[:subscriptions]
+      # @customer = CustomerSubscriptionContract.find_by(shopify_customer_id: params[:customer_id])
+      # if @customer.nil? && params[:subscription_id].present?
+      #   ShopifyContractCreateWorker.new.perform(current_shop.id, params[:subscription_id])
+      #   @customer = CustomerSubscriptionContract.find_by_shopify_id(params[:subscription_id])
+      # end
+      # if @customer.api_source != 'stripe' && !@customer.api_data
+      #   @customer.api_source = 'shopify'
+      #   @customer.api_data = SubscriptionContractService.new(id).run.to_h.deep_transform_keys { |key| key.underscore }
+      #   @customer.save
+      # end
+      # @subscription = JSON.parse(@customer.api_data.to_json, object_class: OpenStruct)
+      # billing_policy = @subscription.billing_policy
+      # #billing_date=#{billing_date}&
+      # link = action_subscription_contract_path(:skip_schedule, @subscription.id[/\d+/], "billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}")
+    rescue => e
+      p 'Exception: '
+      p e
+    end
+    render json: { status: :ok, options: options, skip_link: link, s: @subscription_contracts.present? ? @subscription_contracts : []}
   end
 
   def submit_delivery_option

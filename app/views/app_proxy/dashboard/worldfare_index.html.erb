@@ -667,15 +667,16 @@
     <% week_days = [] %>
     <%
       delivery_settings = DeliveryOption.find_by( shop_id: @current_shop.id )&.api_response
-      cutoff = delivery_settings[:settings].filter{  |day| day['delivery'] == customer_order.note.downcase }[0] rescue nil
+      delivery_day_sym = customer_order.note.downcase.split(' ')[0] rescue  nil
+      cutoff = delivery_settings[:settings].filter{  |day| day['delivery'] == delivery_day_sym }[0] rescue nil
       (1..2).each do |i| %>
       <% if i == 1
           # week_day = current_date + 7.days
-          week_day = current_date.next_week(customer_order.note.downcase.to_sym)
+          week_day = current_date.next_week(delivery_day_sym.to_sym)
           week_days << week_day.strftime('%Y%m%d')
           cutoff_date = cutoff.nil? ? (week_day-2) : current_date.next_week(cutoff['cutoff_day'].downcase.to_sym)
         else
-          week_day = current_date.next_week(:monday).next_week(customer_order.note.downcase.to_sym)
+          week_day = current_date.next_week(:monday).next_week(delivery_day_sym.to_sym)
           week_days << week_day.strftime('%Y%m%d')
           cutoff_date = cutoff.nil? ? (week_day-2) : current_date.next_week(:monday).next_week(cutoff['cutoff_day'].downcase.to_sym)
         end
