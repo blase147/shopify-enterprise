@@ -143,6 +143,26 @@ class AppProxy::DashboardController < AppProxyController
     render json: { status: :ok, options: (order.nil? ? [] : order)}
   end
 
+  def customer_info
+   
+    shopify_customer = ShopifyAPI::Customer.find( params[:customer_id] )
+    shopify_customer.first_name = params[:first_name]
+    shopify_customer.last_name = params[:last_name]
+    shopify_customer.addresses << {
+      first_name: params[:first_name],
+      last_name: params[:last_name],
+      address1: params[:address1],
+      address2: params[:address2],
+      city: params[:city],
+      province: params[:state],
+      country: params[:country],
+      zip: params[:zip],
+      default: true
+    }
+    shopify_customer.save
+    render json: { status: :ok, message: 'Success', show_notification: true, saved: shopify_customer.save }
+  end
+
   private ##
 
   def fetch_products(products)

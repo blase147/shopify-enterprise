@@ -98,6 +98,7 @@ Rails.application.routes.draw do
         post :pre_order
         get :get_delivery_option
         get :submit_delivery_option
+        post :customer_info
       end
     end
 

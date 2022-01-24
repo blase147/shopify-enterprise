@@ -49,6 +49,9 @@
   .t-align-left {
     text-align: left !important;
   }
+  .ml-8{
+    margin-left: 8%;
+  }
   .mb-3{
     margin-bottom: 3rem;
   }
@@ -82,6 +85,9 @@
   }
   .op-05{
     opacity: 0.5;
+  }
+  #hsaved{
+    display:none;
   }
   .portal_product_number {
     --font-body-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Ubuntu, Helvetica Neue, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
@@ -185,6 +191,17 @@
     display: flex;
     justify-content: center;
   }
+
+  input {
+                        width: 100%;
+                        height: 42px;
+                        padding: 13px 18px;
+                        background: #ffffff;
+                        border: 0.850418px solid #dddddd;
+                        box-sizing: border-box;
+                        border-radius: 3px;
+                    }
+.hide{ display:none !important; }
 </style>
 
 <div class="customer account c_account">
@@ -201,7 +218,7 @@
 
   <div class="Profile_tab">
     <button class="Profile_links" onclick="Profile(event, 'Overview')" id="defaultOpen">Overview</button>
-    <button class="Profile_links" onclick="Profile(event, 'Account')">Account</button>
+    <button class="Profile_links account_tab" onclick="Profile(event, 'Account')">Account</button>
     <button class="Profile_links" onclick="Profile(event, 'Subscription')">Subscription</button>
     <button class="Profile_links schedule_tab" onclick="Profile(event, 'Schedule')">Schedule</button>
     <button class="Profile_links" onclick="Profile(event, 'Support')">Support</button>
@@ -249,14 +266,15 @@
         </svg>
         <div class="flex space-between">
           <div class="c63666A-t">
-            <p class="f-42 jc-l">0</p>
+            <p class="f-42 jc-l">{{ current_subscription.metafields.subscription.dishes_in_week }}</p>
             <p class="f-16 jc-l ta-l">Dishes Purchased</p>
           </div>
 
           <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="41.9998" cy="42.0002" r="31.4055" transform="rotate(-120 41.9998 42.0002)" stroke="#63666A" stroke-opacity="0.4" stroke-width="2"/>
             <ellipse cx="42" cy="42" rx="31" ry="31" transform="rotate(-180 42 42)" fill="#D2D06C"/>
-            <path d="M36.4007 43.844H40.9007V45.338H36.4007V43.844ZM43.098 43.844H47.598V45.338H43.098V43.844Z" fill="#63666A"/>
+            <path d="M36.4007 43.844H40.9007V45.338H36.4007V43.844ZM43.098 43.844H47.598V45.338H43.098V43.844Z" /> #fill="#63666A"
+            <text x="50%" y="50%" text-anchor="middle" fill="#63666A" font-size="20px" font-family="Arial" dy=".3em">30%</text>
           </svg>
 
         </div>
@@ -269,17 +287,18 @@
 
         <div class="flex space-between">
           <div class="d2d06c-t">
-            <p class="f-42 jc-l">0</p>
+            <p class="f-42 jc-l">{{ current_subscription.metafields.subscription.dishes_in_week }}</p>
             <p class="f-16 jc-l ta-l">Donations made</p>
           </div>
           <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="41.9998" cy="42.0002" r="31.4055" transform="rotate(-120 41.9998 42.0002)" stroke="#d2d06c" stroke-opacity="0.4" stroke-width="2"/>
             <ellipse cx="42" cy="42" rx="31" ry="31" transform="rotate(-180 42 42)" fill="#2B4F3E"/>
-            <path d="M36.4007 43.844H40.9007V45.338H36.4007V43.844ZM43.098 43.844H47.598V45.338H43.098V43.844Z" fill="#d2d06c"/>
+            <path d="M36.4007 43.844H40.9007V45.338H36.4007V43.844ZM43.098 43.844H47.598V45.338H43.098V43.844Z"/>  #fill="#d2d06c"
+            <text x="50%" y="50%" text-anchor="middle" fill="#D2D06C" font-size="20px" font-family="Arial" dy=".3em">30%</text>
           </svg>
         </div>
       </div>
-      <div class="w-30 br-14 ta-l p-2" style="background-color: #63666A">
+      <div class="w-30 br-14 ta-l p-2" style="background-color: #63666A" id="hsaved">
         <svg width="47" height="44" viewBox="0 0 47 44" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M25.8604 2.60445C25.4472 2.59978 25.1058 2.93252 25.0979 3.34766C25.09 3.76279 25.4185 4.10311 25.8317 4.10778L25.8604 2.60445ZM8.22249 18.6101L8.78682 18.112C8.65296 17.9586 8.46217 17.8673 8.25856 17.859C8.05494 17.8508 7.85613 17.9264 7.70809 18.0683L8.22249 18.6101ZM3.07893 22.5069C2.7788 22.7946 2.76579 23.2705 3.04989 23.5697C3.33398 23.869 3.80759 23.8783 4.10772 23.5905L3.07893 22.5069ZM12.0157 24.1009C12.2871 24.4118 12.7597 24.4409 13.0714 24.1658C13.3831 23.8907 13.4157 23.4156 13.1444 23.1047L12.0157 24.1009ZM18.8463 28.0818C18.5616 28.385 18.5736 28.8607 18.8731 29.1443C19.1726 29.428 19.6463 29.4121 19.931 29.109L18.8463 28.0818ZM26.1285 9.425C26.1285 9.00985 25.7935 8.67597 25.3802 8.67926C24.967 8.68255 24.632 9.02175 24.632 9.4369L26.1285 9.425ZM25.0539 22.5634L24.5116 22.0498L25.0539 22.5634ZM25.3802 21.7401L24.632 21.7461L25.3802 21.7401ZM25.8317 4.10778C29.1688 4.14552 32.4199 5.20247 35.1638 7.14406L36.0321 5.91267C33.0448 3.79885 29.5016 2.64562 25.8604 2.60445L25.8317 4.10778ZM35.1638 7.14406C37.9079 9.08575 40.0179 11.8226 41.2193 15.0012L42.6189 14.4578C41.3133 11.0034 39.0192 8.02638 36.0321 5.91267L35.1638 7.14406ZM41.2193 15.0012C42.4207 18.1798 42.6574 21.652 41.8997 24.9678L43.3582 25.2932C44.1824 21.6866 43.9246 17.9122 42.6189 14.4578L41.2193 15.0012ZM41.8997 24.9678C41.142 28.2835 39.4251 31.2891 36.9733 33.5968L37.992 34.6901C40.6653 32.1738 42.534 28.8999 43.3582 25.2932L41.8997 24.9678ZM36.9733 33.5968C34.5217 35.9043 31.4473 37.4087 28.1479 37.9161L28.363 39.4022C31.9641 38.8483 35.3185 37.2064 37.992 34.6901L36.9733 33.5968ZM28.1479 37.9161C24.8485 38.4236 21.4741 37.9112 18.4612 36.4432L17.7995 37.7969C21.082 39.3962 24.7619 39.9561 28.363 39.4022L28.1479 37.9161ZM18.4612 36.4432C15.4481 34.9751 12.9352 32.6188 11.2493 29.6779L9.95092 30.4359C11.7836 33.6329 14.5172 36.1976 17.7995 37.7969L18.4612 36.4432ZM11.2493 29.6779C9.57828 26.763 8.7408 22.0852 8.9691 18.6543L7.47587 18.5659C7.2323 22.2262 8.10329 27.2129 9.95092 30.4359L11.2493 29.6779ZM7.70809 18.0683L3.07893 22.5069L4.10772 23.5905L8.73689 19.1519L7.70809 18.0683ZM7.65815 19.1082L12.0157 24.1009L13.1444 23.1047L8.78682 18.112L7.65815 19.1082ZM24.5116 22.0498L18.8463 28.0818L19.931 29.109L25.5963 23.0769L24.5116 22.0498ZM26.1285 21.7342L26.1285 9.425L24.632 9.4369L24.632 21.7461L26.1285 21.7342ZM25.5963 23.0769C25.938 22.7131 26.1285 22.2324 26.1285 21.7342L24.632 21.7461C24.632 21.8588 24.5889 21.9675 24.5116 22.0498L25.5963 23.0769Z" fill="white"/>
           <path d="M25.1074 31.6463L25.1074 33.8653" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
@@ -302,9 +321,9 @@
       </div>
     </div>
     <br>
-    <h2 style="font-size: 42px; weight: 400; margin: 0 10%;">Choose a subscription to track your dishes orders per week</h2>
+    <h2 style="font-size: 42px; weight: 400; margin: 0 10%; display:none;">Choose a subscription to track your dishes orders per week</h2>
     <br>
-    <div style="margin: 0 10%;" class="flex space-around">
+    <div style="margin: 0 10%; display:none;" class="flex space-around">
       <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g >
         <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
@@ -427,50 +446,70 @@
 
     </div>
   </div>
-
+  <form id="customer_info_form" onsubmit="return false;" >
   <div id="Account" class="Profile_links_data">
     <div class="flex space-between" style="margin-left: 8%">
-      <div>
+    
+    <div>
         <h1 class="t-align-left">Personal Info</h1>
         <% address = customer&.try(:default_address) || customer&.addresses&.first rescue nil %>
+        
         <table class="info-table">
           <tbody>
             <tr>
-              <td><h3 class="t-align-left bolder">First Name</h3></td>
-              <td><h3 class="t-align-left bolder">Last Name</h3></td>
+              <td colspan="3"><h3 class="t-align-left bolder">First Name</h3></td>
+             
             </tr>
             <tr>
-              <td><p class="t-align-left block subdued ft-1"><%= customer&.first_name %></p></td>
-              <td><p class="t-align-left block subdued ft-1"><%= customer&.last_name %></p></td>
+              <td colspan="3"><p class="t-align-left block subdued ft-1 view-text"><%= customer&.first_name %></p><input type="text" id="first_name" value="<%= customer&.first_name %>" class="view-input" /></td>
             </tr>
+
             <tr>
-              <td colspan="2"><h3 class="t-align-left bolder" >Address line 1</h3></td>
+            <td colspan="2"><h3 class="t-align-left bolder">Last Name</h3></td>
             </tr>
+
             <tr>
-              <td colspan="2"><p class="t-align-left block subdued ft-1"><%= address&.address1 %></p></td>
+            <td colspan="2"><p class="t-align-left block subdued ft-1  view-text"><%= customer&.last_name %></p><input type="text" id="last_name" value="<%= customer&.last_name %>" class="view-input" /></td>
             </tr>
+
+            <tr>
+              <td colspan="2"><h3 class="t-align-left bolder " >Address line 1</h3></td>
+            </tr>
+
+            <tr>
+              <td colspan="2"><p class="t-align-left block subdued ft-1 view-text"><%= address&.address1 %></p><input type="text" id="address1" value="<%= address&.address1 %>"class="view-input" /></td>
+            </tr>
+
             <tr>
               <td colspan="2"><h3 class="t-align-left bolder" >Address line 2</h3></td>
             </tr>
+
             <tr>
-              <td colspan="2"><p class="t-align-left block subdued ft-1"><%= address&.address2 %></p></td>
+              <td colspan="2"><p class="t-align-left block subdued ft-1 view-text"><%= address&.address2 %></p><input type="text" id="address2" value="<%= address&.address2 %>"class="view-input" /></td>
             </tr>
-            <tr>
-              <td><h3 class="t-align-left bolder">City</h3></td>
+
+            <tr colspan="4">
+              <td ><h3 class="t-align-left bolder">City</h3></td>
               <td><h3 class="t-align-left bolder">State</h3></td>
+              
             </tr>
+
             <tr>
-              <td><p class="t-align-left block subdued ft-1"><%= address&.city %></p></td>
-              <td><p class="t-align-left block subdued ft-1"><%= address&.province %></p></td>
+            <td ><p class="t-align-left block subdued ft-1 view-text"><%= address&.city %></p><input type="text" id="city" value="<%= address&.city %>" class="view-input" /></td>
+            <td><p class="t-align-left block subdued ft-1 view-text"><%= address&.province %></p><input type="text" id="province" value="<%= address&.province %>" class="view-input" /></td>
             </tr>
+
+
             <tr>
               <td><h3 class="t-align-left bolder">Country</h3></td>
               <td><h3 class="t-align-left bolder">Zip Code</h3></td>
             </tr>
+
             <tr>
-              <td><p class="t-align-left block subdued ft-1"><%= address&.country_name %></p></td>
-              <td><p class="t-align-left block subdued ft-1"><%= address&.zip %></p></td>
+            <td><p class="t-align-left block subdued ft-1 view-text"><%= address&.country_name %></p><input type="text" id="country_name" value="<%= address&.country_name %>" class="view-input" /></td>
+            <td><p class="t-align-left block subdued ft-1 view-text"><%= address&.zip %></p><input type="text" id="zip" value="<%= address&.zip %>" class="view-input" /></td>
             </tr>
+
           </tbody>
         </table>
       </div>
@@ -479,44 +518,56 @@
         <table class="info-table">
           <tbody>
             <tr>
-              <td colspan="2"><h3 class="t-align-left bolder" >Card Number</h3></td>
+              <td colspan="3"><h3 class="t-align-left bolder view-text" >Card Number</h3></td>
             </tr>
             <tr>
-              <td colspan="2"><p class="t-align-left block subdued ft-1"><%= customer_order&.payment_details&.credit_card_number rescue nil %></p></td>
+              <td colspan="3"><p class="t-align-left block subdued ft-1 view-text"><%= customer_order&.payment_details&.credit_card_number rescue nil %></p><input type="text" id="credit_card_number" class="view-input" /></td>
             </tr><tr>
-              <td colspan="2"><h3 class="t-align-left bolder" >Name on Card</h3></td>
+              <td colspan="3"><h3 class="t-align-left bolder view-text" >Name on Card</h3></td>
             </tr>
             <tr>
-              <td colspan="2"><p class="t-align-left block subdued ft-1"><%= customer_order&.payment_details&.credit_card_name rescue nil %></p></td>
+              <td colspan="3"><p class="t-align-left block subdued ft-1 view-text"><%= customer_order&.payment_details&.credit_card_name rescue nil %></p><input type="text" id="credit_card_name" class="view-input" /></td>
             </tr>
             <tr>
-              <td colspan="2"><h3 class="t-align-left bolder">Billing Address</h3></td>
+              <td colspan="3"><h3 class="t-align-left bolder view-text">Billing Address</h3></td>
             </tr>
             <tr>
-              <td colspan="2"><p class="t-align-left block subdued ft-1">Same as shipping address</p></td>
+              <td colspan="3"><p class="t-align-left block subdued ft-1 view-text">Same as shipping address</p><input type="text" id="shipping_address" class="view-input" /></td>
             </tr>
             <tr>
-              <td><h3 class="t-align-left bolder">Expiration Date</h3></td>
+              <td ><h3 class="t-align-left bolder">Expiration Date</h3></td>
+            
               <td><h3 class="t-align-left bolder">Company</h3></td>
+             
             </tr>
+
+           <tr>     
+           <td><input type="date" id="expiration_date" class="view-input" /></td>
+           <td><input type="text" id="company" class="view-input" /></td>
+           </tr>
             <tr>
-              <td><p class="t-align-left block subdued ft-1"><%= "#{customer_order&.payment_details&.credit_card_expiration_month}/#{customer_order&.payment_details&.credit_card_expiration_year}" rescue nil %></p></td>
-              <td><p class="t-align-left block subdued ft-1"><%= customer_order&.payment_details&.credit_card_company rescue nil %></p></td>
+              <td><p class="t-align-left block subdued ft-1 view-text"><%= "#{customer_order&.payment_details&.credit_card_expiration_month}/#{customer_order&.payment_details&.credit_card_expiration_year}" rescue nil %></p></td>
+              <td><p class="t-align-left block subdued ft-1 view-text"><%= customer_order&.payment_details&.credit_card_company rescue nil %></p></td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
+    </form>
+    
+    <div class="ml-8">
     <div>
-      <h1 class="t-align-left">Contact Info</h1>
+      <h1 class="t-align-left ml">Contact Info</h1>
       <h3 class="t-align-left bolder">Phone Number</h3>
       <p class="t-align-left block subdued ft-1"><%= customer&.phone %></p>
       <h3 class="t-align-left bolder">Email Address</h3>
       <p class="t-align-left block subdued ft-1"><%= customer&.email %></p>
     </div>
+    </div>
 
     <div class="flex center">
-      <button>Edit Information</button>
+      <button id="edit_information">Edit Information</button>
+      <button id="save_information">Save Information</button>
     </div>
   </div>
 
@@ -715,10 +766,70 @@
       });
     });
 
-    <% if params[:tab] == 'Schedule' %>
+    $('.view-input').hide();
+    $('#save_information').hide();
 
+    $("#edit_information").on('click', function(){
+        $('p.view-text').addClass("hide");
+        $('.view-input').show().removeClass('hide');
+        $(this).hide();
+        $('#save_information').show();
+
+
+      });
+
+   
+
+      $("#save_information").on('click', function(){
+
+        $('p.view-text').removeClass("hide");//.hide();
+        $('.view-input').addClass("hide");
+        $(this).hide();
+        $('#edit_information').show();
+
+
+          $("form").submit(function (event) {
+            var formData = {
+              customer_id: '<%= params[:customer_id] %>',
+              first_name: $("#first_name").val(),
+              last_name: $("#last_name").val(),
+              address1: $("#address1").val(),
+              address2: $("#address2").val(),
+              city: $("#city").val(),
+              state: $("#province").val(),
+              state: $("#province").val(),
+              country: $("#country_name").val(),
+              zip: $("#zip").val(),
+              credit_card_number: $("#credit_card_number").val(),
+              credit_card_name: $("#credit_card_name").val(),
+              shipping_address: $("#shipping_address").val(),
+              expiration_date: $("#expiration_date").val(),
+              company: $("#company").val(),
+            };
+        
+
+      
+          $.ajax({
+            url: '/a/chargezen_production/dashboard/customer_info',
+            type: 'POST',
+            data: JSON.stringify(formData),
+            contentType: 'application/json',
+            success: function(response) {
+               window.location = window.location.href + '&tab=Account';
+            },
+            error: function(response) {}
+          });
+
+        
+          });
+        });
+
+    <% if params[:tab] == 'Schedule' %>
     Profile($('.schedule_tab'), 'Schedule',false)
     $('.schedule_tab').addClass('active');
+    <% els if ( params[:tab] == 'Account') %>
+    Profile($('.account_tab'), 'Account',false)
+    $('.account_tab').addClass('active');
       <% else %>
     document.getElementById("defaultOpen").click();
     <% end %>
