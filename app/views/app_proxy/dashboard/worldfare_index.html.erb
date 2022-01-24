@@ -449,16 +449,16 @@
   <form id="customer_info_form" onsubmit="return false;" >
   <div id="Account" class="Profile_links_data">
     <div class="flex space-between" style="margin-left: 8%">
-    
+
     <div>
         <h1 class="t-align-left">Personal Info</h1>
         <% address = customer&.try(:default_address) || customer&.addresses&.first rescue nil %>
-        
+
         <table class="info-table">
           <tbody>
             <tr>
               <td colspan="3"><h3 class="t-align-left bolder">First Name</h3></td>
-             
+
             </tr>
             <tr>
               <td colspan="3"><p class="t-align-left block subdued ft-1 view-text"><%= customer&.first_name %></p><input type="text" id="first_name" value="<%= customer&.first_name %>" class="view-input" /></td>
@@ -491,7 +491,7 @@
             <tr colspan="4">
               <td ><h3 class="t-align-left bolder">City</h3></td>
               <td><h3 class="t-align-left bolder">State</h3></td>
-              
+
             </tr>
 
             <tr>
@@ -529,20 +529,30 @@
               <td colspan="3"><p class="t-align-left block subdued ft-1 view-text"><%= customer_order&.payment_details&.credit_card_name rescue nil %></p><input type="text" id="credit_card_name" class="view-input" /></td>
             </tr>
             <tr>
-              <td colspan="3"><h3 class="t-align-left bolder view-text">Billing Address</h3></td>
+              <td colspan="3"><h3 class="t-align-left bolder view-text" >CVV</h3></td>
             </tr>
             <tr>
-              <td colspan="3"><p class="t-align-left block subdued ft-1 view-text">Same as shipping address</p><input type="text" id="shipping_address" class="view-input" /></td>
+              <td colspan="3"><p class="t-align-left block subdued ft-1 view-text"><%= customer_order&.payment_details&.verification_value rescue nil %></p><input type="text" id="verification_value" class="view-input" /></td>
             </tr>
+<!--            <tr>-->
+<!--              <td colspan="3"><h3 class="t-align-left bolder view-text">Billing Address</h3></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td colspan="3"><p class="t-align-left block subdued ft-1 view-text">Same as shipping address</p><input type="text" id="shipping_address" class="view-input" /></td>-->
+<!--            </tr>-->
             <tr>
               <td ><h3 class="t-align-left bolder">Expiration Date</h3></td>
-            
+
               <td><h3 class="t-align-left bolder">Company</h3></td>
-             
+
             </tr>
 
-           <tr>     
-           <td><input type="date" id="expiration_date" class="view-input" /></td>
+           <tr>
+           <td>
+             Month: <br/><br/><input type="month" id="exp_month" class="view-input" placeholder="Month" />
+             <br/><br/>
+             Year: <br/><br/><input type="year" id="exp_year" class="view-input" placeholder="Year" />
+           </td>
            <td><input type="text" id="company" class="view-input" /></td>
            </tr>
             <tr>
@@ -554,7 +564,7 @@
       </div>
     </div>
     </form>
-    
+
     <div class="ml-8">
     <div>
       <h1 class="t-align-left ml">Contact Info</h1>
@@ -779,7 +789,7 @@
 
       });
 
-   
+
 
       $("#save_information").on('click', function(){
 
@@ -801,27 +811,45 @@
               state: $("#province").val(),
               country: $("#country_name").val(),
               zip: $("#zip").val(),
-              credit_card_number: $("#credit_card_number").val(),
-              credit_card_name: $("#credit_card_name").val(),
-              shipping_address: $("#shipping_address").val(),
-              expiration_date: $("#expiration_date").val(),
-              company: $("#company").val(),
             };
-        
 
-      
+          let payment_url = '<%= action_subscription_contract_path(:update_payment, customer.id) %>'
+          console.log( payment_url );
           $.ajax({
             url: '/a/chargezen_production/dashboard/customer_info',
             type: 'POST',
             data: JSON.stringify(formData),
             contentType: 'application/json',
             success: function(response) {
-               window.location = window.location.href + '&tab=Account';
+              if($("#credit_card_number").val() != '' && $("#credit_card_name").val() != '' && $("#expiration_date").val() != ''){
+                let card_data = {
+                  card_number: $("#credit_card_number").val(),
+                  name: $("#credit_card_name").val(),
+                  verification_value: $('#verification_value').val(),
+                  // shipping_address: $("#shipping_address").val(),
+                  exp_year: $("#exp_year").val(),
+                  exp_month: $("#exp_month").val(),
+                  company: $("#company").val()
+                };
+                $.ajax({
+                  url: payment_url,
+                  type: 'POST',
+                  data: JSON.stringify(card_data),
+                  contentType: 'application/json',
+                  success: function(response) {
+
+                    window.location = window.location.href + '&tab=Account';
+                  },
+                  error: function(response) {window.location = window.location.href + '&tab=Account';}
+                });
+              }else{
+                window.location = window.location.href + '&tab=Account';
+              }
             },
             error: function(response) {}
           });
 
-        
+
           });
         });
 
