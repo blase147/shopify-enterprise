@@ -202,6 +202,74 @@
                         border-radius: 3px;
                     }
 .hide{ display:none !important; }
+
+@media only screen and (max-width: 720px) {
+  #itable {
+    flex-direction:column;
+  }
+}
+@media screen and (max-width: 749px){
+#itable td:before {
+   flex-grow: 0;
+    
+}
+#citys,#edate{
+  display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+
+
+}
+#citysvalue,#edatevalue{
+  display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+
+}
+#citysvalue td,#edatevalue td{
+  padding:0.4rem 1rem 0.5rem 0 !important;
+
+}
+
+#countryz{
+  display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    
+
+}
+#countryz td{
+  padding:0.4rem 10rem 0.5rem 0 !important;
+}
+#countryz-value{
+  display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+
+}
+#countryz-value td{
+  padding:0.4rem 1rem 0.5rem 0 !important;
+
+}
+#edate td{
+  padding:0.4rem 8rem 0.5rem 0 !important;
+}
+#psection,#psegment{
+  display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 10px;
+}
+.orders p.placed_dates{
+  font-size: 10px;
+}
+.sort_by{
+  display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 10px;
+    max-width:100%;
+}
+
+}
 </style>
 
 <div class="customer account c_account">
@@ -448,7 +516,7 @@
   </div>
   <form id="customer_info_form" onsubmit="return false;" >
   <div id="Account" class="Profile_links_data">
-    <div class="flex space-between" style="margin-left: 8%">
+    <div id="itable" class="flex space-between" style="margin-left: 8%">
 
     <div>
         <h1 class="t-align-left">Personal Info</h1>
@@ -488,26 +556,27 @@
               <td colspan="2"><p class="t-align-left block subdued ft-1 view-text"><%= address&.address2 %></p><input type="text" id="address2" value="<%= address&.address2 %>"class="view-input" /></td>
             </tr>
 
-            <tr colspan="4">
+            <tr id="citys" >
               <td ><h3 class="t-align-left bolder">City</h3></td>
+
               <td><h3 class="t-align-left bolder">State</h3></td>
 
             </tr>
-
-            <tr>
+            <tr id="citysvalue">
+  
             <td ><p class="t-align-left block subdued ft-1 view-text"><%= address&.city %></p><input type="text" id="city" value="<%= address&.city %>" class="view-input" /></td>
             <td><p class="t-align-left block subdued ft-1 view-text"><%= address&.province %></p><input type="text" id="province" value="<%= address&.province %>" class="view-input" /></td>
             </tr>
 
 
-            <tr>
+            <tr id="countryz">
               <td><h3 class="t-align-left bolder">Country</h3></td>
               <td><h3 class="t-align-left bolder">Zip Code</h3></td>
             </tr>
 
-            <tr>
-            <td><p class="t-align-left block subdued ft-1 view-text"><%= address&.country_name %></p><input type="text" id="country_name" value="<%= address&.country_name %>" class="view-input" /></td>
-            <td><p class="t-align-left block subdued ft-1 view-text"><%= address&.zip %></p><input type="text" id="zip" value="<%= address&.zip %>" class="view-input" /></td>
+            <tr id="countryz-value">
+              <td><p class="t-align-left block subdued ft-1 view-text"><%= address&.country_name %></p><input type="text" id="country_name" value="<%= address&.country_name %>" class="view-input" /></td>
+              <td><p class="t-align-left block subdued ft-1 view-text"><%= address&.zip %></p><input type="text" id="zip" value="<%= address&.zip %>" class="view-input" /></td>
             </tr>
 
           </tbody>
@@ -540,7 +609,7 @@
 <!--            <tr>-->
 <!--              <td colspan="3"><p class="t-align-left block subdued ft-1 view-text">Same as shipping address</p><input type="text" id="shipping_address" class="view-input" /></td>-->
 <!--            </tr>-->
-            <tr>
+            <tr id="edate">
               <td ><h3 class="t-align-left bolder">Expiration Date</h3></td>
 
               <td><h3 class="t-align-left bolder">Company</h3></td>
@@ -548,14 +617,14 @@
             </tr>
 
            <tr>
-           <td>
+           <!-- <td>
              Month: <br/><br/><input type="month" id="exp_month" class="view-input" placeholder="Month" />
              <br/><br/>
              Year: <br/><br/><input type="year" id="exp_year" class="view-input" placeholder="Year" />
            </td>
            <td><input type="text" id="company" class="view-input" /></td>
-           </tr>
-            <tr>
+           </tr> -->
+            <tr id="edatevalue">
               <td><p class="t-align-left block subdued ft-1 view-text"><%= "#{customer_order&.payment_details&.credit_card_expiration_month}/#{customer_order&.payment_details&.credit_card_expiration_year}" rescue nil %></p></td>
               <td><p class="t-align-left block subdued ft-1 view-text"><%= customer_order&.payment_details&.credit_card_company rescue nil %></p></td>
             </tr>
@@ -588,7 +657,7 @@
     <% end %>
 
     <div class="sub_box">
-      <ul class="sub_list slide_box">
+      <ul class="sub_list slide_box" id="sub_list_slide_box">
         <% active_sub = customer_order.line_items.find{|item| item.name.downcase.include?('box')} rescue nil %>
         <% if active_sub %>
           {% assign active_sub = <%= active_sub.product_id %> %}
@@ -613,7 +682,7 @@
           {% endunless %}
         {% endfor %}
       </ul>
-      <button class="Update_sub">Update Subscription</button>
+      <button class="Update_sub" id="sub">Update Subscription</button>
       <a href="" class="Cancel_sub">Cancel Subscription</a>
 
     </div>
@@ -630,34 +699,41 @@
         <option value="All">All</option>
       </select>
     </div>
-    <% if customer_order&.line_items.present? && customer_order&.line_items.count > 5 %>
-      <h2 class="Trial">Current Week</h2>
-      <% else %>
-      <h2 class="Trial">Trial Week</h2>
-      <% end %>
+    
 
 
     <% created_at = Date.parse(customer_order&.created_at) rescue nil %>
+    <% delivery_day_sym = customer_order.note.downcase.split(' ')[0] rescue  nil %>
+    
     <% next_day = created_at + 1.day rescue nil %>
     <% products = ShopifyAPI::Product.where(ids: customer_order.line_items.map(&:product_id).join(', '), fields: 'id,title,images') rescue nil %>
-    <div class="orders">
-      <div class="placed_data">
-        <p class="placed">Order placed:</p>
-        <p class="placed_dates"><%= created_at.strftime('%B %d, %Y') rescue nil %> (edit before <%= next_day.strftime('%B %d') rescue nil %>)</p>
-      </div>
-      <div class="product_section">
-      <% customer_order&.line_items&.each do |line_item| %>
-        <% unless line_item.name.downcase.include?('box') %>
-          <% product = products.find{|p| p.id == line_item.product_id } %>
-          <div class="order_inn">
-<!--             <span class="dish_remove" data-id="{{item.id}}">×</span>-->
-            <img src="<%= product.images.first.src rescue nil %>">
-            <h5><%= line_item.name %> (<%= line_item.quantity %>)</h5>
-          </div>
-        <% end %>
+    <% (created_at.cweek..DateTime.now.cweek).each  do |week_number| %>
+      <% if DateTime.now.cweek == week_number && customer_order&.line_items.present? && customer_order&.line_items.count > 5 %>
+      <h2 class="Trial">Current Week</h2>
+      <% elsif  DateTime.now.cweek == week_number %>
+      <h2 class="Trial">Trial Week</h2>
       <% end %>
+      <div class="orders">
+        <div class="placed_data pdate">
+          <p class="placed">Order placed:</p>
+          <% if DateTime.now.cweek == week_number %>
+          <p class="placed_dates "><%= created_at.strftime('%B %d, %Y') rescue nil %> (edit before <%= next_day.strftime('%B %d') rescue nil %>)</p>
+          <% end %>
+        </div>
+        <div id="psection" class="product_section">
+        <% customer_order&.line_items&.each do |line_item| %>
+          <% unless line_item.name.downcase.include?('box') %>
+            <% product = products.find{|p| p.id == line_item.product_id } %>
+            <div class="order_inn">
+  <!--             <span class="dish_remove" data-id="{{item.id}}">×</span>-->
+              <img src="<%= product.images.first.src rescue nil %>">
+              <h5><%= line_item.name %> (<%= line_item.quantity %>)</h5>
+            </div>
+          <% end %>
+        <% end %>
+        </div>
       </div>
-    </div>
+    <% end %>
 
     <div class="order_status">
       <div class="Status">
@@ -699,12 +775,12 @@
       %>
       <div class="pre_orders">
         <h2 class="Trial">Week of <%= week_day.strftime('%B %d, %Y') rescue nil %></h2>
-        <div class="placed_data">
+        <div class="placed_data pdate">
           <p class="placed">Select dishes by:</p>
-          <p class="placed_dates"><%= select_by rescue nil %></p>
+          <p class="placed_dates pdate"><%= select_by rescue nil %></p>
         </div>
         <div class="order_add">
-          <ul class="pre_segment">
+          <ul id="psegment" class="pre_segment">
             <% customer_order&.line_items&.each_with_index do |line_item, key| %>
               <% unless line_item.name.downcase.include?('box') %>
                 <% if params[:product_ids].present? && params[:week].present? && params[:week].to_i == i.to_i %>
@@ -862,6 +938,34 @@
       <% else %>
     document.getElementById("defaultOpen").click();
     <% end %>
+    
+    $('#sub_list_slide_box li button').on('click', function () {
+      $('#sub_list_slide_box li button.active').removeClass('active');
+      $(this).addClass('active');
+    });
+    $('#sub').on('click', function () {
+      // a=$('#sub_list_slide_box li button.active span.sub_duration_2').text();
+      b=$('#sub_list_slide_box li button.active span.each_price').text();
+      // c=$('#sub_list_slide_box li button.active span.bottom').text();
+      let data={
+        each_price:b
+      }
+      
+    //   $.ajax({
+    //     url: '/a/chargezen_production/dashboard/pre_order',
+    //     type: 'POST',
+    //     data: JSON.stringify(data),
+    //     contentType: 'application/json',
+    //     success: function(response) {
+    //       window.location = '/a/chargezen_production?customer_id=' + response.customer_id;
+    //     },
+    //     error: function(response) {}
+    //   });
+    //   console.log(a);
+    //   console.log(b);
+    //   console.log(c);
+    //   $(this).addClass('active');
+    });
 
   });
 </script>
