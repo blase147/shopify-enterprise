@@ -211,7 +211,7 @@
 @media screen and (max-width: 749px){
 #itable td:before {
    flex-grow: 0;
-    
+
 }
 #citys,#edate{
   display: flex;
@@ -235,7 +235,7 @@
   display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    
+
 
 }
 #countryz td{
@@ -563,7 +563,7 @@
 
             </tr>
             <tr id="citysvalue">
-  
+
             <td ><p class="t-align-left block subdued ft-1 view-text"><%= address&.city %></p><input type="text" id="city" value="<%= address&.city %>" class="view-input" /></td>
             <td><p class="t-align-left block subdued ft-1 view-text"><%= address&.province %></p><input type="text" id="province" value="<%= address&.province %>" class="view-input" /></td>
             </tr>
@@ -670,7 +670,8 @@
         {% for pro in subcollection.products %}
           {% unless pro.title contains 'Trial' %}
             <li class="sub_single">
-              <button class="sub_button {% if active_sub == pro.id %}active{% endif %}">
+              <button class="sub_button subscription-plans {% if active_sub == pro.id %}active{% endif %}">
+                <input type="hidden" value="{{pro.metafields.subscription.dishes_in_week}}">
                 <span class="Big">{{pro.title}}</span>
                 <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/files/Vector_20.png?v=1631797836">
               <div class="product_number_out"><span class="portal_product_number">{{pro.metafields.subscription.dishes_in_week}}</span></div>
@@ -699,12 +700,12 @@
         <option value="All">All</option>
       </select>
     </div>
-    
+
 
 
     <% created_at = Date.parse(customer_order&.created_at) rescue nil %>
     <% delivery_day_sym = customer_order.note.downcase.split(' ')[0] rescue  nil %>
-    
+
     <% next_day = created_at + 1.day rescue nil %>
     <% products = ShopifyAPI::Product.where(ids: customer_order.line_items.map(&:product_id).join(', '), fields: 'id,title,images') rescue nil %>
     <% (created_at.cweek..DateTime.now.cweek).each  do |week_number| %>
@@ -938,7 +939,7 @@
       <% else %>
     document.getElementById("defaultOpen").click();
     <% end %>
-    
+
     $('#sub_list_slide_box li button').on('click', function () {
       $('#sub_list_slide_box li button.active').removeClass('active');
       $(this).addClass('active');
@@ -950,21 +951,21 @@
       let data={
         each_price:b
       }
-      
-    //   $.ajax({
-    //     url: '/a/chargezen_production/dashboard/pre_order',
-    //     type: 'POST',
-    //     data: JSON.stringify(data),
-    //     contentType: 'application/json',
-    //     success: function(response) {
-    //       window.location = '/a/chargezen_production?customer_id=' + response.customer_id;
-    //     },
-    //     error: function(response) {}
-    //   });
-    //   console.log(a);
-    //   console.log(b);
-    //   console.log(c);
-    //   $(this).addClass('active');
+
+      $.ajax({
+        url: "/a/chargezen_production/subscriptions/<%= active_sub.id %>/update_subscription",
+        type: 'POST',
+        data: JSON.stringify({quantity: $('#sub_list_slide_box li button.active').find('input[type=hidden]').val() }),
+        contentType: 'application/json',
+        success: function(response) {
+          window.location = '/a/chargezen_production?customer_id=' + response.customer_id;
+        },
+        error: function(response) {}
+      });
+      console.log(a);
+      console.log(b);
+      console.log(c);
+      $(this).addClass('active');
     });
 
   });
