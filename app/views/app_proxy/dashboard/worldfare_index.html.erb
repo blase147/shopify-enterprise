@@ -202,8 +202,117 @@
                         border-radius: 3px;
                     }
 .hide{ display:none !important; }
+.support-section {
+  max-width: 1200px;
+  margin: 60px auto 40px;
+}
+.support-section form {
+  max-width: 600px;
+  margin: 50px auto 80px;
+}
+.support-section form .holder {
+  display: flex;
+}
+.support-section form .holder button {
+  margin: 0 0 0 20px !important;
+  background: #1E513D;
+  border: none;
+}
+.support-section form .holder button:hover {
+  color: #fff;
+}
+.support-section h2 {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: left;
+}
+.support-section .popular-questions,
+.support-section .looking-for {
+  margin-top: 60px;
+}
+.support-section .help-category ul {
+  margin: 0 -20px;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+}
+.support-section .help-category ul li {
+  margin: 15px;
+}
+.support-section .help-category ul li a {
+  padding: 19px 70px 22px 80px;
+  background: #c4c4c47a;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  font-size: 22px;
+  color: #000;
+  font-weight: 500;
+  text-decoration: none;
+  position: relative;
+  border: 2px solid transparent;
+  transition: 0.3s all ease;
+}
+.support-section .help-category ul li a:hover {
+  border: 2px solid #1e513d;
+  background: #fff;
+  color: #1e513d;
+}
+.support-section .help-category ul li a img {
+  width: 25px;
+  position: absolute;
+  left: 30px;
+  top: 25px;
+}
+.support-section .popular-questions ul {
+  margin: 0 15px;
+  padding: 0;
+}
+.support-section .popular-questions ul li a {
+  color: #000;
+  font-size: 16px;
+  font-family: Lato;
+  font-weight: 400;
+  padding: 8px;
+}
+.support-section .popular-questions ul li a:hover {
+  opacity: 0.7;
+}
+.support-section .looking-for {
+  text-align: left;
+}
+.support-section .looking-for p {
+  display: block !important;
+  font-size: 16px !important;
+  font-family: "Lato" !important;
+  font-weight: 400 !important;
+  text-align: left !important;
+  line-height: 1.8 !important;
+}
+.support-section .looking-for p a {
+  font-size: 16px;
+  font-family: "Lato";
+  color: #000;
+  padding: 0 6px;
+  font-weight: 400;
+}
+.support-section .looking-for p a:hover {
+  opacity: 0.7;
+}
 
 @media only screen and (max-width: 720px) {
+  .support-section .help-category ul {
+    display: block;
+  }
+  .support-section .help-category ul li {
+    width: 92%;
+    margin: 20px auto;
+  }
+  .support-section .help-category ul li a {
+    display: block;
+    font-size: 16px;
+  }
   #itable {
     flex-direction:column;
   }
@@ -813,9 +922,90 @@
   </div>
 
   <div id="Support" class="Profile_links_data">
-    <h3>Support</h3>
-    <p>Tokyo is the capital of Japan.</p>
-  </div>
+    <div class="support-section">
+      <h1>How can we help?</h1>
+      <form action="">
+        <div class="holder">
+          <div class="field">
+            <input type="text" class="field__input" placeholder="Ex: 'delivery issue'">
+          </div>
+          <button type="button" class="button button--primary" name="commit" id="Search">
+            Search
+          </button>
+        </div>
+      </form>
+      <div class="help-category">
+        <h2>Help by category</h2>
+        <ul>
+          <li>
+            <a href="#">
+              <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/t/8/assets/Gear.png?v=1643271581">
+              How it works
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/t/8/assets/User.png?v=1643271601">
+              Account & Subscription
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/t/8/assets/Truck.png?v=1643271594">
+              Delivery & Location
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/t/8/assets/ForkKnife.png?v=1643271574">
+              Dietary & Nutrition
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/t/8/assets/Truck.png?v=1643271594">
+              Cooking & Enjoying Your Dishes
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/t/8/assets/Recycle.png?v=1643271587">
+              Recycling & Sustainability
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/t/8/assets/Wallet.png?v=1643271609">
+              Payment & Promos
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="popular-questions">
+        <h2>Popular questions</h2>
+        <ul>
+          <li>
+            <a href="#">
+              How do I make changes to my account?
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              My delivery was...rough. How can you make it right?
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              I forgot to cancel my subscription before the cutoff—can I still get a refund?
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="looking-for">
+        <h2>Didn’t find what you’re looking for? </h2>
+        <p>Contact us at <a href="mailto:support@worldfare.com">Support@WorldFare.com</a> and we’ll get back to you as soon as possilbe!</p>
+      </div>
+    </div>
 </div>
 
 
