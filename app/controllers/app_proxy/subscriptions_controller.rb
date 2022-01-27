@@ -46,15 +46,19 @@ class AppProxy::SubscriptionsController < AppProxyController
   end
 
   def update_subscription
-    if params[:subscription].present? && !params[:subscription].nil?
+    if params[:subscription].present?
       date = begin
                params[:subscription][:next_billing_date].to_date
              rescue StandardError
                nil
              end
-      if date.nil?
-        splitted_date = params[:subscription][:next_billing_date].split('/')
-        params[:subscription][:next_billing_date] = [splitted_date[2], splitted_date[0], splitted_date[1]].join('-')
+      begin
+        if date.nil?
+          splitted_date = params[:subscription][:next_billing_date].split('/')
+          params[:subscription][:next_billing_date] = [splitted_date[2], splitted_date[0], splitted_date[1]].join('-')
+        end
+      rescue
+        p 'Error: '
       end
     end
     id = "gid://shopify/SubscriptionContract/#{params[:id]}"
