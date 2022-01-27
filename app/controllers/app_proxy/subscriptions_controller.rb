@@ -46,7 +46,7 @@ class AppProxy::SubscriptionsController < AppProxyController
   end
 
   def update_subscription
-    if params[:subscription].present?
+    if params[:subscription].present? && !params[:subscription].nil?
       date = begin
                params[:subscription][:next_billing_date].to_date
              rescue StandardError
