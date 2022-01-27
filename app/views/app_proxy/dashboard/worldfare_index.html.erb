@@ -958,7 +958,7 @@
         data: JSON.stringify({quantity: $('#sub_list_slide_box li button.active').find('input[type=hidden]').val() }),
         contentType: 'application/json',
         success: function(response) {
-          window.location = '/a/chargezen_production?customer_id=' + response.customer_id;
+          window.location.reload();// = '/a/chargezen_production?customer_id=' + response.customer_id;
         },
         error: function(response) {}
       });
