@@ -16,15 +16,15 @@ class DeliveryOption < ApplicationRecord
       sets[set['delivery']] = []
 
       if DateTime.now.to_i < Date.today.at_beginning_of_week(set['cutoff_day'].to_sym).to_time.to_i
-        sets[set['delivery']] << Date.today.at_beginning_of_week(set['delivery'].to_sym).strftime('%Y-%m-%d')
+        sets[set['delivery']] << Date.today.at_beginning_of_week(set['delivery'].to_sym).strftime('%A %d %b %Y')
       end
 
       if Date.today.next_week(set['cutoff_day'].to_sym).to_time.to_i < Date.today.next_week(set['delivery'].to_sym).to_time.to_i
-        sets[set['delivery']] << Date.today.next_week(set['delivery'].to_sym).strftime('%Y-%m-%d')
+        sets[set['delivery']] << Date.today.next_week(set['delivery'].to_sym).strftime('%A %d %b %Y')
       end
-      sets[set['delivery']] << Date.today.next_week.next_week(set['delivery'].to_sym).strftime('%Y-%m-%d')
-      sets[set['delivery']] << Date.today.next_week.next_week.next_week(set['delivery'].to_sym).strftime('%Y-%m-%d')
-      sets[set['delivery']] << Date.today.next_week.next_week.next_week.next_week(set['delivery'].to_sym).strftime('%Y-%m-%d')
+      sets[set['delivery']] << Date.today.next_week.next_week(set['delivery'].to_sym).strftime('%A %d %b %Y')
+      sets[set['delivery']] << Date.today.next_week.next_week.next_week(set['delivery'].to_sym).strftime('%A %d %b %Y')
+      sets[set['delivery']] << Date.today.next_week.next_week.next_week.next_week(set['delivery'].to_sym).strftime('%A %d %b %Y')
     end
     sets
   end
