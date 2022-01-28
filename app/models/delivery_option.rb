@@ -9,7 +9,48 @@ class DeliveryOption < ApplicationRecord
     }
   end
 
+  def setup( settings )
+    sets = {}
+    DateTime.now.to_i
+    JSON.parse(settings).each do |set|
+      sets[set['delivery']] = []
+
+      if DateTime.now.to_i < Date.today.at_beginning_of_week(set['cutoff_day'].to_sym).to_time.to_i
+        sets[set['delivery']] << Date.today.at_beginning_of_week(set['delivery'].to_sym).strftime('%Y-%m-%d')
+      end
+
+      if Date.today.next_week(set['cutoff_day'].to_sym).to_time.to_i < Date.today.next_week(set['delivery'].to_sym).to_time.to_i
+        sets[set['delivery']] << Date.today.next_week(set['delivery'].to_sym).strftime('%Y-%m-%d')
+      end
+      sets[set['delivery']] << Date.today.next_week.next_week(set['delivery'].to_sym).strftime('%Y-%m-%d')
+      sets[set['delivery']] << Date.today.next_week.next_week.next_week(set['delivery'].to_sym).strftime('%Y-%m-%d')
+      sets[set['delivery']] << Date.today.next_week.next_week.next_week.next_week(set['delivery'].to_sym).strftime('%Y-%m-%d')
+    end
+    sets
+  end
+
   def setup_settings(settings)
+    sets = []
+
+    week = 0
+    stop = 1
+    future_dates = setup( settings )
+    while (stop <= delivery_option) do
+      JSON.parse(settings).each_with_index do |set, key|
+        if stop <= delivery_option
+          set['date'] = future_dates[set['delivery']][week]
+          set['date_i'] = DateTime.parse(future_dates[set['delivery']][week]).to_i
+          sets << set
+        end
+        stop += 1
+      end
+      week += 1
+    end
+    sets.sort_by! { |k| k["date_i"] }
+  end
+
+
+  def setup_settings_archive(settings)
     sets = []
     next_week_used = false
     week = 1
@@ -38,6 +79,11 @@ class DeliveryOption < ApplicationRecord
       end
       week += 1
     end
-    sets
+
+
+  end
+
+  def sort_fields(fields, sort_by)
+    fields.sort_by { |_key, value| value[sort_by].present? ? value[sort_by] : 999 }.to_h if fields.present?
   end
 end
