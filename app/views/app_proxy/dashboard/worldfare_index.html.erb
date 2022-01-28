@@ -1054,7 +1054,7 @@
     });
 
     $('#orders_list').on('change', function(){
-      let enable = $('#orders_list :selected').text();
+      let enable = $('#orders_list :selected').val();
       $('.past_orders, .current_order, .pre_orders').hide();
       if(enable == 'Current'){
         $('.current_order, .pre_orders').show();

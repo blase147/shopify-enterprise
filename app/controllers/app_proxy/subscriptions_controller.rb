@@ -71,7 +71,13 @@ class AppProxy::SubscriptionsController < AppProxyController
       if params[:quantity].present? && params[:customer_id].present?
         customer = ShopifyAPI::Customer.find( params[:customer_id] )
         if customer.present?
-          customer.tags = "#{params[:quantity]}box"
+          tags = ["#{params[:quantity]}box"]
+          customer.tags.split(',').each do |tag|
+            if !['8box', '10box', '12box'].include?( tag.strip.downcase )
+              tags << tag
+            end
+          end
+          customer.tags = tags.join(',')
           customer.save
         end
       end
