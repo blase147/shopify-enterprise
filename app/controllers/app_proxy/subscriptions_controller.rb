@@ -46,7 +46,7 @@ class AppProxy::SubscriptionsController < AppProxyController
   end
 
   def update_subscription
-    if params[:subscription].present?
+    if params[:subscription].present? && params[:subscription][:next_billing_date].present?
       date = begin
                params[:subscription][:next_billing_date].to_date
              rescue StandardError
@@ -68,6 +68,13 @@ class AppProxy::SubscriptionsController < AppProxyController
       flash[:error] = result[:error]
       render js: "alert('#{result[:error]}'); hideLoading()"
     else
+      if params[:quantity].present? && params[:customer_id].present?
+        customer = ShopifyAPI::Customer.find( params[:customer_id] )
+        if customer.present?
+          customer.tags = "#{params[:quantity]}box"
+          customer.save
+        end
+      end
       render js: 'location.reload();'
     end
   end
