@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 {{ 'customer.css' | asset_url | stylesheet_tag }}
 <% customer = ShopifyAPI::Customer.find(params[:customer_id]) rescue nil %>
 <% customer_order = ShopifyAPI::Order.find(:first, params: {customer_id: customer.id} ) rescue nil %>
@@ -185,6 +187,507 @@
     display: flex;
     justify-content: center;
   }
+  .customer-details {
+    background: #E9DBC3;
+    padding: 30px;
+    margin-bottom: 30px;
+  }
+  .customer-details .container {
+    max-width: 1300px;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin: auto;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .customer-details .customer-info {
+    display: flex;
+    align-items: center;
+  }
+  .customer-details .customer-info .initial {
+    background: #323232;
+    color: #fff;
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: bold;
+  }
+  .customer-details .customer-info .details strong {
+    font-size: 18px;
+    line-height: 1;
+    color: #323232;
+    font-weight: bold;
+  }
+  .customer-details .customer-info .details p {
+    font-size: 14px;
+    font-weight: 300;
+    color: #384443;
+    font-family: 'Ainslie';
+  }
+  .customer-details .customer-info .details a {
+    color: #384443;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 14px;
+    margin-top: 1px;
+  }
+  .customer-details .contact-details strong {
+    font-size: 16px;
+    line-height: 1;
+    color: #323232;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .customer-details .contact-details p {
+    font-size: 14px !important;
+    font-weight: 300 !important;
+    color: #384443 !important;
+    font-family: 'Ainslie' !important;
+    justify-content: flex-start !important;
+  }
+  .customer-details .button-holder button {
+    margin: 0 !important;
+  }
+  .btn-yellow {
+    font-size: 14px !important;
+    font-family: 'Ainslie' !important;
+    background: #F6BA2E !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 15px 20px !important;
+    min-width: inherit !important;
+  }
+  .customer-portal {
+    max-width: 1300px;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin: auto;
+    text-align: left;
+  }
+  .customer-portal .flex-holder {
+    display: flex;
+  }
+  .customer-portal .tabs-holder {
+    width: 20%;
+    position: relative;
+    top: -240px;
+  }
+  .customer-portal .tab-content-holder {
+    width: 80%;
+  }
+  .customer-portal .tab-content-holder .Profile_links_data {
+    margin: 0;
+  }
+  .customer-portal .tab-content-holder .Profile_links_data .space-between {
+    margin: 0 !important;
+    display: block;
+  }
+  .customer-portal .tab-content-holder .account-holder {
+    background: rgba(233, 219, 195, 0.1);
+    border: 1px solid #DDE2E2;
+    box-sizing: border-box;
+    border-radius: 10px;
+    padding: 30px;
+  }
+  .customer-portal .tab-content-holder .left-button button {
+    margin: 20px 0 !important;
+    justify-content: flex-start;
+    font-size: 18px !important;
+  }
+  .customer-portal .tab-content-holder .account-holder > div + div {
+    border-top: 1px dotted #DDE2E2;
+    padding-top: 35px;
+    margin-top: 35px;
+  }
+  .customer-portal .tab-content-holder .account-holder h1 {
+    margin: 0 0 20px !important;
+    font-family: 'Ainslie';
+    font-weight: bold;
+    color: #384443;
+    font-size: 34px;
+  }
+  .customer-portal .tab-content-holder .account-holder h3 {
+    margin: 20px 0 0 !important;
+    font-family: 'Ainslie';
+    font-weight: 700;
+    color: #384443;
+    font-size: 18px;
+  }
+  .customer-portal .tab-content-holder .account-holder p.t-align-left.block.subdued {
+    font-weight: normal;
+    font-family: 'Ainslie';
+    font-size: 18px !important;
+    margin-bottom: 5px;
+  }
+  .customer-portal .tab-content-holder .sort_by {
+    justify-content: space-between;
+    margin-left: auto;
+    position: relative;
+    padding-right: 20px;
+    max-width: 21%;
+    margin-bottom: 20px;
+  }
+  .customer-portal .tab-content-holder .sort_by:after {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-left: 2px solid #333;
+    border-bottom: 2px solid #333;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    right: 5px;
+    top: 16px;
+  }
+  .customer-portal .tab-content-holder .sort_by p {
+    font-family: "Ainslie" !important;
+    font-weight: normal !important;
+    font-size: 16px !important;
+  }
+  .customer-portal .tab-content-holder .sort_by select {
+    font-family: "Ainslie" !important;
+    font-weight: normal !important;
+    font-size: 16px !important;
+  }
+  *:focus-visible {
+    outline: none !important;
+  }
+  .customer-portal .tab-content-holder .sort_by select:hover,
+  .customer-portal .tab-content-holder .sort_by select:focus {
+    box-shadow: none !important;
+  }
+  .customer-portal .tabs-holder .Profile_tab {
+    margin: 0;
+    border: none;
+  }
+  .customer-portal .tabs-holder .Profile_tab button {
+    font-family: "Ainslie" !important;
+  }
+  .customer-portal .tabs-holder .Profile_tab button.active {
+    color: #88B363;
+    font-weight: bold;
+    border: none;
+  }
+  .customer-portal .tabs-holder .Profile_tab button svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 15px;
+  }
+  .customer-portal .tabs-holder .Profile_tab button.active svg path {
+    stroke: #88B363;
+  }
+  .customer-portal .top-section {
+    width: 80%;
+    margin-left: auto;
+  }
+  .customer-portal .box-holder {
+    display: flex;
+    margin: 0 -10px 30px;
+  }
+  .customer-portal .box-holder .boxes {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    border: 1px solid #DDE2E2;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 30px 25px;
+  }
+  .customer-portal .box-holder .boxes .ico {
+    margin-right: 20px;
+    width: 60px;
+    height: 60px;
+  }
+  .customer-portal .box-holder .boxes .ico svg {
+    width: 100%;
+    height: 100%;
+  }
+  .customer-portal .box-holder .boxes .details {
+    flex: auto;
+  }
+  .customer-portal .box-holder .boxes .details p {
+    font-size: 14px;
+    font-weight: 200;
+    display: block;
+    text-align: left;
+    margin-bottom: 15px;
+    font-family: 'Ainslie';
+  }
+  .customer-portal .box-holder .boxes .details p strong {
+    font-size: 26px;
+    font-weight: bold;
+    color: #000;
+  }
+  .customer-portal .ui-progressbar {
+    background: #DDE2E2;
+    height: 6px;
+    border-radius: 40px;
+    margin-left: 35px;
+    position: relative;
+  }
+  .customer-portal .ui-progressbar:before {
+    content: attr(aria-valuenow) "%";
+    position: absolute;
+    font-size: 12px;
+    left: -35px;
+    top: -7px;
+  }
+  .customer-portal .ui-progressbar .ui-progressbar-value {
+    height: 6px;
+    background: #F88568;
+    border-radius: 20px;
+  }
+  .customer-portal .warning .ui-progressbar .ui-progressbar-value {
+    height: 6px;
+    background: #F6BA2E;
+    border-radius: 20px;
+  }
+  .recommended-for {
+    margin-bottom: 30px;
+  }
+  .recommended-for strong {
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .recommended-for .text-details strong {
+    font-size: 16px;
+    font-weight: bold;
+    display: block;
+    margin: 7px 0;
+  }
+  .recommended-for .text-details p {
+    font-size: 14px !important;
+    display: block !important;
+    text-align: left !important;
+    font-weight: 300 !important;
+    font-family: 'Ainslie' !important;
+    margin-bottom: 10px !important;
+  }
+  .recommended-for .text-details button {
+    font-weight: bold;
+    margin: 0 !important;
+    display: block;
+  }
+  .recommended-for .slick-slide {
+    margin: 0 10px;
+  }
+  .recommended-for .slick-list {
+    margin: 0 -10px;
+  }
+  .recommended-for .list .box-holder {
+    border: 1px solid #DDE2E2;
+    border-radius: 5px;
+    padding: 20px 20px 25px;
+    margin: 0;
+  }
+  .recommended-for .list .img-holder {
+    width: 120px;
+    height: 120px;
+    border-radius: 11px;
+    overflow: hidden;
+    position: relative;
+    margin-right: 15px;
+    background: #eadcc2;
+    overflow: hidden;
+  }
+  .recommended-for .list .img-holder button {
+    position: absolute;
+    top: 5px;
+    right: 7px;
+    background: transparent;
+    box-shadow: none;
+    color: #000;
+    font-family: 'Lato';
+    font-weight: normal;
+    font-size: 36px;
+    line-height: 30px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    padding: 0;
+    min-width: inherit;
+    margin: 0 !important;
+    height: auto;
+    min-height: inherit;
+  }
+  .recommended-for .list .img-holder img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+  .order-box {
+    border: 1px solid #DDE2E2;
+    border-radius: 10px;
+    padding: 40px;
+    overflow: hidden;
+  }
+  .order-box + .order-box {
+    margin-top: 40px;
+  }
+  .order-box h2 {
+    margin: 0 0 12px !important;
+    font-family: 'Ainslie';
+    font-weight: bold;
+    font-size: 34px;
+  }
+  .order-box .placed_dates {
+    display: block !important;
+    text-align: left !important;
+    font-weight: 300 !important;
+    font-family: 'Ainslie' !important;
+    font-weight: 100 !important;
+    font-size: 20px !important;
+    color: #384443 !important;
+    margin-bottom: 15px !important;
+  }
+  .order-box .placed {
+    display: block !important;
+    text-align: left !important;
+    font-family: 'Ainslie' !important;
+    font-weight: 600 !important;
+    font-size: 22px !important;
+    color: #384443 !important;
+    margin-bottom: 15px !important;
+  }
+  .order-box .skip_week {
+    display: block !important;
+    text-align: right !important;
+  }
+  .order-box .skip_week a {
+    font-family: 'Ainslie' !important;
+    font-weight: 600 !important;
+    font-size: 22px !important;
+    text-decoration: none;
+    color: #384443 !important;
+  }
+  .order-box .product_section {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -15px;
+  }
+  .order-box .product_section .order_inn {
+    box-shadow: none;
+    background: transparent;
+    text-align: center;
+    width: 25%;
+    margin: 0;
+    float: none;
+    padding: 10px 15px !important;
+  }
+  .order-box .product_section .order_inn .holder {
+    padding: 25px 15px;
+    background: #f8f4ed;
+    overflow: hidden;
+    border-radius: 8px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .order-box .product_section .order_inn .holder button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: transparent;
+    box-shadow: none;
+    color: #000;
+    font-family: 'Lato';
+    font-weight: normal;
+    font-size: 36px;
+    line-height: 30px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    padding: 0;
+    min-width: inherit;
+    margin: 0 !important;
+    height: auto;
+    min-height: inherit;
+  }
+  .order-box .product_section .order_inn img {
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .order-box .product_section .order_inn h5 {
+    font-size: 16px;
+    line-height: 1.4;
+    font-family: 'Ainslie';
+    font-weight: bold;
+  }
+  .order-box .order_status {
+    margin-top: 20px !important;
+  }
+  .order-box .order_status p {
+    display: block !important;
+    text-align: left !important;
+    font-family: 'Ainslie' !important;
+    font-weight: 600 !important;
+    font-size: 22px !important;
+    color: #384443 !important;
+    margin-bottom: 15px !important;
+  }
+  .order-box .order_status p.s_data {
+    text-align: right !important;
+  }
+  .order-box .pre_segment {
+    display: flex;
+    margin: 0 -10px;
+  }
+  .order-box .pre_segment .pre_segment_order {
+    width: 25%;
+    float: none;
+  }
+  .order-box .pre_segment .pre_segment_order a {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    padding: 12px;
+  }
+  .order-box .pre_segment .pre_segment_order a button {
+    min-width: inherit !important;
+    display: block;
+    width: 100%;
+    margin: auto !important;
+    min-height: inherit !important;
+    box-shadow: none;
+    background: #f8f4ed;
+    padding: 60px 25px;
+  }
+  .order-box .pre_segment .pre_segment_order button span {
+    font-size: 32px;
+    font-family: 'Lato';
+    font-weight: 300;
+    margin-bottom: 15px;
+    display: block;
+    width: auto; 
+  }
+  .order-box .pre_segment .pre_segment_order button p {
+    font-size: 18px;
+    display: block;
+    text-align: left;
+    width: auto;
+    font-family: 'Ainslie';
+    font-weight: bold;
+  }
+  .info-table td {
+    width: 50%;
+  }
 </style>
 
 <div class="customer account c_account">
@@ -199,483 +702,667 @@
     </a>
   </div>
 
-  <div class="Profile_tab">
-    <button class="Profile_links" onclick="Profile(event, 'Overview')" id="defaultOpen">Overview</button>
-    <button class="Profile_links" onclick="Profile(event, 'Account')">Account</button>
-    <button class="Profile_links" onclick="Profile(event, 'Subscription')">Subscription</button>
-    <button class="Profile_links schedule_tab" onclick="Profile(event, 'Schedule')">Schedule</button>
-    <button class="Profile_links" onclick="Profile(event, 'Support')">Support</button>
-  </div>
-
-  <div id="Overview" class="Profile_links_data">
-    <div class="plan_detail_outer">
-      <div class="plan_title_btn">
-        <h1>Your <br>current plan:</h1>
-        <a href="" class="plan_up">
-          {% if current_subscription %}
-            Upgrade
-          {% else %}
-            Choose
-          {% endif %} Subscription
-        </a>
+  <div class="customer-details">
+    <div class="container">
+      <div class="customer-info">
+        <div class="initial">
+          EA
+        </div>
+        <div class="details">
+          <strong>{{ customer.first_name }}</strong>
+          <p>4-Dish Trial Box - $14/dish</p>
+          <a href="#" class="btn-link">Upgrade Subscription</a>
+        </div>
       </div>
-      <div class="plan_detail">
-        <p class="choose_plan_boxes_namber_of_dish">
-          {% if current_subscription %}
-            {{ current_subscription.metafields.subscription.dishes_in_week }}-Dish Box
+      <div class="contact-details">
+        <strong>Questions? Call Us: +1234 5678 9000</strong>
+        <p>Monday - Friday 8:30 - 18:30</p>
+      </div>
+      <div class="button-holder">
+        <button class='btn-yellow'>GET $5 OFF</button>
+      </div>
+    </div>
+  </div>
+  <div class="customer-portal">
+    <div class="top-section">
+      <div class="box-holder">
+        <div class="boxes">
+          <div class="ico">
+            <svg width="84" height="71" viewBox="0 0 84 71" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M78.6667 2.1665H5.33333C3.49238 2.1665 2 3.65889 2 5.49984V65.4998C2 67.3408 3.49238 68.8332 5.33333 68.8332H78.6667C80.5076 68.8332 82 67.3408 82 65.4998V5.49984C82 3.65889 80.5076 2.1665 78.6667 2.1665Z" stroke="#88B363" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 15.5H82" stroke="#88B363" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M58.6654 28.833C58.6654 33.2533 56.9094 37.4925 53.7838 40.6181C50.6582 43.7437 46.419 45.4997 41.9987 45.4997C37.5784 45.4997 33.3392 43.7437 30.2136 40.6181C27.088 37.4925 25.332 33.2533 25.332 28.833" stroke="#88B363" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="details">
+            <p><strong>10</strong> Meals ordered</p>
+            <div class="progress">
+              <div id="progressbar"></div>
+            </div>
+          </div>
+        </div>
+        <div class="boxes">
+          <div class="ico">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M41.7827 66.2187L67.0952 40.9062C73.3139 34.6562 74.2202 24.4374 68.3452 17.9062C66.8718 16.2603 65.0783 14.9321 63.0742 14.0027C61.0702 13.0733 58.8977 12.5623 56.6895 12.5009C54.4813 12.4395 52.2838 12.8289 50.2312 13.6455C48.1786 14.462 46.314 15.6885 44.7514 17.2499L40.0014 22.0312L35.9077 17.9062C29.6577 11.6874 19.4389 10.7812 12.9077 16.6562C11.2618 18.1296 9.93354 19.9231 9.00417 21.9271C8.0748 23.9312 7.5638 26.1037 7.50238 28.3118C7.44096 30.52 7.83041 32.7176 8.64695 34.7702C9.46348 36.8228 10.6899 38.6873 12.2514 40.2499L38.2202 66.2187C38.6941 66.6881 39.3343 66.9515 40.0014 66.9515C40.6685 66.9515 41.3087 66.6881 41.7827 66.2187V66.2187Z" stroke="#88B363" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="details">
+            <p><strong>10</strong> lbs of food waste saved</p>
+            <div class="progress warning">
+              <div id="progressbarwarning"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="recommended-for">
+        <strong>Recommended for you</strong>
+        <div class="slider-holder">
+          <div class="list">
+            <div class="box-holder">
+              <div class="img-holder">
+                <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/t/8/assets/placeholder.png?v=1643630880" alt="Placeholder">
+                <button>+</button>
+              </div>
+              <div class="text-details">
+                <strong>Garden Salad (1)</strong>
+                <p>$56 / one time</p>
+                <button class="btn-yellow bold">Add Subscription</button>
+              </div>
+            </div>
+          </div>
+          <div class="list">
+              <div class="box-holder">
+                <div class="img-holder">
+                  <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/t/8/assets/placeholder.png?v=1643630880" alt="Placeholder">
+                  <button>+</button>
+                </div>
+                <div class="text-details">
+                  <strong>Garden Salad (1)</strong>
+                  <p>$56 / one time</p>
+                  <button class="btn-yellow bold">Add Subscription</button>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    <div class="flex-holder">
+      <div class="tabs-holder">
+        <div class="Profile_tab">
+          <button class="Profile_links" onclick="Profile(event, 'Overview')" id="defaultOpen">
+            <svg width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_764_2732)">
+              <path d="M1.54883 24.0072L1.54883 2.10498" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.549 24.0068L23.4512 24.0068" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M6.4668 15.1517C9.32277 12.543 11.3713 11.0515 13.6813 8.98047L15.115 14.5964L21.3621 9.33043" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+              <defs>
+              <clipPath id="clip0_764_2732">
+              <rect width="25" height="25" fill="white" transform="translate(0 0.556152)"/>
+              </clipPath>
+              </defs>
+            </svg>
+            Overview
+          </button>
+          <button class="Profile_links" onclick="Profile(event, 'Account')">
+            <svg width="25" height="18" viewBox="0 0 25 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_764_2738)">
+              <path d="M7.35156 1.92139H22.8256" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.35156 9.06348H22.8256" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.35156 16.2051H22.8256" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.40039 1.92139H1.41121" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.40039 9.06348H1.41121" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.40039 16.2051H1.41121" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+              <defs>
+              <clipPath id="clip0_764_2738">
+              <rect width="25" height="17.5" fill="white"/>
+              </clipPath>
+              </defs>
+            </svg>
+            Account
+          </button>
+          <button class="Profile_links" onclick="Profile(event, 'Subscription')">
+            <svg width="25" height="21" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21.4922 1.48877H3.95977C2.88389 1.48877 2.01172 2.42151 2.01172 3.5721V16.0721C2.01172 17.2227 2.88389 18.1554 3.95977 18.1554H21.4922C22.5681 18.1554 23.4403 17.2227 23.4403 16.0721V3.5721C23.4403 2.42151 22.5681 1.48877 21.4922 1.48877Z" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2.01172 7.44141H23.4403" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            Subscription
+          </button>
+          <button class="Profile_links schedule_tab" onclick="Profile(event, 'Schedule')">
+            <svg width="25" height="18" viewBox="0 0 25 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_764_2738)">
+              <path d="M7.35156 1.92139H22.8256" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.35156 9.06348H22.8256" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.35156 16.2051H22.8256" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.40039 1.92139H1.41121" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.40039 9.06348H1.41121" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.40039 16.2051H1.41121" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+              <defs>
+              <clipPath id="clip0_764_2738">
+              <rect width="25" height="17.5" fill="white"/>
+              </clipPath>
+              </defs>
+            </svg>
+            Schedule
+          </button>
+          <button class="Profile_links" onclick="Profile(event, 'Support')">
+            <svg width="25" height="35" viewBox="0 0 25 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12.8167 21.1691C18.0809 21.1691 22.3483 16.9017 22.3483 11.6375C22.3483 6.37338 18.0809 2.10596 12.8167 2.10596C7.55258 2.10596 3.28516 6.37338 3.28516 11.6375C3.28516 16.9017 7.55258 21.1691 12.8167 21.1691Z" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.65541 20.7846L6.00781 33.1893L12.8161 29.1043L19.6243 33.1893L17.9767 20.771" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>        
+            Support
+          </button>
+        </div>
+      </div>
+      <div class='tab-content-holder'>
+        <div id="Overview" class="Profile_links_data">
+          <div class="plan_detail_outer">
+            <div class="plan_title_btn">
+              <h1>Your <br>current plan:</h1>
+              <a href="" class="plan_up">
+                {% if current_subscription %}
+                  Upgrade
+                {% else %}
+                  Choose
+                {% endif %} Subscription
+              </a>
+            </div>
+            <div class="plan_detail">
+              <p class="choose_plan_boxes_namber_of_dish">
+                {% if current_subscription %}
+                  {{ current_subscription.metafields.subscription.dishes_in_week }}-Dish Box
+                {% else %}
+                  None
+                {% endif %}
+              </p>
+              <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/files/Vector_5.png?v=1637752683">
+              {% if current_subscription %}
+                <span class="choose_plan_boxes_price">{{current_subscription.price | divided_by: current_subscription.metafields.subscription.dishes_in_week | money}}/dish</span>
+                <span class="choose_plan_boxes_duration bottom">{{current_subscription.price | money}}/week</span>
+              {% endif %}
+            </div>
+          </div>
+          {% if is_trail %}
+            <p>Oops!<br>No data found</p>
           {% else %}
-            None
+            {% unless current_subscription %}
+              <p>Oops!<br>No data found</p>
+            {% endunless %}
           {% endif %}
-        </p>
-        <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/files/Vector_5.png?v=1637752683">
-        {% if current_subscription %}
-          <span class="choose_plan_boxes_price">{{current_subscription.price | divided_by: current_subscription.metafields.subscription.dishes_in_week | money}}/dish</span>
-          <span class="choose_plan_boxes_duration bottom">{{current_subscription.price | money}}/week</span>
-        {% endif %}
-      </div>
-    </div>
-    {% if is_trail %}
-      <p>Oops!<br>No data found</p>
-    {% else %}
-      {% unless current_subscription %}
-        <p>Oops!<br>No data found</p>
-      {% endunless %}
-    {% endif %}
-    <br>
-    <div style="margin: 0 5%;" class="flex space-around {% if is_trail %} op-05{% else %}{% unless current_subscription %} op-05{% endunless %}{% endif %}">
-      <div class="w-30 br-14 ta-l p-2" style="background-color: #D2D06C">
-        <svg width="47" height="46" viewBox="0 0 39 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 5.39887V24.6011C0.00529495 24.7279 0.0477186 24.8501 0.121892 24.952C0.196066 25.0539 0.298449 25.1307 0.415931 25.1726L15.7181 29.9732C15.8308 30.0089 15.9515 30.0089 16.0641 29.9732L38.5839 25.1726C38.7013 25.1307 38.8039 25.0539 38.8781 24.952C38.9523 24.8501 38.9947 24.7279 39 24.6011V5.39887C38.9953 5.27192 38.953 5.14939 38.8787 5.04737C38.8045 4.94536 38.7017 4.86872 38.5839 4.82736L23.2817 0.0267982C23.169 -0.00893275 23.0483 -0.00893275 22.9357 0.0267982L0.415931 4.82736C0.298449 4.86925 0.196066 4.94613 0.121892 5.04803C0.0477186 5.14993 0.00529495 5.27208 0 5.39887ZM37.8219 24.1546L16.4803 28.5844V10.646L37.8219 6.21612V24.1546ZM15.3022 28.5844L1.17808 24.1546V6.20718L15.3022 10.6371V28.5844ZM36.4116 5.39451L15.889 9.56535L2.59267 5.39451L23.111 1.22345L36.4116 5.39451Z" fill="#63666A"/>
-        </svg>
-        <div class="flex space-between">
-          <div class="c63666A-t">
-            <p class="f-42 jc-l">0</p>
-            <p class="f-16 jc-l ta-l">Dishes Purchased</p>
+          <br>
+          <div style="margin: 0 5%;" class="flex space-around {% if is_trail %} op-05{% else %}{% unless current_subscription %} op-05{% endunless %}{% endif %}">
+            <div class="w-30 br-14 ta-l p-2" style="background-color: #D2D06C">
+              <svg width="47" height="46" viewBox="0 0 39 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 5.39887V24.6011C0.00529495 24.7279 0.0477186 24.8501 0.121892 24.952C0.196066 25.0539 0.298449 25.1307 0.415931 25.1726L15.7181 29.9732C15.8308 30.0089 15.9515 30.0089 16.0641 29.9732L38.5839 25.1726C38.7013 25.1307 38.8039 25.0539 38.8781 24.952C38.9523 24.8501 38.9947 24.7279 39 24.6011V5.39887C38.9953 5.27192 38.953 5.14939 38.8787 5.04737C38.8045 4.94536 38.7017 4.86872 38.5839 4.82736L23.2817 0.0267982C23.169 -0.00893275 23.0483 -0.00893275 22.9357 0.0267982L0.415931 4.82736C0.298449 4.86925 0.196066 4.94613 0.121892 5.04803C0.0477186 5.14993 0.00529495 5.27208 0 5.39887ZM37.8219 24.1546L16.4803 28.5844V10.646L37.8219 6.21612V24.1546ZM15.3022 28.5844L1.17808 24.1546V6.20718L15.3022 10.6371V28.5844ZM36.4116 5.39451L15.889 9.56535L2.59267 5.39451L23.111 1.22345L36.4116 5.39451Z" fill="#63666A"/>
+              </svg>
+              <div class="flex space-between">
+                <div class="c63666A-t">
+                  <p class="f-42 jc-l">0</p>
+                  <p class="f-16 jc-l ta-l">Dishes Purchased</p>
+                </div>
+
+                <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="41.9998" cy="42.0002" r="31.4055" transform="rotate(-120 41.9998 42.0002)" stroke="#63666A" stroke-opacity="0.4" stroke-width="2"/>
+                  <ellipse cx="42" cy="42" rx="31" ry="31" transform="rotate(-180 42 42)" fill="#D2D06C"/>
+                  <path d="M36.4007 43.844H40.9007V45.338H36.4007V43.844ZM43.098 43.844H47.598V45.338H43.098V43.844Z" fill="#63666A"/>
+                </svg>
+
+              </div>
+            </div>
+            <div class="w-30 br-14 ta-l p-2" style="background-color: #2B4F3E">
+              <svg width="47" height="46" viewBox="0 0 47 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.33182 19.1148L20.5091 25.1219M8.33182 19.1148L1.35256 23.1556C0.720992 23.5212 0.681149 24.4184 1.27782 24.8386L10.1477 31.0853M8.33182 19.1148L17.049 16.5883M20.5091 25.1219L10.8018 31.1053C10.5994 31.2301 10.3421 31.2222 10.1477 31.0853V31.0853M20.5091 25.1219L27.022 32.8057C27.2826 33.1132 27.7024 33.2342 28.0867 33.1125L38.9886 29.6608M20.5091 25.1219L40.1636 20.48M20.5091 25.1219L20.7227 44.2353M40.1636 20.48L45.8006 25.9586C46.343 26.4857 46.1265 27.4008 45.4055 27.6291L38.9886 29.6608M40.1636 20.48L31.3333 16.5883M20.7227 44.2353L10.5108 35.7977C10.2809 35.6077 10.1477 35.3251 10.1477 35.0268V31.0853M20.7227 44.2353L37.4606 37.8967C37.8089 37.7648 38.0551 37.4503 38.0994 37.0805L38.9886 29.6608" stroke="#D2D06C" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M22.2638 3.62291L23.8591 4.98182C23.9185 5.03245 24.0053 5.03469 24.0672 4.98718L26.1395 3.39843C28.4743 1.60846 31.8542 2.31196 33.2809 4.88483C33.8101 5.83911 33.9994 6.94481 33.818 8.0208L33.666 8.92253C33.421 10.3753 32.7496 11.7224 31.7371 12.7926L25.6026 19.2766C24.7133 20.2166 23.215 20.2107 22.3332 19.2637L16.1399 12.6128C15.25 11.6571 14.6435 10.4727 14.3883 9.19202L14.2198 8.34645C13.966 7.07292 14.2242 5.75069 14.9383 4.66613C16.5704 2.18753 20.0047 1.69845 22.2638 3.62291Z" stroke="#D2D06C" stroke-width="1.5"/>
+              </svg>
+
+              <div class="flex space-between">
+                <div class="d2d06c-t">
+                  <p class="f-42 jc-l">0</p>
+                  <p class="f-16 jc-l ta-l">Donations made</p>
+                </div>
+                <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="41.9998" cy="42.0002" r="31.4055" transform="rotate(-120 41.9998 42.0002)" stroke="#d2d06c" stroke-opacity="0.4" stroke-width="2"/>
+                  <ellipse cx="42" cy="42" rx="31" ry="31" transform="rotate(-180 42 42)" fill="#2B4F3E"/>
+                  <path d="M36.4007 43.844H40.9007V45.338H36.4007V43.844ZM43.098 43.844H47.598V45.338H43.098V43.844Z" fill="#d2d06c"/>
+                </svg>
+              </div>
+            </div>
+            <div class="w-30 br-14 ta-l p-2" style="background-color: #63666A">
+              <svg width="47" height="44" viewBox="0 0 47 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25.8604 2.60445C25.4472 2.59978 25.1058 2.93252 25.0979 3.34766C25.09 3.76279 25.4185 4.10311 25.8317 4.10778L25.8604 2.60445ZM8.22249 18.6101L8.78682 18.112C8.65296 17.9586 8.46217 17.8673 8.25856 17.859C8.05494 17.8508 7.85613 17.9264 7.70809 18.0683L8.22249 18.6101ZM3.07893 22.5069C2.7788 22.7946 2.76579 23.2705 3.04989 23.5697C3.33398 23.869 3.80759 23.8783 4.10772 23.5905L3.07893 22.5069ZM12.0157 24.1009C12.2871 24.4118 12.7597 24.4409 13.0714 24.1658C13.3831 23.8907 13.4157 23.4156 13.1444 23.1047L12.0157 24.1009ZM18.8463 28.0818C18.5616 28.385 18.5736 28.8607 18.8731 29.1443C19.1726 29.428 19.6463 29.4121 19.931 29.109L18.8463 28.0818ZM26.1285 9.425C26.1285 9.00985 25.7935 8.67597 25.3802 8.67926C24.967 8.68255 24.632 9.02175 24.632 9.4369L26.1285 9.425ZM25.0539 22.5634L24.5116 22.0498L25.0539 22.5634ZM25.3802 21.7401L24.632 21.7461L25.3802 21.7401ZM25.8317 4.10778C29.1688 4.14552 32.4199 5.20247 35.1638 7.14406L36.0321 5.91267C33.0448 3.79885 29.5016 2.64562 25.8604 2.60445L25.8317 4.10778ZM35.1638 7.14406C37.9079 9.08575 40.0179 11.8226 41.2193 15.0012L42.6189 14.4578C41.3133 11.0034 39.0192 8.02638 36.0321 5.91267L35.1638 7.14406ZM41.2193 15.0012C42.4207 18.1798 42.6574 21.652 41.8997 24.9678L43.3582 25.2932C44.1824 21.6866 43.9246 17.9122 42.6189 14.4578L41.2193 15.0012ZM41.8997 24.9678C41.142 28.2835 39.4251 31.2891 36.9733 33.5968L37.992 34.6901C40.6653 32.1738 42.534 28.8999 43.3582 25.2932L41.8997 24.9678ZM36.9733 33.5968C34.5217 35.9043 31.4473 37.4087 28.1479 37.9161L28.363 39.4022C31.9641 38.8483 35.3185 37.2064 37.992 34.6901L36.9733 33.5968ZM28.1479 37.9161C24.8485 38.4236 21.4741 37.9112 18.4612 36.4432L17.7995 37.7969C21.082 39.3962 24.7619 39.9561 28.363 39.4022L28.1479 37.9161ZM18.4612 36.4432C15.4481 34.9751 12.9352 32.6188 11.2493 29.6779L9.95092 30.4359C11.7836 33.6329 14.5172 36.1976 17.7995 37.7969L18.4612 36.4432ZM11.2493 29.6779C9.57828 26.763 8.7408 22.0852 8.9691 18.6543L7.47587 18.5659C7.2323 22.2262 8.10329 27.2129 9.95092 30.4359L11.2493 29.6779ZM7.70809 18.0683L3.07893 22.5069L4.10772 23.5905L8.73689 19.1519L7.70809 18.0683ZM7.65815 19.1082L12.0157 24.1009L13.1444 23.1047L8.78682 18.112L7.65815 19.1082ZM24.5116 22.0498L18.8463 28.0818L19.931 29.109L25.5963 23.0769L24.5116 22.0498ZM26.1285 21.7342L26.1285 9.425L24.632 9.4369L24.632 21.7461L26.1285 21.7342ZM25.5963 23.0769C25.938 22.7131 26.1285 22.2324 26.1285 21.7342L24.632 21.7461C24.632 21.8588 24.5889 21.9675 24.5116 22.0498L25.5963 23.0769Z" fill="white"/>
+                <path d="M25.1074 31.6463L25.1074 33.8653" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M32.1899 28.8707L33.7306 30.4397" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M36 21.1071L38.1788 21.1071" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M32.1899 13.2447L33.7306 11.6757" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+
+              <div class="flex space-between">
+                <div class="white-t">
+                  <p class="f-42 jc-l">0</p>
+                  <p class="f-16 jc-l ta-l">Hours saved</p>
+                </div>
+                <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="41.9998" cy="42.0002" r="31.4055" transform="rotate(-120 41.9998 42.0002)" stroke="#fff" stroke-opacity="0.4" stroke-width="2"/>
+                  <ellipse cx="42" cy="42" rx="31" ry="31" transform="rotate(-180 42 42)" fill="#63666A"/>
+                  <path d="M36.4007 43.844H40.9007V45.338H36.4007V43.844ZM43.098 43.844H47.598V45.338H43.098V43.844Z" fill="#fff"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <br>
+          <h2 style="font-size: 42px; weight: 400; margin: 0 10%;">Choose a subscription to track your dishes orders per week</h2>
+          <br>
+          <div style="margin: 0 10%;" class="flex space-around">
+            <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g >
+              <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
+              <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
+              <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
+              <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
+              <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
+              <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+              <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+              <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+              <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+              <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+              <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+              <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+              </g>
+            </svg>
+            <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g >
+            <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
+            <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
+            <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
+            <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
+            <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
+            <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            </g>
+            </svg>
+
+            <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g >
+            <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
+            <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
+            <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
+            <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
+            <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
+            <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            </g>
+            </svg>
+
+            <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g >
+            <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
+            <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
+            <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
+            <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
+            <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
+            <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            </g>
+            </svg>
+
+
+            <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g >
+            <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
+            <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
+            <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
+            <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
+            <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
+            <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            </g>
+            </svg>
+
+
+            <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g >
+            <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
+            <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
+            <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
+            <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
+            <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
+            <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            </g>
+            </svg>
+
+            <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g >
+            <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
+            <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
+            <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
+            <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
+            <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
+            <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
+            </g>
+            </svg>
+
+          </div>
+        </div>
+
+        <div id="Account" class="Profile_links_data">
+          <div class="account-holder">
+            <div>
+              <h1 class="t-align-left">Personal Info</h1>
+              <% address = customer&.try(:default_address) || customer&.addresses&.first rescue nil %>
+              <table class="info-table">
+                <tbody>
+                  <tr>
+                    <td><h3 class="t-align-left bolder">First Name</h3></td>
+                    <td><h3 class="t-align-left bolder">Last Name</h3></td>
+                  </tr>
+                  <tr>
+                    <td><p class="t-align-left block subdued ft-1"><%= customer&.first_name %></p></td>
+                    <td><p class="t-align-left block subdued ft-1"><%= customer&.last_name %></p></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2"><h3 class="t-align-left bolder" >Address line 1</h3></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2"><p class="t-align-left block subdued ft-1"><%= address&.address1 %></p></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2"><h3 class="t-align-left bolder" >Address line 2</h3></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2"><p class="t-align-left block subdued ft-1"><%= address&.address2 %></p></td>
+                  </tr>
+                  <tr>
+                    <td><h3 class="t-align-left bolder">City</h3></td>
+                    <td><h3 class="t-align-left bolder">State</h3></td>
+                  </tr>
+                  <tr>
+                    <td><p class="t-align-left block subdued ft-1"><%= address&.city %></p></td>
+                    <td><p class="t-align-left block subdued ft-1"><%= address&.province %></p></td>
+                  </tr>
+                  <tr>
+                    <td><h3 class="t-align-left bolder">Country</h3></td>
+                    <td><h3 class="t-align-left bolder">Zip Code</h3></td>
+                  </tr>
+                  <tr>
+                    <td><p class="t-align-left block subdued ft-1"><%= address&.country_name %></p></td>
+                    <td><p class="t-align-left block subdued ft-1"><%= address&.zip %></p></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <h1 class="t-align-left">Payment</h1>
+              <table class="info-table">
+                <tbody>
+                  <tr>
+                    <td><h3 class="t-align-left bolder" >Card Number</h3></td>
+                    <td><h3 class="t-align-left bolder" >Name on Card</h3></td>
+                  </tr>
+                  <tr>
+                    <td><p class="t-align-left block subdued ft-1"><%= customer_order&.payment_details&.credit_card_number rescue nil %></p></td>
+                    <td><p class="t-align-left block subdued ft-1"><%= customer_order&.payment_details&.credit_card_name rescue nil %></p></td>
+                  </tr>
+                  <tr>
+                    <td><h3 class="t-align-left bolder">Billing Address</h3></td>
+                  </tr>
+                  <tr>
+                    <td><p class="t-align-left block subdued ft-1">Same as shipping address</p></td>
+                  </tr>
+                  <tr>
+                    <td><h3 class="t-align-left bolder">Expiration Date</h3></td>
+                    <td><h3 class="t-align-left bolder">Company</h3></td>
+                  </tr>
+                  <tr>
+                    <td><p class="t-align-left block subdued ft-1"><%= "#{customer_order&.payment_details&.credit_card_expiration_month}/#{customer_order&.payment_details&.credit_card_expiration_year}" rescue nil %></p></td>
+                    <td><p class="t-align-left block subdued ft-1"><%= customer_order&.payment_details&.credit_card_company rescue nil %></p></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <h1 class="t-align-left">Contact Info</h1>
+              <table class="info-table">
+                <tbody>
+                  <tr>
+                    <td>
+                      <h3 class="t-align-left bolder">Phone Number</h3>
+                    </td>
+                    <td>
+                      <h3 class="t-align-left bolder">Email Address</h3>                      
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <p class="t-align-left block subdued ft-1"><%= customer&.phone %></p>
+                    </td>
+                    <td>
+                    <p class="t-align-left block subdued ft-1"><%= customer&.email %></p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
-          <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="41.9998" cy="42.0002" r="31.4055" transform="rotate(-120 41.9998 42.0002)" stroke="#63666A" stroke-opacity="0.4" stroke-width="2"/>
-            <ellipse cx="42" cy="42" rx="31" ry="31" transform="rotate(-180 42 42)" fill="#D2D06C"/>
-            <path d="M36.4007 43.844H40.9007V45.338H36.4007V43.844ZM43.098 43.844H47.598V45.338H43.098V43.844Z" fill="#63666A"/>
-          </svg>
-
-        </div>
-      </div>
-      <div class="w-30 br-14 ta-l p-2" style="background-color: #2B4F3E">
-        <svg width="47" height="46" viewBox="0 0 47 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M8.33182 19.1148L20.5091 25.1219M8.33182 19.1148L1.35256 23.1556C0.720992 23.5212 0.681149 24.4184 1.27782 24.8386L10.1477 31.0853M8.33182 19.1148L17.049 16.5883M20.5091 25.1219L10.8018 31.1053C10.5994 31.2301 10.3421 31.2222 10.1477 31.0853V31.0853M20.5091 25.1219L27.022 32.8057C27.2826 33.1132 27.7024 33.2342 28.0867 33.1125L38.9886 29.6608M20.5091 25.1219L40.1636 20.48M20.5091 25.1219L20.7227 44.2353M40.1636 20.48L45.8006 25.9586C46.343 26.4857 46.1265 27.4008 45.4055 27.6291L38.9886 29.6608M40.1636 20.48L31.3333 16.5883M20.7227 44.2353L10.5108 35.7977C10.2809 35.6077 10.1477 35.3251 10.1477 35.0268V31.0853M20.7227 44.2353L37.4606 37.8967C37.8089 37.7648 38.0551 37.4503 38.0994 37.0805L38.9886 29.6608" stroke="#D2D06C" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M22.2638 3.62291L23.8591 4.98182C23.9185 5.03245 24.0053 5.03469 24.0672 4.98718L26.1395 3.39843C28.4743 1.60846 31.8542 2.31196 33.2809 4.88483C33.8101 5.83911 33.9994 6.94481 33.818 8.0208L33.666 8.92253C33.421 10.3753 32.7496 11.7224 31.7371 12.7926L25.6026 19.2766C24.7133 20.2166 23.215 20.2107 22.3332 19.2637L16.1399 12.6128C15.25 11.6571 14.6435 10.4727 14.3883 9.19202L14.2198 8.34645C13.966 7.07292 14.2242 5.75069 14.9383 4.66613C16.5704 2.18753 20.0047 1.69845 22.2638 3.62291Z" stroke="#D2D06C" stroke-width="1.5"/>
-        </svg>
-
-        <div class="flex space-between">
-          <div class="d2d06c-t">
-            <p class="f-42 jc-l">0</p>
-            <p class="f-16 jc-l ta-l">Donations made</p>
+          <div class="flex left-button">
+            <button class="btn-yellow">Edit Information</button>
           </div>
-          <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="41.9998" cy="42.0002" r="31.4055" transform="rotate(-120 41.9998 42.0002)" stroke="#d2d06c" stroke-opacity="0.4" stroke-width="2"/>
-            <ellipse cx="42" cy="42" rx="31" ry="31" transform="rotate(-180 42 42)" fill="#2B4F3E"/>
-            <path d="M36.4007 43.844H40.9007V45.338H36.4007V43.844ZM43.098 43.844H47.598V45.338H43.098V43.844Z" fill="#d2d06c"/>
-          </svg>
         </div>
-      </div>
-      <div class="w-30 br-14 ta-l p-2" style="background-color: #63666A">
-        <svg width="47" height="44" viewBox="0 0 47 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M25.8604 2.60445C25.4472 2.59978 25.1058 2.93252 25.0979 3.34766C25.09 3.76279 25.4185 4.10311 25.8317 4.10778L25.8604 2.60445ZM8.22249 18.6101L8.78682 18.112C8.65296 17.9586 8.46217 17.8673 8.25856 17.859C8.05494 17.8508 7.85613 17.9264 7.70809 18.0683L8.22249 18.6101ZM3.07893 22.5069C2.7788 22.7946 2.76579 23.2705 3.04989 23.5697C3.33398 23.869 3.80759 23.8783 4.10772 23.5905L3.07893 22.5069ZM12.0157 24.1009C12.2871 24.4118 12.7597 24.4409 13.0714 24.1658C13.3831 23.8907 13.4157 23.4156 13.1444 23.1047L12.0157 24.1009ZM18.8463 28.0818C18.5616 28.385 18.5736 28.8607 18.8731 29.1443C19.1726 29.428 19.6463 29.4121 19.931 29.109L18.8463 28.0818ZM26.1285 9.425C26.1285 9.00985 25.7935 8.67597 25.3802 8.67926C24.967 8.68255 24.632 9.02175 24.632 9.4369L26.1285 9.425ZM25.0539 22.5634L24.5116 22.0498L25.0539 22.5634ZM25.3802 21.7401L24.632 21.7461L25.3802 21.7401ZM25.8317 4.10778C29.1688 4.14552 32.4199 5.20247 35.1638 7.14406L36.0321 5.91267C33.0448 3.79885 29.5016 2.64562 25.8604 2.60445L25.8317 4.10778ZM35.1638 7.14406C37.9079 9.08575 40.0179 11.8226 41.2193 15.0012L42.6189 14.4578C41.3133 11.0034 39.0192 8.02638 36.0321 5.91267L35.1638 7.14406ZM41.2193 15.0012C42.4207 18.1798 42.6574 21.652 41.8997 24.9678L43.3582 25.2932C44.1824 21.6866 43.9246 17.9122 42.6189 14.4578L41.2193 15.0012ZM41.8997 24.9678C41.142 28.2835 39.4251 31.2891 36.9733 33.5968L37.992 34.6901C40.6653 32.1738 42.534 28.8999 43.3582 25.2932L41.8997 24.9678ZM36.9733 33.5968C34.5217 35.9043 31.4473 37.4087 28.1479 37.9161L28.363 39.4022C31.9641 38.8483 35.3185 37.2064 37.992 34.6901L36.9733 33.5968ZM28.1479 37.9161C24.8485 38.4236 21.4741 37.9112 18.4612 36.4432L17.7995 37.7969C21.082 39.3962 24.7619 39.9561 28.363 39.4022L28.1479 37.9161ZM18.4612 36.4432C15.4481 34.9751 12.9352 32.6188 11.2493 29.6779L9.95092 30.4359C11.7836 33.6329 14.5172 36.1976 17.7995 37.7969L18.4612 36.4432ZM11.2493 29.6779C9.57828 26.763 8.7408 22.0852 8.9691 18.6543L7.47587 18.5659C7.2323 22.2262 8.10329 27.2129 9.95092 30.4359L11.2493 29.6779ZM7.70809 18.0683L3.07893 22.5069L4.10772 23.5905L8.73689 19.1519L7.70809 18.0683ZM7.65815 19.1082L12.0157 24.1009L13.1444 23.1047L8.78682 18.112L7.65815 19.1082ZM24.5116 22.0498L18.8463 28.0818L19.931 29.109L25.5963 23.0769L24.5116 22.0498ZM26.1285 21.7342L26.1285 9.425L24.632 9.4369L24.632 21.7461L26.1285 21.7342ZM25.5963 23.0769C25.938 22.7131 26.1285 22.2324 26.1285 21.7342L24.632 21.7461C24.632 21.8588 24.5889 21.9675 24.5116 22.0498L25.5963 23.0769Z" fill="white"/>
-          <path d="M25.1074 31.6463L25.1074 33.8653" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M32.1899 28.8707L33.7306 30.4397" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M36 21.1071L38.1788 21.1071" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M32.1899 13.2447L33.7306 11.6757" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
 
-        <div class="flex space-between">
-          <div class="white-t">
-            <p class="f-42 jc-l">0</p>
-            <p class="f-16 jc-l ta-l">Hours saved</p>
+        <div id="Subscription" class="Profile_links_data">
+          <h2 class="Trial">My Subscription</h2>
+          <% if (customer_order.line_items.any?{|item| item.name.downcase.include?('trial')} rescue false) %>
+            <p>Choose your weekly plan.</p>
+          <% end %>
+
+          <div class="sub_box">
+            <ul class="sub_list slide_box">
+              <% active_sub = customer_order.line_items.find{|item| item.name.downcase.include?('box')} rescue nil %>
+              <% if active_sub %>
+                {% assign active_sub = <%= active_sub.product_id %> %}
+              <% else %>
+                {% assign active_sub = false %}
+              <% end %>
+
+              <!-- active_sub {{ active_sub }}-->
+              {% assign subcollection = collections['subscriptions'] %}
+              {% for pro in subcollection.products %}
+                {% unless pro.title contains 'Trial' %}
+                  <li class="sub_single">
+                    <button class="sub_button {% if active_sub == pro.id %}active{% endif %}">
+                      <span class="Big">{{pro.title}}</span>
+                      <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/files/Vector_20.png?v=1631797836">
+                    <div class="product_number_out"><span class="portal_product_number">{{pro.metafields.subscription.dishes_in_week}}</span></div>
+                    <span class="sub_duration_2">dishs/week</span>
+                      <span class="each_price">{{pro.price | divided_by: pro.metafields.subscription.dishes_in_week | money}}/dish</span>
+                      <span class="sub_duration_2 bottom">{{pro.price | money}}/week</span>
+                    </button>
+                  </li>
+                {% endunless %}
+              {% endfor %}
+            </ul>
+            <button class="Update_sub">Update Subscription</button>
+            <a href="" class="Cancel_sub">Cancel Subscription</a>
+
           </div>
-          <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="41.9998" cy="42.0002" r="31.4055" transform="rotate(-120 41.9998 42.0002)" stroke="#fff" stroke-opacity="0.4" stroke-width="2"/>
-            <ellipse cx="42" cy="42" rx="31" ry="31" transform="rotate(-180 42 42)" fill="#63666A"/>
-            <path d="M36.4007 43.844H40.9007V45.338H36.4007V43.844ZM43.098 43.844H47.598V45.338H43.098V43.844Z" fill="#fff"/>
-          </svg>
+
         </div>
-      </div>
-    </div>
-    <br>
-    <h2 style="font-size: 42px; weight: 400; margin: 0 10%;">Choose a subscription to track your dishes orders per week</h2>
-    <br>
-    <div style="margin: 0 10%;" class="flex space-around">
-      <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g >
-        <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
-        <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
-        <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
-        <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
-        <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
-        <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-        <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-        <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-        <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-        <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-        <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-        <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-        </g>
-      </svg>
-      <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g >
-      <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
-      <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
-      <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
-      <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
-      <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
-      <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      </g>
-      </svg>
 
-      <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g >
-      <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
-      <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
-      <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
-      <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
-      <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
-      <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      </g>
-      </svg>
-
-      <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g >
-      <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
-      <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
-      <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
-      <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
-      <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
-      <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      </g>
-      </svg>
-
-
-      <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g >
-      <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
-      <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
-      <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
-      <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
-      <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
-      <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      </g>
-      </svg>
-
-
-      <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g >
-      <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
-      <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
-      <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
-      <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
-      <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
-      <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      </g>
-      </svg>
-
-      <svg width="48" height="241" viewBox="0 0 48 241" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g >
-      <rect y="0.558594" width="48" height="240" rx="10" fill="#FAFAFA"/>
-      <path d="M0 220.559H48V230.559C48 236.081 43.5228 240.559 38 240.559H10C4.47715 240.559 0 236.081 0 230.559V220.559Z" fill="black" fill-opacity="0.1"/>
-      <path d="M0 200.559H48V220.559H0V200.559Z" fill="black" fill-opacity="0.1"/>
-      <path d="M0 180.559H48V200.559H0V180.559Z" fill="black" fill-opacity="0.1"/>
-      <path d="M0 160.559H48V180.559H0V160.559Z" fill="black" fill-opacity="0.1"/>
-      <line y1="140.059" x2="48" y2="140.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="120.059" x2="48" y2="120.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="100.059" x2="48" y2="100.059" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="80.0586" x2="48" y2="80.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="60.0586" x2="48" y2="60.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="40.0586" x2="48" y2="40.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      <line y1="20.0586" x2="48" y2="20.0586" stroke="#2B4F3E" stroke-opacity="0.1"/>
-      </g>
-      </svg>
-
-    </div>
-  </div>
-
-  <div id="Account" class="Profile_links_data">
-    <div class="flex space-between" style="margin-left: 8%">
-      <div>
-        <h1 class="t-align-left">Personal Info</h1>
-        <% address = customer&.try(:default_address) || customer&.addresses&.first rescue nil %>
-        <table class="info-table">
-          <tbody>
-            <tr>
-              <td><h3 class="t-align-left bolder">First Name</h3></td>
-              <td><h3 class="t-align-left bolder">Last Name</h3></td>
-            </tr>
-            <tr>
-              <td><p class="t-align-left block subdued ft-1"><%= customer&.first_name %></p></td>
-              <td><p class="t-align-left block subdued ft-1"><%= customer&.last_name %></p></td>
-            </tr>
-            <tr>
-              <td colspan="2"><h3 class="t-align-left bolder" >Address line 1</h3></td>
-            </tr>
-            <tr>
-              <td colspan="2"><p class="t-align-left block subdued ft-1"><%= address&.address1 %></p></td>
-            </tr>
-            <tr>
-              <td colspan="2"><h3 class="t-align-left bolder" >Address line 2</h3></td>
-            </tr>
-            <tr>
-              <td colspan="2"><p class="t-align-left block subdued ft-1"><%= address&.address2 %></p></td>
-            </tr>
-            <tr>
-              <td><h3 class="t-align-left bolder">City</h3></td>
-              <td><h3 class="t-align-left bolder">State</h3></td>
-            </tr>
-            <tr>
-              <td><p class="t-align-left block subdued ft-1"><%= address&.city %></p></td>
-              <td><p class="t-align-left block subdued ft-1"><%= address&.province %></p></td>
-            </tr>
-            <tr>
-              <td><h3 class="t-align-left bolder">Country</h3></td>
-              <td><h3 class="t-align-left bolder">Zip Code</h3></td>
-            </tr>
-            <tr>
-              <td><p class="t-align-left block subdued ft-1"><%= address&.country_name %></p></td>
-              <td><p class="t-align-left block subdued ft-1"><%= address&.zip %></p></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div>
-        <h1 class="t-align-left">Payment</h1>
-        <table class="info-table">
-          <tbody>
-            <tr>
-              <td colspan="2"><h3 class="t-align-left bolder" >Card Number</h3></td>
-            </tr>
-            <tr>
-              <td colspan="2"><p class="t-align-left block subdued ft-1"><%= customer_order&.payment_details&.credit_card_number rescue nil %></p></td>
-            </tr><tr>
-              <td colspan="2"><h3 class="t-align-left bolder" >Name on Card</h3></td>
-            </tr>
-            <tr>
-              <td colspan="2"><p class="t-align-left block subdued ft-1"><%= customer_order&.payment_details&.credit_card_name rescue nil %></p></td>
-            </tr>
-            <tr>
-              <td colspan="2"><h3 class="t-align-left bolder">Billing Address</h3></td>
-            </tr>
-            <tr>
-              <td colspan="2"><p class="t-align-left block subdued ft-1">Same as shipping address</p></td>
-            </tr>
-            <tr>
-              <td><h3 class="t-align-left bolder">Expiration Date</h3></td>
-              <td><h3 class="t-align-left bolder">Company</h3></td>
-            </tr>
-            <tr>
-              <td><p class="t-align-left block subdued ft-1"><%= "#{customer_order&.payment_details&.credit_card_expiration_month}/#{customer_order&.payment_details&.credit_card_expiration_year}" rescue nil %></p></td>
-              <td><p class="t-align-left block subdued ft-1"><%= customer_order&.payment_details&.credit_card_company rescue nil %></p></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div>
-      <h1 class="t-align-left">Contact Info</h1>
-      <h3 class="t-align-left bolder">Phone Number</h3>
-      <p class="t-align-left block subdued ft-1"><%= customer&.phone %></p>
-      <h3 class="t-align-left bolder">Email Address</h3>
-      <p class="t-align-left block subdued ft-1"><%= customer&.email %></p>
-    </div>
-
-    <div class="flex center">
-      <button>Edit Information</button>
-    </div>
-  </div>
-
-  <div id="Subscription" class="Profile_links_data">
-    <h2 class="Trial">My Subscription</h2>
-    <% if (customer_order.line_items.any?{|item| item.name.downcase.include?('trial')} rescue false) %>
-      <p>Choose your weekly plan.</p>
-    <% end %>
-
-    <div class="sub_box">
-      <ul class="sub_list slide_box">
-        <% active_sub = customer_order.line_items.find{|item| item.name.downcase.include?('box')} rescue nil %>
-        <% if active_sub %>
-          {% assign active_sub = <%= active_sub.product_id %> %}
-        <% else %>
-          {% assign active_sub = false %}
-        <% end %>
-
-        <!-- active_sub {{ active_sub }}-->
-        {% assign subcollection = collections['subscriptions'] %}
-        {% for pro in subcollection.products %}
-          {% unless pro.title contains 'Trial' %}
-            <li class="sub_single">
-              <button class="sub_button {% if active_sub == pro.id %}active{% endif %}">
-                <span class="Big">{{pro.title}}</span>
-                <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/files/Vector_20.png?v=1631797836">
-              <div class="product_number_out"><span class="portal_product_number">{{pro.metafields.subscription.dishes_in_week}}</span></div>
-              <span class="sub_duration_2">dishs/week</span>
-                <span class="each_price">{{pro.price | divided_by: pro.metafields.subscription.dishes_in_week | money}}/dish</span>
-                <span class="sub_duration_2 bottom">{{pro.price | money}}/week</span>
-              </button>
-            </li>
-          {% endunless %}
-        {% endfor %}
-      </ul>
-      <button class="Update_sub">Update Subscription</button>
-      <a href="" class="Cancel_sub">Cancel Subscription</a>
-
-    </div>
-
-  </div>
-
-  <div id="Schedule" class="Profile_links_data">
-    <div class="sort_by">
-      <p>Sort by:</p>
-      <select name="orders" id="orders">
-        <option value="Current">Current Orders</option>
-        <option value="Old">Old Orders</option>
-        <option value="New">New Orders</option>
-        <option value="All">All</option>
-      </select>
-    </div>
-    <% if customer_order&.line_items.present? && customer_order&.line_items.count > 5 %>
-      <h2 class="Trial">Current Week</h2>
-      <% else %>
-      <h2 class="Trial">Trial Week</h2>
-      <% end %>
-
-
-    <% created_at = Date.parse(customer_order&.created_at) rescue nil %>
-    <% next_day = created_at + 1.day rescue nil %>
-    <% products = ShopifyAPI::Product.where(ids: customer_order.line_items.map(&:product_id).join(', '), fields: 'id,title,images') rescue nil %>
-    <div class="orders">
-      <div class="placed_data">
-        <p class="placed">Order placed:</p>
-        <p class="placed_dates"><%= created_at.strftime('%B %d, %Y') rescue nil %> (edit before <%= next_day.strftime('%B %d') rescue nil %>)</p>
-      </div>
-      <div class="product_section">
-      <% customer_order&.line_items&.each do |line_item| %>
-        <% unless line_item.name.downcase.include?('box') %>
-          <% product = products.find{|p| p.id == line_item.product_id } %>
-          <div class="order_inn">
-<!--             <span class="dish_remove" data-id="{{item.id}}">×</span>-->
-            <img src="<%= product.images.first.src rescue nil %>">
-            <h5><%= line_item.name %> (<%= line_item.quantity %>)</h5>
+        <div id="Schedule" class="Profile_links_data">
+          <div class="sort_by">
+            <p>Sort by:</p>
+            <select name="orders" id="orders">
+              <option value="Current">Current Orders</option>
+              <option value="Old">Old Orders</option>
+              <option value="New">New Orders</option>
+              <option value="All">All</option>
+            </select>
           </div>
-        <% end %>
-      <% end %>
-      </div>
-    </div>
+          <div class="order-box">
+            
+            <% if customer_order&.line_items.present? && customer_order&.line_items.count > 5 %>
+            <h2 class="Trial">Current Week</h2>
+            <% else %>
+            <h2 class="Trial">Trial Week</h2>
+            <% end %>
 
-    <div class="order_status">
-      <div class="Status">
-        <p class="s_name">Status:</p>
-        <p class="s_data">Pending</p>
-      </div>
-      <div class="Status">
-        <p class="s_name">Arriving:</p>
-        <!-- <p class="s_data subdued">Est. <%= (created_at + 3.days).strftime('%B %d, %Y') rescue nil %></p> -->
-      </div>
-    </div>
 
-    <% current_date = Date.today %>
-    <% if params[:product_ids].present? %>
-      <% selected_products = ShopifyAPI::Product.where(ids: params[:product_ids], fields: 'id,title,images') rescue nil %>
-    <% end %>
-    <% week_days = [] %>
-    <% (1..2).each do |i| %>
-      <% if i == 1
-          week_day = current_date + 7.days
-          week_days << week_day.strftime('%Y%m%d')
-        else
-          week_day = current_date + 14.days
-          week_days << week_day.strftime('%Y%m%d')
-        end
-         week_subscription = WorldfarePreOrder.find_by( customer_id: params[:customer_id], week: week_days.last )
-         week_subscription_products = nil
-         if week_subscription.present?
-           week_subscription_products = ShopifyAPI::Product.where(ids: week_subscription.products, fields: 'id,title,images') rescue nil
-         end
-      %>
-      <div class="pre_orders">
-        <h2 class="Trial">Week of <%= week_day.strftime('%B %d, %Y') rescue nil %></h2>
-        <div class="placed_data">
-          <p class="placed">Select dishes by:</p>
-          <p class="placed_dates"><%= (week_day-2).strftime('%B %d, %Y') rescue nil %></p>
-        </div>
-        <div class="order_add">
-          <ul class="pre_segment">
-            <% customer_order&.line_items&.each_with_index do |line_item, key| %>
-              <% unless line_item.name.downcase.include?('box') %>
-                <% if params[:product_ids].present? && params[:week].present? && params[:week].to_i == i.to_i %>
-                  <% selected_product = selected_products[key-1].present? ? selected_products[key-1] : nil %>
-                  <div class="order_inn center" >
-                    <img src="<%= selected_product.images.first.src rescue nil %>">
-                    <h5><%= selected_product.title rescue nil %> </h5>
-                    <h6><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>">Edit</a></h6>
+            <% created_at = Date.parse(customer_order&.created_at) rescue nil %>
+            <% next_day = created_at + 1.day rescue nil %>
+            <% products = ShopifyAPI::Product.where(ids: customer_order.line_items.map(&:product_id).join(', '), fields: 'id,title,images') rescue nil %>
+            <div class="orders">
+              <div class="placed_data">
+                <p class="placed_dates"><%= created_at.strftime('%B %d, %Y') rescue nil %> (edit before <%= next_day.strftime('%B %d') rescue nil %>)</p>
+              </div>
+              <p class="placed">Order placed:</p>
+              <div class="product_section">
+              <% customer_order&.line_items&.each do |line_item| %>
+                <% unless line_item.name.downcase.include?('box') %>
+                  <% product = products.find{|p| p.id == line_item.product_id } %>
+                  <div class="order_inn">
+                    <div class="holder">
+                      <!--<span class="dish_remove" data-id="{{item.id}}">×</span>-->
+                      <img src="<%= product.images.first.src rescue nil %>">
+                      <h5><%= line_item.name %> (<%= line_item.quantity %>)</h5>
+                      <button>+</button>
+                    </div>
                   </div>
-                <% elsif week_subscription_products.present? %>
-                  <% week_subscription_product = week_subscription_products[key-1].present? ? week_subscription_products[key-1] : nil %>
-                  <div class="order_inn center" >
-                    <img src="<%= week_subscription_product.images.first.src rescue nil %>">
-                    <h5><%= week_subscription_product.title rescue nil %> </h5>
-                    <h6><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>">Edit</a></h6>
-                  </div>
-                <% else %>
-                  <li class="pre_segment_order"><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>"><button><span>+</span><p>Add to box</p></button></a></li>
                 <% end %>
               <% end %>
-            <% end %>
-          </ul>
+              </div>
+            </div>
+
+            <div class="order_status">
+              <div class="Status">
+                <p class="s_name">Status:</p>
+                <p class="s_data">Pending</p>
+              </div>
+              <div class="Status">
+                <p class="s_name">Arriving:</p>
+                <!-- <p class="s_data subdued">Est. <%= (created_at + 3.days).strftime('%B %d, %Y') rescue nil %></p> -->
+              </div>
+            </div>
+          </div>
+          
+          <% current_date = Date.today %>
+          <% if params[:product_ids].present? %>
+            <% selected_products = ShopifyAPI::Product.where(ids: params[:product_ids], fields: 'id,title,images') rescue nil %>
+          <% end %>
+          <% week_days = [] %>
+          <% (1..2).each do |i| %>
+            <% if i == 1
+                week_day = current_date + 7.days
+                week_days << week_day.strftime('%Y%m%d')
+              else
+                week_day = current_date + 14.days
+                week_days << week_day.strftime('%Y%m%d')
+              end
+              week_subscription = WorldfarePreOrder.find_by( customer_id: params[:customer_id], week: week_days.last )
+              week_subscription_products = nil
+              if week_subscription.present?
+                week_subscription_products = ShopifyAPI::Product.where(ids: week_subscription.products, fields: 'id,title,images') rescue nil
+              end
+            %>
+            <div class="order-box">
+              <div class="pre_orders">
+                <h2 class="Trial">Week of <%= week_day.strftime('%B %d, %Y') rescue nil %></h2>
+                <div class="placed_data">
+                  <p class="placed_dates"><%= (week_day-2).strftime('%B %d, %Y') rescue nil %></p>
+                  <p class="skip_week"><a href="#">Skip Week</a></p>
+                </div>
+                <p class="placed">Select dishes by:</p>
+                <div class="order_add">
+                  <ul class="pre_segment">
+                    <% customer_order&.line_items&.each_with_index do |line_item, key| %>
+                      <% unless line_item.name.downcase.include?('box') %>
+                        <% if params[:product_ids].present? && params[:week].present? && params[:week].to_i == i.to_i %>
+                          <% selected_product = selected_products[key-1].present? ? selected_products[key-1] : nil %>
+                          <div class="order_inn center" >
+                            <img src="<%= selected_product.images.first.src rescue nil %>">
+                            <h5><%= selected_product.title rescue nil %> </h5>
+                            <h6><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>">Edit</a></h6>
+                          </div>
+                        <% elsif week_subscription_products.present? %>
+                          <% week_subscription_product = week_subscription_products[key-1].present? ? week_subscription_products[key-1] : nil %>
+                          <div class="order_inn center" >
+                            <img src="<%= week_subscription_product.images.first.src rescue nil %>">
+                            <h5><%= week_subscription_product.title rescue nil %> </h5>
+                            <h6><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>">Edit</a></h6>
+                          </div>
+                        <% else %>
+                          <li class="pre_segment_order"><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>"><button><span>+</span><p>Add to box</p></button></a></li>
+                        <% end %>
+                      <% end %>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          <% if params[:product_ids].present? && params[:week] %>
+          <button data-pre_order="<%= { customer_id: params[:customer_id],week: week_days[params[:week].to_i-1], products: params[:product_ids] }.to_json %>" class="submit_pre_order">Save Changes</button>
+          <% end %>
+        </div>
+
+        <div id="Support" class="Profile_links_data">
+          <h3>Support</h3>
+          <p>Tokyo is the capital of Japan.</p>
         </div>
       </div>
-    <% end %>
-    <% if params[:product_ids].present? && params[:week] %>
-    <button data-pre_order="<%= { customer_id: params[:customer_id],week: week_days[params[:week].to_i-1], products: params[:product_ids] }.to_json %>" class="submit_pre_order">Save Changes</button>
-    <% end %>
-  </div>
-
-  <div id="Support" class="Profile_links_data">
-    <h3>Support</h3>
-    <p>Tokyo is the capital of Japan.</p>
+    </div>
   </div>
 </div>
 
 
 {% section 'Account_slider' %}
 
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script>
+  $('.recommended-for .slider-holder').slick({
+    infinite: true,
+    slidesToShow: 2,
+    slidesToScroll: 2
+  });
+  $( "#progressbar" ).progressbar({ value: 30});
+  $( "#progressbarwarning" ).progressbar({ value: 50});
+
   function Profile(evt, usr_tab,make_active = true) {
     var i, Profile_links_data, Profile_links;
     Profile_links_data = document.getElementsByClassName("Profile_links_data");
