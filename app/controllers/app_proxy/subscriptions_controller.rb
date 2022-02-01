@@ -46,15 +46,19 @@ class AppProxy::SubscriptionsController < AppProxyController
   end
 
   def update_subscription
-    if params[:subscription].present?
+    if params[:subscription].present? && params[:subscription][:next_billing_date].present?
       date = begin
                params[:subscription][:next_billing_date].to_date
              rescue StandardError
                nil
              end
-      if date.nil?
-        splitted_date = params[:subscription][:next_billing_date].split('/')
-        params[:subscription][:next_billing_date] = [splitted_date[2], splitted_date[0], splitted_date[1]].join('-')
+      begin
+        if date.nil?
+          splitted_date = params[:subscription][:next_billing_date].split('/')
+          params[:subscription][:next_billing_date] = [splitted_date[2], splitted_date[0], splitted_date[1]].join('-')
+        end
+      rescue
+        p 'Error: '
       end
     end
     id = "gid://shopify/SubscriptionContract/#{params[:id]}"
@@ -64,6 +68,19 @@ class AppProxy::SubscriptionsController < AppProxyController
       flash[:error] = result[:error]
       render js: "alert('#{result[:error]}'); hideLoading()"
     else
+      if params[:quantity].present? && params[:customer_id].present?
+        customer = ShopifyAPI::Customer.find( params[:customer_id] )
+        if customer.present?
+          tags = ["#{params[:quantity]}box"]
+          customer.tags.split(',').each do |tag|
+            if !['8box', '10box', '12box'].include?( tag.strip.downcase )
+              tags << tag
+            end
+          end
+          customer.tags = tags.join(',')
+          customer.save
+        end
+      end
       render js: 'location.reload();'
     end
   end

@@ -33,7 +33,7 @@ class AppProxy::DashboardController < AppProxyController
 
   def payment_methods
     @orders = ShopifyAPI::Order.find(:all,
-      params: { customer_id: 5796293443755, limit: 6, page_info: nil }
+      params: { customer_id: params[:customer_id], limit: 6, page_info: nil }
     )
 
     @payment_methods = {}
@@ -120,6 +120,70 @@ class AppProxy::DashboardController < AppProxyController
     rescue => e
       puts e
     end
+  end
+
+  def get_delivery_option
+    if current_shop.present? && current_shop.id.present?
+      options = DeliveryOption.find_by(shop_id: current_shop.id)&.api_response
+    else
+      options = DeliveryOption.find_by(shop_id: params[:shop_id])&.api_response
+    end
+    link = ''
+    begin
+      customer_id = "gid://shopify/Customer/#{params[:customer_id]}"
+      @data = CustomerSubscriptionContractsService.new(customer_id).run params[:cursor]
+      @subscription_contracts = @data[:subscriptions]
+      # @customer = CustomerSubscriptionContract.find_by(shopify_customer_id: params[:customer_id])
+      # if @customer.nil? && params[:subscription_id].present?
+      #   ShopifyContractCreateWorker.new.perform(current_shop.id, params[:subscription_id])
+      #   @customer = CustomerSubscriptionContract.find_by_shopify_id(params[:subscription_id])
+      # end
+      # if @customer.api_source != 'stripe' && !@customer.api_data
+      #   @customer.api_source = 'shopify'
+      #   @customer.api_data = SubscriptionContractService.new(id).run.to_h.deep_transform_keys { |key| key.underscore }
+      #   @customer.save
+      # end
+      # @subscription = JSON.parse(@customer.api_data.to_json, object_class: OpenStruct)
+      # billing_policy = @subscription.billing_policy
+      # #billing_date=#{billing_date}&
+      # link = action_subscription_contract_path(:skip_schedule, @subscription.id[/\d+/], "billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}")
+    rescue => e
+      p 'Exception: '
+      p e
+    end
+    render json: { status: :ok, options: options, skip_link: link, s: @subscription_contracts.present? ? @subscription_contracts : []}
+  end
+
+  def submit_delivery_option
+    current_shop.connect
+    if params[:order_id].present?
+      order = ShopifyAPI::Order.find(params[:order_id]) rescue nil
+      if order.present?
+        order.note = params[:note]
+        order.save
+      end
+    end
+    render json: { status: :ok, options: (order.nil? ? [] : order)}
+  end
+
+  def customer_info
+   
+    shopify_customer = ShopifyAPI::Customer.find( params[:customer_id] )
+    shopify_customer.first_name = params[:first_name]
+    shopify_customer.last_name = params[:last_name]
+    shopify_customer.addresses << {
+      first_name: params[:first_name],
+      last_name: params[:last_name],
+      address1: params[:address1],
+      address2: params[:address2],
+      city: params[:city],
+      province: params[:state],
+      country: params[:country],
+      zip: params[:zip],
+      default: true
+    }
+    shopify_customer.save
+    render json: { status: :ok, message: 'Success', show_notification: true, saved: shopify_customer.save }
   end
 
   private ##

@@ -3,7 +3,7 @@ class DebugModeController < AuthenticatedController
 
   def index
     debug_setting = ShopSetting.find_by(shop_id: current_shop.id)
-    ENV['DEBUG'] = debug_setting&.debug_mode
+    ENV['DEBUG'] = debug_setting&.debug_mode&.to_s
     render json: { debug_mode: debug_setting&.debug_mode }
   end
 
