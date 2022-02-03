@@ -969,7 +969,7 @@
         </div>
         <div class="details">
           <strong>{{ customer.first_name }}</strong>
-          <p>4-Dish Trial Box - $14/dish</p>
+          <p>{{ current_subscription.metafields.subscription.dishes_in_week }}-Dish Trial Box - {{current_subscription.price | divided_by: current_subscription.metafields.subscription.dishes_in_week | money}}/dish</p>
           <a href="#" class="btn-link">Upgrade Subscription</a>
         </div>
       </div>
@@ -995,7 +995,7 @@
             </svg>
           </div>
           <div class="details">
-            <p><strong>10</strong> Meals ordered</p>
+            <p><strong> {{ current_subscription.metafields.subscription.dishes_in_week }}</strong> Meals ordered</p>
             <div class="progress">
               <div id="progressbar"></div>
             </div>
@@ -1008,7 +1008,7 @@
             </svg>
           </div>
           <div class="details">
-            <p><strong>10</strong> lbs of food waste saved</p>
+            <p><strong> {{ current_subscription.metafields.subscription.dishes_in_week }}</strong> lbs of food waste saved</p>
             <div class="progress warning">
               <div id="progressbarwarning"></div>
             </div>
