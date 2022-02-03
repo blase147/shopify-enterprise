@@ -16,7 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: worldfare
+        ref: ethey
     - name: Get current date
       id: date
       run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
