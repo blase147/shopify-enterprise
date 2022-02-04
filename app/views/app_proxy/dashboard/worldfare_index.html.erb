@@ -4,7 +4,7 @@
 <% customer = ShopifyAPI::Customer.find(params[:customer_id]) rescue nil %>
 <% customer_order = ShopifyAPI::Order.find(:first, params: {customer_id: customer.id} ) rescue nil %>
 
-<% active_sub_main = customer_order.line_items.find{|item| item.name.downcase.include?('MEALS'.downcase)} rescue nil %>
+<% active_sub_main = customer_order.line_items.find{|item| item.name.downcase.include?('MEAL Box'.downcase)} rescue nil %>
 <% if active_sub_main %>
   {% assign active_sub = <%= active_sub_main.product_id %> %}
 <% else %>
@@ -1476,7 +1476,7 @@
           
               <div class="sub_box">
                 <ul class="sub_list slide_box" id="sub_list_slide_box">
-                  <% active_sub = customer_order.line_items.find{|item| item.name.downcase.include?('meals')} rescue nil %>
+                  <% active_sub = customer_order.line_items.find{|item| item.name.downcase.include?('meal box')} rescue nil %>
                   <% if active_sub %>
                     {% assign active_sub = <%= active_sub.product_id %> %}
                   <% else %>
