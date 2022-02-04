@@ -4,9 +4,9 @@
 <% customer = ShopifyAPI::Customer.find(params[:customer_id]) rescue nil %>
 <% customer_order = ShopifyAPI::Order.find(:first, params: {customer_id: customer.id} ) rescue nil %>
 
-<% active_sub = customer_order.line_items.find{|item| item.name.downcase.include?('box')} rescue nil %>
-<% if active_sub %>
-  {% assign active_sub = <%= active_sub.product_id %> %}
+<% active_sub_main = customer_order.line_items.find{|item| item.name.downcase.include?('MEALS'.downcase)} rescue nil %>
+<% if active_sub_main %>
+  {% assign active_sub = <%= active_sub_main.product_id %> %}
 <% else %>
   {% assign active_sub = false %}
 <% end %>
@@ -827,6 +827,10 @@
   .support-section .looking-for p a:hover {
     opacity: 0.7;
   }
+  #discount{
+    display:none;
+  }
+
   @media screen and (max-width: 992px) {
     .customer-details .container {
       flex-wrap: wrap;
@@ -1468,7 +1472,7 @@
           
               <div class="sub_box">
                 <ul class="sub_list slide_box" id="sub_list_slide_box">
-                  <% active_sub = customer_order.line_items.find{|item| item.name.downcase.include?('box')} rescue nil %>
+                  <% active_sub = customer_order.line_items.find{|item| item.name.downcase.include?('meals')} rescue nil %>
                   <% if active_sub %>
                     {% assign active_sub = <%= active_sub.product_id %> %}
                   <% else %>
@@ -1762,9 +1766,13 @@
       tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
     document.getElementById(usr_tab).style.display = "block";
+    document.getElementById("Overview").style.display = "none";
     if (make_active)
       evt.currentTarget.className += " active";
+      
   }
+
+
 
   // Get the element with id="defaultOpen" and click on it
   document.getElementById("defaultOpen").click();
@@ -1886,7 +1894,7 @@
       }
 
       $.ajax({
-        url: "/a/chargezen_production/subscriptions/<%= active_sub.id %>/update_subscription",
+        url: "/a/chargezen_production/subscriptions/<%= active_sub_main.id %>/update_subscription",
         type: 'POST',
         data: JSON.stringify({customer_id: '<%= params[:customer_id] %>', quantity: $('#sub_list_slide_box li button.active').find('input[type=hidden]').val() }),
         contentType: 'application/json',
