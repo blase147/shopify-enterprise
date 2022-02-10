@@ -1841,7 +1841,7 @@
               zip: $("#zip").val(),
             };
 
-          let payment_url = '<%= action_subscription_contract_path(:update_payment, customer.id) %>'
+          let payment_url = '<%= action_subscription_contract_path(:update_payment, (customer.id rescue params[:customer_id]) ) %>'
           console.log( payment_url );
           $.ajax({
             url: '/a/chargezen_production/dashboard/customer_info',
