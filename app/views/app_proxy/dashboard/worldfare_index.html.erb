@@ -972,12 +972,14 @@
   <div class="customer-details">
     <div class="container">
       <div class="customer-info">
-        <div class="initial">
+        <div class="initial customer-initial">
           EA
         </div>
         <div class="details">
           <strong>{{ customer.first_name }}</strong>
+          {% if current_subscription.metafields.subscription.dishes_in_week %}
           <p>{{ current_subscription.metafields.subscription.dishes_in_week }}-Dish Trial Box - {{current_subscription.price | divided_by: current_subscription.metafields.subscription.dishes_in_week | money}}/dish</p>
+          {% endif %}
           <a href="#" class="btn-link">Upgrade Subscription</a>
         </div>
       </div>
