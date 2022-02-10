@@ -972,7 +972,7 @@
   <div class="customer-details">
     <div class="container">
       <div class="customer-info">
-        <div class="initial customer-initial">
+        <div data-name="{{ customer.first_name }}" class="initial customer-initial">
           EA
         </div>
         <div class="details">
@@ -1842,7 +1842,6 @@
             };
 
           let payment_url = '<%= action_subscription_contract_path(:update_payment, (customer.id rescue params[:customer_id]) ) %>'
-          console.log( payment_url );
           $.ajax({
             url: '/a/chargezen_production/dashboard/customer_info',
             type: 'POST',
@@ -1917,7 +1916,8 @@
 
       $(this).addClass('active');
     });
-
+    let name = $('.customer-initial').data('name');
+    $('.customer-initial').html(name.substring(0, 2).toUpperCase());
   });
 </script>
 
