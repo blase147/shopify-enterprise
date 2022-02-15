@@ -1127,6 +1127,7 @@
                 {% endif %} Subscription
               </a>
             </div> -->
+            {% if current_subscription %}
             <div class="plan_detail">
               <p class="choose_plan_boxes_namber_of_dish">
                 {% if current_subscription %}
@@ -1336,6 +1337,7 @@
             </svg>
 
           </div>
+          {% endif %}
           <div class="sort_by">
               <p>Sort by:</p>
               <select name="orders" id="orders_list">
@@ -1756,7 +1758,6 @@
       tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
     document.getElementById(usr_tab).style.display = "block";
-    document.getElementById("Overview").style.display = "none";
     if (make_active)
       evt.currentTarget.className += " active";
 
