@@ -1751,13 +1751,19 @@
     var i, Profile_links_data, Profile_links;
     Profile_links_data = document.getElementsByClassName("Profile_links_data");
     for (i = 0; i < Profile_links_data.length; i++) {
-      Profile_links_data[i].style.display = "none";
+      if(!(Profile_links_data[i].id == 'Schedule' && usr_tab == 'Overview')) {
+        Profile_links_data[i].style.display = "none";
+      }
     }
     tablinks = document.getElementsByClassName("Profile_links");
     for (i = 0; i < tablinks.length; i++) {
       tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
     document.getElementById(usr_tab).style.display = "block";
+    if(usr_tab == 'Overview') {
+      document.getElementById('Schedule').style.display = "block";
+    }
+    document.getElementById("Overview").style.display = "none";
     if (make_active)
       evt.currentTarget.className += " active";
 
