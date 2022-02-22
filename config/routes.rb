@@ -99,6 +99,7 @@ Rails.application.routes.draw do
         get :get_delivery_option
         get :submit_delivery_option
         post :customer_info
+        put :update_theme
       end
     end
 

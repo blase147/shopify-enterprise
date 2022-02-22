@@ -1,4 +1,9 @@
 class Setting < ApplicationRecord
+  THEME_TYPE = {
+    'Default': nil,
+    'Worldfare': 'worldfare_'
+  }.freeze
+
   belongs_to :shop
   enum design_type: %i[one two three]
   has_many :email_notifications, dependent: :destroy
