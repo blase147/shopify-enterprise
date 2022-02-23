@@ -166,6 +166,10 @@ class AppProxy::DashboardController < AppProxyController
     render json: { status: :ok, options: (order.nil? ? [] : order)}
   end
 
+  def update_theme
+    current_setting.update(portal_theme: params[:theme_name])
+  end
+
   def customer_info
    
     shopify_customer = ShopifyAPI::Customer.find( params[:customer_id] )
