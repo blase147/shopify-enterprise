@@ -15,53 +15,17 @@ import './weeklyMeals.css';
 
 const index = ({ handleBack }) => {
   // Start Tabs
-  const [selectedWeek, setSelectedWeek] = useState(null);
+  const [selectedDate, setSelectedDate] = useState('');
   const [customersData, setCustomersData] = useState(null);
-  const orders = [
-    {
-      name: 'order 1',
-      image: 'src',
-      status: 'Pending',
-      eta: '13-24-2022',
-    },
-    {
-      name: 'order 1',
-      image: 'src',
-      status: 'Pending',
-      eta: '13-24-2022',
-    },
-    {
-      name: 'order 1',
-      image: 'src',
-      status: 'Pending',
-      eta: '13-24-2022',
-    },
-    {
-      name: 'order 1',
-      image: 'src',
-      status: 'Pending',
-      eta: '13-24-2022',
-    },
-    {
-      name: 'order 1',
-      image: 'src',
-      status: 'Pending',
-      eta: '13-24-2022',
-    },
-    {
-      name: 'order 1',
-      image: 'src',
-      status: 'Pending',
-      eta: '13-24-2022',
-    }
-  ]
-  // -------------------
+ // -------------------
   const GET_Customers_Orders = gql`
     query {
         fetchCustomersMealsOrders {
                 totalCount
                 customerName
                 customerOrders {
+                  estimatedDateOfDelivery
+                  createdAt
                   orderItems {
                     name
                     quantity
@@ -76,9 +40,46 @@ const index = ({ handleBack }) => {
 
   useEffect(() => {
     if (data && data.fetchCustomersMealsOrders) {
-      setCustomersData(data.fetchCustomersMealsOrders);
+      filterAndSetCustomersData();
+    }
+    if(selectedDate === '') {
+      setSelectedDate(dayjs().format('YYYY-MM-DD'));
     }
   }, [data]);
+
+  const filterAndSetCustomersData = () => {
+    let customerData=[]
+    data.fetchCustomersMealsOrders.forEach((c)=> {
+      if(c.totalCount > 0) {
+        let info = { 
+          name: c.customerName,
+          totalCount: c.totalCount,
+          customerOrders: []
+        }
+        c.customerOrders.forEach((order)=> {
+          if(order.createdAt === selectedDate) {
+            info.customerOrders.push(order)
+          }
+        })
+        if(info.customerOrders.length > 0){
+          customerData.push(info)
+        }
+      }
+    })
+    setCustomersData(customerData)
+  }
+
+  const handleDateChange = (e) => {
+    let newDate = dayjs()
+    if(e.target.parentElement.parentElement.id === 'next-day') {
+      newDate = dayjs(selectedDate).add('1', 'day').format('YYYY-MM-DD')
+    } else {
+      newDate = dayjs(selectedDate).subtract('1', 'day').format('YYYY-MM-DD')
+    }
+    setSelectedDate(newDate)
+    filterAndSetCustomersData()
+  }
+
   return (
     <>
       <Frame>
@@ -93,13 +94,13 @@ const index = ({ handleBack }) => {
         <Card>
           <Card.Section>
             <div className='header'>
-              <div className="back-button pointer" onClick={handleBack}>
+              <div className="back-button pointer"  id='prev-day' onClick={handleDateChange}>
               <Icon
                 source={MobileBackArrowMajor}
                 color="base" />
               </div>
-              <h2 className="Trial">Meals for: Week of </h2>
-              <div className="back-button pointer" onClick={handleBack}>
+              <h2 className="Trial">Meals for: Week of {selectedDate} </h2>
+              <div className="back-button pointer" id='next-day' onClick={handleDateChange}>
                 <Icon
                   source={ArrowRightMinor}
                   color="base" />
@@ -108,7 +109,7 @@ const index = ({ handleBack }) => {
             {customersData && customersData.map((customer)=> (
               <div className="Trial">
                 <div className='order-box'>
-                  <h2 className="Trial">{customer.customerName} <span>June 1, 2022</span></h2>
+                  <h2 className="Trial">{customer.name} <span>{selectedDate}</span></h2>
                   <div className="orders">
                     <div className="placed_data pdate">
                       <p className="placed">Order placed:</p>
@@ -119,7 +120,8 @@ const index = ({ handleBack }) => {
                       order.orderItems.map((line_item)=> (
                       <div className="order_inn">
                         <div className="holder">
-                          <button className="dish_remove" data-id="{{item.id}}">+</button>
+                          { //<button className="dish_remove" data-id="{{item.id}}">+</button>
+                          }
                           <img src={line_item.src} alt="not present" />
                           <h5>{line_item.name} ({line_item.quantity})</h5>
                         </div>
@@ -134,7 +136,7 @@ const index = ({ handleBack }) => {
                       </div>
                       <div className="Status bottom">
                         <p className="s_name">Arriving:</p>
-                        <p className="s_data subdued">Est. June 4, 2021</p>
+                        <p className="s_data subdued">Est. {customer.customerOrders[0].estimatedDateOfDelivery}</p>
                       </div>
                     </div>
                 </div>
