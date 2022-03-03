@@ -1,4 +1,4 @@
-module Types
+ module Types
   class QueryType < Types::BaseObject
     field :fetch_plan_groups, resolver: Queries::FetchSellingPlanGroups
     field :fetch_plan_group, resolver: Queries::FetchSellingPlanGroup
@@ -33,6 +33,7 @@ module Types
     field :fetch_build_a_box_campaign_group, resolver: Queries::FetchBuildABoxCampaignGroup
     field :fetch_build_a_box_campaign_groups, resolver: Queries::FetchBuildABoxCampaignGroups
     field :fetch_ship_engine_orders, resolver: Queries::FetchShipEngineOrders
+    field :fetch_customers_meals_orders, resolver: Queries::FetchCustomersMealsOrders
     field :fetch_ship_engine_order, resolver: Queries::FetchShipEngineOrder
     field :fetch_estimated_shipping_rates, resolver: Queries::FetchEstimatedShippingRates
   end

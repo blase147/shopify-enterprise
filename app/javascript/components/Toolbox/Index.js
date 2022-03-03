@@ -11,6 +11,7 @@ import InformationImage from '../../../assets/images/settings/information.svg'
 import Integrations from '../integration/Index';
 import IntegrationDetail from '../integration/Detail';
 import ShippingSuit from '../shippingSuit/index';
+import WeeklyMealsList from '../weeklyMeals/index';
 
 const Index = () => {
 
@@ -49,6 +50,12 @@ const Index = () => {
             {
                 key: "integerations",
                 title: "Integrations",
+                img: EmailImage,
+                desc: "Manage upsell settings and customization for you and your customers."
+            },
+            {
+                key: "meals",
+                title: "Weekly Meals",
                 img: EmailImage,
                 desc: "Manage upsell settings and customization for you and your customers."
             }
@@ -117,6 +124,9 @@ const Index = () => {
                              <ShippingSuit
                              handleBack={handleBackSetting}
                              />
+                             : selectedSetting === 'meals' ?
+                             <WeeklyMealsList 
+                             handleBack={handleBackSetting}/>
                              :''
                          }
                           </Layout.Section>
