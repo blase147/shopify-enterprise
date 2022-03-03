@@ -42,7 +42,7 @@ const index = ({ handleBack }) => {
     if (data && data.fetchCustomersMealsOrders) {
       filterAndSetCustomersData();
     }
-    if(selectedDate === '') {
+    if(!selectedDate) {
       setSelectedDate(dayjs().format('YYYY-MM-DD'));
     }
   }, [data]);

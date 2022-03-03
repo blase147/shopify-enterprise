@@ -4,8 +4,6 @@ module Types
     field :quantity, Int, null: true
 
     def name
-      item_name =  object.name
-      puts item_name
       object.name
     end
 
