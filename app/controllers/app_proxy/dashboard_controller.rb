@@ -160,7 +160,6 @@ class AppProxy::DashboardController < AppProxyController
       order = ShopifyAPI::Order.find(params[:order_id]) rescue nil
       if order.present?
         order.note = params[:note]
-        order.note[:delivery_date] = Date.parse(params[:note][:delivery_date]).strftime('%m/%d/%Y') if order[:note].present? && order.note[:delivery_date].present?
         order.save
       end
     end
