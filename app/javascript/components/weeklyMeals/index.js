@@ -14,40 +14,83 @@ import {
 import './weeklyMeals.css';
 
 const index = ({ handleBack }) => {
-  // Start Tabs
+  const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  const [selectedWeek, setSelectedWeek] = useState('');
+  const [selectedDay, setSelectedDay] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [customersData, setCustomersData] = useState(null);
+  const [ deliveryOptions, setDeliveryOptions] = useState(days);
+  
  // -------------------
-  const GET_Customers_Orders = gql`
+
+ const GET_Delivery_Options = gql`
     query {
-        fetchCustomersMealsOrders {
-                totalCount
-                customerName
-                customerOrders {
-                  estimatedDateOfDelivery
-                  createdAt
-                  orderItems {
-                    name
-                    quantity
-                  }
-                }
-        }
+      fetchDeliveryOptions {
+        deliveryDays
+      }
     }
     `;
+
+  const deliveryData = useQuery(GET_Delivery_Options, {
+    fetchPolicy: 'no-cache'
+  });
+
+  useEffect(() => {
+    if(deliveryData.data && deliveryData.data.fetchDeliveryOptions) {
+      setDeliveryOptions(deliveryData.data.fetchDeliveryOptions.map(o => o.deliveryDays))
+    }
+  }, [deliveryData.data]);
+
+
+  const GET_Customers_Orders = gql`
+    query {
+      fetchCustomersMealsOrders {
+        totalCount
+        customerName
+        customerOrders {
+          dateOfDelivery
+          createdAt
+          orderItems {
+            name
+            quantity
+            productId
+          }
+          products {
+            id
+            imageUrl
+          }
+        }
+      }
+    }
+  `;
+
   const { data, loading } = useQuery(GET_Customers_Orders, {
     fetchPolicy: 'no-cache'
   });
 
   useEffect(() => {
     if (data && data.fetchCustomersMealsOrders) {
-      filterAndSetCustomersData();
-    }
-    if(!selectedDate) {
-      setSelectedDate(dayjs().format('YYYY-MM-DD'));
+      filterAndSetCustomersData(selectedDate);
     }
   }, [data]);
+  
+  useEffect(() => {
+    if(!selectedWeek) {
+      var weekOfYear = require('dayjs/plugin/weekOfYear')
+      var weekday = require('dayjs/plugin/weekday')
+      var updateLocale = require('dayjs/plugin/updateLocale')
+      dayjs.extend(weekOfYear)
+      dayjs.extend(weekday)
+      dayjs.extend(updateLocale)
+      let date = dayjs().startOf('week')
 
-  const filterAndSetCustomersData = () => {
+      setSelectedWeek(dayjs().week());
+      setSelectedDay(days[dayjs(date).get('day')]);
+      setSelectedDate(dayjs(date).format('YYYY-MM-DD'));
+    }
+  }, []);
+
+  const filterAndSetCustomersData = (selectedDate) => {
     let customerData=[]
     data.fetchCustomersMealsOrders.forEach((c)=> {
       if(c.totalCount > 0) {
@@ -56,8 +99,9 @@ const index = ({ handleBack }) => {
           totalCount: c.totalCount,
           customerOrders: []
         }
-        c.customerOrders.forEach((order)=> {
-          if(order.createdAt === selectedDate) {
+        c.customerOrders && c.customerOrders.forEach((order)=> {
+          let dateOfDelivery = dayjs(order.dateOfDelivery).format('YYYY-MM-DD')
+          if(selectedDate === dateOfDelivery) {
             info.customerOrders.push(order)
           }
         })
@@ -69,15 +113,34 @@ const index = ({ handleBack }) => {
     setCustomersData(customerData)
   }
 
-  const handleDateChange = (e) => {
+  const handleWeekChange = (e) => {
     let newDate = dayjs()
-    if(e.target.parentElement.parentElement.id === 'next-day') {
-      newDate = dayjs(selectedDate).add('1', 'day').format('YYYY-MM-DD')
-    } else {
-      newDate = dayjs(selectedDate).subtract('1', 'day').format('YYYY-MM-DD')
+    let newWeek = selectedWeek
+    if(e.target.id === 'next-week' && selectedWeek < 52) {
+      newDate = dayjs(selectedDate).add('7', 'day').format('YYYY-MM-DD')
+      newWeek = selectedWeek + 1
+    } else if (selectedWeek > 1) {
+      newDate = dayjs(selectedDate).subtract('7', 'day').format('YYYY-MM-DD')
+      newWeek = selectedWeek - 1
     }
     setSelectedDate(newDate)
-    filterAndSetCustomersData()
+    setSelectedWeek(newWeek)
+    filterAndSetCustomersData(newDate)
+  }
+
+  const handleDayChange = (e) => {
+    let dayCount = days.indexOf(e.target.value)
+    let newDate = dayjs(selectedDate).startOf('week').add(dayCount, 'day').format('YYYY-MM-DD')
+    setSelectedDate(newDate)
+    setSelectedDay(e.target.value)
+    filterAndSetCustomersData(newDate)
+  }
+
+  const productImage = (products, pid) => {
+    if(pid && products.length > 0) {
+      return products.find(p => p.id === pid).imageUrl
+    }
+    return ""
   }
 
   return (
@@ -94,16 +157,23 @@ const index = ({ handleBack }) => {
         <Card>
           <Card.Section>
             <div className='header'>
-              <div className="back-button pointer"  id='prev-day' onClick={handleDateChange}>
-              <Icon
+              <div className="back-button pointer"  id='prev-week' onClick={handleWeekChange}>
+              {/* <Icon
                 source={MobileBackArrowMajor}
-                color="base" />
+                color="base" /> */}
+                Back
               </div>
-              <h2 className="Trial">Meals for: Week of {selectedDate} </h2>
-              <div className="back-button pointer" id='next-day' onClick={handleDateChange}>
-                <Icon
+              <h2 className="Trial">Meals for: Week of {selectedWeek}/52 </h2>
+              <select name="days" id="days" onChange={handleDayChange}>
+                {deliveryOptions.map((dd) => (
+                  <option value={dd}>{dd}</option>
+                ))}
+              </select>
+              <div className="back-button pointer" id='next-week' onClick={handleWeekChange}>
+                {/* <Icon
                   source={ArrowRightMinor}
-                  color="base" />
+                  color="base" /> */}
+                  Next
               </div>
             </div>
             {customersData && customersData.map((customer)=> (
@@ -118,14 +188,14 @@ const index = ({ handleBack }) => {
                     <div id="psection" className="product_section">
                     {customer.customerOrders.map((order) =>(
                       order.orderItems.map((line_item)=> (
-                      <div className="order_inn">
-                        <div className="holder">
-                          { //<button className="dish_remove" data-id="{{item.id}}">+</button>
-                          }
-                          <img src={line_item.src} alt="not present" />
-                          <h5>{line_item.name} ({line_item.quantity})</h5>
+                        <div className="order_inn">
+                          <div className="holder">
+                            { //<button className="dish_remove" data-id="{{item.id}}">+</button>
+                            }
+                            <img src={productImage(order.products, line_item.productId)} alt="not present" />
+                            <h5>{line_item.name} ({line_item.quantity})</h5>
+                          </div>
                         </div>
-                      </div>
                     ))))}
                     </div>
                   </div>
@@ -136,13 +206,13 @@ const index = ({ handleBack }) => {
                       </div>
                       <div className="Status bottom">
                         <p className="s_name">Arriving:</p>
-                        <p className="s_data subdued">Est. {customer.customerOrders[0].estimatedDateOfDelivery}</p>
+                        <p className="s_data subdued">Est. {selectedDate}</p>
                       </div>
                     </div>
                 </div>
               </div>
             ))}
-            {loading && (
+            {(loading || deliveryData.loading) && (
               <Spinner
                 accessibilityLabel="Spinner example"
                 size="large"
