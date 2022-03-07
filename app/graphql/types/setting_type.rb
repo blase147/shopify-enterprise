@@ -1,6 +1,7 @@
 module Types
   class SettingType < Types::BaseObject
     field :account_portal_option, String, null: true
+    field :portal_theme, String, null: true
     #billing
     field :payment_retries, String, null: true
     field :payment_delay_retries, String, null: true

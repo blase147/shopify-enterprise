@@ -45,19 +45,6 @@
         = render partial: 'paused_subscriptions'
 javascript:
 
-  $('#theme').on('change', function() {
-    $.ajax({
-      url: '/a/chargezen_production/dashboard/update_theme',
-      type: 'PUT',
-      data: JSON.stringify({'theme_name': this.value}),
-      contentType: 'application/json',
-      success: function(response) {
-        location.reload();
-      },
-      error: function(response) {}
-    });
-  });
-
   $('.owl-carousel').owlCarousel(
     {
       dots: true,

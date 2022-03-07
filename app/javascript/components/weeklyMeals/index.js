@@ -14,7 +14,7 @@ import {
 import './weeklyMeals.css';
 
 const index = ({ handleBack }) => {
-  const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
   const [selectedWeek, setSelectedWeek] = useState('');
   const [selectedDay, setSelectedDay] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
@@ -129,6 +129,7 @@ const index = ({ handleBack }) => {
   }
 
   const handleDayChange = (e) => {
+    debugger
     let dayCount = days.indexOf(e.target.value)
     let newDate = dayjs(selectedDate).startOf('week').add(dayCount, 'day').format('YYYY-MM-DD')
     setSelectedDate(newDate)
