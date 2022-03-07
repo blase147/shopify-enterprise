@@ -129,7 +129,6 @@ const index = ({ handleBack }) => {
   }
 
   const handleDayChange = (e) => {
-    debugger
     let dayCount = days.indexOf(e.target.value)
     let newDate = dayjs(selectedDate).startOf('week').add(dayCount, 'day').format('YYYY-MM-DD')
     setSelectedDate(newDate)

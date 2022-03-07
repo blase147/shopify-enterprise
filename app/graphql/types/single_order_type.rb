@@ -10,8 +10,8 @@ module Types
     end
 
     def date_of_delivery
-      "Thursday 10 Mar 2022"
-      # object.note
+      # "Thursday 10 Mar 2022"
+      object.note
     end
 
     def products

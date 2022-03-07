@@ -42,9 +42,11 @@ const CustomPortal = (props) => {
     document.head.appendChild(elem);
   };
   const handleApplyStyles = () => {
-    const styles = `${values?.styleSubscription || ''} ${values?.styleUpsell || ''
-      } ${values?.styleSidebarPages || ''} ${values?.styleSidebar || ''} ${values?.styleAccountProfile || ''
-      }`;
+    const styles = `${values?.styleSubscription || ''} ${
+      values?.styleUpsell || ''
+    } ${values?.styleSidebarPages || ''} ${values?.styleSidebar || ''} ${
+      values?.styleAccountProfile || ''
+    }`;
     applyStyles(styles);
   };
   const [valueAccountProfile_CSS, setValueAccountProfile_CSS] = useState();
