@@ -1011,14 +1011,9 @@
       </div>
       <div class="contact-details">
         <h2>Your Current Plan</h2>
-        <span>12-Dish Trial Box - $10.41/Dish</span>
         {% if current_subscription.metafields.subscription.dishes_in_week %}
         <span>{{ current_subscription.metafields.subscription.dishes_in_week }}-Dish Trial Box - {{current_subscription.price | divided_by: current_subscription.metafields.subscription.dishes_in_week | money}}/dish</span>
         {% endif %}
-        <div class="center">
-          <span>Current Theme</span>
-          <%= select_tag :theme, options_for_select(Setting::THEME_TYPE.map {|k, v| [k.to_s, v]}, current_setting.portal_theme), {class: 'form-control choose-theme width-auto',  prompt: 'Please Select'} %>
-        </div>
       </div>
       <div class="button-holder">
         <button class="btn-yellow bold" tabindex="0">Upgrade Subscription</button>
@@ -1759,19 +1754,6 @@
 
 
 <script>
-  $('#theme').on('change', function() {
-    $.ajax({
-      url: '/a/chargezen_production/dashboard/update_theme',
-      type: 'PUT',
-      data: JSON.stringify({'theme_name': this.value}),
-      contentType: 'application/json',
-      success: function(response) {
-        location.reload();
-
-      },
-      error: function(response) {}
-    });
-  });
 
   $('.recommended-for .slider-holder').slick({
     infinite: true,

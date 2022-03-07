@@ -14,7 +14,7 @@ import {
 import './weeklyMeals.css';
 
 const index = ({ handleBack }) => {
-  const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
   const [selectedWeek, setSelectedWeek] = useState('');
   const [selectedDay, setSelectedDay] = useState('');
   const [selectedDate, setSelectedDate] = useState('');

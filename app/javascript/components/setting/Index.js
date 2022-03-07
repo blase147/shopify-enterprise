@@ -84,6 +84,7 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
         deliveryIntervalAfterProduction
         eligibleWeekdaysForDelivery
         accountPortalOption
+        portalTheme
         activeSubscriptionBtnSeq
 
         styleAccountProfile
@@ -193,6 +194,7 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
           deliveryIntervalAfterProduction
           eligibleWeekdaysForDelivery
           accountPortalOption
+          portalTheme
           activeSubscriptionBtnSeq
 
           styleAccountProfile

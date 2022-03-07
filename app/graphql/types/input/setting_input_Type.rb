@@ -7,6 +7,7 @@ module Types
       argument :active_subscription_btn_seq, [String], required: false
 
       argument :account_portal_option, String, required: false
+      argument :portal_theme, String, required: false
 
       argument :__typename, String, required: false
       #customer portal

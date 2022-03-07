@@ -177,6 +177,11 @@ const CustomPortal = (props) => {
     { label: 'Use only app customer portal', value: 'redirect' },
   ];
 
+  const themePortalOptions = [
+    { label: 'Default', value: '' },
+    { label: 'Worldfare', value: 'worldfare_' },
+  ];
+
   const {
     values,
     touched,
@@ -283,6 +288,19 @@ const CustomPortal = (props) => {
               </Stack.Item>
               <Stack.Item>
                 <h5 className="customize-text">Customize Styles</h5>
+              </Stack.Item>
+              <Stack.Item>
+              <p className="applied-classes">
+                            Select Theme
+                          </p>
+                <Select
+                  options={themePortalOptions}
+                  value={values.portalTheme}
+                  error={
+                    touched.portalTheme && errors.portalTheme
+                  }
+                  onChange={(e) => setFieldValue('portalTheme', e)}
+                />
               </Stack.Item>
               <Stack.Item>
                 <div className="portal-section">
