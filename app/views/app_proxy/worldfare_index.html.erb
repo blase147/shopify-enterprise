@@ -870,20 +870,6 @@
                 {% endif %} Subscription
               </a>
             </div>
-            <div class="plan_detail">
-              <p class="choose_plan_boxes_namber_of_dish">
-                {% if current_subscription %}
-                  {{ current_subscription.metafields.subscription.dishes_in_week }}-Dish Box
-                {% else %}
-                  None
-                {% endif %}
-              </p>
-              <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/files/Vector_5.png?v=1637752683">
-              {% if current_subscription %}
-                <span class="choose_plan_boxes_price">{{current_subscription.price | divided_by: current_subscription.metafields.subscription.dishes_in_week | money}}/dish</span>
-                <span class="choose_plan_boxes_duration bottom">{{current_subscription.price | money}}/week</span>
-              {% endif %}
-            </div>
           </div>
           {% if is_trail %}
             <p>Oops!<br>No data found</p>
