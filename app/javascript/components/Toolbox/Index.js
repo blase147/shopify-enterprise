@@ -12,6 +12,7 @@ import Integrations from '../integration/Index';
 import IntegrationDetail from '../integration/Detail';
 import ShippingSuit from '../shippingSuit/index';
 import WeeklyMealsList from '../weeklyMeals/index';
+import WeeklyMenu from '../weeklyMenu/index';
 
 const Index = () => {
 
@@ -58,6 +59,12 @@ const Index = () => {
                 title: "Weekly Meals",
                 img: EmailImage,
                 desc: "Manage upsell settings and customization for you and your customers."
+            },
+            {
+                key: "menu",
+                title: "Weekly Menu",
+                img: EmailImage,
+                desc: "Manage upsell settings and customization for you and your customers."
             }
             // {
             //     key: "",
@@ -76,19 +83,19 @@ const Index = () => {
                             <div>
                               <Card>
                                 <Card.Section>
-                                  <div class="setting-grid">
+                                  <div className="setting-grid">
                                     {settings.map((setting) => (
                                       <div
                                         key={Math.random()}
-                                        class="tabs-parents pointer"
+                                        className="tabs-parents pointer"
                                         onClick={() =>
                                           setSelectedSetting(setting.key)
                                         }
                                       >
-                                        <div class="icon-sec">
+                                        <div className="icon-sec">
                                           <img src={setting.img} />
                                         </div>
-                                        <div class="tab-info">
+                                        <div className="tab-info">
                                           <h4>{setting.title}</h4>
                                           <p>{setting.desc}</p>
                                         </div>
@@ -126,6 +133,9 @@ const Index = () => {
                              />
                              : selectedSetting === 'meals' ?
                              <WeeklyMealsList 
+                             handleBack={handleBackSetting}/>
+                             : selectedSetting === 'menu' ?
+                             <WeeklyMenu 
                              handleBack={handleBackSetting}/>
                              :''
                          }

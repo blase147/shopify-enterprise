@@ -1,0 +1,249 @@
+.shipping-header {
+    margin-bottom: 25px;
+  }
+  .order-box {
+    border: 1px solid #DDE2E2;
+    border-radius: 10px;
+    padding: 40px;
+    overflow: hidden;
+  }
+  .order-box .product_section .order_inn .holder button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: transparent;
+    box-shadow: none;
+    color: #000;
+    font-family: 'Lato';
+    font-weight: normal;
+    font-size: 36px;
+    line-height: 30px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    padding: 0;
+    min-width: inherit;
+    margin: 0 !important;
+    height: auto;
+    min-height: inherit;
+    border: none;
+  }
+  .order-box .product_section .order_inn img {
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .order-box .product_section .order_inn h5 {
+    font-size: 16px;
+    line-height: 1.4;
+    font-family: 'Ainslie';
+    font-weight: bold;
+  }
+  .order-box .order_status {
+    margin-top: 20px !important;
+  }
+  /* .order-box .order_status p {
+    display: block !important;
+    text-align: left !important;
+    font-family: 'Ainslie' !important;
+    font-weight: 600 !important;
+    font-size: 22px !important;
+    color: #384443 !important;
+    margin-bottom: 15px !important;
+  }
+  .order-box .order_status p.s_data {
+    text-align: right !important;
+  } */
+  .order-box .pre_segment {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -10px;
+    width: auto !important;
+    float: none !important;
+  }
+  .order-box .pre_segment .pre_segment_order {
+    width: 25%;
+    float: none;
+  }
+  .order-box .pre_segment .pre_segment_order a {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    padding: 12px;
+  }
+  .order-box .pre_segment .pre_segment_order a button {
+    min-width: inherit !important;
+    display: block;
+    width: 100%;
+    margin: auto !important;
+    min-height: inherit !important;
+    box-shadow: none;
+    background: #f8f4ed;
+    padding: 60px 25px;
+  }
+  .order-box .pre_segment .pre_segment_order button span {
+    font-size: 32px;
+    font-family: 'Lato';
+    font-weight: 300;
+    margin-bottom: 15px;
+    display: block;
+    width: auto;
+  }
+  .order-box .pre_segment .pre_segment_order button p {
+    font-size: 18px;
+    display: block;
+    text-align: left;
+    width: auto;
+    font-family: 'Ainslie';
+    font-weight: bold;
+  }
+  .order-box + .order-box {
+    margin-top: 40px;
+  }
+  .order-box h2 {
+    margin: 0 0 12px !important;
+    font-family: 'Ainslie';
+    font-weight: bold;
+    font-size: 34px;
+  }
+  .order-box .placed_dates {
+    display: block !important;
+    text-align: left !important;
+    font-weight: 300 !important;
+    font-family: 'Ainslie' !important;
+    font-weight: 100 !important;
+    font-size: 20px !important;
+    color: #384443 !important;
+    margin-bottom: 15px !important;
+  }
+  .order-box .placed {
+    display: block !important;
+    text-align: left !important;
+    font-family: 'Ainslie' !important;
+    font-weight: 600 !important;
+    font-size: 22px !important;
+    color: #384443 !important;
+    margin-bottom: 15px !important;
+  }
+  .order-box .skip_week {
+    display: block !important;
+    text-align: right !important;
+  }
+  .order-box .skip_week a {
+    font-family: 'Ainslie' !important;
+    font-weight: 600 !important;
+    font-size: 22px !important;
+    text-decoration: none;
+    color: #384443 !important;
+  }
+  .order-box .product_section {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -15px;
+  }
+  .order-box .product_section .order_inn {
+    box-shadow: none;
+    background: transparent;
+    text-align: center;
+    width: 25%;
+    margin: 0;
+    float: none;
+    padding: 10px 15px !important;
+  }
+  .order-box .product_section .order_inn .holder {
+    padding: 25px 15px;
+    background: #f8f4ed;
+    overflow: hidden;
+    border-radius: 8px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .header {
+    text-align: center;
+    background: #E9DBC3;
+    padding: 30px;
+    margin-bottom: 30px;
+  }
+  .header h2 {
+    position: static;
+    width: 483px;
+    height: 59px;
+    left: 90px;
+    top: 0px;
+    font-family: Avenir;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 39px;
+    line-height: 150%;
+    text-align: center;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 0px 60px;
+  }
+  .Trial {
+    margin-bottom: 30px;
+  }
+  .order-box h2 span {
+    display: block;
+    margin-top: 10px;
+    font-family: Avenir;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 20px;
+    line-height: 150%;
+    color: #384443;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+  }
+  .order_status .Status {
+    position: relative;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding: 5px;
+  }
+  .order_status .Status p.s_name {
+    position: absolute;
+    display: flex;
+    text-align: left !important;
+    font-family: 'Ainslie' !important;
+    font-weight: 600 !important;
+    font-size: 22px !important;
+    color: #384443 !important;
+    margin-bottom: 15px !important;
+    left: 0;
+  }
+  .order_status .Status p.s_data {
+    position: absolute;
+    display: flex;
+    text-align: right !important;
+    font-family: 'Ainslie' !important;
+    font-weight: 600 !important;
+    font-size: 22px !important;
+    color: #384443 !important;
+    margin-bottom: 15px !important;
+    right: 0 !important;
+  }
+  .order-box .orders {
+    margin-bottom: 50px;
+  }
+  .Status.bottom {
+      margin-top: 30px;
+  }
+  #next-week {
+    position: absolute;
+    right: 50px;
+    top: 150px;
+  }
+  #prev-week {
+    position: absolute;
+    left: 50px;
+    top: 150px;
+  }
