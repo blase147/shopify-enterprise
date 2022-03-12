@@ -1,230 +1,364 @@
-import { gql, useQuery } from '@apollo/client';
+import React, { useState, useCallback, useEffect } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import {
-  Badge, Button,
+  Page,
+  Button,
+  Badge,
+  Select,
   Card,
-  Checkbox, ChoiceList,
-  Frame, Icon,
-  Spinner
+  Checkbox,
+  DataTable,
+  Layout,
+  Stack,
+  Icon,
+  Spinner,
+  TextField,
+  Frame,
+  Toast,
+  List,
+  Banner,
 } from '@shopify/polaris';
-import dayjs from 'dayjs';
-import React, { useCallback, useEffect, useState } from 'react';
 import {
-  MobileBackArrowMajor, ArrowRightMinor
+  DeleteMajor,
+  MobilePlusMajor,
+  SearchMajor,
+  MobileBackArrowMajor,
 } from '@shopify/polaris-icons';
-import './weeklyMenu.css';
 
-const index = ({ handleBack }) => {
-  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-  const [selectedWeek, setSelectedWeek] = useState('');
-  const [selectedDay, setSelectedDay] = useState('');
-  const [selectedDate, setSelectedDate] = useState('');
-  const [customersData, setCustomersData] = useState(null);
-  const [ deliveryOptions, setDeliveryOptions] = useState(days);
-  
- // -------------------
+import { gql, useMutation, useQuery } from '@apollo/client';
+import _ from 'lodash';
 
- const GET_Delivery_Options = gql`
-    query {
-      fetchDeliveryOptions {
-        deliveryDays
-      }
-    }
-    `;
-
-  const deliveryData = useQuery(GET_Delivery_Options, {
-    fetchPolicy: 'no-cache'
-  });
-
-  useEffect(() => {
-    if(deliveryData.data && deliveryData.data.fetchDeliveryOptions) {
-      setDeliveryOptions(deliveryData.data.fetchDeliveryOptions.map(o => o.deliveryDays))
-    }
-  }, [deliveryData.data]);
-
-
-  const GET_Customers_Orders = gql`
-    query {
-      fetchCustomersMealsOrders {
-        totalCount
-        customerName
-        customerOrders {
-          dateOfDelivery
-          createdAt
-          orderItems {
+import AppLayout from '../layout/Layout';
+const ButtonRemove = (props) => {
+  const {
+    selectedMenusForRemove,
+    setSelectedMenusForRemove,
+    setFormErrors,
+    formatRows,
+    setMenus,
+    setFilterMenus,
+    setSaveSuccess,
+    menus,
+    filteredMenus,
+  } = props;
+  const DELETE_UPSELL_MENU = gql`
+    mutation ($input: DeleteWeeklyMenuInput!) {
+      deleteWeeklyMenus(input: $input) {
+        weeklyMenu {
+          startDate
+          endDate
+          boxQuantityLimit
+          boxSubscriptionType
+          triggers {
             name
-            quantity
-            productId
           }
-          products {
-            id
-            imageUrl
+          sellingPlans {
+            sellingPlanId
+            sellingPlanName
+          }
+          collectionImages {
+            collectionId
+            collectionTitle
+            products {
+              title
+            }
+          }
+          productImages {
+            title
           }
         }
       }
     }
   `;
 
-  const { data, loading } = useQuery(GET_Customers_Orders, {
-    fetchPolicy: 'no-cache'
+  const [deleteUpsellMenu, { loading: deleting, error: deleteError }] =
+    useMutation(DELETE_UPSELL_MENU);
+
+  const handleRemoveMenus = () => {
+    if (deleting) return;
+    deleteUpsellMenu({
+      variables: {
+        input: { params: selectedMenusForRemove },
+      },
+    }).then((resp) => {
+      const errors = resp.data.errors;
+      if (errors) {
+        // setSaveSuccess(false);
+        setFormErrors(errors);
+      } else {
+        const rowsData = formatRows(
+          resp.data.deleteBoxMenus.buildABoxGroups
+        );
+        setMenus(resp.data.deleteWeeklyMenus);
+        setFilterMenus(rowsData);
+        setSaveSuccess(true);
+        setSelectedMenusForRemove([]);
+      }
+    });
+  };
+
+  return (
+    <Button
+      destructive
+      icon={DeleteMajor}
+      onClick={() => handleRemoveMenus()}
+      loading={deleting}
+    >
+      Delete Menu
+    </Button>
+  );
+};
+
+const Index = ({ handleForm, handleBack }) => {
+  const history = useHistory();
+
+  const GET_UPSELL_MENUS = gql`
+    query {
+      weeklyMenu {
+        startDate
+        endDate
+        boxQuantityLimit
+        boxSubscriptionType
+        triggers {
+          name
+        }
+        sellingPlans {
+          sellingPlanId
+          sellingPlanName
+        }
+        collectionImages {
+          collectionId
+          collectionTitle
+          products {
+            title
+          }
+        }
+        productImages {
+          productId
+          image
+          _destroy
+        }
+      }
+    }
+  `;
+
+  const [formErrors, setFormErrors] = useState([]);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
+
+  const [menus, setMenus] = useState([]);
+  const [filterMenus, setFilterMenus] = useState([]);
+
+  const [menuStatus, setMenuStatus] = useState('');
+  const [searchValue, setSearchValue] = useState('');
+
+  const filterMenusValue = () => {
+    const rowsData = menus.filter((item) => {
+      return (
+        ((item.status === 'publish' && menuStatus === 'active') ||
+          (item.status !== 'publish' && menuStatus === 'draft') ||
+          menuStatus === 'all' ||
+          !menuStatus) &&
+        (item.internalName
+          ?.toLowerCase()
+          ?.includes(searchValue?.toLowerCase()) ||
+          item.id === searchValue ||
+          !searchValue)
+      );
+    });
+
+    setFilterMenus(formatRows(rowsData));
+  };
+
+  const optionsMenus = [
+    { label: 'All Menus', value: 'all' },
+    { label: 'Active Menus', value: 'active' },
+    { label: 'Draft Menus', value: 'draft' },
+  ];
+
+  const { data, loading, error, refetch } = useQuery(GET_UPSELL_MENUS, {
+    fetchPolicy: 'no-cache',
   });
 
   useEffect(() => {
-    if (data && data.fetchCustomersMealsOrders) {
-      filterAndSetCustomersData(selectedDate);
+    if (data) {
+      let rowsData = formatRows(data.fetchBuildABoxMenuGroups);
+
+      setMenus(data.fetchBuildABoxMenuGroups);
+      setFilterMenus(rowsData);
     }
   }, [data]);
-  
+
+  const formatRows = (rows) => {
+    return rows?.map((row) => [
+      <Checkbox
+        label={false}
+        checked={selectedMenusForRemove.indexOf(row.id) != -1}
+        onChange={(newChecked) =>
+          handleChangeCheckedMenus(newChecked, row.id)
+        }
+      />,
+      <div className="menus">
+        {/* <div className={`${row.status == 'publish' ? 'active' : 'draft'}`}>
+              <Badge>{row.status == 'publish' ? 'Active' : 'Draft'}</Badge>
+            </div> */}
+        <Link key={row.id} onClick={() => handleForm(row.id)}>
+          {row.internalName}
+        </Link>
+      </div>,
+      `${_.startCase(row.location?.split('_').join(' '))}`,
+      //   <p className="money">
+      //     <span>$130.00</span>USD
+      //   </p>,
+      //   'one-time',
+      //   '0 Days',
+    ]);
+  };
+
+  const [selectedMenusForRemove, setSelectedMenusForRemove] = useState(
+    []
+  );
+
+  const handleChangeCheckedMenus = (newChecked, menuId) => {
+    if (newChecked) {
+      setSelectedMenusForRemove([
+        ...selectedMenusForRemove,
+        menuId,
+      ]);
+    } else {
+      const index = selectedMenusForRemove.indexOf(menuId);
+      setSelectedMenusForRemove([
+        ...selectedMenusForRemove.slice(0, index),
+        ...selectedMenusForRemove.slice(index + 1),
+      ]);
+    }
+  };
+
   useEffect(() => {
-    if(!selectedWeek) {
-      var weekOfYear = require('dayjs/plugin/weekOfYear')
-      var weekday = require('dayjs/plugin/weekday')
-      var updateLocale = require('dayjs/plugin/updateLocale')
-      dayjs.extend(weekOfYear)
-      dayjs.extend(weekday)
-      dayjs.extend(updateLocale)
-      let date = dayjs().startOf('week')
+    filterMenusValue();
+    setSelectedMenusForRemove([]);
+  }, [searchValue, menuStatus]);
 
-      setSelectedWeek(dayjs().week());
-      setSelectedDay(days[dayjs(date).get('day')]);
-      setSelectedDate(dayjs(date).format('YYYY-MM-DD'));
-    }
-  }, []);
-
-  const filterAndSetCustomersData = (selectedDate) => {
-    let customerData=[]
-    data.fetchCustomersMealsOrders.forEach((c)=> {
-      if(c.totalCount > 0) {
-        let info = { 
-          name: c.customerName,
-          totalCount: c.totalCount,
-          customerOrders: []
-        }
-        c.customerOrders && c.customerOrders.forEach((order)=> {
-          let dateOfDelivery = dayjs(order.dateOfDelivery).format('YYYY-MM-DD')
-          if(selectedDate === dateOfDelivery) {
-            info.customerOrders.push(order)
-          }
-        })
-        if(info.customerOrders.length > 0){
-          customerData.push(info)
-        }
-      }
-    })
-    setCustomersData(customerData)
-  }
-
-  const handleWeekChange = (e) => {
-    let newDate = dayjs()
-    let newWeek = selectedWeek
-    if(e.target.id === 'next-week' && selectedWeek < 52) {
-      newDate = dayjs(selectedDate).add('7', 'day').format('YYYY-MM-DD')
-      newWeek = selectedWeek + 1
-    } else if (selectedWeek > 1) {
-      newDate = dayjs(selectedDate).subtract('7', 'day').format('YYYY-MM-DD')
-      newWeek = selectedWeek - 1
-    }
-    setSelectedDate(newDate)
-    setSelectedWeek(newWeek)
-    filterAndSetCustomersData(newDate)
-  }
-
-  const handleDayChange = (e) => {
-    let dayCount = days.indexOf(e.target.value)
-    let newDate = dayjs(selectedDate).startOf('week').add(dayCount, 'day').format('YYYY-MM-DD')
-    setSelectedDate(newDate)
-    setSelectedDay(e.target.value)
-    filterAndSetCustomersData(newDate)
-  }
-
-  const productImage = (products, pid) => {
-    if(pid && products.length > 0) {
-      return products.find(p => p.id === pid).imageUrl
-    }
-    return ""
-  }
+  useEffect(() => {
+    filterMenusValue();
+  }, [selectedMenusForRemove]);
 
   return (
-    <>
-      <Frame>
-        <div className="shipping-header">
+    <Frame>
+      {saveSuccess && (
+        <Toast
+          content="Weekly menu is deleted"
+          onDismiss={hideSaveSuccess}
+        />
+      )}
+      {formErrors.length > 0 && (
+        <>
+          <Banner
+            title="Weekly menu could not be saved"
+            status="critical"
+          >
+            <List type="bullet">
+              {formErrors.map((message, index) => (
+                <List.Item key={index}>{message.message}</List.Item>
+              ))}
+            </List>
+          </Banner>
+          <br />
+        </>
+      )}
+      <Layout>
+        <Layout.Section>
           <div className="back-button pointer" onClick={handleBack}>
-            <Icon
-              source={MobileBackArrowMajor}
-              color="base" />
+            <Icon source={MobileBackArrowMajor} color="base" />
           </div>
-        </div>
-
-        <Card>
-          <Card.Section>
-            <div className='header'>
-              <div className="back-button pointer"  id='prev-week' onClick={handleWeekChange}>
-              {/* <Icon
-                source={MobileBackArrowMajor}
-                color="base" /> */}
-                Back
-              </div>
-              <h2 className="Trial">Meals for: Week of {selectedWeek}/52 </h2>
-              <select name="days" id="days" onChange={handleDayChange}>
-                {deliveryOptions.map((dd) => (
-                  <option value={dd}>{dd}</option>
-                ))}
-              </select>
-              <div className="back-button pointer" id='next-week' onClick={handleWeekChange}>
-                {/* <Icon
-                  source={ArrowRightMinor}
-                  color="base" /> */}
-                  Next
-              </div>
-            </div>
-            {customersData && customersData.map((customer)=> (
-              <div className="Trial">
-                <div className='order-box'>
-                  <h2 className="Trial">{customer.name} <span>{selectedDate}</span></h2>
-                  <div className="orders">
-                    <div className="placed_data pdate">
-                      <p className="placed">Order placed:</p>
-                      <p className="placed_dates "></p>
-                    </div>
-                    <div id="psection" className="product_section">
-                    {customer.customerOrders.map((order) =>(
-                      order.orderItems.map((line_item)=> (
-                        <div className="order_inn">
-                          <div className="holder">
-                            { //<button className="dish_remove" data-id="{{item.id}}">+</button>
-                            }
-                            <img src={productImage(order.products, line_item.productId)} alt="not present" />
-                            <h5>{line_item.name} ({line_item.quantity})</h5>
-                          </div>
-                        </div>
-                    ))))}
-                    </div>
-                  </div>
-                  <div className="order_status">
-                      <div className="Status">
-                        <p className="s_name">Status:</p>
-                        <p className="s_data">Pending</p>
-                      </div>
-                      <div className="Status bottom">
-                        <p className="s_name">Arriving:</p>
-                        <p className="s_data subdued">Est. {selectedDate}</p>
-                      </div>
-                    </div>
+        </Layout.Section>
+        <Layout.Section>
+          <Stack>
+            <Stack.Item>
+            </Stack.Item>
+            <Stack.Item fill></Stack.Item>
+            <Stack.Item>
+              <Stack>
+                <div
+                  className={`${
+                    selectedMenusForRemove.length === 0 ? 'hidden' : ''
+                  }`}
+                >
+                  <ButtonRemove
+                    compaigns={menus}
+                    filteredCompaigns={filterMenus}
+                    formatRows={formatRows}
+                    setMenus={setMenus}
+                    setFilterMenus={setFilterMenus}
+                    setFormErrors={setFormErrors}
+                    setSaveSuccess={setSaveSuccess}
+                    selectedMenusForRemove={selectedMenusForRemove}
+                    setSelectedMenusForRemove={
+                      setSelectedMenusForRemove
+                    }
+                  />
                 </div>
+                <Button
+                  primary
+                  icon={MobilePlusMajor}
+                  onClick={() => handleForm('')}
+                >
+                  Create Weekly Menu
+                </Button>
+              </Stack>
+            </Stack.Item>
+          </Stack>
+        </Layout.Section>
+        <Layout.Section>
+          <Card>
+            <Card.Section>
+              <div className="search">
+                <label className="head-search">
+                  {filterMenus.length} Menus
+                </label>
+                <TextField
+                  value={searchValue}
+                  onChange={(value) => setSearchValue(value)}
+                  prefix={<Icon source={SearchMajor} color="inkLighter" />}
+                  placeholder="Search for Name"
+                />
               </div>
-            ))}
-            {(loading || deliveryData.loading) && (
-              <Spinner
-                accessibilityLabel="Spinner example"
-                size="large"
-                color="teal"
-              />
-            )}
-          </Card.Section>
-        </Card>
-        {/* </Page> */}
-      </Frame>
-    </>
-  )
-}
 
-export default index
+              <DataTable
+                columnContentTypes={[
+                  'text',
+                  'text',
+                  'text',
+                  // 'text',
+                  // 'text',
+                  // 'text',
+                ]}
+                headings={[
+                  '',
+                  'Menus',
+                  'Location',
+                  // 'Created',
+                  // 'Pricing Model',
+                  // 'Trial Period',
+                ]}
+                rows={filterMenus}
+                sortable={[false, false, true, false, false, false]}
+                defaultSortDirection="descending"
+                initialSortColumnIndex={1}
+              />
+              {loading && (
+                <Spinner
+                  accessibilityLabel="Spinner example"
+                  size="large"
+                  color="teal"
+                />
+              )}
+            </Card.Section>
+          </Card>
+        </Layout.Section>
+      </Layout>
+    </Frame>
+  );
+};
+
+export default Index;
