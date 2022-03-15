@@ -199,7 +199,7 @@ const Index = ({ handleForm, handleBack }) => {
         }
       />,
       <div className="menus">
-        <Link key={row.id} onClick={() => handleForm(row.id)}>
+        <Link key={row.id} onClick={() => handleForm(row.id)} to='#'>
           {row.displayName}
         </Link>
       </div>,

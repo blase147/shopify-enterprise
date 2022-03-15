@@ -507,6 +507,7 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                               options={[{ label: 'is any', value: 'is_any' }]}
                               label=""
                               value={'is_any'}
+                              onChange={() => {/* for future and avoid warning */}}
                             />
 
                             <div className="search">

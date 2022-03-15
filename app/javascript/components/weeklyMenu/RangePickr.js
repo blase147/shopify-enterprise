@@ -8,14 +8,7 @@ export default class RangePickr extends React.Component {
   state = {
     month: dayjs().get('month'),
     year: dayjs().get('year'),
-    //  month: 4,
-    //  year: 2021,
-    selected:
-      this.props.cutoff
-        ? {
-            cutoff: new Date(Date.parse(this.props.cutoff)) || new Date(),
-          }
-        : null,
+    selected: this.props.cutoff ? (new Date(Date.parse(this.props.cutoff)) || new Date()) : null,
     active: false,
   };
 
@@ -36,9 +29,7 @@ export default class RangePickr extends React.Component {
             disclosure={'down'}
             textAlign="left"
           >
-            {!isEmpty(this.state.selected)
-              ? `${dayjs(this.state.selected?.cutoff).format('DD MMM, YYYY')}`
-              : 'Choose date'}
+            { selected ? `${dayjs(selected).format('DD MMM, YYYY')}` : 'Choose date'}
           </Button>
 
           <div className="analytics-btn-group"></div>
@@ -66,11 +57,11 @@ export default class RangePickr extends React.Component {
   }
 
   handleChange = (value) => {
-    this.setState({ selected: value });
+    this.setState({ selected: value.start });
     this.props.setFieldValue &&
       this.props.setFieldValue(
         this.props.cutoffLabel,
-        dayjs(value.cutoff).format('YYYY-MM-DD')
+        dayjs(value.start).format('YYYY-MM-DD')
       );
   };
 
