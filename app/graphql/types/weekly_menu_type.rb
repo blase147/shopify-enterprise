@@ -1,5 +1,5 @@
 module Types
-  class WeeklyMenu < Types::BaseObject
+  class WeeklyMenuType < Types::BaseObject
     field :id, ID, null: false
     field :cutoff_date, String, null: true
     field :display_name, String, null: true

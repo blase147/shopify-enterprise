@@ -46,11 +46,6 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
   const [allProducts, setAllProducts] = useState([]);
   const [updated, setUpdated] = useState(false);
 
-  const locationOptions = [
-    { label: 'Customer Portal', value: 'customer_portal' },
-    { label: 'Product Page', value: 'product_page' },
-  ];
-
   const triggerOptions = [
     {
       label: 'Customer is subscribed to subscription plan',
@@ -59,18 +54,13 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
   ];
 
   const initialValues = {
-    internalName: '',
-    location: 'customer_portal',
-    weeklyMenu: {
-      startDate: '',
-      endDate: '',
-      boxQuantityLimit: 0,
-      boxSubscriptionType: '',
-      triggers: 'customer_is_subscribed_to_subscription_plan',
-      sellingPlans: [],
-      collectionImages: [],
-      productImages: [],
-    },
+    cutoffDate: '',
+    week: 0,
+    boxSubscriptionType: '',
+    triggers: 'customer_is_subscribed_to_subscription_plan',
+    sellingPlans: [],
+    collectionImages: [],
+    productImages: [],
   };
 
   const [formErrors, setFormErrors] = useState([]);
@@ -80,37 +70,33 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
 
-  const handleRemovingUpsellMenu = useCallback((values, index) => {
-    const menus = [...(values.upsellMenus || [])];
+  const handleRemovingWeeklyMenu = useCallback((values, index) => {
+    const menus = [...(values.weeklyMenus || [])];
     menus[index]._destroy = true;
     return menus;
   });
 
-  const handleAddUpsellMenu = useCallback((values) => {
-    const menus = [...(values.upsellMenus || [])];
-    menus.push(initialValues.upsellMenus[0]);
+  const handleAddWeeklyMenu = useCallback((values) => {
+    const menus = [...(values.weeklyMenus || [])];
+    menus.push(initialValues.weeklyMenus[0]);
 
     return menus;
   });
 
   const validationSchema = yup.object().shape({
-    internalName: yup.string().required().label('Internal name'),
-    weeklyMenu: yup.object().shape({
-      boxSubscriptionType: yup
-        .string()
-        .required()
-        .label('box subscription type'),
-    }),
+    boxSubscriptionType: yup
+      .string()
+      .required()
+      .label('box subscription type'),
   });
 
-  const GET_UPSELL_MENU = gql`
+  const GET_WEEKLY_MENU = gql`
     query ($id: ID!) {
-      weeklyMenu(id: $id) {
+      fetchWeeklyMenu(id: $id) {
         id
-        startDate
-        endDate
+        cutoffDate
+        week
         displayName
-        boxQuantityLimit
         boxSubscriptionType
         triggers {
           name
@@ -139,8 +125,8 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
   `;
   // const { id } = useParams();
 
-  const [getUpsell, { data, loading, error }] = useLazyQuery(
-    GET_UPSELL_MENU,
+  const [getWeeklyMenu, { data, loading, error }] = useLazyQuery(
+    GET_WEEKLY_MENU,
     {
       variables: { id: id },
       fetchPolicy: 'no-cache',
@@ -149,16 +135,15 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
 
   useEffect(() => {
     if (id) {
-      getUpsell();
+      getWeeklyMenu();
     }
   }, []);
 
-  const UPDATE_BOX_MENU = gql`
+  const UPDATE_WEEKLY_MENU = gql`
     mutation ($input: UpdateWeeklyMenuInput!) {
       updateWeeklyMenu(input: $input) {
         menu {
           id
-          internalName
         }
       }
     }
@@ -170,14 +155,13 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
       addWeeklyMenu(input: $input) {
         menu {
           id
-          internalName
         }
       }
     }
   `;
 
   const history = useHistory();
-  const [createUpsellMenu] = useMutation(CREATE_WEEKLY_MENU);
+  const [createWeeklyMenu] = useMutation(CREATE_WEEKLY_MENU);
 
   const formRef = useRef(null);
 
@@ -217,11 +201,11 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
     if (
       selectedProducts &&
       formRef.current &&
-      formRef.current?.values.weeklyMenu.productImages !=
+      formRef.current?.values.productImages !=
         selectedProducts
     ) {
       formRef.current.setFieldValue(
-        'weeklyMenu.productImages',
+        'productImages',
         selectedProducts
       );
     }
@@ -231,11 +215,11 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
     if (
       selectedCollections &&
       formRef.current &&
-      formRef.current?.values.weeklyMenu.collectionImages !=
+      formRef.current?.values.collectionImages !=
         selectedCollections
     ) {
       formRef.current.setFieldValue(
-        'weeklyMenu.collectionImages',
+        'collectionImages',
         selectedCollections
       );
     }
@@ -253,37 +237,33 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
 
   useEffect(() => {
     if (data) {
-      data.weeklyMenu.triggers =
-        data.weeklyMenu.triggers[0]?.name; //Manipulate later
-      data.weeklyMenu.endDate =
-        data.weeklyMenu.endDate || '';
-      data.weeklyMenu.startDate =
-        data.weeklyMenu.startDate || '';
+      data.fetchWeeklyMenu.triggers = data.fetchWeeklyMenu.triggers[0]?.name; //Manipulate later
+      data.fetchWeeklyMenu.cutoffDate = data.fetchWeeklyMenu.cutoffDate || '';
       setMenuData(data);
       setSelectedProducts(
-        data.weeklyMenu.productImages
+        data.fetchWeeklyMenu.productImages
       );
       setSelectedProductOptions(() => {
         const defaultOption = [];
-        data.weeklyMenu.productImages?.map(
+        data.fetchWeeklyMenu.productImages?.map(
           (image) =>
             image._destroy == false && defaultOption.push(image.productId)
         );
         return defaultOption;
       });
       setSelectedCollections(
-        data.weeklyMenu.collectionImages
+        data.fetchWeeklyMenu.collectionImages
       );
       setSelectedCollectionOptions(() => {
         const defaultOption = [];
-        data.weeklyMenu.collectionImages?.map(
+        data.fetchWeeklyMenu.collectionImages?.map(
           (image) =>
             image._destroy == false && defaultOption.push(image.collectionId)
         );
         return defaultOption;
       });
       setAllSelectedPlans(
-        data.weeklyMenu.sellingPlans
+        data.fetchWeeklyMenu.sellingPlans
       );
     }
   }, [data]);
@@ -311,15 +291,15 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
         {(menuData || !id) && (
           <Formik
             validationSchema={validationSchema}
-            initialValues={menuData || initialValues}
+            initialValues={menuData?.fetchWeeklyMenu || initialValues}
             innerRef={formRef}
             onSubmit={(values, { setSubmitting }) => {
               const formData = { ...values };
-              formData.weeklyMenu.collectionImages = selectedCollections;
-              formData.weeklyMenu.productImages = selectedProducts;
-              formData.weeklyMenu.sellingPlans = allSelectedPlans;
-              formData.weeklyMenu.triggers = [
-                { name: formData?.weeklyMenu?.triggers },
+              formData.collectionImages = selectedCollections;
+              formData.productImages = selectedProducts;
+              formData.sellingPlans = allSelectedPlans;
+              formData.triggers = [
+                { name: formData?.triggers },
               ]; // Manipulate later
 
               if (id) {
@@ -328,24 +308,23 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                     input: { params: formData },
                   },
                 })
-                  .then((resp) => {
-                    const data = resp.data;
-                    const errors = data.errors;
-                    if (errors) {
-                      setFormErrors(errors);
-                      setSubmitting(false);
-                    } else {
-                      // setSaveSuccess(true);
-                      handleClose();
-                    }
-                  })
-                  .catch((error) => {
+                .then((resp) => {
+                  const data = resp.data;
+                  const errors = data.errors;
+                  if (errors) {
+                    setFormErrors(errors);
                     setSubmitting(false);
-                    setFormErrors(error);
-                  });
+                  } else {
+                    // setSaveSuccess(true);
+                    handleClose();
+                  }
+                })
+                .catch((error) => {
+                  setSubmitting(false);
+                  setFormErrors(error);
+                });
               } else {
-                
-                createUpsellMenu({
+                createWeeklyMenu({
                   variables: { input: { params: formData } },
                 })
                   .then((resp) => {
@@ -382,6 +361,7 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
             }) => (
               <Form onSubmit={handleSubmit}>
                 {(dirty || updated) && (
+                  <>
                   <ContextualSaveBar
                     message="Unsaved changes"
                     saveAction={{
@@ -391,22 +371,17 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                     }}
                     discardAction={{
                       onAction: () => {
-                        //   canceledProducts.map(prod => {
-                        //     allProducts.push(prod)
-                        //   });
-
-                        //   setAllProducts(allProducts);
-                        //   setCanceledProducts(prod => prod = []);
                         setUpdated((flag) => (flag = false));
                         resetForm();
                       },
                     }}
                   />
+                  </>
                 )}
 
                 {saveSuccess && (
                   <Toast
-                    content="Upsell menu group is saved"
+                    content="Weekly menu is saved"
                     onDismiss={hideSaveSuccess}
                   />
                 )}
@@ -414,7 +389,7 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                 {formErrors.length > 0 && (
                   <>
                     <Banner
-                      title="Upsell menu group could not be saved"
+                      title="Weekly menu could not be saved"
                       status="critical"
                     >
                       <List type="bullet">
@@ -427,57 +402,23 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                   </>
                 )}
                 <div className="build-a-box-create">
-                  <Card title="Weekly menu group" sectioned>
-                    <FormLayout>
-                      <FormLayout.Group>
-                        <TextField
-                          value={values.internalName}
-                          label="Internal name"
-                          placeholder="Subscribe & Save"
-                          type="text"
-                          error={touched.internalName && errors.internalName}
-                          onChange={(e) => setFieldValue('internalName', e)}
-                          helpText={
-                            <span>
-                              Internal name of the group, used to identify it in
-                              the admin
-                            </span>
-                          }
-                        />
-                        <Select
-                          options={locationOptions}
-                          label="Select weekly menu location"
-                          value={values.location}
-                          error={touched.location && errors.location}
-                          onChange={(e) => setFieldValue(`location`, e)}
-                          helpText={
-                            <span>
-                              Customer portal shows directly after Shopify's
-                              checkout.
-                            </span>
-                          }
-                        />
-                      </FormLayout.Group>
-                    </FormLayout>
-                  </Card>
-
                   <Card title="Weekly Menu" sectioned>
                     <Card.Section>
                       <FormLayout>
                         <FormLayout.Group>
                           <div>
                             <TextField
-                              value={values?.weeklyMenu?.displayName}
+                              value={values?.displayName}
                               label="Display name"
-                              placeholder="Build A Weekly Menu"
+                              placeholder="Weekly Menu"
                               type="text"
                               error={touched.displayName && errors.displayName}
                               onChange={(e) => {
-                                setFieldValue(`weeklyMenu.displayName`, e);
+                                setFieldValue(`displayName`, e);
                               }}
                               helpText={
                                 <span>
-                                  Display Name that will appear on build a box page.
+                                  Display Name that will appear on weekly menu page.
                                 </span>
                               }
                             />
@@ -495,6 +436,7 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                               </h5>
                             </TextContainer>
                             <br />
+
                             <div className="date-range-label">
                               <TextContainer>
                                 <Subheading element="h3">
@@ -502,12 +444,28 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                                 </Subheading>
                               </TextContainer>
                             </div>
+
                             <RangePickr
-                              startLabel={'weeklyMenu.startDate'}
-                              endLabel={'weeklyMenu.endDate'}
+                              cutoffLabel={'cutoffDate'}
                               setFieldValue={setFieldValue}
-                              start={values?.weeklyMenu?.startDate || ''}
-                              end={values?.weeklyMenu?.endDate || ''}
+                              cutoff={values?.cutoffDate || ''}
+                            />
+                            <br />
+
+                            <TextField
+                              value={values?.week && values?.week.toString()}
+                              label="Week Number"
+                              placeholder="Week Number(1,2,3,4...)"
+                              type="text"
+                              error={touched.week && errors.week}
+                              onChange={(e) => {
+                                setFieldValue(`week`, e);
+                              }}
+                              helpText={
+                                <span>
+                                  Week Number that will appear on weekly menu page.
+                                </span>
+                              }
                             />
                           </div>
                           <br />
@@ -520,13 +478,13 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                         <Select
                           options={triggerOptions}
                           label="Triggers"
-                          value={values?.weeklyMenu?.triggers}
+                          value={values?.triggers}
                           error={
-                            touched.weeklyMenu?.triggers &&
-                            errors.weeklyMenu?.triggers
+                            touched.triggers &&
+                            errors.triggers
                           }
                           onChange={(e) =>
-                            setFieldValue(`weeklyMenu.triggers`, e)
+                            setFieldValue(`triggers`, e)
                           }
                           helpText={
                             <span>
@@ -554,16 +512,16 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                             <div className="search">
                               <SearchPlan
                                 idForTextField={`serchPlan-${Math.random()}`}
-                                value={values.weeklyMenu?.sellingPlans}
+                                value={values.sellingPlans}
                                 setFieldValue={setFieldValue}
-                                fieldName={`weeklyMenu.sellingPlans`}
+                                fieldName={`sellingPlans`}
                                 allSelectedPlans={allSelectedPlans || []}
                                 setAllSelectedPlans={setAllSelectedPlans}
                                 error={
-                                  values.weeklyMenu?.sellingPlans &&
-                                  touched.weeklyMenu?.sellingPlans
+                                  values.sellingPlans &&
+                                  touched.sellingPlans
                                     ?.sellingPlanId &&
-                                  errors.weeklyMenu?.sellingPlans
+                                  errors.sellingPlans
                                     ?.sellingPlanId
                                 }
                               />
@@ -591,44 +549,22 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                         </FormLayout.Group>
 
                         <TextContainer>
-                          <Subheading>BUILD-A-BOX CONFIGURATION</Subheading>
+                          <Subheading>WEEKLY-MENU CONFIGURATION</Subheading>
                         </TextContainer>
                         <div className="limit-section">
-                          <FormLayout.Group>
-                            <div className="box-subscription-detail">
-                              <TextField
-                                label="Limit Options"
-                                value={values.weeklyMenu.boxQuantityLimit.toString()}
-                                error={
-                                  touched.weeklyMenu?.boxQuantityLimit &&
-                                  errors.weeklyMenu?.boxQuantityLimit
-                                }
-                                type="number"
-                                onChange={(e) => {
-                                  setFieldValue(
-                                    `weeklyMenu.boxQuantityLimit`,
-                                    parseInt(e)
-                                  );
-                                }}
-                                // placeholder="1"
-                              />
-                            </div>
-                          </FormLayout.Group>
                           <FormLayout.Group>
                             <Checkbox
                               label="Sort box choices by collection"
                               checked={
-                                values?.weeklyMenu
-                                  ?.boxSubscriptionType === 'collection'
+                                values?.boxSubscriptionType === 'collection'
                               }
                               error={
-                                touched.weeklyMenu
-                                  ?.boxSubscriptionType &&
-                                errors.weeklyMenu?.boxSubscriptionType
+                                touched?.boxSubscriptionType &&
+                                errors?.boxSubscriptionType
                               }
                               onChange={(e) => {
                                 setFieldValue(
-                                  `weeklyMenu.boxSubscriptionType`,
+                                  `boxSubscriptionType`,
                                   e === true ? 'collection' : ''
                                 );
                               }}
@@ -636,24 +572,22 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                             <Checkbox
                               label="Display box choices by products"
                               checked={
-                                values?.weeklyMenu
-                                  ?.boxSubscriptionType === 'products'
+                                values?.boxSubscriptionType === 'products'
                               }
                               error={
-                                touched.weeklyMenu
-                                  ?.boxSubscriptionType &&
-                                errors.weeklyMenu?.boxSubscriptionType
+                                touched.boxSubscriptionType &&
+                                errors.boxSubscriptionType
                               }
                               onChange={(e) => {
                                 setFieldValue(
-                                  `weeklyMenu.boxSubscriptionType`,
+                                  `boxSubscriptionType`,
                                   e === true ? 'products' : ''
                                 );
                               }}
                             />
                           </FormLayout.Group>
                           <FormLayout.Group>
-                            {values?.weeklyMenu?.boxSubscriptionType ===
+                            {values?.boxSubscriptionType ===
                               'collection' && (
                               <div className="box-subscription-search">
                                 <TextContainer>Collection</TextContainer>
@@ -669,7 +603,7 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                                 />
                               </div>
                             )}
-                            {values?.weeklyMenu?.boxSubscriptionType ===
+                            {values?.boxSubscriptionType ===
                               'products' && (
                               <div className="box-subscription-search">
                                 <TextContainer>Product</TextContainer>
@@ -682,7 +616,7 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                               </div>
                             )}
                           </FormLayout.Group>
-                          {values?.weeklyMenu?.boxSubscriptionType ===
+                          {values?.boxSubscriptionType ===
                             'collection' && (
                             <div className="collection-stack">
                               {selectedCollections?.map(
@@ -724,7 +658,7 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                               )}
                             </div>
                           )}
-                          {values?.weeklyMenu?.boxSubscriptionType ===
+                          {values?.boxSubscriptionType ===
                             'products' && (
                             <div className="product-stack">
                               <div>

@@ -41,13 +41,13 @@ const ButtonRemove = (props) => {
     menus,
     filteredMenus,
   } = props;
-  const DELETE_UPSELL_MENU = gql`
+  const DELETE_WEEKLY_MENU = gql`
     mutation ($input: DeleteWeeklyMenuInput!) {
       deleteWeeklyMenus(input: $input) {
         weeklyMenu {
-          startDate
-          endDate
-          boxQuantityLimit
+          cutoffDate
+          week
+          displayName
           boxSubscriptionType
           triggers {
             name
@@ -71,12 +71,12 @@ const ButtonRemove = (props) => {
     }
   `;
 
-  const [deleteUpsellMenu, { loading: deleting, error: deleteError }] =
-    useMutation(DELETE_UPSELL_MENU);
+  const [deleteWeeklyMenu, { loading: deleting, error: deleteError }] =
+    useMutation(DELETE_WEEKLY_MENU);
 
   const handleRemoveMenus = () => {
     if (deleting) return;
-    deleteUpsellMenu({
+    deleteWeeklyMenu({
       variables: {
         input: { params: selectedMenusForRemove },
       },
@@ -87,7 +87,7 @@ const ButtonRemove = (props) => {
         setFormErrors(errors);
       } else {
         const rowsData = formatRows(
-          resp.data.deleteBoxMenus.buildABoxGroups
+          resp.data.deleteBoxMenus.deleteWeeklyMenus
         );
         setMenus(resp.data.deleteWeeklyMenus);
         setFilterMenus(rowsData);
@@ -112,12 +112,13 @@ const ButtonRemove = (props) => {
 const Index = ({ handleForm, handleBack }) => {
   const history = useHistory();
 
-  const GET_UPSELL_MENUS = gql`
+  const GET_WEEKLY_MENUS = gql`
     query {
-      weeklyMenu {
-        startDate
-        endDate
-        boxQuantityLimit
+      fetchWeeklyMenus {
+        id
+        displayName
+        cutoffDate
+        week
         boxSubscriptionType
         triggers {
           name
@@ -159,14 +160,13 @@ const Index = ({ handleForm, handleBack }) => {
           (item.status !== 'publish' && menuStatus === 'draft') ||
           menuStatus === 'all' ||
           !menuStatus) &&
-        (item.internalName
+        (item.displayName
           ?.toLowerCase()
           ?.includes(searchValue?.toLowerCase()) ||
           item.id === searchValue ||
           !searchValue)
       );
     });
-
     setFilterMenus(formatRows(rowsData));
   };
 
@@ -176,15 +176,15 @@ const Index = ({ handleForm, handleBack }) => {
     { label: 'Draft Menus', value: 'draft' },
   ];
 
-  const { data, loading, error, refetch } = useQuery(GET_UPSELL_MENUS, {
+  const { data, loading, error, refetch } = useQuery(GET_WEEKLY_MENUS, {
     fetchPolicy: 'no-cache',
   });
 
   useEffect(() => {
     if (data) {
-      let rowsData = formatRows(data.fetchBuildABoxMenuGroups);
+      let rowsData = formatRows(data.fetchWeeklyMenus);
 
-      setMenus(data.fetchBuildABoxMenuGroups);
+      setMenus(data.fetchWeeklyMenus);
       setFilterMenus(rowsData);
     }
   }, [data]);
@@ -199,19 +199,11 @@ const Index = ({ handleForm, handleBack }) => {
         }
       />,
       <div className="menus">
-        {/* <div className={`${row.status == 'publish' ? 'active' : 'draft'}`}>
-              <Badge>{row.status == 'publish' ? 'Active' : 'Draft'}</Badge>
-            </div> */}
         <Link key={row.id} onClick={() => handleForm(row.id)}>
-          {row.internalName}
+          {row.displayName}
         </Link>
       </div>,
       `${_.startCase(row.location?.split('_').join(' '))}`,
-      //   <p className="money">
-      //     <span>$130.00</span>USD
-      //   </p>,
-      //   'one-time',
-      //   '0 Days',
     ]);
   };
 
@@ -314,7 +306,7 @@ const Index = ({ handleForm, handleBack }) => {
             <Card.Section>
               <div className="search">
                 <label className="head-search">
-                  {filterMenus.length} Menus
+                  {filterMenus && filterMenus.length} Menus
                 </label>
                 <TextField
                   value={searchValue}
@@ -341,7 +333,7 @@ const Index = ({ handleForm, handleBack }) => {
                   // 'Pricing Model',
                   // 'Trial Period',
                 ]}
-                rows={filterMenus}
+                rows={filterMenus ? filterMenus : []}
                 sortable={[false, false, true, false, false, false]}
                 defaultSortDirection="descending"
                 initialSortColumnIndex={1}

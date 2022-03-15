@@ -9,7 +9,7 @@ class CreateWeeklyMenus < ActiveRecord::Migration[6.0]
       t.string :selling_plan_ids
       t.string :display_name
       t.integer :week
-      t.date :cutoff
+      t.date :cutoff_date
 
       t.timestamps
     end

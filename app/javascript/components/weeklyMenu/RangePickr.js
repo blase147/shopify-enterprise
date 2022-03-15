@@ -11,10 +11,9 @@ export default class RangePickr extends React.Component {
     //  month: 4,
     //  year: 2021,
     selected:
-      this.props.start && this.props.end
+      this.props.cutoff
         ? {
-            start: new Date(Date.parse(this.props.start)) || new Date(),
-            end: new Date(Date.parse(this.props.end)) || new Date(),
+            cutoff: new Date(Date.parse(this.props.cutoff)) || new Date(),
           }
         : null,
     active: false,
@@ -38,9 +37,7 @@ export default class RangePickr extends React.Component {
             textAlign="left"
           >
             {!isEmpty(this.state.selected)
-              ? `${dayjs(this.state.selected?.start).format(
-                  'DD MMM, YYYY'
-                )} - ${dayjs(this.state.selected?.end).format('DD MMM, YYYY')}`
+              ? `${dayjs(this.state.selected?.cutoff).format('DD MMM, YYYY')}`
               : 'Choose date'}
           </Button>
 
@@ -63,7 +60,6 @@ export default class RangePickr extends React.Component {
           onChange={this.handleChange}
           onMonthChange={this.handleMonthChange}
           selected={selected}
-          allowRange={true}
         />
       </Popover>
     );
@@ -73,23 +69,9 @@ export default class RangePickr extends React.Component {
     this.setState({ selected: value });
     this.props.setFieldValue &&
       this.props.setFieldValue(
-        this.props.startLabel,
-        dayjs(value.start).format('YYYY-MM-DD')
+        this.props.cutoffLabel,
+        dayjs(value.cutoff).format('YYYY-MM-DD')
       );
-    this.props.setFieldValue &&
-      this.props.setFieldValue(
-        this.props.endLabel,
-        dayjs(value.end).format('YYYY-MM-DD')
-      );
-    // let dates=this.props.existingValues;
-    // if(dates){
-    //     dates.push(dayjs(value.start).format("YYYY-MM-DD"))
-    //   }else{
-    //     dates=[dayjs(value.start).format("YYYY-MM-DD")]
-    //   }
-    // this.props.callback && this.props.callback(this.props.input,dates)
-    // this.props.handleDate(value.start);
-    // this.setState({active:false})
   };
 
   handleMonthChange = (month, year) => {
