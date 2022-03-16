@@ -100,7 +100,6 @@ Rails.application.routes.draw do
         get :submit_delivery_option
         post :customer_info
         put :update_theme
-        post :create_pre_order
       end
     end
 

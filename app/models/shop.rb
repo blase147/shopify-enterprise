@@ -21,7 +21,6 @@ class Shop < ActiveRecord::Base
   has_many :bundle_groups, dependent: :destroy
   # has_many :sms_logs, dependent: :destroy
   has_many :subscription_logs, dependent: :destroy
-  has_many :weekly_menus, dependent: :destroy
 
   has_many :upsell_campaign_groups, dependent: :destroy
   has_many :integrations, dependent: :destroy
