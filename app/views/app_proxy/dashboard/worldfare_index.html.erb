@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 
 {{ 'customer.css' | asset_url | stylesheet_tag }}
 <% customer = ShopifyAPI::Customer.find(params[:customer_id]) rescue nil %>
@@ -988,6 +989,60 @@
       width: 100%;
     }
   }
+
+/* Edit Subcription Popup */
+
+div#edit-subscription-modal .header {
+    width: 100%;
+    height: 75px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 20px;
+    margin-bottom: 30px;
+}
+div#edit-subscription-modal .header h2 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-left: 40px;
+}
+div#edit-subscription-modal .header svg {
+    cursor: pointer;
+}
+div#edit-subscription-modal {
+    width: 100% !important;
+    padding: 0;
+    position: relative;
+    max-height: 400px;
+}
+#edit-subscription-modal .subscription-details {
+    padding: 0px 35px;
+}
+#edit-subscription-modal .subscription-details .btn-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding-bottom: 20px;
+}
+#edit-subscription-modal .subscription-details .btn-wrapper>button {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #000;
+    margin-bottom: 10px;
+    background: transparent;
+    cursor: pointer;
+    outline: 0 none;
+}
+.modal a.close-modal {
+  top: 10px;
+  right: 10px;
+}
+
 </style>
 <div class="customer account c_account">
   <div class="client_profile">
@@ -1016,7 +1071,20 @@
         {% endif %}
       </div>
       <div class="button-holder">
-        <button class="btn-yellow bold" tabindex="0">Upgrade Subscription</button>
+        <a href="#edit-subscription-modal" rel="modal:open">
+          <button class="btn-yellow bold" id="edit-subscription-btn" tabindex="0">Edit Subscription</button>
+        </a>
+        <div id="edit-subscription-modal" title="Basic dialog" class="modal">
+          <div class="header"><div><h2>Edit Subscription</h2></div><div aria-hidden="true" class="close-modal" data-action="close" tabindex="-1">
+            <!-- <svg fill="none" height="20" viewBox="0 0 18 20" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z" fill="#DDDDDD"></path></svg> -->
+          </div></div>
+
+          <div class="subscription-details">
+            <div class="btn-wrapper"><button aria-hidden="true" class="upgrade-subscription" data-action="close" data-target="#upgrade-c8758bef-34ff-4bac-9ca7-9a4fe096f715" data-toggle="modal" tabindex="-1" type="button">Pause Subscription</button><button aria-hidden="true" class="swap-subscription light" data-action="close" data-target="#swap-c8758bef-34ff-4bac-9ca7-9a4fe096f715" data-toggle="modal" disabled="" tabindex="-1" type="button">Upgrade Subscription</button><button class="downgrade-subscription light" type="button">Skip Next Order</button><button class="ask-questions light" type="button">Change Delivery Date</button><button aria-hidden="true" class="cancel-subscription" data-action="close" data-name="Everyday Fashionista - 2021 II" data-target="#cancel-c8758bef-34ff-4bac-9ca7-9a4fe096f715" data-toggle="modal" tabindex="-1" type="button">CANCEL SUBSCRIPTION</button></div>
+          </div>
+
+<!--           <a href="#" rel="modal:close"><button>Close</button></a> -->
+        </div>
       </div>
     </div>
   </div>
@@ -1744,7 +1812,6 @@
         </div>
       </div>
     </div>
-
   </div>
 
 
@@ -1754,7 +1821,7 @@
 
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
 
 <script>
 
