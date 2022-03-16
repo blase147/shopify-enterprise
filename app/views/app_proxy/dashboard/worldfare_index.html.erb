@@ -1654,9 +1654,11 @@ li.pre_segment_order .order_inn {
                   </div>
                   <%
                     #week_day.strftime('%-V').to_i
-                    current_week_meals = WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first["products"]                                      
+                    current_week_meals = []
+                    current_week_meals = WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first["products"] if WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first.present?
                   %>
-                  <div class="meal-options">
+                  <% if current_week_meals.present? %>
+                    <div class="meal-options">
                     <ul class="box-items-grid hide" id="box-items">
                     <% current_week_meals.each do |meal| %>
                       <li class="box-item-grid" id="<%= meal["product_id"]&.split('/')&.last %>">
@@ -1696,6 +1698,7 @@ li.pre_segment_order .order_inn {
                     <% end %>
                     </ul>
                   </div>
+                  <% end %>
                   <button id='confirm-sub-btn', data-customer-id="<%= params[:customer_id] %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Subscription</button>
                 </div>
               </div>
@@ -1968,6 +1971,7 @@ li.pre_segment_order .order_inn {
 
 <script>
   $(".add-to-week").on('click', function(e){
+    e.preventDefault();
     image_url = $(this).data('url')
     let pre_order_selector = document.getElementsByClassName('empty')[0]
     pre_order_selector.innerHTML = "<div class='order_inn add_new_order'><div class='holder'><img src="+ $(this).data('url') + " data-id=" + $(this).data('id') +"></img></div></div>"
@@ -1976,6 +1980,8 @@ li.pre_segment_order .order_inn {
   });
 
   $("#confirm-sub-btn").on('click', function(e){
+    $(this).prop('disabled', true);
+    $(this).text('Processing..');
 
     let product_ids = []
     $('.pre_segment_order img').each(function(i, obj) {
