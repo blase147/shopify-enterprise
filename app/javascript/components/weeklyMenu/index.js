@@ -41,38 +41,41 @@ const ButtonRemove = (props) => {
     menus,
     filteredMenus,
   } = props;
-  const DELETE_WEEKLY_MENU = gql`
-    mutation ($input: DeleteWeeklyMenuInput!) {
+  const DELETE_WEEKLY_MENUS = gql`
+    mutation ($input: DeleteWeeklyMenusInput!) {
       deleteWeeklyMenus(input: $input) {
-        weeklyMenu {
-          cutoffDate
-          week
-          displayName
-          boxSubscriptionType
-          triggers {
-            name
+        cutoffDate
+        week
+        displayName
+        boxSubscriptionType
+        triggers {
+          name
+        }
+        sellingPlans {
+          sellingPlanId
+          sellingPlanName
+        }
+        collectionImages {
+          collectionId
+          collectionTitle
+          _destroy
+          products {
+            productId
+            image
+            _destroy
           }
-          sellingPlans {
-            sellingPlanId
-            sellingPlanName
-          }
-          collectionImages {
-            collectionId
-            collectionTitle
-            products {
-              title
-            }
-          }
-          productImages {
-            title
-          }
+        }
+        productImages {
+          productId
+          image
+          _destroy
         }
       }
     }
   `;
 
   const [deleteWeeklyMenu, { loading: deleting, error: deleteError }] =
-    useMutation(DELETE_WEEKLY_MENU);
+    useMutation(DELETE_WEEKLY_MENUS);
 
   const handleRemoveMenus = () => {
     if (deleting) return;
@@ -87,7 +90,7 @@ const ButtonRemove = (props) => {
         setFormErrors(errors);
       } else {
         const rowsData = formatRows(
-          resp.data.deleteBoxMenus.deleteWeeklyMenus
+          resp.data.deleteWeeklyMenus
         );
         setMenus(resp.data.deleteWeeklyMenus);
         setFilterMenus(rowsData);
