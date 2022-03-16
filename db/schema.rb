@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_21_113727) do
+ActiveRecord::Schema.define(version: 2022_03_14_210430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,6 +99,49 @@ ActiveRecord::Schema.define(version: 2022_01_21_113727) do
     t.index ["bundle_group_id"], name: "index_bundles_on_bundle_group_id"
   end
 
+  create_table "campaigns", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.string "name", null: false
+    t.boolean "status", default: false
+    t.integer "referrer_reward"
+    t.integer "referrer_points"
+    t.integer "referrer_fixed_points"
+    t.integer "points_to_referrer"
+    t.string "selected_reward"
+    t.string "selected_coupon"
+    t.integer "apply_coupon"
+    t.string "title"
+    t.string "reward_text"
+    t.string "description"
+    t.string "icon"
+    t.string "call_to_action_text"
+    t.string "landing_url"
+    t.string "landing_url_query_params"
+    t.string "default_twitter_msg"
+    t.string "header_for_fb_msg"
+    t.string "description_for_fb_msg"
+    t.string "default_sms_msg"
+    t.string "campaign_name"
+    t.string "description_text"
+    t.string "completed_msg"
+    t.string "max_times_completion"
+    t.integer "customer_fixed_points"
+    t.integer "reward_amount"
+    t.string "required_product"
+    t.string "required_product_reward"
+    t.string "customer_tag"
+    t.string "customer_tag_list"
+    t.string "order_tag"
+    t.string "order_tag_list"
+    t.string "limit"
+    t.integer "orders"
+    t.string "max_times_per_user"
+    t.string "time_between"
+    t.string "countdown_message"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "custom_keywords", force: :cascade do |t|
     t.text "response"
     t.text "keywords", default: [], array: true
@@ -153,6 +196,7 @@ ActiveRecord::Schema.define(version: 2022_01_21_113727) do
     t.json "import_data"
     t.string "import_type"
     t.string "selling_plan_id"
+    t.integer "migration"
     t.index ["reasons_cancel_id"], name: "index_customer_subscription_contracts_on_reasons_cancel_id"
     t.index ["selling_plan_id"], name: "index_customer_subscription_contracts_on_selling_plan_id"
   end
@@ -201,6 +245,164 @@ ActiveRecord::Schema.define(version: 2022_01_21_113727) do
     t.string "password_digest", null: false
     t.datetime "created_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
+  end
+
+  create_table "loyalties", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.string "name", null: false
+    t.string "location", null: false
+    t.string "primary_theme_color"
+    t.string "secondary_theme_color"
+    t.string "primary_text_color"
+    t.string "secondary_text_color"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "loyalty_campaigns", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.string "name", null: false
+    t.boolean "status", default: false
+    t.integer "referrer_reward"
+    t.integer "referrer_points"
+    t.integer "referrer_fixed_points"
+    t.integer "points_to_referrer"
+    t.string "selected_reward"
+    t.string "selected_coupon"
+    t.integer "apply_coupon"
+    t.string "reward_text"
+    t.string "description"
+    t.string "icon"
+    t.string "call_to_action_text"
+    t.string "landing_url"
+    t.string "landing_url_query_params"
+    t.string "default_twitter_msg"
+    t.string "header_for_fb_msg"
+    t.string "description_for_fb_msg"
+    t.string "default_sms_msg"
+    t.string "campaign_name"
+    t.string "description_text"
+    t.string "completed_msg"
+    t.string "max_times_completion"
+    t.integer "customer_fixed_points"
+    t.string "required_product"
+    t.string "required_product_reward"
+    t.string "customer_tag"
+    t.string "customer_tag_list"
+    t.string "order_tag"
+    t.string "order_tag_list"
+    t.string "limit"
+    t.integer "orders"
+    t.string "max_times_per_user"
+    t.string "time_between"
+    t.string "countdown_message"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "loyalty_coupons", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.string "name", null: false
+    t.boolean "status", default: false
+    t.string "reward_customers"
+    t.string "coupon_type"
+    t.integer "discount_amount"
+    t.string "coupon_name"
+    t.string "description"
+    t.string "coupon_points"
+    t.string "coupon_text"
+    t.string "apply_discount"
+    t.integer "cart_amount"
+    t.string "customer_list"
+    t.string "apply_discount_per"
+    t.string "discount_code_usage"
+    t.string "coupon_code_expire"
+    t.string "coupon_restriction"
+    t.string "code_prefix"
+    t.integer "code_length"
+    t.string "success_msg"
+    t.string "icon"
+    t.string "coupon_code_intro"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "loyalty_email_settings", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.string "name", null: false
+    t.string "email", null: false
+    t.integer "notification"
+    t.integer "referral"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "loyalty_points", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.integer "purchase"
+    t.integer "account"
+    t.integer "social_media_like"
+    t.integer "social_media_follow"
+    t.integer "buy_upsell"
+    t.integer "signup_smarty_sms"
+    t.integer "refer_friend"
+    t.integer "signup_mailing_list"
+    t.integer "custom_rule"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "loyalty_redeem_points", force: :cascade do |t|
+    t.bigint "loyalty_id", null: false
+    t.integer "discount"
+    t.integer "point"
+    t.date "starting_date"
+    t.date "ending_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["loyalty_id"], name: "index_loyalty_redeem_points_on_loyalty_id"
+  end
+
+  create_table "loyalty_references", force: :cascade do |t|
+    t.string "referrer_id"
+    t.string "referred_id"
+    t.boolean "refer_a_friend", default: false
+    t.boolean "create_account", default: false
+    t.boolean "happy_birthday", default: false
+    t.boolean "make_a_purchase", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "loyalty_referrals", force: :cascade do |t|
+    t.string "referrer_id"
+    t.string "referral_code"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "loyalty_rules", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.integer "purchase"
+    t.integer "account"
+    t.integer "social_media_like"
+    t.integer "social_media_follow"
+    t.integer "buy_upsell"
+    t.integer "signup_smarty_sms"
+    t.integer "refer_friend"
+    t.integer "signup_mailing_list"
+    t.integer "custom_rule"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "migration_statuses", force: :cascade do |t|
+    t.string "email"
+    t.string "subgql"
+    t.string "shopify_customer"
+    t.string "stripe_customer"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "reasons_cancels", force: :cascade do |t|
@@ -775,6 +977,21 @@ ActiveRecord::Schema.define(version: 2022_01_21_113727) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "weekly_menus", force: :cascade do |t|
+    t.integer "box_subscription_type"
+    t.json "collection_images"
+    t.json "product_images"
+    t.json "triggers"
+    t.json "selling_plans"
+    t.string "selling_plan_ids"
+    t.string "display_name"
+    t.integer "week"
+    t.date "cutoff_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "shop_id"
+  end
+
   create_table "worldfare_pre_orders", force: :cascade do |t|
     t.integer "shop_id"
     t.string "customer_id"
@@ -797,6 +1014,7 @@ ActiveRecord::Schema.define(version: 2022_01_21_113727) do
   add_foreign_key "bundle_groups", "shops"
   add_foreign_key "bundles", "bundle_groups"
   add_foreign_key "customer_subscription_contracts", "reasons_cancels"
+  add_foreign_key "loyalty_redeem_points", "loyalties"
   add_foreign_key "sms_flows", "shops"
   add_foreign_key "user_shops", "shops"
   add_foreign_key "user_shops", "users"
