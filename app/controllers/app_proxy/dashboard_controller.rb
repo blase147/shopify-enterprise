@@ -190,24 +190,6 @@ class AppProxy::DashboardController < AppProxyController
     render json: { status: :ok, message: 'Success', show_notification: true, saved: shopify_customer.save }
   end
 
-  def create_pre_order
-    pre_order = WorldfarePreOrder.find_by(customer_id: params[:customer_id], week: params[:week])
-    if pre_order.nil?
-      pre_order = WorldfarePreOrder.new(shop_id: current_shop.id, customer_id: params[:customer_id], week: params[:week], products: params[:product_ids])
-    end
-    if pre_order.persisted?
-      product_ids = JSON.parse(pre_order.products)
-      updated_ids = product_ids << params[:product_ids]
-      pre_order.products = updated_ids.flatten
-    end
-
-    if pre_order.save
-      render json: { status: :ok, customer_id: params[:customer_id], message: 'Pre Order created Successfuly', show_notification: true }
-    else
-      render json: { customer_id: params[:customer_id], message: pre_order.errors.full_messages, show_notification: true }
-    end
-  end
-
   private ##
 
   def fetch_products(products)
