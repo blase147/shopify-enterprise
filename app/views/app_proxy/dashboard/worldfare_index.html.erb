@@ -988,6 +988,105 @@
       width: 100%;
     }
   }
+/* styles for add to box */
+.box-item-img img {
+    width: 100%;
+    height: auto;
+    transition: transform .2s;
+}
+.box-item-img img hover {
+    -ms-transform: scale(1.5);
+    -webkit-transform: scale(1.5);
+    transform: scale(1.5);
+}
+li.box-item-grid {
+    display: inline-flex;
+    width: 23.8%;
+    box-shadow: 3.36108px 3.36108px 21.0067px rgb(0 0 0 / 25%);
+    border-radius: 10px;
+    padding: 10px 8px;
+    margin-right: 9px;
+}
+li.box-item-grid:last-child {
+    margin-right: 0 !important;
+}
+
+.box-item-icons ul {
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 2px 0 0;
+}
+
+.box-item-icons ul li {
+    display: inline-block;
+}
+ul.box-items-grid {
+    list-style: none;
+    padding: 0;
+}
+.box-icon-wrapper img {
+    margin-bottom: 0px !important;
+}
+
+.box-item-img img {
+    margin-bottom: 0px !important;
+}
+.box-item-information span {
+    font-family: 'Ainslie';
+    font-size: 13px;
+    line-height: normal;
+    color: #384443;
+}
+.box-item-information {
+    margin-bottom: 20px;
+}
+.box-item-information h5 {
+    font-size: 16px;
+    font-weight: 900;
+    color: #384443;
+    font-family: 'Ainslie';
+    margin: 5px 0px;
+}
+.box-item-icons .icon_list li {
+    padding: 0px 7px;
+    text-align: center;
+    border-right: 1px solid #DDE2E2;
+} 
+.box-item-icons .icon_list li:last-child {
+    border: 0;
+}
+.box-item-icons ul li span {
+    font-family: 'Inter';
+    font-size: 9px;
+    line-height: 100%;
+    color: #384443;
+    letter-spacing: 0;
+}
+div#items-list .green-btn {
+    font-family: 'Ainslie';
+    background: #88B363;
+    border-radius: 5px;
+    font-weight: 900;
+    font-size: 18px;
+    line-height: 21px;
+    display: inline-block;
+    text-align: center;
+    color: #fff;
+    width: 100%;
+    border: 0;
+    padding: 10px;
+    cursor: pointer;
+    top: auto;
+    position: unset;
+    right: auto;
+    text-decoration: none;
+}
+div#items-list .green-btn:hover {
+  text-decoration: none;
+}
+
 </style>
 <div class="customer account c_account">
   <div class="client_profile">
@@ -1482,12 +1581,153 @@
                               </div>
                             </div>
                           <% else %>
-                            <li class="pre_segment_order"><a href="/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>"><button><span>+</span><p>Add to box</p></button></a></li>
+                            <li class="pre_segment_order"><a href="#_" id="box-item"><button><span>+</span><p>Add to box</p></button></a></li>
                           <% end %>
                         <% end %>
                       <% end %>
                     </ul>
                   </div>
+                  <ul class="box-items-grid hide" id="box-items">
+                    <li class="box-item-grid">
+                      <div id="items-list" class="">
+                        <div class="box-item-img">
+                          <img src="https://cdn.shopify.com/s/files/1/0559/4005/5133/products/28_20-_20Bulgogi_20Angus_20Beef_20Wok_20Box.jpg?v=1645447685">
+                        </div>
+                        <div class="box-item-information">
+                          <h5>Coconut Chicken</h5>
+                          <span>Chicken breast slowly simmered with coconut...</span>
+                        </div>
+                        <div class="box-item-icons">
+                          <ul class="icon_list">
+                            <li>
+                              <div class="box-icon-wrapper">
+                                <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Calories_Icon.svg?v=4569060398551131372">
+                              </div>
+                              <span>520 kcal</span>
+                            </li>
+                            <li>
+                              <div class="box-icon-wrapper">
+                                <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Group_346.svg?v=3253623496766777332">
+                              </div>
+                              <span>82g Carbs</span>
+                            </li>
+                            <li>
+                              <div class="box-icon-wrapper">
+                                <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/protein_20x.png?v=7819928887151425549">
+                              </div>
+                              <span>30g Protein</span>
+                            </li>
+                          </ul>
+                        </div>
+                        <a href="#"class="green-btn">Add to Week</a>
+                      </div>
+                    </li>
+
+                    <li class="box-item-grid">
+                      <div id="items-list" class="">
+                        <div class="box-item-img">
+                         <img srcset="//cdn.shopify.com/s/files/1/0557/3033/9913/products/4-KoreanBBQBeefwithRiceandVegetables_165x.jpg?v=1646283930 165w,//cdn.shopify.com/s/files/1/0557/3033/9913/products/4-KoreanBBQBeefwithRiceandVegetables_360x.jpg?v=1646283930 360w,//cdn.shopify.com/s/files/1/0557/3033/9913/products/4-KoreanBBQBeefwithRiceandVegetables_533x.jpg?v=1646283930 533w,//cdn.shopify.com/s/files/1/0557/3033/9913/products/4-KoreanBBQBeefwithRiceandVegetables_720x.jpg?v=1646283930 720w,//cdn.shopify.com/s/files/1/0557/3033/9913/products/4-KoreanBBQBeefwithRiceandVegetables_940x.jpg?v=1646283930 940w,//cdn.shopify.com/s/files/1/0557/3033/9913/products/4-KoreanBBQBeefwithRiceandVegetables_1066x.jpg?v=1646283930 1066w" src="//cdn.shopify.com/s/files/1/0557/3033/9913/products/4-KoreanBBQBeefwithRiceandVegetables_533x.jpg?v=1646283930">
+                        </div>
+                        <div class="box-item-information">
+                          <h5>Sizzling Korean Beef</h5>
+                          <span>Tangy Korean beef bulgogi served with rice...</span>
+                        </div>
+                        <div class="box-item-icons">
+                          <ul class="icon_list">
+                            <li>
+                              <div class="box-icon-wrapper">
+                                <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Calories_Icon.svg?v=4569060398551131372">
+                              </div>
+                              <span>480 kcal</span>
+                            </li>
+                            <li>
+                              <div class="box-icon-wrapper">
+                                <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Group_346.svg?v=3253623496766777332">
+                              </div>
+                              <span>63g Carbs</span>
+                            </li>
+                            <li>
+                              <div class="box-icon-wrapper">
+                                <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/protein_20x.png?v=7819928887151425549">
+                              </div>
+                              <span>33g Protein</span>
+                            </li>
+                          </ul>
+                        </div>
+                        <a href="#"class="green-btn">Add to Week</a>
+                      </div>
+                    </li>
+
+                    <li class="box-item-grid">
+                      <div id="items-list" class="">
+                        <div class="box-item-img">
+                         <img srcset="//cdn.shopify.com/s/files/1/0557/3033/9913/products/25-CheesyCajunChickenPerogies_165x.jpg?v=1646285317 165w,//cdn.shopify.com/s/files/1/0557/3033/9913/products/25-CheesyCajunChickenPerogies_360x.jpg?v=1646285317 360w,//cdn.shopify.com/s/files/1/0557/3033/9913/products/25-CheesyCajunChickenPerogies_533x.jpg?v=1646285317 533w,//cdn.shopify.com/s/files/1/0557/3033/9913/products/25-CheesyCajunChickenPerogies_720x.jpg?v=1646285317 720w,//cdn.shopify.com/s/files/1/0557/3033/9913/products/25-CheesyCajunChickenPerogies_940x.jpg?v=1646285317 940w,//cdn.shopify.com/s/files/1/0557/3033/9913/products/25-CheesyCajunChickenPerogies_1066x.jpg?v=1646285317 1066w" src="//cdn.shopify.com/s/files/1/0557/3033/9913/products/25-CheesyCajunChickenPerogies_533x.jpg?v=1646285317">
+                        </div>
+                        <div class="box-item-information">
+                          <h5>Cajun Chicken Perogies</h5>
+                          <span>Cheese loaded perogies topped with cheddar cheese...</span>
+                        </div>
+                        <div class="box-item-icons">
+                          <ul class="icon_list">
+                            <li>
+                              <div class="box-icon-wrapper">
+                                <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Calories_Icon.svg?v=4569060398551131372">
+                              </div>
+                              <span>800 kcal</span>
+                            </li>
+                            <li>
+                              <div class="box-icon-wrapper">
+                                <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Group_346.svg?v=3253623496766777332">
+                              </div>
+                              <span>90g Carbs</span>
+                            </li>
+                            <li>
+                              <div class="box-icon-wrapper">
+                                <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/protein_20x.png?v=7819928887151425549">
+                              </div>
+                              <span>46g Protein</span>
+                            </li>
+                          </ul>
+                        </div>
+                        <a href="#"class="green-btn">Add to Week</a>
+                      </div>
+                    </li>
+
+                    <li class="box-item-grid">
+                      <div id="items-list" class="">
+                        <div class="box-item-img">
+                         <img srcset="//cdn.shopify.com/s/files/1/0557/3033/9913/products/12-ChickenPennePastawithBlushSauce_165x.jpg?v=1646285666 165w,//cdn.shopify.com/s/files/1/0557/3033/9913/products/12-ChickenPennePastawithBlushSauce_360x.jpg?v=1646285666 360w,//cdn.shopify.com/s/files/1/0557/3033/9913/products/12-ChickenPennePastawithBlushSauce_533x.jpg?v=1646285666 533w,//cdn.shopify.com/s/files/1/0557/3033/9913/products/12-ChickenPennePastawithBlushSauce_720x.jpg?v=1646285666 720w,//cdn.shopify.com/s/files/1/0557/3033/9913/products/12-ChickenPennePastawithBlushSauce_940x.jpg?v=1646285666 940w,//cdn.shopify.com/s/files/1/0557/3033/9913/products/12-ChickenPennePastawithBlushSauce_1066x.jpg?v=1646285666 1066w" src="//cdn.shopify.com/s/files/1/0557/3033/9913/products/12-ChickenPennePastawithBlushSauce_533x.jpg?v=1646285666">
+                        </div>
+                        <div class="box-item-information">
+                          <h5>Penne alla Rosé</h5>
+                          <span>A creamy blush penne pasta, al dente style with chicken.</span>
+                        </div>
+                        <div class="box-item-icons">
+                          <ul class="icon_list">
+                            <li>
+                              <div class="box-icon-wrapper">
+                                <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Calories_Icon.svg?v=4569060398551131372">
+                              </div>
+                              <span>840 kcal</span>
+                            </li>
+                            <li>
+                              <div class="box-icon-wrapper">
+                                <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Group_346.svg?v=3253623496766777332">
+                              </div>
+                              <span>136g Carbs</span>
+                            </li>
+                            <li>
+                              <div class="box-icon-wrapper">
+                                <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/protein_20x.png?v=7819928887151425549">
+                              </div>
+                              <span>54g Protein</span>
+                            </li>
+                          </ul>
+                        </div>
+                        <a href="#"class="green-btn">Add to Week</a>
+                      </div>
+                    </li>
+                  </ul>
                 </div>
               </div>
             <% end %>
@@ -1757,6 +1997,9 @@
 
 
 <script>
+  $("#box-item").on('click', function(){
+    $('#box-items')[0].classList.remove('hide');
+  });
 
   $('.recommended-for .slider-holder').slick({
     infinite: true,
