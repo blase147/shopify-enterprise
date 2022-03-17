@@ -52,12 +52,6 @@ const Index = () => {
       img: EmailImage,
       desc: 'Manage upsell settings and customization for you and your customers.',
     },
-    // {
-    //     key:"",
-    //     title:"Loyalty & Referrals",
-    //     img:InformationImage,
-    //     desc:"Manage the loyalty and referrals settings for your customers."
-    // },
     {
       key: 'build-box',
       title: 'Build-a-box Campaign',

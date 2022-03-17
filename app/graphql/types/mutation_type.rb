@@ -17,6 +17,10 @@ module Types
     field :add_campaign, mutation: Mutations::AddUpsellCampaignGroup
     field :update_campaign, mutation: Mutations::UpdateUpsellCampaignGroup
     field :delete_campaigns, mutation: Mutations::DeleteUpsellCampaignGroups
+    field :add_weekly_menu, mutation: Mutations::AddWeeklyMenu
+    field :update_weekly_menu, mutation: Mutations::UpdateWeeklyMenu
+    field :delete_weekly_menus, mutation: Mutations::DeleteWeeklyMenus
+
     field :add_smarty_cancellation, mutation: Mutations::AddSmartyCancellation
     field :update_smarty_cancellation, mutation: Mutations::UpdateSmartyCancellation
     field :delete_smarty_cancellation, mutation: Mutations::DeleteSmartyCancellation
