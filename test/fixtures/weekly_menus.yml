@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  box_subscription_type: 1
+  collection_images: 
+  product_images: 
+  triggers: 
+  selling_plans: 
+  selling_plan_ids: MyString
+  display_name: MyString
+  week: 1
+  cutoff: 2022-03-14
+
+two:
+  box_subscription_type: 1
+  collection_images: 
+  product_images: 
+  triggers: 
+  selling_plans: 
+  selling_plan_ids: MyString
+  display_name: MyString
+  week: 1
+  cutoff: 2022-03-14

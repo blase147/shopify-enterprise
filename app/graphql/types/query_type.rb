@@ -37,5 +37,7 @@
     field :fetch_delivery_options, resolver: Queries::FetchDeliveryOptions
     field :fetch_ship_engine_order, resolver: Queries::FetchShipEngineOrder
     field :fetch_estimated_shipping_rates, resolver: Queries::FetchEstimatedShippingRates
+    field :fetch_weekly_menu, resolver: Queries::FetchWeeklyMenu
+    field :fetch_weekly_menus, resolver: Queries::FetchWeeklyMenus
   end
 end

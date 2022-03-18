@@ -5,7 +5,7 @@ class EmailService::Send < ApplicationService
   end
 
   def send_email(object)
-    if @email_notification.present?
+    if @email_notification.present? && @email_notification.setting.email_service
       email_service = @email_notification.setting.email_service
       case email_service.downcase
       when "klaviyo"
