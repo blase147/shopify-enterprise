@@ -176,7 +176,7 @@ module SubscriptionConcern
 
   def pause
     id = params[:id]
-    csc = CustomerSubscriptionContract.find(id)
+    csc = CustomerSubscriptionContract.find_by(shopify_id: id)
     if params[:stripe_subscription]
       Stripe::SubscriptionPause.new(csc.api_resource_id, current_shop).pause
       csc.update(status: 'PAUSED')
@@ -198,7 +198,7 @@ module SubscriptionConcern
 
   def resume
     id = params[:id]
-    csc = CustomerSubscriptionContract.find(id)
+    csc = CustomerSubscriptionContract.find_by(shopify_id: id)
     if params[:stripe_subscription]
       if csc.status == 'CANCELLED'
         row = csc.import_data
