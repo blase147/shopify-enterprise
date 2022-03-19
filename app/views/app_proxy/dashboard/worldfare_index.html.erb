@@ -28,6 +28,13 @@
 {% endif %}
 
 <style>
+  select {
+    background: white;
+    min-height: 30px;
+    margin-bottom: 20px;
+    border-color: #eee;
+    width: 100%;
+  }
   .chargezen-proxy {
     margin-top: -60px;
   }
@@ -1197,6 +1204,22 @@ li.pre_segment_order .order_inn {
 .holder img {
   width: 100%;
 }
+.pre_orders {
+  position: relative;
+}
+.grey-layer {
+  float: left;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  z-index: 10000000;
+  position: absolute;
+  top: 0;
+  opacity: 0.6;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+}
 </style>
 <div class="customer account c_account">
   <div class="client_profile">
@@ -1234,10 +1257,21 @@ li.pre_segment_order .order_inn {
           </div></div>
 
           <div class="subscription-details">
-            <div class="btn-wrapper"><button aria-hidden="true" class="upgrade-subscription" data-action="close" data-target="#upgrade-c8758bef-34ff-4bac-9ca7-9a4fe096f715" data-toggle="modal" tabindex="-1" type="button">Pause Subscription</button><button aria-hidden="true" class="swap-subscription light" data-action="close" data-target="#swap-c8758bef-34ff-4bac-9ca7-9a4fe096f715" data-toggle="modal" disabled="" tabindex="-1" type="button">Upgrade Subscription</button><button class="downgrade-subscription light" type="button">Skip Next Order</button><button class="ask-questions light" type="button">Change Delivery Date</button><button aria-hidden="true" class="cancel-subscription" data-action="close" data-name="Everyday Fashionista - 2021 II" data-target="#cancel-c8758bef-34ff-4bac-9ca7-9a4fe096f715" data-toggle="modal" tabindex="-1" type="button">CANCEL SUBSCRIPTION</button></div>
-          </div>
+            <%= select_tag(:option, options_for_select(@subscription_contracts.map {|csc| [csc.subscription, csc.shopify_id] }), id:"subscription-contracts") %>
+            <div class="btn-wrapper">
+              
+              <% if @subscription_paused %>
+                <button class="upgrade-subscription light" id="pause-resume-sub"data-path="/resume">Resume Subscription</button>
+              <% else %>
+                <button class="upgrade-subscription light" id="pause-resume-sub" data-path="/pause">Pause Subscription</button>
+              <% end %>
+              
+              
+              <button class="downgrade-subscription light" type="button">Skip Next Order</button><button class="ask-questions light" type="button">Change Delivery Date</button>
 
-<!--           <a href="#" rel="modal:close"><button>Close</button></a> -->
+              <button aria-hidden="true" class="cancel-subscription" data-action="close" data-name="Everyday Fashionista - 2021 II" data-target="#cancel-c8758bef-34ff-4bac-9ca7-9a4fe096f715" data-toggle="modal" tabindex="-1" type="button">CANCEL SUBSCRIPTION</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1280,6 +1314,7 @@ li.pre_segment_order .order_inn {
         <div class="slider-holder">
           <div class="list">
             <div class="box-holder">
+              <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
               <div class="img-holder">
                 <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/t/8/assets/placeholder.png?v=1643630880" alt="Placeholder">
                 <button>+</button>
@@ -1287,7 +1322,7 @@ li.pre_segment_order .order_inn {
               <div class="text-details">
                 <strong>Garden Salad (1)</strong>
                 <p>$56 / one time</p>
-                <a  href="/pages/choose-your-plan"  style="text-decoration: none;"> <button class="btn-yellow bold">Add Subscription</button></a>
+                <a href="/pages/choose-your-plan" style="text-decoration: none;" disabled="true"> <button class="btn-yellow bold">Add Subscription</button></a>
               </div>
             </div>
           </div>
@@ -1678,6 +1713,7 @@ li.pre_segment_order .order_inn {
               %>
               
               <div class="pre_orders">
+                <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
                 <div class="order-box">
                   <h2 class="Trial">Week of <%= week_day.strftime('%B %d, %Y') rescue nil %></h2>
                   <div class="placed_data pdate">
@@ -2037,6 +2073,30 @@ li.pre_segment_order .order_inn {
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+  $('#pause-resume-sub').on('click', function(e){
+    e.preventDefault();
+    action = $(this).data('path');
+    contract_id = $("#subscription-contracts option:selected").val();
+    url = "/a/chargezen_production/subscriptions/" + contract_id + action
+    $(this).text('Updating..');
+    $.ajax({
+      url: url,
+      type: 'POST',
+      contentType: 'application/json',
+      success: function(response) {
+        Swal.fire({
+          icon: 'success',
+          title: "Success! Reloading Page",
+          showConfirmButton: false
+        })
+        location.reload();
+      },
+      error: function(response) {
+
+      }
+    });
+  });
+
   $(".add-to-week").on('click', function(e){
     e.preventDefault();
     image_url = $(this).data('url')
@@ -2261,5 +2321,3 @@ li.pre_segment_order .order_inn {
     $('.customer-initial').html(name.substring(0, 2).toUpperCase());
   });
 </script>
-
-
