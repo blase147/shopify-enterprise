@@ -2097,11 +2097,17 @@ li.pre_segment_order .order_inn {
     });
   });
 
+  function weekDishRemove(e){
+    let pre_order_selector = e.target.parentElement.parentElement.parentElement
+    pre_order_selector.innerHTML = "<a href='#_' id='box-item'><button><span>+</span><p>Add to box</p></button></a><img src='' />";
+    pre_order_selector.classList.add('empty');
+  }
+
   $(".add-to-week").on('click', function(e){
     e.preventDefault();
     image_url = $(this).data('url')
     let pre_order_selector = document.getElementsByClassName('empty')[0]
-    pre_order_selector.innerHTML = "<div class='order_inn add_new_order'><div class='holder'><img src="+ $(this).data('url') + " data-id=" + $(this).data('id') +"></img></div></div>"
+    pre_order_selector.innerHTML = "<div class='order_inn add_new_order'><div class='holder'><button class='week_dish_remove' onClick='weekDishRemove(event)'>+</button><img src="+ $(this).data('url') + " data-id=" + $(this).data('id') +"></img></div></div>"
     pre_order_selector.classList.remove("empty");
     $('#confirm-sub-btn').removeClass('hide');
   });
