@@ -1279,7 +1279,7 @@ li.pre_segment_order .order_inn {
 
   <div class="customer-portal">
     <div class="top-section">
-      <div class="hide box-holder {% if is_trail %} op-05{% else %}{% unless current_subscription %} op-05{% endunless %}{% endif %}">
+      <div class="box-holder {% if is_trail %} op-05{% else %}{% unless current_subscription %} op-05{% endunless %}{% endif %}">
         <div class="boxes">
           <div class="ico">
             <svg width="84" height="71" viewBox="0 0 84 71" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1639,46 +1639,47 @@ li.pre_segment_order .order_inn {
         
             <% products = ShopifyAPI::Product.where(ids: customer_order.line_items.map(&:product_id).join(', '), fields: 'id,title,images') rescue nil %>
             <% if created_at.present? %>
-            <% week_number = created_at.cweek %>
-              <div class="past_orders">
-                <div class='order-box'>
-                  <% if DateTime.now.cweek == week_number && customer_order&.line_items.present? && customer_order&.line_items.count > 5 %>
-                  <h2 class="Trial">Current Week</h2>
-                  <% elsif  DateTime.now.cweek == week_number %>
-                  <h2 class="Trial">Trial Week</h2>
-                  <% end %>
-                  <div class="orders">
-                    <div class="placed_data pdate">
-                      <p class="placed">Order placed:</p>
-                      <p class="placed_dates "><%= Date.commercial(created_at.strftime('%Y').to_i, (created_at.strftime('%W').to_i - 1), 1).next_week(delivery_day_sym.to_sym) rescue nil %></p>
-                    </div>
-                    <div id="psection" class="product_section">
-                    <% customer_order&.line_items&.each do |line_item| %>
-                      <% unless line_item.name.downcase.include?('box') %>
-                        <% product = products.find{|p| p.id == line_item.product_id } %>
-                        <div class="order_inn">
-                          <div class="holder">
-                            <button class="dish_remove" data-id="{{item.id}}">+</button>
-                            <img src="<%= product.images.first.src rescue nil %>">
-                            <h5><%= line_item.name %> (<%= line_item.quantity %>)</h5>
-                          </div>
-                        </div>
-                      <% end %>
+              <% (created_at.cweek..DateTime.now.cweek).each  do |week_number| %>
+                <div class="<%= week_number < DateTime.now.cweek ? 'past_orders' : 'current_order' %>">
+                  <div class='order-box'>
+                    <% if DateTime.now.cweek == week_number && customer_order&.line_items.present? && customer_order&.line_items.count > 5 %>
+                    <h2 class="Trial">Current Week</h2>
+                    <% elsif  DateTime.now.cweek == week_number %>
+                    <h2 class="Trial">Trial Week</h2>
                     <% end %>
+                    <div class="orders">
+                      <div class="placed_data pdate">
+                        <p class="placed">Order placed:</p>
+                        <p class="placed_dates "><%= Date.commercial(created_at.strftime('%Y').to_i, (created_at.strftime('%W').to_i - 1), 1).next_week(delivery_day_sym.to_sym) rescue nil %></p>
+                      </div>
+                      <div id="psection" class="product_section">
+                      <% customer_order&.line_items&.each do |line_item| %>
+                        <% unless line_item.name.downcase.include?('box') %>
+                          <% product = products.find{|p| p.id == line_item.product_id } %>
+                          <div class="order_inn">
+                            <div class="holder">
+                              <button class="dish_remove" data-id="{{item.id}}">+</button>
+                              <img src="<%= product.images.first.src rescue nil %>">
+                              <h5><%= line_item.name %> (<%= line_item.quantity %>)</h5>
+                            </div>
+                          </div>
+                        <% end %>
+                      <% end %>
+                      </div>
                     </div>
-                  </div>
-                  <div class="order_status">
-                    <div class="Status">
-                      <p class="s_name">Status:</p>
-                      <p class="s_data"><%= customer_order.financial_status %></p>
-                    </div>
-                    <div class="Status">
-                      <p class="s_name">Arriving:</p>
-                      <!-- <p class="s_data subdued">Est. <%= (created_at + 3.days).strftime('%B %d, %Y') rescue nil %></p> -->
+                    <div class="order_status">
+                      <div class="Status">
+                        <p class="s_name">Status:</p>
+                        <p class="s_data">Pending</p>
+                      </div>
+                      <div class="Status">
+                        <p class="s_name">Arriving:</p>
+                        <!-- <p class="s_data subdued">Est. <%= (created_at + 3.days).strftime('%B %d, %Y') rescue nil %></p> -->
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              <% end %>
             <% else %>
               <p class="mb-3">No Active Orders</p>
             <% end %>
@@ -1759,7 +1760,6 @@ li.pre_segment_order .order_inn {
                     #week_day.strftime('%-V').to_i
                     current_week_meals = []
                     current_week_meals = WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first["products"] if WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first.present?
-                    current_week_meals = WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.product_images if current_week_meals.blank?
                   %>
                   <% if current_week_meals.present? %>
                     <div class="meal-options">
