@@ -3,7 +3,7 @@
 
 {{ 'customer.css' | asset_url | stylesheet_tag }}
 <% customer = ShopifyAPI::Customer.find(params[:customer_id]) rescue nil %>
-<% customer_order = ShopifyAPI::Order.find(:first, params: {customer_id: customer.id} ) rescue nil %>
+<% customer_order = ShopifyAPI::Order.find(:last, params: {customer_id: customer.id} ) rescue nil %>
 
 <% active_sub_main = customer_order.line_items.find{|item| item.name.downcase.include?('Box'.downcase)} rescue nil %>
 <% if active_sub_main %>
@@ -1646,7 +1646,7 @@ li.pre_segment_order .order_inn {
                   <% if DateTime.now.cweek == week_number && customer_order&.line_items.present? && customer_order&.line_items.count > 5 %>
                   <h2 class="Trial">Current Week</h2>
                   <% elsif  DateTime.now.cweek == week_number %>
-                  <h2 class="Trial">Trial Week</h2>
+                  <h2 class="Trial">Current Week</h2>
                   <% end %>
                   <div class="orders">
                     <div class="placed_data pdate">
