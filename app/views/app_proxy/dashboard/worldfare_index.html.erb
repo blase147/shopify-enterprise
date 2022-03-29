@@ -1723,35 +1723,33 @@ li.pre_segment_order .order_inn {
                   <div class="order_add">
                     <ul id="psegment" class="pre_segment">
                       <% customer_order&.line_items&.each_with_index do |line_item, key| %>
-                        <% unless line_item.name.downcase.include?('box') %>
-                          <% if params[:product_ids].present? && params[:week].present? && params[:week].to_i == i.to_i %>
-                            <% selected_product = selected_products[key-1].present? ? selected_products[key-1] : nil %>
+                        <% if params[:product_ids].present? && params[:week].present? && params[:week].to_i == i.to_i %>
+                          <% selected_product = selected_products[key-1].present? ? selected_products[key-1] : nil %>
+                          <div class="order_inn center" >
+                            <img src="<%= selected_product.images.first.src rescue nil %>">
+                            <h5><%= selected_product.title rescue nil %> </h5>
+                            <h6><a href="/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>">Edit</a></h6>
+                          </div>
+                        <% elsif week_subscription_products.present? %>
+                          <% week_subscription_product = week_subscription_products[key-1].present? ? week_subscription_products[key-1] : nil %>
+                          <% if week_subscription_product.present? %>
                             <div class="order_inn center" >
-                              <img src="<%= selected_product.images.first.src rescue nil %>">
-                              <h5><%= selected_product.title rescue nil %> </h5>
-                              <h6><a href="/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>">Edit</a></h6>
-                            </div>
-                          <% elsif week_subscription_products.present? %>
-                            <% week_subscription_product = week_subscription_products[key-1].present? ? week_subscription_products[key-1] : nil %>
-                            <% if week_subscription_product.present? %>
-                              <div class="order_inn center" >
-                                <div class="holder">
-                                  <img src="<%= week_subscription_product.images.first.src rescue nil %>">
-                                  <h5><%= week_subscription_product.title rescue nil %> </h5>
-                                </div>
+                              <div class="holder">
+                                <img src="<%= week_subscription_product.images.first.src rescue nil %>">
+                                <h5><%= week_subscription_product.title rescue nil %> </h5>
                               </div>
-                            <% else %>
-                              <li class="pre_segment_order empty">
-                                <a href="#_" id="box-item"><button><span>+</span><p>Add to box</p></button></a>
-                                <img src="" />
-                              </li>
-                            <% end %>
+                            </div>
                           <% else %>
                             <li class="pre_segment_order empty">
                               <a href="#_" id="box-item"><button><span>+</span><p>Add to box</p></button></a>
                               <img src="" />
                             </li>
                           <% end %>
+                        <% else %>
+                          <li class="pre_segment_order empty">
+                            <a href="#_" id="box-item"><button><span>+</span><p>Add to box</p></button></a>
+                            <img src="" />
+                          </li>
                         <% end %>
                       <% end %>
                     </ul>
