@@ -1329,21 +1329,20 @@ li.pre_segment_order .order_inn {
    background: #43a1ff;
 }
 
+
+.jquery-modal.blocker {
+  z-index: 10;
+}
+.jquery-modal.blocker .close-modal svg {
+  display: none;
+}
 </style>
 <%
 @contract = CustomerSubscriptionContract.where(shopify_customer_id: params[:customer_id]).last
 @subscription = JSON.parse(@contract.api_data.to_json, object_class: OpenStruct)
 %>
 
-
-
 <div class="customer account c_account">
-  <% @subscription.lines.edges.each do |line| %>
-    <a href="#<%= "swap-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}" %>" rel="modal:open">
-      <button class="btn-yellow bold" id="edit-subscription-btn" tabindex="0">Swap Subscription</button>
-    </a>
-    <%= render 'app_proxy/dashboard/swap_subscription_modal', subscription: @subscription, line_item: line.node %>
-  <% end %>
   <div class="client_profile">
     <a href="{{ routes.account_logout_url }}" class="mb-3 logout">
       <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 18 19">
@@ -1373,6 +1372,12 @@ li.pre_segment_order .order_inn {
         <a href="#edit-subscription-modal" rel="modal:open">
           <button class="btn-yellow bold" id="edit-subscription-btn" tabindex="0">Edit Subscription</button>
         </a>
+        <% @subscription.lines.edges.each do |line| %>
+          <a href="#<%= "swap-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}" %>" rel="modal:open">
+            <button class="btn-yellow bold" id="edit-subscription-btn" tabindex="0">Swap Subscription</button>
+          </a>
+          <%= render 'app_proxy/dashboard/swap_subscription_modal', subscription: @subscription, line_item: line.node %>
+        <% end %>
         <div id="edit-subscription-modal" title="Basic dialog" class="modal">
           <div class="header"><div><h2>Edit Subscription</h2></div><div aria-hidden="true" class="close-modal" data-action="close" tabindex="-1">
             <!-- <svg fill="none" height="20" viewBox="0 0 18 20" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z" fill="#DDDDDD"></path></svg> -->
