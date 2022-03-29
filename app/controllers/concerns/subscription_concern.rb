@@ -96,7 +96,8 @@ module SubscriptionConcern
         description = @customer.name+",swaped,"+variant.title
         # amount = (product.quantity * variant.price.to_f).round(2).to_s
         current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id, product_name: variant.title, note: note, description: description, product_id: params[:variant_id], swaped_product_id: variant.product_id)
-        render js: 'location.reload()'
+        redirect_to "/a/chargezen_production?customer_id=#{@customer.shopify_customer_id}"
+        # render js: 'location.reload()'
       end
     end
   end
