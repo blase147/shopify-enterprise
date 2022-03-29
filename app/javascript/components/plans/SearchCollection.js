@@ -61,6 +61,7 @@ const SearchCollection = (props) => {
             productsList.push({
               productId: product.node.id,
               image: product.node.featuredImage?.transformedSrc,
+              title: product.node.title,
               _destroy: false
             })
           );
