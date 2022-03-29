@@ -106,10 +106,11 @@ const SearchProduct = (props) => {
 
         if (isHave != -1) {
           newProductList[isHave]._destroy = false;
-        } else {
+        } else {  
           newProductList.push({
             productId: productList[newItemIndex].value,
             image: productList[newItemIndex].image,
+            title: productList[newItemIndex].label,
             _destroy: false,
           });
         }
