@@ -48,28 +48,6 @@ const ButtonRemove = (props) => {
         week
         displayName
         boxSubscriptionType
-        triggers {
-          name
-        }
-        sellingPlans {
-          sellingPlanId
-          sellingPlanName
-        }
-        collectionImages {
-          collectionId
-          collectionTitle
-          _destroy
-          products {
-            productId
-            image
-            _destroy
-          }
-        }
-        productImages {
-          productId
-          image
-          _destroy
-        }
       }
     }
   `;
@@ -89,10 +67,11 @@ const ButtonRemove = (props) => {
         // setSaveSuccess(false);
         setFormErrors(errors);
       } else {
+        let updatedMenus = menus.filter(menu => !selectedMenusForRemove.includes(menu.id));
         const rowsData = formatRows(
-          resp.data.deleteWeeklyMenus
+          updatedMenus
         );
-        setMenus(resp.data.deleteWeeklyMenus);
+        setMenus(updatedMenus);
         setFilterMenus(rowsData);
         setSaveSuccess(true);
         setSelectedMenusForRemove([]);
@@ -123,25 +102,6 @@ const Index = ({ handleForm, handleBack }) => {
         cutoffDate
         week
         boxSubscriptionType
-        triggers {
-          name
-        }
-        sellingPlans {
-          sellingPlanId
-          sellingPlanName
-        }
-        collectionImages {
-          collectionId
-          collectionTitle
-          products {
-            title
-          }
-        }
-        productImages {
-          productId
-          image
-          _destroy
-        }
       }
     }
   `;
@@ -280,7 +240,7 @@ const Index = ({ handleForm, handleBack }) => {
                   }`}
                 >
                   <ButtonRemove
-                    compaigns={menus}
+                    menus={menus}
                     filteredCompaigns={filterMenus}
                     formatRows={formatRows}
                     setMenus={setMenus}
