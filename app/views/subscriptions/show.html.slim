@@ -118,7 +118,7 @@
                     span.Polaris-Button__Content Edit
 
             - if api_order.present?
-              - card = api_order.payment_details
+              - card = api_order.payment_details rescue nil
               - billing_address = api_order.billing_address
 
               .Polaris-Stack.visa-section
@@ -129,15 +129,16 @@
                     <path d="M61.6018 44.4566C63.1475 44.4566 64.4005 43.2035 64.4005 41.6578C64.4005 40.1121 63.1475 38.859 61.6018 38.859C60.056 38.859 58.803 40.1121 58.803 41.6578C58.803 43.2035 60.056 44.4566 61.6018 44.4566Z" fill="#212B36"/>
                   </svg>
 
-                .Polaris-Stack__Item
-                  p
-                    = card.credit_card_company
-                    span.Polaris-TextStyle--variationStrong style="margin-left: 0.5rem;"
-                      = card.credit_card_number[/\d+/]
-                  - if card.respond_to?(:credit_card_expiration_month)
+                - if card.present?
+                  .Polaris-Stack__Item
                     p
-                      | Exp. Date
-                      span.Polaris-TextStyle--variationStrong #{card.credit_card_expiration_month}/#{card.credit_card_expiration_year}
+                      = card.credit_card_company
+                      span.Polaris-TextStyle--variationStrong style="margin-left: 0.5rem;"
+                        = card.credit_card_number[/\d+/]
+                    - if card.respond_to?(:credit_card_expiration_month)
+                      p
+                        | Exp. Date
+                        span.Polaris-TextStyle--variationStrong #{card.credit_card_expiration_month}/#{card.credit_card_expiration_year}
 
               p style="font-size: 18px; line-height: 18px; margin-top: 1rem; font-family: Avenir LT Std;"
                 i TOTAL SPEND TO DATE:
