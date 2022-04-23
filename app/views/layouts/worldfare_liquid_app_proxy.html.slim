@@ -4,6 +4,7 @@ html
     meta[charset="utf-8"]
     = csrf_meta_tags
     = csp_meta_tag
+  = stylesheet_link_tag 'embedded_app'
 
   div.chargezen-proxy
     - unless @skip_auth

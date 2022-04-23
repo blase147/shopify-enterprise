@@ -1,116 +1,127 @@
 class SubscriptionContractService < GraphqlService
-  GET_QUERY = <<-GRAPHQL
-    query($id: ID!){
-      subscriptionContract(id: $id) {
-        id
-        createdAt
-        updatedAt
-        status
-        nextBillingDate
-        appAdminUrl
-        lines(first: 10) {
-          edges {
-            node {
-              title
-              id
-              quantity
-              productId
-              sellingPlanId
-              pricingPolicy
-              sellingPlanName
-              variantId
-              currentPrice {
-                amount
-              }
-            }
-          }
-        }
-        orders(first: 10, reverse: true) {
-          edges {
-            node {
-              id
-              name
-              createdAt
-              netPaymentSet
-              totalReceivedSet {
-                presentmentMoney {
+    GET_QUERY = <<-GRAPHQL
+      query($id: ID!){
+        subscriptionContract(id: $id) {
+          id
+          createdAt
+          updatedAt
+          status
+          nextBillingDate
+          appAdminUrl
+          lines(first: 10) {
+            edges {
+              node {
+                title
+                id
+                quantity
+                productId
+                sellingPlanId
+                pricingPolicy
+                sellingPlanName
+                variantId
+                currentPrice {
                   amount
                 }
               }
+            }
+          }
+          orders(first: 10, reverse: true) {
+            edges {
+              node {
+                id
+                name
+                createdAt
+                netPaymentSet
+                totalReceivedSet {
+                  presentmentMoney {
+                    amount
+                  }
+                }
 
-              events(first: 10, reverse: true) {
-                pageInfo
-                edges {
-                  node {
-                    id
-                    createdAt
-                    message
+                events(first: 10, reverse: true) {
+                  pageInfo
+                  edges {
+                    node {
+                      id
+                      createdAt
+                      message
+                    }
                   }
                 }
               }
             }
           }
-        }
-        customer {
-          id
-          displayName
-          firstName
-          lastName
-          email
-          phone
-          paymentMethods(first: 5) {
-            edges {
-              node {
-                id
-                instrument
-              }
-            }
-          }
-          defaultAddress {
+          customer {
             id
-            formatted
-            address1
-            address2
-          }
-        }
-        originOrder {
-          id
-          shippingAddress {
-            formatted
-          }
-          lineItems(first:10) {
-            edges {
-              node {
-                id
-                quantity
-                customAttributes{
-                  ... on Attribute{
-                    key
-                    value
-                  }
+            displayName
+            firstName
+            lastName
+            email
+            phone
+            paymentMethods(first: 5) {
+              edges {
+                node {
+                  id
+                  instrument
                 }
-                sellingPlan {
-                  name
+              }
+            }
+            defaultAddress {
+              id
+              formatted
+              address1
+              address2
+            }
+          }
+          originOrder {
+            id
+            shippingAddress {
+              formatted
+            }
+            lineItems(first:50) {
+              edges {
+                node {
+                  id
+                  quantity
+                  customAttributes{
+                    ... on Attribute{
+                      key
+                      value
+                    }
+                  }
+                  sellingPlan {
+                    name
+                  }
+                  product {
+                    id
+                    title
+                    images (first: 1) {
+                      edges {
+                        node {
+                          originalSrc
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
           }
-        }
-        customerPaymentMethod {
-          id
-        }
-        deliveryMethod
-        deliveryPolicy {
-          interval
-          intervalCount
-        }
-        billingPolicy {
-          interval
-          intervalCount
+          customerPaymentMethod {
+            id
+          }
+          deliveryMethod
+          deliveryPolicy {
+            interval
+            intervalCount
+          }
+          billingPolicy {
+            interval
+            intervalCount
+          }
         }
       }
-    }
-  GRAPHQL
+    GRAPHQL
 
   def initialize id
     @id = id
