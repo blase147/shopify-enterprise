@@ -17,11 +17,6 @@
   {% assign is_trail = true %}
 {% endif %}
 
-<%
-@contract = CustomerSubscriptionContract.where(shopify_customer_id: params[:customer_id]).last
-@subscription = JSON.parse(@contract.api_data.to_json, object_class: OpenStruct)
-%>
-
 <% active_sub_main = customer_order.line_items.find{|item| item.name.downcase.include?('Box'.downcase)} rescue nil %>
 <% if active_sub_main %>
   {% assign active_sub = <%= active_sub_main.product_id %> %}
