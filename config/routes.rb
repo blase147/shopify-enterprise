@@ -101,6 +101,7 @@ Rails.application.routes.draw do
         post :customer_info
         put :update_theme
         post :create_pre_order
+        get :fetch_contract
       end
     end
 

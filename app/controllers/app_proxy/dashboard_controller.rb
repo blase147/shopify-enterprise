@@ -210,6 +210,11 @@ class AppProxy::DashboardController < AppProxyController
     end
   end
 
+  def fetch_contract
+    @customer = CustomerSubscriptionContract.find params[:local_id]
+    @api_data = @customer.api_data
+  end
+
   private ##
 
   def fetch_products(products)

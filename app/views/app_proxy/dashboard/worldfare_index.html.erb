@@ -30,12 +30,18 @@
 <% end %>
 
 <div class="customer account c_account">
-    <ul class="nav nav-pills nav-justified">
-      <% @subscription_contracts.each do |contract| %>
-        <li class="active"><a href="#"><%= contract.subscription %></a></li>
-      <% end %>
-    </ul>
-  <%= render 'partials/subscription_contract.html.erb' %>
+  <ul class="nav nav-pills nav-justified contract-tabs">
+    <% @subscription_contracts.each do |contract| %>
+      <li class="contract-tab" id="<%= contract.id %>"><a href="#"><%= contract.subscription %></a></li>
+    <% end %>
+  </ul>
+
+  <div class="loader">
+    <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+  </div>
+  <div id="contract-content">
+    
+  </div>
   
 {% section 'Account_slider' %}
 
@@ -47,6 +53,34 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 <script>
+  $(document).ready(function(){
+    $(".contract-tab:first").click();
+  });
+
+  $('.contract-tab').on('click', function(){
+      $('.contract-tabs li.active').removeClass('active');
+      $(this).addClass('active');
+      $('.loader').show();
+      $('#contract-content').html('');
+    id = $(this).attr('id');
+    let params = {
+      local_id: id
+    }
+    url = '/a/chargezen_production/dashboard/fetch_contract';
+    $.ajax({
+      url: url,
+      type: 'GET',
+      data: params,
+      contentType: 'application/json',
+      success: function(response) {
+        $('.loader').hide();
+      },
+      error: function(response) {
+
+      }
+    });
+  });
+
   $('#pause-resume-sub').on('click', function(e){
     e.preventDefault();
     action = $(this).data('path');
@@ -69,59 +103,6 @@
 
       }
     });
-  });
-
-  function weekDishRemove(e){
-    let pre_order_selector = e.target.parentElement.parentElement.parentElement
-    pre_order_selector.innerHTML = "<a href='#_' id='box-item'><button><span>+</span><p>Add to box</p></button></a><img src='' />";
-    pre_order_selector.classList.add('empty');
-  }
-
-  $(".add-to-week").on('click', function(e){
-    e.preventDefault();
-    image_url = $(this).data('url')
-    let pre_order_selector = document.getElementsByClassName('empty')[0]
-    pre_order_selector.innerHTML = "<div class='order_inn add_new_order'><div class='holder'><button class='week_dish_remove' onClick='weekDishRemove(event)'>+</button><img src="+ $(this).data('url') + " data-id=" + $(this).data('id') +"></img></div></div>"
-    pre_order_selector.classList.remove("empty");
-    $('#confirm-sub-btn').removeClass('hide');
-  });
-
-  $("#confirm-sub-btn").on('click', function(e){
-    $(this).prop('disabled', true);
-    $(this).text('Processing..');
-
-    let product_ids = []
-    $('.pre_segment_order img').each(function(i, obj) {
-       product_ids.push(obj.dataset.id)
-    });
-    let params = {
-      product_ids: product_ids,
-      week: $(this).data('week'),
-      customer_id: $(this).data('customer-id')
-    }
-    $.ajax({
-      url: '/a/chargezen_production/dashboard/create_pre_order',
-      type: 'POST',
-      data: JSON.stringify(params),
-      contentType: 'application/json',
-      success: function(response) {
-        $('.meal-options').hide();
-        Swal.fire({
-          icon: 'success',
-          title: "Success! Reloading Page",
-          showConfirmButton: false
-        })
-        window.location = '/a/chargezen_production?customer_id=' + response.customer_id;
-      },
-      error: function(response) {
-
-      }
-    });
-  });
-
-  $("#box-item").on('click', function(e){
-    e.preventDefault();
-    $('#box-items')[0].classList.remove('hide');
   });
 
   $('.recommended-for .slider-holder').slick({
