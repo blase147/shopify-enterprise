@@ -421,6 +421,7 @@
                           <% if week_subscription_product.present? %>
                             <div class="order_inn center" >
                               <div class="holder">
+                                <span class="dish_remove" data-id="{{week_subscription_product.title}}">×</span>
                                 <img src="<%= week_subscription_product.images.first.src rescue nil %>">
                                 <h5><%= week_subscription_product.title rescue nil %> </h5>
                               </div>
@@ -765,8 +766,16 @@
     });
   });
 
-  $("#box-item").on('click', function(e){
+  $(document).on('click', '#box-item', function(e) {
     e.preventDefault();
     $('#box-items')[0].classList.remove('hide');
+  });
+
+  $(".dish_remove").on('click', function(e) {
+    e.preventDefault();
+    $(this).closest('.order_inn').remove();
+    let pre_order_selector = e.target.parentElement.parentElement
+    $('.pre_segment').append("<li class='pre_segment_order empty'><a href='#_' id='box-item'><button><span>+</span><p>Add to box</p></button></a><img src='' /></li>")
+    
   });
 </script>
