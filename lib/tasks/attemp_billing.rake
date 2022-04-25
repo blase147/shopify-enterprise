@@ -64,7 +64,7 @@ namespace :subscriptions do
     Shop.find_each do |shop|
       if shop.shopify_domain.include?('ethey')
         shop.connect
-        CustomerSubscriptionContract.find_each(batch_size: 100) do |contract|
+        CustomerSubscriptionContract.where(shop_id: shop.id).find_each(batch_size: 100) do |contract|
           puts "<====== Processing ContractID, #{contract.id} ======>"
           data = shop.with_shopify_session do
             SubscriptionContractService.new(contract.shopify_id).run
