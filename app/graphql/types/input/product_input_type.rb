@@ -3,6 +3,7 @@ module Types
       class ProductInputType < Types::BaseInputObject
         argument :product_id, String, required: true
         argument :image, String, required: false
+        argument :description, String, required: false
         argument :_destroy, GraphQL::Types::Boolean, required: false
         argument :title, String, required: false
 

@@ -4,6 +4,7 @@ module Types
     field :product_id, String, null: true
     field :image, String, null: true
     field :title, String, null: true
+    field :description, String, null: true
     field :_destroy, GraphQL::Types::Boolean, null: true
 
     field :__typename, String, null: true

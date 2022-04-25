@@ -30,6 +30,7 @@ const SearchCollection = (props) => {
                 node {
                   id
                   title
+                  description
                   featuredImage {
                     id
                     transformedSrc
@@ -62,6 +63,7 @@ const SearchCollection = (props) => {
               productId: product.node.id,
               image: product.node.featuredImage?.transformedSrc,
               title: product.node.title,
+              description: product.node.description,
               _destroy: false
             })
           );
