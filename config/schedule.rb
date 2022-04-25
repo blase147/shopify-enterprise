@@ -27,3 +27,7 @@ end
 every 1.hours do
   rake 'orders:sync_orders'
 end
+
+every 39.minutes do
+  rake 'subscriptions:sync_subscription_contracts'
+end

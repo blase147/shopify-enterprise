@@ -59,6 +59,41 @@ namespace :subscriptions do
     end
   end
 
+  task :sync_subscription_contracts => :environment do
+    puts "Sync Subscription Contract #{Time.current}"
+    Shop.find_each do |shop|
+      if shop.shopify_domain.include?('ethey')
+        shop.connect
+        CustomerSubscriptionContract.find_each(batch_size: 100) do |contract|
+          puts "<====== Processing ContractID, #{contract.id} ======>"
+          data = shop.with_shopify_session do
+            SubscriptionContractService.new(contract.shopify_id).run
+          end
+
+          next if data.nil?
+
+          contract.assign_attributes(
+            first_name: data.customer.first_name,
+            last_name: data.customer.last_name,
+            email: data.customer.email,
+            phone: data.customer.phone,
+            shopify_at: data.created_at.to_date,
+            shopify_updated_at: data.updated_at&.to_date,
+            status: data.status,
+            subscription: data.lines.edges.first&.node&.title,
+            language: "$#{data.lines.edges.first&.node&.current_price&.amount} / #{data.billing_policy.interval.pluralize}",
+            communication: "#{data.billing_policy.interval_count} #{data.billing_policy.interval} Pack".titleize,
+            api_source: 'shopify',
+            shopify_customer_id: data.customer.id[/\d+/],
+            api_data: data.to_h.deep_transform_keys { |key| key.underscore }
+          )
+          contract.save
+          puts "====== Done ContractID, #{contract.id} ======"
+        end
+      end
+    end
+  end
+
   def process_subscription(subscription)
     return unless subscription.status == 'ACTIVE'
     subscription_id = subscription.id[/\d+/]

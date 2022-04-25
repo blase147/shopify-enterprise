@@ -4,6 +4,8 @@ html
     meta[charset="utf-8"]
     = csrf_meta_tags
     = csp_meta_tag
+  = stylesheet_link_tag 'embedded_app'
+  = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.0/css/font-awesome.css'
 
   div.chargezen-proxy
     - unless @skip_auth

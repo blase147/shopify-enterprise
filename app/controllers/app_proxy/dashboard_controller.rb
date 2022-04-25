@@ -210,6 +210,11 @@ class AppProxy::DashboardController < AppProxyController
     end
   end
 
+  def fetch_contract
+    @customer = CustomerSubscriptionContract.find params[:local_id]
+    @api_data = @customer.api_data
+  end
+
   private ##
 
   def fetch_products(products)
@@ -218,7 +223,7 @@ class AppProxy::DashboardController < AppProxyController
   end
 
   def load_customer
-    CustomerSubscriptionContract.update_contracts(shopify_customer_id, current_shop)
+    # CustomerSubscriptionContract.update_contracts(shopify_customer_id, current_shop)
     @customer = current_shop.customer_subscription_contracts.find_by_shopify_customer_id(customer_id)
   end
 
