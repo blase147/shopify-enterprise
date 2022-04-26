@@ -112,6 +112,7 @@ const SearchProduct = (props) => {
             productId: productList[newItemIndex].value,
             image: productList[newItemIndex].image,
             title: productList[newItemIndex].label,
+            description: productList[newItemIndex].description,
             _destroy: false,
           });
         }
