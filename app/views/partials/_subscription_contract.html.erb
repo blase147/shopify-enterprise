@@ -458,7 +458,7 @@
                           </div>
                           <div class="box-item-information">
                             <h5><%= meal["title"] %></h5>
-                            <span>Chicken breast slowly simmered with ...</span>
+                            <span><%= truncate(meal["description"], :length => 50) %></span>
                           </div>
                           <div class="box-item-icons">
                             <ul class="icon_list">
@@ -489,7 +489,7 @@
                     </ul>
                   </div>
                   <% end %>
-                  <button id='confirm-sub-btn', data-customer-id="<%= @customer.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Subscription</button>
+                  <button id='confirm-sub-btn', data-customer-id="<%= @customer.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Selection</button>
                 </div>
               </div>
             <% end %>

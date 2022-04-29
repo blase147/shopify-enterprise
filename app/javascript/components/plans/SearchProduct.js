@@ -25,11 +25,11 @@ const SearchProduct = (props) => {
           node {
             id
             title
+            description
             featuredImage {
               id
               transformedSrc
             }
-            description
           }
         }
       }
@@ -53,6 +53,7 @@ const SearchProduct = (props) => {
             value: product.node.id,
             label: product.node.title,
             image: product.node.featuredImage?.transformedSrc,
+            description: product.node.description,
           })
         );
 
@@ -111,6 +112,7 @@ const SearchProduct = (props) => {
             productId: productList[newItemIndex].value,
             image: productList[newItemIndex].image,
             title: productList[newItemIndex].label,
+            description: productList[newItemIndex].description,
             _destroy: false,
           });
         }
