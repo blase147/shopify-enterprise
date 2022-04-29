@@ -744,7 +744,8 @@
     let params = {
       product_ids: product_ids,
       week: $(this).data('week'),
-      customer_id: $(this).data('customer-id')
+      customer_id: $(this).data('customer-id'),
+      shopify_contract_id: $("#contract-content").data("contract-id")
     }
     $.ajax({
       url: '/a/chargezen_production/dashboard/create_pre_order',

@@ -55,6 +55,15 @@ class ShopifyWebhooksController < ApplicationController
     head :no_content
   end
 
+  def billing_attempt_success
+    shop = Shop.find_by(shopify_domain: shop_domain)
+    week_number = Date.today.cweek
+    pre_order = WorldfarePreOrder.where(week: week_number, shopify_contract_id: params[:subscription_contract_id])
+    pre_order_products = JSON.parse(pre_order.products)
+    shop.connect
+    AddOrderLineItem.new(params[:order_id], pre_order_products).call
+  end
+
 
   private
 
