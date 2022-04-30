@@ -323,7 +323,7 @@
               delivery_day_sym = customer_order.note.downcase.split(' ')[0] rescue  nil
               cutoff = delivery_settings[:settings].filter{  |day| day['delivery'] == delivery_day_sym }[0] rescue nil
             %>
-            <% delivery_date = @api_data["orders"]["edges"].first["node"]["note"] rescue nil %>
+            <% delivery_date = @api_data["delivery_date"] rescue nil %>
             <% products = ShopifyAPI::Product.where(ids: customer_order.line_items.map(&:product_id).join(', '), fields: 'id,title,images') rescue nil %>
             <% if created_at.present? %>
             <% week_number = created_at.cweek %>
@@ -389,7 +389,7 @@
                   cutoff_date = cutoff.nil? ? (week_day-2) : current_date.next_week(:monday).next_week(cutoff['cutoff_day'].downcase.to_sym)
                 end
                 # select_by = cutoff_date.strftime("%B %d, %Y #{cutoff.nil? ? '00:00' : cutoff['cutoff_time']}")
-                select_by = Date.today.next_week(Date.parse(delivery_date ||= DateTime.now.to_s ).strftime("%A").downcase.to_sym).yesterday.strftime('%A, %d %b %Y')
+                select_by = delivery_date.present? ? Date.today.next_week(Date.strptime(delivery_date, '%m/%d/%Y').strftime("%A").downcase.to_sym).yesterday.strftime('%A, %d %b %Y') : Date.today.next_week(:wednesday).yesterday.strftime('%A, %d %b %Y')
                 week_subscription = WorldfarePreOrder.find_by( customer_id: @customer.shopify_customer_id, week: week_day.strftime('%-V').to_i )
                 week_subscription_products = nil
                 if week_subscription.present?
