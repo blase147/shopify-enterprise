@@ -32,6 +32,7 @@ class SubscriptionContractService < GraphqlService
                 name
                 createdAt
                 netPaymentSet
+                note
                 totalReceivedSet {
                   presentmentMoney {
                     amount
