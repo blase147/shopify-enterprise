@@ -1,7 +1,7 @@
 class ShopifyContractCreateWorker
   include Sidekiq::Worker
 
-  def perform(shop_id, id)
+  def perform(shop_id, id, order_id)
     unless CustomerSubscriptionContract.find_by(shopify_id: id)
       shop = Shop.find(shop_id)
       data = shop.with_shopify_session do
@@ -26,6 +26,13 @@ class ShopifyContractCreateWorker
         api_data: data.to_h.deep_transform_keys { |key| key.underscore },
         selling_plan_id: selling_plan&.id
       )
+      if contract.present? && order_id.present?
+        order = ShopifyAPI::Order.find(order_id)
+        delivery_date = order&.note_attributes&.first&.value
+        contract.api_data[:delivery_date] = delivery_date
+        contract.save
+      end
+      contract
     end
   end
 end
