@@ -87,6 +87,12 @@ namespace :subscriptions do
             shopify_customer_id: data.customer.id[/\d+/],
             api_data: data.to_h.deep_transform_keys { |key| key.underscore }
           )
+          order_id = contract.api_data["origin_order"]["id"][/\d+/]
+          if order_id.present?
+            order = ShopifyAPI::Order.find(order_id)
+            delivery_date = order&.note_attributes&.first&.value
+            contract.api_data[:delivery_date] = delivery_date
+          end
           contract.save
           puts "====== Done ContractID, #{contract.id} ======"
         end

@@ -36,7 +36,7 @@ class ShopifyWebhooksController < ApplicationController
 
   def subscription_contract_create
     shop = Shop.find_by(shopify_domain: shop_domain)
-    ShopifyContractCreateWorker.perform_async(shop.id, params[:id])
+    ShopifyContractCreateWorker.perform_async(shop.id, params[:id], params[:order_id])
 
     head :no_content
   end
