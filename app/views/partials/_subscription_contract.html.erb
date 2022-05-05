@@ -314,9 +314,114 @@
                 <option value="Old">Old Orders</option>
               </select>
             </div>
-        
-        
-        
+
+        <!-- Current Week -->
+
+        <%
+          current_date = Date.today
+          week_day = current_date
+          week_subscription = WorldfarePreOrder.find_by( customer_id: @customer.shopify_customer_id, week: week_day.strftime('%-V').to_i )
+          week_subscription_products = nil
+          if week_subscription.present?
+            week_subscription_products = ShopifyAPI::Product.where(ids: JSON.parse(week_subscription.products).join(', '), fields: 'id,title,images') rescue nil
+          end
+        %>
+
+        <div class="pre_orders">
+          <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
+          <div class="order-box">
+            <h2 class="Trial">Current Week(<%= week_day.strftime('%-V').to_i %>/52)</h2>
+            <div class="placed_data pdate">
+            </div>
+            <div class="order_add">
+              <ul id="psegment" class="pre_segment">
+                <% @api_data["origin_order"]["line_items"]["edges"]&.each_with_index do |line_item, key| %>
+                  <% next if line_item["node"]["product"]["title"].downcase.include?("meal box") rescue nil  %>
+                  <% if params[:product_ids].present? && params[:week].present? && params[:week].to_i == i.to_i %>
+                    <% selected_product = selected_products[key-1].present? ? selected_products[key-1] : nil %>
+                    <div class="order_inn center" >
+                      <img src="<%= selected_product.images.first.src rescue nil %>">
+                      <h5><%= selected_product.title rescue nil %> </h5>
+                      <h6><a href="/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>">Edit</a></h6>
+                    </div>
+                  <% elsif week_subscription_products.present? %>
+                    <% week_subscription_product = week_subscription_products[key-1].present? ? week_subscription_products[key-1] : nil %>
+                    <% if week_subscription_product.present? %>
+                      <div class="order_inn center" >
+                        <div class="holder">
+                          <img src="<%= week_subscription_product.images.first.src rescue nil %>">
+                          <h5><%= week_subscription_product.title rescue nil %> </h5>
+                        </div>
+                      </div>
+                    <% else %>
+                      <li class="pre_segment_order empty">
+                        <a href="#_" id="box-item"><button><span>+</span><p>Add to box</p></button></a>
+                        <img src="" />
+                      </li>
+                    <% end %>
+                  <% else %>
+                    <li class="pre_segment_order empty">
+                      <a href="#_" id="box-item"><button><span>+</span><p>Add to box</p></button></a>
+                      <img src="" />
+                    </li>
+                  <% end %>
+                <% end %>
+              </ul>
+            </div>
+            <%
+              #week_day.strftime('%-V').to_i
+              current_week_meals = []
+              current_week_meals = WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first["products"] if WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first.present?
+              current_week_meals = WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.product_images if current_week_meals.blank?
+            %>
+            <% if current_week_meals.present? %>
+              <div class="meal-options">
+              <ul class="box-items-grid hide" id="box-items">
+              <% current_week_meals.each do |meal| %>
+                <li class="box-item-grid" id="<%= meal["product_id"]&.split('/')&.last %>">
+                  <div id="items-list" class="">
+                    <div class="box-item-img">
+                      <img src=<%= meal["image"] %>>
+                    </div>
+                    <div class="box-item-information">
+                      <h5><%= meal["title"] %></h5>
+                      <span><%= truncate(meal["description"], :length => 50) %></span>
+                    </div>
+                    <div class="box-item-icons">
+                      <ul class="icon_list">
+                        <li>
+                          <div class="box-icon-wrapper">
+                            <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Calories_Icon.svg?v=4569060398551131372">
+                          </div>
+                          <span>520 kcal</span>
+                        </li>
+                        <li>
+                          <div class="box-icon-wrapper">
+                            <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Group_346.svg?v=3253623496766777332">
+                          </div>
+                          <span>82g Carbs</span>
+                        </li>
+                        <li>
+                          <div class="box-icon-wrapper">
+                            <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/protein_20x.png?v=7819928887151425549">
+                          </div>
+                          <span>30g Protein</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <a href="#_"class="green-btn add-to-week" data-id="<%= meal["product_id"]&.split('/')&.last %>" data-url="<%= meal["image"] %>" id="<%= meal["product_id"]&.split('/')&.last %>">Add to Week</a>
+                  </div>
+                </li>
+              <% end %>
+              </ul>
+            </div>
+            <% end %>
+            <button id='confirm-sub-btn', data-customer-id="<%= @customer.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Selection</button>
+          </div>
+        </div>
+
+
+        <!-- Next Week -->
             <% created_at = Date.parse(@api_data["created_at"]) rescue nil %>
             <%
               delivery_settings = DeliveryOption.find_by( shop_id: @current_shop.id )&.api_response
@@ -325,49 +430,6 @@
             %>
             <% delivery_date = @api_data["delivery_date"] rescue nil %>
             <% products = ShopifyAPI::Product.where(ids: customer_order.line_items.map(&:product_id).join(', '), fields: 'id,title,images') rescue nil %>
-            <% if created_at.present? %>
-            <% week_number = created_at.cweek %>
-              <div class="past_orders">
-                <div class='order-box'>
-                  <% if DateTime.now.cweek == week_number && customer_order&.line_items.present? && customer_order&.line_items.count > 5 %>
-                  <h2 class="Trial">Current Week</h2>
-                  <% elsif  DateTime.now.cweek == week_number %>
-                  <h2 class="Trial">Current Week</h2>
-                  <% end %>
-                  <div class="orders">
-                    <div class="placed_data pdate">
-                      <p class="placed">Order placed:</p>
-                      <p class="placed_dates "><%= Date.commercial(created_at.strftime('%Y').to_i, (created_at.strftime('%W').to_i - 1), 1).next_week(delivery_day_sym.to_sym) rescue nil %></p>
-                    </div>
-                    <div id="psection" class="product_section">
-                    <% @api_data["origin_order"]["line_items"]["edges"].each do |node| %>
-                      <% next if node["node"]["product"]["title"].downcase.include?("meal box") rescue nil  %>
-                      <%# product = products.find{|p| p.id == node["node"]["product"]["id"][/\d+/].to_i } %>
-                      <div class="order_inn">
-                        <div class="holder">
-                          <button class="dish_remove" data-id="<%= node["node"]["product"]["id"][/\d+/] rescue nil %>">+</button>
-                          <img src="<%= node["node"]["product"]["images"]["edges"].last["node"]["original_src"] rescue nil %>">
-                          <h5><%=  node["node"]["product"]["title"] rescue nil %></h5>
-                        </div>
-                      </div>
-                    <% end %>
-                    </div>
-                  </div>
-                  <div class="order_status">
-                    <div class="Status">
-                      <p class="s_name">Status:</p>
-                      <p class="s_data"><%= @api_data["status"] %></p>
-                    </div>
-                    <div class="Status">
-                      <p class="s_name">Arriving:</p>
-                      <!-- <p class="s_data subdued">Est. <%= (created_at + 3.days).strftime('%B %d, %Y') rescue nil %></p> -->
-                    </div>
-                  </div>
-                </div>
-              </div>
-            <% else %>
-              <p class="mb-3">No Active Orders</p>
-            <% end %>
         
             <% current_date = Date.today %>
             <% if params[:product_ids].present? %>
@@ -492,6 +554,52 @@
                   <button id='confirm-sub-btn', data-customer-id="<%= @customer.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Selection</button>
                 </div>
               </div>
+
+            <!-- Past Week -->
+
+            <% if created_at.present? %>
+            <% week_number = created_at.cweek %>
+              <div class="past_orders">
+                <div class='order-box'>
+                  <% if DateTime.now.cweek == week_number && customer_order&.line_items.present? && customer_order&.line_items.count > 5 %>
+                  <h2 class="Trial">Past Week</h2>
+                  <% elsif DateTime.now.cweek == week_number %>
+                  <h2 class="Trial">Past Week</h2>
+                  <% end %>
+                  <div class="orders">
+                    <div class="placed_data pdate">
+                      <p class="placed">First Order:</p>
+                      <p class="placed_dates "><%= Date.commercial(created_at.strftime('%Y').to_i, (created_at.strftime('%W').to_i - 1), 1).next_week(delivery_day_sym.to_sym) rescue nil %></p>
+                    </div>
+                    <div id="psection" class="product_section">
+                    <% @api_data["origin_order"]["line_items"]["edges"].each do |node| %>
+                      <% next if node["node"]["product"]["title"].downcase.include?("meal box") rescue nil  %>
+                      <%# product = products.find{|p| p.id == node["node"]["product"]["id"][/\d+/].to_i } %>
+                      <div class="order_inn">
+                        <div class="holder">
+                          
+                          <img src="<%= node["node"]["product"]["images"]["edges"].last["node"]["original_src"] rescue nil %>">
+                          <h5><%= node["node"]["product"]["title"] rescue nil %></h5>
+                        </div>
+                      </div>
+                    <% end %>
+                    </div>
+                  </div>
+                  <div class="order_status">
+                    <div class="Status">
+                      <p class="s_name">Status:</p>
+                      <p class="s_data"><%= @api_data["status"] %></p>
+                    </div>
+                    <div class="Status">
+                      <p class="s_name">Arriving:</p>
+                      <!-- <p class="s_data subdued">Est. <%= (created_at + 3.days).strftime('%B %d, %Y') rescue nil %></p> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% else %>
+              <p class="mb-3">No Active Orders</p>
+            <% end %>
             <% end %>
             <% if params[:product_ids].present? && params[:week] %>
             <button data-pre_order="<%= { customer_id: params[:customer_id],week: week_days[params[:week].to_i-1], products: params[:product_ids] }.to_json %>" class="submit_pre_order">Save Changes</button>
