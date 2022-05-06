@@ -198,9 +198,7 @@ class AppProxy::DashboardController < AppProxyController
       pre_order = WorldfarePreOrder.new(shopify_contract_id: params[:shopify_contract_id], shop_id: current_shop.id, customer_id: params[:customer_id], week: params[:week], products: params[:product_ids])
     end
     if pre_order.persisted?
-      product_ids = JSON.parse(pre_order.products)
-      updated_ids = product_ids << params[:product_ids]
-      pre_order.products = updated_ids.flatten
+      pre_order.products = params[:product_ids]
     end
 
     if pre_order.save

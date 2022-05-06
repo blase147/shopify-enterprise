@@ -72,4 +72,8 @@ module AppProxyHelper
     end
     display
   end
+
+  def meals_on_plan(subscription_name)
+    subscription_name.split[0].to_i
+  end
 end
