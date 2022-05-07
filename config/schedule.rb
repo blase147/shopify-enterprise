@@ -31,3 +31,7 @@ end
 every 39.minutes do
   rake 'subscriptions:sync_subscription_contracts'
 end
+
+every 1.days do
+  rake 'pre_orders:fill_pre_order'
+end
