@@ -1,5 +1,5 @@
 .Polaris-Modal.modal id=("swap-#{line_item.id.split("gid://shopify/SubscriptionLine/")[1]}")
-  .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"
+  .model-top data-polaris-layer="true" data-polaris-overlay="true"
     .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1"
       .Polaris-Modal-Dialog__Modal.Polaris-Modal-Dialog--sizeLarge
         .Polaris-Modal__BodyWrapper
@@ -42,8 +42,6 @@
                         button type="submit"
                           span #{@translation.swap_subscription_popup_swap_subscription_button.present? ? @translation.swap_subscription_popup_swap_subscription_button : 'SWAP SUBSCRIPTION'} &nbsp;
                           span
-                          svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg"
-                            path d=("M14.5148 0.514648L13.6239 1.40555L17.5882 5.36991H0V6.62985H17.5882L13.6239 10.5942L14.5148 11.4851L20 5.99984L14.5148 0.514648Z") fill="white" /
             - else
               p.Polaris-Heading No other subscription products available
 

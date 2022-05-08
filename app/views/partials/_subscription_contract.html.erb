@@ -32,7 +32,7 @@
           <a href="#<%= "swap-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}" %>" rel="modal:open">
             <button class="btn-yellow bold" id="edit-subscription-btn" tabindex="0">Swap Subscription</button>
           </a>
-          <%= render 'app_proxy/dashboard/swap_subscription_modal', subscription: @subscription, line_item: line.node %>
+          <%= render 'app_proxy/dashboard/swap_subscription_modal', subscription: struct_data, line_item: line.node %>
         <% end %>
         <div id="edit-subscription-modal" title="Basic dialog" class="modal">
           <div class="header"><div><h2>Edit Subscription</h2></div><div aria-hidden="true" class="close-modal" data-action="close" tabindex="-1">
@@ -44,7 +44,7 @@
             <div class="btn-wrapper">
               
               <% if @subscription_paused %>
-                <button class="upgrade-subscription light" id="pause-resume-sub"data-path="/resume">Resume Subscription</button>
+                <button class="upgrade-subscription light" id="pause-resume-sub" data-path="/resume">Resume Subscription</button>
               <% else %>
                 <button class="upgrade-subscription light" id="pause-resume-sub" data-path="/pause">Pause Subscription</button>
               <% end %>
@@ -96,7 +96,6 @@
         <div class="slider-holder">
           <div class="list">
             <div class="box-holder">
-              <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
               <div class="img-holder">
                 <img src="https://cdn.shopify.com/s/files/1/0585/9573/7757/t/8/assets/placeholder.png?v=1643630880" alt="Placeholder">
                 <button>+</button>
@@ -796,6 +795,34 @@
     </div>
   </div>
 <script type="text/javascript">
+  $(document).on('click', '.btn-wrapper button', function(e) {
+    $(this).html('Processing <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
+  });
+
+  $('#pause-resume-sub').on('click', function(e){
+    e.preventDefault();
+    action = $(this).data('path');
+    contract_id = $("#contract-content").data("contract-id");
+    url = "/a/chargezen_production/subscriptions/" + contract_id + action
+    $(this).text('Updating..');
+    $.ajax({
+      url: url,
+      type: 'POST',
+      contentType: 'application/json',
+      success: function(response) {
+        Swal.fire({
+          icon: 'success',
+          title: "Success! Reloading Page",
+          showConfirmButton: false
+        })
+        location.reload();
+      },
+      error: function(response) {
+
+      }
+    });
+  });
+
   function weekDishRemove(e){
     let pre_order_selector = e.target.parentElement.parentElement.parentElement
     pre_order_selector.innerHTML = "<a href='#_' id='box-item'><button><span>+</span><p>Add to box</p></button></a><img src='' />";

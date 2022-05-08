@@ -4,10 +4,7 @@ class AppProxy::DashboardController < AppProxyController
 
   def index
     # @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
-    products = ProductService.new.list
     @subscription_contracts = CustomerSubscriptionContract.where(shopify_customer_id: params[:customer_id])
-    @subscription_paused = @subscription_contracts.pluck(:status).include?('PAUSED')
-    @swap_products = products.is_a?(Hash) ? nil : products&.select{ |p| p.node.selling_plan_group_count > 0 }
 
     render "#{current_setting.portal_theme}index", content_type: 'application/liquid', layout: "#{current_setting.portal_theme}liquid_app_proxy"
   end
@@ -211,6 +208,10 @@ class AppProxy::DashboardController < AppProxyController
   def fetch_contract
     @customer = CustomerSubscriptionContract.find params[:local_id]
     @api_data = @customer.api_data
+
+    products = ProductService.new.list
+    @swap_products = products.is_a?(Hash) ? nil : products&.select{ |p| p.node.selling_plan_group_count > 0 }
+    @subscription_paused = @customer.status ===  "PAUSED" ? true : false
   end
 
   private ##
