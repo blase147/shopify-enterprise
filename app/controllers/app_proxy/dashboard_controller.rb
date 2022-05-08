@@ -211,7 +211,7 @@ class AppProxy::DashboardController < AppProxyController
 
     products = ProductService.new.list
     @swap_products = products.is_a?(Hash) ? nil : products&.select{ |p| p.node.selling_plan_group_count > 0 }
-    @subscription_paused = @customer.status ===  "PAUSED" ? true : false
+    @subscription_paused = @customer.status ==  "PAUSED"
   end
 
   private ##
