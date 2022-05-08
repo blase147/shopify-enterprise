@@ -47,6 +47,9 @@ class SubscriptionsController < AuthenticatedController
     end
 
     @translation = current_shop&.translation
+
+    @pre_orders = WorldfarePreOrder.where(shopify_contract_id: @customer.shopify_id)
+    @pre_order_products = @pre_orders.to_h { |pre_order| [pre_order.id, fetch_shopify_products(JSON.parse(pre_order.products))] }
     render "#{@customer.api_source == 'stripe' ? 'stripe_' : ''}show"
   end
 
@@ -116,5 +119,10 @@ class SubscriptionsController < AuthenticatedController
     box_items.delete(params[:product_id])
     @customer.update(box_items: box_items.present? ? box_items.join(',') : nil)
     render js: 'location.reload()'
+  end
+
+  def fetch_shopify_products(product_ids)
+    products = ShopifyAPI::Product.where(ids: product_ids.join(', '), fields: 'title')
+    products.map {|product| product.title}
   end
 end

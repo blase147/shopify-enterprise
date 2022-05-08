@@ -205,6 +205,7 @@
             ul.payment-tabs
               li.active data-target="#history" History
               li data-target="#payment-history" Payment History
+              li data-target="#pre-orders" Pre Orders
               - if @box_products.present?
                 li data-target="#box-products" Box Products
 
@@ -242,6 +243,23 @@
                         th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"= DateTime.parse(order.node.created_at).strftime("%b %d, %H:%M%P")
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= order.node.name
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--numeric $#{order.node.total_received_set.presentment_money.amount}
+
+            .Polaris-DataTable.hidden.tab#pre-orders style="margin: 1rem"
+              p style="margin: 1rem 0;" Pre orders for this customer
+              .Polaris-DataTable__ScrollContainer
+                table.Polaris-DataTable__Table
+                  thead
+                    tr style="background: #007EFF;"
+                      th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header aria-sort="none" data-polaris-header-cell="true" scope="col"  style="color: #FFFFFF" Week
+                      th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header aria-sort="none" data-polaris-header-cell="true" scope="col"  style="color: #FFFFFF" Products
+                  tbody
+                    - @pre_orders.each do |pre_order|
+                      tr.Polaris-DataTable__TableRow
+                        th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"= pre_order.week
+                        td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
+                          ul style="margin: 0;"
+                            - @pre_order_products[pre_order.id].each do |product_title|
+                              li = product_title
 
             - if @box_products.present?
               .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing.hidden.tab#box-products
