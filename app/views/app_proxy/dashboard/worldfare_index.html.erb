@@ -76,30 +76,6 @@
     });
   });
 
-  $('#pause-resume-sub').on('click', function(e){
-    e.preventDefault();
-    action = $(this).data('path');
-    contract_id = $("#subscription-contracts option:selected").val();
-    url = "/a/chargezen_production/subscriptions/" + contract_id + action
-    $(this).text('Updating..');
-    $.ajax({
-      url: url,
-      type: 'POST',
-      contentType: 'application/json',
-      success: function(response) {
-        Swal.fire({
-          icon: 'success',
-          title: "Success! Reloading Page",
-          showConfirmButton: false
-        })
-        location.reload();
-      },
-      error: function(response) {
-
-      }
-    });
-  });
-
   $('.recommended-for .slider-holder').slick({
     infinite: true,
     slidesToShow: 2,
