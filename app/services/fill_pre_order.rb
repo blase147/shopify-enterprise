@@ -28,9 +28,12 @@ class FillPreOrder
 	  				updated_products = pre_order_products << required_products
 	  				pre_order.products = updated_products.flatten
 	  			end
+	  		else
+	  			puts "WorldfarePreOrder ID: #{pre_order.id} has products #{pre_order_products.count} and meals on plan has #{meals_on_plan}"
 	  		end
 	  	end	
 	  else
+	  	puts "Manual update required_products for #{@subscription_contract.id} and pre_order_ids: #{@pre_order_ids}"
 	  	# manual update required
   	end
   end
