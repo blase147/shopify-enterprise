@@ -850,6 +850,7 @@
   });
 
   $('.skip-date').on('click', function(e){
+    $(this).html("SKIP <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>");
     let params = {
       id: $(this).data('id'),
       billing_date: $(this).data('billing-date'),
