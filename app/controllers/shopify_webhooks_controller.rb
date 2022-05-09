@@ -67,13 +67,15 @@ class ShopifyWebhooksController < ApplicationController
     end
 
     contract = CustomerSubscriptionContract.find_by(shopify_id: params[:subscription_contract_id])
-    meals_on_plan = contract.subscription_name.split[0].to_i if contract.present?
+    meals_on_plan = contract.subscription.split[0].to_i if contract.present?
     pre_order_products = JSON.parse(pre_order.products)
 
     if contract.present? && pre_order_products.count < meals_on_plan
       puts "Meals count on plan is #{meals_on_plan} and proudcts on PreOrder are: #{pre_order_products.count}"
       Rails.application.load_tasks
       Rake::Task["pre_orders:fill_pre_order_contract"].invoke(params[:subscription_contract_id])
+    else
+      puts "Manual update requied for"
     end
 
     shop.connect
