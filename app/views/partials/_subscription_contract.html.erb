@@ -1,5 +1,8 @@
 <% customer =  nil %>
 <% customer_order =  nil %>
+<% struct_data = JSON.parse(@customer.api_data.to_json, object_class: OpenStruct) %>
+<% next_billing_date =  get_next_billing_date(struct_data, @current_shop) %>
+<% billing_policy = struct_data.billing_policy %>
 
  <div class="client_profile">
     <a href="{{ routes.account_logout_url }}" class="mb-3 logout">
@@ -27,7 +30,9 @@
         <a href="#edit-subscription-modal" rel="modal:open">
           <button class="btn-yellow bold" id="edit-subscription-btn" tabindex="0">Edit Subscription</button>
         </a>
-        <% struct_data = JSON.parse(@customer.api_data.to_json, object_class: OpenStruct) %>
+        <a href="#skip-delivery-date-modal" rel="modal:open">
+          <button class="btn-yellow bold" id="skip-delivery-date-btn" tabindex="0">Skip Delivery Date</button>
+        </a>
         <% struct_data.lines.edges.each do |line| %>
           <a href="#<%= "swap-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}" %>" rel="modal:open">
             <button class="btn-yellow bold" id="edit-subscription-btn" tabindex="0">Swap Subscription</button>
@@ -40,9 +45,7 @@
           </div></div>
 
           <div class="subscription-details">
-            <%= select_tag(:option, options_for_select(@subscription_contracts.map {|csc| [csc.subscription, csc.shopify_id] }), id:"subscription-contracts") %>
             <div class="btn-wrapper">
-              
               <% if @subscription_paused %>
                 <button class="upgrade-subscription light" id="pause-resume-sub" data-path="/resume">Resume Subscription</button>
               <% else %>
@@ -53,6 +56,28 @@
               <!-- <button class="downgrade-subscription light" type="button">Skip Next Order</button> -->
               <!-- <button class="ask-questions light" type="button">Change Delivery Date</button> -->
             </div>
+          </div>
+        </div>
+
+        <div id="skip-delivery-date-modal" title="Basic dialog" class="modal">
+          <div class="header"><div><h2>Skip Delivery Date</h2></div><div aria-hidden="true" class="close-modal" data-action="close" tabindex="-1">
+            <!-- <svg fill="none" height="20" viewBox="0 0 18 20" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z" fill="#DDDDDD"></path></svg> -->
+          </div></div>
+
+          <div class="subscription-details skip-billing">
+              <strong>Delivery schedule</strong>
+              <%#= link_to "SKIP", skip_schedule_app_proxy_subscription_path(struct_data.id[/\d+/], "billing_date=#{next_billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post %>
+              <%#= link_to "SKIP", skip_schedule_app_proxy_subscription_path(struct_data.id[/\d+/]) %>
+
+              
+              <ul>
+                <li><%= next_billing_date.strftime("%B %e, %Y") %> <a href="#_" class="pull-right skip-date" data-id="<%= struct_data.id[/\d+/] %>" data-billing-date="<%= next_billing_date %>" data-interval="<%= billing_policy.interval %>" data-interval-count="<%= billing_policy.interval_count %>">SKIP</a></li>
+                <% (1..2).each do |index| %>
+                  <% billing_date = next_billing_date.to_date + (index * billing_policy.interval_count).send(billing_policy.interval.downcase) %>
+                  <li><%= billing_date.strftime("%B %e, %Y") %> <a href="#_" class="pull-right skip-date" data-id="<%= struct_data.id[/\d+/] %>" data-billing-date="<%= billing_date %>" data-interval="<%= billing_policy.interval %>" data-interval-count="<%= billing_policy.interval_count %>">SKIP</a></li>
+                <% end %>
+              </ul>
+          </div>
           </div>
         </div>
 
@@ -810,6 +835,33 @@
       url: url,
       type: 'POST',
       contentType: 'application/json',
+      success: function(response) {
+        Swal.fire({
+          icon: 'success',
+          title: "Success! Reloading Page",
+          showConfirmButton: false
+        })
+        location.reload();
+      },
+      error: function(response) {
+
+      }
+    });
+  });
+
+  $('.skip-date').on('click', function(e){
+    let params = {
+      id: $(this).data('id'),
+      billing_date: $(this).data('billing-date'),
+      billing_interval: $(this).data('interval'),
+      billing_interval_count: $(this).data('interval-count')
+    }
+    url = "/a/chargezen_production/dashboard/portal_skip_schedule"
+    $.ajax({
+      url: url,
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(params),
       success: function(response) {
         Swal.fire({
           icon: 'success',

@@ -102,6 +102,7 @@ Rails.application.routes.draw do
         put :update_theme
         post :create_pre_order
         get :fetch_contract
+        post :portal_skip_schedule
       end
     end
 
