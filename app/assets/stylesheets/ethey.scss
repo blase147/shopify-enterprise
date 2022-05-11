@@ -939,7 +939,7 @@ subscription-box ul {
     margin-bottom: 40px;
   }
   .order-box .product_section .order_inn {
-    width: 50%;
+    width: 48%;
     border: none;
   }
   .order-box .pre_segment {
@@ -961,6 +961,57 @@ subscription-box ul {
     flex-direction:column;
   }
 }
+
+@media only screen and (max-width: 580px) {
+  .customer-details .button-holder a {
+    width: 100%;
+  }
+  .customer-details {
+    padding: 30px 30px 250px 30px;
+ }
+ .button-holder {
+    top: 100%;
+ } 
+ .contact-details h2 {
+    margin-bottom: 33px;
+    margin-right: -20px;
+    font-size: 20px;
+    text-align: right;
+ }
+ .customer-details .customer-info .details strong {
+    font-size: 17px;
+  }
+  .Account_page_slider h2.title {
+  max-width: 100%;
+  }
+  .customer-details .button-holder button {
+    margin-bottom: 20px !important;
+  }
+  .customer-details .button-holder a button {
+   width: 100% !important;
+  }
+  .recommended-for .list .img-holder {
+    width: 180px !important;
+    height: 180px !important;
+    margin: 0 auto !important;
+  }
+  .recommended-for .list .box-holder .text-details {
+   text-align: center !important;
+  }
+  .recommended-for .list .box-holder .text-details p {
+   text-align: center !important;
+  }
+  .pre_segment .order_inn .holder img {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 100px;
+  }
+  li.box-item-grid {
+    display: inline-block !important;
+    width: 46% !important;
+  }
+}
+
 @media screen and (max-width: 480px) {
   .customer-details .button-holder {
     width: 100%;
