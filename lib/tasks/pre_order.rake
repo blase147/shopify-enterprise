@@ -68,6 +68,7 @@ namespace :pre_orders do
     end
 
     pre_order_products = JSON.parse(pre_order.products)
+    pre_order_ids = [pre_order.id]
 
     if pre_order_products.count < meals_on_plan
       FillPreOrder.new(pre_order_ids, subscription_contract.id).fill
