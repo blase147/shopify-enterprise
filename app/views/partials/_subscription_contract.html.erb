@@ -31,7 +31,7 @@
           <button class="btn-yellow bold" id="edit-subscription-btn" tabindex="0">Edit Subscription</button>
         </a>
         <a href="#skip-delivery-date-modal" rel="modal:open">
-          <button class="btn-yellow bold" id="skip-delivery-date-btn" tabindex="0">Skip Next Delivery</button>
+          <button class="btn-yellow bold" id="skip-delivery-date-btn" tabindex="0">Skip Billing Date</button>
         </a>
         <% struct_data.lines.edges.each do |line| %>
           <a href="#<%= "swap-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}" %>" rel="modal:open">
@@ -60,12 +60,12 @@
         </div>
 
         <div id="skip-delivery-date-modal" title="Basic dialog" class="modal">
-          <div class="header"><div><h2>Skip Delivery Date</h2></div><div aria-hidden="true" class="close-modal" data-action="close" tabindex="-1">
+          <div class="header"><div><h2>Skip Billing Date</h2></div><div aria-hidden="true" class="close-modal" data-action="close" tabindex="-1">
             <!-- <svg fill="none" height="20" viewBox="0 0 18 20" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z" fill="#DDDDDD"></path></svg> -->
           </div></div>
 
           <div class="subscription-details skip-billing">
-              <strong>Delivery schedule</strong>
+              <strong>Billing Cycle</strong>
               <%#= link_to "SKIP", skip_schedule_app_proxy_subscription_path(struct_data.id[/\d+/], "billing_date=#{next_billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post %>
               <%#= link_to "SKIP", skip_schedule_app_proxy_subscription_path(struct_data.id[/\d+/]) %>
 
