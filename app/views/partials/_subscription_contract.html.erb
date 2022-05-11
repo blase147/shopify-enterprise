@@ -345,7 +345,7 @@
         <%
           current_date = Date.today
           week_day = current_date
-          week_subscription = WorldfarePreOrder.find_by( customer_id: @customer.shopify_customer_id, week: week_day.strftime('%-V').to_i )
+          week_subscription = WorldfarePreOrder.find_by(shopify_contract_id: @customer.shopify_id, customer_id: @customer.shopify_customer_id, week: week_day.strftime('%-V').to_i )
           week_subscription_products = []
           if week_subscription.present?
             week_subscription_products = ShopifyAPI::Product.where(ids: JSON.parse(week_subscription.products).join(', '), fields: 'id,title,images') rescue nil
@@ -462,7 +462,7 @@
                 end
                 # select_by = cutoff_date.strftime("%B %d, %Y #{cutoff.nil? ? '00:00' : cutoff['cutoff_time']}")
                 select_by = delivery_date.present? ? Date.today.next_week(Date.strptime(delivery_date, '%m/%d/%Y').strftime("%A").downcase.to_sym).yesterday.strftime('%A, %d %b %Y') : Date.today.next_week(:wednesday).yesterday.strftime('%A, %d %b %Y')
-                week_subscription = WorldfarePreOrder.find_by( customer_id: @customer.shopify_customer_id, week: week_day.strftime('%-V').to_i )
+                week_subscription = WorldfarePreOrder.find_by(shopify_contract_id: @customer.shopify_id, customer_id: @customer.shopify_customer_id, week: week_day.strftime('%-V').to_i )
                 week_subscription_products = []
                 if week_subscription.present?
                   week_subscription_products = ShopifyAPI::Product.where(ids: JSON.parse(week_subscription.products).join(', '), fields: 'id,title,images') rescue nil
