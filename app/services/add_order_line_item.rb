@@ -10,8 +10,8 @@ class AddOrderLineItem < GraphqlService
 	GRAPHQL
 
 	ADD_VARIANT = <<-GRAPHQL
-	  mutation($id: ID!, $variantId: ID!){
-		  orderEditAddVariant(id: $id, variantId: $variantId, quantity: 1){
+	  mutation($id: ID!, $variantId: ID!, $quantity: Int!){
+		  orderEditAddVariant(id: $id, variantId: $variantId, quantity: $quantity){
 		    calculatedOrder {
 		      id
 		      addedLineItems(first:5) {
@@ -73,8 +73,10 @@ class AddOrderLineItem < GraphqlService
 
 		product_variants = fetch_product_varients
 
-		product_variants.each do |variant_id|
-			varient_result = add_variant(variant_id, calculated_order_id)
+		product_variants_count = product_variants.tally
+
+		product_variants_count.each do |variant_id, quantity|
+			varient_result = add_variant(variant_id, calculated_order_id, quantity)
 		end
 
 	  finish_order_edit(calculated_order_id)
@@ -99,10 +101,11 @@ class AddOrderLineItem < GraphqlService
 		varient_ids
 	end
 
-	def add_variant(varient_id, calculated_order_id)
+	def add_variant(varient_id, calculated_order_id, quantity)
 		add_variant = client.query(client.parse(ADD_VARIANT), variables: {
 	    id: calculated_order_id,
-	    variantId: varient_id
+	    variantId: varient_id,
+	    quantity: quantity
 	  })
 	end
 
