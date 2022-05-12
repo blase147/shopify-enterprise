@@ -49,8 +49,8 @@ namespace :pre_orders do
   end
 
   task :fill_pre_order_and_add_items_to_shopify_order, [:shopify_order_id, :contract_id] do |t, args|
-    shopify_order_id = "4309408481353"
-    contract_id = 110
+    shopify_order_id = args.shopify_order_id
+    contract_id = args.contract_id
     puts "<============== Rake task started for ShopipfyOrder: #{shopify_order_id}, contract_id: #{contract_id} ==============>"
 
     contract = CustomerSubscriptionContract.find contract_id
