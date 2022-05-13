@@ -1,6 +1,7 @@
 class ShopifyWebhooksController < ApplicationController
   skip_before_action :verify_authenticity_token
   include ShopifyApp::WebhookVerification
+  before_action :create_site_log, only: :billing_attempt_success
 
   def app_uninstalled
     if ENV['APP_TYPE'] == 'public'
@@ -56,11 +57,9 @@ class ShopifyWebhooksController < ApplicationController
   end
 
   def billing_attempt_success
-    puts "Params for billing_attempt_success web-hook: #{params}"
-
     order_id = params[:order_id]
-    contract_id = params[:subscription_contract_id][/\d+/]
-    AddProductsToOrder.perform_async(order_id, contract_id)
+    contract_id = params[:subscription_contract_id]
+    AddProductsToOrderWorker.perform_async(order_id, contract_id)
 
     head :no_content
   end
@@ -76,6 +75,10 @@ class ShopifyWebhooksController < ApplicationController
     nil
   rescue
     nil
+  end
+
+  def create_site_log
+    SiteLog.create(log_type: SiteLog::TYPES[:shopify_webhook], action: params[:action], controller: params[:controller], params: params)
   end
 end
 
