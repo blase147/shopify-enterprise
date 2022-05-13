@@ -57,30 +57,12 @@ class ShopifyWebhooksController < ApplicationController
 
   def billing_attempt_success
     puts "Params for billing_attempt_success web-hook: #{params}"
-    shop = Shop.find_by(shopify_domain: shop_domain)
-    week_number = Date.today.cweek
-    pre_order = WorldfarePreOrder.where(week: week_number, shopify_contract_id: params[:subscription_contract_id]).first
 
-    if pre_order.blank?
-      puts "WorldfarePreOrder not found for #{week_number} and shopify_contract_id: #{params[:subscription_contract_id]}"
-      return
-    end
+    order_id = params[:order_id]
+    contract_id = params[:subscription_contract_id][/\d+/]
+    AddProductsToOrder.perform_async(order_id, contract_id)
 
-    contract = CustomerSubscriptionContract.find_by(shopify_id: params[:subscription_contract_id])
-    meals_on_plan = contract.subscription.split[0].to_i if contract.present?
-    pre_order_products = JSON.parse(pre_order.products)
-
-    if contract.present? && pre_order_products.count < meals_on_plan
-      puts "Meals count on plan is #{meals_on_plan} and proudcts on PreOrder are: #{pre_order_products.count}"
-      Rails.application.load_tasks
-      Rake::Task["pre_orders:fill_pre_order_contract"].invoke(params[:subscription_contract_id])
-    else
-      puts "Manual update requied for"
-    end
-
-    shop.connect
-    result = AddOrderLineItem.new(params[:order_id], pre_order_products).call
-    puts "Priting result for AddOrderLineItem class: #{result}"
+    head :no_content
   end
 
 
