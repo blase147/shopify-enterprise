@@ -23,31 +23,6 @@ namespace :pre_orders do
     puts "<============== Cron for PreOrder Ended: at #{Time.current} ==============>"
   end
 
-  task :fill_pre_order_contract, [:contract_id] do |t, args|
-    puts "<============== Rake task started ==============>"
-    CustomerSubscriptionContract.where(shopify_id: args.contract_id).each do |subscription_contract|
-      shop = subscription_contract.shop
-      shop.connect
-
-      delivery_date = subscription_contract.api_data["delivery_date"]
-      subscription_name = subscription_contract.subscription
-      delivery_date ||= Date.today.next_week(:wednesday).yesterday.strftime("%m/%d/%Y")
-      delivery_day = Date.strptime(delivery_date, '%m/%d/%Y').strftime("%A")
-
-      todays_day = Date.today.strftime("%A")
-      week_number = Date.today.cweek
-
-      pre_order_ids = WorldfarePreOrder.where(shopify_contract_id: subscription_contract.shopify_id, week: week_number).pluck(:id)
-      
-      if delivery_day.eql?(todays_day) && pre_order_ids.present?
-        puts "#{subscription_contract.id} is eligible to Pre-Fill order today"
-        FillPreOrder.new(pre_order_ids, subscription_contract.id).fill
-      else
-        puts "#{subscription_contract.id} is not eligible to Pre-Fill order today"
-      end
-    end
-  end
-
   task :fill_pre_order_and_add_items_to_shopify_order, [:shopify_order_id, :contract_id] do |t, args|
     shopify_order_id = args.shopify_order_id
     contract_id = args.contract_id
