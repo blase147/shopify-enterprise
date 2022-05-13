@@ -53,7 +53,8 @@ namespace :pre_orders do
     contract_id = args.contract_id
     puts "<============== Rake task started for ShopipfyOrder: #{shopify_order_id}, contract_id: #{contract_id} ==============>"
 
-    contract = CustomerSubscriptionContract.find contract_id
+    contract = CustomerSubscriptionContract.find_by_id contract_id
+    contract ||= CustomerSubscriptionContract.find_by(shopify_id: contract_id)
     shop = contract.shop
     shop.connect
     meals_on_plan = contract.subscription.split[0].to_i

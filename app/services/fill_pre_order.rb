@@ -40,6 +40,7 @@ class FillPreOrder
     required_products = []
     first_order_products.last(products_to_be_added).each do |item|
       next if item["node"]["product"]["title"].downcase.include?('meal box')
+      next if item["node"]["product"]["title"].downcase.include?('meal')
       required_products << item["node"]["product"]["id"][/\d+/]
     end
     updated_products = pre_order_products << required_products
