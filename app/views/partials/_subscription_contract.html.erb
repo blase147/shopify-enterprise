@@ -347,11 +347,20 @@
           week_day = current_date
           week_subscription = WorldfarePreOrder.find_by(shopify_contract_id: @customer.shopify_id, customer_id: @customer.shopify_customer_id, week: week_day.strftime('%-V').to_i )
           week_subscription_products = []
-          if week_subscription.present?
-            week_subscription_products = ShopifyAPI::Product.where(ids: JSON.parse(week_subscription.products).join(', '), fields: 'id,title,images') rescue nil
-          end
+
+          selected_products = []
           total_meals = meals_on_plan(@customer.subscription)
-          meals_to_select = week_subscription_products ? total_meals -  week_subscription_products.count : total_meals
+          meals_to_select = total_meals
+
+          current_week_meals = []
+          current_week_meals = WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first["products"] if WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first.present?
+          current_week_meals = WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.product_images if current_week_meals.blank?
+
+          if week_subscription.present? && current_week_meals.present?
+            selected_products = JSON.parse(week_subscription.products)
+            meals_to_select = total_meals - selected_products.count
+          end
+
         %>
 
         <div class="pre_orders">
@@ -362,72 +371,23 @@
             </div>
             <div class="order_add current-week">
               <ul id="psegment" class="pre_segment">
-                <% week_subscription_products.each do |item| %>
-                    <div class="order_inn center" >
-                      <div class="holder">
-                        <!-- <span class='dish_remove'>x</span> -->
-                        <img src="<%= item.images.first.src rescue nil %>">
-                        <h5><%= item.title rescue nil %> </h5>
-                      </div>
+                <% selected_products.each do |item| %>
+                  <% meal_product = current_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
+                  <div class="order_inn center" >
+                    <div class="holder">
+                      <!-- <span class='dish_remove'>x</span> -->
+                      <img src="<%= meal_product['image'] rescue nil %>" data-id="<%= meal_product['product_id'][/\d+/] %>">
+                      <h5><%= meal_product['title'] rescue nil %> </h5>
                     </div>
+                  </div>
                 <% end %>
                 <% meals_to_select.times do %>
-                  <li class="pre_segment_order current_week_empty">
-                    <a href="#_" id=""><button><span>+</span><p>Add to box</p></button></a>
+                  <li class="pre_segment_order empty-current">
+                    <a href="#_" id="box-item-current"><button><span>+</span><p>Add to box</p></button></a>
                     <img src="" />
                   </li>
                 <% end %>
-              </ul>
             </div>
-            <%
-              #week_day.strftime('%-V').to_i
-              current_week_meals = []
-              current_week_meals = WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first["products"] if WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first.present?
-              current_week_meals = WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.product_images if current_week_meals.blank?
-            %>
-            <% if current_week_meals.present? %>
-              <div class="meal-options">
-              <ul class="box-items-grid hide" id="box-items">
-              <% current_week_meals.each do |meal| %>
-                <li class="box-item-grid" id="<%= meal["product_id"]&.split('/')&.last %>">
-                  <div id="items-list" class="">
-                    <div class="box-item-img">
-                      <img src=<%= meal["image"] %>>
-                    </div>
-                    <div class="box-item-information">
-                      <h5><%= meal["title"] %></h5>
-                      <span><%= truncate(meal["description"], :length => 50) %></span>
-                    </div>
-                    <div class="box-item-icons">
-                      <ul class="icon_list">
-                        <li>
-                          <div class="box-icon-wrapper">
-                            <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Calories_Icon.svg?v=4569060398551131372">
-                          </div>
-                          <span>520 kcal</span>
-                        </li>
-                        <li>
-                          <div class="box-icon-wrapper">
-                            <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Group_346.svg?v=3253623496766777332">
-                          </div>
-                          <span>82g Carbs</span>
-                        </li>
-                        <li>
-                          <div class="box-icon-wrapper">
-                            <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/protein_20x.png?v=7819928887151425549">
-                          </div>
-                          <span>30g Protein</span>
-                        </li>
-                      </ul>
-                    </div>
-                    <a href="#_"class="green-btn add-to-week" data-id="<%= meal["product_id"]&.split('/')&.last %>" data-url="<%= meal["image"] %>" id="<%= meal["product_id"]&.split('/')&.last %>">Add to Week</a>
-                  </div>
-                </li>
-              <% end %>
-              </ul>
-            </div>
-            <% end %>
-            <button id='confirm-current-week-sub-btn', data-customer-id="<%= @customer.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Selection</button>
           </div>
         </div>
 
@@ -463,13 +423,18 @@
                 # select_by = cutoff_date.strftime("%B %d, %Y #{cutoff.nil? ? '00:00' : cutoff['cutoff_time']}")
                 select_by = delivery_date.present? ? Date.today.next_week(Date.strptime(delivery_date, '%m/%d/%Y').strftime("%A").downcase.to_sym).yesterday.strftime('%A, %d %b %Y') : Date.today.next_week(:wednesday).yesterday.strftime('%A, %d %b %Y')
                 week_subscription = WorldfarePreOrder.find_by(shopify_contract_id: @customer.shopify_id, customer_id: @customer.shopify_customer_id, week: week_day.strftime('%-V').to_i )
-                week_subscription_products = []
-                if week_subscription.present?
-                  week_subscription_products = ShopifyAPI::Product.where(ids: JSON.parse(week_subscription.products).join(', '), fields: 'id,title,images') rescue nil
-
-                end
+                selected_products = []
                 total_meals = meals_on_plan(@customer.subscription)
-                meals_to_select = week_subscription_products ? total_meals -  week_subscription_products.count : total_meals
+                meals_to_select = total_meals
+
+                next_week_meals = []
+                next_week_meals = WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first["products"] if WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first.present?
+                next_week_meals = WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.product_images if next_week_meals.blank?
+
+                if week_subscription.present? && next_week_meals.present?
+                  selected_products = JSON.parse(week_subscription.products)
+                  meals_to_select = total_meals - selected_products.count
+                end
               %>
               <div class="pre_orders">
                 <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
@@ -481,12 +446,13 @@
                   </div>
                   <div class="order_add next-week">
                     <ul id="psegment" class="pre_segment">
-                      <% week_subscription_products.each do |item| %>
+                      <% selected_products.each do |item| %>
+                        <% meal_product = next_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
                         <div class="order_inn center" >
                           <div class="holder">
                             <span class='dish_remove'>x</span>
-                            <img src="<%= item.images.first.src rescue nil %>" data-id="<%= item.id %>">
-                            <h5><%= item.title rescue nil %> </h5>
+                            <img src="<%= meal_product['image'] rescue nil %>" data-id="<%= meal_product['product_id'][/\d+/] %>">
+                            <h5><%= meal_product['title'] rescue nil %> </h5>
                           </div>
                         </div>
                       <% end %>
@@ -500,14 +466,14 @@
                   </div>
                   <%
                     #week_day.strftime('%-V').to_i
-                    current_week_meals = []
-                    current_week_meals = WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first["products"] if WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first.present?
-                    current_week_meals = WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.product_images if current_week_meals.blank?
+                    # current_week_meals = []
+                    # current_week_meals = WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first["products"] if WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first.present?
+                    # current_week_meals = WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.product_images if current_week_meals.blank?
                   %>
-                  <% if current_week_meals.present? %>
+                  <% if next_week_meals.present? %>
                     <div class="meal-options">
                     <ul class="box-items-grid hide" id="box-items">
-                    <% current_week_meals.each do |meal| %>
+                    <% next_week_meals.each do |meal| %>
                       <li class="box-item-grid" id="<%= meal["product_id"]&.split('/')&.last %>">
                         <div id="items-list" class="">
                           <div class="box-item-img">
@@ -884,6 +850,7 @@
   }
 
   $(".add-to-week").on('click', function(e){
+    debugger
     e.preventDefault();
     image_url = $(this).data('url')
     let pre_order_selector = document.getElementsByClassName('empty')[0]
