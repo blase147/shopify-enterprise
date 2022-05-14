@@ -192,7 +192,7 @@ class AppProxy::DashboardController < AppProxyController
   def create_pre_order
     pre_order = WorldfarePreOrder.find_by(shopify_contract_id: params[:shopify_contract_id], customer_id: params[:customer_id], week: params[:week])
     if pre_order.nil?
-      pre_order = WorldfarePreOrder.new(shopify_contract_id: params[:shopify_contract_id], shop_id: current_shop.id, customer_id: params[:customer_id], week: params[:week], products: params[:product_ids])
+      pre_order = WorldfarePreOrder.new(shopify_contract_id: params[:shopify_contract_id], shop_id: current_shop.id, customer_id: params[:customer_id], week: params[:week], products: params[:product_ids], created_by: WorldfarePreOrder::CREATION_TYPES[:customer])
     end
     if pre_order.persisted?
       pre_order.products = params[:product_ids]
