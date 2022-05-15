@@ -372,7 +372,7 @@
         <div class="pre_orders">
           <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
           <div class="order-box">
-            <h2 class="Trial">Current Week(<%= week_day.strftime('%-V').to_i %>/52)</h2>
+            <h2 class="Trial">Current Week(<%= week_day.strftime('%-V').to_i %>) (<%= week_day.beginning_of_week(:sunday).strftime('%B %d') rescue nil %> - <%= week_day.end_of_week(:sunday).strftime('%d, %Y') rescue nil %>)</h2>
             <div class="placed_data pdate">
               <p class="placed">Select Meals By</p>
               <p class="placed_dates pdate text-right"><%= select_by %></p>
@@ -455,7 +455,7 @@
               <div class="pre_orders">
                 <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
                 <div class="order-box">
-                  <h2 class="Trial">Week <%= week_day.strftime('%-V') rescue nil %>/52 (<%= week_day.beginning_of_week(:sunday).strftime('%B %d') rescue nil %> - <%= week_day.end_of_week(:sunday).strftime('%d, %Y') rescue nil %>)</h2>
+                  <h2 class="Trial">Week <%= week_day.strftime('%-V') rescue nil %> (<%= week_day.beginning_of_week(:sunday).strftime('%B %d') rescue nil %> - <%= week_day.end_of_week(:sunday).strftime('%d, %Y') rescue nil %>)</h2>
                   <div class="placed_data pdate">
                     <p class="placed">Select Meals By</p>
                     <p class="placed_dates pdate text-right"><%= select_by %></p>
