@@ -343,6 +343,12 @@
         <!-- Current Week -->
 
         <%
+          delivery_date = @api_data["delivery_date"] rescue nil
+          delivery_settings = DeliveryOption.find_by( shop_id: @current_shop.id )&.api_response
+          expected_delivery = delivery_date.present? ? Date.today.beginning_of_week.next_occurring(Date.strptime(delivery_date, '%m/%d/%Y').strftime("%A").downcase.to_sym).strftime('%A, %d %b %Y') : Date.today.beginning_of_week.next_occurring(:thursday).strftime('%A, %d %b %Y')
+          delivery = delivery_settings[:settings].filter{|d| d["delivery"] == expected_delivery.to_date.strftime('%A').downcase }
+          select_by = expected_delivery.to_date.prev_occurring(delivery.first["cutoff_day"]
+.to_sym).strftime('%A, %d %b %Y')
           current_date = Date.today
           week_day = current_date
           week_subscription = WorldfarePreOrder.find_by(shopify_contract_id: @customer.shopify_id, customer_id: @customer.shopify_customer_id, week: week_day.strftime('%-V').to_i )
@@ -368,6 +374,13 @@
           <div class="order-box">
             <h2 class="Trial">Current Week(<%= week_day.strftime('%-V').to_i %>/52)</h2>
             <div class="placed_data pdate">
+              <p class="placed">Select Meals By</p>
+              <p class="placed_dates pdate text-right"><%= select_by %></p>
+            </div>
+
+            <div class="placed_data pdate">
+              <p class="placed">Expected delivery :</p>
+              <p class="placed_dates pdate text-right"><%= expected_delivery %></p>
             </div>
             <div class="order_add current-week">
               <ul id="psegment" class="pre_segment">
@@ -393,13 +406,13 @@
 
 
         <!-- Next Week -->
+            <% delivery_date = @api_data["delivery_date"] rescue nil %>
             <% created_at = Date.parse(@api_data["created_at"]) rescue nil %>
             <%
               delivery_settings = DeliveryOption.find_by( shop_id: @current_shop.id )&.api_response
               delivery_day_sym = customer_order.note.downcase.split(' ')[0] rescue  nil
               cutoff = delivery_settings[:settings].filter{  |day| day['delivery'] == delivery_day_sym }[0] rescue nil
             %>
-            <% delivery_date = @api_data["delivery_date"] rescue nil %>
             <% products = ShopifyAPI::Product.where(ids: customer_order.line_items.map(&:product_id).join(', '), fields: 'id,title,images') rescue nil %>
 
             <% current_date = Date.today %>
@@ -420,8 +433,11 @@
                   week_days << week_day.strftime('%Y%m%d')
                   cutoff_date = cutoff.nil? ? (week_day-2) : current_date.next_week(:monday).next_week(cutoff['cutoff_day'].downcase.to_sym)
                 end
+                expected_delivery = delivery_date.present? ? Date.today.next_week(Date.strptime(delivery_date, '%m/%d/%Y').strftime("%A").downcase.to_sym).strftime('%A, %d %b %Y') : Date.today.next_week(:thursday).strftime('%A, %d %b %Y')
+                delivery = delivery_settings[:settings].filter{|d| d["date"] == expected_delivery.to_date.strftime('%A %d %b %Y') }
+                select_by = expected_delivery.to_date.prev_occurring(delivery.first["cutoff_day"]
+.to_sym).strftime('%A, %d %b %Y')
                 # select_by = cutoff_date.strftime("%B %d, %Y #{cutoff.nil? ? '00:00' : cutoff['cutoff_time']}")
-                select_by = delivery_date.present? ? Date.today.next_week(Date.strptime(delivery_date, '%m/%d/%Y').strftime("%A").downcase.to_sym).yesterday.strftime('%A, %d %b %Y') : Date.today.next_week(:wednesday).yesterday.strftime('%A, %d %b %Y')
                 week_subscription = WorldfarePreOrder.find_by(shopify_contract_id: @customer.shopify_id, customer_id: @customer.shopify_customer_id, week: week_day.strftime('%-V').to_i )
                 selected_products = []
                 total_meals = meals_on_plan(@customer.subscription)
@@ -441,8 +457,13 @@
                 <div class="order-box">
                   <h2 class="Trial">Week <%= week_day.strftime('%-V') rescue nil %>/52 (<%= week_day.beginning_of_week(:sunday).strftime('%B %d') rescue nil %> - <%= week_day.end_of_week(:sunday).strftime('%d, %Y') rescue nil %>)</h2>
                   <div class="placed_data pdate">
-                    <p class="placed">Select dishes by:</p>
+                    <p class="placed">Select Meals By</p>
                     <p class="placed_dates pdate text-right"><%= select_by %></p>
+                  </div>
+
+                  <div class="placed_data pdate">
+                    <p class="placed">Expected delivery :</p>
+                    <p class="placed_dates pdate text-right"><%= expected_delivery %></p>
                   </div>
                   <div class="order_add next-week">
                     <ul id="psegment" class="pre_segment">
