@@ -348,7 +348,7 @@
           expected_delivery = delivery_date.present? ? Date.today.beginning_of_week.next_occurring(Date.strptime(delivery_date, '%m/%d/%Y').strftime("%A").downcase.to_sym).strftime('%A, %d %b %Y') : Date.today.beginning_of_week.next_occurring(:thursday).strftime('%A, %d %b %Y')
           delivery = delivery_settings[:settings].filter{|d| d["delivery"] == expected_delivery.to_date.strftime('%A').downcase }
           select_by = expected_delivery.to_date.prev_occurring(delivery.first["cutoff_day"]
-.to_sym).strftime('%A, %d %b %Y')
+.to_sym).strftime('%A, %d %b %Y') rescue nil
           current_date = Date.today
           week_day = current_date
           week_subscription = WorldfarePreOrder.find_by(shopify_contract_id: @customer.shopify_id, customer_id: @customer.shopify_customer_id, week: week_day.strftime('%-V').to_i )
@@ -435,8 +435,8 @@
                 end
                 expected_delivery = delivery_date.present? ? Date.today.next_week(Date.strptime(delivery_date, '%m/%d/%Y').strftime("%A").downcase.to_sym).strftime('%A, %d %b %Y') : Date.today.next_week(:thursday).strftime('%A, %d %b %Y')
                 delivery = delivery_settings[:settings].filter{|d| d["date"] == expected_delivery.to_date.strftime('%A %d %b %Y') }
-                select_by = expected_delivery.to_date.prev_occurring(delivery.first["cutoff_day"]
-.to_sym).strftime('%A, %d %b %Y')
+                select_by = expected_delivery.to_date.prev_occurring(delivery&.first["cutoff_day"]
+.to_sym).strftime('%A, %d %b %Y') rescue nil
                 # select_by = cutoff_date.strftime("%B %d, %Y #{cutoff.nil? ? '00:00' : cutoff['cutoff_time']}")
                 week_subscription = WorldfarePreOrder.find_by(shopify_contract_id: @customer.shopify_id, customer_id: @customer.shopify_customer_id, week: week_day.strftime('%-V').to_i )
                 selected_products = []
