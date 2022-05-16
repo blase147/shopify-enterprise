@@ -89,8 +89,9 @@ namespace :subscriptions do
           )
           order_id = contract.api_data["origin_order"]["id"][/\d+/]
           if order_id.present?
-            order = ShopifyAPI::Order.find(order_id)
+            order = ShopifyAPI::Order.find(order_id) rescue nil
             delivery_date = order&.note_attributes&.first&.value
+            delivery_date = delivery_date.to_date.strftime("%m/%d/%Y") if delivery_date.present?
             contract.api_data[:delivery_date] = delivery_date
           end
           contract.save
