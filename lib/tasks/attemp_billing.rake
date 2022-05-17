@@ -88,11 +88,15 @@ namespace :subscriptions do
             api_data: data.to_h.deep_transform_keys { |key| key.underscore }
           )
           order_id = contract.api_data["origin_order"]["id"][/\d+/]
-          if order_id.present?
+          order = ShopifyAPI::Order.find(order_id) rescue nil
+          if order.present?
             order = ShopifyAPI::Order.find(order_id) rescue nil
-            delivery_date = order&.note_attributes&.first&.value
+            puts "order found for #{order_id}"
+            note_attributes = order&.note_attributes
+            delivery_date = note_attributes.filter{|attr| attr.name == "Delivery Date" }.last&.value
             delivery_date = delivery_date.to_date.strftime("%m/%d/%Y") if delivery_date.present?
             contract.api_data[:delivery_date] = delivery_date
+            puts "delivery_date #{delivery_date}"
           end
           contract.save
           puts "====== Done ContractID, #{contract.id} ======"
