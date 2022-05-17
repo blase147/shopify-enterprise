@@ -41,13 +41,15 @@ class FillPreOrder
       next if item["node"]["product"]["title"].downcase.include?('meal box')
       next if item["node"]["product"]["title"].downcase.include?('meal')
       if required_products.count < products_to_be_added
-        required_products << item["node"]["product"]["id"][/\d+/]
+        item["node"]["quantity"].to_i.times do
+          required_products << item["node"]["product"]["id"][/\d+/]
+        end
       end
     end
 
     if required_products.count < products_to_be_added
       puts "fetching from WeeklyMenu...."
-      required_products << fill_from_weekly_menu(pre_order, required_products, products_to_be_added)
+      required_products = fill_from_weekly_menu(pre_order, required_products, products_to_be_added)
     else
       puts "No need to fetch from WeeklyMenu.. products filled"
     end
