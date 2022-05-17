@@ -5,6 +5,10 @@ class AddOrderLineItem < GraphqlService
         calculatedOrder{
           id
         }
+        userErrors {
+          field
+          message
+        }
       }
     }
   GRAPHQL
@@ -79,9 +83,10 @@ class AddOrderLineItem < GraphqlService
       varient_result = add_variant(variant_id, calculated_order_id, quantity)
     end
 
-    finish_order_edit(calculated_order_id)
+    result = finish_order_edit(calculated_order_id)
 
     update_order_delivery_date
+    result
   end
 
 

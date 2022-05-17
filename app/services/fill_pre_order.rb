@@ -60,11 +60,11 @@ class FillPreOrder
 
   def fill_from_weekly_menu(pre_order, required_products, products_to_be_added)
     weekly_menu = WeeklyMenu.find_by(week: pre_order.week)
-    menu_products = first.collection_images.last.to_h["products"]
+    menu_products = weekly_menu.collection_images.last.to_h["products"]
     menu_products ||= weekly_menu.product_images
     
     menu_products.each do |product|
-      if required_products.count > products_to_be_added
+      if required_products.count < products_to_be_added
         required_products << product["product_id"][/\d+/]
       end
     end
