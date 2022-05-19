@@ -130,7 +130,7 @@ class AddOrderLineItem < GraphqlService
       delivery_date = order&.note_attributes&.first&.value
       delivery_date = delivery_date.to_date.strftime("%m/%d/%Y") if delivery_date.present?
       
-      expected_delivery = Date.today.beginning_of_week.next_occurring(Date.strptime(delivery_date, '%m/%d/%Y').strftime("%A").downcase.to_sym).strftime('%d/%m/%Y')
+      expected_delivery = Date.today.beginning_of_week.next_occurring(Date.strptime(delivery_date, '%m/%d/%Y').strftime("%A").downcase.to_sym).strftime('%d/%m/%Y') rescue nil
 
       order.note_attributes << {name: "Expected Delivery Date", value: expected_delivery}
       order.save
