@@ -37,7 +37,8 @@ class EmailService::Base < ApplicationService
         storename: storename,
         myshopify_url: myshopify_url,
         customer_portal_link: customer_portal_link,
-        shopify_store_email: shop_email
+        shopify_store_email: shop_email,
+        email_body: object[:email_body],
       }
     when "Subscription Cancellation"
       {
@@ -109,7 +110,8 @@ class EmailService::Base < ApplicationService
   end
 
   def email_body(context_hash)
-    email_message = @email_notification.email_message
+    email_message = context_hash[:email_body]
+    email_message ||= @email_notification.email_message
     context_hash.keys.each do |key|
       var = "{{"+key.to_s+"}}"
       email_message = email_message.gsub(var,context_hash[key].to_s)
