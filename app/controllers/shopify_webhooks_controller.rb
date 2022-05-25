@@ -27,6 +27,7 @@ class ShopifyWebhooksController < ApplicationController
           order.tags = ShopifyAPI::Product.where(ids: box_product_ids, fields: 'id,title').map(&:title).join(', ')
           order.save
         end
+        generate_and_send_account_activation_email
       end
     rescue => e
       p e
@@ -79,6 +80,16 @@ class ShopifyWebhooksController < ApplicationController
 
   def create_site_log
     SiteLog.create(log_type: SiteLog::TYPES[:shopify_webhook], action: params[:action], controller: params[:controller], params: params)
+  end
+
+  def generate_and_send_account_activation_email
+    order = ShopifyAPI::Order.find(params[:id])
+    unless order.customer.state.eql?("enabled")
+      AccountActivationEmailWorker.perform_async(order.customer.id)
+    end
+  rescue => e
+    message = "#{e.message} from #{e.backtrace.first}"
+    SiteLog.create(log_type: SiteLog::TYPES[:email_failure], message: message, params: params)
   end
 end
 

@@ -27,7 +27,7 @@ class EmailService::Sendgrid < EmailService::Base
     context_hash = context(object)
     to = object[:customer]&.email
     to = shopify_shop.email if @email_notification.slug == 'store_owner'
-    from = SendGrid::Email.new(email: 'notifications@chargezen.com', name: (@email_notification.from_name || @email_notification.setting.store_name || shopify_shop.name))
+    from = SendGrid::Email.new(email: 'hello@chargezen.co', name: (@email_notification.from_name || @email_notification.setting.store_name || shopify_shop.name))
     to = SendGrid::Email.new(email: to)
     content = SendGrid::Content.new(type: 'text/html', value: email_body(context_hash))
     mail = SendGrid::Mail.new(from, (@email_notification.email_subject || subject_str), to, content)
