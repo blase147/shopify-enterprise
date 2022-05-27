@@ -367,17 +367,12 @@
             meals_to_select = total_meals - selected_products.count
           end
 
-          next_billing_date = Date.parse(@api_data["next_billing_date"])
-          if next_billing_date < Date.today
-            current_week_select_by = "There seems to be an issue with your subscription. Please contact support at hello@ethey.com"
-            current_week_expected_delivery = nil
-          else
-            delivery_settings = DeliveryOption.find_by( shop_id: @current_shop.id )&.api_response
-            delivery_day = @api_data['delivery_day'].to_sym rescue nil
-            cutoff_day = delivery_settings[:settings].filter{|s| s["delivery"].to_sym  == delivery_day } .first["cutoff_day"].to_sym rescue nil
-            current_week_select_by = next_billing_date.strftime('%A').downcase.to_sym == cutoff_day ? next_billing_date : next_billing_date.next_occurring(cutoff_day) rescue nil
-            current_week_expected_delivery = current_week_select_by.next_occurring(delivery_day) rescue nil
-          end
+          delivery_settings = DeliveryOption.find_by( shop_id: @current_shop.id )&.api_response
+          next_billing_date = @api_data["next_billing_date"]
+          delivery_day = @api_data['delivery_day'].to_sym rescue nil
+          cutoff_day = delivery_settings[:settings].filter{|s| s["delivery"].to_sym  == delivery_day } .first["cutoff_day"].to_sym rescue nil
+          current_week_select_by = Date.parse(next_billing_date).strftime('%A').downcase.to_sym == cutoff_day ? Date.parse(next_billing_date) : Date.parse(next_billing_date).next_occurring(cutoff_day) rescue nil
+          current_week_expected_delivery = current_week_select_by.next_occurring(delivery_day) rescue nil
 
         %>
         <div class="pre_orders">
@@ -386,7 +381,7 @@
             <h2 class="Trial">Week of <%= current_week_expected_delivery.beginning_of_week.strftime('%A %d %B') rescue nil %> - <%= current_week_expected_delivery.end_of_week.strftime('%A %d %B, %Y') rescue nil %></h2>
             <div class="placed_data pdate">
               <p class="placed">Select Meals By</p>
-              <p class="placed_dates pdate text-right"><%= current_week_select_by.strftime('%A, %d %b %Y') rescue current_week_select_by %></p>
+              <p class="placed_dates pdate text-right"><%= current_week_select_by.strftime('%A, %d %b %Y') rescue nil %></p>
             </div>
 
             <div class="placed_data pdate">
@@ -463,13 +458,15 @@
                   meals_to_select = total_meals - selected_products.count
                 end
 
+                next_billing_date = @api_data["next_billing_date"].to_date
+                next_billing_date = "2022-06-01T15:00:00Z".to_date
+
                 if next_billing_date < Date.today
                   select_by = "There seems to be an issue with your subscription. Please contact support at hello@ethey.com"
-                  expected_delivery = nil
-                else
-                  select_by = current_week_select_by.next_occurring(cutoff_day) rescue nil
-                  expected_delivery =   select_by.next_occurring(delivery_day) rescue nil
                 end
+
+                select_by = current_week_select_by.next_occurring(cutoff_day) rescue nil
+                expected_delivery =   select_by.next_occurring(delivery_day) rescue nil
               %>
               <div class="pre_orders">
                 <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
@@ -477,7 +474,7 @@
                   <h2 class="Trial">Week of <%= expected_delivery.beginning_of_week.strftime('%A %d %B') rescue nil %> - <%= expected_delivery.end_of_week.strftime('%A %d %B, %Y') rescue nil %> </h2>
                   <div class="placed_data pdate">
                     <p class="placed">Select Meals By</p>
-                    <p class="placed_dates pdate text-right"><%= select_by.strftime('%A, %d %b %Y') rescue select_by %></p>
+                    <p class="placed_dates pdate text-right"><%= select_by.strftime('%A, %d %b %Y') rescue nil %></p>
                   </div>
 
                   <div class="placed_data pdate">
