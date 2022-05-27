@@ -90,13 +90,15 @@ namespace :subscriptions do
           order_id = contract.api_data["origin_order"]["id"][/\d+/]
           order = ShopifyAPI::Order.find(order_id) rescue nil
           if order.present?
-            order = ShopifyAPI::Order.find(order_id) rescue nil
             puts "order found for #{order_id}"
             note_attributes = order&.note_attributes
-            delivery_date = note_attributes.filter{|attr| attr.name == "Delivery Date" }.last&.value
-            delivery_date = delivery_date.to_date.strftime("%m/%d/%Y") if delivery_date.present?
+            delivery_date = note_attributes.filter{|attr| attr.name == "Delivery Date" }.last&.value rescue nil
+            delivery_date = delivery_date.to_date.strftime("%m/%d/%Y") if delivery_date.present? rescue nil
+            delivery_day = note_attributes.filter{|attr| attr.name == "Delivery Day" }.last&.value rescue nil
             contract.api_data[:delivery_date] = delivery_date
+            contract.api_data[:delivery_day] = delivery_day
             puts "delivery_date #{delivery_date}"
+            puts "delivery_day #{delivery_day}"
           end
           contract.save
           puts "====== Done ContractID, #{contract.id} ======"
