@@ -373,7 +373,7 @@
             current_week_expected_delivery = nil
           else
             delivery_settings = DeliveryOption.find_by( shop_id: @current_shop.id )&.api_response
-            delivery_day = @api_data['delivery_day'].to_sym rescue nil
+            delivery_day = @api_data['delivery_day'].downcase.to_sym rescue nil
             cutoff_day = delivery_settings[:settings].filter{|s| s["delivery"].to_sym  == delivery_day } .first["cutoff_day"].to_sym rescue nil
             current_week_select_by = next_billing_date.strftime('%A').downcase.to_sym == cutoff_day ? next_billing_date : next_billing_date.next_occurring(cutoff_day) rescue nil
             current_week_expected_delivery = current_week_select_by.next_occurring(delivery_day) rescue nil
