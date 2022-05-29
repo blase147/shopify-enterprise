@@ -4,7 +4,7 @@
 - delivery_policy = @subscription.delivery_policy
 - api_order = ShopifyAPI::Order.find(@subscription.origin_order.id[/\d+/]) rescue nil
 - address = customer.default_address rescue nil
-- billing_address = api_order.billing_address
+- billing_address = api_order.billing_address rescue nil
 - baddress = "#{billing_address.address1} #{billing_address.city} #{billing_address.province} #{billing_address.zip} #{billing_address.country}" rescue ''
 - next_billing_date =  get_next_billing_date(@subscription, current_shop)
 
