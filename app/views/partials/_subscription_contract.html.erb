@@ -343,7 +343,7 @@
         <!-- Current Week -->
 
         <%
-          current_date = Date.today
+          current_date = Date.current
           week_day = current_date
           week_subscription = WorldfarePreOrder.find_by(shopify_contract_id: @customer.shopify_id, customer_id: @customer.shopify_customer_id, week: week_day.strftime('%-V').to_i )
           week_subscription_products = []
@@ -379,7 +379,9 @@
             next_week_expected_delivery = nil
             previous_orders = @api_data["orders"]["edges"]
             previous_orders.reverse.each do |o|
-              prev_order_date = o["node"]["created_at"].to_date rescue nil
+              time = Time.parse o["node"]["created_at"]
+              time = time.in_time_zone('Eastern Time (US & Canada)')
+              prev_order_date = time.to_date rescue nil
               prev_order_select_by = prev_order_date.strftime('%A').downcase.to_sym == cutoff_day ? prev_order_date : prev_order_date.next_occurring(cutoff_day) rescue nil
               prev_order_expected_delivery = prev_order_select_by.next_occurring(delivery_day) rescue nil
               if prev_order_expected_delivery.between?(current_date.beginning_of_week, current_date.end_of_week)
@@ -403,7 +405,7 @@
         <div class="pre_orders">
           <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
           <div class="order-box">
-            <h2 class="Trial">Week of <%= current_week_expected_delivery.beginning_of_week.strftime('%A %d %B') rescue nil %> - <%= current_week_expected_delivery.end_of_week.strftime('%A %d %B, %Y') rescue nil %></h2>
+            <h2 class="Trial">Week of <%= current_date.beginning_of_week.strftime('%A %d %B') %> - <%= current_date.end_of_week.strftime('%A %d %B') %></h2>
             <div class="placed_data pdate">
               <p class="placed">Select Meals By</p>
               <p class="placed_dates pdate text-right"><%= current_week_select_by.strftime('%A, %d %b %Y') rescue no_data_message %></p>
@@ -491,7 +493,7 @@
               <div class="pre_orders">
                 <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
                 <div class="order-box">
-                  <h2 class="Trial">Week of <%= next_week_expected_delivery.beginning_of_week.strftime('%A %d %B') rescue (current_date + 1.week).beginning_of_week.strftime('%A %d %B') %> - <%= next_week_expected_delivery.end_of_week.strftime('%A %d %B, %Y') rescue (current_date + 1.week) .end_of_week.strftime('%A %d %B, %Y')%> </h2>
+                  <h2 class="Trial">Week of <%= (current_date + 1.week).beginning_of_week.strftime('%A %d %B') %> - <%= (current_date + 1.week).end_of_week.strftime('%A %d %B, %Y')%> </h2>
                   <div class="placed_data pdate">
                     <p class="placed">Select Meals By</p>
                     <p class="placed_dates pdate text-right"><%= next_week_select_by.strftime('%A, %d %b %Y') rescue no_data_message %></p>
