@@ -1,6 +1,7 @@
 module Mutations
   class DeleteWeeklyMenus < Mutations::BaseMutation
     argument :params, [String], required: true
+    field :weekly_menus, [Types::WeeklyMenuType], null: false
     # field :weekly_menu, Types::WeeklyMenuType, null: false
     field :id, ID, null: true
     field :cutoff_date, String, null: true

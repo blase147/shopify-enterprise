@@ -1,13 +1,17 @@
-.shipping-header {
+.weeklyMeal .Polaris-Card__Section{
+  padding: 0!important;
+}
+
+.weeklyMeal .shipping-header {
   margin-bottom: 25px;
 }
-.order-box {
+.weeklyMeal .order-box {
   border: 1px solid #DDE2E2;
   border-radius: 10px;
   padding: 40px;
   overflow: hidden;
 }
-.order-box .product_section .order_inn .holder button {
+.weeklyMeal .order-box .product_section .order_inn .holder button {
   position: absolute;
   top: 10px;
   right: 15px;
@@ -27,20 +31,20 @@
   min-height: inherit;
   border: none;
 }
-.order-box .product_section .order_inn img {
+.weeklyMeal .order-box .product_section .order_inn img {
   width: 100px;
   height: 100px;
   border-radius: 100%;
   overflow: hidden;
   margin-bottom: 10px;
 }
-.order-box .product_section .order_inn h5 {
+.weeklyMeal .order-box .product_section .order_inn h5 {
   font-size: 16px;
   line-height: 1.4;
   font-family: 'Ainslie';
   font-weight: bold;
 }
-.order-box .order_status {
+.weeklyMeal .order-box .order_status {
   margin-top: 20px !important;
 }
 /* .order-box .order_status p {
@@ -55,24 +59,24 @@
 .order-box .order_status p.s_data {
   text-align: right !important;
 } */
-.order-box .pre_segment {
+.weeklyMeal .order-box .pre_segment {
   display: flex;
   flex-wrap: wrap;
   margin: 0 -10px;
   width: auto !important;
   float: none !important;
 }
-.order-box .pre_segment .pre_segment_order {
+.weeklyMeal .order-box .pre_segment .pre_segment_order {
   width: 25%;
   float: none;
 }
-.order-box .pre_segment .pre_segment_order a {
+.weeklyMeal .order-box .pre_segment .pre_segment_order .profile {
   display: block;
   width: 100%;
   text-decoration: none;
   padding: 12px;
 }
-.order-box .pre_segment .pre_segment_order a button {
+.weeklyMeal .order-box .pre_segment .pre_segment_order .profile button {
   min-width: inherit !important;
   display: block;
   width: 100%;
@@ -82,7 +86,7 @@
   background: #f8f4ed;
   padding: 60px 25px;
 }
-.order-box .pre_segment .pre_segment_order button span {
+.weeklyMeal .order-box .pre_segment .pre_segment_order button span {
   font-size: 32px;
   font-family: 'Lato';
   font-weight: 300;
@@ -90,7 +94,7 @@
   display: block;
   width: auto;
 }
-.order-box .pre_segment .pre_segment_order button p {
+.weeklyMeal .order-box .pre_segment .pre_segment_order button p {
   font-size: 18px;
   display: block;
   text-align: left;
@@ -98,16 +102,16 @@
   font-family: 'Ainslie';
   font-weight: bold;
 }
-.order-box + .order-box {
+.weeklyMeal .order-box + .order-box {
   margin-top: 40px;
 }
-.order-box h2 {
+.weeklyMeal .order-box h2 {
   margin: 0 0 12px !important;
   font-family: 'Ainslie';
   font-weight: bold;
   font-size: 34px;
 }
-.order-box .placed_dates {
+.weeklyMeal .order-box .placed_dates {
   display: block !important;
   text-align: left !important;
   font-weight: 300 !important;
@@ -117,7 +121,7 @@
   color: #384443 !important;
   margin-bottom: 15px !important;
 }
-.order-box .placed {
+.weeklyMeal .order-box .placed {
   display: block !important;
   text-align: left !important;
   font-family: 'Ainslie' !important;
@@ -126,23 +130,23 @@
   color: #384443 !important;
   margin-bottom: 15px !important;
 }
-.order-box .skip_week {
+.weeklyMeal .order-box .skip_week {
   display: block !important;
   text-align: right !important;
 }
-.order-box .skip_week a {
+.weeklyMeal .order-box .skip_week .profile {
   font-family: 'Ainslie' !important;
   font-weight: 600 !important;
   font-size: 22px !important;
   text-decoration: none;
   color: #384443 !important;
 }
-.order-box .product_section {
+.weeklyMeal .order-box .product_section {
   display: flex;
   flex-wrap: wrap;
   margin: 0 -15px;
 }
-.order-box .product_section .order_inn {
+.weeklyMeal .order-box .product_section .order_inn {
   box-shadow: none;
   background: transparent;
   text-align: center;
@@ -151,7 +155,7 @@
   float: none;
   padding: 10px 15px !important;
 }
-.order-box .product_section .order_inn .holder {
+.weeklyMeal .order-box .product_section .order_inn .holder {
   padding: 25px 15px;
   background: #f8f4ed;
   overflow: hidden;
@@ -163,13 +167,18 @@
   justify-content: center;
   position: relative;
 }
-.header {
+.weeklyMeal .header {
   text-align: center;
-  background: #E9DBC3;
+  background: rgba(0, 128, 255, 0.1);
   padding: 30px;
-  margin-bottom: 30px;
 }
-.header h2 {
+
+.weeklyMeal .header-content {
+  margin: auto;
+  width: fit-content;
+}
+
+.weeklyMeal .header h2 {
   position: static;
   width: 483px;
   height: 59px;
@@ -186,10 +195,209 @@
   flex-grow: 0;
   margin: 0px 60px;
 }
-.Trial {
+.weeklyMeal .Trial {
   margin-bottom: 30px;
 }
-.order-box h2 span {
+
+
+.weeklyMeal .shipping-header {
+  margin-bottom: 25px;
+}
+.weeklyMeal .order-box {
+  border: 1px solid #DDE2E2;
+  border-radius: 10px;
+  padding: 40px;
+  overflow: hidden;
+}
+.weeklyMeal .order-box .product_section .order_inn .holder button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  box-shadow: none;
+  color: #000;
+  font-family: 'Lato';
+  font-weight: normal;
+  font-size: 36px;
+  line-height: 30px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  padding: 0;
+  min-width: inherit;
+  margin: 0 !important;
+  height: auto;
+  min-height: inherit;
+  border: none;
+}
+.weeklyMeal .order-box .product_section .order_inn img {
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.weeklyMeal .order-box .product_section .order_inn h5 {
+  font-size: 16px;
+  line-height: 1.4;
+  font-family: 'Ainslie';
+  font-weight: bold;
+}
+.weeklyMeal .order-box .order_status {
+  margin-top: 20px !important;
+}
+/* .order-box .order_status p {
+  display: block !important;
+  text-align: left !important;
+  font-family: 'Ainslie' !important;
+  font-weight: 600 !important;
+  font-size: 22px !important;
+  color: #384443 !important;
+  margin-bottom: 15px !important;
+}
+.order-box .order_status p.s_data {
+  text-align: right !important;
+} */
+.weeklyMeal .order-box .pre_segment {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10px;
+  width: auto !important;
+  float: none !important;
+}
+.weeklyMeal .order-box .pre_segment .pre_segment_order {
+  width: 25%;
+  float: none;
+}
+.weeklyMeal .order-box .pre_segment .pre_segment_order .profile {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  padding: 12px;
+}
+.weeklyMeal .order-box .pre_segment .pre_segment_order .profile button {
+  min-width: inherit !important;
+  display: block;
+  width: 100%;
+  margin: auto !important;
+  min-height: inherit !important;
+  box-shadow: none;
+  background: #f8f4ed;
+  padding: 60px 25px;
+}
+.weeklyMeal .order-box .pre_segment .pre_segment_order button span {
+  font-size: 32px;
+  font-family: 'Lato';
+  font-weight: 300;
+  margin-bottom: 15px;
+  display: block;
+  width: auto;
+}
+.weeklyMeal .order-box .pre_segment .pre_segment_order button p {
+  font-size: 18px;
+  display: block;
+  text-align: left;
+  width: auto;
+  font-family: 'Ainslie';
+  font-weight: bold;
+}
+.weeklyMeal .order-box + .order-box {
+  margin-top: 40px;
+}
+.weeklyMeal .order-box h2 {
+  margin: 0 0 12px !important;
+  font-family: 'Ainslie';
+  font-weight: bold;
+  font-size: 34px;
+}
+.weeklyMeal .order-box .placed_dates {
+  display: block !important;
+  text-align: left !important;
+  font-weight: 300 !important;
+  font-family: 'Ainslie' !important;
+  font-weight: 100 !important;
+  font-size: 20px !important;
+  color: #384443 !important;
+  margin-bottom: 15px !important;
+}
+.weeklyMeal .order-box .placed {
+  display: block !important;
+  text-align: left !important;
+  font-family: 'Ainslie' !important;
+  font-weight: 600 !important;
+  font-size: 22px !important;
+  color: #384443 !important;
+  margin-bottom: 15px !important;
+}
+.weeklyMeal .order-box .skip_week {
+  display: block !important;
+  text-align: right !important;
+}
+.weeklyMeal .order-box .skip_week .profile {
+  font-family: 'Ainslie' !important;
+  font-weight: 600 !important;
+  font-size: 22px !important;
+  text-decoration: none;
+  color: #384443 !important;
+}
+.weeklyMeal .order-box .product_section {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15px;
+}
+.weeklyMeal .order-box .product_section .order_inn {
+  box-shadow: none;
+  background: transparent;
+  text-align: center;
+  width: 25%;
+  margin: 0;
+  float: none;
+  padding: 10px 15px !important;
+}
+.weeklyMeal .order-box .product_section .order_inn .holder {
+  padding: 25px 15px;
+  background: #f8f4ed;
+  overflow: hidden;
+  border-radius: 8px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.weeklyMeal .header {
+  text-align: center;
+  background: rgba(0, 128, 255, 0.1);
+  padding: 30px;
+}
+
+.weeklyMeal .header-content {
+  margin: auto;
+  width: fit-content;
+}
+
+.weeklyMeal .header h2 {
+  position: static;
+  width: 483px;
+  height: 59px;
+  left: 90px;
+  top: 0px;
+  font-size: 39px;
+  line-height: 150%;
+  text-align: center;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  margin: 0px 60px;
+  font-family: 'Avenir-Black';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.weeklyMeal .Trial {
+  margin-bottom: 30px;
+}
+.weeklyMeal .order-box h2 span {
   display: block;
   margin-top: 10px;
   font-family: Avenir;
@@ -202,14 +410,14 @@
   order: 1;
   flex-grow: 0;
 }
-.order_status .Status {
+.weeklyMeal .order_status .Status {
   position: relative;
   display: flex;
   width: 100%;
   align-items: center;
   padding: 5px;
 }
-.order_status .Status p.s_name {
+.weeklyMeal .order_status .Status p.s_name {
   position: absolute;
   display: flex;
   text-align: left !important;
@@ -220,7 +428,7 @@
   margin-bottom: 15px !important;
   left: 0;
 }
-.order_status .Status p.s_data {
+.weeklyMeal .order_status .Status p.s_data {
   position: absolute;
   display: flex;
   text-align: right !important;
@@ -231,19 +439,669 @@
   margin-bottom: 15px !important;
   right: 0 !important;
 }
-.order-box .orders {
+.weeklyMeal .order-box .orders {
   margin-bottom: 50px;
 }
-.Status.bottom {
+.weeklyMeal .Status.bottom {
     margin-top: 30px;
 }
-#next-week {
-  position: absolute;
-  right: 50px;
-  top: 150px;
+
+.weeklyMeal .back-button.pointer {
+  display: flex;
+  justify-content: space-between;
+  width: fit-content;
 }
-#prev-week {
+.weeklyMeal .Polaris-TextStyle--variationSubdued{
+  margin-left: 15px;
+}
+.weeklyMeal .order-header {
+  text-align: center;
+  background: rgba(0, 128, 255, 0.1);
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+
+.weeklyMeal .order-card {
+  padding: 10px;
+  background-color: rgba(0, 126, 255, 0.1);
+  border-radius: 5.22px;
+  width: 102.98px;
+  height: 102.98px;
+}
+.weeklyMeal .order_status .Status {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 5px;
+}
+.weeklyMeal .order_status .Status p.s_name {
   position: absolute;
-  left: 50px;
-  top: 150px;
+  display: flex;
+  text-align: left !important;
+  font-family: 'Ainslie' !important;
+  font-weight: 600 !important;
+  font-size: 22px !important;
+  color: #384443 !important;
+  margin-bottom: 15px !important;
+  left: 0;
+}
+.weeklyMeal .order_status .Status p.s_data {
+  position: absolute;
+  display: flex;
+  text-align: right !important;
+  font-family: 'Ainslie' !important;
+  font-weight: 600 !important;
+  font-size: 22px !important;
+  color: #384443 !important;
+  margin-bottom: 15px !important;
+  right: 0 !important;
+}
+.weeklyMeal .order-box .orders {
+  margin-bottom: 50px;
+}
+.weeklyMeal .Status.bottom {
+    m.body-content {
+      padding: 60px 125px 0;
+  }argin-top: 30px;
+}
+
+.weeklyMeal .back-button.pointer {
+  display: flex;
+  justify-content: space-between;
+  width: fit-content;
+}
+.weeklyMeal  .Polaris-TextStyle--variationSubdued{
+  margin-left: 16px;
+}
+.weeklyMeal .order-header {
+  text-align: center;
+  background: rgba(0, 128, 255, 0.1);
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+
+.weeklyMeal .order-card {
+  padding: 10px;
+  background-color: rgba(0, 126, 255, 0.1);
+  border-radius: 5.22px;
+  width: 102.98px;
+  height: 102.98px;
+}
+.weeklyMeal  .body-content {
+  padding: 60px 115px 0;
+}
+/* 23/05/2022 */
+
+.weeklyMeal .shipping-header span.Polaris-TextStyle--variationSubdued {
+  font-size: 20px;
+  color: #000;
+  font-family: 'Avenir-Black';
+}
+
+/* .Polaris-Layout__Section{
+      padding-top: 80px;
+    padding-bottom: 5px;
+} */
+
+
+.weeklyMeal .order-header {
+  background: #2F80ED;
+  border-radius: 10px 10px 0px 0px;
+  color: #fff;
+  font-size: 27px;
+  line-height: 1;
+  text-align: left;
+  margin: 0;
+  font-family: 'AvenirLTStd-Black';
+  padding: 28px 25px 28px;
+}
+
+.weeklyMeal .module-integrations .Polaris-Card{
+  border-radius: 0;
+  box-shadow: none;
+    outline: none;
+}
+.weeklyMeal .Polaris-Card .order-buttons {
+  display: flex;
+}
+
+.weeklyMeal .Polaris-Layout__Section .back-button.pointer{
+  
+  padding: 81px 0 5px 168px;
+}
+
+
+
+
+.weeklyMeal .chargezen .body-content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 60px;
+}
+
+.weeklyMeal .selectbox_03,
+.weeklyMeal .selectbox_02,
+.weeklyMeal .selectbox_01{
+
+  position: relative;
+}
+
+.weeklyMeal .Polaris-Card .order-buttons .week_custom_css {
+  width: 136px !important;
+  padding: 8px 12px 8px 16px;
+  width: 136px;
+  height: 36px;
+  background: #FFFFFF;
+  box-shadow: 0px 1px 0px rgb(0 0 0 / 5%);
+  border-radius: 4px;
+  position: relative;
+  COLOR: #202223;
+  FONT-SIZE: 14PX;
+  font-family: 'Avenir-Medium';
+  BORDER: 1PX SOLID #BABFC3;
+}
+
+
+.weeklyMeal .order-buttons .order_day{
+  padding: 8px 12px 8px 16px;
+  width: 125px;
+  height: 36px;
+  background: #FFFFFF;
+  box-shadow: 0px 1px 0px rgb(0 0 0 / 5%);
+  border-radius: 4px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+
+.weeklyMeal .order-buttons .number_of_order{
+padding: 8px 12px 8px 16px;
+width: 174px;
+height: 36px;
+background: #FFFFFF;
+box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.05);
+border-radius: 4px;
+}
+
+.weeklyMeal .selectbox_02 svg.Polaris-Icon__Svg {
+  position: absolute;
+  top: 5px;
+  left: 94px;
+}
+
+
+
+.weeklyMeal .order-buttons select {
+  margin-right: 10px;
+}
+
+.weeklyMeal .analytic-section .deep-analytics{
+ 
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 16px;
+    height: 36px;
+    background: #2F80ED;
+    border: 1px solid #FFFFFF;
+    box-shadow: inset 0px 2px 0px rgb(0 0 0 / 5%);
+    border-radius: 4px;
+    font-weight: 500;
+font-size: 15px;
+line-height: 20px;
+}
+
+
+
+.weeklyMeal .order-buttons path {
+  fill: #5C5F62;
+}
+
+.weeklyMeal .selectbox_01 svg.Polaris-Icon__Svg {  
+  top: 4px;
+  right: 19px;
+}
+
+
+
+.weeklyMeal .order-buttons svg.Polaris-Icon__Svg {
+  width: 25px;
+  height: 25px;
+  position: absolute;
+}
+
+.weeklyMeal .selectbox_03 svg.Polaris-Icon__Svg {
+  position: absolute;
+  top: 7px;
+  right: 21px;
+}
+
+
+.weeklyMeal .Polaris-Card h1 {
+  font-size: 18px;
+  line-height: 18px;
+  padding-top: 15px;
+  font-family: 'AvenirLTStd-Black';
+}
+
+.weeklyMeal .body-content .Polaris-Page {
+  max-width: 100%;
+  padding: 0;
+}
+
+
+.weeklyMeal .body-content tr th.Polaris-DataTable__Cell {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 125%;
+  color: #000;
+}
+
+.weeklyMeal .body-content .Polaris-Link {
+  display: flex;
+  align-items: center;
+}
+
+.weeklyMeal .Polaris-DataTable__TableRow .order-img{
+  margin-right: 10px;
+}
+
+.weeklyMeal .Polaris-Link {
+  display: flex;
+  align-items: center;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 14px;
+  color: #000;
+}
+
+.weeklyMeal td.Polaris-DataTable__Cell {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 14px;
+}
+
+
+
+.weeklyMeal .Polaris-DataTable table tbody tr:hover {
+  background: #E8F7FF;
+}
+
+
+.weeklyMeal .order-detail-content .order-name {
+  font-weight: 900;
+  font-size: 10px;
+  line-height: 10px;color: #384443;
+  padding: 12px 0 10px;
+
+}
+
+
+.weeklyMeal label{
+  pointer-events:none;
+}
+
+/* 24-05-2022 */
+
+.weeklyMeal .main-order-section {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.weeklyMeal .main-order-section .left-section {
+  width: 100%;
+  max-width: calc(100% - 400px);
+  flex: 0 0 calc(100% - 400px);
+  padding-left: 30px;
+  padding-top: 33px;
+}
+
+
+.weeklyMeal .main-order-section .right-section {
+  max-width: 400px;
+  flex: 400px;
+  width: 100%;
+}
+
+.weeklyMeal .Polaris-Card .order-buttons > div select {
+  margin: 0;
+  margin-right: 10px;
+  font-size: 14px;
+  COLOR: #202223;
+  FONT-SIZE: 14PX;
+  font-family: 'Avenir-Medium';
+  BORDER: 1PX SOLID #BABFC3;
+}
+.weeklyMeal .main-order-section .left-section .order-buttons .analytic-section {
+  margin-top: 0;
+  margin-left: 8px;
+}
+
+.weeklyMeal .main-order-section .left-section .Polaris-Page .Polaris-Page__Content .Polaris-DataTable table.Polaris-DataTable__Table thead tr th {
+  width: 100%;
+  max-width: 25%;
+  text-align: left;
+  text-align: initial;
+  padding: 15px 0 20px;
+  font-size: 16px;
+  font-family: 'Avenir-Medium';
+}
+
+.weeklyMeal .main-order-section .left-section .Polaris-Page .Polaris-Page__Content .Polaris-DataTable table.Polaris-DataTable__Table tbody tr.Polaris-DataTable__TableRow td,
+.weeklyMeal .main-order-section .left-section .Polaris-Page .Polaris-Page__Content .Polaris-DataTable table.Polaris-DataTable__Table tbody tr.Polaris-DataTable__TableRow th {
+  width: 100%;
+  max-width: 25%;
+  text-align: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #828282;
+  font-family: 'Avenir-Medium';
+  padding:0;
+}
+
+.weeklyMeal table.Polaris-DataTable__Table tbody tr.Polaris-DataTable__TableRow .selectbox select {
+  width: 100%;
+  text-align: inherit;
+  padding: 10px;
+  border-radius: 4px;
+  max-width: 106px;
+  font-size: 14px;
+  font-weight: 400;
+  margin-bottom: 0;
+}
+.weeklyMeal .Polaris-DataTable table.Polaris-DataTable__Table tbody tr.Polaris-DataTable__TableRow th .profile {
+  color: #828282;
+  text-decoration: none;
+}
+
+.weeklyMeal table.Polaris-DataTable__Table tbody tr.Polaris-DataTable__TableRow .selectbox label {
+  position: absolute;
+  right: 3px;
+  top: 9px;
+}
+.weeklyMeal table.Polaris-DataTable__Table tbody tr.Polaris-DataTable__TableRow .selectbox {
+  position: relative;
+  width: 100%;
+  max-width: 105px;
+}
+
+.weeklyMeal .main-order-section .left-section .Polaris-DataTable__Cell--verticalAlignTop {
+  vertical-align: middle;
+}
+
+.weeklyMeal .main-order-section .left-section .Polaris-Page .Polaris-Page__Content table.Polaris-DataTable__Table tbody tr.Polaris-DataTable__TableRow th .profile.Polaris-Link img {
+  width: 100%;
+  max-width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+
+.weeklyMeal .main-order-section .right-section .order-detail {
+  width: 100%;
+  padding: 89px 25px 48px;
+  background: #E8F7FF;
+}
+
+.weeklyMeal .main-order-section .right-section .order-detail h3 {
+  font-size: 19px;
+  line-height: 24px;
+  font-weight: 800;
+  color: #000;
+}
+
+.weeklyMeal .main-order-section .right-section .order-detail .items-header {
+  padding-top: 30px;
+  font-size: 17px;
+  font-weight: 600;
+  padding-bottom: 17px;
+  border-bottom: 1.5px solid #ddd;
+  position: relative;
+}
+
+.weeklyMeal .main-order-section .right-section .order-detail .items-header::after {
+  position: absolute;
+  content: "";
+  background: #2F80ED;
+  width: 100%;
+  height: 2px;
+  left: 0;
+  bottom: -1px;
+  max-width: 50px;
+}
+
+
+
+.weeklyMeal .main-order-section .right-section .order-detail .order-detail-content {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 30px 0 0;
+  margin: 0 -9px;
+}
+
+.weeklyMeal .main-order-section .right-section .order-detail .order-detail-content .order-card {
+  max-width: calc(100%/3 - 18px);
+  flex: calc(100%/3 - 18px) 1;
+  margin: 0 9px 0px;
+  padding: 10px;
+  text-align: center;
+}
+
+.weeklyMeal .main-order-section .right-section .order-detail .order-detail-content .order-card span.Polaris-Icon {
+  margin-right: 0;
+  width: 10px;
+  height: 10px;
+}
+
+.weeklyMeal .main-order-section .right-section .order-detail .order-detail-content .order-card img {
+  width: 100%;
+  max-width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.weeklyMeal .main-order-section .right-section .order-detail .order-detail-content .order-card span.Polaris-Icon {
+  margin-right: 0;
+  width: 10px;
+  height: 10px;
+}
+
+.weeklyMeal .main-order-section .right-section .order-detail .order-detail-content .order-card img {
+  width: 100%;
+  max-width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.weeklyMeal .header .header-content {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.weeklyMeal .header .header-content div#prev-week {
+  padding: 0;
+  position: absolute;
+  top: 050%;
+  left: 0 !important;
+  transform: translateY(-50%);
+  width: auto;
+  height: auto;
+}
+
+.weeklyMeal .header .header-content h2.Trial {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.weeklyMeal .header .header-content div#next-week {
+  padding: 0;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.weeklyMeal .app-content .Polaris-Page {
+  max-width: 100%;
+  padding: 0;
+}
+
+.weeklyMeal .app-content .Polaris-Page .Polaris-Page-Header__MainContent {
+  width: 100%;
+  max-width: 1200px !important;
+  margin: 0 auto 40px;
+}
+
+.weeklyMeal .Polaris-Frame__Content .Polaris-Card .Polaris-Card__Section .shipping-header .Polaris-Layout__Section, .weeklyMeal .Polaris-Frame__Content .Polaris-Card .Polaris-Card__Section .shipping-header {
+  width: 100%;
+  max-width: 100% !important;
+  margin: 0 auto;
+}
+.weeklyMeal .Polaris-Frame__Content .Polaris-Card .Polaris-Card__Section .shipping-header .Polaris-Layout__Section .back-button.pointer {
+  padding: 100px 0px 40px;
+  margin: 0;
+}
+
+.weeklyMeal .Polaris-Page__Content .Polaris-Layout__Section .Polaris-Layout {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
+
+.weeklyMeal .Polaris-DataTable__TableRow:hover .Polaris-DataTable__Cell .profile.Polaris-Link {
+  color: #000;
+}
+
+.weeklyMeal .Polaris-DataTable__TableRow:hover .Polaris-DataTable__Cell {
+  background: #E8F7FF !important;
+  color: #000 !important;
+}
+
+.weeklyMeal .Polaris-DataTable__ScrollContainer table.Polaris-DataTable__Table tbody tr.Polaris-DataTable__TableRow td:last-child {
+  color: #000 !important;
+}
+
+.module-integrations .weeklyMeal .Polaris-Card {
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+/*-- 27-05-2022 --*/
+.weeklyMeal {
+  max-width: 1440px;
+  width: 100%;
+  background-color: #fff;
+  margin: 0 auto;
+}
+.weeklyMeal .shipping-header {
+  background-color: #fff;
+  min-width: none;
+}
+.weeklyMeal .Polaris-Layout {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+.weeklyMeal .header .header-content {
+  max-width: 660px;
+}
+.weeklyMeal .Polaris-Card__Section {
+  background-color: #fff;
+}
+th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn > div > img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 100%;
+}
+.profile_image_link {
+  display: flex;
+  min-height: 66px;
+  align-items: center;
+}
+tr.Polaris-DataTable__TableRow th:first-child {
+  padding-left: 8px !important;
+}
+.preparing {
+  border: 1px solid #A8E1FF;
+}
+.delivered {
+  border: 1px solid #62DCA2;
+}
+.inTransit {
+  border: 1px solid #F9FF2E;
+}
+.pending {
+  border: 1px solid #FFB2B5;
+}
+.customerActive {
+  background: #E8F7FF;
+}
+/*-- 27-05-2022 End --*/
+@media (max-width:1599px){
+  .weeklyMeal  .body-content {
+    padding: 40px 40px 0;
+}
+}
+@media (max-width:1439px){
+  .weeklyMeal .main-order-section .right-section {
+    max-width: 300px;
+    flex: 300px 1;
+}
+.weeklyMeal .main-order-section .left-section {
+  max-width: calc(100% - 300px);
+  flex-basis: calc(100% - 300px);
+}
+.weeklyMeal .main-order-section .right-section .order-detail .order-detail-content .order-card {
+  max-width: calc(100%/2 - 18px);
+  flex: calc(100%/2 - 18px) 1;
+}
+.weeklyMeal .main-order-section .left-section {
+  padding-left: 10px;
+  padding-top: 13px;
+}
+.weeklyMeal .Polaris-Card .order-buttons {
+  flex-wrap: wrap;
+}
+.weeklyMeal .header h2 {  
+  font-size: 30px;
+}
+.weeklyMeal .header .header-content {
+  max-width: 550px;
+}
+} 
+
+@media (max-width:1365px){
+  .weeklyMeal .main-order-section .right-section .order-detail .order-detail-content .order-card {
+    max-width: 100%;
+    flex: 100%;
+}
+.weeklyMeal .main-order-section .right-section {
+  max-width: 180px;
+  flex: 180px 1;
+}
+.weeklyMeal .main-order-section .left-section {
+  max-width: calc(100% - 180px);
+  flex-basis: calc(100% - 180px);
+}
+.weeklyMeal .Polaris-Card .order-buttons {
+  flex-wrap: wrap;
+}
+.weeklyMeal .main-order-section .left-section .order-buttons .analytic-section {
+  margin-left: 0;
+}
 }
