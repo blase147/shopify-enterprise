@@ -421,7 +421,7 @@
                   <% meal_product = current_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
                   <div class="order_inn center" >
                     <div class="holder">
-                      <!-- <span class='dish_remove'>x</span> -->
+                      <span class='current-week-dish-remove'>x</span>
                       <img src="<%= meal_product['image'] rescue nil %>" data-id="<%= meal_product['product_id'][/\d+/] %>">
                       <h5><%= meal_product['title'] rescue nil %> </h5>
                     </div>
@@ -434,6 +434,50 @@
                   </li>
                 <% end %>
             </div>
+
+            <% if current_week_meals.present? %>
+              <div class="meal-options">
+              <ul class="box-items-grid hide" id="box-items-current">
+              <% current_week_meals.each do |meal| %>
+                <li class="box-item-grid" id="<%= meal["product_id"]&.split('/')&.last %>">
+                  <div id="items-list" class="">
+                    <div class="box-item-img">
+                      <img src=<%= meal["image"] %>>
+                    </div>
+                    <div class="box-item-information">
+                      <h5><%= meal["title"] %></h5>
+                      <span><%= truncate(meal["description"], :length => 50) %></span>
+                    </div>
+                    <div class="box-item-icons">
+                      <ul class="icon_list">
+                        <li>
+                          <div class="box-icon-wrapper">
+                            <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Calories_Icon.svg?v=4569060398551131372">
+                          </div>
+                          <span>520 kcal</span>
+                        </li>
+                        <li>
+                          <div class="box-icon-wrapper">
+                            <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Group_346.svg?v=3253623496766777332">
+                          </div>
+                          <span>82g Carbs</span>
+                        </li>
+                        <li>
+                          <div class="box-icon-wrapper">
+                            <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/protein_20x.png?v=7819928887151425549">
+                          </div>
+                          <span>30g Protein</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <a href="#_"class="green-btn add-to-current-week" data-id="<%= meal["product_id"]&.split('/')&.last %>" data-url="<%= meal["image"] %>" id="<%= meal["product_id"]&.split('/')&.last %>">Add to Week</a>
+                  </div>
+                </li>
+              <% end %>
+              </ul>
+            </div>
+          <% end %>
+          <button id='confirm-current-week-sub-btn', data-customer-id="<%= @customer.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Selection</button>
           </div>
         </div>
 
@@ -502,7 +546,7 @@
                   <div class="placed_data pdate">
                     <p class="placed">Expected delivery :</p>
                     <p class="placed_dates pdate text-right"><%= next_week_expected_delivery.strftime('%A, %d %b %Y') rescue nil %></p>
-                  </div>
+                  </div>  
                   <div class="order_add next-week">
                     <ul id="psegment" class="pre_segment">
                       <% selected_products.each do |item| %>
@@ -908,6 +952,12 @@
     pre_order_selector.classList.add('empty');
   }
 
+  function currentWeekDishRemove(e){
+    let pre_order_selector = e.target.parentElement.parentElement.parentElement
+    pre_order_selector.innerHTML = "<a href='#_' id='box-item'><button><span>+</span><p>Add to box</p></button></a><img src='' />";
+    pre_order_selector.classList.add('empty-current');
+  }
+
   $(".add-to-week").on('click', function(e){
     e.preventDefault();
     image_url = $(this).data('url')
@@ -915,6 +965,15 @@
     pre_order_selector.innerHTML = "<div class='order_inn add_new_order'><div class='holder'><button class='week_dish_remove' onClick='weekDishRemove(event)'>+</button><img src="+ $(this).data('url') + " data-id=" + $(this).data('id') +"></img></div></div>"
     pre_order_selector.classList.remove("empty");
     $('#confirm-sub-btn').removeClass('hide');
+  });
+
+$(".add-to-current-week").on('click', function(e){
+    e.preventDefault();
+    image_url = $(this).data('url')
+    let pre_order_selector = document.getElementsByClassName('empty-current')[0]
+    pre_order_selector.innerHTML = "<div class='order_inn add_new_order'><div class='holder'><button class='current_week_dish_remove' onClick='currentWeekDishRemove(event)'>+</button><img src="+ $(this).data('url') + " data-id=" + $(this).data('id') +"></img></div></div>"
+    pre_order_selector.classList.remove("empty-current");
+    $('#confirm-current-week-sub-btn').removeClass('hide');
   });
 
   $("#confirm-sub-btn").on('click', function(e){
@@ -951,14 +1010,59 @@
     });
   });
 
+  $("#confirm-current-week-sub-btn").on('click', function(e){
+    $(this).prop('disabled', true);
+    $(this).text('Processing..');
+
+    let product_ids = []
+    $('.order_add.current-week img').each(function(i, obj) {
+       product_ids.push(obj.dataset.id)
+    });
+    let params = {
+      product_ids: product_ids,
+      week: $(this).data('week'),
+      customer_id: $(this).data('customer-id'),
+      shopify_contract_id: $("#contract-content").data("contract-id")
+    }
+    $.ajax({
+      url: '/a/chargezen_production/dashboard/create_pre_order',
+      type: 'POST',
+      data: JSON.stringify(params),
+      contentType: 'application/json',
+      success: function(response) {
+        $('.current-meal-options').hide();
+        Swal.fire({
+          icon: 'success',
+          title: "Success! Reloading Page",
+          showConfirmButton: false
+        })
+        window.location = '/a/chargezen_production?customer_id=' + response.customer_id;
+      },
+      error: function(response) {
+
+      }
+    });
+  });
+
   $(document).on('click', '#box-item', function(e) {
     e.preventDefault();
     $('#box-items')[0].classList.remove('hide');
+  });
+
+  $(document).on('click', '#box-item-current', function(e) {
+    e.preventDefault();
+    $('#box-items-current')[0].classList.remove('hide');
   });
 
   $(".dish_remove").on('click', function(e) {
     e.preventDefault();
     $(this).closest('.order_inn').remove();
     $('.next-week ul').append("<li class='pre_segment_order empty'><a href='#_' id='box-item'><button><span>+</span><p>Add to box</p></button></a><img src='' /></li>")
+  });
+
+  $(".current-week-dish-remove").on('click', function(e) {
+    e.preventDefault();
+    $(this).closest('.order_inn').remove();
+    $('.current-week ul').append("<li class='pre_segment_order empty-current'><a href='#_' id='box-item-current'><button><span>+</span><p>Add to box</p></button></a><img src='' /></li>")
   });
 </script>
