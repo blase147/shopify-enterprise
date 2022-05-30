@@ -1,25 +1,24 @@
 module Types
   class SingleOrderType < Types::BaseObject
-    field :order_items, [Types::OrderLineItemType], null: true
-    field :date_of_delivery, String, null: true
-    field :created_at, String, null: true
-    field :products, [Types::OrderProductType], null: true
+    field :id, ID, null: true
+    field :title, String, null: true
+    field :image, String, null: true
+    field :description, String, null: true
 
-    def order_items
-      object.line_items
+    def id
+      object["product_id"]
     end
 
-    def date_of_delivery
-      # "Thursday 10 Mar 2022"
-      object.note
+    def title
+      object["title"]
     end
 
-    def products
-      ShopifyAPI::Product.where(ids: object.line_items.map(&:product_id).join(', '), fields: 'id,title,images')
+    def image
+      object["image"]
     end
 
-    def created_at
-      (Date.parse(object.created_at)).to_s
+    def description
+      object["description"]
     end
   end
 end
