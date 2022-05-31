@@ -127,8 +127,9 @@ class AddOrderLineItem < GraphqlService
     order = ShopifyAPI::Order.find(@order_id)
 
     if order.present?
-      delivery_date = order&.note_attributes&.first&.value
-      delivery_date = delivery_date.to_date.strftime("%m/%d/%Y") if delivery_date.present?
+      note_attributes = order&.note_attributes
+      delivery_date = note_attributes.filter{|attr| attr.name == "Delivery Date" }.last&.value rescue nil
+      delivery_date = delivery_date.to_date.strftime("%m/%d/%Y") if delivery_date.present? rescue nil
       
       expected_delivery = Date.today.beginning_of_week.next_occurring(Date.strptime(delivery_date, '%m/%d/%Y').strftime("%A").downcase.to_sym).strftime('%d/%m/%Y') rescue nil
 
