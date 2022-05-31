@@ -19,7 +19,7 @@ import './weeklyMeals.css';
 import OrderMangementTable from './OrderMangementTable';
 import { Link } from 'react-router-dom';
 import OrderDetail from './OrderDetail';
-//import './AvenirFont/stylesheet.css';
+import './AvenirFont/stylesheet.css';
 
 const index = ({ handleBack }) => {
   const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
