@@ -1,4 +1,8 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
+  mount Sidekiq::Web => "/#{ENV['SIDEKIQ_SECRET']}"
+
   resources :bundles, only: [:destroy]
   resources :bundle_groups
   resources :sms_flows
