@@ -2,10 +2,12 @@ class AccountActivationEmailWorker
   include Sidekiq::Worker
 
   def perform(customer_id)
+    csc = CustomerSubscriptionContract.find_by(shopify_customer_id: customer_id)
+    shop = csc.shop
+    shop.connect
     activation_url = GenerateAccountActivationUrl.new(customer_id).generate
     if activation_url.present?
-      csc = CustomerSubscriptionContract.find_by(shopify_customer_id: customer_id)
-      @email_notification = csc.shop.setting.email_notifications.find_by_name "Subscription Activation"
+      @email_notification = shop.setting.email_notifications.find_by_name "Subscription Activation"
       email_body = "Here is your activation URL #{activation_url}"
       customer_object = {customer: csc, email_body: email_body}
       if EmailService::Send.new(@email_notification).send_email(customer_object)
