@@ -208,10 +208,20 @@ class AppProxy::DashboardController < AppProxyController
   def fetch_contract
     @customer = CustomerSubscriptionContract.find params[:local_id]
     @api_data = @customer.api_data
+    set_delivery_dates
 
     products = ProductService.new.list
     @swap_products = products.is_a?(Hash) ? nil : products&.select{ |p| p.node.selling_plan_group_count > 0 }
     @subscription_paused = @customer.status ==  "PAUSED"
+  end
+
+  def set_delivery_dates
+    @delivery_dates = CalculateOrderDelivery.new(@api_data, @current_shop.id).calculate
+    @current_week_select_by = @delivery_dates[:current_week_select_by]
+    @current_week_expected_delivery = @delivery_dates[:current_week_expected_delivery]
+    @next_week_select_by = @delivery_dates[:next_week_select_by]
+    @next_week_expected_delivery = @delivery_dates[:next_week_expected_delivery]
+    @no_data_message = "No delivery this week"
   end
 
   def portal_skip_schedule
