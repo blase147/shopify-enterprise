@@ -12,7 +12,8 @@ class AddProductsToOrderWorker
       meals_on_plan = contract.subscription.split[0].to_i
       
       order = ShopifyAPI::Order.find(shopify_order_id) rescue nil
-      week_number = order.created_at.to_date.cweek rescue nil
+      expected_order_delivery = CalculateOrderDelivery.new(contract.api_data, shop.id).expected_delivery_of_order(order.created_at)
+      week_number = expected_order_delivery.to_date.cweek
 
       if order.present? && week_number.present?
         pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_number)
@@ -31,7 +32,7 @@ class AddProductsToOrderWorker
         pre_order.reload
         pre_order_products = JSON.parse(pre_order.products)
         
-        result = AddOrderLineItem.new(shopify_order_id, pre_order_products).call
+        result = AddOrderLineItem.new(shopify_order_id, pre_order_products, expected_order_delivery).call
         puts result.order_edit_commit.order.id
         puts result.order_edit_commit.user_errors
       else

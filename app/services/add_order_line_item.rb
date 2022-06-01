@@ -67,9 +67,10 @@ class AddOrderLineItem < GraphqlService
     }
   GRAPHQL
 
-  def initialize(order_id, product_ids)
+  def initialize(order_id, product_ids, expected_order_delivery)
     @order_id = order_id
     @product_ids = product_ids
+    @expected_order_delivery = expected_order_delivery
   end
 
   def call
@@ -128,12 +129,8 @@ class AddOrderLineItem < GraphqlService
 
     if order.present?
       note_attributes = order&.note_attributes
-      delivery_date = note_attributes.filter{|attr| attr.name == "Delivery Date" }.last&.value rescue nil
-      delivery_date = delivery_date.to_date.strftime("%m/%d/%Y") if delivery_date.present? rescue nil
-      
-      expected_delivery = Date.today.beginning_of_week.next_occurring(Date.strptime(delivery_date, '%m/%d/%Y').strftime("%A").downcase.to_sym).strftime('%d/%m/%Y') rescue nil
 
-      order.note_attributes << {name: "Expected Delivery Date", value: expected_delivery}
+      order.note_attributes << { name: "Expected Delivery Date", value: @expected_order_delivery.strftime('%d/%m/%Y') }
       order.save
     end
   end
