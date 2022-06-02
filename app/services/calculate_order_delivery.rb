@@ -56,13 +56,13 @@ class CalculateOrderDelivery
 
   def expected_delivery_of_order(order_created_at)
   	delivery_settings = delivery_setting
-    delivery_day = @api_data['delivery_day'].downcase.to_sym rescue nil
-    cutoff_day = delivery_settings[:settings].filter{|s| s["delivery"].to_sym  == delivery_day } .first["cutoff_day"].to_sym rescue nil
+    delivery_day = @api_data['delivery_day'].downcase.to_sym
+    cutoff_day = delivery_settings[:settings].filter{|s| s["delivery"].to_sym  == delivery_day } .first["cutoff_day"].to_sym
 
   	order_date = Time.parse order_created_at
     order_date = order_date.in_time_zone('Eastern Time (US & Canada)')
-    order_select_by = order_date.strftime('%A').downcase.to_sym == cutoff_day ? order_date : order_date.next_occurring(cutoff_day) rescue nil
-    order_expected_delivery = order_select_by.next_occurring(delivery_day) rescue nil
+    order_select_by = order_date.strftime('%A').downcase.to_sym == cutoff_day ? order_date : order_date.next_occurring(cutoff_day)
+    order_expected_delivery = order_select_by.next_occurring(delivery_day)
     order_expected_delivery
   end
 
