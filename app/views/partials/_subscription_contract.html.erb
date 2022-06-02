@@ -30,11 +30,12 @@
   </div>
 
     <div class="button-holder">
+      <h4>Change Delivery Day:</h4>
         <%= select_tag "delivery_day", options_for_select(options_for_delivery_day, :selected=>@api_data["delivery_day"]), {prompt: "Select Delivery Day", :class =>"select_combobox",:onchange=>"reset_form(this.id,'page_type_msg');"} %>
         <%#= select(:delivery, :day, options_for_select(options_for_delivery_day), selected: (@api_data["delivery_day"] || "Some text")) %>
 
         <a href="#" rel="modal:open">
-          <button class="btn-yellow bold" id="update-delivery-btn" tabindex="0" data-id="<%= @customer.id %>">Update Delivery Day</button>
+          <button class="btn-yellow bold" id="update-delivery-btn" tabindex="0" data-id="<%= @customer.id %>">Confirm Day Change</button>
         </a>
         <a href="#edit-subscription-modal" rel="modal:open">
           <button class="btn-yellow bold" id="edit-subscription-btn" tabindex="0">Edit Subscription</button>

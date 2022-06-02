@@ -225,9 +225,12 @@ button.sub_button.active {
   //position: absolute;
   //right: 0;
   margin-top: -50px;
+  h4{
+    display: inline-block;
+  }
   select {
     display: inline-block;
-    width: 30%;
+    width: 18%;
     border: 1px solid #cacaca;
   }
 }
