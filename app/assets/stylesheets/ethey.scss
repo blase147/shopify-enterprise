@@ -217,12 +217,18 @@ button.sub_button.active {
   text-align: center;
 }
 .contact-details h2 {
+  text-align: right;
   margin-bottom: 10px;
-  margin-right: 200px;
+  //margin-right: 200px;
 }
 .button-holder {
-  position: absolute;
-  right: 0;
+  //position: absolute;
+  //right: 0;
+  margin-top: -50px;
+  select {
+    display: inline-block;
+    width: 30%;
+  }
 }
 .customer-details .customer-info .initial {
   background: #323232;

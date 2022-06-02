@@ -76,4 +76,10 @@ module AppProxyHelper
   def meals_on_plan(subscription_name)
     subscription_name.split[0].to_i
   end
+
+  def options_for_delivery_day
+    delivery_options = DeliveryOption.find_by(shop_id: @current_shop.id).api_response
+    options = delivery_options[:settings].map {|setting| setting["delivery"].humanize } rescue nil
+    options.uniq rescue []
+  end
 end
