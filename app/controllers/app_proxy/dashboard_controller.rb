@@ -224,6 +224,14 @@ class AppProxy::DashboardController < AppProxyController
     @no_data_message = "No delivery this week"
   end
 
+  def update_delivery_day
+    if params[:delivery_day] && params[:contract_id]
+      contract = CustomerSubscriptionContract.find params[:contract_id]
+      contract.api_data[:delivery_day] = params[:delivery_day]
+      contract.save
+    end
+  end
+
   def portal_skip_schedule
     billing_date = DateTime.parse(params[:billing_date])
     skip_billing_offset = params[:billing_interval_count].to_i.send(params[:billing_interval].downcase)

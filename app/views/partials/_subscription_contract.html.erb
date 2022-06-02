@@ -23,10 +23,19 @@
         </div>
       </div>
       <div class="contact-details">
-        <h2>Your Current Plan</h2>
-        
+        <h2>Your Current Plan: <%= @customer.subscription %></h2>
       </div>
-      <div class="button-holder">
+      
+    </div>
+  </div>
+
+    <div class="button-holder">
+        <%= select_tag "delivery_day", options_for_select(options_for_delivery_day, :selected=>@api_data["delivery_day"]), {prompt: "Select Delivery Day", :class =>"select_combobox",:onchange=>"reset_form(this.id,'page_type_msg');"} %>
+        <%#= select(:delivery, :day, options_for_select(options_for_delivery_day), selected: (@api_data["delivery_day"] || "Some text")) %>
+
+        <a href="#" rel="modal:open">
+          <button class="btn-yellow bold" id="update-delivery-btn" tabindex="0" data-id="<%= @customer.id %>">Update Delivery Day</button>
+        </a>
         <a href="#edit-subscription-modal" rel="modal:open">
           <button class="btn-yellow bold" id="edit-subscription-btn" tabindex="0">Edit Subscription</button>
         </a>
@@ -82,8 +91,6 @@
         </div>
 
       </div>
-    </div>
-  </div>
 
   <div class="customer-portal">
     <div class="top-section">
@@ -1010,5 +1017,33 @@ $(".add-to-current-week").on('click', function(e){
     e.preventDefault();
     $(this).closest('.order_inn').remove();
     $('.current-week ul').append("<li class='pre_segment_order empty-current'><a href='#_' id='box-item-current'><button><span>+</span><p>Add to box</p></button></a><img src='' /></li>")
+  });
+
+  $('#update-delivery-btn').on('click', function(e){
+    e.preventDefault();
+    contract_id = $(this).data('id');
+    url = '/a/chargezen_production/dashboard/update_delivery_day';
+    $(this).text('Updating..');
+    let params = {
+      delivery_day: $("#delivery_day").val(),
+      contract_id : contract_id
+    }
+    $.ajax({
+      url: url,
+      type: 'GET',
+      contentType: 'application/json',
+      data: params,
+      success: function(response) {
+        Swal.fire({
+          icon: 'success',
+          title: "Success! Reloading Page",
+          showConfirmButton: false
+        })
+        location.reload();
+      },
+      error: function(response) {
+
+      }
+    });
   });
 </script>
