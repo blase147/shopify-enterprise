@@ -5,8 +5,7 @@ class AccountActivationEmailWorker
     csc = CustomerSubscriptionContract.find_by(shopify_customer_id: customer_id)
     shop = csc.shop
     shop.connect
-    # activation_url = GenerateAccountActivationUrl.new(customer_id).generate
-    activation_url = "www.google.com"
+    activation_url = GenerateAccountActivationUrl.new(customer_id).generate
     if activation_url.present?
       @email_notification = shop.setting.email_notifications.find_by_name "Subscription Activation"
       email_body = "Hi #{csc.name} you’ve created a new customer account at Ethey: Canada’s #1 meal delivery service.. All you have to do is activate it.
