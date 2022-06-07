@@ -82,4 +82,8 @@ module AppProxyHelper
     options = delivery_options[:settings].map {|setting| setting["delivery"].humanize } rescue nil
     options.uniq rescue []
   end
+
+  def hide_display_selection
+    @api_data['orders']['edges'].count > 1 ? '' : 'hideJKKJ'
+  end
 end

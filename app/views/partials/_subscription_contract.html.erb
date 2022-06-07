@@ -349,7 +349,6 @@
             </div>
 
         <!-- Current Week -->
-
         <%
           current_date = Date.current
           week_day = current_date
@@ -368,15 +367,14 @@
             selected_products = JSON.parse(week_subscription.products)
             meals_to_select = total_meals - selected_products.count
           end
-
         %>
-        <div class="pre_orders">
+        <div class="pre_orders <%= hide_display_selection %>">
           <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
           <div class="order-box">
             <h2 class="Trial">Week of <%= current_date.beginning_of_week.strftime('%A %d %B') %> - <%= current_date.end_of_week.strftime('%A %d %B') %></h2>
             <div class="placed_data pdate">
               <p class="placed">Select Meals By</p>
-              <p class="placed_dates pdate text-right"><%= @current_week_select_by.strftime('%A, %d %b %Y') rescue @no_data_message %></p>
+              <p class="placed_dates pdate text-right" id='current-week-select-by'><%= @current_week_select_by.strftime('%A, %d %b %Y') rescue @no_data_message %></p>
             </div>
 
             <div class="placed_data pdate">
@@ -493,13 +491,13 @@
                   meals_to_select = total_meals - selected_products.count
                 end
               %>
-              <div class="pre_orders">
+              <div class="pre_orders <%= hide_display_selection  %>" >
                 <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
                 <div class="order-box">
                   <h2 class="Trial">Week of <%= (current_date + 1.week).beginning_of_week.strftime('%A %d %B') %> - <%= (current_date + 1.week).end_of_week.strftime('%A %d %B, %Y')%> </h2>
                   <div class="placed_data pdate">
                     <p class="placed">Select Meals By</p>
-                    <p class="placed_dates pdate text-right"><%= @next_week_select_by.strftime('%A, %d %b %Y') rescue @no_data_message %></p>
+                    <p class="placed_dates pdate text-right" id='next-week-select-by'><%= @next_week_select_by.strftime('%A, %d %b %Y') rescue @no_data_message %></p>
                   </div>
 
                   <div class="placed_data pdate">
@@ -1000,12 +998,16 @@ $(".add-to-current-week").on('click', function(e){
 
   $(document).on('click', '#box-item', function(e) {
     e.preventDefault();
-    $('#box-items')[0].classList.remove('hide');
+    if ($('#next-week-select-by').text() != 'No delivery this week') {
+      $('#box-items')[0].classList.remove('hide');
+    }
   });
 
   $(document).on('click', '#box-item-current', function(e) {
     e.preventDefault();
-    $('#box-items-current')[0].classList.remove('hide');
+    if ($('#current-week-select-by').text() != 'No delivery this week') {
+      $('#box-items-current')[0].classList.remove('hide');
+    }
   });
 
   $(".dish_remove").on('click', function(e) {
