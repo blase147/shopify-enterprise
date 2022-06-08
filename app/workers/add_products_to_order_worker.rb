@@ -14,31 +14,44 @@ class AddProductsToOrderWorker
       shop = contract.shop
       shop.connect
       meals_on_plan = contract.subscription.split[0].to_i
-      
+
       order = ShopifyAPI::Order.find(shopify_order_id) rescue nil
+
+      if order.present?
+        note_attributes = order&.note_attributes
+
+        order.note_attributes << { name: "Expected Delivery Date", value: @expected_order_delivery.strftime('%d/%m/%Y') }
+        order.save
+      end
+
       expected_order_delivery = CalculateOrderDelivery.new(contract.api_data, shop.id).expected_delivery_of_order(order.created_at)
+      order_select_by = CalculateOrderDelivery.new(contract.api_data, shop.id).cuttoff_for_order(order.created_at)
       week_number = expected_order_delivery.to_date.cweek
+
+      cutoff_in_hours = ((order_select_by.to_time.beginning_of_day - Date.today.to_time.beginning_of_day) / 3600).to_i
 
       if order.present? && week_number.present?
         pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_number)
 
-        if pre_order.blank?
-          pre_order = WorldfarePreOrder.create(shop_id: shop.id, shopify_contract_id: contract.shopify_id, week: week_number, customer_id: contract.shopify_customer_id, products: "[]", created_by: WorldfarePreOrder::CREATION_TYPES[:rake])
+        if pre_order.present? || cutoff_in_hours.negative?
+          pre_order_products = JSON.parse(pre_order.products)
+          pre_order_ids = [pre_order.id]
+
+          if pre_order_products.count < meals_on_plan
+            FillPreOrder.new(pre_order_ids, contract.id).fill
+          end
+
+          pre_order.reload
+          pre_order_products = JSON.parse(pre_order.products)
+
+          result = AddOrderLineItem.new(shopify_order_id, pre_order_products).call
+          puts result.order_edit_commit.order.id
+          puts result.order_edit_commit.user_errors
+        else
+          # Enque sidekiq job to create Pre-Order on select by
+          FillPreOrderWorker.perform_in(cutoff_in_hours.hours, contract.id)
+          # PreOrderEmailNotificationWorker.perform_in(cutoff_in_hours.hours-24.hours, contract_id)
         end
-
-        pre_order_products = JSON.parse(pre_order.products)
-        pre_order_ids = [pre_order.id]
-
-        if pre_order_products.count < meals_on_plan
-          FillPreOrder.new(pre_order_ids, contract.id).fill
-        end
-
-        pre_order.reload
-        pre_order_products = JSON.parse(pre_order.products)
-        
-        result = AddOrderLineItem.new(shopify_order_id, pre_order_products, expected_order_delivery).call
-        puts result.order_edit_commit.order.id
-        puts result.order_edit_commit.user_errors
       else
         puts "Rake task is aborting as order not found"
       end
