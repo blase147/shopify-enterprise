@@ -67,10 +67,9 @@ class AddOrderLineItem < GraphqlService
     }
   GRAPHQL
 
-  def initialize(order_id, product_ids, expected_order_delivery)
+  def initialize(order_id, product_ids)
     @order_id = order_id
     @product_ids = product_ids
-    @expected_order_delivery = expected_order_delivery
   end
 
   def call
@@ -85,8 +84,6 @@ class AddOrderLineItem < GraphqlService
     end
 
     result = finish_order_edit(calculated_order_id)
-
-    update_order_delivery_date
     result
   end
 
@@ -122,16 +119,5 @@ class AddOrderLineItem < GraphqlService
       id: calculated_order_id
     })
     commit_variant.data
-  end
-
-  def update_order_delivery_date
-    order = ShopifyAPI::Order.find(@order_id)
-
-    if order.present?
-      note_attributes = order&.note_attributes
-
-      order.note_attributes << { name: "Expected Delivery Date", value: @expected_order_delivery.strftime('%d/%m/%Y') }
-      order.save
-    end
   end
 end
