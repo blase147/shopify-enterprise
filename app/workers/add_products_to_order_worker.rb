@@ -17,16 +17,16 @@ class AddProductsToOrderWorker
 
       order = ShopifyAPI::Order.find(shopify_order_id) rescue nil
 
-      if order.present?
-        note_attributes = order&.note_attributes
-
-        order.note_attributes << { name: "Expected Delivery Date", value: @expected_order_delivery.strftime('%d/%m/%Y') }
-        order.save
-      end
-
       expected_order_delivery = CalculateOrderDelivery.new(contract.api_data, shop.id).expected_delivery_of_order(order.created_at)
       order_select_by = CalculateOrderDelivery.new(contract.api_data, shop.id).cuttoff_for_order(order.created_at)
       week_number = expected_order_delivery.to_date.cweek
+
+      if order.present?
+        note_attributes = order&.note_attributes
+
+        order.note_attributes << { name: "Expected Delivery Date", value: expected_order_delivery.strftime('%d/%m/%Y') }
+        order.save
+      end
 
       cutoff_in_hours = ((order_select_by.to_time.beginning_of_day - Date.today.to_time.beginning_of_day) / 3600).to_i
 
@@ -49,7 +49,7 @@ class AddProductsToOrderWorker
           puts result.order_edit_commit.user_errors
         else
           # Enque sidekiq job to create Pre-Order on select by
-          FillPreOrderWorker.perform_in(cutoff_in_hours.hours, contract.id)
+          FillPreOrderWorker.perform_in(cutoff_in_hours.hours, contract.id, shopify_order_id)
           # PreOrderEmailNotificationWorker.perform_in(cutoff_in_hours.hours-24.hours, contract_id)
         end
       else
