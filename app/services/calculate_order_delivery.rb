@@ -55,6 +55,8 @@ class CalculateOrderDelivery
   end
 
   def expected_delivery_of_order(order_created_at)
+    delivery_day = @api_data['delivery_day'].downcase.to_sym
+
     order_select_by = cuttoff_for_order(order_created_at)
     order_expected_delivery = order_select_by.next_occurring(delivery_day)
     order_expected_delivery

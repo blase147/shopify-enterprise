@@ -1,7 +1,7 @@
 class FillPreOrderWorker
   include Sidekiq::Worker
 
-  def perform(contract_id)
+  def perform(contract_id, shopify_order_id)
     puts "<============== SideKiq Job for contract_id: #{contract_id} running now... ==============>"
     contract = CustomerSubscriptionContract.find_by_id contract_id
     contract ||= CustomerSubscriptionContract.find_by(shopify_id: contract_id)
