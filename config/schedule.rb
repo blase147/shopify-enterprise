@@ -35,3 +35,7 @@ end
 every 1.days do
   rake 'pre_orders:fill_pre_order'
 end
+
+every 1.days do
+  rake 'subscriptions:save_billing_attempts'
+end

@@ -107,6 +107,22 @@ namespace :subscriptions do
     end
   end
 
+  task :save_billing_attempts => :environment do
+    puts "Save Billing attempt job started at #{Time.current}"
+    Shop.find_each do |shop|
+      shop.connect
+      CustomerSubscriptionContract.where(shop_id: shop.id).find_each(batch_size: 100) do |contract|
+        puts "<====== Processing ContractID, #{contract.id} ======>"
+
+        result = FetchBillingAttempts.new(contract.shopify_id).run
+        contract.billing_attempts = result.to_h.deep_transform_keys { |key| key.underscore } rescue {}
+
+        contract.save
+        puts "====== Done ContractID, #{contract.id} ======"
+      end
+    end
+  end
+
   def process_subscription(subscription)
     return unless subscription.status == 'ACTIVE'
     subscription_id = subscription.id[/\d+/]
