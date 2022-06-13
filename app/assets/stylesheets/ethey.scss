@@ -1,4 +1,4 @@
-.pull-right {
+  .pull-right {
   float: right;
 }
 .pull-left {
@@ -1402,4 +1402,8 @@ span.current-week-dish-remove {
   top: -6px;
   display: block;
   color: #636363;
+}
+.contact-details h2 button {
+  display: inline-block;
+  margin: 0 !important;
 }

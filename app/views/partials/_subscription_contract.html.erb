@@ -28,12 +28,13 @@ line_item = subscription.lines.edges.first.node
         </div>
       </div>
       <div class="contact-details">
-        <h2>Your Current Plan: <%= @customer.subscription %></h2>
+        <h2><%= plan_title %> <%= resume_btn %></h2>
       </div>
       
     </div>
   </div>
 
+  <% unless @customer.cancelled? %>
     <div class="button-holder">
       <h4>Change Delivery Day:</h4>
         <%= select_tag "delivery_day", options_for_select(options_for_delivery_day, :selected=>@api_data["delivery_day"]), {prompt: "Select Delivery Day", :class =>"select_combobox",:onchange=>"reset_form(this.id,'page_type_msg');"} %>
@@ -847,6 +848,7 @@ line_item = subscription.lines.edges.first.node
       </div>
     </div>
   </div>
+  <% end %>
 <script type="text/javascript">
   $(document).on('click', '.btn-wrapper button', function(e) {
     $(this).html('Processing <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');

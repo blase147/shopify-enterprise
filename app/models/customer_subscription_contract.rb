@@ -106,4 +106,8 @@ class CustomerSubscriptionContract < ApplicationRecord
       )
     end if (items && items[:subscriptions] rescue false)
   end
+
+  def cancelled?
+    status == "CANCELLED"
+  end
 end
