@@ -97,4 +97,8 @@ module AppProxyHelper
       button_tag "Resume", class: 'upgrade-subscription light', data: { path: '/resume' }, id: 'pause-resume-sub'
     end
   end
+
+  def billing_attempt_status error_code
+    error_code.present? ? "Failure" : "Success"
+  end
 end

@@ -48,9 +48,14 @@ class SubscriptionsController < AuthenticatedController
 
     @translation = current_shop&.translation
 
+    set_associated_data
+    render "#{@customer.api_source == 'stripe' ? 'stripe_' : ''}show"
+  end
+
+  def set_associated_data
     @pre_orders = WorldfarePreOrder.where(shopify_contract_id: @customer.shopify_id)
     @pre_order_products = @pre_orders.to_h { |pre_order| [pre_order.id, fetch_shopify_products(JSON.parse(pre_order.products))] }
-    render "#{@customer.api_source == 'stripe' ? 'stripe_' : ''}show"
+    @billing_attempts = @customer.billing_attempts["edges"] rescue []
   end
 
   def update_customer
