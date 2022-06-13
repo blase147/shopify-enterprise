@@ -86,4 +86,15 @@ module AppProxyHelper
   def hide_display_selection
     @api_data['orders']['edges'].count > 1 ? '' : 'hideJKKJ'
   end
+
+  def plan_title
+    plan_str = @customer.cancelled? ? 'Cancelled' : 'Current'
+    "Your #{plan_str} Plan: #{@customer.subscription}"
+  end
+
+  def resume_btn
+    if @customer.cancelled?
+      button_tag "Resume", class: 'upgrade-subscription light', data: { path: '/resume' }, id: 'pause-resume-sub'
+    end
+  end
 end

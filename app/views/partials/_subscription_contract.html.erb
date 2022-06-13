@@ -1,6 +1,11 @@
 <% customer =  nil %>
 <% customer_order =  nil %>
 <% struct_data = JSON.parse(@customer.api_data.to_json, object_class: OpenStruct) %>
+<%
+subscription = struct_data
+id = subscription.id[/\d+/]
+line_item = subscription.lines.edges.first.node
+%>
 <% next_billing_date =  get_next_billing_date(struct_data, @current_shop) %>
 <% billing_policy = struct_data.billing_policy %>
 
@@ -23,12 +28,13 @@
         </div>
       </div>
       <div class="contact-details">
-        <h2>Your Current Plan: <%= @customer.subscription %></h2>
+        <h2><%= plan_title %> <%= resume_btn %></h2>
       </div>
       
     </div>
   </div>
 
+  <% unless @customer.cancelled? %>
     <div class="button-holder">
       <h4>Change Delivery Day:</h4>
         <%= select_tag "delivery_day", options_for_select(options_for_delivery_day, :selected=>@api_data["delivery_day"]), {prompt: "Select Delivery Day", :class =>"select_combobox",:onchange=>"reset_form(this.id,'page_type_msg');"} %>
@@ -61,6 +67,7 @@
               <% else %>
                 <button class="upgrade-subscription light" id="pause-resume-sub" data-path="/pause">Pause Subscription</button>
               <% end %>
+              <button class="upgrade-subscription light" id="cancel-sub" data-id="<%= subscription.id[/\d+/] %>" data-line-id="<%= line_item.id  %>" data-line-name="<%= line_item.name  %> "data-variant-id="<%= line_item.variant_id %>" >Cancel Subscription</button>
               
               
               <!-- <button class="downgrade-subscription light" type="button">Skip Next Order</button> -->
@@ -841,9 +848,36 @@
       </div>
     </div>
   </div>
+  <% end %>
 <script type="text/javascript">
   $(document).on('click', '.btn-wrapper button', function(e) {
     $(this).html('Processing <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
+  });
+
+  $('#cancel-sub').on('click', function(e){
+    e.preventDefault();
+    id = $(this).data('id');
+    line_id = $(this).data('line-id');
+    line_name = $(this).data('line-name');
+    variant_id = $(this).data('variant-id');
+    url = "/a/chargezen_production/subscriptions/"+1562017885+"/remove_line?line_id="+line_id+"&lines_count=1&quantity=1&variant_id="+variant_id;
+    $(this).text('Updating..');
+    $.ajax({
+      url: url,
+      type: 'POST',
+      contentType: 'application/json',
+      success: function(response) {
+        Swal.fire({
+          icon: 'success',
+          title: "Success! Reloading Page",
+          showConfirmButton: false
+        })
+        location.reload();
+      },
+      error: function(response) {
+
+      }
+    });
   });
 
   $('#pause-resume-sub').on('click', function(e){
