@@ -206,6 +206,7 @@
               li.active data-target="#history" History
               li data-target="#payment-history" Payment History
               li data-target="#pre-orders" Pre Orders
+              li data-target="#billing-attempts" Billing Attempts
               - if @box_products.present?
                 li data-target="#box-products" Box Products
 
@@ -260,6 +261,24 @@
                           ul style="margin: 0;"
                             - @pre_order_products[pre_order.id].each do |product_title|
                               li = product_title
+
+            .Polaris-DataTable.hidden.tab#billing-attempts style="margin: 1rem"
+              .Polaris-DataTable__ScrollContainer
+                table.Polaris-DataTable__Table
+                  thead
+                    tr style="background: #007EFF;"
+                      th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header aria-sort="none" data-polaris-header-cell="true" scope="col"  style="color: #FFFFFF" Created at
+                      th.Polaris-DataTable__Cell--header aria-sort="none" data-polaris-header-cell="true" scope="col"  style="color: #FFFFFF" Status
+                      th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header aria-sort="none" data-polaris-header-cell="true" scope="col"  style="color: #FFFFFF" Error Code
+                      th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header aria-sort="none" data-polaris-header-cell="true" scope="col"  style="color: #FFFFFF" Error Message
+                  tbody
+                    - @billing_attempts.each do |billing_attempt|
+                      - billing_attempt = billing_attempt["node"]
+                      tr.Polaris-DataTable__TableRow
+                        th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"= billing_attempt["created_at"].to_datetime.strftime("%e %B, %Y")
+                        td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop=  billing_attempt_status billing_attempt["error_code"]
+                        td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= billing_attempt["error_code"] || "N/A"
+                        td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= billing_attempt["error_message"] || "N/A"
 
             - if @box_products.present?
               .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing.hidden.tab#box-products
