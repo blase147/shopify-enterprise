@@ -247,6 +247,10 @@ module SubscriptionConcern
       render js: 'location.reload()'
     else
       result = SubscriptionContractDeleteService.new(id).run 'ACTIVE'
+      
+      if params[:billing_date].present? && result[:error].blank?
+        SetNextBillingDate.new(csc.shopify_id, params[:billing_date]).run
+      end
 
       if result[:error].present?
         render js: "alert('#{result[:error]}');"

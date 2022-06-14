@@ -130,4 +130,19 @@ class SubscriptionsController < AuthenticatedController
     products = ShopifyAPI::Product.where(ids: product_ids.join(', '), fields: 'title')
     products.map {|product| product.title}
   end
+
+  def update_billing_date
+    @customer = CustomerSubscriptionContract.find_by(id: params[:local_id])
+
+    return if params[:date].blank?
+    
+    result = SetNextBillingDate.new(@customer.shopify_id, params[:date]).run
+
+    if result.is_a?(Hash)
+      flash[:error] = result[:error]
+      render js: "showToast('error', '#{result[:error]}'); hideLoading()"
+    else
+      render js: "showToast('notice', 'Updated billing date!'); hideModal();"
+    end
+  end
 end
