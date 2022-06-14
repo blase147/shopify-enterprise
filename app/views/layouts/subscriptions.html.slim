@@ -16,6 +16,7 @@ html[lang="en"]
     = csrf_meta_tags
     meta[name="viewport" content="width=device-width, initial-scale=1"]
     link[rel="stylesheet" href="https://unpkg.com/@shopify/polaris@5.8.4/dist/styles.css"]
+    link[rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css"]
   body.chargezen class=page_class
     - unless controller_name == 'select_plan'
       = render 'layouts/shared/nav'

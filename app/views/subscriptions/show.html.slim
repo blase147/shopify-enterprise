@@ -97,8 +97,11 @@
                   .Polaris-Stack__Item
                     .Polaris-ButtonGroup.resume
                       .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                        = link_to action_subscription_contract_path(:resume, @subscription.id[/\d+/]), remote: true, method: :post, style: 'text-decoration: none;' do
+                        = link_to "#", remote: true, style: 'text-decoration: none;' do
                           span.resume-btn type="button" Resume
+                          <input type="text" id="resume-datepicker" hidden=true>
+                        = link_to action_subscription_contract_path(:resume, @subscription.id[/\d+/]), remote: true, method: :post, style: 'text-decoration: none;' do
+                          button.hidden.Polaris-Button--plain type="button" id="resume-billing-btn" Apply
 
               - if @subscription.status == 'ACTIVE'
                 - product = ShopifyAPI::Product.find(line.node.product_id[/\d+/])
@@ -177,6 +180,9 @@
           .Polaris-Stack__Item
             p.Polaris-Heading Next Charge Date
             p = next_billing_date.strftime("%a, %B %e")
+            button.Polaris-Button.Polaris-Button--plain type="button" id="edit-next-billing-date" Edit
+            <input type="text" id="datepicker" hidden=true>
+            button.hidden.Polaris-Button--plain type="button" id="save-next-billing-date-btn" Apply
         .Polaris-Stack
           .Polaris-Stack__Item
             <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -423,8 +429,65 @@
                 /           span.Polaris-Button__Text Skip
 
     = render 'layouts/shared/footer'
-
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 javascript:
+  $( function() {
+      $( "#datepicker" ).datepicker({
+        dateFormat: 'yy-mm-dd'
+      });
+
+      $( "#resume-datepicker" ).datepicker({
+        dateFormat: 'yy-mm-dd'
+      });
+
+
+      $( ".resume-btn" ).on('click', function(e){
+        e.preventDefault();
+        $("#resume-billing-btn").removeClass("hidden");
+        $("#resume-datepicker")[0].hidden = false;
+        $('#resume-datepicker').datepicker( "show" );
+      });
+
+      $( "#resume-billing-btn" ).on('click', function(e){
+        e.preventDefault();
+        selectedDate = $( "#resume-datepicker" ).val();
+        link = $(this).parent();
+        url = $(link).attr('href');
+        new_url = url + "billing_date="+selectedDate
+        $(link).attr("href", new_url);
+        link.click();
+      });
+
+
+      $( "#save-next-billing-date-btn" ).on('click', function(){
+        selectedDate = $( "#datepicker" ).val();
+        $.ajax({
+          url: "/subscriptions/update_next_billing_date",
+          type: "POST",
+          data: { local_id: "#{@customer.id}", date: selectedDate},
+          success: function(result){
+            if(result.success == false){
+              alert( 'Something went wrong, contact support.' );
+              // $('.order-update-status-message').html(result.error.join(','))
+            }else{
+              // $('.order-update-status-message').html('Order synced successfully, reloading..')
+              // setTimeout(function(){
+                window.location.reload();
+              // }, 800);
+            }
+
+          }
+        });
+      });
+    });
+
+  $('#edit-next-billing-date').on('click', function(){
+    $("#save-next-billing-date-btn").removeClass("hidden");
+    $("#datepicker")[0].hidden = false;
+    $('#datepicker').datepicker( "show" );
+  });
+
   $( document ).on('turbolinks:load', function() {
     document.querySelectorAll('ul.payment-tabs li').forEach(li => {
       li.addEventListener('click', (e) => {
