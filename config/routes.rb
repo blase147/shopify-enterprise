@@ -129,6 +129,7 @@ Rails.application.routes.draw do
       post :update_subscription
       post :update_customer
       get :sync_stripe
+      post :create_billing_attempt  
     end
 
     member do

@@ -145,4 +145,9 @@ class SubscriptionsController < AuthenticatedController
       render js: "showToast('notice', 'Updated billing date!'); hideModal();"
     end
   end
+
+  def create_billing_attempt
+    id = params["id"].to_i
+    CreateBillingAttemptService.new().run(id)
+  end
 end
