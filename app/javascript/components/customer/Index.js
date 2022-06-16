@@ -317,7 +317,23 @@ const Customers = ({shopifyDomain}) => {
             <p>
               <span className="price">{row.language}</span>
             </p>
-          </div>
+          </div>,
+          <Button
+          onClick={() => {
+             fetch(`/subscriptions/create_billing_attempt`, {
+               method: 'POST',
+               headers: {
+                 'Content-Type': 'application/json',
+                 Accept: 'application/json',
+               },
+               credentials: 'same-origin',
+               body: JSON.stringify({id: row.id})
+             })
+               .then((response) => response.json())
+           }}
+         >
+             Create Billing Attempt
+         </Button>
         ] : []);
   };
   const [customers, setCustomers] = useState([]);
@@ -745,6 +761,7 @@ const Customers = ({shopifyDomain}) => {
                     'Status',
                     'Source',
                     'Product',
+                    '',
                     '',
                   ]}
                   rows={selectedTab == 1 ? formatRows(newArr) : selectedTab == 2 ? formatRows(pausedArr) : selectedTab == 3 ? formatRows(activeArr) : selectedTab == 4 ? formatRows(cancelledArr) : formatRows(filterCustomers)}
