@@ -1,0 +1,32 @@
+<div class="Polaris-DataTable__ScrollContainer">
+    <table class="Polaris-DataTable__Table">
+        <thead>
+            <tr style="background: #007EFF;">
+                <th aria-sort="none" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--header" data-polaris-header-cell="true" scope="col" style="color: #FFFFFF">
+                    Sr No.
+                </th>
+                <th aria-sort="none" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--header" data-polaris-header-cell="true" scope="col" style="color: #FFFFFF">
+                    Contract Action
+                </th>
+                <th aria-sort="none" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--header Polaris-DataTable__Cell--numeric" data-polaris-header-cell="true" scope="col" style="color: #FFFFFF">
+                    Created At
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <% subscription&.subscription_logs&.each_with_index do |subscription_log,i| %>
+                <tr class="Polaris-DataTable__TableRow">
+                    <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--firstColumn" scope="row">
+                        <%= i+1 %>
+                    </th>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop">
+                        <%= subscription_log.description %>
+                    </td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--numeric">
+                        <%= subscription_log.created_at %>
+                    </td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+</div>

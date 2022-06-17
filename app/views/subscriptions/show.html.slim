@@ -37,7 +37,7 @@
             div style="display: flex; justify-content: space-between; margin-bottom: 1rem;"
               div
                 h1.Polaris-Heading
-                  = customer.display_name.titleize
+                  = customer&.display_name&.titleize
               div
                 p Shopify Subscription
               div
@@ -47,10 +47,10 @@
                   button.Polaris-Button.Polaris-Button--plain type="button" data-toggle='modal' data-target='#customerEditModal'
                     span.Polaris-Button__Content
                       span.Polaris-Button__Text Edit
-                p.Polaris-DisplayText.Polaris-TextStyle--variationSubdued #{customer.email}
+                p.Polaris-DisplayText.Polaris-TextStyle--variationSubdued #{customer&.email}
 
 
-            - @subscription.lines.edges.each do |line|
+            - @subscription&.lines&.edges&.each do |line|
               - selling_plan = SellingPlan.find_by(shopify_id: line.node.selling_plan_id)
               - if @subscription.status == 'ACTIVE'
                 div.item
@@ -161,7 +161,7 @@
             </svg>
           .Polaris-Stack__Item
             h2.Polaris-Heading Order Date
-            p = DateTime.parse(@subscription.created_at).strftime("%b %d, %H:%M%P")
+            p = DateTime.parse(@subscription&.created_at)&.strftime("%b %d, %H:%M%P")
         .Polaris-Stack
           .Polaris-Stack__Item
             <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -309,7 +309,7 @@
                           = image_pack_tag "media/subscriptionsPlans/removeProduct.svg", class: 'removeIcon'
 
             .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing.hidden.tab#contract-actions
-                h2.Polaris-Heading.Polaris-TextStyle--variationStrong contact actions
+                = render "subscriptions/subscription_logs", subscription: @customer
 
         / .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
         /   h2.Polaris-Heading.Polaris-TextStyle--variationStrong History
