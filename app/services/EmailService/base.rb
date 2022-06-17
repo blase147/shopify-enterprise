@@ -14,6 +14,8 @@ class EmailService::Base < ApplicationService
       "Your subscription order charge at #{@shopify_shop.name} failed"
     when "Skip Next Order"
       "Your modified your subscription at #{@shopify_shop.name}"
+    when "Fill PreOrder"
+      "#{@email_notification.email_subject} at #{@shopify_shop.name}"
     when "Out of Stock"
       # "#{@shopify_shop.name} - Items on your subscription order are currently out of stock"
       false
@@ -103,6 +105,10 @@ class EmailService::Base < ApplicationService
         storename: storename,
         shopify_store_email: shop_email,
         confirmation_url: object[:confirmation_url]
+      }
+    when "Fill PreOrder"
+      {
+        name: object[:customer].name
       }
     else
       false
