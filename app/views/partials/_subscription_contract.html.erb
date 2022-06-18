@@ -34,7 +34,7 @@ line_item = subscription.lines.edges.first.node
     </div>
   </div>
 
-  <% unless @customer.cancelled? %>
+  <% unless paused_or_cancel_plan? %>
     <div class="button-holder">
       <h4>Change Delivery Day:</h4>
         <%= select_tag "delivery_day", options_for_select(options_for_delivery_day, :selected=>@api_data["delivery_day"]), {prompt: "Select Delivery Day", :class =>"select_combobox",:onchange=>"reset_form(this.id,'page_type_msg');"} %>
@@ -62,11 +62,7 @@ line_item = subscription.lines.edges.first.node
 
           <div class="subscription-details">
             <div class="btn-wrapper">
-              <% if @subscription_paused %>
-                <button class="upgrade-subscription light" id="pause-resume-sub" data-path="/resume">Resume Subscription</button>
-              <% else %>
-                <button class="upgrade-subscription light" id="pause-resume-sub" data-path="/pause">Pause Subscription</button>
-              <% end %>
+              <button class="upgrade-subscription light" id="pause-resume-sub" data-path="/pause">Pause Subscription</button>
               <button class="upgrade-subscription light" id="cancel-sub" data-id="<%= subscription.id[/\d+/] %>" data-line-id="<%= line_item.id  %>" data-line-name="<%= line_item.name  %> "data-variant-id="<%= line_item.variant_id %>" >Cancel Subscription</button>
               
               
@@ -884,7 +880,11 @@ line_item = subscription.lines.edges.first.node
     e.preventDefault();
     action = $(this).data('path');
     contract_id = $("#contract-content").data("contract-id");
-    url = "/a/chargezen_production/subscriptions/" + contract_id + action
+    var myDate=new Date();
+    myDate.setDate(myDate.getDate()+1);
+    // format a date
+    var date = myDate.getDate() + '/' + ("0" + (myDate.getMonth() + 1)).slice(-2) + '/' + myDate.getFullYear();
+    url = "/a/chargezen_production/subscriptions/" + contract_id + action + "?billing_date=" + date
     $(this).text('Updating..');
     $.ajax({
       url: url,
@@ -903,6 +903,8 @@ line_item = subscription.lines.edges.first.node
       }
     });
   });
+
+
 
   $('.skip-date').on('click', function(e){
     $(this).html("SKIP <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>");

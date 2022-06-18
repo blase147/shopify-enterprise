@@ -88,17 +88,21 @@ module AppProxyHelper
   end
 
   def plan_title
-    plan_str = @customer.cancelled? ? 'Cancelled' : 'Current'
+    plan_str = paused_or_cancel_plan? ? @customer.status.humanize : 'Current'
     "Your #{plan_str} Plan: #{@customer.subscription}"
   end
 
   def resume_btn
-    if @customer.cancelled?
+    if paused_or_cancel_plan?
       button_tag "Resume", class: 'upgrade-subscription light', data: { path: '/resume' }, id: 'pause-resume-sub'
     end
   end
 
   def billing_attempt_status error_code
     error_code.present? ? "Failure" : "Success"
+  end
+
+  def paused_or_cancel_plan?
+    @customer.cancelled? || @customer.paused?
   end
 end
