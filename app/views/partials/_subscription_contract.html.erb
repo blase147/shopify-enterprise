@@ -457,25 +457,13 @@ line_item = subscription.lines.edges.first.node
         <!-- Next Week -->
             <% delivery_date = @api_data["delivery_date"] rescue nil %>
             <% created_at = Date.parse(@api_data["created_at"]) rescue nil %>
-            <%
-              delivery_settings = DeliveryOption.find_by( shop_id: @current_shop.id )&.api_response
-              delivery_day_sym = customer_order.note.downcase.split(' ')[0] rescue  nil
-              cutoff = delivery_settings[:settings].filter{  |day| day['delivery'] == delivery_day_sym }[0] rescue nil
-            %>
-            <% products = ShopifyAPI::Product.where(ids: customer_order.line_items.map(&:product_id).join(', '), fields: 'id,title,images') rescue nil %>
 
             <% current_date = Date.today %>
-            <% if params[:product_ids].present? %>
-              <% selected_products = ShopifyAPI::Product.where(ids: params[:product_ids], fields: 'id,title,images') rescue nil %>
-            <% end %>
             <% week_days = [] %>
             <%
               (1..1).each do |i| %>
               <% if i == 1
                   week_day = current_date + 7.days
-                  # week_day = current_date.next_week(delivery_day_sym.to_sym)
-                  week_days << week_day.strftime('%Y%m%d')
-                  cutoff_date = cutoff.nil? ? (week_day-2) : current_date.next_week(cutoff['cutoff_day'].downcase.to_sym)
                 else
                   week_day = current_date + 7.days
                   # week_day = current_date.next_week(:monday).next_week(delivery_day_sym.to_sym)
