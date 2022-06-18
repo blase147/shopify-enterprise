@@ -377,32 +377,35 @@ line_item = subscription.lines.edges.first.node
             <h2 class="Trial">Week of <%= current_date.beginning_of_week.strftime('%A %d %B') %> - <%= current_date.end_of_week.strftime('%A %d %B') %></h2>
             <div class="placed_data pdate">
               <p class="placed">Select Meals By</p>
-              <p class="placed_dates pdate text-right" id='current-week-select-by'><%= @current_week_select_by.strftime('%A, %d %b %Y') rescue @no_data_message %></p>
+              <p class="placed_dates pdate text-right" id='current-week-select-by'><%= @current_week_select_by.strftime('%A, %d %b %Y') rescue nil  %></p>
             </div>
 
             <div class="placed_data pdate">
               <p class="placed">Expected delivery :</p>
-              <p class="placed_dates pdate text-right"><%= @current_week_expected_delivery.strftime('%A, %d %b %Y') rescue nil %></p>
+              <p class="placed_dates pdate text-right"><%= @current_week_expected_delivery.strftime('%A, %d %b %Y') rescue @no_data_message %></p>
             </div>
-            <div class="order_add current-week">
-              <ul id="psegment" class="pre_segment">
-                <% selected_products.each do |item| %>
-                  <% meal_product = current_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
-                  <div class="order_inn center" >
-                    <div class="holder">
-                      <span class='current-week-dish-remove'>x</span>
-                      <img src="<%= meal_product['image'] rescue nil %>" data-id="<%= meal_product['product_id'][/\d+/] %>">
-                      <h5><%= meal_product['title'] rescue nil %> </h5>
+            <% if @current_week_select_by.present? %>
+              <div class="order_add current-week">
+                <ul id="psegment" class="pre_segment">
+                  <% selected_products.each do |item| %>
+                    <% meal_product = current_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
+                    <div class="order_inn center" >
+                      <div class="holder">
+                        <span class='current-week-dish-remove'>x</span>
+                        <img src="<%= meal_product['image'] rescue nil %>" data-id="<%= meal_product['product_id'][/\d+/] %>">
+                        <h5><%= meal_product['title'] rescue nil %> </h5>
+                      </div>
                     </div>
-                  </div>
-                <% end %>
-                <% meals_to_select.times do %>
-                  <li class="pre_segment_order empty-current">
-                    <a href="#_" id="box-item-current"><button><span>+</span><p>Add to box</p></button></a>
-                    <img src="" />
-                  </li>
-                <% end %>
-            </div>
+                  <% end %>
+                  <% meals_to_select.times do %>
+                    <li class="pre_segment_order empty-current">
+                      <a href="#_" id="box-item-current"><button><span>+</span><p>Add to box</p></button></a>
+                      <img src="" />
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
 
             <% if current_week_meals.present? %>
               <div class="meal-options">
@@ -500,33 +503,36 @@ line_item = subscription.lines.edges.first.node
                   <h2 class="Trial">Week of <%= (current_date + 1.week).beginning_of_week.strftime('%A %d %B') %> - <%= (current_date + 1.week).end_of_week.strftime('%A %d %B, %Y')%> </h2>
                   <div class="placed_data pdate">
                     <p class="placed">Select Meals By</p>
-                    <p class="placed_dates pdate text-right" id='next-week-select-by'><%= @next_week_select_by.strftime('%A, %d %b %Y') rescue @no_data_message %></p>
+                    <p class="placed_dates pdate text-right" id='next-week-select-by'><%= @next_week_select_by.strftime('%A, %d %b %Y') rescue nil %></p>
                   </div>
 
                   <div class="placed_data pdate">
                     <p class="placed">Expected delivery :</p>
-                    <p class="placed_dates pdate text-right"><%= @next_week_expected_delivery.strftime('%A, %d %b %Y') rescue nil %></p>
-                  </div>  
-                  <div class="order_add next-week">
-                    <ul id="psegment" class="pre_segment">
-                      <% selected_products.each do |item| %>
-                        <% meal_product = next_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
-                        <div class="order_inn center" >
-                          <div class="holder">
-                            <span class='dish_remove'>x</span>
-                            <img src="<%= meal_product['image'] rescue nil %>" data-id="<%= meal_product['product_id'][/\d+/] %>">
-                            <h5><%= meal_product['title'] rescue nil %> </h5>
-                          </div>
-                        </div>
-                      <% end %>
-                      <% meals_to_select.times do %>
-                        <li class="pre_segment_order empty">
-                          <a href="#_" id="box-item"><button><span>+</span><p>Add to box</p></button></a>
-                          <img src="" />
-                        </li>
-                      <% end %>
-                    </ul>
+                    <p class="placed_dates pdate text-right"><%= @next_week_expected_delivery.strftime('%A, %d %b %Y') rescue @no_data_message %></p>
                   </div>
+
+                  <% if @next_week_select_by.present? %>
+                    <div class="order_add next-week">
+                      <ul id="psegment" class="pre_segment">
+                        <% selected_products.each do |item| %>
+                          <% meal_product = next_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
+                          <div class="order_inn center" >
+                            <div class="holder">
+                              <span class='dish_remove'>x</span>
+                              <img src="<%= meal_product['image'] rescue nil %>" data-id="<%= meal_product['product_id'][/\d+/] %>">
+                              <h5><%= meal_product['title'] rescue nil %> </h5>
+                            </div>
+                          </div>
+                        <% end %>
+                        <% meals_to_select.times do %>
+                          <li class="pre_segment_order empty">
+                            <a href="#_" id="box-item"><button><span>+</span><p>Add to box</p></button></a>
+                            <img src="" />
+                          </li>
+                        <% end %>
+                      </ul>
+                    </div>
+                  <% end %>
                   
                   <% if next_week_meals.present? %>
                     <div class="meal-options">
