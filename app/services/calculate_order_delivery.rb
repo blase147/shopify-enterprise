@@ -14,7 +14,8 @@ class CalculateOrderDelivery
     else
       prev_order_date = @api_data["orders"]["edges"].last["node"]["created_at"].to_date rescue nil
       delivery_settings = delivery_setting
-      delivery_day = @api_data['delivery_day'].downcase.to_sym rescue nil
+      fallback_day = delivery_settings[:settings].first["delivery"].to_sym
+      delivery_day = @api_data['delivery_day'].downcase.to_sym rescue fallback_day
       cutoff_day = delivery_settings[:settings].filter{|s| s["delivery"].to_sym  == delivery_day } .first["cutoff_day"].to_sym rescue nil
       first_select_by = next_billing_date.strftime('%A').downcase.to_sym == cutoff_day ? next_billing_date : next_billing_date.next_occurring(cutoff_day) rescue nil
       first_expected_delivery = first_select_by.next_occurring(delivery_day) rescue nil
