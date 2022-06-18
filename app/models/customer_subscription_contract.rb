@@ -1,4 +1,10 @@
 class CustomerSubscriptionContract < ApplicationRecord
+  STATUS = {
+    cancelled: 'CANCELLED',
+    paused: 'PAUSED',
+    active: 'ACTIVE'
+  }
+
   enum gender: [:male, :female]
   belongs_to :shop, foreign_key: :shop_id
   belongs_to :reasons_cancel, optional: true
@@ -108,6 +114,10 @@ class CustomerSubscriptionContract < ApplicationRecord
   end
 
   def cancelled?
-    status == "CANCELLED"
+    status == STATUS[:cancelled]
+  end
+
+  def paused?
+    status == STATUS[:paused]
   end
 end
