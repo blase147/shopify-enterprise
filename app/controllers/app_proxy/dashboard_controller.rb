@@ -1,6 +1,8 @@
 class AppProxy::DashboardController < AppProxyController
-  before_action :load_subscriptions, except: [:build_a_box, :confirm_box_selection]
-  before_action :load_customer, only: %w(index addresses payment_methods settings upcoming build_a_box track_order)
+  skip_before_action :init_session, only: [:index, :fetch_contract]
+  skip_before_action :set_skip_auth, only: [:fetch_contract]
+  before_action :load_subscriptions, except: [:build_a_box, :confirm_box_selection, :index, :fetch_contract]
+  before_action :load_customer, only: %w(addresses payment_methods settings upcoming build_a_box track_order)
 
   def index
     # @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
@@ -206,6 +208,7 @@ class AppProxy::DashboardController < AppProxyController
   end
 
   def fetch_contract
+    @translation = current_shop&.translation
     @customer = CustomerSubscriptionContract.find params[:local_id]
     @api_data = @customer.api_data
     set_delivery_dates

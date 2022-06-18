@@ -1,6 +1,7 @@
 class AppProxyController < ApplicationController
   include ShopifyApp::AppProxyVerification
   before_action :init_session
+  before_action :set_skip_auth
 
   PER_PAGE = 6
 
@@ -18,11 +19,14 @@ class AppProxyController < ApplicationController
     @setting ||= current_shop&.setting
   end
 
+  def set_skip_auth
+    shop_setting = ShopSetting.find_by(shop_id: current_shop.id)
+    @skip_auth = shop_setting.nil? || shop_setting.debug_mode.nil? ? false : shop_setting.debug_mode
+  end
+
   private ##
 
   def init_session
-    shop_setting = ShopSetting.find_by(shop_id: current_shop.id)
-    @skip_auth = shop_setting.nil? || shop_setting.debug_mode.nil? ? false : shop_setting.debug_mode
     current_shop.connect
     @setting = current_shop&.setting
     @translation = current_shop&.translation
