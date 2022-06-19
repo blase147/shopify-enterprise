@@ -71,7 +71,7 @@ const Nav = (props) => {
     {
       content: 'Settings',
       id: 'settings',
-      path: '/settings',
+      path: '/app-settings',
     },
   ];
 
