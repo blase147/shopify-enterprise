@@ -75,7 +75,7 @@ customerData && customerData.map((customer,index)=>{
             HandleCustomerClick(index)
           }}
         >
-          140
+          {customer.deliveryData}
         </div>,
     ]
   )
