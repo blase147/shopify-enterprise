@@ -1,9 +1,9 @@
 module Queries
   class FetchCustomersMealsOrders < Queries::BaseQuery
-    type [Types::CustomerMealsOrdersType], null: false
+    type Types::FetchCustomerMealType, null: false
 
     def resolve
-      WorldfarePreOrder.all
+      {pre_order: WorldfarePreOrder.all, contracts: CustomerSubscriptionContract.all}
     end
   end
 end

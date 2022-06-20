@@ -19,7 +19,7 @@ import './weeklyMeals.css';
 import OrderMangementTable from './OrderMangementTable';
 import { Link } from 'react-router-dom';
 import OrderDetail from './OrderDetail';
-//import './AvenirFont/stylesheet.css';
+import './AvenirFont/stylesheet.css';
 
 const index = ({ handleBack }) => {
   const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
@@ -27,7 +27,8 @@ const index = ({ handleBack }) => {
   const [selectedDay, setSelectedDay] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [customersData, setCustomersData] = useState(null);
-  const [ deliveryOptions, setDeliveryOptions] = useState(days);
+  const [deliveryOptions, setDeliveryOptions] = useState(days);
+  const [selectedDeliveryOption, setSelectedDeliveryOption] = useState('sunday')
   const [mealData, setMealData] = useState([]);
   const[activeCustomer,setactiveCustomer]=useState(0)
   const[selectedCustomerMeals, setSelectedCustomerMeals]=useState([])
@@ -49,6 +50,7 @@ const index = ({ handleBack }) => {
   useEffect(() => {
     if(deliveryData.data && deliveryData.data.fetchDeliveryOptions) {
       setDeliveryOptions(deliveryData.data.fetchDeliveryOptions.map(o => o.deliveryDays))
+      setSelectedDeliveryOption(deliveryData.data.fetchDeliveryOptions[0]?.deliveryDays)
     }
   }, [deliveryData.data]);
 
@@ -56,19 +58,32 @@ const index = ({ handleBack }) => {
   const GET_Customers_Orders = gql`
     query {
       fetchCustomersMealsOrders {
-        week
-        products {
-          id
-          title
-          image
-          description
+        preOrder {
+          week
+          products {
+            id
+            title
+            image
+            description
+          }
+          shopifyContractId
+          customer {
+            name
+            subscription
+          }
+          deliveryDate
         }
-        shopifyContractId
-        customer {
+        contracts {
           name
           subscription
+          weekNumber
+          deliveryDate
+          originOrderProducts {
+            id
+            title
+            image
+          }
         }
-        deliveryDate
       }
     }
   `;
@@ -80,7 +95,7 @@ const index = ({ handleBack }) => {
   useEffect(() => {
     if (data && data.fetchCustomersMealsOrders) {
       filterAndSetCustomersData(selectedWeek);
-      setOrderCount(data.fetchCustomersMealsOrders.length)
+      setOrderCount(data.fetchCustomersMealsOrders.preOrder.length + data.fetchCustomersMealsOrders.contracts.length)
     }
   }, [data]);
   
@@ -104,8 +119,8 @@ const index = ({ handleBack }) => {
     var weekOfYear = require('dayjs/plugin/weekOfYear')
     dayjs.extend(weekOfYear)
     let customerData=[]
-    data.fetchCustomersMealsOrders.forEach((c)=> {
-      if(c.week === selectedWeek.toString()) {
+    data.fetchCustomersMealsOrders.preOrder.forEach((c)=> {
+      if(c.week === selectedWeek.toString() && days[new Date(c.deliveryDate).getDay()] === selectedDeliveryOption) {
         let info = { 
           name: c.customer.name,
           totalCount: c.products.length,
@@ -119,12 +134,26 @@ const index = ({ handleBack }) => {
         customerData.push(info)
       }
     })
+    data.fetchCustomersMealsOrders.contracts.forEach((c)=> {
+      if(c.weekNumber === selectedWeek.toString()) {
+        let info = { 
+          name: c.name,
+          totalCount: c.originOrderProducts.length,
+          products: [],
+          deliveryDate: c.deliveryDate,
+          subscription: c.subscription
+        }
+        c.originOrderProducts && c.originOrderProducts.forEach((product)=> {
+          info.products.push(product)
+        })
+        customerData.push(info)
+      }
+    })
     setCustomersData(customerData)
     filterMealData(customerData)
   }
 
   const filterMealData = (customerData) => {
-
     let mealsArray = []
     customerData.forEach((c) => {
       let productArray = []
@@ -159,6 +188,7 @@ const index = ({ handleBack }) => {
     let newDate = dayjs(selectedDate).startOf('week').add(dayCount, 'day').format('YYYY-MM-DD')
     setSelectedDate(newDate)
     setSelectedDay(e.target.value)
+    setSelectedDeliveryOption(e.target.value)
     filterAndSetCustomersData(newDate)
   }
 
@@ -169,27 +199,18 @@ const index = ({ handleBack }) => {
     return ""
   }
 
-  console.log('customersData',customersData)
+  const HandleCustomerClick=(customer_id)=>{
+    setSelectedCustomerMeals(mealData[customer_id])
+    setactiveCustomer(customer_id)
+  }
 
-  const MealDataArr=[
-    [
-      {name: 'test1',imgUrl: 'https://picsum.photos/200/300'},
-  {name: '45888',imgUrl: 'https://picsum.photos/200/300'},
-  {name: '5998',imgUrl: 'https://picsum.photos/200/300'}
-  
-  ],
-    [{name: 'test2',imgUrl: 'https://picsum.photos/200/300'}],
-    [{name: 'test3',imgUrl: 'https://picsum.photos/200/300'}],
-    [{name: 'test4',imgUrl: 'https://picsum.photos/200/300'}],
-  ]
-// const[mealdata,setMealData]=useState(MealDataArr[0])
-
-const HandleCustomerClick=(customer_id)=>{
-  setSelectedCustomerMeals(mealData[customer_id])
-  setactiveCustomer(customer_id)
-}
-
-
+  const formatDateTitle = () => {
+    const curr = new Date(selectedDate);
+    const first = curr.getDate() - curr.getDay() + 1; // Start from Monday
+    const firstDate = new Date(curr.setDate(first));
+    const lastDate = new Date(curr.setDate(firstDate.getDate() + 6));
+    return `${dayjs(firstDate).format('dddd DD MMM')} - ${dayjs(lastDate).format('dddd DD MMM YYYY')}`
+  }
   return (
     <>
       <div className='weeklyMeal'>
@@ -204,22 +225,6 @@ const HandleCustomerClick=(customer_id)=>{
 
         <Card>
           <Card.Section>
-          <div className="shipping-header">
-            <Layout>
-              <Layout.Section>
-              <div className="back-button pointer" onClick={handleBack}>
-                {/* <Icon source={MobileBackArrowMajor} color="base" /> */}
-                <svg width="21" height="22" viewBox="0 0 21 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0.597437 11.485L0.59753 11.485L0.593739 11.4757C0.468752 11.1719 0.468752 10.8311 0.593739 10.5272L0.59383 10.5273L0.597437 10.518C0.656313 10.3663 0.74431 10.2276 0.856495 10.1096L9.60596 1.371L9.6074 1.36954C9.72365 1.25249 9.86198 1.15954 10.0144 1.09611C10.1669 1.03267 10.3304 1 10.4956 1C10.6608 1 10.8244 1.03267 10.9768 1.09611C11.1293 1.15954 11.2676 1.25249 11.3839 1.36954L11.3868 1.37244C11.504 1.48854 11.597 1.62663 11.6604 1.77873C11.7239 1.93084 11.7565 2.09396 11.7565 2.2587C11.7565 2.42344 11.7239 2.58656 11.6604 2.73866C11.597 2.89076 11.504 3.02886 11.3868 3.14495L11.3859 3.14586L5.60845 8.89862L4.75049 9.75293H5.96125L19.2493 9.75293C19.5812 9.75293 19.8994 9.88463 20.1339 10.1188C20.3684 10.353 20.5 10.6706 20.5 11.0015C20.5 11.3324 20.3684 11.6499 20.1339 11.8841C19.8994 12.1184 19.5812 12.2501 19.2493 12.2501L5.96125 12.2501H4.75049L5.60845 13.1044L11.3853 18.8566C11.6211 19.0921 11.7535 19.4114 11.7535 19.7443C11.7535 19.9091 11.721 20.0723 11.6579 20.2246C11.5947 20.3769 11.5021 20.5154 11.3853 20.632L11.7387 20.9858L11.3853 20.632C11.1495 20.8676 10.8294 21 10.4956 21C10.3304 21 10.1667 20.9675 10.0141 20.9043C9.8614 20.8412 9.72273 20.7486 9.60595 20.632L0.856514 11.8934C0.744318 11.7754 0.656315 11.6367 0.597437 11.485Z" fill="black" stroke="black"/>
-                </svg>
-
-                <p>
-                  <TextStyle variation="subdued"> Back to schedule page</TextStyle>
-                </p>
-              </div>
-              </Layout.Section>
-            </Layout>
-          </div>
             <div className='header'>
               <div className="header-content">
                 <div className="back-button pointer"  id='prev-week' onClick={handleWeekChange}>
@@ -230,7 +235,7 @@ const HandleCustomerClick=(customer_id)=>{
 
                 {/* Back */}
                 </div>
-                <h2 className="Trial">Meals for: Week of {selectedWeek}/52 </h2>
+                <h2 className="Trial">Meals for: Week of {formatDateTitle()} </h2>
                 <div className="back-button pointer" id='next-week' onClick={handleWeekChange}>
                   {/* <Icon source={ArrowRightMinor} color="base" /> */}
                   <svg width="30" height="31" viewBox="0 0 30 31" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -248,33 +253,10 @@ const HandleCustomerClick=(customer_id)=>{
                   <div className='main-order-section'>
                   <div className='left-section'>
                     <div className='order-buttons'>
-                      <div className='selectbox_01'>
-                        <select name="week" id="week"  className='week_custom_css' onChange={handleDayChange}>
-                          <option value="">Select Week</option>
-                          {deliveryOptions.map((dd) => (
-                            <option value={dd}>{dd}</option>
-                          ))}
-                        </select>
-                        <label htmlFor="week">
-                          <Icon source={DropdownMinor} color="base" />
-                        </label>
-                      </div>
-
                       <div className='selectbox_02'>
                         <select name="days" id="days" className="order_day" onChange={handleDayChange}>
                           {deliveryOptions.map((dd) => (
-                            <option value=''>Select Day</option>
-                          ))}
-                        </select>
-                        <label>
-                          <Icon source={DropdownMinor} color="base" />
-                        </label>
-                      </div>
-                      
-                      <div className='selectbox_03'>
-                        <select name="orders" className='number_of_order' id="num_of_orders" onChange={handleDayChange}>
-                          {deliveryOptions.map((dd) => (
-                            <option value=''>Number Of Orders</option>
+                            <option value={dd}>{_.upperFirst(dd)}</option>                        
                           ))}
                         </select>
                         <label>
