@@ -17,6 +17,9 @@ module Types
     field :billing_address, Types::BillingAddressType, null: true
     field :pack, String, null: true
     field :frequency, String, null: true
+    field :origin_order_products, [Types::OriginOrderProductsType], null: true
+    field :week_number, String, null: true
+    field :delivery_date, String, null: true
 
     field :api_resource_id, String, null: true
     field :api_source, String, null: true
@@ -52,5 +55,19 @@ module Types
     def shop_domain
       object.shop.shopify_domain
     end
+
+    def week_number
+      date = object.api_data["delivery_date"]
+      Date.strptime(date, "%m/%d/%Y").to_date.cweek rescue 1
+    end
+
+    def delivery_date
+      object.api_data["delivery_date"]
+    end
+
+    def origin_order_products
+      object.api_data["origin_order"]["line_items"]["edges"]
+    end
+
   end
 end
