@@ -135,7 +135,7 @@ const index = ({ handleBack }) => {
       }
     })
     data.fetchCustomersMealsOrders.contracts.forEach((c)=> {
-      if(c.weekNumber === selectedWeek.toString()) {
+      if(c.weekNumber === selectedWeek.toString()) {  
         let info = { 
           name: c.name,
           totalCount: c.originOrderProducts.length,
@@ -211,6 +211,17 @@ const index = ({ handleBack }) => {
     const lastDate = new Date(curr.setDate(firstDate.getDate() + 6));
     return `${dayjs(firstDate).format('dddd DD MMM')} - ${dayjs(lastDate).format('dddd DD MMM YYYY')}`
   }
+  let mealQuantity=[]
+  customersData?.map((val,index)=>{
+    val?.products?.map((product,index)=>{
+      mealQuantity.push(JSON.stringify({title: product.title,image: product.image}))
+    })
+  })
+  const mealDataWithQuantity = mealQuantity.reduce((finalMap, item) => {
+    finalMap[item] = ++finalMap[item] || 1; 
+    
+    return finalMap;
+  } , {})
   return (
     <>
       <div className='weeklyMeal'>
@@ -272,6 +283,21 @@ const index = ({ handleBack }) => {
                             Refresh
                           </Link>
                         </div>
+                      </div>
+                    </div>
+                    <div style={{display: "block"}}>
+                      <div className="meals_with_quantity">
+                        { Object.keys(mealDataWithQuantity).map((key,index)=>{
+                          return(
+                            <>
+                              <div className='meal-main'>
+                                <img clas="meal-image" src={JSON.parse(key)?.image} alt="not present" />
+                                <div className="meal_title" label="Chip Filled" style={{fontSize: "15px",fontWeight:700}}>{JSON.parse(key)?.title}</div>
+                                <div className="meal_qty">(Quantity: {mealDataWithQuantity[key]})</div>
+                              </div>
+                            </>
+                          )
+                        })}
                       </div>
                     </div>
                     <h1>Total Orders: { orderCount }</h1>
