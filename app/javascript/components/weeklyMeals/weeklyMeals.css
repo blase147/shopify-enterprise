@@ -1105,3 +1105,45 @@ tr.Polaris-DataTable__TableRow th:first-child {
   margin-left: 0;
 }
 }
+
+/* meal with .meals_with_quantity */
+.weeklyMeal .meals_with_quantity {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
+  overflow-x: unset;
+  overflow-y: auto;
+  text-align: center;
+  padding: 18px;
+  flex-wrap: nowrap;
+}
+.weeklyMeal .meals_with_quantity div {
+  display: inline-block;
+  padding: 0 10px;
+  flex: 0 0 30%;
+  max-width: 30%;
+}
+.weeklyMeal .meals_with_quantity div img {
+  width: 100%;
+  max-width: 73px;
+  height: 73px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+} 
+.weeklyMeal .meals_with_quantity div .meal_title {
+  flex: 0 0 100%;
+  width: 100%;
+  max-width: 100%;
+  margin: 8px 0;
+  margin-bottom: 0;
+}
+.weeklyMeal .meals_with_quantity div .meal_qty {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
