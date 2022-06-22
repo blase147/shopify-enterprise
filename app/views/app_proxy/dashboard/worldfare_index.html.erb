@@ -94,6 +94,7 @@
   $( "#progressbarwarning" ).progressbar({ value: 30});
 
   function Profile(evt, usr_tab,make_active = true) {
+    console.log("fdafdafdasfas",usr_tab)
     var i, Profile_links_data, Profile_links;
     Profile_links_data = document.getElementsByClassName("Profile_links_data");
     for (i = 0; i < Profile_links_data.length; i++) {
@@ -106,6 +107,9 @@
       tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
     document.getElementById(usr_tab).style.display = "block";
+    if(usr_tab == 'Account') {
+      document.getElementById('customer_info_form').style.display = "block";
+    }
     if(usr_tab == 'Overview') {
       document.getElementById('Schedule').style.display = "block";
     }

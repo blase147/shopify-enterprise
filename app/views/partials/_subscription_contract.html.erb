@@ -178,7 +178,7 @@ line_item = subscription.lines.edges.first.node
               </clipPath>
               </defs>
             </svg>
-            Overview
+            Overviews
           </button>
           <button class="Profile_links" onclick="Profile(event, 'Account')">
             <svg width="25" height="18" viewBox="0 0 25 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -618,7 +618,7 @@ line_item = subscription.lines.edges.first.node
             <button data-pre_order="<%= { customer_id: params[:customer_id],week: week_days[params[:week].to_i-1], products: params[:product_ids] }.to_json %>" class="submit_pre_order">Save Changes</button>
             <% end %>
         </div>
-        <form id="customer_info_form hide" onsubmit="return false;" style="display: none">
+        <form id="customer_info_form" onsubmit="return false;" style="display: none">
           <div id="Account" class="Profile_links_data">
               <div id="itable" class="flex space-between">
                 <div class="account-holder">
@@ -736,8 +736,8 @@ line_item = subscription.lines.edges.first.node
           </div>
           </form>
 
-          <div id="Subscription hide" class="Profile_links_data" style="display: none">
-            <div class="subscription-box">
+          <div id="Subscription" class="Profile_links_data" style="display: none">
+            <div class="subscription-box" style="min-height:350px">
               <h2 class="Trial">My Subscription</h2>
               <% if (customer_order.line_items.any?{|item| item.name.downcase.include?('trial')} rescue false) %>
                 <p>Choose your weekly plan.</p>
@@ -749,7 +749,7 @@ line_item = subscription.lines.edges.first.node
           </div>
         
         
-          <div id="Support hide" class="Profile_links_data" style="display: none">
+          <div id="Support" class="Profile_links_data" style="display: none">
             <div class="support-section">
               <h1>How can we help?</h1>
               <form action="">
