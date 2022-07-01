@@ -310,7 +310,7 @@ const Customers = ({shopifyDomain}) => {
             key={row.id}
           >{`${row.firstName} ${row.lastName}`}</a>,
           row.createdAt,
-          apiData?.next_billing_date,
+          apiData =="" ? "" : moment(apiData?.next_billing_date)?.format('MMMM Do YYYY, h:mm:ss a'),
           <div
             className={
               row.status === 'PAUSED'
