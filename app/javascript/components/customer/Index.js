@@ -288,9 +288,14 @@ const Customers = ({shopifyDomain}) => {
   };
   //each row in data table
   const formatRows = (rows) => {
+    let apiData;
     return rows?.map((row) =>
-    {
-      let apiData = row?.apiData != null ? JSON.parse(row?.apiData?.replaceAll("=>",":")?.replaceAll("nil",'"nil"')) : ""
+    { 
+      try{
+        apiData = row?.apiData != null ? JSON.parse(row?.apiData?.replaceAll("=>",":")?.replaceAll("nil",'"nil"')) : ""
+      }catch(e){
+        apiData = ""
+      }
       return row?.subscription !== null ?
         [
           <Checkbox
@@ -305,7 +310,7 @@ const Customers = ({shopifyDomain}) => {
             key={row.id}
           >{`${row.firstName} ${row.lastName}`}</a>,
           row.createdAt,
-          moment(apiData?.next_billing_date)?.format('MMMM Do YYYY, h:mm:ss a'),
+          apiData?.next_billing_date,
           <div
             className={
               row.status === 'PAUSED'
