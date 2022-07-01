@@ -18,6 +18,7 @@ import { CSVLink } from 'react-csv';
 import { useHistory } from 'react-router-dom';
 import swapIcon from '../../../assets/images/icons/swap.svg';
 import AppLayout from '../layout/Layout';
+import moment from 'moment';
 
 
 // import json2csv from 'json2csv';
@@ -99,6 +100,10 @@ const Customers = ({shopifyDomain}) => {
     {
       id: 'active',
       content: 'Active',
+    },
+    {
+      id: 'paused',
+      content: 'Paused',
     },
     {
       id: 'expired',
@@ -230,6 +235,7 @@ const Customers = ({shopifyDomain}) => {
         language
         createdAt
         updatedAt
+        apiData
         apiResourceId
         apiSource
         additionalContacts {
@@ -283,7 +289,9 @@ const Customers = ({shopifyDomain}) => {
   //each row in data table
   const formatRows = (rows) => {
     return rows?.map((row) =>
-      row?.subscription !== null ?
+    {
+      let apiData = row?.apiData != null ? JSON.parse(row?.apiData?.replaceAll("=>",":")?.replaceAll("nil",'"nil"')) : ""
+      return row?.subscription !== null ?
         [
           <Checkbox
             label={row.id}
@@ -297,6 +305,7 @@ const Customers = ({shopifyDomain}) => {
             key={row.id}
           >{`${row.firstName} ${row.lastName}`}</a>,
           row.createdAt,
+          moment(apiData?.next_billing_date)?.format('MMMM Do YYYY, h:mm:ss a'),
           <div
             className={
               row.status === 'PAUSED'
@@ -334,7 +343,7 @@ const Customers = ({shopifyDomain}) => {
          >
              Create Billing Attempt
          </Button>
-        ] : []);
+        ] : []});
   };
   const [customers, setCustomers] = useState([]);
   const [filterCustomers, setFilterCustomers] = useState([]);
@@ -342,7 +351,7 @@ const Customers = ({shopifyDomain}) => {
   const filterCustomersValue = () => {
     const rowsData = customers.filter((item) => {
       return (
-        (item.subscription === subscriptions[selectedTab] ||
+        (item.subscription === subscriptions[selectedTab] ||(subscriptions[selectedTab] === 'paused') ||
           (subscriptions[selectedTab] === 'all') || (subscriptions[selectedTab] === 'returning') || (subscriptions[selectedTab] === 'active') || (subscriptions[selectedTab] === 'cancelled') || (subscriptions[selectedTab] === 'new')) &&
         (item.name?.toLowerCase()?.includes(queryValue?.toLowerCase()) ||
           !queryValue) &&
@@ -596,7 +605,7 @@ const Customers = ({shopifyDomain}) => {
         newArr.push(res);
       }
     });
-  } else if (selectedTab == 2 && filterCustomers.length !== 0) {
+  } else if (selectedTab == 4 && filterCustomers.length !== 0) {
     filterCustomers?.map(res => {
       res.status == 'PAUSED' && pausedArr.push(res);
     });
@@ -604,13 +613,13 @@ const Customers = ({shopifyDomain}) => {
     filterCustomers?.map(res => {
       res.status == 'ACTIVE' && activeArr.push(res);
     });
-  } else if (selectedTab == 4 && filterCustomers.length !== 0) {
+  } else if (selectedTab == 5 && filterCustomers.length !== 0) {
     filterCustomers?.map(res => {
       res.status == 'CANCELLED' && cancelledArr.push(res);
     });
   }
 
-
+console.log("selectedTab>>>>>>>>>>>>>>>>>>>",selectedTab)
   return (
     <AppLayout typePage="customers" tabIndex="2">
       <Frame>
@@ -752,19 +761,21 @@ const Customers = ({shopifyDomain}) => {
                     'numeric',
                     'numeric',
                     'numeric',
+                    'numeric',
                     'text',
                   ]}
                   headings={[
                     'Id',
                     'Name',
                     'Date Created',
+                    'Next Billing Date',
                     'Status',
                     'Source',
                     'Product',
                     '',
                     '',
                   ]}
-                  rows={selectedTab == 1 ? formatRows(newArr) : selectedTab == 2 ? formatRows(pausedArr) : selectedTab == 3 ? formatRows(activeArr) : selectedTab == 4 ? formatRows(cancelledArr) : formatRows(filterCustomers)}
+                  rows={selectedTab == 1 ? formatRows(newArr) : selectedTab == 4 ? formatRows(pausedArr) : selectedTab == 3 ? formatRows(activeArr) : selectedTab == 5 ? formatRows(cancelledArr) : formatRows(filterCustomers)}
                 />
               </div>
               {loading && (

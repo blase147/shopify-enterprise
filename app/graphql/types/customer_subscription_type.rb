@@ -20,7 +20,7 @@ module Types
     field :origin_order_products, [Types::OriginOrderProductsType], null: true
     field :week_number, String, null: true
     field :delivery_date, String, null: true
-
+    field :api_data, String, null: true
     field :api_resource_id, String, null: true
     field :api_source, String, null: true
 
