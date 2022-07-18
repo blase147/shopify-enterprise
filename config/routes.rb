@@ -110,6 +110,7 @@ Rails.application.routes.draw do
         get :fetch_contract
         get :update_delivery_day
         post :portal_skip_schedule
+        get :skip_next_billing_date
       end
     end
 
