@@ -371,13 +371,10 @@ line_item = subscription.lines.edges.first.node
             meals_to_select = total_meals - selected_products.count
           end
         %>
-        <div class="pre_orders <%= hide_display_selection %> <%= @customer&.skip_dates.index("#{week_day}") != nil ? "grayed-out" : "" %>">
+        <div class="pre_orders <%= hide_display_selection %>">
           <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
           <div class="order-box">
             <h2 class="Trial">Week of <%= current_date.beginning_of_week.strftime('%A %d %B') %> - <%= current_date.end_of_week.strftime('%A %d %B') %></h2>
-            <button type="button" class="btn-yellow bold skip_week" style="float: right;" data-week="<%= week_day %>" data-contractId="<%= @customer.id %>" >
-              <%= @customer&.skip_dates.index("#{week_day}") != nil ? "Unskip" : "Skip" %>
-            </button>
             <div class="placed_data pdate">
               <p class="placed">Select Meals By</p>
               <p class="placed_dates pdate text-right" id='current-week-select-by'><%= @current_week_select_by.strftime('%A, %d %b %Y') rescue nil  %></p>
@@ -488,13 +485,10 @@ line_item = subscription.lines.edges.first.node
                   meals_to_select = total_meals - selected_products.count
                 end
               %>
-              <div class="pre_orders <%= hide_display_selection  %> <%= @customer&.skip_dates.index("#{week_day}") != nil ? "grayed-out" : "" %>" >
+              <div class="pre_orders <%= hide_display_selection  %>" >
                 <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
                 <div class="order-box">
                   <h2 class="Trial">Week of <%= (current_date + 1.week).beginning_of_week.strftime('%A %d %B') %> - <%= (current_date + 1.week).end_of_week.strftime('%A %d %B, %Y')%> </h2>
-                  <button type="button" class="btn-yellow bold skip_week" style="float: right;" data-week="<%= week_day %>" data-contractId="<%= @customer.id %>" >
-                    <%= @customer&.skip_dates.index("#{week_day}") != nil ? "Unskip" : "Skip" %>
-                  </button>
                   <div class="placed_data pdate">
                     <p class="placed">Select Meals By</p>
                     <p class="placed_dates pdate text-right" id='next-week-select-by'><%= @next_week_select_by.strftime('%A, %d %b %Y') rescue nil %></p>
@@ -1084,23 +1078,5 @@ $(".add-to-current-week").on('click', function(e){
 
       }
     });
-  });
-
-  $('.skip_week').on('click',function() {      
-    if($(this).html() == "Skip")
-    {
-         data= "skip_date="+$(this)?.data("week")+"&method=skip&id="+$(this)?.data("contractid")
-         $(this).html('Unskip');
-         $(this).parent().parent().addClass("grayed-out");
-    }else{
-      data= "skip_date="+$(this)?.data("week")+"&method=unskip&id="+$(this)?.data("contractid")
-      $(this).html('Skip')
-      $(this).parent().parent().removeClass("grayed-out")
-    }
-    $.ajax({
-      type: "get",
-      data: data,
-      url: "dashboard/skip_next_billing_date",
-    })
   });
 </script>

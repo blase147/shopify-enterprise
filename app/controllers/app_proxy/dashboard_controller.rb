@@ -247,17 +247,6 @@ class AppProxy::DashboardController < AppProxyController
     end
   end
 
-  def skip_next_billing_date
-    contract = CustomerSubscriptionContract.find(params[:id])
-    skip_dates = contract&.skip_dates
-    if params["method"]=="skip"
-      skip_dates&.push(params[:skip_date])
-    else
-      skip_dates&.delete(params[:skip_date])
-    end
-    contract.update(skip_dates: skip_dates)
-  end
-  
   private ##
 
   def fetch_products(products)
