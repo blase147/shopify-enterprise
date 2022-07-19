@@ -388,7 +388,7 @@ line_item = subscription.lines.edges.first.node
               <p class="placed_dates pdate text-right"><%= @current_week_expected_delivery.strftime('%A, %d %b %Y') rescue @no_data_message %></p>
             </div>
             <% if @current_week_select_by.present? %>
-              <div class="order_add current-week" id="add_box_<%= week_day %>">
+              <div class="order_add current-week <%= @customer&.skip_dates.index("#{week_day}") != nil ? "hide" : "" %>" id="add_box_<%= week_day %>">
                 <ul id="psegment" class="pre_segment">
                   <% selected_products.each do |item| %>
                     <% meal_product = current_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
@@ -506,7 +506,7 @@ line_item = subscription.lines.edges.first.node
                   </div>
 
                   <% if @next_week_select_by.present? %>
-                    <div class="order_add next-week" id="add_box_<%= week_day %>">
+                    <div class="order_add next-week <%= @customer&.skip_dates.index("#{week_day}") != nil ? "hide" : "" %>" id="add_box_<%= week_day %>">
                       <ul id="psegment" class="pre_segment">
                         <% selected_products.each do |item| %>
                           <% meal_product = next_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
@@ -1092,12 +1092,12 @@ $(".add-to-current-week").on('click', function(e){
       data= "skip_date="+$(this)?.data("week")+"&method=skip&id="+$(this)?.data("contractid")
       $(this).html('Unskip');
       $(this).parent().parent().addClass("grayed-out");
-      $("#add_box_<%= week_day %>").hide();
+      $("#add_box_"+$(this)?.data("week")).addClass("hide");
     }else{
       data= "skip_date="+$(this)?.data("week")+"&method=unskip&id="+$(this)?.data("contractid")
       $(this).html('Skip')
       $(this).parent().parent().removeClass("grayed-out");
-      $("#add_box_<%= week_day %>").show();
+      $("#add_box_"+$(this)?.data("week")).removeClass("hide");
     }
     $.ajax({
       type: "get",
