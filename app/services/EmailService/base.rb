@@ -52,6 +52,7 @@ class EmailService::Base < ApplicationService
     when "Recurring Charge Confirmation"
       {
         name: object[:customer].name,
+        order_details: object[:order_details],
         storename: storename,
         subscription_line_item: object[:line_name],
         customer_portal_link: customer_portal_link,

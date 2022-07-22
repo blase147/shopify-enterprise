@@ -31,6 +31,7 @@ class AddProductsToOrderWorker
       cutoff_in_hours = ((order_select_by.to_time.beginning_of_day - Date.today.to_time.beginning_of_day) / 3600).to_i
 
       if order.present? && week_number.present?
+        products = []
         pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_number)
 
         if pre_order.present? || cutoff_in_hours.negative?
@@ -43,7 +44,10 @@ class AddProductsToOrderWorker
 
           pre_order.reload
           pre_order_products = JSON.parse(pre_order.products)
-
+          pre_order_products&.each do |p|
+            product = ShopifyAPI::Product.find(p.to_i)
+            products << product&.title
+          end
           result = AddOrderLineItem.new(shopify_order_id, pre_order_products).call
           puts result.order_edit_commit.order.id
           puts result.order_edit_commit.user_errors
@@ -53,6 +57,9 @@ class AddProductsToOrderWorker
           # Send email notification to user befoer 24 hours of cutoff
           PreOrderEmailNotificationWorker.perform_in(cutoff_in_hours.hours-24.hours, contract.id)
         end
+        
+        EmailService::Send.new(email_notification).send_email({customer: contract, order_details: "Order Number: #{shopify_order_id} Meals: #{products.to_sentence}"  }) unless email_notification.nil?
+      
       else
         puts "Rake task is aborting as order not found"
       end
