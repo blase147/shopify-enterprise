@@ -48,7 +48,7 @@ class AddProductsToOrderWorker
           puts result.order_edit_commit.order.id
           puts result.order_edit_commit.user_errors
         else
-          # Enque sidekiq job to create Pre-Order on select by
+          # Enque sidekiq job to create Pre-Order on select byy
           FillPreOrderWorker.perform_in(cutoff_in_hours.hours, contract.id, shopify_order_id)
           # Send email notification to user befoer 24 hours of cutoff
           PreOrderEmailNotificationWorker.perform_in(cutoff_in_hours.hours-24.hours, contract.id)
