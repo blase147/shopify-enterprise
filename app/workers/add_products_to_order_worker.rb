@@ -43,30 +43,22 @@ class AddProductsToOrderWorker
 
           pre_order.reload
           pre_order_products = JSON.parse(pre_order.products)
-  
+
           result = AddOrderLineItem.new(shopify_order_id, pre_order_products).call
           puts result.order_edit_commit.order.id
           puts result.order_edit_commit.user_errors
         else
-          # Enque sidekiq job to create Pre-Order on select byy
+          # Enque sidekiq job to create Pre-Order on select by
           FillPreOrderWorker.perform_in(cutoff_in_hours.hours, contract.id, shopify_order_id)
           # Send email notification to user befoer 24 hours of cutoff
           PreOrderEmailNotificationWorker.perform_in(cutoff_in_hours.hours-24.hours, contract.id)
         end
-      
       else
         puts "Rake task is aborting as order not found"
       end
-      email_notification = contract.shop.setting.email_notifications.find_by_name "Recurring Charge Confirmation"
-      products = []
-      order&.line_items&.each do |product|
-        products << product&.title
-      end
-      EmailService::Send.new(email_notification).send_email({customer: contract, order_details: "Order Number: #{shopify_order_id} Meals: #{products.to_sentence}"  }) unless email_notification.nil?
     else
       puts "shopify_order_id or contract_id not present"
     end
-
   rescue => e
     params = {shopify_order_id: shopify_order_id, contract_id: contract_id}
     message = "#{e.message} from #{e.backtrace.first}"
@@ -74,5 +66,3 @@ class AddProductsToOrderWorker
     raise e
   end
 end
-
-
