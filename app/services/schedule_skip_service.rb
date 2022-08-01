@@ -34,28 +34,38 @@ class ScheduleSkipService < GraphqlService
 
   def run(params = nil)
     subscription = SubscriptionContractService.new(@id).run
+    customer = CustomerSubscriptionContract.find_by(shopify_id: @id)
+    skip_billing_offset = subscription.billing_policy.interval_count.send(subscription.billing_policy.interval.downcase)
     if params.present? && params[:billing_date].present?
       skip_billing_date = params[:billing_date].to_date
     else
       # subscription = SubscriptionContractService.new(@id).run
       billing_date = DateTime.parse(subscription.next_billing_date)
-      skip_billing_offset = subscription.billing_policy.interval_count.send(subscription.billing_policy.interval.downcase)
       skip_billing_date = billing_date + skip_billing_offset
     end
     log_work(subscription) if @allow_default
 
     p skip_billing_date
     input = {}
+    if customer&.skip_dates.include? "#{skip_billing_date&.strftime('%Y-%m-%d')}"
+      while(customer&.skip_dates.include? "#{skip_billing_date&.strftime('%Y-%m-%d')}")
+        skip_billing_date += skip_billing_offset
+      end
+    end
     input['nextBillingDate'] = skip_billing_date
 
     id = "gid://shopify/SubscriptionContract/#{@id}"
     result = client.query(client.parse(DELETE_QUERY), variables: { contractId: id } )
+    api_data = customer&.api_data
+    api_data["next_billing_date"] = skip_billing_date
+    customer&.update(api_data: api_data)
+    puts "=====++Service=============",result
     p result
     draft_id = result.data.subscription_contract_update.draft.id
     result = SubscriptionDraftsService.new.update draft_id, input
     p result
     result = SubscriptionDraftsService.new.commit draft_id
-    customer = CustomerSubscriptionContract.find_by(shopify_id: @id)
+    
     # customer.shop.subscription_logs.skip.create(subscription_id: @id, customer_id: customer.id)
     p result
     email_notification = customer.shop.setting.email_notifications.find_by_name "Skip Next Order"
