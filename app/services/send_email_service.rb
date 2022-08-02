@@ -6,8 +6,9 @@ class SendEmailService
         order = ShopifyAPI::Order.find(order_number) rescue nil
         expected_order_delivery = CalculateOrderDelivery.new(contract.api_data, contract.shop.id).expected_delivery_of_order(order.created_at)
         products = []
-        contract&.api_data["origin_order"]["line_items"]["edges"]&.each do |product|
-            products << product["node"]["product"]["title"] unless product["node"]["product"]["title"]&.downcase&.include? "meals"
+        
+        order&.line_items&.each do |product|
+            products << product&.title unless product&.title&.downcase&.include? "meals"
         end
 
         EmailService::Send.new(email_notification).send_email({customer: contract, order_details: "Order Number: #{order_number} Meals: #{products.to_sentence}", delivery_date: expected_order_delivery }) unless email_notification.nil?
