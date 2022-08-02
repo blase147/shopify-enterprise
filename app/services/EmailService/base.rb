@@ -52,11 +52,13 @@ class EmailService::Base < ApplicationService
     when "Recurring Charge Confirmation"
       {
         name: object[:customer].name,
+        first_name: object[:customer].first_name&.humanize,
         order_details: object[:order_details],
         storename: storename,
         subscription_line_item: object[:line_name],
         customer_portal_link: customer_portal_link,
-        shopify_store_email: shop_email
+        shopify_store_email: shop_email,
+        delivery_date: object[:delivery_date]
       }
     when "Upcoming Charge"
       {
