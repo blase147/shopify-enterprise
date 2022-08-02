@@ -17,6 +17,6 @@ class SendEmailService
         contract&.api_data["origin_order"]["line_items"]["edges"]&.each do |product|
             products << product["node"]["product"]["title"] unless product["node"]["product"]["title"]&.downcase&.include? "meals"
         end
-        EmailService::Send.new(email_notification).send_email({customer: contract, order_details_first: "Order Number: #{order_number} Meals: #{products.to_sentence}", delivery_date_first: contract.api_data["delivery_date"] }) if email_notification.present?
+        EmailService::Send.new(email_notification).send_email({customer: contract, order_details_first: "Order Number: #{order_number} Meals: #{products.to_sentence}", delivery_date_first: contract.api_data["delivery_date"] }) if email_notification.present? && shop.setting.email_service.present?
     end
 end
