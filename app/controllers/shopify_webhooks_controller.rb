@@ -60,6 +60,8 @@ class ShopifyWebhooksController < ApplicationController
   def billing_attempt_success
     order_id = params[:order_id]
     contract_id = params[:subscription_contract_id]
+
+    SendEmailService.new.send_recurring_order_email(order_id, contract_id)
     AddProductsToOrderWorker.perform_async(order_id, contract_id)
 
     head :no_content
