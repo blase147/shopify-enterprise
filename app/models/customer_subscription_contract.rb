@@ -57,9 +57,7 @@ class CustomerSubscriptionContract < ApplicationRecord
 
   def activation_email
     unless import_type == "stripe_subscription"
-      email_notification = shop.setting.email_notifications.find_by_name "Subscription Activation"
-      EmailService::Send.new(email_notification).send_email({customer: self}) if email_notification.present? && shop.setting.email_service.present?
-      puts "activation email"
+      SendEmailService.new.send_subscription_activation_email(self.id)
     end
   end
 
