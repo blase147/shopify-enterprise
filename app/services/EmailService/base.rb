@@ -36,11 +36,14 @@ class EmailService::Base < ApplicationService
     when "Subscription Activation"
       {
         name: object[:customer].name,
+        first_name: object[:customer].first_name&.humanize,
+        order_details_first: object[:order_details_first],
         storename: storename,
         myshopify_url: myshopify_url,
         customer_portal_link: customer_portal_link,
         shopify_store_email: shop_email,
         email_body: object[:email_body],
+        delivery_date_first: object[:delivery_date_first]
       }
     when "Subscription Cancellation"
       {
