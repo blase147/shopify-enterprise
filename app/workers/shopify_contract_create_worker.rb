@@ -30,10 +30,10 @@ class ShopifyContractCreateWorker
         order = ShopifyAPI::Order.find(order_id)
         note_hash = JSON.parse(order&.note) rescue {}
        if note_hash["delivery_date"].present?
-        delivery_date = note_hash["delivery_date"].to_date.strftime("%Y-%m-%d")
+        delivery_date = note_hash["delivery_date"].to_date.strftime("%d/%m/%Y")
        else
         calculate_delivery_date = calculate_delivery_date(shop_id)
-        delivery_date = calculate_delivery_date.to_date.strftime("%Y-%m-%d")
+        delivery_date = calculate_delivery_date.to_date.strftime("%d/%m/%Y")
        end
         delivery_day = delivery_date.to_date.strftime("%A")
         contract.api_data[:delivery_day] = delivery_day
