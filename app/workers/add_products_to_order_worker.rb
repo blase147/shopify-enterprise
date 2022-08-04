@@ -21,7 +21,7 @@ class AddProductsToOrderWorker
       order_select_by = CalculateOrderDelivery.new(contract.api_data, shop.id).cuttoff_for_order(order.created_at)
       week_number = expected_order_delivery.to_date.cweek
 
-      pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: next_week_number, customer_id: contract.shopify_customer_id)
+      pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_number, customer_id: contract.shopify_customer_id)
       if order.present?
         note_attributes = order&.note_attributes
 
