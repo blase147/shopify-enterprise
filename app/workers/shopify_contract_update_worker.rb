@@ -23,6 +23,17 @@ class ShopifyContractUpdateWorker
       api_source: 'shopify',
       api_data: data.to_h.deep_transform_keys { |key| key.underscore }
     )
+
+    if contract.api_data.present?
+      order_id = contract.api_data["origin_order"]["id"].split("/").last
+      order = ShopifyAPI::Order.find(order_id)
+      note_hash = JSON.parse(order&.note) rescue {}
+      delivery_date = note_hash["delivery_date"].to_date.strftime("%d/%m/%Y")
+      delivery_day = delivery_date.to_date.strftime("%A")
+      contract.api_data[:delivery_date] = delivery_date
+      contract.api_data[:delivery_day] = delivery_day
+    end
+    
     unless contract.persisted?
       contract.shop_id = shop.id
 
