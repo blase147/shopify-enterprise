@@ -26,6 +26,7 @@ class ShopifyContractCreateWorker
         api_data: data.to_h.deep_transform_keys { |key| key.underscore },
         selling_plan_id: selling_plan&.id
       )
+      contract.save
       if contract.present? && order_id.present?
         order = ShopifyAPI::Order.find(order_id)
         note_hash = JSON.parse(order&.note) rescue {}
@@ -34,6 +35,7 @@ class ShopifyContractCreateWorker
        else
         calculate_delivery_date = calculate_delivery_date(shop_id)
         delivery_date = calculate_delivery_date.to_date.strftime("%d/%m/%Y")
+        SendEmailService.new.send_missing_delivery_date_email(contract.id, delivery_date)
        end
         delivery_day = delivery_date.to_date.strftime("%A")
         contract.api_data[:delivery_day] = delivery_day
