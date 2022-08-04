@@ -1,7 +1,7 @@
 class ShopifyContractCreateWorker
   include Sidekiq::Worker
 
-  def perform(shop_id, id, order_id="4321418477629")
+  def perform(shop_id, id, order_id)
     unless CustomerSubscriptionContract.find_by(shopify_id: id)
       shop = Shop.find(shop_id)
       data = shop.with_shopify_session do
