@@ -23,6 +23,10 @@ const EmailNotification = (props) => {
   const contentStatus = active ? 'Disable' : 'Enable';
   const listCustomerNotification = [
     {
+      name: 'Missing Delivery Date',
+      content: 'Sent to customers when delivery date is missing form their subscription',
+    },
+    {
       name: 'Subscription Activation',
       content: 'Sent to customers when they first sign up for a subscription',
     },

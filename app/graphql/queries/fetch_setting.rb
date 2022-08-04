@@ -7,6 +7,7 @@ module Queries
       @setting = current_shop.setting || current_shop.create_setting
       if @setting.email_notifications.blank?
         email_notifications = [
+          {name: 'Missing Delivery Date', description: 'Sent to customers when delivery date is missing form their subscription', status: true, slug: "customer" },
           {name: 'Subscription Activation', description: 'Sent to customers when they first sign up for a subscription', status: true, slug: "customer" },
           {name: 'Subscription Cancellation', description: 'Sent to customers when they cancel all subscription and become inactive', status: true, slug: "customer" },
           {name: 'Recurring Charge Confirmation', description: 'Sent to customers when their recurring payment is processed', status: true, slug: "customer"},

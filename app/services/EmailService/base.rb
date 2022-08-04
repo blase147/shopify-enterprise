@@ -2,6 +2,8 @@ class EmailService::Base < ApplicationService
 
   def subject(object)
    case @email_notification.name
+    when "Missing Delivery Date"
+      "Your subscription order confirmation from #{@shopify_shop.name}"
     when "Subscription Activation"
       "Your subscription order confirmation from #{@shopify_shop.name}"
     when "Subscription Cancellation"
@@ -33,6 +35,18 @@ class EmailService::Base < ApplicationService
     shop_email = @shopify_shop.email
     myshopify_url = "https://"+@shopify_shop.myshopify_domain
    case @email_notification.name
+    when "Missing Delivery Date"
+      {
+        name: object[:customer].name,
+        first_name: object[:customer].first_name&.humanize,
+        order_details_first: object[:order_details_first],
+        storename: storename,
+        myshopify_url: myshopify_url,
+        customer_portal_link: customer_portal_link,
+        shopify_store_email: shop_email,
+        email_body: object[:email_body],
+        delivery_date_first: object[:delivery_date_first]
+      }
     when "Subscription Activation"
       {
         name: object[:customer].name,
