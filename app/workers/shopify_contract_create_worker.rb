@@ -1,7 +1,7 @@
 class ShopifyContractCreateWorker
   include Sidekiq::Worker
 
-  def perform(shop_id, id, order_id)
+  def perform(shop_id, id, order_id="4321418477629")
     unless CustomerSubscriptionContract.find_by(shopify_id: id)
       shop = Shop.find(shop_id)
       data = shop.with_shopify_session do
@@ -28,11 +28,42 @@ class ShopifyContractCreateWorker
       )
       if contract.present? && order_id.present?
         order = ShopifyAPI::Order.find(order_id)
-        delivery_date = order&.note_attributes&.first&.value
+        note_hash = JSON.parse(order&.note) rescue {}
+       if note_hash["delivery_date"].present?
+        delivery_date = note_hash["delivery_date"].to_date.strftime("%Y-%m-%d")
+       else
+        calculate_delivery_date = calculate_delivery_date(shop_id)
+        delivery_date = calculate_delivery_date.to_date.strftime("%Y-%m-%d")
+       end
+        delivery_day = delivery_date.to_date.strftime("%A")
+        contract.api_data[:delivery_day] = delivery_day
         contract.api_data[:delivery_date] = delivery_date
         contract.save
       end
       contract
     end
+  end 
+
+  def calculate_delivery_date(shop_id)
+    current_day_number = Date.today.wday
+    delivery_options = DeliveryOption.find_by_shop_id(shop_id)
+    delivery_options = JSON.parse(delivery_options.settings)
+    cutoff_days = []
+    delivery_options&.each do |delivery_option|
+      cutoff_days << Date.parse(delivery_option["cutoff_day"]).wday
+    end
+
+    diff = {}
+    cutoff_days=cutoff_days.sort()
+
+    nextdeliveryday=cutoff_days.reject { |c| c < current_day_number }
+    cutoff_number=nextdeliveryday.length === 0 ? cutoff_days[0] : nextdeliveryday.first
+
+    cuttoff_day = Date::DAYNAMES[cutoff_number&.to_i]
+    delivery_option = delivery_options.select{|d| d["cutoff_day"]&.downcase == cuttoff_day&.downcase}
+
+    delivery_day = delivery_option&.first["delivery"]
+    delivery_date = Date.today.next_occurring(delivery_day&.downcase&.to_sym).to_date.strftime("%Y-%m-%d")
+    return delivery_date
   end
 end
