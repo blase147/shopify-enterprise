@@ -37,7 +37,9 @@ class EmailService::Sendgrid < EmailService::Base
     # puts response.status_code
     # puts response.body
     # puts response.parsed_body
-    response.status_code.to_i > 200 && response.status_code.to_i < 300
+    respone_body = {}
+    respone_body = { status: response.status_code.to_i > 200 && response.status_code.to_i < 300, email_body: email_body(context_hash)}
+    return respone_body
   rescue => e
     puts e
     false

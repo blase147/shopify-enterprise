@@ -46,4 +46,11 @@ class SendEmailService
         end
         EmailService::Send.new(email_notification).send_email({customer: contract, order_details_first: "Order Number: #{order_number} Meals: #{products.to_sentence}", delivery_date_first: delivery_date }) if email_notification.present? && contract.shop.setting.email_service.present?
     end
+
+    def send_account_activation_url_email(contract, activation_url)
+        email_notification = contract.shop.setting.email_notifications.find_by_name "Account Activation URL"
+        
+        sent= EmailService::Send.new(email_notification).send_email({customer: contract, activation_url: activation_url }) if email_notification.present? && contract.shop.setting.email_service.present?
+        return sent
+    end
 end

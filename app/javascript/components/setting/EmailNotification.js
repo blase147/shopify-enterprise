@@ -35,6 +35,10 @@ const EmailNotification = (props) => {
       content: 'Sent to customers when they first sign up for a subscription',
     },
     {
+      name: 'Account Activation URL',
+      content: 'Send the account activation link to the customer',
+    },
+    {
       name: 'Subscription Cancellation',
       content:
         'Sent to customers when they cancel all subscription and become inactive',

@@ -25,6 +25,8 @@ class EmailService::Base < ApplicationService
       false
     when "Cancellation Alert"
       "Customer #{object[:customer].name}} cancelled a subscription"
+    when "Account Activation URL"
+      "Activate your account for #{@shopify_shop.name}"
     else
       false
     end
@@ -140,6 +142,15 @@ class EmailService::Base < ApplicationService
     when "Fill PreOrder"
       {
         name: object[:customer].name
+      }
+    when "Account Activation URL"
+      {
+        first_name: object[:customer].first_name&.humanize,
+        activation_url: object[:activation_url],
+        storename: storename,
+        myshopify_url: myshopify_url,
+        customer_portal_link: customer_portal_link,
+        shopify_store_email: shop_email,
       }
     else
       false
