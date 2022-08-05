@@ -8,6 +8,7 @@ module Queries
       if @setting.email_notifications.blank?
         email_notifications = [
           {name: 'Missing Delivery Date', description: 'Sent to customers when delivery date is missing form their subscription', status: true, slug: "customer" },
+          {name: 'Subscription Activation 2 Hours', description: 'Sent to customers after 2 hours of their first sign up for a subscription', status: true, slug: "customer" },
           {name: 'Subscription Activation', description: 'Sent to customers when they first sign up for a subscription', status: true, slug: "customer" },
           {name: 'Subscription Cancellation', description: 'Sent to customers when they cancel all subscription and become inactive', status: true, slug: "customer" },
           {name: 'Recurring Charge Confirmation', description: 'Sent to customers when their recurring payment is processed', status: true, slug: "customer"},
@@ -27,6 +28,7 @@ module Queries
           {name: 'Order Cancellation', description: 'Sent to store owner when the order is cancelled', status: false, slug: "store_owner" },
           {name: 'Pause Subscription', description: 'Sent to store owner when subscription is paused', status: false, slug: "store_owner" },
           {name: 'Resume Subscription', description: 'Sent to store owner when subscription is resumed', status: false, slug: "store_owner" },
+          {name: 'Account Activation URL', description: 'Send the account activation link to the customer', status: true, slug: "customer" },
         ]
         email_notifications.push({name: 'Store Charge Confirmation', description: 'Sent to storeowner to confirm their recurring charges', status: true, slug: "store_owner" }) if ENV['APP_TYPE'] == 'public'
         @setting.email_notifications.create(email_notifications)

@@ -4,6 +4,8 @@ class EmailService::Base < ApplicationService
    case @email_notification.name
     when "Missing Delivery Date"
       "Your subscription order confirmation from #{@shopify_shop.name}"
+    when "Subscription Activation 2 Hours"
+      "Questions about your ethey subscription? We’re here to help from #{@shopify_shop.name}"
     when "Subscription Activation"
       "Your subscription order confirmation from #{@shopify_shop.name}"
     when "Subscription Cancellation"
@@ -23,6 +25,8 @@ class EmailService::Base < ApplicationService
       false
     when "Cancellation Alert"
       "Customer #{object[:customer].name}} cancelled a subscription"
+    when "Account Activation URL"
+      "Activate your account for #{@shopify_shop.name}"
     else
       false
     end
@@ -44,7 +48,17 @@ class EmailService::Base < ApplicationService
         myshopify_url: myshopify_url,
         customer_portal_link: customer_portal_link,
         shopify_store_email: shop_email,
-        email_body: object[:email_body],
+        delivery_date_first: object[:delivery_date_first]
+      }
+    when "Subscription Activation 2 Hours"
+      {
+        name: object[:customer].name,
+        first_name: object[:customer].first_name&.humanize,
+        order_details_first: object[:order_details_first],
+        storename: storename,
+        myshopify_url: myshopify_url,
+        customer_portal_link: customer_portal_link,
+        shopify_store_email: shop_email,
         delivery_date_first: object[:delivery_date_first]
       }
     when "Subscription Activation"
@@ -56,7 +70,6 @@ class EmailService::Base < ApplicationService
         myshopify_url: myshopify_url,
         customer_portal_link: customer_portal_link,
         shopify_store_email: shop_email,
-        email_body: object[:email_body],
         delivery_date_first: object[:delivery_date_first]
       }
     when "Subscription Cancellation"
@@ -129,6 +142,15 @@ class EmailService::Base < ApplicationService
     when "Fill PreOrder"
       {
         name: object[:customer].name
+      }
+    when "Account Activation URL"
+      {
+        first_name: object[:customer].first_name&.humanize,
+        activation_url: object[:activation_url],
+        storename: storename,
+        myshopify_url: myshopify_url,
+        customer_portal_link: customer_portal_link,
+        shopify_store_email: shop_email,
       }
     else
       false

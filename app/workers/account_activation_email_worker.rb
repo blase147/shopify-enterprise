@@ -7,15 +7,11 @@ class AccountActivationEmailWorker
     shop.connect
     activation_url = GenerateAccountActivationUrl.new(customer_id).generate
     if activation_url.present?
-      @email_notification = shop.setting.email_notifications.find_by_name "Subscription Activation"
-      email_body = "Hi #{csc.name} you’ve created a new customer account at Ethey: Canada’s #1 meal delivery service.. All you have to do is activate it.
-
-      Here's your activation URL #{activation_url}"
-      customer_object = {customer: csc, email_body: email_body}
-      if EmailService::Send.new(@email_notification).send_email(customer_object)
-        SiteLog.create(log_type: SiteLog::TYPES[:email_success], message: email_body)
+      response = SendEmailService.new.send_account_activation_url_email(csc, activation_url)
+      if response[:status]
+        SiteLog.create(log_type: SiteLog::TYPES[:email_success], message: response[:email_body])
       else
-        SiteLog.create(log_type: SiteLog::TYPES[:email_failure], params: {email_body: email_body, id: csc.id, emaill: csc.email, shopify_id: csc.shopify_customer_id })
+        SiteLog.create(log_type: SiteLog::TYPES[:email_failure], params: {email_body: response[:email_body], id: csc.id, emaill: csc.email, shopify_id: csc.shopify_customer_id })
       end
     end
   rescue => e
