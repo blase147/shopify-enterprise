@@ -360,7 +360,8 @@ const Customers = ({shopifyDomain}) => {
           (subscriptions[selectedTab] === 'all') || (subscriptions[selectedTab] === 'returning') || (subscriptions[selectedTab] === 'active') || (subscriptions[selectedTab] === 'cancelled') || (subscriptions[selectedTab] === 'new')) &&
         (item.name?.toLowerCase()?.includes(queryValue?.toLowerCase()) ||
           !queryValue) &&
-        (item.subscription?.toLowerCase()?.includes(taggedWith) || !taggedWith)
+        (item.subscription?.toLowerCase()?.includes(taggedWith) || !taggedWith) ||
+        (item.email?.toLowerCase()?.includes(queryValue?.toLowerCase())
       );
     });
 
