@@ -42,6 +42,10 @@ class ShopifyContractCreateWorker
         contract.api_data[:delivery_date] = delivery_date
         contract.save
       end
+
+      #Send Activation 2 hour email
+      SendActivationTwoHourEmailWorker.perform_in(2.hours,contract.id, delivery_date)
+      
       contract
     end
   end 

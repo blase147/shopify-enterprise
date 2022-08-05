@@ -27,6 +27,10 @@ const EmailNotification = (props) => {
       content: 'Sent to customers when delivery date is missing form their subscription',
     },
     {
+      name: 'Subscription Activation 2 Hours',
+      content: 'Sent to customers after 2 hours of their first sign up for a subscription',
+    },
+    {
       name: 'Subscription Activation',
       content: 'Sent to customers when they first sign up for a subscription',
     },
