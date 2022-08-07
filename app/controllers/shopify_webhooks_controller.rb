@@ -36,23 +36,6 @@ class ShopifyWebhooksController < ApplicationController
     head :no_content
   end
 
-  def order_cancelled
-    preorder = WorldfarePreOrder.find_by_order_id(params[:id].to_s)
-    preorder.update(status: "canceled")
-  end
-
-  def order_fulfilled
-    preorder = WorldfarePreOrder.find_by_order_id(params[:id].to_s)
-    preorder.update(status: "fulfilled")
-  end
-
-  def order_updated
-    if params[:financial_status] == "refunded"
-      preorder = WorldfarePreOrder.find_by_order_id(params[:id].to_s)
-      preorder.update(status: "refunded")
-    end
-  end
-
   def subscription_contract_create
     shop = Shop.find_by(shopify_domain: shop_domain)
     ShopifyContractCreateWorker.perform_async(shop.id, params[:id], params[:order_id])

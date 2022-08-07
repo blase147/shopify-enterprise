@@ -31,11 +31,6 @@ const OrderMangementTable = ({ HandleCustomerClick, activeCustomer, customerData
           onClick={() => {
             HandleCustomerClick(index)
           }}
-          style={customer.type === 'originOrder' ? {
-            borderWidth: '2px 0px 2px 2px',
-            borderColor: 'red',
-            borderStyle: 'solid'
-          } : {}}
         >
           <img src='https://picsum.photos/200/300' className='order-img' />
           {customer.name}</div>,
@@ -44,11 +39,6 @@ const OrderMangementTable = ({ HandleCustomerClick, activeCustomer, customerData
           onClick={() => {
             HandleCustomerClick(index)
           }}
-          style={customer.type === 'originOrder' ? {
-            borderWidth: '2px 0px 2px 0px',
-            borderColor: 'red',
-            borderStyle: 'solid'
-          } : {}}
         >
           {customer.subscription}
         </div>,
@@ -56,11 +46,6 @@ const OrderMangementTable = ({ HandleCustomerClick, activeCustomer, customerData
           onClick={() => {
             HandleCustomerClick(index)
           }}
-          style={customer.type === 'originOrder' ? {
-            borderWidth: '2px 0px 2px 0px',
-            borderColor: 'red',
-            borderStyle: 'solid'
-          } : {}}
         >
           <div className='selectbox'>
             <select name="status" className={`${customer.status == 'Preparing' ?
@@ -90,25 +75,8 @@ const OrderMangementTable = ({ HandleCustomerClick, activeCustomer, customerData
           onClick={() => {
             HandleCustomerClick(index)
           }}
-          style={customer.type === 'originOrder' ? {
-            borderWidth: '2px 0px 2px 0px',
-            borderColor: 'red',
-            borderStyle: 'solid'
-          } : {}}
         >
           {customer?.deliveryDate}
-        </div>,
-        <div className={`${activeCustomer === index ? 'customerActive' : (customer.preparationTime === "false" || customer.products.length === 0) ? 'warning' : ''} profile_image_link`}
-          onClick={() => {
-            HandleCustomerClick(index)
-          }}
-          style={customer.type === 'originOrder' ? {
-            borderWidth: '2px 2px 2px 0px',
-            borderColor: 'red',
-            borderStyle: 'solid'
-          } : {}}
-        >
-          {customer?.status ? customer?.status?.toUpperCase() : "PREPARING"}
         </div>,
       ]
     )
@@ -193,7 +161,7 @@ const OrderMangementTable = ({ HandleCustomerClick, activeCustomer, customerData
           'text',
           'numeric',
         ]}
-        headings={['Customer', 'Subscription Plan', 'Fulfilment Status', 'Delivery Date', 'Status']}
+        headings={['Customer', 'Subscription Plan', 'Fulfilment Status', 'Delivery Date']}
         onClick={() => {
           console.log('working')
         }}
