@@ -5,8 +5,6 @@ module Types
     field :shopify_contract_id, String, null: true
     field :customer, Types::PreOrderCustomerType, null: false
     field :delivery_date, String, null: true
-    field :delivery_day, String, null: true
-    field :order_id, String, null: true
 
     def products
       products_to_display = []
@@ -24,11 +22,7 @@ module Types
     end
 
     def delivery_date
-      object.expected_delivery_date
-    end
-
-    def delivery_day
-      object.expected_delivery_date&.strftime("%A")
+      Date.today
     end
 
     def customer
