@@ -24,9 +24,6 @@ Rails.application.routes.draw do
 
   post '/shopify_webhooks/app_uninstalled', to: 'shopify_webhooks#app_uninstalled'
   post '/shopify_webhooks/order_create', to: 'shopify_webhooks#order_create'
-  post '/shopify_webhooks/order_cancelled', to: 'shopify_webhooks#order_cancelled'
-  post '/shopify_webhooks/order_fulfilled', to: 'shopify_webhooks#order_fulfilled'
-  post '/shopify_webhooks/order_updated', to: 'shopify_webhooks#order_updated'
   post '/shopify_webhooks/subscription_contract_create', to: 'shopify_webhooks#subscription_contract_create'
   post '/shopify_webhooks/subscription_contract_update', to: 'shopify_webhooks#subscription_contract_update'
   post '/shopify_webhooks/billing_attempt_success', to: 'shopify_webhooks#billing_attempt_success'
