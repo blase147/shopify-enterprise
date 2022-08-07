@@ -21,18 +21,17 @@ class AddProductsToOrderWorker
       order_select_by = CalculateOrderDelivery.new(contract.api_data, shop.id).cuttoff_for_order(order.created_at)
       week_number = expected_order_delivery.to_date.cweek
 
-      pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_number, customer_id: contract.shopify_customer_id)
       if order.present?
         note_attributes = order&.note_attributes
 
         order.note_attributes << { name: "Expected Delivery Date", value: expected_order_delivery.strftime('%d/%m/%Y') }
         order.save
-        pre_order.update(order_id: shopify_order_id, expected_delivery_date: expected_order_delivery)
       end
 
       cutoff_in_hours = ((order_select_by.to_time.beginning_of_day - Date.today.to_time.beginning_of_day) / 3600).to_i
 
       if order.present? && week_number.present?
+        pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_number)
 
         if pre_order.present? || cutoff_in_hours.negative?
           pre_order_products = JSON.parse(pre_order.products)
