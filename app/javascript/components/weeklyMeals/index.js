@@ -76,6 +76,7 @@ const index = ({ handleBack }) => {
           deliveryDate
           deliveryDay
           orderId
+          status
         }
         contracts {
           name
@@ -125,7 +126,6 @@ const index = ({ handleBack }) => {
     dayjs.extend(weekOfYear)
     const customerData = []
     data.fetchCustomersMealsOrders?.preOrder?.forEach((c) => {
-      console.log("preorder", c);
       if ((dayjs(c?.deliveryDate).week()).toString() == (selectedWeek).toString()) {
         let info = {
           name: c.customer.name,
@@ -134,7 +134,9 @@ const index = ({ handleBack }) => {
           deliveryDate: c.deliveryDate,
           deliveryDay: c.deliveryDay,
           subscription: c.customer.subscription,
-          orderNumber: c.orderId
+          orderNumber: c.orderId,
+          status: c.status,
+          type: "preorder"
         }
         c.products && c.products.forEach((product) => {
           info.products.push(product)
@@ -165,7 +167,8 @@ const index = ({ handleBack }) => {
           products: [],
           deliveryDate: c.deliveryDate,
           deliveryDay: c.deliveryDay,
-          subscription: c.subscription
+          subscription: c.subscription,
+          type: "originOrder"
         }
         c.originOrderProducts && c.originOrderProducts.forEach((product) => {
           if (!(product.title?.toLowerCase()?.includes("meal box") || product.title?.toLowerCase()?.includes("meals box"))) {
@@ -173,7 +176,6 @@ const index = ({ handleBack }) => {
           }
         })
         customerData.push(info)
-        console.log("Cutomer Data", customerData);
       }
     })
     setCustomersData(customerData)

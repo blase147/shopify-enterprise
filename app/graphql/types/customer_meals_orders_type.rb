@@ -7,6 +7,7 @@ module Types
     field :delivery_date, String, null: true
     field :delivery_day, String, null: true
     field :order_id, String, null: true
+    field :status, String, null: true
 
     def products
       products_to_display = []
