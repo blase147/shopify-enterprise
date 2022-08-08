@@ -23,6 +23,7 @@ module Types
     field :api_data, String, null: true
     field :api_resource_id, String, null: true
     field :api_source, String, null: true
+    field :delivery_day, String, null: true
 
     field :created_at, String, null: true
     field :updated_at, String, null: true
@@ -65,8 +66,14 @@ module Types
       object.api_data["delivery_date"]
     end
 
+    def delivery_day
+      object.api_data["delivery_day"]
+    end
+
     def origin_order_products
-      object.api_data["origin_order"]["line_items"]["edges"]
+      if object.api_data["origin_order"].present?
+        object.api_data["origin_order"]["line_items"]["edges"]
+      end
     end
 
   end

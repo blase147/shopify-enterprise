@@ -3,65 +3,66 @@ import { DataTable, Icon, Link, Page } from "@shopify/polaris";
 import { DropdownMinor } from '@shopify/polaris-icons';
 import './weeklyMeals.css';
 
-const statusOptions = ['Preparing','Delivered','In Transit','Pending']
-  
+const statusOptions = ['Preparing', 'Delivered', 'In Transit', 'Pending']
+
 const handleStatusColor = (e) => {
 
   // console.log('status',e.target.value)
   e.target.removeAttribute("class");
 
-  e.target.value == 'Preparing'?
-    e.target.setAttribute('class','status preparing')
-  : e.target.value == 'Delivered'?
-    e.target.setAttribute('class','status delivered')
+  e.target.value == 'Preparing' ?
+    e.target.setAttribute('class', 'status preparing')
+    : e.target.value == 'Delivered' ?
+      e.target.setAttribute('class', 'status delivered')
 
- :e.target.value == 'In Transit'?
-    e.target.setAttribute('class','status inTransit')
+      : e.target.value == 'In Transit' ?
+        e.target.setAttribute('class', 'status inTransit')
 
- :e.target.value == 'Pending'?
-    e.target.setAttribute('class','status pending'): ''
+        : e.target.value == 'Pending' ?
+          e.target.setAttribute('class', 'status pending') : ''
 }
-const OrderMangementTable=({ HandleCustomerClick, activeCustomer, customerData })=> {
-const rows = []
-customerData && customerData.map((customer,index)=>{
-  rows.push(
-    [        
-      <div className={`${activeCustomer===index ? 'customerActive':''} profile_image_link`}
-        onClick={()=>{
-          HandleCustomerClick(index)
-        }}
-      >
-        <img src='https://picsum.photos/200/300' className='order-img' />
-        {customer.name}</div>,
-
-        <div className={`${activeCustomer===index ? 'customerActive':''} profile_image_link`}
-          onClick={()=>{
+const OrderMangementTable = ({ HandleCustomerClick, activeCustomer, customerData }) => {
+  const rows = []
+  customerData && customerData.map((customer, index) => {
+    console.log("====customer", customer.products.length)
+    rows.push(
+      [
+        <div className={`${activeCustomer === index ? 'customerActive' : (customer.preparationTime === "false" || customer.products.length == 0) ? 'warning' : ''} profile_image_link`}
+          onClick={() => {
             HandleCustomerClick(index)
           }}
         >
-          { customer.subscription }
-        </div>,
-        <div className= {`${activeCustomer===index ? 'customerActive':''} profile_image_link`}
-          onClick={()=>{
+          <img src='https://picsum.photos/200/300' className='order-img' />
+          {customer.name}</div>,
+
+        <div className={`${activeCustomer === index ? 'customerActive' : (customer.preparationTime === "false" || customer.products.length == 0) ? 'warning' : ''} profile_image_link`}
+          onClick={() => {
             HandleCustomerClick(index)
-         }}
+          }}
+        >
+          {customer.subscription}
+        </div>,
+        <div className={`${activeCustomer === index ? 'customerActive' : (customer.preparationTime === "false" || customer.products.length === 0) ? 'warning' : ''} profile_image_link`}
+          onClick={() => {
+            HandleCustomerClick(index)
+          }}
         >
           <div className='selectbox'>
-            <select name="status" className= {`${customer.status == 'Preparing'?
-                'status preparing'
-              : customer.status == 'Delivered'?
+            <select name="status" className={`${customer.status == 'Preparing' ?
+              'status preparing'
+              : customer.status == 'Delivered' ?
                 'status delivered'
-              :customer.status == 'In Transit'?
-                'status inTransit'
-              :customer.status == 'Pending'? 'status pending' : ''} status`} id="ful_status"
-              onChange={(e,value)=>handleStatusColor(e)}
+                : customer.status == 'In Transit' ?
+                  'status inTransit'
+                  : customer.status == 'Pending' ? 'status pending' : ''} status`} id="ful_status"
+              onChange={(e, value) => handleStatusColor(e)}
             >
-              {statusOptions.map((status ) => {  
-                if( status == customer.status){         
-                  return <option value={status} selected >{ status }</option>
+              {statusOptions.map((status) => {
+                if (status == customer.status) {
+                  return <option value={status} selected >{status}</option>
                 }
                 else {
-                  return <option value={status}>{ status }</option>
+                  return <option value={status}>{status}</option>
                 }
               })}
             </select>
@@ -70,20 +71,20 @@ customerData && customerData.map((customer,index)=>{
             </label>
           </div>
         </div>,
-        <div className={`${activeCustomer===index ? 'customerActive':''} profile_image_link`}
-          onClick={()=>{
+        <div className={`${activeCustomer === index ? 'customerActive' : (customer.preparationTime === "false" || customer.products.length === 0) ? 'warning' : ''} profile_image_link`}
+          onClick={() => {
             HandleCustomerClick(index)
           }}
         >
-          {customer.deliveryData}
+          {customer?.deliveryDate}
         </div>,
-    ]
-  )
-})
+      ]
+    )
+  })
 
   // const rows = [
   //   [
-      
+
   //       <div className={`${activeCustomer===0 ? 'active':''} profile_image_link`}
   //        onClick={()=>{
   //         HandleCustomerClick(0)
@@ -161,7 +162,7 @@ customerData && customerData.map((customer,index)=>{
           'numeric',
         ]}
         headings={['Customer', 'Subscription Plan', 'Fulfilment Status', 'Delivery Date']}
-        onClick={()=>{
+        onClick={() => {
           console.log('working')
         }}
         rows={rows}
