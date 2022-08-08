@@ -19,10 +19,11 @@ import { useHistory } from 'react-router-dom';
 import swapIcon from '../../../assets/images/icons/swap.svg';
 import AppLayout from '../layout/Layout';
 import moment from 'moment';
+import { Pagination } from "@shopify/polaris";
 
 
 // import json2csv from 'json2csv';
-const subscriptions = ['all', 'new', 'returning', 'active', 'cancelled'];
+const subscriptions = ['active', 'new', 'returning', 'paused', 'cancelled', 'all'];
 
 const {
   Parser,
@@ -57,7 +58,11 @@ const ButtonRemove = (props) => {
       const errors = resp.errors;
       if (errors) {
       } else {
-        refetch().then(() => setselectedCustomers([]));
+        refetch({
+          variables: {
+            page: page.toString()
+          }
+        }).then(() => setselectedCustomers([]));
       }
     });
   };
@@ -74,7 +79,7 @@ const ButtonRemove = (props) => {
   );
 };
 
-const Customers = ({shopifyDomain}) => {
+const Customers = ({ shopifyDomain }) => {
   const history = useHistory();
   // Start Tabs
   const [selectedTab, setSelectedTab] = useState(0);
@@ -86,8 +91,8 @@ const Customers = ({shopifyDomain}) => {
 
   const tabs = [
     {
-      id: 'all',
-      content: 'All',
+      id: 'active',
+      content: 'Active',
     },
     {
       id: 'new',
@@ -98,10 +103,6 @@ const Customers = ({shopifyDomain}) => {
       content: 'Returning',
     },
     {
-      id: 'active',
-      content: 'Active',
-    },
-    {
       id: 'paused',
       content: 'Paused',
     },
@@ -109,10 +110,14 @@ const Customers = ({shopifyDomain}) => {
       id: 'expired',
       content: 'Canceled',
     },
+    {
+      id: 'all',
+      content: 'All',
+    },
   ];
   // End tabs
-
-  const [sortOrder,setSortOrder]=useState(0);
+  console.log(selectedTab);
+  const [sortOrder, setSortOrder] = useState(0);
 
   const [moneySpent, setMoneySpent] = useState(null);
   const [taggedWith, setTaggedWith] = useState(null);
@@ -216,55 +221,94 @@ const Customers = ({shopifyDomain}) => {
       return value === '' || value == null;
     }
   }
+
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [totalPages, setTotalPages] = useState(1);
+  const [hasPrevious, setHasPrevious] = useState(false);
   // -------------------
   const GET_CUSTOMERS = gql`
-    query($sortColumn: String, $sortDirection: String) {
-      fetchCustomers(sortColumn: $sortColumn, sortDirection: $sortDirection) {
-        id
-        shopifyId
-        shopDomain
-        firstName
-        lastName
-        name
-        email
-        phone
-        communication
-        subscription
-        status
-        autoCollection
-        language
-        createdAt
-        updatedAt
-        apiData
-        apiResourceId
-        apiSource
-        additionalContacts {
+    query($sortColumn: String, $sortDirection: String, $page: String) {
+      fetchCustomers(sortColumn: $sortColumn, sortDirection: $sortDirection, page: $page) {
+        customerSubscriptions{
           id
+          shopifyId
+          shopDomain
           firstName
           lastName
+          name
           email
           phone
-          companyName
-        }
-        billingAddress {
-          id
+          communication
+          subscription
+          status
+          autoCollection
           language
-          firstName
-          lastName
-          email
-          company
-          phone
-          address1
-          address2
-          city
-          zipCode
+          createdAt
+          updatedAt
+          apiData
+          apiResourceId
+          apiSource
+          additionalContacts {
+            id
+            firstName
+            lastName
+            email
+            phone
+            companyName
+          }
+          billingAddress {
+            id
+            language
+            firstName
+            lastName
+            email
+            company
+            phone
+            address1
+            address2
+            city
+            zipCode
+          }
         }
+        totalCount
+        totalPages
+        pageNumber
       }
     }
   `;
   const { data, loading, error, refetch } = useQuery(GET_CUSTOMERS, {
     fetchPolicy: 'no-cache',
+    variables: {
+      page: page.toString()
+    }
   });
+
+  useEffect(() => {
+    refetch({
+      variables: {
+        page: page.toString()
+      }
+    });
+    setTotalPages(data?.fetchCustomers?.totalPages)
+  }, [page]);
+
+  useEffect(() => {
+    setTotalPages(data?.fetchCustomers?.totalPages)
+    if (+page < +totalPages) {
+      setHasMore(true);
+    }
+    else {
+      setHasMore(false)
+    }
+    if (+page <= 1) {
+      setHasPrevious(false)
+    }
+    else {
+      setHasPrevious(true)
+    }
+  }, [data]);
+
   const [formErrors, setFormErrors] = useState([]);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
@@ -289,11 +333,10 @@ const Customers = ({shopifyDomain}) => {
   //each row in data table
   const formatRows = (rows) => {
     let apiData;
-    return rows?.map((row) =>
-    { 
-      try{
-        apiData = row?.apiData != null ? JSON.parse(row?.apiData?.replaceAll("=>",":")?.replaceAll("nil",'"nil"')) : ""
-      }catch(e){
+    return rows?.map((row) => {
+      try {
+        apiData = row?.apiData != null ? JSON.parse(row?.apiData?.replaceAll("=>", ":")?.replaceAll("nil", '"nil"')) : ""
+      } catch (e) {
         apiData = ""
       }
       return row?.subscription !== null ?
@@ -310,7 +353,7 @@ const Customers = ({shopifyDomain}) => {
             key={row.id}
           >{`${row.firstName} ${row.lastName}`}</a>,
           row.createdAt,
-          apiData =="" ? "" : moment(apiData?.next_billing_date)?.format('MMMM Do YYYY, h:mm:ss a'),
+          apiData == "" ? "" : moment(apiData?.next_billing_date)?.format('MMMM Do YYYY, h:mm:ss a'),
           <div
             className={
               row.status === 'PAUSED'
@@ -333,22 +376,23 @@ const Customers = ({shopifyDomain}) => {
             </p>
           </div>,
           <Button
-          onClick={() => {
-             fetch(`/subscriptions/create_billing_attempt`, {
-               method: 'POST',
-               headers: {
-                 'Content-Type': 'application/json',
-                 Accept: 'application/json',
-               },
-               credentials: 'same-origin',
-               body: JSON.stringify({id: row.id})
-             })
-               .then((response) => response.json())
-           }}
-         >
-             Create Billing Attempt
-         </Button>
-        ] : []});
+            onClick={() => {
+              fetch(`/subscriptions/create_billing_attempt`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Accept: 'application/json',
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({ id: row.id })
+              })
+                .then((response) => response.json())
+            }}
+          >
+            Create Billing Attempt
+          </Button>
+        ] : []
+    });
   };
   const [customers, setCustomers] = useState([]);
   const [filterCustomers, setFilterCustomers] = useState([]);
@@ -356,8 +400,8 @@ const Customers = ({shopifyDomain}) => {
   const filterCustomersValue = () => {
     const rowsData = customers.filter((item) => {
       return (
-        (item.subscription === subscriptions[selectedTab] ||(subscriptions[selectedTab] === 'paused') ||
-          (subscriptions[selectedTab] === 'all') || (subscriptions[selectedTab] === 'returning') || (subscriptions[selectedTab] === 'active') || (subscriptions[selectedTab] === 'cancelled') || (subscriptions[selectedTab] === 'new')) &&
+        (item.subscription === subscriptions[selectedTab] || (subscriptions[selectedTab] === 'paused') ||
+          (subscriptions[selectedTab] === 'active') || (subscriptions[selectedTab] === 'returning') || (subscriptions[selectedTab] === 'cancelled') || (subscriptions[selectedTab] === 'new') || (subscriptions[selectedTab] === 'all')) &&
         (item.name?.toLowerCase()?.includes(queryValue?.toLowerCase()) ||
           !queryValue) &&
         (item.subscription?.toLowerCase()?.includes(taggedWith) || !taggedWith) 
@@ -379,8 +423,8 @@ const Customers = ({shopifyDomain}) => {
 
   useEffect(() => {
     if (data && data.fetchCustomers) {
-      let rowsData = formatRows(data.fetchCustomers);
-      setCustomers(data.fetchCustomers);
+      let rowsData = formatRows(data.fetchCustomers?.customerSubscriptions);
+      setCustomers(data.fetchCustomers?.customerSubscriptions);
       // console.log('data: ', data);
     }
   }, [data]);
@@ -578,7 +622,11 @@ const Customers = ({shopifyDomain}) => {
         setFormErrors(errors);
       } else {
         setSaveSuccess(true);
-        refetch();
+        refetch({
+          variables: {
+            page: page.toString()
+          }
+        });
       }
     });
     setFile();
@@ -610,21 +658,21 @@ const Customers = ({shopifyDomain}) => {
         newArr.push(res);
       }
     });
-  } else if (selectedTab == 4 && filterCustomers.length !== 0) {
+  } else if (selectedTab == 3 && filterCustomers.length !== 0) {
     filterCustomers?.map(res => {
       res.status == 'PAUSED' && pausedArr.push(res);
     });
-  } else if (selectedTab == 3 && filterCustomers.length !== 0) {
+  } else if (selectedTab == 0 && filterCustomers.length !== 0) {
     filterCustomers?.map(res => {
       res.status == 'ACTIVE' && activeArr.push(res);
     });
-  } else if (selectedTab == 5 && filterCustomers.length !== 0) {
+  } else if (selectedTab == 4 && filterCustomers.length !== 0) {
     filterCustomers?.map(res => {
       res.status == 'CANCELLED' && cancelledArr.push(res);
     });
   }
 
-console.log("selectedTab>>>>>>>>>>>>>>>>>>>",selectedTab)
+  console.log("selectedTab>>>>>>>>>>>>>>>>>>>", selectedTab)
   return (
     <AppLayout typePage="customers" tabIndex="2">
       <Frame>
@@ -674,14 +722,14 @@ console.log("selectedTab>>>>>>>>>>>>>>>>>>>",selectedTab)
                   })
                     .then((response) => response.json())
                     .then(() => {
-                      try{
+                      try {
                         var Toast = window['app-bridge'].actions.Toast;
                         Toast.create(window.app, {
                           message: 'Syncing Stripe Subscriptions',
                           duration: 5000,
                         }).dispatch(Toast.Action.SHOW);
                       }
-                      catch(e){
+                      catch (e) {
                         console.error('Error syncing data: ', e);
                       }
                     })
@@ -780,7 +828,7 @@ console.log("selectedTab>>>>>>>>>>>>>>>>>>>",selectedTab)
                     '',
                     '',
                   ]}
-                  rows={selectedTab == 1 ? formatRows(newArr) : selectedTab == 4 ? formatRows(pausedArr) : selectedTab == 3 ? formatRows(activeArr) : selectedTab == 5 ? formatRows(cancelledArr) : formatRows(filterCustomers)}
+                  rows={selectedTab == 1 ? formatRows(newArr) : selectedTab == 3 ? formatRows(pausedArr) : selectedTab == 0 ? formatRows(activeArr) : selectedTab == 4 ? formatRows(cancelledArr) : formatRows(filterCustomers)}
                 />
               </div>
               {loading && (
@@ -790,6 +838,18 @@ console.log("selectedTab>>>>>>>>>>>>>>>>>>>",selectedTab)
                   color="teal"
                 />
               )}
+              <div style={{ width: '100%', justifyContent: 'center', display: 'flex' }}>
+                <Pagination
+                  hasPrevious={hasPrevious}
+                  onPrevious={() => {
+                    setPage((prev) => +prev - 1)
+                  }}
+                  hasNext={hasMore}
+                  onNext={() => {
+                    setPage((prev) => +prev + 1)
+                  }}
+                />
+              </div>
             </Card.Section>
           </Card>
         </Page>
