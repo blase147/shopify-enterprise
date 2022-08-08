@@ -1,14 +1,16 @@
 module Queries
   class FetchCustomers < Queries::BaseQuery
 
-    type [Types::CustomerSubscriptionType], null: false
+    type Types::CustomerSubscriptionPageType, null: false
     argument :status, String, required: false
     argument :sort_column, String, required: false
     argument :sort_direction, String, required: false
+    argument :page, String, required: false
 
     def resolve(**args)
       #current_shop.sync_contracts
-      current_shop.customer_subscription_contracts.includes(:shop, :additional_contacts, :billing_address).where(where_data(args[:status] || 'all')).order(order_by(args))
+      customer_subscriptions = current_shop.customer_subscription_contracts.includes(:shop, :additional_contacts, :billing_address).where(where_data(args[:status] || 'all')).page(args[:page]).order(order_by(args))
+      {customer_subscriptions: customer_subscriptions, total_count: customer_subscriptions.count, total_pages: customer_subscriptions.total_pages, page_number: args[:page]}
     end
 
     def where_data(status)

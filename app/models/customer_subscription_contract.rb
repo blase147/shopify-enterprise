@@ -4,7 +4,7 @@ class CustomerSubscriptionContract < ApplicationRecord
     paused: 'PAUSED',
     active: 'ACTIVE'
   }
-
+  paginates_per 50
   enum gender: [:male, :female]
   belongs_to :shop, foreign_key: :shop_id
   belongs_to :reasons_cancel, optional: true
