@@ -147,7 +147,8 @@
                 i TOTAL SPEND TO DATE:
                 br
                 |$
-                = api_order.customer.total_spent
+                - if api_order.customer.key?("total_spent")
+                  =  api_order.customer.total_spent
 
   .Polaris-Card
     .Polaris-Card__Section
