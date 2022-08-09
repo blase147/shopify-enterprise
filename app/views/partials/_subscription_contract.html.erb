@@ -856,7 +856,7 @@ line_item = subscription.lines.edges.first.node
     line_id = $(this).data('line-id');
     line_name = $(this).data('line-name');
     variant_id = $(this).data('variant-id');
-    url = "/a/chargezen_production/subscriptions/"+1562017885+"/remove_line?line_id="+line_id+"&lines_count=1&quantity=1&variant_id="+variant_id;
+    url = "/a/chargezen_production/subscriptions/"+id+"/remove_line?line_id="+line_id+"&lines_count=1&quantity=1&variant_id="+variant_id;
     $(this).text('Updating..');
     $.ajax({
       url: url,
