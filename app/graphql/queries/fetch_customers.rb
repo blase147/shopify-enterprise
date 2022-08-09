@@ -6,11 +6,17 @@ module Queries
     argument :sort_column, String, required: false
     argument :sort_direction, String, required: false
     argument :page, String, required: false
+    argument :searchquery, String, required: false
 
     def resolve(**args)
       #current_shop.sync_contracts
-      customer_subscriptions = current_shop.customer_subscription_contracts.includes(:shop, :additional_contacts, :billing_address).where(where_data(args[:status] || 'all')).page(args[:page]).order(order_by(args))
-      {customer_subscriptions: customer_subscriptions, total_count: customer_subscriptions.count, total_pages: customer_subscriptions.total_pages, page_number: args[:page]}
+      if args[:searchquery].present?
+        customer_subscriptions = current_shop.customer_subscription_contracts.search(args[:searchquery]).includes(:shop, :additional_contacts, :billing_address).order(order_by(args))
+        {customer_subscriptions: customer_subscriptions, total_count: customer_subscriptions.count, total_pages: 1, page_number: 1}
+      else
+        customer_subscriptions = current_shop.customer_subscription_contracts.includes(:shop, :additional_contacts, :billing_address).where(where_data(args[:status] || 'all')).page(args[:page]).order(order_by(args))
+        {customer_subscriptions: customer_subscriptions, total_count: customer_subscriptions.count, total_pages: customer_subscriptions.total_pages, page_number: args[:page]}
+      end
     end
 
     def where_data(status)
