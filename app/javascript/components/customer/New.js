@@ -343,7 +343,7 @@ const CreateCustomer = () => {
           breadcrumbs={[
             {
               content: 'Subscriptions Orders',
-              onAction: () => history.push('/customers'),
+              onClick: () => history.push('/customers'),
             },
           ]}
           primaryAction={

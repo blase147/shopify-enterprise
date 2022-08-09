@@ -85,8 +85,22 @@ const Customers = ({ shopifyDomain }) => {
   const [selectedTab, setSelectedTab] = useState(0);
 
   const handleTabChange = useCallback(
-    (selectedTabIndex) => setSelectedTab(selectedTabIndex),
-    []
+    (selectedTabIndex) => {
+      setSelectedTab(selectedTabIndex)
+      if (selectedTabIndex == 1) {
+        setStatus('all')
+      } else if (selectedTabIndex == 3) {
+        setStatus("returning")
+      } else if (selectedTabIndex == 0) {
+        setStatus("active")
+      } else if (selectedTabIndex == 4) {
+        setStatus("expired")
+      } else if (selectedTabIndex == 5) {
+        setStatus("all")
+      }
+      setPage("1")
+    },
+    [],
   );
 
   const tabs = [
@@ -129,10 +143,6 @@ const Customers = ({ shopifyDomain }) => {
   );
   const handleTaggedWithChange = useCallback(
     (value) => setTaggedWith(value),
-    []
-  );
-  const handleFiltersQueryChange = useCallback(
-    (value) => setQueryValue(value),
     []
   );
 
@@ -226,10 +236,12 @@ const Customers = ({ shopifyDomain }) => {
   const [hasMore, setHasMore] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
   const [hasPrevious, setHasPrevious] = useState(false);
+  const [status, setStatus] = useState("active");
+  const [searchQuery, setSearchQuery] = useState();
   // -------------------
   const GET_CUSTOMERS = gql`
-    query($sortColumn: String, $sortDirection: String, $page: String) {
-      fetchCustomers(sortColumn: $sortColumn, sortDirection: $sortDirection, page: $page) {
+    query($sortColumn: String, $sortDirection: String, $page: String, $status: String, $searchquery: String) {
+      fetchCustomers(sortColumn: $sortColumn, sortDirection: $sortDirection, page: $page,status: $status, searchquery: $searchquery) {
         customerSubscriptions{
           id
           shopifyId
@@ -280,18 +292,41 @@ const Customers = ({ shopifyDomain }) => {
   const { data, loading, error, refetch } = useQuery(GET_CUSTOMERS, {
     fetchPolicy: 'no-cache',
     variables: {
-      page: page.toString()
-    }
+      page: page.toString(),
+      searchquery: searchQuery,
+      status: status,
+    },
+
   });
 
   useEffect(() => {
-    refetch({
-      variables: {
-        page: page.toString()
-      }
-    });
+    if (searchQuery) {
+      refetch({
+        variables: {
+          page: page.toString(),
+          searchquery: searchQuery,
+        }
+      });
+    } else {
+      refetch({
+        variables: {
+          page: page.toString(),
+          status: status
+        }
+      });
+    }
     setTotalPages(data?.fetchCustomers?.totalPages)
-  }, [page]);
+  }, [page, status, searchQuery]);
+
+  const handleFiltersQueryChange = (value) => {
+    console.log("fsdafdsafdfwe", value, value.length);
+    setQueryValue(value)
+    if (value.length > 1) {
+      setSearchQuery(value)
+    } else {
+      setSearchQuery()
+    }
+  }
 
   useEffect(() => {
     setTotalPages(data?.fetchCustomers?.totalPages)
@@ -648,31 +683,6 @@ const Customers = ({ shopifyDomain }) => {
       someDate.getFullYear() == today.getFullYear()
   }
 
-  let activeArr = [],
-    newArr = [],
-    pausedArr = [],
-    cancelledArr = [];
-  if (selectedTab == 1 && filterCustomers.length !== 0) {
-    filterCustomers?.map(res => {
-      if (res.createdAt !== null && (new Date(Date.parse(res.createdAt)).toDateString()) === new Date(new Date().getTime()).toDateString()) {
-        newArr.push(res);
-      }
-    });
-  } else if (selectedTab == 3 && filterCustomers.length !== 0) {
-    filterCustomers?.map(res => {
-      res.status == 'PAUSED' && pausedArr.push(res);
-    });
-  } else if (selectedTab == 0 && filterCustomers.length !== 0) {
-    filterCustomers?.map(res => {
-      res.status == 'ACTIVE' && activeArr.push(res);
-    });
-  } else if (selectedTab == 4 && filterCustomers.length !== 0) {
-    filterCustomers?.map(res => {
-      res.status == 'CANCELLED' && cancelledArr.push(res);
-    });
-  }
-
-  console.log("selectedTab>>>>>>>>>>>>>>>>>>>", selectedTab)
   return (
     <AppLayout typePage="customers" tabIndex="2">
       <Frame>
@@ -828,7 +838,7 @@ const Customers = ({ shopifyDomain }) => {
                     '',
                     '',
                   ]}
-                  rows={selectedTab == 1 ? formatRows(newArr) : selectedTab == 3 ? formatRows(pausedArr) : selectedTab == 0 ? formatRows(activeArr) : selectedTab == 4 ? formatRows(cancelledArr) : formatRows(filterCustomers)}
+                  rows={formatRows(filterCustomers)}
                 />
               </div>
               {loading && (
