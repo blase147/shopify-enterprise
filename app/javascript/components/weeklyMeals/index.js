@@ -129,7 +129,7 @@ const index = ({ handleBack }) => {
       if ((dayjs(c?.deliveryDate).week()).toString() == (selectedWeek).toString()) {
         let info = {
           name: c.customer.name,
-          totalCount: c.products.length,
+          totalCount: c.products?.length,
           products: [],
           deliveryDate: c.deliveryDate,
           deliveryDay: c.deliveryDay,
@@ -163,7 +163,7 @@ const index = ({ handleBack }) => {
       if ((dayjs(c?.deliveryDate).week()).toString() == (selectedWeek).toString()) {
         let info = {
           name: c.name,
-          totalCount: c.originOrderProducts.length,
+          totalCount: c.originOrderProducts?.length,
           products: [],
           deliveryDate: c.deliveryDate,
           deliveryDay: c.deliveryDay,
@@ -179,7 +179,7 @@ const index = ({ handleBack }) => {
       }
     })
     setCustomersData(customerData)
-    setOrderCount(customerData.length)
+    setOrderCount(customerData?.length)
     filterMealData(customerData)
     let ArrayData = [];
     const mealdata = customerData
@@ -269,7 +269,7 @@ const index = ({ handleBack }) => {
   }
 
   const productImage = (products, pid) => {
-    if (pid && products.length > 0) {
+    if (pid && products?.length > 0) {
       return products.find(p => p.id === pid).imageUrl
     }
     return ""
