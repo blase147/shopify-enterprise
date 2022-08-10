@@ -13,7 +13,7 @@ class PreorderUpdateWorker
                         note_hash = shopify_order&.note_attributes
                         expected_delivery_date=nil
                         note_hash&.each do |note|
-                            if note&.name.downcase == "delivery date" || note&.name.downcase == "expected delivery date"
+                            if note&.name.downcase == "expected delivery date"
                                 expected_delivery_date = note.value
                             end 
                         end
