@@ -24,10 +24,10 @@ const handleStatusColor = (e) => {
 const OrderMangementTable = ({ HandleCustomerClick, activeCustomer, customerData }) => {
   const rows = []
   customerData && customerData.map((customer, index) => {
-    console.log("====customer", customer.products.length)
+    console.log("====customer", customer.products?.length)
     rows.push(
       [
-        <div className={`${activeCustomer === index ? 'customerActive' : (customer.preparationTime === "false" || customer.products.length == 0) ? 'warning' : ''} profile_image_link`}
+        <div className={`${activeCustomer === index ? 'customerActive' : (customer.preparationTime === "false" || customer.products?.length == 0) ? 'warning' : ''} profile_image_link`}
           onClick={() => {
             HandleCustomerClick(index)
           }}
@@ -40,7 +40,7 @@ const OrderMangementTable = ({ HandleCustomerClick, activeCustomer, customerData
           <img src='https://picsum.photos/200/300' className='order-img' />
           {customer.name}</div>,
 
-        <div className={`${activeCustomer === index ? 'customerActive' : (customer.preparationTime === "false" || customer.products.length == 0) ? 'warning' : ''} profile_image_link`}
+        <div className={`${activeCustomer === index ? 'customerActive' : (customer.preparationTime === "false" || customer.products?.length == 0) ? 'warning' : ''} profile_image_link`}
           onClick={() => {
             HandleCustomerClick(index)
           }}
@@ -52,7 +52,7 @@ const OrderMangementTable = ({ HandleCustomerClick, activeCustomer, customerData
         >
           {customer.subscription}
         </div>,
-        <div className={`${activeCustomer === index ? 'customerActive' : (customer.preparationTime === "false" || customer.products.length === 0) ? 'warning' : ''} profile_image_link`}
+        <div className={`${activeCustomer === index ? 'customerActive' : (customer.preparationTime === "false" || customer.products?.length === 0) ? 'warning' : ''} profile_image_link`}
           onClick={() => {
             HandleCustomerClick(index)
           }}
@@ -86,7 +86,7 @@ const OrderMangementTable = ({ HandleCustomerClick, activeCustomer, customerData
             </label>
           </div>
         </div>,
-        <div className={`${activeCustomer === index ? 'customerActive' : (customer.preparationTime === "false" || customer.products.length === 0) ? 'warning' : ''} profile_image_link`}
+        <div className={`${activeCustomer === index ? 'customerActive' : (customer.preparationTime === "false" || customer.products?.length === 0) ? 'warning' : ''} profile_image_link`}
           onClick={() => {
             HandleCustomerClick(index)
           }}
@@ -98,7 +98,7 @@ const OrderMangementTable = ({ HandleCustomerClick, activeCustomer, customerData
         >
           {customer?.deliveryDate}
         </div>,
-        <div className={`${activeCustomer === index ? 'customerActive' : (customer.preparationTime === "false" || customer.products.length === 0) ? 'warning' : ''} profile_image_link`}
+        <div className={`${activeCustomer === index ? 'customerActive' : (customer.preparationTime === "false" || customer.products?.length === 0) ? 'warning' : ''} profile_image_link`}
           onClick={() => {
             HandleCustomerClick(index)
           }}
