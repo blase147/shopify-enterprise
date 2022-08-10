@@ -385,7 +385,7 @@ line_item = subscription.lines.edges.first.node
 
             <div class="placed_data pdate">
               <p class="placed">Expected delivery :</p>
-              <p class="placed_dates pdate text-right"><%= @current_week_expected_delivery.strftime('%A, %d %b %Y') %></p>
+              <p class="placed_dates pdate text-right"><%= @current_week_expected_delivery&.strftime('%A, %d %b %Y') %></p>
             </div>
             <% if @current_week_select_by.present? %>
               <div class="order_add current-week <%= @customer&.skip_dates.index("#{week_day}") != nil ? "hide" : "" %>" id="add_box_<%= week_day %>">
