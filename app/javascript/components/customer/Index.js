@@ -261,6 +261,8 @@ const Customers = ({ shopifyDomain }) => {
           apiData
           apiResourceId
           apiSource
+          deliveryDay
+          deliveryDate
           additionalContacts {
             id
             firstName
@@ -426,6 +428,19 @@ const Customers = ({ shopifyDomain }) => {
           >
             Create Billing Attempt
           </Button>
+          ,
+          <input type='date' value={row?.deliveryDate} onChange={(e) => {
+            fetch(`/subscriptions/update_contract_delivery_date_day`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+              },
+              credentials: 'same-origin',
+              body: JSON.stringify({ id: row.id, date: e.target.value })
+            })
+              .then((response) => response.json())
+          }} />
         ] : []
     });
   };
@@ -439,7 +454,7 @@ const Customers = ({ shopifyDomain }) => {
           (subscriptions[selectedTab] === 'active') || (subscriptions[selectedTab] === 'returning') || (subscriptions[selectedTab] === 'cancelled') || (subscriptions[selectedTab] === 'new') || (subscriptions[selectedTab] === 'all')) &&
         (item.name?.toLowerCase()?.includes(queryValue?.toLowerCase()) ||
           !queryValue) &&
-        (item.subscription?.toLowerCase()?.includes(taggedWith) || !taggedWith) 
+        (item.subscription?.toLowerCase()?.includes(taggedWith) || !taggedWith)
       );
     });
 
@@ -826,6 +841,7 @@ const Customers = ({ shopifyDomain }) => {
                     'numeric',
                     'numeric',
                     'text',
+                    'text',
                   ]}
                   headings={[
                     'Id',
@@ -837,6 +853,7 @@ const Customers = ({ shopifyDomain }) => {
                     'Product',
                     '',
                     '',
+                    ''
                   ]}
                   rows={formatRows(filterCustomers)}
                 />

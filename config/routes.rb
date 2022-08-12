@@ -133,7 +133,8 @@ Rails.application.routes.draw do
       post :update_subscription
       post :update_customer
       get :sync_stripe
-      post :create_billing_attempt  
+      post :create_billing_attempt
+      post :update_contract_delivery_date_day 
     end
 
     member do
