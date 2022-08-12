@@ -588,22 +588,29 @@ line_item = subscription.lines.edges.first.node
                   <h2 class="Trial">Past Week</h2>
                   <% end %>
                   <div class="orders">
-                    <div class="placed_data pdate">
-                      <p class="placed">First Order:</p>
-                      <p class="placed_dates "><%= Date.commercial(created_at.strftime('%Y').to_i, (created_at.strftime('%W').to_i - 1), 1).next_week(delivery_day_sym.to_sym) rescue nil %></p>
-                    </div>
-                    <div id="psection" class="product_section">
-                    <% @api_data["origin_order"]["line_items"]["edges"].each do |node| %>
-                      <% next if node["node"]["product"]["title"].downcase.include?("meal box") rescue nil  %>
-                      <%# product = products.find{|p| p.id == node["node"]["product"]["id"][/\d+/].to_i } %>
-                      <div class="order_inn">
-                        <div class="holder">
-                          
-                          <img src="<%= node["node"]["product"]["images"]["edges"].last["node"]["original_src"] rescue nil %>">
-                          <h5><%= node["node"]["product"]["title"] rescue nil %></h5>
+                    <div class="wrap-collabsible">
+                      <input id="collapsible" class="toggle collapse_checkbox" type="checkbox">
+                      <label for="collapsible" class="lbl-toggle placed">First Order:</label>
+                      <div class="collapsible-content">
+                        <div class="content-inner">
+                          <p>
+                            <p class="placed_dates "><%= Date.commercial(created_at.strftime('%Y').to_i, (created_at.strftime('%W').to_i - 1), 1).next_week(delivery_day_sym.to_sym) rescue nil %></p>
+                            <div id="psection" class="product_section">
+                              <% @api_data["origin_order"]["line_items"]["edges"].each do |node| %>
+                                <% next if node["node"]["product"]["title"].downcase.include?("meal box") rescue nil  %>
+                                <%# product = products.find{|p| p.id == node["node"]["product"]["id"][/\d+/].to_i } %>
+                                <div class="order_inn">
+                                  <div class="holder">
+                                    
+                                    <img src="<%= node["node"]["product"]["images"]["edges"].last["node"]["original_src"] rescue nil %>">
+                                    <h5><%= node["node"]["product"]["title"] rescue nil %></h5>
+                                  </div>
+                                </div>
+                              <% end %>
+                            </div>
+                          </p>
                         </div>
                       </div>
-                    <% end %>
                     </div>
                   </div>
                   <div class="order_status">
