@@ -46,9 +46,9 @@ line_item = subscription.lines.edges.first.node
         <a href="#edit-subscription-modal" rel="modal:open">
           <button class="btn-yellow bold" id="edit-subscription-btn" tabindex="0">Edit Subscription</button>
         </a>
-        <a href="#skip-delivery-date-modal" rel="modal:open">
+        <%# <a href="#skip-delivery-date-modal" rel="modal:open">
           <button class="btn-yellow bold" id="skip-delivery-date-btn" tabindex="0">Skip Billing Date</button>
-        </a>
+        </a> %>
         <% struct_data.lines.edges.each do |line| %>
           <a href="#<%= "swap-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}" %>" rel="modal:open">
             <button class="btn-yellow bold" id="edit-subscription-btn" tabindex="0">Swap Subscription</button>
