@@ -19,10 +19,23 @@ class CalculateOrderDelivery
       cutoff_day = delivery_settings[:settings].filter{|s| s["delivery"].to_sym  == delivery_day } .first["cutoff_day"].to_sym rescue nil
       first_select_by = next_billing_date.strftime('%A').downcase.to_sym == cutoff_day ? next_billing_date : next_billing_date.next_occurring(cutoff_day) rescue nil
       first_expected_delivery = first_select_by.next_occurring(delivery_day) rescue nil
-      current_week_select_by = nil
-      current_week_expected_delivery = nil
-      next_week_select_by = nil
-      next_week_expected_delivery = nil
+      
+      current_week_select_by = ((current_date - 1.week).beginning_of_week.to_date..(current_date- 1.week).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == cutoff_day&.downcase&.to_sym }
+
+      current_week_select_by = current_week_select_by&.first
+
+      current_week_expected_delivery = ((current_date).beginning_of_week.to_date..(current_date).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase.to_sym == @api_data["delivery_day"]&.downcase.to_sym }
+
+      current_week_expected_delivery = current_week_expected_delivery.first
+
+      next_week_select_by = ((current_date).beginning_of_week.to_date..(current_date).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase.to_sym == cutoff_day&.downcase.to_sym }
+
+      next_week_select_by = next_week_select_by&.first
+
+      next_week_expected_delivery = ((current_date + 1.week).beginning_of_week.to_date..(current_date + 1.week).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == @api_data["delivery_day"]&.downcase&.to_sym }
+
+      next_week_expected_delivery = next_week_expected_delivery&.first
+
       previous_orders = @api_data["orders"]["edges"]
       previous_orders.reverse.each do |o|
         time = Time.parse o["node"]["created_at"]
@@ -30,21 +43,21 @@ class CalculateOrderDelivery
         prev_order_date = time.to_date rescue nil
         prev_order_select_by = prev_order_date.strftime('%A').downcase.to_sym == cutoff_day ? prev_order_date : prev_order_date.next_occurring(cutoff_day) rescue nil
         prev_order_expected_delivery = prev_order_select_by.next_occurring(delivery_day) rescue nil
-        if prev_order_expected_delivery.between?(current_date.beginning_of_week, current_date.end_of_week)
-          current_week_select_by = prev_order_select_by
-          current_week_expected_delivery = prev_order_expected_delivery
-        elsif prev_order_expected_delivery.between?((current_date + 1.week).beginning_of_week, (current_date + 1.week).end_of_week)
-          next_week_select_by = prev_order_select_by
-          next_week_expected_delivery = prev_order_expected_delivery
-        end
+        # if prev_order_expected_delivery.between?(current_date.beginning_of_week, current_date.end_of_week)
+        #   # current_week_select_by = prev_order_select_by
+        #   current_week_expected_delivery = prev_order_expected_delivery
+        # elsif prev_order_expected_delivery.between?((current_date + 1.week).beginning_of_week, (current_date + 1.week).end_of_week)
+        #   # next_week_select_by = prev_order_select_by
+        #   # next_week_expected_delivery = prev_order_expected_delivery
+        # end
       end
-      if first_expected_delivery.between?(current_date.beginning_of_week, current_date.end_of_week)
-        current_week_select_by = first_select_by
-        current_week_expected_delivery = first_expected_delivery
-      elsif first_expected_delivery.between?((current_date + 1.week).beginning_of_week(:monday), (current_date + 1.week).end_of_week())
-        next_week_select_by = first_select_by
-        next_week_expected_delivery = first_expected_delivery
-      end
+      # if first_expected_delivery.between?(current_date.beginning_of_week, current_date.end_of_week)
+      #   # current_week_select_by = first_select_by
+      #   current_week_expected_delivery = first_expected_delivery
+      # elsif first_expected_delivery.between?((current_date + 1.week).beginning_of_week(:monday), (current_date + 1.week).end_of_week())
+      #   # next_week_select_by = first_select_by
+      #   # next_week_expected_delivery = first_expected_delivery
+      # end
     end
 
     {

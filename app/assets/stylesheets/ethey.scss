@@ -1722,7 +1722,7 @@
   }
 
   .toggle:checked+.lbl-toggle+.collapsible-content {
-    max-height: 350px;
+    max-height: fit-content;
   }
 
   .toggle:checked+.lbl-toggle {
