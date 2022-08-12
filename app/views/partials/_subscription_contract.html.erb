@@ -481,8 +481,9 @@ line_item = subscription.lines.edges.first.node
                   # week_day = current_date.next_week(:monday).next_week(delivery_day_sym.to_sym)
                   week_days << week_day.strftime('%Y%m%d')
                   # cutoff_date = cutoff.nil? ? (week_day-2) : current_date.next_week(:monday).next_week(cutoff['cutoff_day'].downcase.to_sym)
+                  @next_week_select_by = @next_week_select_by + 7.days
+                  @next_week_expected_delivery = @next_week_expected_delivery + 7.days
                 end
-
                 week_subscription = WorldfarePreOrder.find_by(shopify_contract_id: @customer.shopify_id, customer_id: @customer.shopify_customer_id, week: week_day.strftime('%-V').to_i )
                 selected_products = []
                 total_meals = meals_on_plan(@customer.subscription)
@@ -517,7 +518,7 @@ line_item = subscription.lines.edges.first.node
 
                         <div class="placed_data pdate">
                           <p class="placed">Expected delivery :</p>
-                          <p class="placed_dates pdate text-right"><%= @next_week_expected_delivery&.strftime('%A, %d %b %Y') rescue @no_data_message %></p>
+                          <p class="placed_dates pdate text-right"><%= @next_week_expected_delivery&.to_date&.strftime('%A, %d %b %Y') rescue @no_data_message %></p>
                         </div>
 
                         <% if @next_week_select_by.present? %>
