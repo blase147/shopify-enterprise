@@ -1036,14 +1036,14 @@ $(".add-to-current-week").on('click', function(e){
 
   $(document).on('click', '#box-item', function(e) {
     e.preventDefault();
-    if ($('#next-week-select-by').text() != 'No deliveery this week') {
+    if ($('#next-week-select-by').text() != 'No delivery this week') {
       $('#box-items')[0].classList.remove('hide');
     }
   });
 
   $(document).on('click', '#box-item-current', function(e) {
     e.preventDefault();
-    if ($('#current-week-select-by').text() != 'No deliveery this week') {
+    if ($('#current-week-select-by').text() != 'No delivery this week') {
       $('#box-items-current')[0].classList.remove('hide');
     }
   });
