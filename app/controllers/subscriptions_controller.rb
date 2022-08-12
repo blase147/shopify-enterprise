@@ -150,4 +150,17 @@ class SubscriptionsController < AuthenticatedController
     id = params["id"].to_i
     CreateBillingAttemptService.new().run(id)
   end
+
+  def update_contract_delivery_date_day
+    contract = CustomerSubscriptionContract.find(params[:id])
+    delivery_date = params[:date]&.to_date.strftime("%d/%m/%Y")
+    delivery_day = delivery_date.to_date.strftime("%A")
+    contract&.api_data["delivery_date"] = delivery_date
+    contract&.api_data["delivery_day"] = delivery_day
+    contract.save
+    order = ShopifyAPI::Order.find(contract.api_data["origin_order"]["id"]&.split("/")&.last)
+    order.note_attributes << { name: "delivery_date", value: delivery_date }
+    order.note_attributes << { name: "delivery_day", value: delivery_day }
+    order.save
+  end
 end
