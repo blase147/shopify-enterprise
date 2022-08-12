@@ -37,11 +37,11 @@ line_item = subscription.lines.edges.first.node
   <% unless paused_or_cancel_plan? %>
     <div class="button-holder">
       <h4>Change Delivery Day:</h4>
-        <%= select_tag "delivery_day", options_for_select(options_for_delivery_day, :selected=>@api_data["delivery_day"]), {prompt: "Select Delivery Day", :class =>"select_combobox",:onchange=>"reset_form(this.id,'page_type_msg');"} %>
+        <%= select_tag "delivery_day", options_for_select(options_for_delivery_day, :selected=>@api_data["delivery_day"]), {prompt: "Select Delivery Day", :class =>"select_combobox",:onchange=>"reset_form(this.id,'page_type_msg');", data: {day: @api_data["delivery_day"]} }%>
         <%#= select(:delivery, :day, options_for_select(options_for_delivery_day), selected: (@api_data["delivery_day"] || "Some text")) %>
 
         <a href="#" rel="modal:open">
-          <button class="btn-yellow bold" id="update-delivery-btn" tabindex="0" data-id="<%= @customer.id %>">Confirm Day Change</button>
+          <button class="btn-yellow bold hide" id="update-delivery-btn" tabindex="0" data-id="<%= @customer.id %>">Confirm Day Change</button>
         </a>
         <a href="#edit-subscription-modal" rel="modal:open">
           <button class="btn-yellow bold" id="edit-subscription-btn" tabindex="0">Edit Subscription</button>
@@ -371,90 +371,96 @@ line_item = subscription.lines.edges.first.node
             meals_to_select = total_meals - selected_products.count
           end
         %>
-        <div class="pre_orders <%= hide_display_selection %> <%= @customer&.skip_dates.index("#{week_day}") != nil ? "grayed-out" : "" %>">
+        <div class="pre_orders">
           <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
-          <div class="order-box">
-            <h2 class="Trial">Week of <%= current_date.beginning_of_week.strftime('%A %d %B') %> - <%= current_date.end_of_week.strftime('%A %d %B') %></h2>
-            <button type="button" class="btn-yellow bold skip_week" style="float: right;" data-week="<%= week_day %>" data-contractId="<%= @customer.id %>" >
-              <%= @customer&.skip_dates.index("#{week_day}") != nil ? "Unskip" : "Skip" %>
-            </button>
-            <div class="placed_data pdate">
-              <p class="placed">Select Meals By</p>
-              <p class="placed_dates pdate text-right" id='current-week-select-by'><%= @current_week_select_by.strftime('%A, %d %b %Y') rescue nil  %></p>
-            </div>
+          <div class="order-box  <%= hide_display_selection %> <%= @customer&.skip_dates.index("#{week_day}") != nil ? "grayed-out" : "" %>">
+            <div>
+              <h2 class="Trial">Week of <%= current_date.beginning_of_week.strftime('%A %d %B') %> - <%= current_date.end_of_week.strftime('%A %d %B') %></h2>
+              <div>
+                <div>
+                  <button type="button" class="btn-yellow bold skip_week" style="float: right;" data-week="<%= week_day %>" data-contractId="<%=  @customer.id %>" >
+                    <%= @customer&.skip_dates.index("#{week_day}") != nil ? "Unskip" : "Skip" %>
+                  </button>
+                  <div class="placed_data pdate">
+                    <p class="placed">Select Meals By</p>
+                    <p class="placed_dates pdate text-right" id='current-week-select-by'><%= @current_week_select_by.strftime('%A, %d %b %Y') rescue nil  %></p>
+                  </div>
 
-            <div class="placed_data pdate">
-              <p class="placed">Expected delivery :</p>
-              <p class="placed_dates pdate text-right"><%= @current_week_expected_delivery.strftime('%A, %d %b %Y') rescue @no_data_message %></p>
-            </div>
-            <% if @current_week_select_by.present? %>
-              <div class="order_add current-week <%= @customer&.skip_dates.index("#{week_day}") != nil ? "" : "" %>" id="add_box_<%= week_day %>">
-                <ul id="psegment" class="pre_segment">
-                  <% selected_products.each do |item| %>
-                    <% meal_product = current_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
-                    <% if  meal_product.present? %>
-                      <div class="order_inn center" >
-                        <div class="holder">
-                            <span class='current-week-dish-remove'>x</span>
-                            <img src="<%= meal_product&['image'] rescue nil %>" data-id="<%= meal_product&['product_id'][/\d+/] %>">
-                            <h5><%= meal_product&['title'] rescue nil %> </h5>
-                        </div>
-                      </div>
-                    <% end %>
-                  <% end %>
-                  <% meals_to_select.times do %>
-                    <li class="pre_segment_order empty-current">
-                      <a href="#_" id="box-item-current"><button><span>+</span><p>Add to box</p></button></a>
-                      <img src="" />
-                    </li>
-                  <% end %>
-                </ul>
-              </div>
-            <% end %>
-
-            <% if current_week_meals.present? %>
-              <div class="meal-options">
-              <ul class="box-items-grid hide" id="box-items-current">
-              <% current_week_meals.each do |meal| %>
-                <li class="box-item-grid" id="<%= meal["product_id"]&.split('/')&.last %>">
-                  <div id="items-list" class="">
-                    <div class="box-item-img">
-                      <img src=<%= meal["image"] %>>
-                    </div>
-                    <div class="box-item-information">
-                      <h5><%= meal["title"] %></h5>
-                      <span><%= truncate(meal["description"], :length => 50) %></span>
-                    </div>
-                    <div class="box-item-icons">
-                      <ul class="icon_list">
-                        <li>
-                          <div class="box-icon-wrapper">
-                            <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Calories_Icon.svg?v=4569060398551131372">
-                          </div>
-                          <span>520 kcal</span>
-                        </li>
-                        <li>
-                          <div class="box-icon-wrapper">
-                            <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Group_346.svg?v=3253623496766777332">
-                          </div>
-                          <span>82g Carbs</span>
-                        </li>
-                        <li>
-                          <div class="box-icon-wrapper">
-                            <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/protein_20x.png?v=7819928887151425549">
-                          </div>
-                          <span>30g Protein</span>
-                        </li>
+                  <div class="placed_data pdate">
+                    <p class="placed">Expected delivery :</p>
+                    <p class="placed_dates pdate text-right"><%= @current_week_expected_delivery&.strftime('%A, %d %b %Y') rescue @no_data_message %></p>
+                  </div>
+                  <% if @current_week_select_by.present? %>
+                    <div class="order_add current-week <%= @customer&.skip_dates.index("#{week_day}") != nil ? "" : "" %>" id="add_box_<%= week_day %>">
+                      <ul id="psegment" class="pre_segment">
+                        <% selected_products.each do |item| %>
+                          <% meal_product = current_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
+                          <% if  meal_product.present? %>
+                            <div class="order_inn center" >
+                              <div class="holder">
+                                  <span class='current-week-dish-remove'>x</span>
+                                  <img src="<%= meal_product&['image'] rescue nil %>" data-id="<%= meal_product&['product_id'][/\d+/] %>">
+                                  <h5><%= meal_product&['title'] rescue nil %> </h5>
+                              </div>
+                            </div>
+                          <% end %>
+                        <% end %>
+                        <% meals_to_select.times do %>
+                          <li class="pre_segment_order empty-current">
+                            <a href="#_" id="box-item-current"><button><span>+</span><p>Add to box</p></button></a>
+                            <img src="" />
+                          </li>
+                        <% end %>
                       </ul>
                     </div>
-                    <a href="#_"class="green-btn add-to-current-week" data-id="<%= meal["product_id"]&.split('/')&.last %>" data-url="<%= meal["image"] %>" id="<%= meal["product_id"]&.split('/')&.last %>">Add to Week</a>
-                  </div>
-                </li>
-              <% end %>
-              </ul>
+                  <% end %>
+
+                  <% if current_week_meals.present? %>
+                    <div class="meal-options">
+                      <ul class="box-items-grid hide" id="box-items-current">
+                        <% current_week_meals.each do |meal| %>
+                          <li class="box-item-grid" id="<%= meal["product_id"]&.split('/')&.last %>">
+                            <div id="items-list" class="">
+                              <div class="box-item-img">
+                                <img src=<%= meal["image"] %>>
+                              </div>
+                              <div class="box-item-information">
+                                <h5><%= meal["title"] %></h5>
+                                <span><%= truncate(meal["description"], :length => 50) %></span>
+                              </div>
+                              <div class="box-item-icons">
+                                <ul class="icon_list">
+                                  <li>
+                                    <div class="box-icon-wrapper">
+                                      <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Calories_Icon.svg?v=4569060398551131372">
+                                    </div>
+                                    <span>520 kcal</span>
+                                  </li>
+                                  <li>
+                                    <div class="box-icon-wrapper">
+                                      <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Group_346.svg?v=3253623496766777332">
+                                    </div>
+                                    <span>82g Carbs</span>
+                                  </li>
+                                  <li>
+                                    <div class="box-icon-wrapper">
+                                      <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/protein_20x.png?v=7819928887151425549">
+                                    </div>
+                                    <span>30g Protein</span>
+                                  </li>
+                                </ul>
+                              </div>
+                              <a href="#_"class="green-btn add-to-current-week" data-id="<%= meal["product_id"]&.split('/')&.last %>" data-url="<%= meal["image"] %>" id="<%= meal["product_id"]&.split('/')&.last %>">Add to Week</a>
+                            </div>
+                          </li>
+                        <% end %>
+                      </ul>
+                    </div>
+                  <% end %>
+                  <button id='confirm-current-week-sub-btn', data-customer-id="<%= @customer.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Selection</button>
+                </div>
+              </div>
             </div>
-          <% end %>
-          <button id='confirm-current-week-sub-btn', data-customer-id="<%= @customer.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Selection</button>
           </div>
         </div>
 
@@ -465,15 +471,16 @@ line_item = subscription.lines.edges.first.node
 
             <% current_date = Date.today %>
             <% week_days = [] %>
-            <%
-              (1..1).each do |i| %>
-              <% if i == 1
-                  week_day = current_date + 7.days
+            <% (1..3).each do |i| %>
+              <% 
+                if i == 1
+                    week_day = current_date + 7.days
                 else
+                  current_date = week_day
                   week_day = current_date + 7.days
                   # week_day = current_date.next_week(:monday).next_week(delivery_day_sym.to_sym)
                   week_days << week_day.strftime('%Y%m%d')
-                  cutoff_date = cutoff.nil? ? (week_day-2) : current_date.next_week(:monday).next_week(cutoff['cutoff_day'].downcase.to_sym)
+                  # cutoff_date = cutoff.nil? ? (week_day-2) : current_date.next_week(:monday).next_week(cutoff['cutoff_day'].downcase.to_sym)
                 end
 
                 week_subscription = WorldfarePreOrder.find_by(shopify_contract_id: @customer.shopify_id, customer_id: @customer.shopify_customer_id, week: week_day.strftime('%-V').to_i )
@@ -490,107 +497,116 @@ line_item = subscription.lines.edges.first.node
                   meals_to_select = total_meals - selected_products.count
                 end
               %>
-              <div class="pre_orders <%= hide_display_selection  %> <%= @customer&.skip_dates.index("#{week_day}") != nil ? "grayed-out" : "" %>" >
+              <div class="pre_orders" >
                 <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
-                <div class="order-box">
-                  <h2 class="Trial">Week of <%= (current_date + 1.week).beginning_of_week.strftime('%A %d %B') %> - <%= (current_date + 1.week).end_of_week.strftime('%A %d %B, %Y')%> </h2>
-                  <button type="button" class="btn-yellow bold skip_week" style="float: right;" data-week="<%= week_day %>" data-contractId="<%= @customer.id %>" >
-                    <%= @customer&.skip_dates.index("#{week_day}") != nil ? "Unskip" : "Skip" %>
-                  </button>
-                  <div class="placed_data pdate">
-                    <p class="placed">Select Meals By</p>
-                    <p class="placed_dates pdate text-right" id='next-week-select-by'><%= @next_week_select_by.strftime('%A, %d %b %Y') rescue nil %></p>
-                  </div>
+                <div class="order-box <%= hide_display_selection  %> <%= @customer&.skip_dates.index("#{week_day}") != nil ? "grayed-out" : "" %>">
+                  <div class="wrap-collabsible">
+                    <input id="collapsible<%=i%>" class="toggle collapse_checkbox" type="checkbox">
+                    <label for="collapsible<%=i%>" class="lbl-toggle placed">
+                      <h2 class="Trial">Week of <%= (current_date + 1.week).beginning_of_week.strftime('%A %d %B') %> - <%= (current_date + 1.week).end_of_week.strftime('%A %d %B, %Y')%> </h2>
+                    </label>
+                    <div class="collapsible-content">
+                      <div class="content-inner">
+                        <button type="button" class="btn-yellow bold skip_week" style="float: right;" data-week="<%= week_day %>" data-contractId="<%= @customer.id %>" >
+                          <%= @customer&.skip_dates.index("#{week_day}") != nil ? "Unskip" : "Skip" %>
+                        </button>
+                        <div class="placed_data pdate">
+                          <p class="placed">Select Meals By</p>
+                          <p class="placed_dates pdate text-right" id='next-week-select-by'><%= @next_week_select_by.strftime('%A, %d %b %Y') rescue nil %></p>
+                        </div>
 
-                  <div class="placed_data pdate">
-                    <p class="placed">Expected delivery :</p>
-                    <p class="placed_dates pdate text-right"><%= @next_week_expected_delivery.strftime('%A, %d %b %Y') rescue @no_data_message %></p>
-                  </div>
+                        <div class="placed_data pdate">
+                          <p class="placed">Expected delivery :</p>
+                          <p class="placed_dates pdate text-right"><%= @next_week_expected_delivery&.strftime('%A, %d %b %Y') rescue @no_data_message %></p>
+                        </div>
 
-                  <% if @next_week_select_by.present? %>
-                    <div class="order_add next-week <%= @customer&.skip_dates.index("#{week_day}") != nil ? "hide" : "" %>" id="add_box_<%= week_day %>">
-                      <ul id="psegment" class="pre_segment">
-                        <% selected_products.each do |item| %>
-                          <% meal_product = next_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
-                          <div class="order_inn center" >
-                            <div class="holder">
-                              <span class='dish_remove'>x</span>
-                              <img src="<%= meal_product['image'] rescue nil %>" data-id="<%= meal_product['product_id'][/\d+/] %>">
-                              <h5><%= meal_product['title'] rescue nil %> </h5>
-                            </div>
-                          </div>
-                        <% end %>
-                        <% meals_to_select.times do %>
-                          <li class="pre_segment_order empty">
-                            <a href="#_" id="box-item"><button><span>+</span><p>Add to box</p></button></a>
-                            <img src="" />
-                          </li>
-                        <% end %>
-                      </ul>
-                    </div>
-                  <% end %>
-                  
-                  <% if next_week_meals.present? %>
-                    <div class="meal-options">
-                    <ul class="box-items-grid hide" id="box-items">
-                    <% next_week_meals.each do |meal| %>
-                      <li class="box-item-grid" id="<%= meal["product_id"]&.split('/')&.last %>">
-                        <div id="items-list" class="">
-                          <div class="box-item-img">
-                            <img src=<%= meal["image"] %>>
-                          </div>
-                          <div class="box-item-information">
-                            <h5><%= meal["title"] %></h5>
-                            <span><%= truncate(meal["description"], :length => 50) %></span>
-                          </div>
-                          <div class="box-item-icons">
-                            <ul class="icon_list">
-                              <li>
-                                <div class="box-icon-wrapper">
-                                  <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Calories_Icon.svg?v=4569060398551131372">
+                        <% if @next_week_select_by.present? %>
+                          <div class="order_add next-week <%= @customer&.skip_dates.index("#{week_day}") != nil ? "hide" : "" %>" id="add_box_<%= week_day %>">
+                            <ul id="psegment" class="pre_segment">
+                              <% selected_products.each do |item| %>
+                                <% meal_product = next_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
+                                <div class="order_inn center" >
+                                  <div class="holder">
+                                    <span class='dish_remove'>x</span>
+                                    <img src="<%= meal_product['image'] rescue nil %>" data-id="<%= meal_product['product_id'][/\d+/] %>">
+                                    <h5><%= meal_product['title'] rescue nil %> </h5>
+                                  </div>
                                 </div>
-                                <span>520 kcal</span>
-                              </li>
-                              <li>
-                                <div class="box-icon-wrapper">
-                                  <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Group_346.svg?v=3253623496766777332">
-                                </div>
-                                <span>82g Carbs</span>
-                              </li>
-                              <li>
-                                <div class="box-icon-wrapper">
-                                  <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/protein_20x.png?v=7819928887151425549">
-                                </div>
-                                <span>30g Protein</span>
-                              </li>
+                              <% end %>
+                              <% meals_to_select.times do %>
+                                <li class="pre_segment_order empty">
+                                  <a href="#_" id="box-item"><button><span>+</span><p>Add to box</p></button></a>
+                                  <img src="" />
+                                </li>
+                              <% end %>
                             </ul>
                           </div>
-                          <a href="#_"class="green-btn add-to-week" data-id="<%= meal["product_id"]&.split('/')&.last %>" data-url="<%= meal["image"] %>" id="<%= meal["product_id"]&.split('/')&.last %>">Add to Week</a>
+                        <% end %>
+                        
+                        <% if next_week_meals.present? %>
+                          <div class="meal-options">
+                          <ul class="box-items-grid hide" id="box-items">
+                          <% next_week_meals.each do |meal| %>
+                            <li class="box-item-grid" id="<%= meal["product_id"]&.split('/')&.last %>">
+                              <div id="items-list" class="">
+                                <div class="box-item-img">
+                                  <img src=<%= meal["image"] %>>
+                                </div>
+                                <div class="box-item-information">
+                                  <h5><%= meal["title"] %></h5>
+                                  <span><%= truncate(meal["description"], :length => 50) %></span>
+                                </div>
+                                <div class="box-item-icons">
+                                  <ul class="icon_list">
+                                    <li>
+                                      <div class="box-icon-wrapper">
+                                        <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Calories_Icon.svg?v=4569060398551131372">
+                                      </div>
+                                      <span>520 kcal</span>
+                                    </li>
+                                    <li>
+                                      <div class="box-icon-wrapper">
+                                        <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/Group_346.svg?v=3253623496766777332">
+                                      </div>
+                                      <span>82g Carbs</span>
+                                    </li>
+                                    <li>
+                                      <div class="box-icon-wrapper">
+                                        <img src="//cdn.shopify.com/s/files/1/0557/3033/9913/files/protein_20x.png?v=7819928887151425549">
+                                      </div>
+                                      <span>30g Protein</span>
+                                    </li>
+                                  </ul>
+                                </div>
+                                <a href="#_"class="green-btn add-to-week" data-id="<%= meal["product_id"]&.split('/')&.last %>" data-url="<%= meal["image"] %>" id="<%= meal["product_id"]&.split('/')&.last %>">Add to Week</a>
+                              </div>
+                            </li>
+                          <% end %>
+                          </ul>
                         </div>
-                      </li>
-                    <% end %>
-                    </ul>
+                        <% end %>
+                        <button id='confirm-sub-btn', data-customer-id="<%= @customer.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Selection</button>
+                      </div>
+                    </div>
                   </div>
-                  <% end %>
-                  <button id='confirm-sub-btn', data-customer-id="<%= @customer.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Selection</button>
                 </div>
               </div>
-
+            <% end %>
             <!-- Past Week -->
 
             <% if created_at.present? %>
-            <% week_number = created_at.cweek %>
+              <% week_number = created_at.cweek %>
               <div class="past_orders">
                 <div class='order-box'>
                   <% if DateTime.now.cweek == week_number && customer_order&.line_items.present? && customer_order&.line_items.count > 5 %>
-                  <h2 class="Trial">Past Week</h2>
+                    <h2 class="Trial">Past Week</h2>
                   <% elsif DateTime.now.cweek == week_number %>
-                  <h2 class="Trial">Past Week</h2>
+                    <h2 class="Trial">Past Week</h2>
                   <% end %>
                   <div class="orders">
                     <div class="wrap-collabsible">
-                      <input id="collapsible" class="toggle collapse_checkbox" type="checkbox">
-                      <label for="collapsible" class="lbl-toggle placed">First Order:</label>
+                      <input id="collapsible1" class="toggle collapse_checkbox" type="checkbox">
+                      <label for="collapsible1" class="lbl-toggle placed">First Order:</label>
                       <div class="collapsible-content">
                         <div class="content-inner">
                           <p>
@@ -627,7 +643,6 @@ line_item = subscription.lines.edges.first.node
               </div>
             <% else %>
               <p class="mb-3">No Active Orders</p>
-            <% end %>
             <% end %>
             <% if params[:product_ids].present? && params[:week] %>
             <button data-pre_order="<%= { customer_id: params[:customer_id],week: week_days[params[:week].to_i-1], products: params[:product_ids] }.to_json %>" class="submit_pre_order">Save Changes</button>
@@ -1100,12 +1115,12 @@ $(".add-to-current-week").on('click', function(e){
     {
       data= "skip_date="+$(this)?.data("week")+"&method=skip&id="+$(this)?.data("contractid")
       $(this).html('Unskip');
-      $(this).parent().parent().addClass("grayed-out");
+      $(this).parent().parent().parent().parent().addClass("grayed-out");
       $("#add_box_"+$(this)?.data("week")).addClass("hide");
     }else{
       data= "skip_date="+$(this)?.data("week")+"&method=unskip&id="+$(this)?.data("contractid")
       $(this).html('Skip')
-      $(this).parent().parent().removeClass("grayed-out");
+      $(this).parent().parent().parent().parent().removeClass("grayed-out");
       $("#add_box_"+$(this)?.data("week")).removeClass("hide");
     }
     $.ajax({
@@ -1114,4 +1129,13 @@ $(".add-to-current-week").on('click', function(e){
       url: "/a/chargezen_production/dashboard/skip_next_billing_date",
     })
   });
+
+  $("#delivery_day").on("change",function(){
+    if($(this).find(":selected").val() && $(this).find(":selected").val() != $(this).data('day')){
+      $("#update-delivery-btn").removeClass('hide');
+    }
+    else{
+      $("#update-delivery-btn").addClass('hide');
+    }
+  })
 </script>
