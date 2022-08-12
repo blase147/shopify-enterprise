@@ -439,7 +439,7 @@ const Customers = ({ shopifyDomain }) => {
           (subscriptions[selectedTab] === 'active') || (subscriptions[selectedTab] === 'returning') || (subscriptions[selectedTab] === 'cancelled') || (subscriptions[selectedTab] === 'new') || (subscriptions[selectedTab] === 'all')) &&
         (item.name?.toLowerCase()?.includes(queryValue?.toLowerCase()) ||
           !queryValue) &&
-        (item.subscription?.toLowerCase()?.includes(taggedWith) || !taggedWith)
+        (item.subscription?.toLowerCase()?.includes(taggedWith) || !taggedWith) 
       );
     });
 

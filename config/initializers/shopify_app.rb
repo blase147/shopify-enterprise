@@ -14,8 +14,8 @@ ShopifyApp.configure do |config|
   config.webhooks = [
     { topic: 'app/uninstalled', address: "#{ENV['HOST']}shopify_webhooks/app_uninstalled" },
     { topic: 'orders/create', address: "#{ENV['HOST']}shopify_webhooks/order_create", fields: ["id", "updated_at"]},
-    { topic: 'orders/cancelled', address: "#{ENV['HOST']}shopify_webhooks/order_cancelled", fields: ["id", "updated_at"]},
-    { topic: 'orders/fulfilled', address: "#{ENV['HOST']}shopify_webhooks/order_fulfilled", fields: ["id", "updated_at"]},
+    { topic: 'orders/cancelled', address: "#{ENV['HOST']}shopify_webhooks/order_cancelled", fields: ["id"]},
+    { topic: 'orders/fulfilled', address: "#{ENV['HOST']}shopify_webhooks/order_fulfilled", fields: ["id"]},
     { topic: 'orders/updated', address: "#{ENV['HOST']}shopify_webhooks/order_updated", fields: ["id", "financial_status", "updated_at"]},
     { topic: 'subscription_contracts/create', address: "#{ENV['HOST']}shopify_webhooks/subscription_contract_create", fields: ["id"]},
     { topic: 'subscription_contracts/update', address: "#{ENV['HOST']}shopify_webhooks/subscription_contract_update", fields: ["id"]},

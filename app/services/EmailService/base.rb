@@ -3,9 +3,9 @@ class EmailService::Base < ApplicationService
   def subject(object)
    case @email_notification.name
     when "Missing Delivery Date"
-      "Your subscription order confirmation from #{@shopify_shop.name}"
+      "Confirm delivery date of order from #{@shopify_shop.name}"
     when "Subscription Activation 2 Hours"
-      "Questions about your ethey subscription? We’re here to help from #{@shopify_shop.name}"
+      "Important details about your subscription from #{@shopify_shop.name}"
     when "Subscription Activation"
       "Your subscription order confirmation from #{@shopify_shop.name}"
     when "Subscription Cancellation"
