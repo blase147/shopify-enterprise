@@ -399,7 +399,7 @@ line_item = subscription.lines.edges.first.node
                             <div class="order_inn center" >
                               <div class="holder">
                                   <span class='current-week-dish-remove'>x</span>
-                                  <img src="<%= meal_product&['image'] rescue nil %>" data-id="<%= meal_product&['product_id'][/\d+/] %>">
+                                  <img src="<%= meal_product['image'] rescue nil %>" data-id="<%= meal_product['product_id'][/\d+/] %>" data-saved="true">
                                   <h5><%= meal_product&['title'] rescue nil %> </h5>
                               </div>
                             </div>
@@ -522,21 +522,21 @@ line_item = subscription.lines.edges.first.node
                         </div>
 
                         <% if @next_week_select_by.present? %>
-                          <div class="order_add next-week <%= @customer&.skip_dates.index("#{week_day}") != nil ? "hide" : "" %>" id="add_box_<%= week_day %>">
+                          <div class="order_add next-week-<%= week_day.strftime('%-V').to_i %> next-week_<%= week_day %> next-week <%= @customer&.skip_dates.index("#{week_day}") != nil ? "hide" : "" %>" id="add_box_<%= week_day %>">
                             <ul id="psegment" class="pre_segment">
                               <% selected_products.each do |item| %>
                                 <% meal_product = next_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
                                 <div class="order_inn center" >
                                   <div class="holder">
-                                    <span class='dish_remove'>x</span>
-                                    <img src="<%= meal_product['image'] rescue nil %>" data-id="<%= meal_product['product_id'][/\d+/] %>">
+                                    <span class='dish_remove' data-week="<%= week_day %>">x</span>
+                                    <img src="<%= meal_product['image'] rescue nil %>" data-id="<%= meal_product['product_id'][/\d+/] %>" data-saved="true">
                                     <h5><%= meal_product['title'] rescue nil %> </h5>
                                   </div>
                                 </div>
                               <% end %>
                               <% meals_to_select.times do %>
-                                <li class="pre_segment_order empty">
-                                  <a href="#_" id="box-item"><button><span>+</span><p>Add to box</p></button></a>
+                                <li class="pre_segment_order <%= week_day %> empty">
+                                  <a href="#_" id="box-item"><button class="<%= week_day %>"><span>+</span><p>Add to box</p></button></a>
                                   <img src="" />
                                 </li>
                               <% end %>
@@ -546,7 +546,7 @@ line_item = subscription.lines.edges.first.node
                         
                         <% if next_week_meals.present? %>
                           <div class="meal-options">
-                          <ul class="box-items-grid hide" id="box-items">
+                          <ul class="box-items-grid hide" id="box-items<%= week_day %>">
                           <% next_week_meals.each do |meal| %>
                             <li class="box-item-grid" id="<%= meal["product_id"]&.split('/')&.last %>">
                               <div id="items-list" class="">
@@ -579,14 +579,16 @@ line_item = subscription.lines.edges.first.node
                                     </li>
                                   </ul>
                                 </div>
-                                <a href="#_"class="green-btn add-to-week" data-id="<%= meal["product_id"]&.split('/')&.last %>" data-url="<%= meal["image"] %>" id="<%= meal["product_id"]&.split('/')&.last %>">Add to Week</a>
+                                <a href="#_"class="green-btn" onclick="addToWeek(event,'<%= week_day %>')" data-id="<%= meal["product_id"]&.split('/')&.last %>" data-url="<%= meal["image"] %>" id="<%= meal["product_id"]&.split('/')&.last %>">Add to Week</a>
+                                <!-- <a href="#_"class="green-btn add-to-week" data-id="<%= meal["product_id"]&.split('/')&.last %>" data-url="<%= meal["image"] %>" id="<%= meal["product_id"]&.split('/')&.last %>">Add to Week</a> %> -->
                               </div>
                             </li>
                           <% end %>
                           </ul>
                         </div>
                         <% end %>
-                        <button id='confirm-sub-btn', data-customer-id="<%= @customer.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Selection</button>
+                        <button id='confirm-sub-btn_<%= week_day %>', data-customer-id="<%= @customer.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" onclick="submitAddMeals(event)" class="hide">Confirm Selection</button>
+                        <!--<button id='confirm-sub-btn', data-customer-id="<%= @customer.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Selection</button>-->
                       </div>
                     </div>
                   </div>
@@ -971,16 +973,16 @@ line_item = subscription.lines.edges.first.node
     pre_order_selector.classList.add('empty-current');
   }
 
-  $(".add-to-week").on('click', function(e){
+  function addToWeek(e,week){
     e.preventDefault();
     image_url = $(this).data('url')
-    let pre_order_selector = document.getElementsByClassName('empty')[0]
-    pre_order_selector.innerHTML = "<div class='order_inn add_new_order'><div class='holder'><button class='week_dish_remove' onClick='weekDishRemove(event)'>+</button><img src="+ $(this).data('url') + " data-id=" + $(this).data('id') +"></img></div></div>"
+    let pre_order_selector = document.getElementsByClassName(`${week} empty`)[0]
+    pre_order_selector.innerHTML = "<div class='order_inn add_new_order'><div class='holder'><button class='week_dish_remove' onClick='weekDishRemove(event)'>+</button><img src="+ e.target.getAttribute("data-url") + " data-id=" + e.target.getAttribute("data-id") +"></img></div></div>"
     pre_order_selector.classList.remove("empty");
-    $('#confirm-sub-btn').removeClass('hide');
-  });
+    $('#confirm-sub-btn_'+week).removeClass('hide');
+  };
 
-$(".add-to-current-week").on('click', function(e){
+  $(".add-to-current-week").on('click', function(e){
     e.preventDefault();
     image_url = $(this).data('url')
     let pre_order_selector = document.getElementsByClassName('empty-current')[0]
@@ -989,20 +991,24 @@ $(".add-to-current-week").on('click', function(e){
     $('#confirm-current-week-sub-btn').removeClass('hide');
   });
 
-  $("#confirm-sub-btn").on('click', function(e){
+  function submitAddMeals(e){
     $(this).prop('disabled', true);
     $(this).text('Processing..');
+    week_number = e.target.getAttribute("data-week")
+    product_selector = '.order_add.next-week-'+week_number + ' img'
 
     let product_ids = []
-    $('.order_add.next-week img').each(function(i, obj) {
-       product_ids.push(obj.dataset.id)
+    $(product_selector).each(function(i, obj) {
+      product_ids.push(obj.dataset.id)
     });
+
     let params = {
       product_ids: product_ids,
-      week: $(this).data('week'),
-      customer_id: $(this).data('customer-id'),
+      week:  week_number,
+      customer_id:  e.target.getAttribute("data-customer-id"),
       shopify_contract_id: $("#contract-content").data("contract-id")
     }
+
     $.ajax({
       url: '/a/chargezen_production/dashboard/create_pre_order',
       type: 'POST',
@@ -1021,7 +1027,7 @@ $(".add-to-current-week").on('click', function(e){
 
       }
     });
-  });
+  };
 
   $("#confirm-current-week-sub-btn").on('click', function(e){
     $(this).prop('disabled', true);
@@ -1060,7 +1066,7 @@ $(".add-to-current-week").on('click', function(e){
   $(document).on('click', '#box-item', function(e) {
     e.preventDefault();
     if ($('#next-week-select-by').text() != 'No delivery this week') {
-      $('#box-items')[0].classList.remove('hide');
+      $('#box-items'+e.target.parentElement.className)[0]?.classList?.remove('hide');
     }
   });
 
@@ -1071,10 +1077,12 @@ $(".add-to-current-week").on('click', function(e){
     }
   });
 
+
   $(".dish_remove").on('click', function(e) {
     e.preventDefault();
+    week_class = $(this).data('week')
     $(this).closest('.order_inn').remove();
-    $('.next-week ul').append("<li class='pre_segment_order empty'><a href='#_' id='box-item'><button><span>+</span><p>Add to box</p></button></a><img src='' /></li>")
+    $(`.next-week_${e.target.getAttribute("data-week")} ul`).append("<li class='pre_segment_order "+ week_class+ " empty'><a href='#_' id='box-item'><button class="+week_class+"><span>+</span><p>Add to box</p></button></a><img src='' /></li>")
   });
 
   $(".current-week-dish-remove").on('click', function(e) {

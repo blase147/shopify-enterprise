@@ -4,5 +4,4 @@ class WorldfarePreOrder < ApplicationRecord
 		cron: "Cron job",
 		customer: "Customer"
 	}
-	validates :order_id, uniqueness: true
 end
