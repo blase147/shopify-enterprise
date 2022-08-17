@@ -45,6 +45,7 @@ class ShopifyWebhooksController < ApplicationController
   def order_fulfilled
     preorder = WorldfarePreOrder.find_by_order_id(params[:id].to_s)
     preorder&.update(status: "fulfilled")
+    SendEmailService.new.send_order_fulfiled_email(preorder&.shopify_contract_id)
     head :no_content
   end
 
@@ -82,6 +83,7 @@ class ShopifyWebhooksController < ApplicationController
     contract_id = params[:subscription_contract_id]
 
     SendEmailService.new.send_recurring_order_email(order_id, contract_id)
+    ScheduleEmailWorker.perform_in(1.hour,"changes_reminder",contract_id)
     AddProductsToOrderWorker.perform_async(order_id, contract_id)
 
     head :no_content

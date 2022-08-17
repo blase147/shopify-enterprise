@@ -53,4 +53,20 @@ class SendEmailService
         sent= EmailService::Send.new(email_notification).send_email({customer: contract, activation_url: activation_url }) if email_notification.present? && contract.shop.setting.email_service.present?
         return sent
     end
+
+    def send_order_fulfiled_email(contract_id)
+        contract = CustomerSubscriptionContract.find_by_shopify_id(contract_id&.to_s)
+        email_notification = contract.shop.setting.email_notifications.find_by_name "Order fulfiled"
+        
+        sent= EmailService::Send.new(email_notification).send_email({customer: contract }) if email_notification.present? && contract.shop.setting.email_service.present?
+        return sent
+    end
+
+    def send_changes_reminder_email(contract_id)
+        contract = CustomerSubscriptionContract.find_by_shopify_id(contract_id&.to_s)
+        email_notification = contract.shop.setting.email_notifications.find_by_name "Changes Reminder"
+        
+        sent= EmailService::Send.new(email_notification).send_email({customer: contract}) if email_notification.present? && contract.shop.setting.email_service.present?
+        return sent
+    end
 end

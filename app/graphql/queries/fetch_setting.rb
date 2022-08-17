@@ -7,6 +7,8 @@ module Queries
       @setting = current_shop.setting || current_shop.create_setting
       if @setting.email_notifications.blank?
         email_notifications = [
+          {name: 'Changes Reminder', description: 'Sent to customers when a recurring order occurs', status: true, slug: "customer" },
+          {name: 'Order fulfiled', description: 'Sent to customers when an order is fulfiled)', status: true, slug: "customer" },
           {name: 'Missing Delivery Date', description: 'Sent to customers when delivery date is missing form their subscription', status: true, slug: "customer" },
           {name: 'Subscription Activation 2 Hours', description: 'Sent to customers after 2 hours of their first sign up for a subscription', status: true, slug: "customer" },
           {name: 'Subscription Activation', description: 'Sent to customers when they first sign up for a subscription', status: true, slug: "customer" },
