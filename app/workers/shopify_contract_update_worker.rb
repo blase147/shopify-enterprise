@@ -3,6 +3,7 @@ class ShopifyContractUpdateWorker
 
   def perform(shop_id, id)
     shop = Shop.find(shop_id)
+    shop.connect
     data = shop.with_shopify_session do
       SubscriptionContractService.new(id).run
     end
@@ -28,8 +29,8 @@ class ShopifyContractUpdateWorker
       order_id = contract.api_data["origin_order"]["id"].split("/").last
       order = ShopifyAPI::Order.find(order_id)
       note_hash = JSON.parse(order&.note) rescue {}
-      delivery_date = note_hash["delivery_date"].to_date.strftime("%d/%m/%Y")
-      delivery_day = delivery_date.to_date.strftime("%A")
+      delivery_date = note_hash["delivery_date"]&.to_date&.strftime("%d/%m/%Y")
+      delivery_day = delivery_date&.to_date&.strftime("%A")
       contract.api_data[:delivery_date] = delivery_date
       contract.api_data[:delivery_day] = delivery_day
     end

@@ -82,10 +82,13 @@ module SubscriptionConcern
       @customer.save
     else
       set_draft_contract
-      variant = ShopifyAPI::Variant.find(params[:variant_id][/\d+/])
+      variant_id = params["variant_id#{params[:index]}_#{params[:productindex]}"]
+      selling_plan_id = params["selling_plan_id#{params[:index]}_#{params[:productindex]}"]
+      selling_plan = SellingPlan.find(selling_plan_id)
+      variant = ShopifyAPI::Variant.find(variant_id&.split("/")&.last)
       product = ProductService.new(variant.product_id).run
-      result = SubscriptionDraftsService.new.line_update @draft_id, params[:line_id], { 'productVariantId': params[:variant_id], 'quantity': 1, 'currentPrice': variant.price }
-      SubscriptionDraftsService.new.commit @draft_id
+      result = SubscriptionDraftsService.new.line_update @draft_id, params[:line_id], { 'productVariantId': variant_id, 'quantity': 1, 'currentPrice': variant.price, 'sellingPlanId': selling_plan&.shopify_id, 'sellingPlanName': selling_plan&.name }
+      temp = SubscriptionDraftsService.new.commit @draft_id
       if result[:error].present?
         flash[:error] = result[:error]
         render js: "alert('#{result[:error]}'); hideLoading()"
@@ -95,13 +98,12 @@ module SubscriptionConcern
         note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
         description = @customer.name+",swaped,"+variant.title
         # amount = (product.quantity * variant.price.to_f).round(2).to_s
-        current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id, product_name: variant.title, note: note, description: description, product_id: params[:variant_id], swaped_product_id: variant.product_id)
+        current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id, product_name: variant.title, note: note, description: description, product_id: variant_id&.split("/")&.last, swaped_product_id: variant.product_id)
         redirect_to "/a/chargezen_production?customer_id=#{@customer.shopify_customer_id}"
         # render js: 'location.reload()'
       end
     end
   end
-
   def upgrade_product
     line_update = SubscriptionDraftsService.new.line_update @draft_id, params[:line_id], { 'sellingPlanId': params[:selling_plan_id], 'sellingPlanName': params[:name] }
     if line_update[:error].present?
