@@ -72,7 +72,7 @@ class CalculateOrderDelivery
       # elsif first_expected_delivery.between?((current_date + 1.week).beginning_of_week(:monday), (current_date + 1.week).end_of_week())
       #   # next_week_select_by = first_select_by
       #   # next_week_expected_delivery = first_expected_delivery
-      # end
+      # end trigger
     end
 
     {
