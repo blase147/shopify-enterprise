@@ -58,9 +58,12 @@ class ShopifyWebhooksController < ApplicationController
   end
 
   def subscription_contract_create
-    shop = Shop.find_by(shopify_domain: shop_domain)
-    ShopifyContractCreateWorker.perform_async(shop.id, params[:id], params[:order_id])
-
+    begin
+      shop = Shop.find_by(shopify_domain: shop_domain)
+      ShopifyContractCreateWorker.perform_async(shop.id, params[:id], params[:order_id])
+    rescue => error
+      puts "There is an error in subscription_contract_create:- #{error&.message}"
+    end
     head :no_content
   end
 
