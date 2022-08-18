@@ -21,6 +21,15 @@ class CalculateOrderDelivery
         delivery_day = "tuesday"
         cutoff_day = delivery_settings[:settings].filter{|s| s["delivery"].to_sym  == delivery_day }.first["cutoff_day"].to_sym rescue nil
       end
+
+      order_tag_date = nil
+      Shop.find(@shop_id).connect
+      order = ShopifyAPI::Order.find(@api_data["orders"]["edges"].last["node"]["id"]&.split("/")&.last) rescue nil
+      order&.tags&.split(",")&.each do |order|
+        order_tag_date = order.to_date rescue nil
+        break if order_tag_date.present?
+      end
+
       first_select_by = next_billing_date.strftime('%A').downcase&.to_sym == cutoff_day ? next_billing_date : next_billing_date.next_occurring(cutoff_day) rescue nil
       first_expected_delivery = first_select_by.next_occurring(delivery_day) rescue nil
 
@@ -32,13 +41,15 @@ class CalculateOrderDelivery
 
       current_week_expected_delivery = current_week_expected_delivery.first
 
+      if order_tag_date&.present? && order_tag_date&.cweek >= current_week_expected_delivery&.cweek
+        week_diff = order_tag_date&.cweek - current_week_expected_delivery&.cweek
+        current_week_expected_delivery = current_week_expected_delivery + week_diff.weeks + 1.week
+      end 
       next_week_select_by = ((current_date).beginning_of_week.to_date..(current_date).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == cutoff_day&.downcase&.to_sym }
 
       next_week_select_by = next_week_select_by&.first
 
-      next_week_expected_delivery = ((current_date + 1.week).beginning_of_week.to_date..(current_date + 1.week).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == delivery_day&.downcase&.to_sym }
-
-      next_week_expected_delivery = next_week_expected_delivery&.first
+      next_week_expected_delivery = current_week_expected_delivery + 1.week
 
       previous_orders = @api_data["orders"]["edges"]
       previous_orders.reverse.each do |o|
