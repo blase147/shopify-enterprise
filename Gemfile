@@ -93,3 +93,5 @@ gem 'httparty'
 gem "stripe", "~> 5.41"
 
 gem 'appsignal'
+
+gem 'scout_apm'
