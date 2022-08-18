@@ -69,6 +69,8 @@ GEM
     apollo_upload_server (2.0.3)
       graphql (>= 1.8)
       rails (>= 4.2)
+    appsignal (3.1.4)
+      rack
     autoprefixer-rails (10.2.0.0)
       execjs
     babel-source (5.8.35)
@@ -398,10 +400,11 @@ GEM
     zeitwerk (2.4.2)
 
 PLATFORMS
-  ruby
+  x86_64-linux
 
 DEPENDENCIES
   apollo_upload_server
+  appsignal
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.2)
   bootstrap (~> 5.0.0.alpha3)
@@ -448,4 +451,4 @@ DEPENDENCIES
   whenever
 
 BUNDLED WITH
-   2.1.4
+   2.3.20
