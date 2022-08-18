@@ -82,9 +82,13 @@ class ShopifyWebhooksController < ApplicationController
     order_id = params[:order_id]
     contract_id = params[:subscription_contract_id]
 
-    SendEmailService.new.send_recurring_order_email(order_id, contract_id)
-    ScheduleEmailWorker.perform_in(1.hour,"changes_reminder",contract_id)
-    AddProductsToOrderWorker.perform_async(order_id, contract_id)
+    begin
+      SendEmailService.new.send_recurring_order_email(order_id, contract_id)
+      ScheduleEmailWorker.perform_in(1.hour,"changes_reminder",contract_id)
+      AddProductsToOrderWorker.perform_async(order_id, contract_id)
+    rescue => error
+      puts "There is an error in billing_attempt_success:- #{error&.message}"
+    end
 
     head :no_content
   end

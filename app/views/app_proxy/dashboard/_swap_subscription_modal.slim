@@ -19,31 +19,78 @@
                   path d=("M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z") fill="#DDDDDD" /
             - if @swap_products.present?
               .swap-grid
-                - @swap_products.each do |product|
-                  .item
-                    .img
-                      img src=product.node.images.edges.first&.node&.original_src
-                    .title
-                      h2
-                        = product.node.title
-                      p
-                        = "#{number_to_currency product.node.variants.edges.first.node.price} / #{subscription.billing_policy.interval_count} #{subscription.billing_policy.interval}"
-                    = form_tag action_subscription_contract_path(:swap_product, subscription.id[/\d+/]), method: :post, :id => "form-#{line_item.id}", remote: true do
-                      .variants-wrapper
-                        - product.node.variants.edges.each_with_index do |variant, index|
-                          label for="input-#{index}"
-                            input.hidden name="line_id" type="text" value="#{line_item.id}"
-                            - if index.zero?
-                              input name="variant_id" type="radio" value="#{variant.node.id}" checked='checked' id="input-#{index}"
-                            - else
-                              input name="variant_id" type="radio" value="#{variant.node.id}" id="input-#{index}"
-                            = "#{variant.node.title} (#{number_to_currency variant.node.price})"
-                      .btn-wrapper
-                        button type="submit"
-                          span #{@translation.swap_subscription_popup_swap_subscription_button.present? ? @translation.swap_subscription_popup_swap_subscription_button : 'SWAP SUBSCRIPTION'} &nbsp;
-                          span
+                - @selling_plans = SellingPlan.all 
+                - @selling_plans&.each_with_index do |selling_plan,index|
+                  - products = selling_plan&.selling_plan_group.product_ids
+                  - products.each do |prod|
+                    - product = (@swap_products.select {|p| p.node.id == prod["product_id"]}).first
+                    - if product.present?
+                      .item
+                        .img
+                          img src=product.node.images.edges.first&.node&.original_src
+                        .title
+                          h2
+                            = product.node.title
+                          p
+                            = "#{number_to_currency product.node.variants.edges.first.node.price} / #{subscription.billing_policy.interval_count} #{subscription.billing_policy.interval}"
+                        = form_tag action_subscription_contract_path(:swap_product, subscription.id[/\d+/]), method: :post, :id => "form-#{index}", remote: true do
+                          .variants-wrapper
+                            - product.node.variants.edges.each_with_index do |variant, i|
+                              label for="input-#{i}"
+                                input.hidden name="selling_plan_title#{index}_#{i}" type="text" value="#{prod["title"]}"
+                                input.hidden name="line_id" type="text#{index}_#{i}" value="#{line_item.id}"
+                                input.hidden name="selling_plan_id#{index}_#{i}" type="text" value="#{selling_plan.id}"
+                                - if index.zero?
+                                  input name="variant_id#{index}_#{i}" type="hidden" value="#{variant.node.id}" checked='checked' id="input-#{index}"
+                                - else
+                                  input name="variant_id#{index}_#{i}" type="hidden" value="#{variant.node.id}" id="input-#{index}"
+                                = "#{variant.node.title} (#{number_to_currency variant.node.price})"
+                              .btn-wrapper
+                                button type="button" class="submit_swap_form" data-index="#{index}" data-productindex="#{i}"
+                                  span #{@translation.swap_subscription_popup_swap_subscription_button.present? ? @translation.swap_subscription_popup_swap_subscription_button : 'SWAP SUBSCRIPTION'} &nbsp;
+                                  span
             - else
               p.Polaris-Heading No other subscription products available
 
 
   .Polaris-Backdrop
+
+javascript: 
+  $(".submit_swap_form").on("click",function (){
+    var formId = $(this).attr("data-index");
+    var form = document.getElementById(`form-${formId}`);
+    $.ajax({
+      type: "post",
+      data: serialize(form)+"&index="+$(this).attr("data-index")+"&productindex="+$(this).attr("data-productindex"),
+      url: form.getAttribute('action'),
+      success: ()=>{
+        alert("Swapped")
+        window.location.reload()
+      },
+      error: (error)=>{
+        alert(JSON.stringify(error));
+        window.location.reload()
+      }
+    }) 
+  })
+
+  function serialize(form) {
+    var field, s = [];
+    if (typeof form == 'object' && form.nodeName == "FORM") {
+        var len = form.elements.length;
+        for (i=0; i<len; i++) {
+            field = form.elements[i];
+            if (field.name && !field.disabled && field.type != 'file' && field.type != 'reset' && field.type != 'submit' && field.type != 'button') {
+                if (field.type == 'select-multiple') {
+                    for (j=form.elements[i].options.length-1; j>=0; j--) {
+                        if(field.options[j].selected)
+                            s[s.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.options[j].value);
+                    }
+                } else if ((field.type != 'checkbox' && field.type != 'radio') || field.checked) {
+                    s[s.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value);
+                }
+            }
+        }
+    }
+    return s.join('&').replace(/%20/g, '+');
+  }
