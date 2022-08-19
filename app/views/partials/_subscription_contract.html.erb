@@ -37,8 +37,8 @@ line_item = subscription.lines.edges.first.node
   <% unless paused_or_cancel_plan? %>
     <div class="button-holder">
       <h4>Change Delivery Day:</h4>
-        <%= select_tag "delivery_day", options_for_select(options_for_delivery_day, :selected=>@api_data["delivery_day"]), {prompt: "Select Delivery Day", :class =>"select_combobox",:onchange=>"reset_form(this.id,'page_type_msg');", data: {day: @api_data["delivery_day"]} }%>
-        <%#= select(:delivery, :day, options_for_select(options_for_delivery_day), selected: (@api_data["delivery_day"] || "Some text")) %>
+        <%= select_tag "delivery_day", options_for_select(options_for_delivery_day, :selected=>@customer.delivery_day), {prompt: "Select Delivery Day", :class =>"select_combobox",:onchange=>"reset_form(this.id,'page_type_msg');", data: {day: @customer.delivery_day} }%>
+        <%#= select(:delivery, :day, options_for_select(options_for_delivery_day), selected: (@customer.delivery_day || "Some text")) %>
 
         <a href="#" rel="modal:open">
           <button class="btn-yellow bold hide" id="update-delivery-btn" tabindex="0" data-id="<%= @customer.id %>">Confirm Day Change</button>
@@ -466,7 +466,7 @@ line_item = subscription.lines.edges.first.node
 
 
         <!-- Next Week -->
-            <% delivery_date = @api_data["delivery_date"] rescue nil %>
+            <% delivery_date = @customer.delivery_date rescue nil %>
             <% created_at = Date.parse(@api_data["created_at"]) rescue nil %>
 
             <% current_date = Date.today %>

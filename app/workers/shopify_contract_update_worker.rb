@@ -27,12 +27,23 @@ class ShopifyContractUpdateWorker
 
     if contract.api_data.present?
       order_id = contract.api_data["origin_order"]["id"].split("/").last
-      order = ShopifyAPI::Order.find(order_id)
-      note_hash = JSON.parse(order&.note) rescue {}
-      delivery_date = note_hash["delivery_date"]&.to_date&.strftime("%d/%m/%Y")
-      delivery_day = delivery_date&.to_date&.strftime("%A")
-      contract.api_data[:delivery_date] = delivery_date
-      contract.api_data[:delivery_day] = delivery_day
+      order = ShopifyAPI::Order.find(order_id) rescue nil
+      unless order.present?
+        order_id = contract.api_data["orders"]["edges"].last["node"]["id"]&.split("/")&.last&.to_i
+        order = ShopifyAPI::Order.find(order_id) rescue nil
+      end
+      notes = order.note_attributes
+      delivery_day = nil
+      delivery_date =nil
+      notes&.each do |note|
+        if note&.name == "Delivery Date"
+          delivery_date = note&.value
+        elsif note&.name == "Delivery Day"
+          delivery_day = note&.value
+        end
+      end
+      contract.delivery_date = delivery_date&.to_date
+      contract.delivery_day = delivery_day
     end
     
     unless contract.persisted?

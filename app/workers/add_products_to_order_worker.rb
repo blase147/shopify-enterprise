@@ -17,8 +17,8 @@ class AddProductsToOrderWorker
 
       order = ShopifyAPI::Order.find(shopify_order_id) rescue nil
 
-      expected_order_delivery = CalculateOrderDelivery.new(contract.api_data, shop.id).expected_delivery_of_order(order.created_at)
-      order_select_by = CalculateOrderDelivery.new(contract.api_data, shop.id).cuttoff_for_order(order.created_at)
+      expected_order_delivery = CalculateOrderDelivery.new(contract, shop.id).expected_delivery_of_order(order.created_at)
+      order_select_by = CalculateOrderDelivery.new(contract, shop.id).cuttoff_for_order(order.created_at)
       week_number = expected_order_delivery.to_date.cweek
 
       if order.present?
