@@ -7,8 +7,9 @@ class UpdateOriginOrderFieldForExistingContracts
             orders = []
             if contract.api_data["origin_order"]["line_items"].present?
                 origin_orders = contract.api_data["origin_order"]["line_items"]["edges"]
-                origin_orders&.each do |origin_order|
-                    unless exclude.include? origin_order["node"]["product"]["title"]&.downcase
+                origin_orders&.each  do |origin_order|
+                    excluded = exclude.include? origin_order["node"]["product"]["title"]&.downcase rescue false
+                    unless excluded
                         orders << origin_order
                     end
                 end
