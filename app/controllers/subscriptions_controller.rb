@@ -155,8 +155,8 @@ class SubscriptionsController < AuthenticatedController
     contract = CustomerSubscriptionContract.find(params[:id])
     delivery_date = params[:date]&.to_date.strftime("%d/%m/%Y")
     delivery_day = delivery_date.to_date.strftime("%A")
-    contract&.api_data["delivery_date"] = delivery_date
-    contract&.api_data["delivery_day"] = delivery_day
+    contract&.delivery_date = delivery_date
+    contract&.delivery_day = delivery_day
     contract.save
     order = ShopifyAPI::Order.find(contract.api_data["origin_order"]["id"]&.split("/")&.last)
     order.note_attributes << { name: "delivery_date", value: delivery_date }

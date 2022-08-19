@@ -3,7 +3,7 @@ namespace :pre_orders do
     puts "<============== Cron for PreOrder Started: at #{Time.current} ==============>"
     puts "<============== Processing for Week day number: #{Date.today.cweek} ==============>"
     CustomerSubscriptionContract.all.each do |subscription_contract|
-      delivery_date = subscription_contract.api_data["delivery_date"]
+      delivery_date = subscription_contract.delivery_date
       subscription_name = subscription_contract.subscription
       delivery_date ||= Date.today.next_week(:wednesday).yesterday.strftime("%m/%d/%Y")
       delivery_day = Date.strptime(delivery_date, '%m/%d/%Y').strftime("%A")

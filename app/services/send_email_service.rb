@@ -4,7 +4,7 @@ class SendEmailService
         contract.shop.connect
         email_notification = contract.shop.setting.email_notifications.find_by_name "Recurring Charge Confirmation"
         order = ShopifyAPI::Order.find(order_number) rescue nil
-        expected_order_delivery = CalculateOrderDelivery.new(contract.api_data, contract.shop.id).expected_delivery_of_order(order.created_at)
+        expected_order_delivery = CalculateOrderDelivery.new(contract, contract.shop.id).expected_delivery_of_order(order.created_at)
         products = []
         
         order&.line_items&.each do |product|
@@ -22,7 +22,7 @@ class SendEmailService
         contract&.api_data["origin_order"]["line_items"]["edges"]&.each do |product|
             products << product["node"]["product"]["title"] unless product["node"]["product"]["title"]&.downcase&.include? "meals"
         end
-        EmailService::Send.new(email_notification).send_email({customer: contract, order_details_first: "Order Number: #{order_number} Meals: #{products.to_sentence}", delivery_date_first: contract.api_data["delivery_date"] }) if email_notification.present? && contract.shop.setting.email_service.present?
+        EmailService::Send.new(email_notification).send_email({customer: contract, order_details_first: "Order Number: #{order_number} Meals: #{products.to_sentence}", delivery_date_first: contract.delivery_date }) if email_notification.present? && contract.shop.setting.email_service.present?
     end
 
     def send_missing_delivery_date_email(contract_id,delivery_date)

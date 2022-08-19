@@ -95,8 +95,8 @@ namespace :subscriptions do
             delivery_date = note_attributes.filter{|attr| attr.name == "Delivery Date" }.last&.value rescue nil
             delivery_date = delivery_date.to_date.strftime("%m/%d/%Y") if delivery_date.present? rescue nil
             delivery_day = note_attributes.filter{|attr| attr.name == "Delivery Day" }.last&.value rescue nil
-            contract.api_data[:delivery_date] = delivery_date
-            contract.api_data[:delivery_day] = delivery_day if contract.api_data[:delivery_day].blank?
+            contract.delivery_date = delivery_date
+            contract.delivery_day = delivery_day if contract.delivery_day.blank?
             puts "delivery_date #{delivery_date}"
             puts "delivery_day #{delivery_day}"
           end

@@ -58,16 +58,16 @@ module Types
     end
 
     def week_number
-      date = object.api_data["delivery_date"]
+      date = object.delivery_date
       Date.strptime(date, "%m/%d/%Y").to_date.cweek rescue 1
     end
 
     def delivery_date
-      object.api_data["delivery_date"]
+      object.delivery_date
     end
 
     def delivery_day
-      object.api_data["delivery_day"]
+      object.delivery_day
     end
 
     def origin_order_products

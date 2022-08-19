@@ -219,7 +219,7 @@ class AppProxy::DashboardController < AppProxyController
   end
 
   def set_delivery_dates
-    @delivery_dates = CalculateOrderDelivery.new(@api_data, @current_shop.id).calculate
+    @delivery_dates = CalculateOrderDelivery.new(@customer, @current_shop.id).calculate
     @current_week_select_by = @delivery_dates[:current_week_select_by]
     @current_week_expected_delivery = @delivery_dates[:current_week_expected_delivery]
     @next_week_select_by = @delivery_dates[:next_week_select_by]
@@ -230,7 +230,7 @@ class AppProxy::DashboardController < AppProxyController
   def update_delivery_day
     if params[:delivery_day] && params[:contract_id]
       contract = CustomerSubscriptionContract.find params[:contract_id]
-      contract.api_data[:delivery_day] = params[:delivery_day]
+      contract.delivery_day = params[:delivery_day]
       contract.save
     end
   end
