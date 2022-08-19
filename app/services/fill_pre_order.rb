@@ -77,7 +77,7 @@ class FillPreOrder
   private
 
   def first_order_products
-    @subscription_contract.api_data["origin_order"]["line_items"]["edges"]
+    @subscription_contract.origin_order_meals
   end
 
   def meals_on_plan
@@ -85,7 +85,7 @@ class FillPreOrder
   end
 
   def manual_update_required?
-    first_order_meal_count = @subscription_contract.api_data["origin_order"]["line_items"]["edges"].count - 1
+    first_order_meal_count = @subscription_contract.origin_order_meals&.count - 1
     meals_on_plan < first_order_meal_count
   end
 end

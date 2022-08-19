@@ -71,8 +71,8 @@ module Types
     end
 
     def origin_order_products
-      if object.api_data["origin_order"].present?
-        object.api_data["origin_order"]["line_items"]["edges"]
+      if object.origin_order_meals.present?
+        object.origin_order_meals
       end
     end
 

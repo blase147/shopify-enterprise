@@ -5,7 +5,7 @@ class ShopifyContractUpdateWorker
     shop = Shop.find(shop_id)
     shop.connect
     data = shop.with_shopify_session do
-      SubscriptionContractService.new(id).run
+      SubscriptionContractService.new(id).update_contract
     end
     contract = CustomerSubscriptionContract.find_or_initialize_by(shopify_id: id)
 
