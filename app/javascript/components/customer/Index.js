@@ -404,6 +404,8 @@ const Customers = ({ shopifyDomain }) => {
           </div>,
           <p className='capitalize'>{row.apiSource || 'shopify'}</p>,
           <div className='subscription'>{row.subscription}</div>,
+          <div className='subscription'>{row?.deliveryDate}</div>,
+          <div className='subscription'>{row?.deliveryDay}</div>,
           <div>
             <p className="more">
               {row.communication}
@@ -842,6 +844,8 @@ const Customers = ({ shopifyDomain }) => {
                     'numeric',
                     'text',
                     'text',
+                    'text',
+                    'text',
                   ]}
                   headings={[
                     'Id',
@@ -851,6 +855,8 @@ const Customers = ({ shopifyDomain }) => {
                     'Status',
                     'Source',
                     'Product',
+                    'Delivery Date',
+                    'Delivery Day',
                     '',
                     '',
                     ''
