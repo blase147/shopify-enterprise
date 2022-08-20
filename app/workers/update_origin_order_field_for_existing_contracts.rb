@@ -2,7 +2,7 @@ class UpdateOriginOrderFieldForExistingContracts
     include Sidekiq::Worker
     def perform
         contracts = CustomerSubscriptionContract.all
-        exclude = ["4 meal box", "6 meal box", "8 meal box", "12 meal box", "20 meal box"]
+        exclude = ["8 meals - Medium", "6 meals - Small", "4 meals - Trial", "12 meals - Large", "20 meals - Family"]
         contracts&.each do |contract|
             orders = []
             if contract.api_data["origin_order"]["line_items"].present?
