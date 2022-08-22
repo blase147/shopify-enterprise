@@ -219,7 +219,7 @@ class AppProxy::DashboardController < AppProxyController
   end
 
   def set_delivery_dates
-    @delivery_dates = CalculateOrderDelivery.new(@customer, @current_shop.id).calculate
+    @delivery_dates = CalculateOrderDelivery.new(@customer, @current_shop.id).calculate_for_customer_portal
     @current_week_select_by = @delivery_dates[:current_week_select_by]
     @current_week_expected_delivery = @delivery_dates[:current_week_expected_delivery]
     @next_week_select_by = @delivery_dates[:next_week_select_by]
