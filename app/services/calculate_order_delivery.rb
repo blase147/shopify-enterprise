@@ -128,13 +128,13 @@ class CalculateOrderDelivery
 
       next_week_expected_delivery = ((current_date + 1.week).beginning_of_week.to_date..(current_date + 1.week).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == delivery_day&.downcase&.to_sym }
       next_week_expected_delivery = next_week_expected_delivery&.first
-      {
-        current_week_select_by: current_week_select_by, 
-        current_week_expected_delivery: current_week_expected_delivery,
-        next_week_select_by: next_week_select_by,
-        next_week_expected_delivery: next_week_expected_delivery
-      }
     end
+    {
+      current_week_select_by: current_week_select_by, 
+      current_week_expected_delivery: current_week_expected_delivery,
+      next_week_select_by: next_week_select_by,
+      next_week_expected_delivery: next_week_expected_delivery
+    }
 
   end
 
