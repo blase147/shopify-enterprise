@@ -82,7 +82,7 @@
                             span.Polaris-Button__Content
                               span.Polaris-Button__Text.ml-0
                                 | Cancel
-
+                  
                     div
                       p style="font-size: 2rem; line-height: 1.8;" = selling_plan&.name
                     div
@@ -91,6 +91,17 @@
                           span.Polaris-Button__Content
                             span.Polaris-Button__Text.ml-0
                               | Shopify Profile
+                  div style="display: flex; justify-content: left;"
+                    .Polaris-Stack__Item style="margin: 16px;"
+                      p.Polaris-Heading Delivery Day
+                      p = @customer&.delivery_day
+                    .Polaris-Stack__Item style="margin: 16px;"
+                      p.Polaris-Heading Delivery Date
+                      p = @customer&.delivery_date&.strftime("%a, %B %e")
+                      button.Polaris-Button.Polaris-Button--plain type="button" id="edit-delivery-date" Edit
+                      <input type="date" id="new_delivery_date" hidden=true >
+                      button.hidden.Polaris-Button--plain type="button" id="save-delivery-date" Apply
+                    div#delivery_date_update_message
 
               - else
                 - if setting.admin_allowed?('reactive_subscription')
@@ -485,12 +496,43 @@ javascript:
           }
         });
       });
+
+      $( "#save-delivery-date" ).on('click', function(){
+        let selectedDate  = $("#new_delivery_date").val()
+        if(selectedDate){
+          $( "#save-delivery-date" ).hide();
+          $.ajax({
+            url: "/subscriptions/update_contract_delivery_date_day",
+            type: "POST",
+            data: { id: "#{@customer.id}", date: selectedDate},
+            success: function(result){
+              if(result.success == false){
+                alert( 'Something went wrong, contact support.' );
+                // $('.order-update-status-message').html(result.error.join(','))
+              }else{
+                $("#delivery_date_update_message").css("display","flex");
+                $("#delivery_date_update_message").html("Delivery Date and Delivery Day Updated Successfully");
+                setTimeout(function(){
+                  window.location.reload();
+                }, 300);
+              }
+
+            }
+          });
+        }
+      });
     });
 
   $('#edit-next-billing-date').on('click', function(){
     $("#save-next-billing-date-btn").removeClass("hidden");
     $("#datepicker")[0].hidden = false;
     $('#datepicker').datepicker( "show" );
+  });
+
+  $('#edit-delivery-date').on('click', function(){
+    $("#save-delivery-date").removeClass("hidden");
+    $("#new_delivery_date")[0].hidden = false;
+    $('#edit-delivery-date').hide();  
   });
 
   $( document ).on('turbolinks:load', function() {

@@ -1737,3 +1737,16 @@
   .collapsible-content p {
     margin-bottom: 0;
   }
+
+  #delivery_date_update_message {
+    background: #0000009c;
+    color: white;
+    font-size: 12px;
+    border-radius: 32px;
+    justify-content: center;
+    display: none;
+    align-items: center;
+    padding: 13px;
+    height: fit-content;
+    margin-top: 30px;
+  }
