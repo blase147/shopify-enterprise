@@ -16,12 +16,8 @@ class CalculateOrderDelivery
       prev_order_date = @api_data["orders"]["edges"].first["node"]["created_at"].to_date rescue nil
       delivery_settings = delivery_setting
       fallback_day = delivery_settings[:settings].first["delivery"].to_sym      
-      delivery_day = @contract.delivery_day.downcase&.to_sym rescue fallback_day
+      delivery_day = @contract.delivery_day.downcase&.to_sym rescue fallback_day || "tuesday"
       cutoff_day = delivery_settings[:settings].filter{|s| s["delivery"].to_sym  == delivery_day }.first["cutoff_day"].to_sym rescue nil
-      unless cutoff_day.present? 
-        delivery_day = "tuesday"
-        cutoff_day = delivery_settings[:settings].filter{|s| s["delivery"].to_sym  == delivery_day }.first["cutoff_day"].to_sym rescue nil
-      end
 
       order_tag_date = nil
       Shop.find(@shop_id).connect
@@ -107,4 +103,39 @@ class CalculateOrderDelivery
   def delivery_setting
   	DeliveryOption.find_by(shop_id: @shop_id )&.api_response
   end
+
+  def calculate_for_customer_portal
+    current_date = Date.current
+  	next_billing_date = Date.parse(@api_data["next_billing_date"])
+    if next_billing_date < current_date
+      current_week_select_by = "There seems to be an issue with your subscription. Please contact support at hello@ethey.com"
+      current_week_expected_delivery = nil
+    else
+      prev_order_date = @api_data["orders"]["edges"].first["node"]["created_at"].to_date rescue nil
+      delivery_settings = delivery_setting
+      fallback_day = delivery_settings[:settings].first["delivery"].to_sym      
+      delivery_day = @contract.delivery_day.downcase&.to_sym rescue fallback_day || "tuesday".to_sym
+      cutoff_day = delivery_settings[:settings].filter{|s| s["delivery"].to_sym  == delivery_day }.first["cutoff_day"].to_sym rescue nil
+      
+      current_week_select_by = ((current_date - 1.week).beginning_of_week.to_date..(current_date- 1.week).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == cutoff_day&.downcase&.to_sym }
+      current_week_select_by = current_week_select_by&.first
+
+      current_week_expected_delivery = ((current_date).beginning_of_week.to_date..(current_date).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == delivery_day&.downcase&.to_sym }
+      current_week_expected_delivery = current_week_expected_delivery.first
+
+      next_week_select_by = ((current_date).beginning_of_week.to_date..(current_date).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == cutoff_day&.downcase&.to_sym }
+      next_week_select_by = next_week_select_by&.first
+
+      next_week_expected_delivery = ((current_date + 1.week).beginning_of_week.to_date..(current_date + 1.week).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == delivery_day&.downcase&.to_sym }
+      next_week_expected_delivery = next_week_expected_delivery&.first
+      {
+        current_week_select_by: current_week_select_by, 
+        current_week_expected_delivery: current_week_expected_delivery,
+        next_week_select_by: next_week_select_by,
+        next_week_expected_delivery: next_week_expected_delivery
+      }
+    end
+
+  end
+
 end
