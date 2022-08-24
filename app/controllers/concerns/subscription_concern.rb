@@ -98,7 +98,7 @@ module SubscriptionConcern
         note = "Subscription - " + subscription.billing_policy.interval_count.to_s + " " + subscription.billing_policy.interval
         description = @customer.name+",swaped,"+variant.title
         # amount = (product.quantity * variant.price.to_f).round(2).to_s
-        current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id, product_name: variant.title, note: note, description: description, product_id: variant_id&.split("/")&.last, swaped_product_id: variant.product_id)
+        current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id, product_name: variant.title, note: note, description: description, product_id: variant_id&.split("/")&.last, swaped_product_id: variant.product_id, action_by: params[:action_by])
         # redirect_to "/a/chargezen_production?customer_id=#{@customer.shopify_customer_id}"        
         render js: 'window.location.reload(false)'
       end
@@ -144,7 +144,7 @@ module SubscriptionConcern
         result = SubscriptionDraftsService.new.remove(@draft_id, params[:line_id])
         RemovedSubscriptionLine.create(subscription_id: params[:id], customer_id: params[:customer_id], variant_id: params[:variant_id], quantity: params[:quantity] )
       else
-        result = SubscriptionContractDeleteService.new(params[:id]).run
+        result = SubscriptionContractDeleteService.new(params[:id],nil,true,params[:action_by]).run
       end
       if result[:error].present?
         render js: "alert('#{result[:error]}'); hideLoading()"
@@ -188,7 +188,7 @@ module SubscriptionConcern
       EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
       render js: 'location.reload()'
     else
-      result = SubscriptionContractDeleteService.new(id).run 'PAUSED'
+      result = SubscriptionContractDeleteService.new(id,nil,true,params[:action_by]).run 'PAUSED'
       if result[:error].present?
         render js: "alert('#{result[:error]}');"
       else
@@ -248,8 +248,11 @@ module SubscriptionConcern
       EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
       render js: 'location.reload()'
     else
-      result = SubscriptionContractDeleteService.new(id).run 'ACTIVE'
-      
+      if csc.status == 'PAUSED'
+        result = SubscriptionContractDeleteService.new(id,nil,true,params[:action_by]).run 'RESUMED'
+      else
+        result = SubscriptionContractDeleteService.new(id,nil,true,params[:action_by]).run 'ACTIVE'
+      end      
       if params[:billing_date].present? && result[:error].blank?
         SetNextBillingDate.new(csc.shopify_id, params[:billing_date]).run
       end

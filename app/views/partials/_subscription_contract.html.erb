@@ -53,7 +53,7 @@ line_item = subscription.lines.edges.first.node
           <a href="#<%= "swap-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}" %>" rel="modal:open">
             <button class="btn-yellow bold" id="edit-subscription-btn" tabindex="0">Swap Subscription</button>
           </a>
-          <%= render 'app_proxy/dashboard/swap_subscription_modal', subscription: struct_data, line_item: line.node %>
+          <%= render 'app_proxy/dashboard/swap_subscription_modal', subscription: struct_data, line_item: line.node, action_by: 'customer' %>
         <% end %>
         <div id="edit-subscription-modal" title="Basic dialog" class="modal">
           <div class="header"><div><h2>Edit Subscription</h2></div><div aria-hidden="true" class="close-modal" data-action="close" tabindex="-1">
@@ -883,7 +883,7 @@ line_item = subscription.lines.edges.first.node
     line_id = $(this).data('line-id');
     line_name = $(this).data('line-name');
     variant_id = $(this).data('variant-id');
-    url = "/a/chargezen_production/subscriptions/"+id+"/remove_line?line_id="+line_id+"&lines_count=1&quantity=1&variant_id="+variant_id;
+    url = "/a/chargezen_production/subscriptions/"+id+"/remove_line?line_id="+line_id+"&lines_count=1&quantity=1&variant_id="+variant_id+"&action_by=customer";
     $(this).text('Updating..');
     $.ajax({
       url: url,
@@ -911,7 +911,7 @@ line_item = subscription.lines.edges.first.node
     myDate.setDate(myDate.getDate()+1);
     // format a date
     var date = myDate.getDate() + '/' + ("0" + (myDate.getMonth() + 1)).slice(-2) + '/' + myDate.getFullYear();
-    url = "/a/chargezen_production/subscriptions/" + contract_id + action + "?billing_date=" + date
+    url = "/a/chargezen_production/subscriptions/" + contract_id + action + "?billing_date=" + date+"&action_by=customer"
     $(this).text('Updating..');
     $.ajax({
       url: url,
@@ -1119,8 +1119,8 @@ line_item = subscription.lines.edges.first.node
     });
   });
 
-  $('.skip_week').on('click',function() {      
-    if($(this).html() == "Skip")
+  $('.skip_week').on('click',function() {   
+    if($(this).html()?.trim() === "Skip")
     {
       data= "skip_date="+$(this)?.data("week")+"&method=skip&id="+$(this)?.data("contractid")
       $(this).html('Unskip');

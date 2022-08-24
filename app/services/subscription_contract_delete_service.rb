@@ -14,10 +14,11 @@ class SubscriptionContractDeleteService < GraphqlService
     }
   GRAPHQL
 
-  def initialize(id,type=nil,allow_default=true)
+  def initialize(id,type=nil,allow_default=true,customer_type=nil)
     @id = id
     @type = type
     @allow_default= allow_default
+    @customer_type = customer_type
   end
 
   def log_work(customer, status)
@@ -29,23 +30,30 @@ class SubscriptionContractDeleteService < GraphqlService
       if status == "CANCELLED"
         description = customer.name+",canceled,"+product.title
         if @type == "sms"
-          customer.shop.subscription_logs.sms.cancel.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
+          customer.shop.subscription_logs.sms.cancel.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id, action_by: @customer_type)
         else
-          customer.shop.subscription_logs.cancel.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
+          customer.shop.subscription_logs.cancel.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id, action_by: @customer_type)
         end
       elsif status == "PAUSED"
         description = customer.name+",paused,"+product.title
         if @type == "sms"
-          customer.shop.subscription_logs.sms.restart.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
+          customer.shop.subscription_logs.sms.restart.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id, action_by: @customer_type)
         else
-          customer.shop.subscription_logs.restart.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
+          customer.shop.subscription_logs.restart.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id, action_by: @customer_type)
+        end
+      elsif status == "RESUMED"
+        description = customer.name+",resumed,"+product.title
+        if @type == "sms"
+          customer.shop.subscription_logs.sms.restart.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id, action_by: @customer_type)
+        else
+          customer.shop.subscription_logs.restart.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id, action_by: @customer_type)
         end
       else
         description = customer.name+",restarted,"+product.title
         if @type == "sms"
-          customer.shop.subscription_logs.sms.restart.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
+          customer.shop.subscription_logs.sms.restart.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id, action_by: @customer_type)
         else
-          customer.shop.subscription_logs.restart.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id)
+          customer.shop.subscription_logs.restart.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id, action_by: @customer_type)
         end
       end
     rescue
@@ -54,10 +62,13 @@ class SubscriptionContractDeleteService < GraphqlService
   end
 
   def run(status='CANCELLED')
+    @status_type = status
+    if status === 'RESUMED'
+      status = 'ACTIVE'
+    end
     input = {
       status: status
     }
-
     id = if @id.include? 'SubscriptionContract'
       @id
     else
@@ -78,7 +89,8 @@ class SubscriptionContractDeleteService < GraphqlService
     customer.status =  status
     customer.api_data = SubscriptionContractService.new(id).run.to_h.deep_transform_keys { |key| key.underscore }
     customer.save
-    log_work(customer, status) if @allow_default
+    @status_type
+    log_work(customer, @status_type) if @allow_default
     p result
   rescue Exception => ex
     p ex.message

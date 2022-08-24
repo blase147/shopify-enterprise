@@ -201,6 +201,11 @@ class AppProxy::DashboardController < AppProxyController
     end
 
     if pre_order.save
+      begin_date = Date.commercial(Date.today&.strftime("%Y")&.to_i,params[:week]&.to_i, 1)&.to_date&.strftime("%d/%m/%Y")
+      end_date = Date.commercial(Date.today&.to_date&.strftime("%Y")&.to_i,params[:week]&.to_i, 7)&.to_date&.strftime("%d/%m/%Y")
+      description = "Changed products for #{begin_date} - #{end_date} week"
+      contract=CustomerSubscriptionContract.find_by_shopify_id(params[:shopify_contract_id]) rescue nil
+      contract&.shop&.subscription_logs&.cancel&.create(subscription_id: contract&.shopify_id,customer_id: contract.id, description: description, action_by: 'customer')
       render json: { status: :ok, customer_id: params[:customer_id], message: 'Pre Order created Successfuly', show_notification: true }
     else
       render json: { customer_id: params[:customer_id], message: pre_order.errors.full_messages, show_notification: true }
@@ -212,7 +217,7 @@ class AppProxy::DashboardController < AppProxyController
     @customer = CustomerSubscriptionContract.find params[:local_id]
     @api_data = @customer.api_data
     set_delivery_dates
-
+    @customer&.shop&.connect
     products = ProductService.new.list
     @swap_products = products.is_a?(Hash) ? nil : products&.select{ |p| p.node.selling_plan_group_count > 0 }
     @subscription_paused = @customer.status ==  "PAUSED"
@@ -250,11 +255,16 @@ class AppProxy::DashboardController < AppProxyController
   def skip_next_billing_date
     contract = CustomerSubscriptionContract.find(params[:id])
     skip_dates = contract&.skip_dates
+    begin_date = Date.commercial(params[:skip_date]&.to_date&.strftime("%Y")&.to_i,params[:skip_date]&.to_date.cweek, 1)
+    end_date = Date.commercial(params[:skip_date]&.to_date&.strftime("%Y")&.to_i,params[:skip_date]&.to_date.cweek, 7)
     if params["method"]=="skip"
       skip_dates&.push(params[:skip_date])
+      description = "Skipped weekly meals for #{begin_date} to #{end_date}"
     else
       skip_dates&.delete(params[:skip_date])
+      description = "Un-Skipped weekly meals for #{begin_date} to #{end_date}"
     end
+    contract.shop.subscription_logs.cancel.create(subscription_id: contract&.shopify_id,customer_id: contract.id, description: description, action_by: 'customer')
     contract.update(skip_dates: skip_dates)
   end
   

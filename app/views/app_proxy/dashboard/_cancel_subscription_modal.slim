@@ -23,6 +23,7 @@
                   - @customer.shop.setting.reasons_cancels.each_with_index do |reason, index|
                     label for="input-#{index}"
                       input.hidden name="line_id" type="text" value="#{line_item.id}"
+                      input.hidden name='action_by' value='admin'
                       - if index.zero?
                         input name="reasons_cancel_id" type="radio" value="#{reason.id}" checked='checked' id="input-#{index}"
                       - else
