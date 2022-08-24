@@ -35,6 +35,7 @@ class SubscriptionsController < AuthenticatedController
     end
 
     @subscription = JSON.parse(@customer.api_data.to_json, object_class: OpenStruct)
+    @customer&.shop.connect
     products = ProductService.new.list
     @swap_products = products.is_a?(Hash) ? nil : products&.select{ |p| p.node.selling_plan_group_count > 0 }
     @total = @subscription&.orders&.edges&.map { |order|
@@ -128,8 +129,16 @@ class SubscriptionsController < AuthenticatedController
   end
 
   def fetch_shopify_products(product_ids)
-    products = ShopifyAPI::Product.where(ids: product_ids.join(', '), fields: 'title')
-    products.map {|product| product.title}
+    products = ShopifyAPI::Product.where(ids: product_ids.join(', '), fields: 'id,title')
+    quantity = Hash.new(0)
+    product_ids&.each do |v|
+      quantity[v] += 1
+    end
+    products_with_quantitiy = []
+    products&.each do |p|
+      products_with_quantitiy << {title: p&.title , quantity: quantity["#{p&.id}"]}
+    end
+    products_with_quantitiy
   end
 
   def update_billing_date

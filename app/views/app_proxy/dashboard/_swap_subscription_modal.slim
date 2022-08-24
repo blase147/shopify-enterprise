@@ -17,12 +17,13 @@
               div.close-modal aria-hidden="true" tabindex="-1" data-action='close'
                 svg fill="none" height="20" viewbox=("0 0 18 20") width="18" xmlns="http://www.w3.org/2000/svg"
                   path d=("M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z") fill="#DDDDDD" /
+            
             - if @swap_products.present?
               .swap-grid
                 - @selling_plans = SellingPlan.all 
                 - @selling_plans&.each_with_index do |selling_plan,index|
                   - products = selling_plan&.selling_plan_group.product_ids
-                  - products.each do |prod|
+                  - products&.each do |prod|
                     - product = (@swap_products.select {|p| p.node.id == prod["product_id"]}).first
                     - if product.present?
                       .item
@@ -61,7 +62,7 @@ javascript:
     var form = document.getElementById(`form-${formId}`);
     $.ajax({
       type: "post",
-      data: serialize(form)+"&index="+$(this).attr("data-index")+"&productindex="+$(this).attr("data-productindex"),
+      data: serialize(form)+"&index="+$(this).attr("data-index")+"&productindex="+$(this).attr("data-productindex")+"&action_by=#{action_by}",
       url: form.getAttribute('action'),
       success: ()=>{
         alert("Swapped")

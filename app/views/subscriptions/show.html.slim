@@ -61,7 +61,7 @@
                       = line.node.current_price.amount
                     div
                       - if setting.admin_allowed?('pause_subscription')
-                        = link_to action_subscription_contract_path(:pause, @subscription.id[/\d+/]), remote: true, method: :post, style: 'text-decoration: none;' do
+                        = link_to action_subscription_contract_path("pause", @subscription.id[/\d+/],"action_by=admin"), remote: true, method: :post, style: 'text-decoration: none;' do
                           button.Polaris-Button.Polaris-Button--plain
                             span.Polaris-Button__Content
                               span.Polaris-Button__Text Pause
@@ -118,7 +118,7 @@
                 - product = ShopifyAPI::Product.find(line.node.product_id[/\d+/])
 
                 = render 'app_proxy/dashboard/edit_subscription_modal', subscription: @subscription, line_item: line.node, product_image: product.images.first&.src, admin_action: true, setting: setting, selling_plan_id: line.node.selling_plan_id, selling_plan: selling_plan
-                = render 'app_proxy/dashboard/swap_subscription_modal', subscription: @subscription, line_item: line.node
+                = render 'app_proxy/dashboard/swap_subscription_modal', subscription: @subscription, line_item: line.node, action_by: 'admin'
                 = render 'app_proxy/dashboard/upgrade_subscription_modal', subscription: @subscription, line_item: line.node, selling_plan_id: line.node.selling_plan_id, product: product
                 = render 'app_proxy/dashboard/cancel_subscription_modal', subscription: @subscription, line_item: line.node, lines_count: @subscription.lines.edges.size
 
@@ -227,7 +227,7 @@
               li data-target="#billing-attempts" Billing Attempts
               - if @box_products.present?
                 li data-target="#box-products" Box Products
-              li data-target="#contract-actions" Contract Actions
+              li data-target="#contract-actions" Contract History
 
 
 
@@ -279,8 +279,8 @@
                         th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"= pre_order.week
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
                           ul style="margin: 0;"
-                            - @pre_order_products[pre_order.id].each do |product_title|
-                              li = product_title
+                            - @pre_order_products[pre_order.id].each do |product|
+                              li = "#{product[:title]} x#{product[:quantity]}"
 
             .Polaris-DataTable.hidden.tab#billing-attempts style="margin: 1rem"
               .Polaris-DataTable__ScrollContainer
@@ -470,11 +470,10 @@ javascript:
         selectedDate = $( "#resume-datepicker" ).val();
         link = $(this).parent();
         url = $(link).attr('href');
-        new_url = url + "billing_date="+selectedDate
+        new_url = url + "billing_date="+selectedDate+"&action_by=admin"
         $(link).attr("href", new_url);
         link.click();
       });
-
 
       $( "#save-next-billing-date-btn" ).on('click', function(){
         selectedDate = $( "#datepicker" ).val();

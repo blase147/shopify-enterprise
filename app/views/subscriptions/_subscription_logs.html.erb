@@ -3,27 +3,27 @@
         <thead>
             <tr style="background: #007EFF;">
                 <th aria-sort="none" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--header" data-polaris-header-cell="true" scope="col" style="color: #FFFFFF">
-                    Sr No.
+                    Date
                 </th>
                 <th aria-sort="none" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--header" data-polaris-header-cell="true" scope="col" style="color: #FFFFFF">
-                    Contract Action
+                    Action
                 </th>
                 <th aria-sort="none" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--header Polaris-DataTable__Cell--numeric" data-polaris-header-cell="true" scope="col" style="color: #FFFFFF">
-                    Created At
+                    Action Taken By
                 </th>
             </tr>
         </thead>
         <tbody>
-            <% subscription&.subscription_logs&.each_with_index do |subscription_log,i| %>
+            <% subscription&.subscription_logs&.order(created_at: :desc)&.each_with_index do |subscription_log,i| %>
                 <tr class="Polaris-DataTable__TableRow">
                     <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--firstColumn" scope="row">
-                        <%= i+1 %>
+                        <%= subscription_log&.created_at %>
                     </th>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop">
-                        <%= subscription_log.description %>
+                        <%= subscription_log&.description %>
                     </td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--numeric">
-                        <%= subscription_log.created_at %>
+                        <%= subscription_log&.action_by&.humanize %>
                     </td>
                 </tr>
             <% end %>
