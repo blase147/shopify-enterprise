@@ -13,67 +13,67 @@
             .form-wrapper
               form action="#{action_subscription_contract_path(:update_payment, @customer.shopify_id)}" method='post' data-remote=true enctype="multipart/form-data"
                 input name="payment_method_id" type="hidden" value="#{payment_method.id}"
-                .field style = "display: block !important;"
+                .field
                   div.heading_label
                     label #{@translation.update_payment_popup_card_name.present? ? @translation.update_payment_popup_card_name : 'Name on card'}
                     span.red *
                   input name='name' type="text" placeholder="Name" required="required"/
-                .field style = "display: block !important;"
+                .field
                   div.heading_label
                     label #{@translation.update_payment_popup_card_number.present? ? @translation.update_payment_popup_card_number : 'Card Number'}
                     span.red *
                   input id="cc" name='card_number' maxlength="19" type="text" placeholder="1234 1234 1234 1234" required="required"/
                 .group
-                  .field style = "display: block !important;"
+                  .field
                     div.heading_label
                       label #{@translation.update_payment_popup_exp_month.present? ? @translation.update_payment_popup_exp_month : 'Exp. Month'}
                       span.red *
                     input name='exp_month' maxlength="2" type="text" required="required"/
-                  .field style = "display: block !important;"
+                  .field
                     div.heading_label
                       label #{@translation.update_payment_popup_exp_date.present? ? @translation.update_payment_popup_exp_date : 'Exp. Year'}
                       span.red *
                     input name='exp_year' maxlength="4" type="text" placeholder="" required="required"/
-                .field style = "display: block !important;"
+                .field
                   div.heading_label
                     label #{@translation.update_payment_popup_cvv.present? ? @translation.update_payment_popup_cvv : 'CVV'}
                     span.red *
                   input name='verification_value' maxlength="3" type="text" required="required"/
                 h3.billing_address_label Billing Address
                 .group
-                  .field style = "display: block !important;"
+                  .field
                     div.heading_label
                       label First Name
                       span.red *
                     input name='address_first_name' value="#{@customer.first_name}" type="text" required="required"/
-                  .field style = "display: block !important;"
+                  .field
                     div.heading_label
                       label Last Name
                       span.red *
                     input name='address_last_name' value="#{@customer.last_name}" type="text" required="required"/
-                .field style = "display: block !important;"
+                .field
                   div.heading_label
                     label Address
                     span.red *
                   input name='address'  value="#{billing_address.address1}" type="text" required="required"/
                 .group
-                  .field style = "display: block !important;"
+                  .field
                     div.heading_label
                       label City
                       span.red *
                     input name='address_city' value="#{billing_address.city}" type="text" required="required"/
-                  .field style = "display: block !important;"
+                  .field
                     div.heading_label
                       label Country
                       span.red *
                     input name='address_country' value="#{billing_address.country}" type="text" required="required"/
                 .group
-                  .field style = "display: block !important;"
+                  .field
                     div.heading_label
                       label State
                       span.red *
                     input name='address_state' value="#{billing_address.province}" type="text" required="required"/
-                  .field style = "display: block !important;"
+                  .field
                     div.heading_label
                       label Zip
                       span.red *

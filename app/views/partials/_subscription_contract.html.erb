@@ -196,25 +196,7 @@ line_item = subscription.lines.edges.first.node
               </clipPath>
               </defs>
             </svg>
-            Address
-          </button>
-          <button class="Profile_links" onclick="Profile(event, 'Billing')">
-            <svg width="25" height="18" viewBox="0 0 25 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <g clip-path="url(#clip0_764_2738)">
-              <path d="M7.35156 1.92139H22.8256" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M7.35156 9.06348H22.8256" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M7.35156 16.2051H22.8256" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M1.40039 1.92139H1.41121" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M1.40039 9.06348H1.41121" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M1.40039 16.2051H1.41121" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
-              </g>
-              <defs>
-              <clipPath id="clip0_764_2738">
-              <rect width="25" height="17.5" fill="white"/>
-              </clipPath>
-              </defs>
-            </svg>
-            Billing
+            Account
           </button>
           <button class="Profile_links" onclick="Profile(event, 'Subscription')">
             <svg width="25" height="21" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -669,62 +651,115 @@ line_item = subscription.lines.edges.first.node
             <button data-pre_order="<%= { customer_id: params[:customer_id],week: week_days[params[:week].to_i-1], products: params[:product_ids] }.to_json %>" class="submit_pre_order">Save Changes</button>
             <% end %>
         </div>
-        <form id="customer_info_form" action="/a/chargezen_production/account/update_address" method='post' style="display: none" data-remote="true">
+        <form id="customer_info_form" onsubmit="return false;" style="display: none">
           <div id="Account" class="Profile_links_data">
               <div id="itable" class="flex space-between">
                 <div class="account-holder">
                   <div>
                     <h1 class="t-align-left">Personal Info</h1>
-                    <% address = @customer&.try(:default_address) || @customer&.addresses&.first rescue nil %>
-                      <table class="info-table">
-                        <tbody>
-                          <tr>
-                            <td><h3 class="t-align-left bolder">First Name</h3></td>
-                            <td><h3 class="t-align-left bolder">Last Name</h3></td>
-                          </tr>
-                          <tr>
-                            <input name="id" type="hidden" value="<%= "#{@customer.shopify_customer_id rescue params[:customer_id]}"%>">
-                            <td><input type="text" id="first_name" name="address[first_name]" value="<%= @customer&.first_name %>" class="view-input" /></td>
-                            <td><input type="text" id="last_name" name="address[last_name]" value="<%= @customer&.last_name %>" class="view-input" /></td>
-                          </tr>
+                    <% address = customer&.try(:default_address) || customer&.addresses&.first rescue nil %>
+                    <table class="info-table">
+                      <tbody>
+                        <tr>
+                          <td><h3 class="t-align-left bolder">First Name</h3></td>
+                          <td><h3 class="t-align-left bolder">Last Name</h3></td>
+                        </tr>
+                        <tr>
+                          <td><input type="text" id="first_name" value="<%= customer&.first_name %>" class="view-input" /></td>
+                          <td><input type="text" id="last_name" value="<%= customer&.last_name %>" class="view-input" /></td>
+                        </tr>
 
-                          <tr>
-                            <td colspan="2"><h3 class="t-align-left bolder " >Address line 1</h3></td>
-                          </tr>
+                        <tr>
+                          <td colspan="2"><h3 class="t-align-left bolder " >Address line 1</h3></td>
+                        </tr>
 
-                          <tr>
-                            <td colspan="2"><input type="text" id="address1" name="address[address_1]" value="<%= @customer&.address_1 %>"class="view-input" /></td>
-                          </tr>
+                        <tr>
+                          <td colspan="2"><input type="text" id="address1" value="<%= address&.address1 %>"class="view-input" /></td>
+                        </tr>
 
-                          <tr>
-                            <td colspan="2"><h3 class="t-align-left bolder" >Address line 2</h3></td>
-                          </tr>
+                        <tr>
+                          <td colspan="2"><h3 class="t-align-left bolder" >Address line 2</h3></td>
+                        </tr>
 
-                          <tr>
-                            <td colspan="2"><input type="text" id="address2" name="address[address_2]" value="<%= @customer&.address_2 %>"class="view-input" /></td>
-                          </tr>
+                        <tr>
+                          <td colspan="2"><input type="text" id="address2" value="<%= address&.address2 %>"class="view-input" /></td>
+                        </tr>
 
-                          <tr id="citys" >
-                            <td ><h3 class="t-align-left bolder">City</h3></td>
-                            <td><h3 class="t-align-left bolder">State</h3></td>
-                          </tr>
+                        <tr id="citys" >
+                          <td ><h3 class="t-align-left bolder">City</h3></td>
+                          <td><h3 class="t-align-left bolder">State</h3></td>
+                        </tr>
 
-                          <tr id="citysvalue">
-                          <td><input type="text" id="city" name="address[city]" value="<%= @customer&.city %>" class="view-input" /></td>
-                          <td><input type="text" id="province" name="address[province]" value="<%= @customer&.province %>" class="view-input" /></td>
-                          </tr>
-                          <tr id="countryz">
-                            <td><h3 class="t-align-left bolder">Country</h3></td>
-                            <td><h3 class="t-align-left bolder">Zip Code</h3></td>
-                          </tr>
+                        <tr id="citysvalue">
+                        <td><input type="text" id="city" value="<%= address&.city %>" class="view-input" /></td>
+                        <td><input type="text" id="province" value="<%= address&.province %>" class="view-input" /></td>
+                        </tr>
+                        <tr id="countryz">
+                          <td><h3 class="t-align-left bolder">Country</h3></td>
+                          <td><h3 class="t-align-left bolder">Zip Code</h3></td>
+                        </tr>
 
-                          <tr id="countryz-value">
-                            <td><input type="text" id="country" name="address[country]" value="<%= @customer&.country %>" class="view-input" /></td>
-                            <td><input type="text" id="zip" name="address[zip]" value="<%= @customer&.zip %>" class="view-input" /></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+                        <tr id="countryz-value">
+                          <td><input type="text" id="country_name" value="<%= address&.country_name %>" class="view-input" /></td>
+                          <td><input type="text" id="zip" value="<%= address&.zip %>" class="view-input" /></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div>
+                    <h1 class="t-align-left ml">Contact Info</h1>
+                    <table class="info-table">
+                      <tbody>
+                        <tr>
+                          <td><h3 class="t-align-left bolder">Phone Number</h3></td>
+                          <td><h3 class="t-align-left bolder">Email Address</h3></td>
+                        </tr>
+                        <tr>
+                          <td><p class="t-align-left block subdued ft-1"><%= customer&.phone %></p></td>
+                          <td><p class="t-align-left block subdued ft-1"><%= customer&.email %></p></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div>
+                    <h1 class="t-align-left">Payment</h1>
+                    <table class="info-table">
+                      <tbody>
+                        <tr>
+                          <td><h3 class="t-align-left bolder view-text" >Card Number</h3></td>
+                          <td><h3 class="t-align-left bolder view-text" >Name on Card</h3></td>
+                        </tr>
+                        <tr>
+                          <td><input type="text" id="credit_card_number" class="view-input" /></td>
+                          <td><input type="text" id="credit_card_name" class="view-input" /></td>
+                        </tr>
+                        <tr>
+                          <td><h3 class="t-align-left bolder view-text" >CVV</h3></td>
+                          <td ><h3 class="t-align-left bolder">Expiration Date</h3></td>
+                        </tr>
+                        <tr>
+                          <td><input type="text" id="verification_value" class="view-input" /></td>
+                        </tr>
+
+                        <tr id="edate">
+                          <td><h3 class="t-align-left bolder">Company</h3></td>
+                        </tr>
+
+                      <tr>
+                      <!-- <td>
+                        Month: <br/><br/><input type="month" id="exp_month" class="view-input" placeholder="Month" />
+                        <br/><br/>
+                        Year: <br/><br/><input type="year" id="exp_year" class="view-input" placeholder="Year" />
+                      </td>
+                      <td><input type="text" id="company" class="view-input" /></td>
+                      </tr> -->
+                        <tr id="edatevalue">
+                          <td><p class="t-align-left block subdued ft-1 view-text"><%= "#{customer_order&.payment_details&.credit_card_expiration_month}/#{customer_order&.payment_details&.credit_card_expiration_year}" rescue nil %></p></td>
+                          <td><p class="t-align-left block subdued ft-1 view-text"><%= customer_order&.payment_details&.credit_card_company rescue nil %></p></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               <div class="flex left-button">
                 <button class="btn-yellow" id="edit_information">Edit Information</button>
@@ -732,10 +767,7 @@ line_item = subscription.lines.edges.first.node
               </div>
             </div>
           </div>
-        </form>
-        <div id="Billing" class="Profile_links_data" style="display: none">
-          <%= render "partials/payment_methods" %>
-        </div>
+          </form>
 
           <div id="Subscription" class="Profile_links_data" style="display: none">
             <div class="subscription-box" style="min-height:350px">
