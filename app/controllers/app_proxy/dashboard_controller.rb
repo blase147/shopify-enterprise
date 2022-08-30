@@ -32,8 +32,7 @@ class AppProxy::DashboardController < AppProxyController
     render 'addresses', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
-  def payment_methods(customer_id=nil)
-    params[:customer_id] = customer_id if customer_id.present?
+  def payment_methods
     @orders = ShopifyAPI::Order.find(:all,
       params: { customer_id: params[:customer_id], limit: 6, page_info: nil }
     )
@@ -45,7 +44,7 @@ class AppProxy::DashboardController < AppProxyController
     @shopify_customer = CustomerService.new({shop: current_shop}).get_customer(customer_id)
     @payment_methods = @payment_methods.values
     @payment_type = :SHOPIFY.to_s
-    if @payment_methods.empty? && current_shop.stripe_api_key.present?
+    if @payment_methods.empty?
       @current_shop = current_shop
       @payment_type = :STRIPE.to_s
       @stripe_customer = Stripe::Customer.list({}, api_key: current_shop.stripe_api_key).data.filter{|c| c.email == @shopify_customer.email}[0]
@@ -61,7 +60,7 @@ class AppProxy::DashboardController < AppProxyController
         @stripe_card_owner = stripe_card&.owner
       end
     end
-    render 'payment_methods', content_type: 'application/liquid', layout: 'liquid_app_proxy' if customer_id.nil?
+    render 'payment_methods', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
   def update_stripe_source
@@ -222,7 +221,6 @@ class AppProxy::DashboardController < AppProxyController
     products = ProductService.new.list
     @swap_products = products.is_a?(Hash) ? nil : products&.select{ |p| p.node.selling_plan_group_count > 0 }
     @subscription_paused = @customer.status ==  "PAUSED"
-    payment_methods(@customer.shopify_customer_id)
   end
 
   def set_delivery_dates
