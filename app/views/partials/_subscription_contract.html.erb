@@ -238,25 +238,7 @@
               </clipPath>
               </defs>
             </svg>
-            Address
-          </button>
-          <button class="Profile_links" onclick="Profile(event, 'Billing')">
-            <svg width="25" height="18" viewBox="0 0 25 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <g clip-path="url(#clip0_764_2738)">
-              <path d="M7.35156 1.92139H22.8256" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M7.35156 9.06348H22.8256" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M7.35156 16.2051H22.8256" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M1.40039 1.92139H1.41121" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M1.40039 9.06348H1.41121" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M1.40039 16.2051H1.41121" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
-              </g>
-              <defs>
-              <clipPath id="clip0_764_2738">
-              <rect width="25" height="17.5" fill="white"/>
-              </clipPath>
-              </defs>
-            </svg>
-            Billing
+            Account
           </button>
           <button class="Profile_links" onclick="Profile(event, 'Support')">
             <svg width="25" height="35" viewBox="0 0 25 35" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -769,10 +751,7 @@
               </div>
             </div>
           </div>
-        </form>
-        <div id="Billing" class="Profile_links_data" style="display: none">
-          <%= render "partials/payment_methods" %>
-        </div>
+          </form>
 
           <div id="Subscription" class="Profile_links_data <%= params[:overview]=="true"? "hidden" : "" %>">
             <%= render "partials/subscription.html.slim" %>
