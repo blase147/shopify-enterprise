@@ -1,9 +1,10 @@
 - if @active_subscriptions.present? && (params[:status].present? ? params[:status] == 'active' : true)
   - @active_subscriptions.each do |subscription|
+    - local_id = CustomerSubscriptionContract.find_by_shopify_id(subscription.node.id.split("/").last).id rescue nil
     - if (subscription.api_source == 'stripe' rescue false)
-      = render partial: 'stripe_active_subscription', locals: {subscription: subscription}
+      = render partial: 'app_proxy/dashboard/stripe_active_subscription', locals: {subscription: subscription, local_id: local_id}
     - else
-      = render partial: 'shopify_active_subscription', locals: {subscription: subscription}
+      = render partial: 'app_proxy/dashboard/shopify_active_subscription', locals: {subscription: subscription, local_id: local_id}
 - elsif (params[:status].present? && params[:status] == 'active') || !params[:status].present?
   div.notification-banner
     p.Polaris-Heading #{@translation.home_tab_no_subscriptions_found.present? ? @translation.home_tab_no_subscriptions_found : 'No subscription have been found for your account'}

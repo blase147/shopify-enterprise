@@ -1,13 +1,15 @@
 <% customer =  nil %>
 <% customer_order =  nil %>
-<% struct_data = JSON.parse(@customer.api_data.to_json, object_class: OpenStruct) %>
-<%
-subscription = struct_data
-id = subscription.id[/\d+/]
-line_item = subscription.lines.edges.first.node
-%>
-<% next_billing_date =  get_next_billing_date(struct_data, @current_shop) %>
-<% billing_policy = struct_data.billing_policy %>
+<% if @customer&.present? %>
+  <% struct_data = JSON.parse(@customer&.api_data.to_json, object_class: OpenStruct) %>
+  <%
+  subscription = struct_data
+  id = subscription.id[/\d+/]
+  line_item = subscription.lines.edges.first.node
+  %>
+  <% next_billing_date =  get_next_billing_date(struct_data, @current_shop) %>
+  <% billing_policy = struct_data.billing_policy %>
+<% end %>
 
  <div class="client_profile">
     <a href="{{ routes.account_logout_url }}" class="mb-3 logout">
@@ -23,37 +25,36 @@ line_item = subscription.lines.edges.first.node
           EA
         </div>
         <div class="details">
-          <strong><%= "#{@customer.first_name.capitalize} #{@customer.last_name.capitalize}" %></strong>
+          <strong><%= "#{@customer&.first_name&.capitalize} #{@customer&.last_name&.capitalize}" %></strong>
           <!-- <a href="#" class="btn-link">Upgrade Subscription</a> -->
         </div>
       </div>
       <div class="contact-details">
-        <h2><%= plan_title %> <%= resume_btn %></h2>
+          <% if params[:local_id].present? %>
+            <h2><%= plan_title %> <%= resume_btn %></h2>
+          <% else %>
+            <h2 style="text-align: center">Your Subscriptions</h2>
+          <% end %>
       </div>
       
     </div>
   </div>
-
-  <% unless paused_or_cancel_plan? %>
     <div class="button-holder">
-      <h4>Change Delivery Day:</h4>
-        <%= select_tag "delivery_day", options_for_select(options_for_delivery_day, :selected=>@customer.delivery_day), {prompt: "Select Delivery Day", :class =>"select_combobox",:onchange=>"reset_form(this.id,'page_type_msg');", data: {day: @customer.delivery_day} }%>
-        <%#= select(:delivery, :day, options_for_select(options_for_delivery_day), selected: (@customer.delivery_day || "Some text")) %>
-
-        <a href="#" rel="modal:open">
-          <button class="btn-yellow bold hide" id="update-delivery-btn" tabindex="0" data-id="<%= @customer.id %>">Confirm Day Change</button>
-        </a>
-        <a href="#edit-subscription-modal" rel="modal:open">
+        <%#= select(:delivery, :day, options_for_select(options_for_delivery_day), selected: (@customer&.delivery_day || "Some text")) %>
+        <%# <a href="#edit-subscription-modal" rel="modal:open">
           <button class="btn-yellow bold" id="edit-subscription-btn" tabindex="0">Edit Subscription</button>
-        </a>
+        </a> %>
         <%# <a href="#skip-delivery-date-modal" rel="modal:open">
           <button class="btn-yellow bold" id="skip-delivery-date-btn" tabindex="0">Skip Billing Date</button>
         </a> %>
-        <% struct_data.lines.edges.each do |line| %>
-          <a href="#<%= "swap-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}" %>" rel="modal:open">
+        <% struct_data&.lines&.edges&.each do |line| %>
+          <!-- <a href="#<%= "swap-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}" %>" rel="modal:open">
             <button class="btn-yellow bold" id="edit-subscription-btn" tabindex="0">Swap Subscription</button>
           </a>
-          <%= render 'app_proxy/dashboard/swap_subscription_modal', subscription: struct_data, line_item: line.node, action_by: 'customer' %>
+          -->
+          <div class="subscriptions">
+            <%= render 'app_proxy/dashboard/swap_subscription_modal', subscription: struct_data, line_item: line.node, action_by: 'customer' %>
+          </div>
         <% end %>
         <div id="edit-subscription-modal" title="Basic dialog" class="modal">
           <div class="header"><div><h2>Edit Subscription</h2></div><div aria-hidden="true" class="close-modal" data-action="close" tabindex="-1">
@@ -63,7 +64,7 @@ line_item = subscription.lines.edges.first.node
           <div class="subscription-details">
             <div class="btn-wrapper">
               <button class="upgrade-subscription light" id="pause-resume-sub" data-path="/pause">Pause Subscription</button>
-              <button class="upgrade-subscription light" id="cancel-sub" data-id="<%= subscription.id[/\d+/] %>" data-line-id="<%= line_item.id  %>" data-line-name="<%= line_item.name  %> "data-variant-id="<%= line_item.variant_id %>" >Cancel Subscription</button>
+              <button class="upgrade-subscription light" id="cancel-sub" data-id="<%= subscription&.id[/\d+/] rescue nil %>" data-line-id="<%= line_item&.id  %>" data-line-name="<%= line_item&.name  %> "data-variant-id="<%= line_item&.variant_id %>" >Cancel Subscription</button>
               
               
               <!-- <button class="downgrade-subscription light" type="button">Skip Next Order</button> -->
@@ -84,10 +85,10 @@ line_item = subscription.lines.edges.first.node
 
               
               <ul>
-                <li><%= next_billing_date.strftime("%B %e, %Y") %> <a href="#_" class="pull-right skip-date" data-id="<%= struct_data.id[/\d+/] %>" data-billing-date="<%= next_billing_date %>" data-interval="<%= billing_policy.interval %>" data-interval-count="<%= billing_policy.interval_count %>">SKIP</a></li>
+                <li><%= next_billing_date&.strftime("%B %e, %Y") %> <a href="#_" class="pull-right skip-date" data-id="<%= struct_data&.id[/\d+/] rescue nil %>" data-billing-date="<%= next_billing_date %>" data-interval="<%= billing_policy&.interval %>" data-interval-count="<%= billing_policy&.interval_count %>">SKIP</a></li>
                 <% (1..2).each do |index| %>
-                  <% billing_date = next_billing_date.to_date + (index * billing_policy.interval_count).send(billing_policy.interval.downcase) %>
-                  <li><%= billing_date.strftime("%B %e, %Y") %> <a href="#_" class="pull-right skip-date" data-id="<%= struct_data.id[/\d+/] %>" data-billing-date="<%= billing_date %>" data-interval="<%= billing_policy.interval %>" data-interval-count="<%= billing_policy.interval_count %>">SKIP</a></li>
+                  <% billing_date = next_billing_date&.to_date + (index * billing_policy&.interval_count)&.send(billing_policy&.interval&.downcase) rescue nil%>
+                  <li><%= billing_date&.strftime("%B %e, %Y") %> <a href="#_" class="pull-right skip-date" data-id="<%= struct_data&.id[/\d+/] rescue nil %>" data-billing-date="<%= billing_date %>" data-interval="<%= billing_policy&.interval %>" data-interval-count="<%= billing_policy&.interval_count %>">SKIP</a></li>
                 <% end %>
               </ul>
           </div>
@@ -165,7 +166,7 @@ line_item = subscription.lines.edges.first.node
     <div class="flex-holder">
       <div class="tabs-holder">
         <div class="Profile_tab">
-          <button class="Profile_links" onclick="Profile(event, 'Overview')" id="defaultOpen">
+          <%# <button class="Profile_links" onclick="Profile(event, 'Overview')">
             <svg width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clip-path="url(#clip0_764_2732)">
               <path d="M1.54883 24.0072L1.54883 2.10498" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
@@ -179,6 +180,47 @@ line_item = subscription.lines.edges.first.node
               </defs>
             </svg>
             Overviews
+          </button> %>
+          <button class="Profile_links" onclick="Profile(event, 'Subscription')" id="defaultOpen">
+             <div class="Polaris-Navigation__ItemWrapper">
+                <a class="active_nav('dashboard', 'index')" href="<%= "/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}"%>"  tabindex="0">
+                  <div class="Polaris-Navigation__Icon">
+                    <svg width="25" height="21" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M21.4922 1.48877H3.95977C2.88389 1.48877 2.01172 2.42151 2.01172 3.5721V16.0721C2.01172 17.2227 2.88389 18.1554 3.95977 18.1554H21.4922C22.5681 18.1554 23.4403 17.2227 23.4403 16.0721V3.5721C23.4403 2.42151 22.5681 1.48877 21.4922 1.48877Z" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M2.01172 7.44141H23.4403" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="Polaris-Navigation__Text"> <%= @translation.sidebar_subscription.present? ? @translation.sidebar_subscription : 'Subscription' %></span>
+                  </div>            
+                </a>
+              <div>
+            <div class="Polaris-Navigation__SecondaryNavigation.Polaris-Navigation--isExpanded">
+              <div id="PolarisSecondaryNavigation15" aria-expanded="true" style="transition-duration: 0ms; transition-timing-function: linear; max-height: none; overflow: visible;" >
+                <ul class="Polaris-Navigation__List">
+                  <li class="Polaris-Navigation__ListItem">
+                    <div class="Polaris-Navigation__ItemWrapper active-subscription">
+                      <span class="Polaris-Navigation__Text">
+                        <%= link_to "/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}&status=active", class: 'Polaris-Navigation__Item', data: {'polaris-unstyled': true}, tab_index: '0', aria: {disabled: false} do %>
+                          <span class="Polaris-Navigation__Text">
+                            <span class="<%= params[:status] == "active" ? 'sub-active' : ''%>"><%=@translation.sidebar_active.present? ? @translation.sidebar_active : 'Active' %></span>
+                          </span>
+                        <% end %>
+                      </span>
+                    </div>
+                  </li>
+                
+                  <li class="Polaris-Navigation__ListItem">
+                    <div class="Polaris-Navigation__ItemWrapper cancel-subscription">
+                      <%= link_to "/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}&status=cancelled", class: 'Polaris-Navigation__Item', data: {'polaris-unstyled': true}, tab_index: '0', aria: {disabled: false} do %>
+                        <span class="Polaris-Navigation__Text">
+                          <span class="<%= params[:status] == "cancelled" ? 'sub-active' : ''%>"><%= @translation.sidebar_cancelled.present? ? @translation.sidebar_cancelled : 'Cancelled' %></span>
+                        </span>
+                        <% end %>
+                      </span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </button>
           <button class="Profile_links" onclick="Profile(event, 'Account')">
             <svg width="25" height="18" viewBox="0 0 25 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -216,13 +258,6 @@ line_item = subscription.lines.edges.first.node
             </svg>
             Billing
           </button>
-          <button class="Profile_links" onclick="Profile(event, 'Subscription')">
-            <svg width="25" height="21" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M21.4922 1.48877H3.95977C2.88389 1.48877 2.01172 2.42151 2.01172 3.5721V16.0721C2.01172 17.2227 2.88389 18.1554 3.95977 18.1554H21.4922C22.5681 18.1554 23.4403 17.2227 23.4403 16.0721V3.5721C23.4403 2.42151 22.5681 1.48877 21.4922 1.48877Z" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M2.01172 7.44141H23.4403" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Subscription
-          </button>
           <button class="Profile_links" onclick="Profile(event, 'Support')">
             <svg width="25" height="35" viewBox="0 0 25 35" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12.8167 21.1691C18.0809 21.1691 22.3483 16.9017 22.3483 11.6375C22.3483 6.37338 18.0809 2.10596 12.8167 2.10596C7.55258 2.10596 3.28516 6.37338 3.28516 11.6375C3.28516 16.9017 7.55258 21.1691 12.8167 21.1691Z" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
@@ -233,7 +268,7 @@ line_item = subscription.lines.edges.first.node
         </div>
       </div>
       <div class="tab-content-holder">
-        <div id="Overview" class="Profile_links_data">
+        <div id="Overview" class="Profile_links_data <%= params[:overview]=="true" ? "": "hidden" %>" >
           
           <br>
           <br>
@@ -373,11 +408,11 @@ line_item = subscription.lines.edges.first.node
         <%
           current_date = Date.current
           week_day = current_date
-          week_subscription = WorldfarePreOrder.find_by(shopify_contract_id: @customer.shopify_id, customer_id: @customer.shopify_customer_id, week: week_day.strftime('%-V').to_i )
+          week_subscription = WorldfarePreOrder.find_by(shopify_contract_id: @customer&.shopify_id, customer_id: @customer&.shopify_customer_id, week: week_day.strftime('%-V').to_i )
           week_subscription_products = []
 
           selected_products = []
-          total_meals = meals_on_plan(@customer.subscription)
+          total_meals = meals_on_plan(@customer&.subscription)
           meals_to_select = total_meals
 
           current_week_meals = []
@@ -391,17 +426,17 @@ line_item = subscription.lines.edges.first.node
         %>
         <div class="pre_orders">
           <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
-          <div class="order-box  <%= hide_display_selection %> <%= @customer&.skip_dates.index("#{week_day}") != nil ? "grayed-out" : "" %>">
+          <div class="order-box  <%= hide_display_selection %> <%= @customer&.skip_dates&.index("#{week_day}") != nil ? "grayed-out" : "" %>">
             <div>
-              <h2 class="Trial">Week of <%= current_date.beginning_of_week.strftime('%A %d %B') %> - <%= current_date.end_of_week.strftime('%A %d %B') %></h2>
+              <h2 class="Trial">Week of <%= current_date&.beginning_of_week&.strftime('%A %d %B') %> - <%= current_date&.end_of_week&.strftime('%A %d %B') %></h2>
               <div>
                 <div>
-                  <button type="button" class="btn-yellow bold skip_week" style="float: right;" data-week="<%= week_day %>" data-contractId="<%=  @customer.id %>" >
-                    <%= @customer&.skip_dates.index("#{week_day}") != nil ? "Unskip" : "Skip" %>
+                  <button type="button" class="btn-yellow bold skip_week" style="float: right;" data-week="<%= week_day %>" data-contractId="<%=  @customer&.id %>" >
+                    <%= @customer&.skip_dates&.index("#{week_day}") != nil ? "Unskip" : "Skip" %>
                   </button>
                   <div class="placed_data pdate">
                     <p class="placed">Select Meals By</p>
-                    <p class="placed_dates pdate text-right" id='current-week-select-by'><%= @current_week_select_by.strftime('%A, %d %b %Y') rescue nil  %></p>
+                    <p class="placed_dates pdate text-right" id='current-week-select-by'><%= @current_week_select_by&.strftime('%A, %d %b %Y') rescue nil  %></p>
                   </div>
 
                   <div class="placed_data pdate">
@@ -409,7 +444,7 @@ line_item = subscription.lines.edges.first.node
                     <p class="placed_dates pdate text-right"><%= @current_week_expected_delivery&.strftime('%A, %d %b %Y') rescue @no_data_message %></p>
                   </div>
                   <% if @current_week_select_by.present? %>
-                    <div class="order_add current-week <%= @customer&.skip_dates.index("#{week_day}") != nil ? "" : "" %>" id="add_box_<%= week_day %>">
+                    <div class="order_add current-week <%= @customer&.skip_dates&.index("#{week_day}") != nil ? "" : "" %>" id="add_box_<%= week_day %>">
                       <ul id="psegment" class="pre_segment">
                         <% selected_products.each do |item| %>
                           <% meal_product = current_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
@@ -475,7 +510,7 @@ line_item = subscription.lines.edges.first.node
                       </ul>
                     </div>
                   <% end %>
-                  <button id='confirm-current-week-sub-btn', data-customer-id="<%= @customer.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Selection</button>
+                  <button id='confirm-current-week-sub-btn', data-customer-id="<%= @customer&.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Selection</button>
                 </div>
               </div>
             </div>
@@ -484,7 +519,7 @@ line_item = subscription.lines.edges.first.node
 
 
         <!-- Next Week -->
-            <% delivery_date = @customer.delivery_date rescue nil %>
+            <% delivery_date = @customer&.delivery_date rescue nil %>
             <% created_at = Date.parse(@api_data["created_at"]) rescue nil %>
 
             <% current_date = Date.today %>
@@ -499,12 +534,12 @@ line_item = subscription.lines.edges.first.node
                   # week_day = current_date.next_week(:monday).next_week(delivery_day_sym.to_sym)
                   week_days << week_day.strftime('%Y%m%d')
                   # cutoff_date = cutoff.nil? ? (week_day-2) : current_date.next_week(:monday).next_week(cutoff['cutoff_day'].downcase.to_sym)
-                  @next_week_select_by = @next_week_select_by + 7.days
-                  @next_week_expected_delivery = @next_week_expected_delivery + 7.days
+                  @next_week_select_by = @next_week_select_by + 7.days rescue nil
+                  @next_week_expected_delivery = @next_week_expected_delivery + 7.days rescue nil
                 end
-                week_subscription = WorldfarePreOrder.find_by(shopify_contract_id: @customer.shopify_id, customer_id: @customer.shopify_customer_id, week: week_day.strftime('%-V').to_i )
+                week_subscription = WorldfarePreOrder.find_by(shopify_contract_id: @customer&.shopify_id, customer_id: @customer&.shopify_customer_id, week: week_day.strftime('%-V').to_i )
                 selected_products = []
-                total_meals = meals_on_plan(@customer.subscription)
+                total_meals = meals_on_plan(@customer&.subscription)
                 meals_to_select = total_meals
 
                 next_week_meals = []
@@ -518,7 +553,7 @@ line_item = subscription.lines.edges.first.node
               %>
               <div class="pre_orders" >
                 <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
-                <div class="order-box <%= hide_display_selection  %> <%= @customer&.skip_dates.index("#{week_day}") != nil ? "grayed-out" : "" %>">
+                <div class="order-box <%= hide_display_selection  %> <%= @customer&.skip_dates&.index("#{week_day}") != nil ? "grayed-out" : "" %>">
                   <div class="wrap-collabsible">
                     <input id="collapsible<%=i%>" class="toggle collapse_checkbox" type="checkbox">
                     <label for="collapsible<%=i%>" class="lbl-toggle placed">
@@ -526,8 +561,8 @@ line_item = subscription.lines.edges.first.node
                     </label>
                     <div class="collapsible-content">
                       <div class="content-inner">
-                        <button type="button" class="btn-yellow bold skip_week" style="float: right;" data-week="<%= week_day %>" data-contractId="<%= @customer.id %>" >
-                          <%= @customer&.skip_dates.index("#{week_day}") != nil ? "Unskip" : "Skip" %>
+                        <button type="button" class="btn-yellow bold skip_week" style="float: right;" data-week="<%= week_day %>" data-contractId="<%= @customer&.id %>" >
+                          <%= @customer&.skip_dates&.index("#{week_day}") != nil ? "Unskip" : "Skip" %>
                         </button>
                         <div class="placed_data pdate">
                           <p class="placed">Select Meals By</p>
@@ -540,7 +575,7 @@ line_item = subscription.lines.edges.first.node
                         </div>
 
                         <% if @next_week_select_by.present? %>
-                          <div class="order_add next-week-<%= week_day.strftime('%-V').to_i %> next-week_<%= week_day %> next-week <%= @customer&.skip_dates.index("#{week_day}") != nil ? "hide" : "" %>" id="add_box_<%= week_day %>">
+                          <div class="order_add next-week-<%= week_day.strftime('%-V').to_i %> next-week_<%= week_day %> next-week <%= @customer&.skip_dates&.index("#{week_day}") != nil ? "hide" : "" %>" id="add_box_<%= week_day %>">
                             <ul id="psegment" class="pre_segment">
                               <% selected_products.each do |item| %>
                                 <% meal_product = next_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
@@ -605,8 +640,8 @@ line_item = subscription.lines.edges.first.node
                           </ul>
                         </div>
                         <% end %>
-                        <button id='confirm-sub-btn_<%= week_day %>', data-customer-id="<%= @customer.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" onclick="submitAddMeals(event)" class="hide">Confirm Selection</button>
-                        <!--<button id='confirm-sub-btn', data-customer-id="<%= @customer.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Selection</button>-->
+                        <button id='confirm-sub-btn_<%= week_day %>', data-customer-id="<%= @customer&.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" onclick="submitAddMeals(event)" class="hide">Confirm Selection</button>
+                        <!--<button id='confirm-sub-btn', data-customer-id="<%= @customer&.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Selection</button>-->
                       </div>
                     </div>
                   </div>
@@ -633,7 +668,7 @@ line_item = subscription.lines.edges.first.node
                           <p>
                             <p class="placed_dates "><%= Date.commercial(created_at.strftime('%Y').to_i, (created_at.strftime('%W').to_i - 1), 1).next_week(delivery_day_sym.to_sym) rescue nil %></p>
                             <div id="psection" class="product_section">
-                              <% @customer.origin_order_meals&.each do |node| %>
+                              <% @customer&.origin_order_meals&.each do |node| %>
                                 <% next if node["node"]["product"]["title"].downcase.include?("meal box") rescue nil  %>
                                 <%# product = products.find{|p| p.id == node["node"]["product"]["id"][/\d+/].to_i } %>
                                 <div class="order_inn">
@@ -669,8 +704,10 @@ line_item = subscription.lines.edges.first.node
             <button data-pre_order="<%= { customer_id: params[:customer_id],week: week_days[params[:week].to_i-1], products: params[:product_ids] }.to_json %>" class="submit_pre_order">Save Changes</button>
             <% end %>
         </div>
+        <div>
         <form id="customer_info_form" action="/a/chargezen_production/account/update_address" method='post' style="display: none" data-remote="true">
           <div id="Account" class="Profile_links_data">
+              <%= render  "app_proxy/shared/dashboard_nav" %>
               <div id="itable" class="flex space-between">
                 <div class="account-holder">
                   <div>
@@ -683,7 +720,7 @@ line_item = subscription.lines.edges.first.node
                             <td><h3 class="t-align-left bolder">Last Name</h3></td>
                           </tr>
                           <tr>
-                            <input name="id" type="hidden" value="<%= "#{@customer.shopify_customer_id rescue params[:customer_id]}"%>">
+                            <input name="id" type="hidden" value="<%= "#{@customer&.shopify_customer_id rescue params[:customer_id]}"%>">
                             <td><input type="text" id="first_name" name="address[first_name]" value="<%= @customer&.first_name %>" class="view-input" /></td>
                             <td><input type="text" id="last_name" name="address[last_name]" value="<%= @customer&.last_name %>" class="view-input" /></td>
                           </tr>
@@ -737,16 +774,8 @@ line_item = subscription.lines.edges.first.node
           <%= render "partials/payment_methods" %>
         </div>
 
-          <div id="Subscription" class="Profile_links_data" style="display: none">
-            <div class="subscription-box" style="min-height:350px">
-              <h2 class="Trial">My Subscription</h2>
-              <% if (customer_order.line_items.any?{|item| item.name.downcase.include?('trial')} rescue false) %>
-                <p>Choose your weekly plan.</p>
-              <% end %>
-
-              
-            </div>
-
+          <div id="Subscription" class="Profile_links_data <%= params[:overview]=="true"? "hidden" : "" %>">
+            <%= render "partials/subscription.html.slim" %>
           </div>
         
         
@@ -839,7 +868,6 @@ line_item = subscription.lines.edges.first.node
       </div>
     </div>
   </div>
-  <% end %>
 <script type="text/javascript">
   $(document).on('click', '.btn-wrapper button', function(e) {
     $(this).html('Processing <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
