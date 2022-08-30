@@ -10,7 +10,6 @@
   <% next_billing_date =  get_next_billing_date(struct_data, @current_shop) %>
   <% billing_policy = struct_data.billing_policy %>
 <% end %>
-
  <div class="client_profile">
     <a href="{{ routes.account_logout_url }}" class="mb-3 logout">
       <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 18 19">
@@ -238,7 +237,25 @@
               </clipPath>
               </defs>
             </svg>
-            Account
+            Address
+          </button>
+          <button class="Profile_links" onclick="Profile(event, 'Billing')">
+            <svg width="25" height="18" viewBox="0 0 25 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_764_2738)">
+              <path d="M7.35156 1.92139H22.8256" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.35156 9.06348H22.8256" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.35156 16.2051H22.8256" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.40039 1.92139H1.41121" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.40039 9.06348H1.41121" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.40039 16.2051H1.41121" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+              <defs>
+              <clipPath id="clip0_764_2738">
+              <rect width="25" height="17.5" fill="white"/>
+              </clipPath>
+              </defs>
+            </svg>
+            Billing
           </button>
           <button class="Profile_links" onclick="Profile(event, 'Support')">
             <svg width="25" height="35" viewBox="0 0 25 35" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -689,7 +706,6 @@
         <div>
         <form id="customer_info_form" action="/a/chargezen_production/account/update_address" method='post' style="display: none" data-remote="true">
           <div id="Account" class="Profile_links_data">
-              <%= render  "app_proxy/shared/dashboard_nav" %>
               <div id="itable" class="flex space-between">
                 <div class="account-holder">
                   <div>
@@ -703,8 +719,8 @@
                           </tr>
                           <tr>
                             <input name="id" type="hidden" value="<%= "#{@customer&.shopify_customer_id rescue params[:customer_id]}"%>">
-                            <td><input type="text" id="first_name" name="address[first_name]" value="<%= @customer&.first_name %>" class="view-input" /></td>
-                            <td><input type="text" id="last_name" name="address[last_name]" value="<%= @customer&.last_name %>" class="view-input" /></td>
+                            <td><input type="text" id="first_name" name="address[first_name]" value="<%= @customer&.first_name %>" class="view-input disabled" /></td>
+                            <td><input type="text" id="last_name" name="address[last_name]" value="<%= @customer&.last_name %>" class="view-input disabled" /></td>
                           </tr>
 
                           <tr>
@@ -712,7 +728,7 @@
                           </tr>
 
                           <tr>
-                            <td colspan="2"><input type="text" id="address1" name="address[address_1]" value="<%= @customer&.address_1 %>"class="view-input" /></td>
+                            <td colspan="2"><input type="text" id="address1" name="address[address_1]" value="<%= @customer&.address_1 %>"class="view-input disabled" /></td>
                           </tr>
 
                           <tr>
@@ -720,7 +736,7 @@
                           </tr>
 
                           <tr>
-                            <td colspan="2"><input type="text" id="address2" name="address[address_2]" value="<%= @customer&.address_2 %>"class="view-input" /></td>
+                            <td colspan="2"><input type="text" id="address2" name="address[address_2]" value="<%= @customer&.address_2 %>"class="view-input disabled" /></td>
                           </tr>
 
                           <tr id="citys" >
@@ -729,8 +745,8 @@
                           </tr>
 
                           <tr id="citysvalue">
-                          <td><input type="text" id="city" name="address[city]" value="<%= @customer&.city %>" class="view-input" /></td>
-                          <td><input type="text" id="province" name="address[province]" value="<%= @customer&.province %>" class="view-input" /></td>
+                          <td><input type="text" id="city" name="address[city]" value="<%= @customer&.city %>" class="view-input disabled" /></td>
+                          <td><input type="text" id="province" name="address[province]" value="<%= @customer&.province %>" class="view-input disabled" /></td>
                           </tr>
                           <tr id="countryz">
                             <td><h3 class="t-align-left bolder">Country</h3></td>
@@ -738,20 +754,38 @@
                           </tr>
 
                           <tr id="countryz-value">
-                            <td><input type="text" id="country" name="address[country]" value="<%= @customer&.country %>" class="view-input" /></td>
-                            <td><input type="text" id="zip" name="address[zip]" value="<%= @customer&.zip %>" class="view-input" /></td>
+                            <td><input type="text" id="country" name="address[country]" value="<%= @customer&.country %>" class="view-input disabled" /></td>
+                            <td><input type="text" id="zip" name="address[zip]" value="<%= @customer&.zip %>" class="view-input disabled" /></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div>
+                      <h1 class="t-align-left ml">Contact Info</h1>
+                      <table class="info-table">
+                        <tbody>
+                          <tr>
+                            <td><h3 class="t-align-left bolder">Phone Number</h3></td>
+                            <td><h3 class="t-align-left bolder">Email Address</h3></td>
+                          </tr>
+                          <tr>
+                            <td><p class="t-align-left block subdued ft-1"><%= customer&.phone %></p></td>
+                            <td><p class="t-align-left block subdued ft-1"><%= customer&.email %></p></td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                 </div>
               <div class="flex left-button">
-                <button class="btn-yellow" id="edit_information">Edit Information</button>
-                <button class="btn-yellow" id="save_information">Save Information</button>
+                <button type="button" class="btn-yellow" id="edit_information">Edit Information</button>
+                <button type="button" class="btn-yellow" id="save_information" style="display: none">Save Information</button>
               </div>
             </div>
           </div>
-          </form>
+        </form>
+        <div id="Billing" class="Profile_links_data" style="display: none">
+          <%= render "partials/payment_methods" %>
+        </div>
 
           <div id="Subscription" class="Profile_links_data <%= params[:overview]=="true"? "hidden" : "" %>">
             <%= render "partials/subscription.html.slim" %>
@@ -1122,4 +1156,28 @@
       $("#update-delivery-btn").addClass('hide');
     }
   })
+
+  $("#save_information").on('click',function(){
+    $.ajax({
+      url: $("#customer_info_form").attr("action"),
+      type: 'POST',
+      data: $("#customer_info_form").serialize(),
+      success: function(response) {
+        Swal.fire({
+          icon: 'success',
+          title: "Success! Reloading Page",
+          showConfirmButton: false
+        })
+        location.reload();
+      },
+      error: function(response) {
+
+      }
+    });
+  })
+  $("#edit_information").on('click', function(){
+        $('.view-input').removeClass('disabled');
+        $(this).hide();
+        $('#save_information').show();
+    });
 </script>
