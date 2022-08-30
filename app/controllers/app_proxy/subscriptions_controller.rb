@@ -121,9 +121,11 @@ class AppProxy::SubscriptionsController < AppProxyController
       session_id = JSON.parse(session.body)['id']
       result = CreditCardUpdateService.new(params[:id], session_id, params).run
       if result.is_a?(Hash) && result[:error].present?
-        render js: "alert('#{result[:error]}'); hideLoading()"
+        render json:{ status: 500, error: result[:error]}.to_json
+        # render js: "alert('#{result[:error]}'); hideLoading()"
       else
-        render js: 'location.reload()'
+        render json:{ status: :ok}.to_json
+        # render js: 'location.reload()'
       end
     end
   end
