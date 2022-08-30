@@ -26,12 +26,8 @@
 
 <div class="customer account c_account">
   <ul class="nav nav-pills nav-justified contract-tabs">
-    <% if @subscription_contracts.present? %>
-      <% @subscription_contracts.each do |contract| %>
-        <li class="contract-tab" id="<%= contract.id %>"></li>
-      <% end %>
-    <% else %>
-      <li class="contract-tab" id=""><a href="#"></a></li>
+    <% @subscription_contracts.each do |contract| %>
+      <li class="contract-tab" id="<%= contract.id %>"><a href="#"><%= contract.subscription %></a></li>
     <% end %>
   </ul>
 
@@ -62,12 +58,8 @@
       $('.loader').show();
       $('#contract-content').html('');
     id = $(this).attr('id');
-    let local_id = "<%= params[:local_id] %>"
     let params = {
-      customer_id: <%= params[:customer_id] %>,
-      status: "<%= params[:status] %>",
-      overview: "<%= params[:overview] %>",
-      local_id: local_id === "" ? null : local_id
+      local_id: id
     }
     url = '/a/chargezen_production/dashboard/fetch_contract';
     $.ajax({

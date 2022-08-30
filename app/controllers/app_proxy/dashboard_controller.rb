@@ -6,11 +6,8 @@ class AppProxy::DashboardController < AppProxyController
 
   def index
     # @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
-    if params[:status].present?
-      @subscription_contracts = CustomerSubscriptionContract.where(shopify_customer_id: params[:customer_id], status: params[:status]&.upcase)
-    else
-      @subscription_contracts = CustomerSubscriptionContract.where(shopify_customer_id: params[:customer_id])
-    end
+    @subscription_contracts = CustomerSubscriptionContract.where(shopify_customer_id: params[:customer_id])
+
     render "#{current_setting.portal_theme}index", content_type: 'application/liquid', layout: "#{current_setting.portal_theme}liquid_app_proxy"
   end
 
@@ -217,25 +214,13 @@ class AppProxy::DashboardController < AppProxyController
 
   def fetch_contract
     @translation = current_shop&.translation
-    if params[:local_id].present?
-      @customer = CustomerSubscriptionContract.find(params[:local_id])
-    else
-      if params[:status].present?
-        @customer = CustomerSubscriptionContract.where(shopify_customer_id: "#{params[:customer_id]}", status: params[:status]&.upcase).first
-      else
-        @customer = CustomerSubscriptionContract.where(shopify_customer_id: "#{params[:customer_id]}").first
-      end
-    end
-    if @customer.present?
-      @customer&.shop&.connect
-      load_subscriptions(@customer&.shopify_customer_id)
-      @api_data = @customer.api_data
-      set_delivery_dates
-      products = ProductService.new.list
-      @swap_products = products.is_a?(Hash) ? nil : products&.select{ |p| p.node.selling_plan_group_count > 0 }
-      @subscription_paused = @customer.status ==  "PAUSED"
-      payment_methods(@customer.shopify_customer_id)
-    end
+    @customer = CustomerSubscriptionContract.find params[:local_id]
+    @api_data = @customer.api_data
+    set_delivery_dates
+    @customer&.shop&.connect
+    products = ProductService.new.list
+    @swap_products = products.is_a?(Hash) ? nil : products&.select{ |p| p.node.selling_plan_group_count > 0 }
+    @subscription_paused = @customer.status ==  "PAUSED"
   end
 
   def set_delivery_dates
@@ -295,16 +280,13 @@ class AppProxy::DashboardController < AppProxyController
     @customer = current_shop.customer_subscription_contracts.find_by_shopify_customer_id(customer_id)
   end
 
-  def load_subscriptions(customer_id=nil)
-    shopify_customer_id="gid://shopify/Customer/#{customer_id}" if customer_id.present?
-    Shop.last.connect
-    @setting = Shop.last.setting
+  def load_subscriptions
     @data = CustomerSubscriptionContractsService.new(shopify_customer_id).run
-    @stripe_subscriptions = current_shop.customer_subscription_contracts.where(shopify_customer_id: customer_id, api_source: 'stripe') rescue []
+    @stripe_subscriptions = current_shop.customer_subscription_contracts.where(shopify_customer_id: customer_id, api_source: 'stripe')
     @subscription_contracts = (@data && @data[:subscriptions] || []) + @stripe_subscriptions
-    @paused_subscriptions = (@data && @data[:paused_subscriptions] || []) + @stripe_subscriptions&.select{|lc| lc.status == 'PAUSED'}
-    @cancelled_subscriptions = (@data && @data[:cancelled_subscriptions] || []) + @stripe_subscriptions&.select{|lc| lc.status == 'CANCELLED'}
-    @active_subscriptions = (@data && @data[:active_subscriptions] || []) + @stripe_subscriptions&.select{|lc| lc.status == 'ACTIVE'}
+    @paused_subscriptions = (@data && @data[:paused_subscriptions] || []) + @stripe_subscriptions.select{|lc| lc.status == 'PAUSED'}
+    @cancelled_subscriptions = (@data && @data[:cancelled_subscriptions] || []) + @stripe_subscriptions.select{|lc| lc.status == 'CANCELLED'}
+    @active_subscriptions = (@data && @data[:active_subscriptions] || []) + @stripe_subscriptions.select{|lc| lc.status == 'ACTIVE'}
     @active_subscriptions_count = params[:active_subscriptions_count].present? ? params[:active_subscriptions_count].to_i : (@data && @data[:active_subscriptions].count || 0)
     @cancelled_line_items = RemovedSubscriptionLine.where(customer_id: params[:customer_id])
   end
