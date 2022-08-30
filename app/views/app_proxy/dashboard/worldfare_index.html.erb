@@ -102,6 +102,7 @@
   $( "#progressbarwarning" ).progressbar({ value: 30});
 
   function Profile(evt, usr_tab,make_active = true) {
+    console.log("fdafdafdasfas",usr_tab)
     var i, Profile_links_data, Profile_links;
     Profile_links_data = document.getElementsByClassName("Profile_links_data");
     for (i = 0; i < Profile_links_data.length; i++) {
@@ -164,65 +165,65 @@
       }
     });
 
-    // $("#save_information").on('click', function(){
+    $("#save_information").on('click', function(){
 
-    //     $('.view-input').addClass('disabled');
-    //     $(this).hide();
-    //     $('#edit_information').show();
-
-
-    //       $("form").submit(function (event) {
-    //         var formData = {
-    //           customer_id: '<%= params[:customer_id] %>',
-    //           first_name: $("#first_name").val(),
-    //           last_name: $("#last_name").val(),
-    //           address1: $("#address1").val(),
-    //           address2: $("#address2").val(),
-    //           city: $("#city").val(),
-    //           state: $("#province").val(),
-    //           state: $("#province").val(),
-    //           country: $("#country_name").val(),
-    //           zip: $("#zip").val(),
-    //         };
-
-    //       let payment_url = '<%= action_subscription_contract_path(:update_payment, (customer.id rescue params[:customer_id]) ) %>'
-    //       $.ajax({
-    //         url: '/a/chargezen_production/dashboard/customer_info',
-    //         type: 'POST',
-    //         data: JSON.stringify(formData),
-    //         contentType: 'application/json',
-    //         success: function(response) {
-    //           if($("#credit_card_number").val() != '' && $("#credit_card_name").val() != '' && $("#expiration_date").val() != ''){
-    //             let card_data = {
-    //               card_number: $("#credit_card_number").val(),
-    //               name: $("#credit_card_name").val(),
-    //               verification_value: $('#verification_value').val(),
-    //               // shipping_address: $("#shipping_address").val(),
-    //               exp_year: $("#exp_year").val(),
-    //               exp_month: $("#exp_month").val(),
-    //               company: $("#company").val()
-    //             };
-    //             $.ajax({
-    //               url: payment_url,
-    //               type: 'POST',
-    //               data: JSON.stringify(card_data),
-    //               contentType: 'application/json',
-    //               success: function(response) {
-
-    //                 window.location = window.location.href + '&tab=Account';
-    //               },
-    //               error: function(response) {window.location = window.location.href + '&tab=Account';}
-    //             });
-    //           }else{
-    //             window.location = window.location.href + '&tab=Account';
-    //           }
-    //         },
-    //         error: function(response) {}
-    //       });
+        $('.view-input').addClass('disabled');
+        $(this).hide();
+        $('#edit_information').show();
 
 
-    //       });
-    //   });
+          $("form").submit(function (event) {
+            var formData = {
+              customer_id: '<%= params[:customer_id] %>',
+              first_name: $("#first_name").val(),
+              last_name: $("#last_name").val(),
+              address1: $("#address1").val(),
+              address2: $("#address2").val(),
+              city: $("#city").val(),
+              state: $("#province").val(),
+              state: $("#province").val(),
+              country: $("#country_name").val(),
+              zip: $("#zip").val(),
+            };
+
+          let payment_url = '<%= action_subscription_contract_path(:update_payment, (customer.id rescue params[:customer_id]) ) %>'
+          $.ajax({
+            url: '/a/chargezen_production/dashboard/customer_info',
+            type: 'POST',
+            data: JSON.stringify(formData),
+            contentType: 'application/json',
+            success: function(response) {
+              if($("#credit_card_number").val() != '' && $("#credit_card_name").val() != '' && $("#expiration_date").val() != ''){
+                let card_data = {
+                  card_number: $("#credit_card_number").val(),
+                  name: $("#credit_card_name").val(),
+                  verification_value: $('#verification_value').val(),
+                  // shipping_address: $("#shipping_address").val(),
+                  exp_year: $("#exp_year").val(),
+                  exp_month: $("#exp_month").val(),
+                  company: $("#company").val()
+                };
+                $.ajax({
+                  url: payment_url,
+                  type: 'POST',
+                  data: JSON.stringify(card_data),
+                  contentType: 'application/json',
+                  success: function(response) {
+
+                    window.location = window.location.href + '&tab=Account';
+                  },
+                  error: function(response) {window.location = window.location.href + '&tab=Account';}
+                });
+              }else{
+                window.location = window.location.href + '&tab=Account';
+              }
+            },
+            error: function(response) {}
+          });
+
+
+          });
+      });
 
     <% if params[:tab] == 'Overview' %>
     Profile($('.overview_tab'), 'Overview',false)

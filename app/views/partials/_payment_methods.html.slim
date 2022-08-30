@@ -68,7 +68,7 @@
                   p.card-text = billing_address.present? ? billing_address.address1 : '-'
 / = render 'edit_address_modal'
 - if @payment_type == 'SHOPIFY'
-  = render 'app_proxy/dashboard/update_payment_modal', payment_method: payment_method, billing_address: billing_address
+  / = render 'app_proxy/dashboard/update_payment_modal', payment_method: payment_method, billing_address: billing_address
 - elsif @stripe_customer.present?
   = render 'stripe_update_payment_modal', stripe_customer: @stripe_customer, stripe_card_info: @stripe_card_info
 

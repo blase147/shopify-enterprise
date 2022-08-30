@@ -34,7 +34,7 @@ class AppProxy::AccountController < AppProxyController
   end
 
   def set_customer
-    skip_customer_valid = ENV['DEBUG'].present? && ENV['DEBUG'] == "true" ? true : false
+    skip_customer_valid = ENV['DEBUG'].present? && ENV['DEBUG'].to_bool ? true : false
     @customer = customer_service.find(customer_id) unless skip_customer_valid
   end
 end
