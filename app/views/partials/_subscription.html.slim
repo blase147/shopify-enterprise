@@ -1,6 +1,6 @@
 .Polaris-Frame data-has-navigation="true" data-polaris-layer="true"
   div
-  - if @subscription_contracts.empty?
+  - if @subscription_contracts&.empty?
     div.content-wrapper
       div
         p.Polaris-DisplayText.Polaris-DisplayText--sizeMedium YOUR SUBSCRIPTION
@@ -17,12 +17,11 @@
               span MY &nbsp;
               span.active ACTIVE &nbsp;
               span #{@subscription_contracts.count > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION'}
-          a#logout-btn Logout
           / a.add_weekly_box.promo-tag-I href="#"
           /   span #{@setting.promo_tagline1_content.present? ? @setting.promo_tagline1_content : 'Add one more weekly box'}
           /   svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg"
           /     path d=("M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z") fill="black" /
-        = render partial: 'active_subscriptions'
+        = render partial: 'app_proxy/dashboard/active_subscriptions'
       - if !params[:status].present? || (params[:status].present? && params[:status] == 'cancelled')
         div.display-text.cancel-text
           p
@@ -31,8 +30,8 @@
             - else
               span MY &nbsp;
               span.canceled CANCELLED &nbsp;
-              span #{(@cancelled_subscriptions.count + @cancelled_line_items.count) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION'}
-        = render partial: 'cancelled_subscriptions'
+              span #{(@cancelled_subscriptions&.count + @cancelled_line_items&.count) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION' rescue nil} 
+        = render partial: 'app_proxy/dashboard/cancelled_subscriptions'
       - if !params[:status].present? || (params[:status].present? && params[:status] == 'paused')
         div.display-text.cancel-text
           p
