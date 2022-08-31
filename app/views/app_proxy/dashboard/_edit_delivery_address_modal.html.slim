@@ -1,4 +1,4 @@
-.Polaris-Modal.hidden#deliveryEditModal
+.Polaris-Modal#deliveryEditModal style="display:none"
   .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"
     = simple_form_for :address, url: "#{action_subscription_contract_path(:update_shiping_detail, subscription.id[/\d+/])}", method: :post, remote: true do |f|
       .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1"
@@ -52,7 +52,7 @@
                     = f.input :phone, input_html: { value: subscription.delivery_method.address.phone  }, label: false, required: false
 
           .Polaris-Modal-Footer
-            button.Polaris-Button.mr-10[type="button" aria-hidden="true" tabindex="-1" data-action='close']
+            button.Polaris-Button.mr-10[type="button" aria-hidden="true" tabindex="-1" data-action='close' data-dismiss="modal"]
               | Cancel
 
             = p_button text: @translation.add_address_popup_update.present? ? @translation.add_address_popup_update : 'Update', type: 'submit'

@@ -24,7 +24,12 @@
               p.Polaris-Heading #{@translation.billing_tab_billing_no_subscriptions_found.present? ? @translation.billing_tab_billing_no_subscriptions_found : 'No subscription have been found for your account'}
         - else
           - payment_method = @shopify_customer&.payment_methods&.edges&.first&.node
-          - billing_address = @shopify_customer&.payment_methods&.edges&.first&.node&.instrument&.billing_address
+          - data = JSON.parse(@shopify_customer&.payment_methods&.edges&.first&.to_json, object_class: OpenStruct) rescue nil
+          - cardtype = data&.data&.node&.instrument&.__typename
+          - if cardtype === "CustomerShopPayAgreement"
+            - billing_address = @shopify_customer&.default_address
+          - else                      
+            - billing_address = @shopify_customer&.payment_methods&.edges&.first&.node&.instrument&.billing_address
           div.content-wrapper
             div
               .Polaris-Header-Title__TitleAndSubtitleWrapper
@@ -49,10 +54,11 @@
                   .details
                     p.card-text
                       span &#42;&#42;&#42;&#42; &#42;&#42;&#42;&#42; &#42;&#42;&#42;&#42;&nbsp;
-                      span 3214
-                    p.card-text Expires 3/2035
+                      span #{payment_method&.instrument&.last_digits}
+                    p.card-text Expires #{payment_method&.instrument&.expiry_month}/#{payment_method&.instrument&.expiry_year}
                 .btn-wrapper
-                  button.white.card-btn type="button" id="show_edit" #{@translation&.billing_tab_update.present? ? @translation&.billing_tab_update : 'UPDATE CARD'}
+                  button.btn-yellow.card-btn type="button" id="show_edit" data-show="#{(cardtype === "CustomerShopPayAgreement") ? "show_edit_shopify" : "update-payment"}" #{@translation&.billing_tab_update.present? ? @translation&.billing_tab_update : 'UPDATE CARD'}
+                  div#show_edit_shopify.hidden Login to your Shoppay account to edit card ending with #{payment_method&.instrument&.last_digits}
               .address-information
                 .header
                   h2.card-heading = "#{@customer&.first_name.present? ? @customer&.first_name : '-'} #{@customer&.last_name.present? ? @customer&.last_name : '-'}"
@@ -114,5 +120,5 @@
 
 javascript: 
   $("#show_edit").on("click",function(){
-    $("#update-payment").removeClass("hidden")
+    $("#"+$(this).data("show")).removeClass("hidden")
   })

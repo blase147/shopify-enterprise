@@ -1,7 +1,7 @@
 class AppProxy::DashboardController < AppProxyController
   skip_before_action :init_session, only: [:index, :fetch_contract]
   skip_before_action :set_skip_auth, only: [:fetch_contract]
-  before_action :load_subscriptions, except: [:build_a_box, :confirm_box_selection, :index, :fetch_contract]
+  before_action :load_subscriptions, except: [:build_a_box, :confirm_box_selection, :index, :fetch_contract, :show_order]
   before_action :load_customer, only: %w(addresses payment_methods settings upcoming build_a_box track_order)
 
   def index
@@ -218,6 +218,7 @@ class AppProxy::DashboardController < AppProxyController
 
   def fetch_contract
     @translation = current_shop&.translation
+    @theme = "#{current_setting.portal_theme}"
     if params[:local_id].present?
       @customer = CustomerSubscriptionContract.find(params[:local_id])
     else
@@ -227,6 +228,10 @@ class AppProxy::DashboardController < AppProxyController
         @customer = CustomerSubscriptionContract.where(shopify_customer_id: "#{params[:customer_id]}").first
       end
     end
+    current_shop.connect
+    @orders = ShopifyAPI::Order.find(:all,
+      params: { customer_id: params[:customer_id], limit: PER_PAGE, page_info: params[:page_info] }
+    )
     if @customer.present?
       @customer&.shop&.connect
       load_subscriptions(@customer&.shopify_customer_id)
@@ -236,6 +241,14 @@ class AppProxy::DashboardController < AppProxyController
       @swap_products = products.is_a?(Hash) ? nil : products&.select{ |p| p.node.selling_plan_group_count > 0 }
       @subscription_paused = @customer.status ==  "PAUSED"
       payment_methods(@customer.shopify_customer_id)
+    end
+  end
+
+  def show_order
+    current_shop.connect
+    @order = ShopifyAPI::Order.find(params[:id]&.to_i)
+    respond_to do |format|
+      format.js
     end
   end
 

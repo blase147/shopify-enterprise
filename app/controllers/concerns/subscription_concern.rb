@@ -160,10 +160,9 @@ module SubscriptionConcern
           puts "Could not send email. #{e.message}"
         end
         SubscriptionDraftsService.new.commit @draft_id
+        render js: 'location.reload()'
       end
     end
-
-    render js: 'location.reload()'
   end
 
   def skip_schedule

@@ -31,19 +31,19 @@
             - when 'update_choices'
               - if false # box_campaign && box_campaign_display(box_campaign, selling_plan_id)
                 = link_to "/a/chargezen_production/dashboard/build_a_box?&build_a_box_campaign_id=#{box_campaign.id}&customer_id=#{params[:customer_id]}&subscription_id=#{subscription.id}&stripe_subscription=true&active_subscriptions_count=#{@active_subscriptions.count}&selling_plan_id=#{selling_plan_id[/\d+/]}" do
-                  button.white-btn.action-btn UPDATE CHOICES
+                  button.white-btn.action-btn.modal_btn UPDATE CHOICES
             - when 'delivery_schedule'
               - if @setting.customer_allowed?('navigation_delivery')
                 = link_to "/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}&subscription_id=#{subscription.id}&line_id=#{subscription.id}&active_subscriptions_count=#{@active_subscriptions.count}" do
-                  button.white-btn.action-btn #{@translation.home_tab_delivery_schedule_btn.present? ? @translation.home_tab_delivery_schedule_btn : 'DELIVERY SCHEDULE'}
+                  button.white-btn.action-btn.modal_btn #{@translation.home_tab_delivery_schedule_btn.present? ? @translation.home_tab_delivery_schedule_btn : 'DELIVERY SCHEDULE'}
             - when 'swap_subscription'
               - if @setting.customer_allowed?('swap_product')
-                button.white-btn.action-btn type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#swap-#{subscription.id}" SWAP SUBSCRIPTION
+                button.white-btn.action-btn.modal_btn type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#swap-#{subscription.id}" SWAP SUBSCRIPTION
             - when 'edit_subscription'
-              button.edit-subscription.white-btn.action-btn data-toggle="modal" data-target="#editSubscriptionModal-#{subscription.id}" #{@translation.home_tab_edit_subscription_btn.present? ? @translation.home_tab_edit_subscription_btn : 'Edit Subscription'}
+              button.edit-subscription.white-btn.action-btn.modal_btn data-toggle="modal" data-target="#editSubscriptionModal-#{subscription.id}" #{@translation.home_tab_edit_subscription_btn.present? ? @translation.home_tab_edit_subscription_btn : 'Edit Subscription'}
             - when 'delay_next_order'
               - if @setting.customer_allowed?('frequency')
-                button.delivery-schedule.white-btn.action-btn data-toggle="modal" data-target="#delayOrderModal-#{subscription.id}" #{@translation.home_tab_delay_next_order_btn.present? ? @translation.home_tab_delay_next_order_btn : 'DELAY NEXT ORDER'}
+                button.delivery-schedule.white-btn.action-btn.modal_btn data-toggle="modal" data-target="#delayOrderModal-#{subscription.id}" #{@translation.home_tab_delay_next_order_btn.present? ? @translation.home_tab_delay_next_order_btn : 'DELAY NEXT ORDER'}
         / = render 'delay_order_modal', subscription: subscription.node, next_billing_date: next_billing_date
         = render 'app_proxy/dashboard/stripe_edit_subscription_modal', subscription: subscription, product: product, setting: @setting
         - if @setting.customer_allowed?('swap_product')

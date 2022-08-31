@@ -335,8 +335,10 @@
     margin: 0 !important;
   }
 
-  .btn-yellow {
-    font-size: 14px !important;
+  .btn-yellow,
+  .btn-yellow a {
+    text-transform: uppercase;
+    font-size: 12px !important;
     font-family: 'Ainslie' !important;
     background: #F6BA2E !important;
     color: #000 !important;
@@ -344,6 +346,10 @@
     border: none !important;
     padding: 15px 20px !important;
     min-width: inherit !important;
+  }
+
+  .btn_inside {
+    text-decoration: none !important;
   }
 
   .customer-portal {
@@ -1953,6 +1959,7 @@
     margin: 0;
     border: none;
     width: 100%;
+    margin-bottom: 130px;
   }
 
   body .customer-portal .tabs-holder .Profile_tab button {

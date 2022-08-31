@@ -23,21 +23,23 @@
           /     path d=("M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z") fill="black" /
         = render partial: 'app_proxy/dashboard/active_subscriptions'
       - if !params[:status].present? || (params[:status].present? && params[:status] == 'cancelled')
-        div.display-text.cancel-text
-          p
-            - if @translation.cancelled_tab_cancelled_subscriptions.present?
-              span #{@translation.cancelled_tab_cancelled_subscriptions}
-            - else
-              span MY &nbsp;
-              span.canceled CANCELLED &nbsp;
-              span #{(@cancelled_subscriptions&.count + @cancelled_line_items&.count) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION' rescue nil} 
+        - if (@cancelled_subscriptions.count) > 1
+          div.display-text.cancel-text
+            p
+              - if @translation.cancelled_tab_cancelled_subscriptions.present?
+                span #{@translation.cancelled_tab_cancelled_subscriptions}
+              - else
+                span MY &nbsp;
+                span.canceled CANCELLED &nbsp;
+                span #{(@cancelled_subscriptions&.count + @cancelled_line_items&.count) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION' rescue nil} 
         = render partial: 'app_proxy/dashboard/cancelled_subscriptions'
       - if !params[:status].present? || (params[:status].present? && params[:status] == 'paused')
-        div.display-text.cancel-text
-          p
-            span MY &nbsp;
-            span.canceled PAUSED &nbsp;
-            span #{(@paused_subscriptions.count) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION'}
+        - if (@paused_subscriptions.count) > 1
+          div.display-text.cancel-text
+            p
+              span MY &nbsp;
+              span.canceled PAUSED &nbsp;
+              span #{(@paused_subscriptions.count) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION'}
         = render partial: 'paused_subscriptions'
 javascript:
 
