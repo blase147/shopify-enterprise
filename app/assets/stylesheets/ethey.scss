@@ -229,7 +229,7 @@
   .customer-details {
     background: #E9DBC3;
     padding: 30px 30px 30px 30px;
-    margin-bottom: 30px;
+    margin-bottom: 75px;
   }
 
   .customer-details .container {
@@ -1749,4 +1749,330 @@
     padding: 13px;
     height: fit-content;
     margin-top: 30px;
+  }
+
+  // 29-08-2022 */ 
+  .subscription-contract-products {
+    padding-top: 40px;
+  }
+
+  .img.account-img img {
+    width: 100%;
+    max-width: 276px;
+  }
+
+  .subscription-contract-products .grid {
+    justify-content: inherit;
+    margin: 0;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .subscription-contract-products .grid .grid-item:first-child {
+    max-width: 40%;
+    flex: 0 0 40%;
+  }
+
+  .subscription-contract-products .grid .grid-item:nth-child(2) {
+    flex: 0 0 34%;
+    text-align: end;
+    padding-right: 30px;
+  }
+
+  .subscription-contract-products .grid .grid-item:nth-child(2) p.text.right.active-text {
+    text-align: right ! important;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .subscription-contract-products button a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .subscription-contract-products button {
+    margin: 0 !important;
+    margin-bottom: 14px !important;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 11px;
+    width: 100%;
+  }
+
+  .subscription-contract-products .grid .grid-item p.text.active-text {
+    text-align: left;
+    justify-content: inherit;
+  }
+
+  .quantity-wrapper form .quantity-field span.btn-wrapper button {
+    width: 50px ! important;
+    height: 50px ! important;
+    border-radius: 65%;
+    min-width: inherit ! important;
+  }
+
+  .quantity-wrapper form .quantity-field span.btn-wrapper input.quatity-val {
+    border: 3px solid #445958;
+    height: 48px;
+    width: 97px;
+    border-left: none;
+    border-right: none;
+    margin-left: -14px;
+    margin-right: -11px;
+  }
+
+  .slide-down .item p {
+    display: inline-block ! important;
+    justify-content: initial;
+    text-align: left !important;
+  }
+
+  .delivery-address p.text.active-text {
+    justify-content: left;
+  }
+
+  body .Polaris-Frame {
+    background: transparent;
+  }
+
+  body .subscription-contract-products {
+    background: #fff;
+    /* box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04); */
+    border-radius: 5px;
+    padding: 35px;
+    margin: 30px 0;
+    box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+    border-radius: 5px;
+  }
+
+  body .subscription-contract-products>.grid>.grid-item button.action-btn.white-btn {
+    background: #fff;
+    width: 100%;
+    max-width: 177px;
+    border-radius: 0;
+    background: #49AAA8;
+    border: 0;
+    box-shadow: unset;
+    font-family: 'Avenir LT Std';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 14px;
+    color: #FFFFFF;
+    padding: 0;
+  }
+
+  body .customer.account.c_account p {
+    justify-content: flex-start;
+  }
+
+  body .customer.account.c_account p span.active {
+    width: auto;
+    min-width: unset;
+    color: #49aaa8;
+  }
+
+  body .subscription-contract-products {
+    margin: 20px;
+  }
+
+  .content-wrapper {
+    padding: 0;
+  }
+
+  body .display-text {
+    padding: 0 20px;
+  }
+
+  body .subscription-contract-products>.grid {
+    grid-template-columns: 3fr 2fr 1fr;
+    -moz-column-gap: 0px;
+    column-gap: 0;
+  }
+
+  body .subscription-contract-products .grid .grid-item:first-child {
+    max-width: 100%;
+    flex: 0 0 1000%;
+  }
+
+  body .subscription-contract-products>.grid>.grid-item>.img {
+    width: 200px;
+    height: 200px;
+    border: 1px solid gray;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 23px;
+  }
+
+  .subscription-contract-products .grid .grid-item:first-child p {
+    font-family: 'Avenir LT Std';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 18px;
+    line-height: 18px;
+    letter-spacing: 0.02em;
+    color: #323232;
+  }
+
+  body .subscription-contract-products>.quantity-wrapper>form>.quantity-field>div span.btn-wrapper button {
+    width: 17px !important;
+    height: 17px !important;
+    min-height: 17px;
+    margin: 0;
+    z-index: 9;
+    margin-bottom: 0 !important;
+  }
+
+  body .subscription-contract-products>.quantity-wrapper>form>.quantity-field>div span.btn-wrapper input.quatity-val {
+    height: 17px;
+    width: 50px;
+  }
+
+  .subscription-contract-products>.quantity-wrapper>form>.quantity-field div>span.label {
+    font-size: 16px;
+    font-weight: 900;
+    margin-right: 10px;
+    color: black;
+    font-family: "Ainslie" !important;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 16px;
+    line-height: 16px;
+    letter-spacing: 0.02em;
+    color: #323232;
+  }
+
+  body .subscription-contract-products>.quantity-wrapper {
+    padding: 0 0 15px;
+  }
+
+  body .subscription-contract-products>.quantity-wrapper>form>.quantity-field div>span.label {
+    padding: 0;
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab {
+    margin: 0;
+    border: none;
+    width: 100%;
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab button {
+    width: 100%;
+    display: unset;
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab button .Polaris-Navigation__ItemWrapper>div {
+    // flex: 0 0 80%;
+    // max-width: 80%;
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab button .Polaris-Navigation__ItemWrapper {
+    display: unset;
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab button .Polaris-Navigation__ItemWrapper a.active_nav {
+    /* display: flex; */
+    display: block;
+    width: 100%;
+    min-width: unset;
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab button .Polaris-Navigation__ItemWrapper>a {
+    width: 100%;
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab button .Polaris-Navigation__ItemWrapper>a .Polaris-Navigation__Icon {
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab button .Polaris-Navigation__ItemWrapper>a .Polaris-Navigation__Icon span.Polaris-Navigation__Text {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 150%;
+    color: #000;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    letter-spacing: 0;
+    margin: 0 !important;
+    text-decoration: none;
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab button .Polaris-Navigation__ItemWrapper>div ul.Polaris-Navigation__List {
+    width: calc(100% - 35px);
+    margin: 0 0 0 auto;
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab button .Polaris-Navigation__ItemWrapper>div ul.Polaris-Navigation__List li.Polaris-Navigation__ListItem {
+    display: block;
+    text-align: left;
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab button .Polaris-Navigation__ItemWrapper>div ul.Polaris-Navigation__List li.Polaris-Navigation__ListItem .Polaris-Navigation__ItemWrapper {
+    width: 100%;
+    display: block;
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab button .Polaris-Navigation__ItemWrapper>div ul.Polaris-Navigation__List li.Polaris-Navigation__ListItem .Polaris-Navigation__ItemWrapper span.Polaris-Navigation__Text {
+    display: block;
+    /* margin: 0; */
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab button .Polaris-Navigation__ItemWrapper>div ul.Polaris-Navigation__List li.Polaris-Navigation__ListItem .Polaris-Navigation__ItemWrapper a {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: #000;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    letter-spacing: 0;
+    margin: 0 !important;
+    text-decoration: none;
+  }
+
+  body .Polaris-Navigation__Icon svg {
+    fill: transparent;
+
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab button .Polaris-Navigation__ItemWrapper a.active {
+    color: #88b363;
+    text-decoration: none;
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab button .Polaris-Navigation__ItemWrapper a.active span.Polaris-Navigation__Text {
+    color: #88B363;
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab button .Polaris-Navigation__ItemWrapper a.active span.Polaris-Navigation__Text.active {
+    color: #88B363;
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab button .Polaris-Navigation__ItemWrapper a.active .Polaris-Navigation__Icon svg path {
+    stroke: #88B363 !important;
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab button {
+    width: 100%;
+    display: unset;
+    text-align: left;
+  }
+
+  body .customer-portal .tabs-holder .Profile_tab button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
   }

@@ -1,2 +1,2 @@
 $('#contract-content').html("<%= escape_javascript render(:partial => 'partials/subscription_contract', locals: { customer: @customer, api_data: @api_data }) %>");
-$('#contract-content').attr("data-contract-id", "<%= @customer.shopify_id %>");
+$('#contract-content').attr("data-contract-id", "<%= @customer&.shopify_id %>");
