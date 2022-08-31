@@ -55,29 +55,29 @@
                   div.heading_label
                     label Address
                     span.red *
-                  input name='address'  value="#{billing_address.address1}" type="text" required="required"/
+                  input name='address'  value="#{billing_address&.address1}" type="text" required="required"/
                 .group
                   .field style = "display: block !important;"
                     div.heading_label
                       label City
                       span.red *
-                    input name='address_city' value="#{billing_address.city}" type="text" required="required"/
+                    input name='address_city' value="#{billing_address&.city}" type="text" required="required"/
                   .field style = "display: block !important;"
                     div.heading_label
                       label Country
                       span.red *
-                    input name='address_country' value="#{billing_address.country}" type="text" required="required"/
+                    input name='address_country' value="#{billing_address&.country}" type="text" required="required"/
                 .group
                   .field style = "display: block !important;"
                     div.heading_label
                       label State
                       span.red *
-                    input name='address_state' value="#{billing_address.province}" type="text" required="required"/
+                    input name='address_state' value="#{billing_address&.province}" type="text" required="required"/
                   .field style = "display: block !important;"
                     div.heading_label
                       label Zip
                       span.red *
-                    input name='address_zip' value="#{billing_address.zip}" type="text" required="required"/
+                    input name='address_zip' value="#{billing_address&.zip}" type="text" required="required"/
                 .btn-wrapper
                   button#update_card_details.update-card type="button" #{@translation.update_payment_popup_update_card.present? ? @translation.update_payment_popup_update_card : 'Update Card'}
 
