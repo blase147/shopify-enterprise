@@ -35,6 +35,22 @@ class CustomerService < GraphqlService
                     province
                     zip
                   }
+                  expiryMonth
+                  expiryYear
+                  expiresSoon
+                  lastDigits
+                  name
+                }
+                ... on CustomerShopPayAgreement {
+                  lastDigits
+                  expiryMonth
+                  expiryYear
+                  expiresSoon
+                  inactive
+                  isRevocable
+                  lastDigits
+                  maskedNumber
+                  name  
                 }
               }
             }
@@ -45,6 +61,10 @@ class CustomerService < GraphqlService
           formatted
           address1
           address2
+          city
+          country
+          province
+          zip
         }
       }
     }

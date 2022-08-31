@@ -15,8 +15,8 @@
           .grid-item
           - if @setting.customer_allowed?('reactive_subscription')
             .grid-item
-              = link_to action_subscription_contract_path(:resume, subscription.id, 'stripe_subscription=true'), class: 'btn-link', method: :post, remote: true do
-                button.blue-btn.action-btn type='submit' RE-ACTIVATE
+              = link_to action_subscription_contract_path(:resume, subscription.id, 'stripe_subscription=true'), class: 'btn_inside', method: :post, remote: true do
+                button.btn-yellow.action-btn.modal_btn type='submit' RE-ACTIVATE
         .quantity-wrapper
           form
             .quantity-field
@@ -50,8 +50,8 @@
             .grid-item
             - if @setting.customer_allowed?('reactive_subscription')
               .grid-item
-                = link_to action_subscription_contract_path(:resume, subscription.node.id[/\d+/]), class: 'btn-link', method: :post, remote: true do
-                  button.blue-btn.action-btn type='submit' RE-ACTIVATE
+                = link_to action_subscription_contract_path(:resume, subscription.node.id[/\d+/]), class: 'btn_inside', method: :post, remote: true do
+                  button.btn-yellow.action-btn.modal_btn type='submit' RE-ACTIVATE
           .quantity-wrapper
             form
               .quantity-field
@@ -88,8 +88,8 @@
           .grid-item
           - if @setting.customer_allowed?('reactive_subscription')
             .grid-item
-              = link_to action_subscription_contract_path(:add_product, subscription.node.id[/\d+/], "quantity=#{line_item.quantity}&line_item_id=#{line_item.id}&variant_id=#{line_item.variant_id[/\d+/]}"), class: 'resume-btn', remote: true, method: :post do
-                button.blue-btn.action-btn #{@translation.cancelled_tab_reactivate_btn.present? ? @translation.cancelled_tab_reactivate_btn : 'RE-ACTIVATE'}
+              = link_to action_subscription_contract_path(:add_product, subscription.node.id[/\d+/], "quantity=#{line_item.quantity}&line_item_id=#{line_item.id}&variant_id=#{line_item.variant_id[/\d+/]}"), class: 'resume-btn btn_inside', remote: true, method: :post do
+                button.btn-yellow.action-btn.modal_btn #{@translation.cancelled_tab_reactivate_btn.present? ? @translation.cancelled_tab_reactivate_btn : 'RE-ACTIVATE'}
         .quantity-wrapper
           form
             .quantity-field
@@ -108,6 +108,6 @@
             p #{@translation.cancelled_tab_quantity.present? ? @translation.cancelled_tab_quantity : 'quantity'}
             p
               = line_item.quantity
-- elsif (params[:status].present? && params[:status] == 'cancelled') || !params[:status].present?
+- elsif ((params[:status].present? && params[:status] == 'cancelled'))
   div.notification-banner
     p.Polaris-Heading No cancelled subscription have been found for your account

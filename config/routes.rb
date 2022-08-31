@@ -114,6 +114,7 @@ Rails.application.routes.draw do
         get :update_delivery_day
         post :portal_skip_schedule
         get :skip_next_billing_date
+        get :show_order
       end
     end
 

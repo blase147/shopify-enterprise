@@ -56,7 +56,7 @@
           </div>
         <% end %>
         <div id="edit-subscription-modal" title="Basic dialog" class="modal">
-          <div class="header"><div><h2>Edit Subscription</h2></div><div aria-hidden="true" class="close-modal" data-action="close" tabindex="-1">
+          <div class="header"><div><h2>Edit Subscription</h2></div><div aria-hidden="true" class="close" data-dismiss="modal"  data-action="close" tabindex="-1">
             <!-- <svg fill="none" height="20" viewBox="0 0 18 20" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z" fill="#DDDDDD"></path></svg> -->
           </div></div>
 
@@ -73,7 +73,7 @@
         </div>
 
         <div id="skip-delivery-date-modal" title="Basic dialog" class="modal">
-          <div class="header"><div><h2>Skip Billing Date</h2></div><div aria-hidden="true" class="close-modal" data-action="close" tabindex="-1">
+          <div class="header"><div><h2>Skip Billing Date</h2></div><div aria-hidden="true" class="close" data-dismiss="modal"  data-action="close" tabindex="-1">
             <!-- <svg fill="none" height="20" viewBox="0 0 18 20" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z" fill="#DDDDDD"></path></svg> -->
           </div></div>
 
@@ -209,11 +209,11 @@
                 
                   <li class="Polaris-Navigation__ListItem">
                     <div class="Polaris-Navigation__ItemWrapper cancel-subscription">
-                      <%= link_to "/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}&status=cancelled", class: 'Polaris-Navigation__Item', data: {'polaris-unstyled': true}, tab_index: '0', aria: {disabled: false} do %>
-                        <span class="Polaris-Navigation__Text">
+                      <span class="Polaris-Navigation__Text">
+                        <%= link_to "/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}&status=cancelled", class: 'Polaris-Navigation__Item', data: {'polaris-unstyled': true}, tab_index: '0', aria: {disabled: false} do %>
                           <span class="<%= params[:status] == "cancelled" ? 'sub-active' : ''%>"><%= @translation.sidebar_cancelled.present? ? @translation.sidebar_cancelled : 'Cancelled' %></span>
-                        </span>
                         <% end %>
+                      </span>
                       </span>
                     </div>
                   </li>
@@ -257,7 +257,14 @@
             </svg>
             Billing
           </button>
-          <button class="Profile_links" onclick="Profile(event, 'Support')">
+          <button class="Profile_links" onclick="Profile(event, 'OrderHistory')">
+            <svg fill="none" height="19" viewBox="0 0 16 19" width="16" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9.2917 1.24365H2.88608C2.46136 1.24365 2.05403 1.41237 1.75371 1.71269C1.45339 2.01302 1.28467 2.42034 1.28467 2.84506V15.6563C1.28467 16.081 1.45339 16.4884 1.75371 16.7887C2.05403 17.089 2.46136 17.2577 2.88608 17.2577H12.4945C12.9192 17.2577 13.3266 17.089 13.6269 16.7887C13.9272 16.4884 14.0959 16.081 14.0959 15.6563V6.04787L9.2917 1.24365Z" stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+              <path d="M9.29199 1.24341V6.04763H14.0962" stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            </svg>
+            Order History
+          </button>
+          <button class="Profile_links hide" onclick="Profile(event, 'Support')">
             <svg width="25" height="35" viewBox="0 0 25 35" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12.8167 21.1691C18.0809 21.1691 22.3483 16.9017 22.3483 11.6375C22.3483 6.37338 18.0809 2.10596 12.8167 2.10596C7.55258 2.10596 3.28516 6.37338 3.28516 11.6375C3.28516 16.9017 7.55258 21.1691 12.8167 21.1691Z" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
               <path d="M7.65541 20.7846L6.00781 33.1893L12.8161 29.1043L19.6243 33.1893L17.9767 20.771" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
@@ -791,7 +798,10 @@
             <%= render "partials/subscription.html.slim" %>
           </div>
         
-        
+          <div id="OrderHistory" class="Profile_links_data" style="display: none">
+            <%= render "app_proxy/orders/order_index" %> 
+          </div>
+          <div id="ShowOrder"></div>
           <div id="Support" class="Profile_links_data" style="display: none">
             <div class="support-section">
               <h1>How can we help?</h1>
@@ -882,65 +892,6 @@
     </div>
   </div>
 <script type="text/javascript">
-  $(document).on('click', '.btn-wrapper button', function(e) {
-    $(this).html('Processing <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>');
-  });
-
-  $('#cancel-sub').on('click', function(e){
-    e.preventDefault();
-    id = $(this).data('id');
-    line_id = $(this).data('line-id');
-    line_name = $(this).data('line-name');
-    variant_id = $(this).data('variant-id');
-    url = "/a/chargezen_production/subscriptions/"+id+"/remove_line?line_id="+line_id+"&lines_count=1&quantity=1&variant_id="+variant_id+"&action_by=customer";
-    $(this).text('Updating..');
-    $.ajax({
-      url: url,
-      type: 'POST',
-      contentType: 'application/json',
-      success: function(response) {
-        Swal.fire({
-          icon: 'success',
-          title: "Success! Reloading Page",
-          showConfirmButton: false
-        })
-        location.reload();
-      },
-      error: function(response) {
-
-      }
-    });
-  });
-
-  $('#pause-resume-sub').on('click', function(e){
-    e.preventDefault();
-    action = $(this).data('path');
-    contract_id = $("#contract-content").data("contract-id");
-    var myDate=new Date();
-    myDate.setDate(myDate.getDate()+1);
-    // format a date
-    var date = myDate.getDate() + '/' + ("0" + (myDate.getMonth() + 1)).slice(-2) + '/' + myDate.getFullYear();
-    url = "/a/chargezen_production/subscriptions/" + contract_id + action + "?billing_date=" + date+"&action_by=customer"
-    $(this).text('Updating..');
-    $.ajax({
-      url: url,
-      type: 'POST',
-      contentType: 'application/json',
-      success: function(response) {
-        Swal.fire({
-          icon: 'success',
-          title: "Success! Reloading Page",
-          showConfirmButton: false
-        })
-        location.reload();
-      },
-      error: function(response) {
-
-      }
-    });
-  });
-
-
 
   $('.skip-date').on('click', function(e){
     $(this).html("SKIP <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>");
@@ -1179,5 +1130,6 @@
         $('.view-input').removeClass('disabled');
         $(this).hide();
         $('#save_information').show();
-    });
+  });
+
 </script>
