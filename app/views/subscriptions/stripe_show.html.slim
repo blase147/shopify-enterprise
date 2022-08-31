@@ -94,7 +94,7 @@
               - product = ShopifyAPI::Product.find(@customer.import_data['product_id'])
               = render 'app_proxy/dashboard/stripe_edit_subscription_modal', subscription: @customer, product: product, setting: current_shop.setting
               = render 'app_proxy/dashboard/stripe_swap_subscription_modal', subscription: @customer, product: product
-              / = render 'app_proxy/dashboard/upgrade_subscription_modal', subscription: @subscription, line_item: line.node, selling_plan_id: line.node.selling_plan_id, product: product
+              = render 'app_proxy/dashboard/upgrade_subscription_modal', subscription: @subscription, line_item: line.node, selling_plan_id: line.node.selling_plan_id, product: product
               = render 'app_proxy/dashboard/stripe_cancel_subscription_modal', subscription: @customer, product: product
 
       .Polaris-Layout__Section.Polaris-Layout__Section--secondary

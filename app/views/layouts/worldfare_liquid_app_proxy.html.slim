@@ -6,6 +6,9 @@ html
     = csp_meta_tag
   = stylesheet_link_tag 'embedded_app'
   = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.0/css/font-awesome.css'
+  = stylesheet_link_tag 'app_proxy', media: 'all', 'data-turbolinks-track': 'reload'
+  link[rel="stylesheet" href="https://unpkg.com/@shopify/polaris@5.8.4/dist/styles.css"]
+  = javascript_pack_tag 'app_proxy', 'data-turbolinks-track': 'reload'
 
   div.chargezen-proxy
     - unless @skip_auth

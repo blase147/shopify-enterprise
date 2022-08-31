@@ -74,7 +74,7 @@ module AppProxyHelper
   end
 
   def meals_on_plan(subscription_name)
-    subscription_name.split[0].to_i
+    subscription_name&.split[0]&.to_i rescue nil
   end
 
   def options_for_delivery_day
@@ -84,12 +84,12 @@ module AppProxyHelper
   end
 
   def hide_display_selection
-    @api_data['orders']['edges'].count > 1 ? '' : 'hideJKKJ'
+    @api_data['orders']['edges'].count > 1 ? '' : 'hideJKKJ' rescue nil
   end
 
   def plan_title
-    plan_str = paused_or_cancel_plan? ? @customer.status.humanize : 'Current'
-    "Your #{plan_str} Plan: #{@customer.subscription}"
+    plan_str = paused_or_cancel_plan? ? @customer&.status.humanize : 'Current'
+    "Your #{plan_str} Plan: #{@customer&.subscription}"
   end
 
   def resume_btn
@@ -103,6 +103,6 @@ module AppProxyHelper
   end
 
   def paused_or_cancel_plan?
-    @customer.cancelled? || @customer.paused?
+    @customer&.cancelled? || @customer&.paused?
   end
 end

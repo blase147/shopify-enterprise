@@ -65,7 +65,7 @@ nav.Polaris-Navigation.account
                       rect height="17" transform=("translate(0.753906 0.556641)") width="21" /
             span.Polaris-Navigation__Text Track Order
 
-      - if @setting.show_delivery_schedule.present?
+      - if @setting&.show_delivery_schedule.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
             a.Polaris-Navigation__Item class=active_nav('dashboard', 'upcoming') href="/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
@@ -81,7 +81,7 @@ nav.Polaris-Navigation.account
 
 
               span.Polaris-Navigation__Text #{@translation.sidebar_delivery_schedule.present? ? @translation.sidebar_delivery_schedule : 'Delivery Schedule'}
-      - if @setting.show_order_history.present?
+      - if @setting&.show_order_history.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
             a.Polaris-Navigation__Item class=(active_nav('orders', 'index') || active_nav('orders', 'show')) href="/a/chargezen_production/orders?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
@@ -104,7 +104,7 @@ nav.Polaris-Navigation.account
       /             path d=("M9.04688 1.55078V6.355H13.8511") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
 
       /       span.Polaris-Navigation__Text Order history
-      - if @setting.show_address.present?
+      - if @setting&.show_address.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
             a.Polaris-Navigation__Item class=active_nav('dashboard', 'addresses') href="/a/chargezen_production/dashboard/addresses?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
@@ -114,7 +114,7 @@ nav.Polaris-Navigation.account
 
               span.Polaris-Navigation__Text #{@translation.sidebar_addresses.present? ? @translation.sidebar_addresses : 'Addresses'}
 
-      - if @setting.show_billing.present?
+      - if @setting&.show_billing.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
             a.Polaris-Navigation__Item class=active_nav('dashboard', 'payment_methods') href="/a/chargezen_production/dashboard/payment_methods?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
@@ -129,7 +129,7 @@ nav.Polaris-Navigation.account
                     path d=("M13.8127 4.10886C13.5977 3.93886 13.2837 3.97186 13.1097 4.18686L11.5377 6.15286L10.9157 5.22286C10.7607 4.99286 10.4497 4.93186 10.2227 5.08386C9.99365 5.23686 9.93065 5.54786 10.0837 5.77686L11.0837 7.27686C11.1727 7.40986 11.3187 7.49186 11.4787 7.49986C11.4857 7.49986 11.4937 7.49986 11.4997 7.49986C11.6507 7.49986 11.7947 7.43186 11.8907 7.31186L13.8907 4.81186C14.0627 4.59586 14.0287 4.28186 13.8127 4.10886Z") fill="#4D506A" /
 
               span.Polaris-Navigation__Text #{@translation.sidebar_billing.present? ? @translation.sidebar_billing : 'Billing'}
-      - if @setting.show_account.present?
+      - if @setting&.show_account.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
             a.Polaris-Navigation__Item class=active_nav('dashboard', 'settings') href="/a/chargezen_production/dashboard/settings?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"

@@ -45,7 +45,7 @@
               - if @setting.customer_allowed?('frequency')
                 button.delivery-schedule.white-btn.action-btn data-toggle="modal" data-target="#delayOrderModal-#{subscription.id}" #{@translation.home_tab_delay_next_order_btn.present? ? @translation.home_tab_delay_next_order_btn : 'DELAY NEXT ORDER'}
         / = render 'delay_order_modal', subscription: subscription.node, next_billing_date: next_billing_date
-        = render 'stripe_edit_subscription_modal', subscription: subscription, product: product, setting: @setting
+        = render 'app_proxy/dashboard/stripe_edit_subscription_modal', subscription: subscription, product: product, setting: @setting
         - if @setting.customer_allowed?('swap_product')
           = render 'stripe_swap_subscription_modal', subscription: subscription, product: product
           / = render 'swap_subscription_modal', subscription: subscription, line_item: edge.node
