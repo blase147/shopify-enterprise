@@ -14,7 +14,7 @@
           .grid-item
           - if @setting.customer_allowed?('reactive_subscription')
             .grid-item
-              = link_to action_subscription_contract_path(:resume, subscription.id, 'stripe_subscription=true'), class: 'btn_inside', method: :post, remote: true do
+              = link_to action_subscription_contract_path(:resume, subscription.id, 'stripe_subscription=true'), class: 'btn_inside reactivate_btn', method: :post, remote: true do
                 button.btn-yellow.action-btn.modal_btn type='submit' RE-ACTIVATE
         .quantity-wrapper
           form
@@ -49,7 +49,7 @@
             .grid-item
             - if @setting.customer_allowed?('reactive_subscription')
               .grid-item
-                = link_to action_subscription_contract_path(:resume, subscription.node.id[/\d+/]), class: 'btn_inside', method: :post, remote: true do
+                = link_to action_subscription_contract_path(:resume, subscription.node.id[/\d+/]), class: 'btn_inside reactivate_btn', method: :post, remote: true do
                   button.btn-yellow.action-btn.modal_btn type='submit' RE-ACTIVATE
           .quantity-wrapper
             form

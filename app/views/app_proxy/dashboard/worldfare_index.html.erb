@@ -264,3 +264,13 @@
     $('.customer-initial').html(name.substring(0, 2).toUpperCase());
   });
 </script>
+
+<script>
+
+$(function() {
+  var loc = window.location.pathname.split('?')[0];
+  if("/a/chargezen_production/dashboard"=== loc) {
+    $('body').addClass('customer_service_page');
+  }
+}); 
+</script>

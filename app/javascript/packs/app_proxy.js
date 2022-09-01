@@ -133,6 +133,11 @@ $(document).ready(function () {
     $(this).parents('.quantity-wrapper').next('.slide-down').slideToggle();
 
   });
+  $(document).on('click', '#collapsible_nav', function () {
+    $(this).toggleClass('active');
+    $('#nav_tab').slideToggle();
+
+  });
 
   $(document).on('click', 'div#AppFrameNav .sm-nav-trigger', function () {
     $(this).parents('#AppFrameNav').toggleClass('active');
