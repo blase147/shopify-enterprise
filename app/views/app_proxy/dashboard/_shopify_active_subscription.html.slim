@@ -13,12 +13,13 @@
         .grid-item
           .img.account-img
             img src=product.images.first&.src alt=""
-          p.text.active-text
-            = product.title
-          p.text.active-text
-            = "#{number_to_currency edge.node.current_price.amount} / #{billing_policy.interval_count} #{billing_policy.interval}"
-          p.text.active-text
-            = edge.node.selling_plan_name
+          .main_active_text
+            p.text.active-text
+              = product.title
+            p.text.active-text.currency_text
+              = "#{number_to_currency edge.node.current_price.amount} / #{billing_policy.interval_count} #{billing_policy.interval}"
+            p.text.active-text
+              = edge.node.selling_plan_name
         .grid-item
           h4 NEXT CARD CHARGE
           p.text.right.active-text
@@ -28,24 +29,25 @@
         .grid-item
           a.btn_inside href="/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}&overview=true&local_id=#{local_id}"
             button.overview-buton.btn-yellow.action-btn.modal_btn   Choose Meals
-          - (@setting.active_subscription_btn_seq || ['update_choices', 'delivery_schedule', 'swap_subscription', 'delay_next_order', 'edit_subscription']).each do |btn|
-            - case btn
-              - when 'update_choices'
-                - if !(@current_shop.shopify_domain == "bagamour.myshopify.com" && ShopifyAPI::Order.find(:last, params: {customer_id: params[:customer_id]}).fulfillment_status == "fulfilled") && box_campaign && box_campaign_display(box_campaign, selling_plan_id)
-                  = link_to "/a/chargezen_production/dashboard/build_a_box?&build_a_box_campaign_id=#{box_campaign.id}&customer_id=#{params[:customer_id]}&subscription_id=#{subscription.node.id[/\d+/]}&active_subscriptions_count=#{@active_subscriptions.count}&selling_plan_id=#{selling_plan_id[/\d+/]}" do
-                    button.btn-yellow.action-btn.modal_btn UPDATE CHOICES
-              - when 'delivery_schedule'
-                - if @setting.customer_allowed?('navigation_delivery')
-                  = link_to "/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}&subscription_id=#{subscription.node.id}&line_id=#{edge.node.id}&active_subscriptions_count=#{@active_subscriptions.count}", class: "btn_inside hide" do
-                    button.btn-yellow.action-btn.modal_btn #{@translation.home_tab_delivery_schedule_btn.present? ? @translation.home_tab_delivery_schedule_btn : 'DELIVERY SCHEDULE'}
-              - when 'swap_subscription'
-                - if @setting.customer_allowed?('swap_product')
-                  button.btn-yellow.action-btn.modal_btn type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#swap-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" SWAP SUBSCRIPTION
-              - when 'edit_subscription'
-                button.edit-subscription.btn-yellow.action-btn.modal_btn data-toggle="modal" data-target="#editSubscriptionModal-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" #{@translation.home_tab_edit_subscription_btn.present? ? @translation.home_tab_edit_subscription_btn : 'Edit Subscription'}
-              - when 'delay_next_order'
-                - if @setting.customer_allowed?('frequency')
-                  button.delivery-schedule.btn-yellow.action-btn.modal_btn.hide data-toggle="modal" data-target="#delayOrderModal-#{subscription.node.id[/\d+/]}" #{@translation.home_tab_delay_next_order_btn.present? ? @translation.home_tab_delay_next_order_btn : 'DELAY NEXT ORDER'}
+          div.btns_group
+            - (@setting.active_subscription_btn_seq || ['update_choices', 'delivery_schedule', 'swap_subscription', 'delay_next_order', 'edit_subscription']).each do |btn|
+              - case btn
+                - when 'update_choices'
+                  - if !(@current_shop.shopify_domain == "bagamour.myshopify.com" && ShopifyAPI::Order.find(:last, params: {customer_id: params[:customer_id]}).fulfillment_status == "fulfilled") && box_campaign && box_campaign_display(box_campaign, selling_plan_id)
+                    = link_to "/a/chargezen_production/dashboard/build_a_box?&build_a_box_campaign_id=#{box_campaign.id}&customer_id=#{params[:customer_id]}&subscription_id=#{subscription.node.id[/\d+/]}&active_subscriptions_count=#{@active_subscriptions.count}&selling_plan_id=#{selling_plan_id[/\d+/]}" do
+                      button.btn-yellow.action-btn.modal_btn UPDATE CHOICES
+                - when 'delivery_schedule'
+                  - if @setting.customer_allowed?('navigation_delivery')
+                    = link_to "/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}&subscription_id=#{subscription.node.id}&line_id=#{edge.node.id}&active_subscriptions_count=#{@active_subscriptions.count}", class: "btn_inside hide" do
+                      button.btn-yellow.action-btn.modal_btn #{@translation.home_tab_delivery_schedule_btn.present? ? @translation.home_tab_delivery_schedule_btn : 'DELIVERY SCHEDULE'}
+                - when 'swap_subscription'
+                  - if @setting.customer_allowed?('swap_product')
+                    button.btn-yellow.action-btn.modal_btn type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#swap-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" SWAP SUBSCRIPTION
+                - when 'edit_subscription'
+                  button.btn-yellow.action-btn.modal_btn data-toggle="modal" data-target="#editSubscriptionModal-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" #{@translation.home_tab_edit_subscription_btn.present? ? @translation.home_tab_edit_subscription_btn : 'Edit Subscription'}
+                - when 'delay_next_order'
+                  - if @setting.customer_allowed?('frequency')
+                    button.delivery-schedule.btn-yellow.action-btn.modal_btn.hide data-toggle="modal" data-target="#delayOrderModal-#{subscription.node.id[/\d+/]}" #{@translation.home_tab_delay_next_order_btn.present? ? @translation.home_tab_delay_next_order_btn : 'DELAY NEXT ORDER'}
           - @customer = CustomerSubscriptionContract.find(local_id)
           h4 Change Delivery Day:
           = select_tag "delivery_day", options_for_select(options_for_delivery_day, :selected=>@customer&.delivery_day), {prompt: "Select Delivery Day", :class =>"select_combobox",:onchange=>"reset_form(this.id,'page_type_msg');", data: {day: @customer&.delivery_day} }

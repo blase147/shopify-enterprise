@@ -163,7 +163,11 @@
     </div>
 
     <div class="flex-holder">
-      <div class="tabs-holder">
+      <div class="wrap-collabsible">
+        <input id="collapsible_nav" class="toggle collapse_checkbox" type="checkbox">
+        <label for="collapsible_nav" id="nav_label" class="lbl-toggle placed" id="nav_label">Open Account Menu</label>
+        <div class="collapsible-contentsss">
+      <div class="tabs-holder content-inner" id="nav_tab">
         <div class="Profile_tab">
           <%# <button class="Profile_links" onclick="Profile(event, 'Overview')">
             <svg width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -273,6 +277,7 @@
           </button>
         </div>
       </div>
+      </div></div>
       <div class="tab-content-holder">
         <div id="Overview" class="Profile_links_data <%= params[:overview]=="true" ? "": "hidden" %>" >
           
@@ -1132,4 +1137,15 @@
         $('#save_information').show();
   });
 
+  $("#nav_label").on("click",function(){
+    if($(this).hasClass("closed")){
+      $(this).html("Open account menu");
+      $(this).removeClass("closed")
+      $(this).addClass("open")
+    }else{
+      $(this).html("Close account menu");
+      $(this).removeClass("open")
+      $(this).addClass("closed")
+    }
+  })
 </script>

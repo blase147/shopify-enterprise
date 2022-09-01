@@ -1910,13 +1910,18 @@
   }
 
   .subscription-contract-products .grid .grid-item:first-child p {
-    font-family: 'Avenir LT Std';
-    font-style: normal;
-    font-weight: 900;
-    font-size: 18px;
-    line-height: 18px;
-    letter-spacing: 0.02em;
-    color: #323232;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 32px;
+  }
+
+  .subscription-contract-products .grid .grid-item:first-child p.currency_text {
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ACB5BD;
   }
 
   body .subscription-contract-products>.quantity-wrapper>form>.quantity-field>div span.btn-wrapper button {
@@ -2085,9 +2090,99 @@
   }
 
 
+  .customer-portal .tabs-holder {
+    width: 100%;
+    position: relative;
+    top: -240px;
+  }
+
+  .customer_service_page .customer-portal .tabs-holder {
+    width: 100%;
+  }
+
+  .customer_service_page .subscription-contract-products>.quantity-wrapper>form>.quantity-field {
+
+    justify-content: flex-end;
+  }
+
+  .customer_service_page .subscription-contract-products {
+    position: relative;
+  }
+
+  .customer_service_page .subscription-contract-products .grid-item a.reactivate_btn {
+    position: absolute;
+    right: 21px;
+  }
+
+  .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:last-child a.reactivate_btn {
+    margin-top: 0;
+    position: absolute;
+    top: -200px !important;
+    right: 0px;
+  }
+
+  .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item p.text.cancel-text {
+    text-align: left;
+
+  }
+
+  .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item p.text.cancel-text:last-child {
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ACB5BD;
+  }
+
+  .customer_service_page .subscription-contract-products>.grid>.grid-item>p.text {
+    font-size: 20px;
+    margin-bottom: 13px;
+  }
+
+
+  @media (max-width:991px) {
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:last-child a.reactivate_btn {
+      margin-top: 0;
+      position: absolute;
+      top: 140px ! important;
+      right: 30px;
+    }
+  }
+
+  @media (min-width:767px) {
+    div#nav_tab {
+      display: block !important;
+    }
+  }
+
+
   @media (max-width:767px) {
+    div#nav_tab {
+      display: none;
+    }
+
     body .subscription-contract-products {
       margin: 0;
+    }
+
+    .customer_service_page p.text.right.active-text {
+      font-size: 15px !important;
+    }
+
+    .customer_service_page .subscription-contract-products>.grid>.grid-item button.action-btn {
+      width: 100%;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:last-child a.reactivate_btn {
+      margin-top: 0;
+      position: absolute;
+      top: -200px !important;
+      right: 0px;
+    }
+
+    .customer-portal .flex-holder .wrap-collabsible label#nav_label {
+      display: block;
     }
 
     .subscription-contract-products .grid {
@@ -2138,4 +2233,389 @@
       justify-content: space-between;
       flex-wrap: wrap;
     }
+
+    .customer_service_page .customer-details {
+      padding: 20px 0 !important;
+      margin-bottom: 0 ! important;
+    }
+
+    .customer_service_page .customer-portal {
+      max-width: 100%;
+      padding: 0;
+      padding-right: 0;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .wrap-collabsible {
+      background-color: #f6f6f6;
+      margin-top: 0;
+      position: relative;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .wrap-collabsible label#nav_label::before {
+      position: absolute;
+      right: 10px;
+      top: 9px;
+      color: #808080;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid currentColor;
+      border-left: 5px solid transparent;
+      border-right: 5px solid currentColor;
+      transform: rotate(45deg);
+    }
+
+    .customer_service_page .customer-portal .flex-holder .wrap-collabsible label#nav_label {
+      font-weight: bold;
+      font-size: 12px ! important;
+      line-height: 12px ! important;
+      letter-spacing: 2px ! important;
+      text-transform: uppercase;
+      color: #808080 ! important;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .wrap-collabsible .collapsible-content {
+      background-color: #fff;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .wrap-collabsible .collapsible-content .Profile_tab {
+      margin-bottom: 0;
+      display: block;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products {
+      max-width: 100%;
+      margin-top: 14px;
+      /* box-shadow: inherit; */
+      padding: 21px 15px;
+      margin-bottom: 10px;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item {
+      max-width: 50%;
+      flex: 0 0 50%;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid {
+      display: flex ! important;
+      flex-wrap: wrap;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .grid-item:first-child .img.account-img {
+      width: 100%;
+      max-width: 80px;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .grid-item:first-child .main_active_text {
+
+      width: 100%;
+      max-width: 330px;
+      flex-wrap: wrap;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .grid-item:first-child .main_active_text p:first-child {
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #ACB5BD;
+      display: block;
+      min-height: inherit;
+      margin-bottom: 0;
+
+      height: inherit;
+      margin-bottom: 8px;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .grid-item:first-child .main_active_text p:nth-child(2) {
+      font-weight: bold;
+      font-size: 17px;
+      line-height: 20px;
+
+      display: flex;
+
+      margin-bottom: 8px;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .grid-item:first-child .main_active_text p:last-child {
+      font-weight: bold;
+      font-size: 17px;
+      line-height: 20px;
+
+      display: flex;
+
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:nth-child(2) h4 {
+      text-align: end;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:nth-child(2) p.text.right.active-text {
+      justify-content: flex-end ! important;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:nth-child(2) p.text.right.active-text:last-child {
+      margin-bottom: 0;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:last-child {
+      flex: 0 0 100%;
+      max-width: 100%;
+      margin-top: 35px;
+      display: flex;
+      flex-direction: column-reverse;
+      position: relative;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:last-child h4 {
+      position: absolute;
+      top: -31px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-size: 12px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:last-child select {
+      box-shadow: inherit;
+      border: 1px solid #DDE2E5;
+      border-radius: 6px;
+      outline: none;
+      background-color: #fff;
+      width: 100%;
+      padding: 10px 34px 10px 15px;
+      border-color: rgba(73, 80, 87, 0.3);
+      font-size: 12px;
+      text-transform: none;
+      letter-spacing: normal;
+      cursor: pointer;
+      transition: opacity .33s ease;
+      opacity: 0.5;
+      appearance: auto;
+      margin-bottom: 20px;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:last-child button.edit-subscription.btn-yellow.action-btn.modal_btn {
+      width: 50%;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:last-child button.btn-yellow.action-btn.modal_btn:nth-child(3) {
+      width: 50%;
+      display: inline-block;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:last-child a.btn_inside {
+      margin-top: 0;
+    }
+
+    .customer_service_page .subscription-contract-products>.quantity-wrapper {
+      padding: 15px 0 15px;
+      border-bottom: 1px solid #c4cdd5;
+      border-top: 1px solid #c4cdd5;
+      justify-content: flex-end;
+      display: flex;
+    }
+
+    .customer_service_page .subscription-contract-products .slide-down .item p:last-child {
+      display: flex;
+      justify-content: flex-end;
+      text-align: right ! important;
+    }
+
+    .customer_service_page .subscription-contract-products .slide-down {
+      margin-bottom: 30px;
+    }
+
+    .customer_service_page .subscription-contract-products .delivery-address {
+      margin-top: 25px !important;
+    }
+
+    .customer_service_page .subscription-contract-products .delivery-address p.text.active-text {
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 16px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #ACB5BD;
+    }
+
+    .customer_service_page .Polaris-Frame {
+      min-height: inherit !important;
+    }
+
+    .customer_service_page .customer-portal .tab-content-holder .account-holder {
+
+      background-color: #fff;
+      border: none;
+      padding-left: 21px;
+      padding-right: 21px;
+      padding-top: 10px;
+    }
+
+    .customer_service_page .customer-portal .tab-content-holder .account-holder h1.t-align-left {
+      margin-bottom: 0 ! important;
+      font-size: 25px;
+    }
+
+    .customer_service_page .customer-portal .tab-content-holder .account-holder table.info-table {
+      width: 100%;
+    }
+
+    .customer_service_page .customer-portal .tab-content-holder .account-holder table.info-table td input {
+      border: 1px solid #ddd;
+      height: 46px;
+      padding: 0 10px;
+    }
+
+    .customer_service_page .customer-portal .tab-content-holder .account-holder table.info-table td {
+      padding-left: 0 ! important;
+    }
+
+    .customer_service_page .customer-portal .tab-content-holder .flex.left-button {
+      /* margin-top: 0; */
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+
+    .customer_service_page .customer-portal .tab-content-holder .flex.left-button button#edit_information {
+      margin-top: 0 ! important;
+      margin-bottom: 0px ! important;
+      display: flex;
+      justify-content: center;
+    }
+
+    .customer_service_page.billing-details-tile {
+      box-shadow: inherit ! important;
+      padding-left: 0px ! important;
+      padding-right: 0px ! important;
+      padding-top: 10px ! important;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:last-child button.edit-subscription.btn-yellow.action-btn.modal_btn {
+      width: 50%;
+      font-size: 10px ! important;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:last-child button.btn-yellow.action-btn.modal_btn:nth-child(3) {
+      font-size: 10px ! important;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .billing-details-tile,
+    .customer_service_page .order-history {
+      padding-top: 0px;
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-bottom: 0;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper h2.Polaris-DisplayText {
+      padding-left: 10px;
+      font-size: 19px;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .billing-details-tile .card-details {
+      margin-top: 0;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .billing-details-tile .address-information {
+      margin-top: 0;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .billing-details-tile .address-information .header {
+      padding-bottom: 0;
+    }
+
+    .customer_service_page .order-history .grid {
+      margin: 0;
+    }
+
+    .customer_service_page .order-history {
+      margin-top: 10px;
+    }
+
+    .customer_service_page h2 {
+      font-size: 25px;
+    }
+
+    .customer_service_page .display-text {
+      padding: 0 00px;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .display-text p {
+      justify-content: flex-start;
+      font-weight: bold;
+      font-size: 15px;
+      line-height: 25px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .display-text p span.active {
+      margin-left: -17px;
+      margin-right: -17px;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .display-text p {
+      text-align: center;
+      justify-content: center;
+      width: inherit;
+      min-width: inherit;
+      max-width: inherit;
+    }
+
+    .customer_service_page .customer-portal .tab-content-holder .flex.left-button {
+
+      width: 100%;
+    }
+
+    .customer_service_page .customer-portal .tab-content-holder .flex.left-button button#edit_information {
+      margin-top: 0 !important;
+      margin-bottom: 0px !important;
+      display: flex;
+      justify-content: center;
+      width: 92%;
+    }
+
+    .customer_service_page .customer-portal .tabs-holder .Profile_tab {
+      background-color: #fff;
+      margin-bottom: 0 ! important;
+      padding-left: 7px;
+      padding-right: 7px;
+    }
+
+    .customer_service_page .customer-portal .flex-holder .content-wrapper {
+      padding-top: 10px;
+    }
+
+    div#nav_tab {
+      display: none;
+    }
+
+    .hide_nav {
+      display: none;
+    }
+  }
+
+
+
+  label#nav_label {
+    display: none;
+  }
+
+  .Polaris-Page__Content .Polaris-Card {
+    overflow-x: scroll;
+  }
+
+  .subscription-contract-products>.grid>.grid-item button.action-btn {
+    width: 100%;
   }
