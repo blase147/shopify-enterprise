@@ -311,7 +311,7 @@ class AppProxy::DashboardController < AppProxyController
 
   def load_subscriptions(customer_id=nil)
     shopify_customer_id="gid://shopify/Customer/#{customer_id}" if customer_id.present?
-    shop = CustomerSubscriptionContract.find_by_shopify_customer_id("#{customer_id}").shop
+    shop = CustomerSubscriptionContract.find_by_shopify_customer_id("#{customer_id}")&.shop
     shop&.connect
     @setting = shop&.setting
     @data = CustomerSubscriptionContractsService.new(shopify_customer_id).run
