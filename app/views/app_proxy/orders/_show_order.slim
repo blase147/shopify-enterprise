@@ -9,21 +9,19 @@ main#AppFrameMain.Polaris-Frame__Main data-has-global-ribbon="false"
                 - if @theme&.downcase === "worldfare_"
                     a.Polaris-Breadcrumbs__Breadcrumb[data-polaris-unstyled="true" href=href="/a/chargezen_production/orders?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" ]
                         span.Polaris-Breadcrumbs__ContentWrapper
-                            span.Polaris-Breadcrumbs__Icon
                             span.Polaris-Icon
-                                svg.Polaris-Icon__Svg[viewbox="0 0 20 20" focusable="false" aria-hidden="true"]
-                                path[d="M12 16a.997.997 0 0 1-.707-.293l-5-5a.999.999 0 0 1 0-1.414l5-5a.999.999 0 1 1 1.414 1.414L8.414 10l4.293 4.293A.999.999 0 0 1 12 16z"]
-                            span.Polaris-Breadcrumbs__Content
-                            | All orders
+                                svg style="margin-bottom: 9px;height: 13px;" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 376.83"
+                                    path fill-rule="nonzero" d="M156.88 372.7a12.026 12.026 0 0 0 17.09 1.06c5-4.47 5.46-12.2 1.04-17.25L38.96 200.69h460.89c6.71 0 12.15-5.5 12.15-12.28 0-6.77-5.44-12.27-12.15-12.27H38.95L175.01 20.32c4.42-5.05 3.96-12.78-1.04-17.25-5.01-4.47-12.66-4-17.09 1.05l-153.67 176c-4.17 4.55-4.32 11.64-.17 16.39L156.88 372.7z" 
+                            span.Polaris-Breadcrumbs__Content style="margin-left: 9px;"
+                                | All orders
                 -else
                     div id="all_orders" type="button" style="cursor: pointer;" 
                         span.Polaris-Breadcrumbs__ContentWrapper
-                            span.Polaris-Breadcrumbs__Icon
                             span.Polaris-Icon
-                                svg.Polaris-Icon__Svg[viewbox="0 0 20 20" focusable="false" aria-hidden="true"]
-                                path[d="M12 16a.997.997 0 0 1-.707-.293l-5-5a.999.999 0 0 1 0-1.414l5-5a.999.999 0 1 1 1.414 1.414L8.414 10l4.293 4.293A.999.999 0 0 1 12 16z"]
-                            span.Polaris-Breadcrumbs__Content
-                            | < All orders
+                                svg style="margin-bottom: 9px;height: 13px;" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 376.83"
+                                    path fill-rule="nonzero" d="M156.88 372.7a12.026 12.026 0 0 0 17.09 1.06c5-4.47 5.46-12.2 1.04-17.25L38.96 200.69h460.89c6.71 0 12.15-5.5 12.15-12.28 0-6.77-5.44-12.27-12.15-12.27H38.95L175.01 20.32c4.42-5.05 3.96-12.78-1.04-17.25-5.01-4.47-12.66-4-17.09 1.05l-153.67 176c-4.17 4.55-4.32 11.64-.17 16.39L156.88 372.7z" 
+                            span.Polaris-Breadcrumbs__Content style="margin-left: 9px;"
+                                | All orders
           .Polaris-Page-Header__MainContent
             .Polaris-Page-Header__TitleActionMenuWrapper
               .Polaris-Page-Header__TitleWrapper

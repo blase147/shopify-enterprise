@@ -261,7 +261,7 @@
             </svg>
             Billing
           </button>
-          <button class="Profile_links" onclick="Profile(event, 'OrderHistory')">
+          <button class="Profile_links" id="order_history" onclick="Profile(event, 'OrderHistory')">
             <svg fill="none" height="19" viewBox="0 0 16 19" width="16" xmlns="http://www.w3.org/2000/svg">
               <path d="M9.2917 1.24365H2.88608C2.46136 1.24365 2.05403 1.41237 1.75371 1.71269C1.45339 2.01302 1.28467 2.42034 1.28467 2.84506V15.6563C1.28467 16.081 1.45339 16.4884 1.75371 16.7887C2.05403 17.089 2.46136 17.2577 2.88608 17.2577H12.4945C12.9192 17.2577 13.3266 17.089 13.6269 16.7887C13.9272 16.4884 14.0959 16.081 14.0959 15.6563V6.04787L9.2917 1.24365Z" stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
               <path d="M9.29199 1.24341V6.04763H14.0962" stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
@@ -1147,5 +1147,9 @@
       $(this).removeClass("open")
       $(this).addClass("closed")
     }
+  })
+
+  $("#order_history").on("click",function(){
+    $("#ShowOrder").html("");
   })
 </script>
