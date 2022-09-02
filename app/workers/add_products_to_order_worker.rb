@@ -34,7 +34,7 @@ class AddProductsToOrderWorker
         pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_number)
 
         if pre_order.present? || cutoff_in_hours.negative?
-          pre_order_products = JSON.parse(pre_order.products)
+          pre_order_products = JSON.parse(pre_order&.products)
           pre_order_ids = [pre_order.id]
 
           if pre_order_products.count < meals_on_plan
