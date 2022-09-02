@@ -32,7 +32,7 @@ class ShopifyContractUpdateWorker
         order_id = contract.api_data["orders"]["edges"].last["node"]["id"]&.split("/")&.last&.to_i
         order = ShopifyAPI::Order.find(order_id) rescue nil
       end
-      notes = order.note_attributes
+      notes = order.customAttributes
       delivery_day = nil
       delivery_date =nil
       notes&.each do |note|
