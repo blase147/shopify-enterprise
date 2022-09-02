@@ -7,7 +7,7 @@
             .header
               div
                 h2 Payment Card
-              div.close aria-hidden="true" tabindex="-1" data-action='close' data-dismiss="modal"
+              div.close#close_update_modal aria-hidden="true" tabindex="-1" data-action='close' data-dismiss="modal"
                 svg fill="none" height="20" viewbox=("0 0 18 20") width="18" xmlns="http://www.w3.org/2000/svg"
                   path d=("M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z") fill="#DDDDDD" /
             .form-wrapper
@@ -79,7 +79,7 @@
                       span.red *
                     input name='address_zip' value="#{billing_address&.zip}" type="text" required="required"/
                 .btn-wrapper
-                  button#update_card_details.update-card type="button" #{@translation.update_payment_popup_update_card.present? ? @translation.update_payment_popup_update_card : 'Update Card'}
+                  button#update_card_details.update-card.btn-yellow type="button" #{@translation.update_payment_popup_update_card.present? ? @translation.update_payment_popup_update_card : 'Update Card'}
 
 
   .Polaris-Backdrop
@@ -134,4 +134,8 @@ javascript:
         alert(error)  
       }
     });
+  })
+
+  $("#close_update_modal").on('click',function(){
+    $("#update-payment").css("display","none")
   })
