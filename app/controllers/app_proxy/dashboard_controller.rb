@@ -224,13 +224,14 @@ class AppProxy::DashboardController < AppProxyController
     else
       if params[:status].present?
         @customer = CustomerSubscriptionContract.where(shopify_customer_id: "#{params[:customer_id]}", status: params[:status]&.upcase).first
-      else
+      end
+      if @customer.nil?
         @customer = CustomerSubscriptionContract.where(shopify_customer_id: "#{params[:customer_id]}").first
       end
     end
     current_shop.connect
     @orders = ShopifyAPI::Order.find(:all,
-      params: { customer_id: params[:customer_id], limit: PER_PAGE, page_info: params[:page_info] }
+      params: { customer_id: params[:customer_id], limit: PER_PAGE, status: 'any' }
     )
     if @customer.present?
       @customer&.shop&.connect

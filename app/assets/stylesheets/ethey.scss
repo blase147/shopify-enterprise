@@ -2116,8 +2116,8 @@
 
   .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:last-child a.reactivate_btn {
     margin-top: 0;
-    position: absolute;
-    top: -200px !important;
+    top: 106px !important;
+    margin-right: 15px;
     right: 0px;
   }
 
@@ -2144,8 +2144,7 @@
   @media (max-width:991px) {
     .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:last-child a.reactivate_btn {
       margin-top: 0;
-      position: absolute;
-      top: 140px ! important;
+      top: 140px !important;
       right: 30px;
     }
   }
@@ -2177,7 +2176,7 @@
     .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:last-child a.reactivate_btn {
       margin-top: 0;
       position: absolute;
-      top: -200px !important;
+      top: -225px !important;
       right: 0px;
     }
 
@@ -2603,6 +2602,15 @@
 
     .hide_nav {
       display: none;
+    }
+  }
+
+  @media only screen and (max-width:455px) {
+    .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:last-child a.reactivate_btn {
+      margin-top: 0;
+      position: absolute;
+      top: -265px !important;
+      right: 0px;
     }
   }
 

@@ -16,7 +16,7 @@
             - else
               span MY &nbsp;
               span.active ACTIVE &nbsp;
-              span #{@subscription_contracts.count > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION'}
+              span #{(@cancelled_subscriptions.count rescue 0 )> 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION'}
           / a.add_weekly_box.promo-tag-I href="#"
           /   span #{@setting.promo_tagline1_content.present? ? @setting.promo_tagline1_content : 'Add one more weekly box'}
           /   svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +31,7 @@
               - else
                 span MY &nbsp;
                 span.canceled CANCELLED &nbsp;
-                span #{(@cancelled_subscriptions.count rescue 0 +  + @cancelled_line_items.count rescue 0) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION' rescue nil} 
+                span #{(@cancelled_subscriptions.count rescue 0 + @cancelled_line_items.count rescue 0) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION' rescue nil} 
         = render partial: 'app_proxy/dashboard/cancelled_subscriptions'
       - if !params[:status].present? || (params[:status].present? && params[:status] == 'paused')
         - if ((@paused_subscriptions.count) > 0) || params[:status] == 'paused'

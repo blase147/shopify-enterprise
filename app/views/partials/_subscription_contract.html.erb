@@ -169,7 +169,7 @@
         <div class="collapsible-contentsss">
       <div class="tabs-holder content-inner" id="nav_tab">
         <div class="Profile_tab">
-          <%# <button class="Profile_links" onclick="Profile(event, 'Overview')">
+          <%# <button class="Profile_links nav_tabs" onclick="Profile(event, 'Overview')">
             <svg width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clip-path="url(#clip0_764_2732)">
               <path d="M1.54883 24.0072L1.54883 2.10498" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
@@ -184,7 +184,7 @@
             </svg>
             Overviews
           </button> %>
-          <button class="Profile_links" onclick="Profile(event, 'Subscription')" id="defaultOpen">
+          <button class="Profile_links nav_tabs" onclick="Profile(event, 'Subscription')" id="defaultOpen">
              <div class="Polaris-Navigation__ItemWrapper">
                 <a class="active_nav('dashboard', 'index')" href="<%= "/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}"%>"  tabindex="0">
                   <div class="Polaris-Navigation__Icon">
@@ -225,7 +225,7 @@
               </div>
             </div>
           </button>
-          <button class="Profile_links" onclick="Profile(event, 'Account')">
+          <button class="Profile_links nav_tabs" onclick="Profile(event, 'Account')">
             <svg width="25" height="18" viewBox="0 0 25 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clip-path="url(#clip0_764_2738)">
               <path d="M7.35156 1.92139H22.8256" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
@@ -243,7 +243,7 @@
             </svg>
             Address
           </button>
-          <button class="Profile_links" onclick="Profile(event, 'Billing')">
+          <button class="Profile_links nav_tabs" onclick="Profile(event, 'Billing')">
             <svg width="25" height="18" viewBox="0 0 25 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clip-path="url(#clip0_764_2738)">
               <path d="M7.35156 1.92139H22.8256" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
@@ -261,14 +261,14 @@
             </svg>
             Billing
           </button>
-          <button class="Profile_links" id="order_history" onclick="Profile(event, 'OrderHistory')">
+          <button class="Profile_links nav_tabs" id="order_history" onclick="Profile(event, 'OrderHistory')">
             <svg fill="none" height="19" viewBox="0 0 16 19" width="16" xmlns="http://www.w3.org/2000/svg">
               <path d="M9.2917 1.24365H2.88608C2.46136 1.24365 2.05403 1.41237 1.75371 1.71269C1.45339 2.01302 1.28467 2.42034 1.28467 2.84506V15.6563C1.28467 16.081 1.45339 16.4884 1.75371 16.7887C2.05403 17.089 2.46136 17.2577 2.88608 17.2577H12.4945C12.9192 17.2577 13.3266 17.089 13.6269 16.7887C13.9272 16.4884 14.0959 16.081 14.0959 15.6563V6.04787L9.2917 1.24365Z" stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
               <path d="M9.29199 1.24341V6.04763H14.0962" stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
             </svg>
             Order History
           </button>
-          <button class="Profile_links hide" onclick="Profile(event, 'Support')">
+          <button class="Profile_links  nav_tabs hide" onclick="Profile(event, 'Support')">
             <svg width="25" height="35" viewBox="0 0 25 35" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12.8167 21.1691C18.0809 21.1691 22.3483 16.9017 22.3483 11.6375C22.3483 6.37338 18.0809 2.10596 12.8167 2.10596C7.55258 2.10596 3.28516 6.37338 3.28516 11.6375C3.28516 16.9017 7.55258 21.1691 12.8167 21.1691Z" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
               <path d="M7.65541 20.7846L6.00781 33.1893L12.8161 29.1043L19.6243 33.1893L17.9767 20.771" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1151,5 +1151,18 @@
 
   $("#order_history").on("click",function(){
     $("#ShowOrder").html("");
+  })
+
+  $(".nav_tabs").on('click', function () {
+    $('#nav_tab').slideToggle();
+    if($("#nav_label").hasClass("closed")){
+      $("#nav_label").html("Open account menu");
+      $("#nav_label").removeClass("closed")
+      $("#nav_label").addClass("open")
+    }else{
+      $("#nav_label").html("Close account menu");
+      $("#nav_label").removeClass("open")
+      $("#nav_label").addClass("closed")
+    }
   })
 </script>
