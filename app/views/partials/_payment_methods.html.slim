@@ -8,20 +8,6 @@
       .Polaris-Page
         -if @payment_type == 'STRIPE'
           = render "stripe_payment_methods"
-        - elsif @active_subscriptions_count == 0
-          div.content-wrapper
-            div
-              .Polaris-Header-Title__TitleAndSubtitleWrapper
-                .Polaris-Header-Title
-                  h2.Polaris-DisplayText.main-heading
-                    - if @translation.billing_tab_billing_information.present?
-                      span.Polaris-TextStyle--variationStrong #{@translation.billing_tab_billing_information}
-                    - else
-                      span.Polaris-TextStyle--variationStrong MY&nbsp;
-                      span.Polaris-TextStyle--variationStrong style="color: #007EFF" BILLING
-                      span.Polaris-TextStyle--variationStrong &nbsp;INFORMATION
-            div.notification-banner
-              p.Polaris-Heading #{@translation.billing_tab_billing_no_subscriptions_found.present? ? @translation.billing_tab_billing_no_subscriptions_found : 'No subscription have been found for your account'}
         - else
           - payment_method = @shopify_customer&.payment_methods&.edges&.first&.node
           - data = JSON.parse(@shopify_customer&.payment_methods&.edges&.first&.to_json, object_class: OpenStruct) rescue nil
