@@ -50,7 +50,7 @@ class ShopifyContractCreateWorker
        end
         contract.delivery_day = delivery_day
         contract.delivery_date = delivery_date
-        exclude = ["4 meal box", "6 meal box", "8 meal box", "12 meal box", "20 meal box"]
+        exclude = ["8 meals - medium", "6 meals - small", "4 meals - trial", "12 meals - large", "20 meals - family"]
         orders = []
         origin_orders = contract.api_data["origin_order"]["line_items"]["edges"]
         origin_orders&.each do |origin_order|
