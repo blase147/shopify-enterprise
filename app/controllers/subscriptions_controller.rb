@@ -169,8 +169,8 @@ class SubscriptionsController < AuthenticatedController
     contract&.delivery_day = delivery_day
     contract.save
     order = ShopifyAPI::Order.find(contract.api_data["origin_order"]["id"]&.split("/")&.last)
-    order.note_attributes << { name: "delivery_date", value: delivery_date }
-    order.note_attributes << { name: "delivery_day", value: delivery_day }
+    order.note_attributes << { name: "Delivery Date", value: delivery_date }
+    order.note_attributes << { name: "Delivery Day", value: delivery_day }
     if order.save
       render js:{ success: :true }.to_json
     else
