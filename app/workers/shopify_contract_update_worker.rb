@@ -34,7 +34,7 @@ class ShopifyContractUpdateWorker
       end
       notes = order&.note_attributes
       delivery_day = nil
-      delivery_date =nil
+      delivery_date = nil
       notes&.each do |note|
         if note&.name == "Delivery Date"
           delivery_date = note&.value
