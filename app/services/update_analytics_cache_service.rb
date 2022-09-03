@@ -1,9 +1,6 @@
 class UpdateAnalyticsCacheService < ApplicationService
-   def current_shop
-    return @current_shop if @current_shop.present?
-
-    @current_shop = Shop.find_by(shopify_domain: params[:shop])
-  end
+   
+ current_shop = Shop.find_by(shopify_domain: params[:shop])  
   
   def call(shop)
     start_date, end_date = default_date
