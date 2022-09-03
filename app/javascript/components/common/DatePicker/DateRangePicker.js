@@ -81,6 +81,7 @@ export default class DateRangePicker extends React.Component {
               <Button onClick={()=>this.handleSpan("12 months")} primary={this.state.span==="12 months"} >12 Months</Button>
             </ButtonGroup>
             <Button primary onClick={this.applyFilter} type="button">Run</Button>
+            <Button primary onClick={this.forceUpdate} type="button">Refresh</Button>
           </div>
       </div>
       </>)
@@ -114,6 +115,12 @@ export default class DateRangePicker extends React.Component {
   //  this.togglePopover();
    this.props.handleDates && this.props.handleDates(this.state.selected,this.state.span)  
   }
+
+  forceUpdate=(e)=>{
+    e.stopPropagation();
+    this.props.handleForceUpdates && this.props.handleForceUpdates(this.state.selected,this.state.span)  
+  }
+
   handleChange = value => {
     this.setState({ selected: value, span:"custom" });
   };

@@ -33,12 +33,19 @@ const RevenueTrends = () => {
   // const [filters,setFilters,productCharts,setProductCharts]=useContext(FilterContext)
   const [filters,setFilters]=useState({
     startDate:new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(2,"days")).subtract(30, 'days'))).format())),
-    endDate:new Date(Date.parse(dayjs(new Date()).subtract(1,"days").format())) 
+    endDate:new Date(Date.parse(dayjs(new Date()).subtract(1,"days").format())),
+    reload: false 
   })
   const handleFiltersDates=(dates,span)=>{
     if(!isEmpty(dates)){
       const {start,end}=dates;
-      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD"),span:span});
+      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD"),span:span, refresh: false});
+    }
+  }
+  const handleForceUpdates=(dates,span)=>{
+    if(!isEmpty(dates)){
+      const {start,end}=dates;
+      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD"),span:span, refresh: true});
     }
   }
 
@@ -51,8 +58,8 @@ const RevenueTrends = () => {
 
   ///Graph Query...
   const fetchReport = gql`
-  query($startDate: String!, $endDate: String!) {  
-    fetchRevenueTrend(startDate: $startDate, endDate: $endDate) {
+  query($startDate: String!, $endDate: String!, $refresh: Boolean!) {  
+    fetchRevenueTrend(startDate: $startDate, endDate: $endDate, refresh: $refresh) {
         totalSales {
           value
           percent
@@ -724,8 +731,9 @@ const rows_Charges = [
   const getReportData = useCallback(() => {
     getReport({
       variables:{
-        startDate:filters.startDate,
-        endDate:filters.endDate
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+        refresh: filters.refresh
       }
     })
   }, [filters, getReport])
@@ -1216,6 +1224,7 @@ const rows_Charges = [
                       end={filters.endDate}
                       span={filters.span}
                       handleDates={handleFiltersDates}
+                      handleForceUpdates={handleForceUpdates}
                     />
                     
                   </div>
