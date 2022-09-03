@@ -40,6 +40,6 @@ every 1.days do
   rake 'subscriptions:save_billing_attempts'
 end
 
-every 15.minutes do
+every 1.hours do
   rake 'analytics:update_analytics'
 end
