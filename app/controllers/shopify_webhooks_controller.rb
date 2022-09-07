@@ -39,6 +39,8 @@ class ShopifyWebhooksController < ApplicationController
   def order_cancelled
     preorder = WorldfarePreOrder.find_by(order_id: params[:id])
     preorder&.update(status: "canceled")
+    shop = Shop.find_by(shopify_domain: shop_domain)
+    ShopifyOrderCancelWorker.perform_async(shop.id, params[:id])
     head :no_content
   end
 
@@ -74,12 +76,6 @@ class ShopifyWebhooksController < ApplicationController
     head :no_content
   end
 
-  def order_cancel
-    shop = Shop.find_by(shopify_domain: shop_domain)
-    ShopifyOrderCancelWorker.perform_async(shop.id, params[:id])
-
-    head :no_content
-  end
 
   def billing_attempt_success
     order_id = params[:order_id]
