@@ -37,13 +37,13 @@ class ShopifyWebhooksController < ApplicationController
   end
 
   def order_cancelled
-    preorder = WorldfarePreOrder.find_by_order_id(params[:id].to_s)
+    preorder = WorldfarePreOrder.find_by(order_id: params[:id])
     preorder&.update(status: "canceled")
     head :no_content
   end
 
   def order_fulfilled
-    preorder = WorldfarePreOrder.find_by_order_id(params[:id].to_s)
+    preorder = WorldfarePreOrder.find_by(order_id: params[:id])
     preorder&.update(status: "fulfilled")
     SendEmailService.new.send_order_fulfiled_email(preorder&.shopify_contract_id)
     head :no_content
@@ -51,7 +51,7 @@ class ShopifyWebhooksController < ApplicationController
 
   def order_updated
     if params[:financial_status] == "refunded"
-      preorder = WorldfarePreOrder.find_by_order_id(params[:id].to_s)
+      preorder = WorldfarePreOrder.find_by(order_id: params[:id])
       preorder&.update(status: "refunded")
     end
     head :no_content
