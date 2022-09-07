@@ -408,20 +408,18 @@
                 .text-par style="display: flex; justify-content: space-between;"
                   p.text
                     = next_billing_date.strftime("%B %e, %Y")
-                  = link_to action_subscription_contract_path(:skip_schedule, @subscription.id[/\d+/], "billing_date=#{next_billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post do
-                    button.Polaris-Button.Polaris-Button--plain
-                      span.Polaris-Button__Content
-                        span.Polaris-Button__Text SKIP
+                  button.Polaris-Button.Polaris-Button--plain
+                    span.Polaris-Button__Content
+                      span.Polaris-Button__Text.skip_nextbilling_date data-contractid="#{@customer.id}" data-week="#{next_billing_date}" #{ @customer&.skip_dates&.index("#{next_billing_date}") != nil ? "Unskip" : "Skip"}
 
                 - (1..2).each do |index|
                   .text-par style="display: flex; justify-content: space-between;"
                     -  billing_date = next_billing_date.to_date + (index * billing_policy.interval_count).send(billing_policy.interval.downcase)
                     p.text
                       = billing_date.strftime("%B %e, %Y")
-                    = link_to action_subscription_contract_path(:skip_schedule, @subscription.id[/\d+/], "billing_date=#{billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}"), remote: true, method: :post do
-                      button.Polaris-Button.Polaris-Button--plain
-                        span.Polaris-Button__Content
-                          span.Polaris-Button__Text SKIP
+                    button.Polaris-Button.Polaris-Button--plain
+                      span.Polaris-Button__Content
+                        span.Polaris-Button__Text.skip_nextbilling_date data-contractid="#{@customer.id}" data-week="#{billing_date}" #{ @customer&.skip_dates&.index("#{billing_date}") != nil ? "Unskip" : "Skip"}
 
               / p= order&.shipping_address&.formatted&.join(', ')&.titleize
             / .Polaris-Card__Subsection
@@ -545,3 +543,21 @@ javascript:
       })
     })
   })
+
+  $('.skip_nextbilling_date').on('click',function() {   
+    if($(this).html()?.trim() === "Skip")
+    {
+      data= "skip_date="+$(this)?.data("week")+"&method=skip&id="+$(this)?.data("contractid")
+      $(this).html('Unskip');
+    }else{
+      data= "skip_date="+$(this)?.data("week")+"&method=unskip&id="+$(this)?.data("contractid")
+      $(this).html('Skip')
+      $(this).parent().parent().parent().parent().removeClass("grayed-out");
+      $("#add_box_"+$(this)?.data("week")).removeClass("hide");
+    }
+    $.ajax({
+      type: "get",
+      data: data+"&action_by=admin",
+      url: "https://#{@customer.shop.shopify_domain}/a/chargezen_production/dashboard/skip_next_billing_date",
+    })
+  });
