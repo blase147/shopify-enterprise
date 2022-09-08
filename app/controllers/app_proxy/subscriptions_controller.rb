@@ -25,12 +25,17 @@ class AppProxy::SubscriptionsController < AppProxyController
 
   def cancel
     id = params[:id]
-    result = SubscriptionContractDeleteService.new(id).run
-
-    if result[:error].present?
-      render json: { error: result[:error] }
+    if params[:cancel_later_date].present?
+      contract = CustomerSubscriptionContract.find(id&.to_i) rescue nil
+      contract.update(cancel_later: params[:cancel_later_date]&.to_date)
+      render js:{ success: :true }.to_json
     else
-      render js: 'location.reload();'
+      result = SubscriptionContractDeleteService.new(id).run
+      if result[:error].present?
+        render :json => { error: result[:error] }
+      else
+        render js: "location.reload();"
+      end
     end
   end
 

@@ -58,6 +58,8 @@ module Types
       argument :pause_subscription, String, required: false
       argument :design_type, String, required: false
       argument :plan, String, required: false
+      argument :cancel_later, String, required: false
+      argument :pause_later, String, required: false
 
       #email notification
       argument :email_notifications, [Types::Input::EmailNotificationInputType], required: false

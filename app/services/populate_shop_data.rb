@@ -161,6 +161,6 @@ class PopulateShopData
     end
 
     option = 'storeowner_and_customer'
-    @shop.setting.update(shipment: option, frequency: option, upcoming_quantity: option, shiping_address: option, reactive_subscription: option, subscription_cancellation: option, navigation_delivery: option, swap_product: option, pause_subscription: option)
+    @shop.setting.update(shipment: option, frequency: option, upcoming_quantity: option, shiping_address: option, reactive_subscription: option, subscription_cancellation: option, navigation_delivery: option, swap_product: option, pause_subscription: option, pause_later: option, cancel_later: option)
   end
 end
