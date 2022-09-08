@@ -187,13 +187,19 @@ module SubscriptionConcern
       EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
       render js: 'location.reload()'
     else
-      result = SubscriptionContractDeleteService.new(id,nil,true,params[:action_by]).run 'PAUSED'
-      if result[:error].present?
-        render js: "alert('#{result[:error]}');"
+      if params[:pause_later_date].present?
+        contract = CustomerSubscriptionContract.find(id&.to_i) rescue nil
+        contract.update(pause_later: params[:pause_later_date]&.to_date)
+        render js:{ success: :true }.to_json
       else
-        email_notification = csc.shop.setting.email_notifications.find_by_name "Pause Subscription"
-        EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
-        render js: 'location.reload()'
+        result = SubscriptionContractDeleteService.new(id,nil,true,params[:action_by]).run 'PAUSED'
+        if result[:error].present?
+          render :json => { error: result[:error] }
+        else
+          email_notification = csc.shop.setting.email_notifications.find_by_name "Pause Subscription"
+          EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
+          render js: 'location.reload()'
+        end
       end
     end
   end
