@@ -294,7 +294,7 @@ class AppProxy::DashboardController < AppProxyController
       skip_dates&.delete(params[:skip_date])
       description = "Un-Skipped weekly meals for #{begin_date} to #{end_date}"
     end
-    contract.shop.subscription_logs.cancel.create(subscription_id: contract&.shopify_id,customer_id: contract.id, description: description, action_by: params[:action_by])
+    contract.shop.subscription_logs.cancel.create(subscription_id: contract&.shopify_id,customer_id: contract.id, description: description, action_by: 'customer')
     contract.update(skip_dates: skip_dates)
   end
   
