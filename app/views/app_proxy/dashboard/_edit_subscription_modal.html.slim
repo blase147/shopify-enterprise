@@ -1,4 +1,4 @@
-.Polaris-Modal id=("editSubscriptionModal-#{line_item.id.split("gid://shopify/SubscriptionLine/")[1]}") style='display: #{action_by == "customer" ? "none" : "" }'
+.Polaris-Modal id=("editSubscriptionModal-#{line_item.id.split("gid://shopify/SubscriptionLine/")[1]}") style="display: none"
   .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"
     .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1"
       .Polaris-Modal-Dialog__Modal
@@ -45,23 +45,7 @@
                   - allow_cancel = ((DateTime.parse(subscription.created_at) + (selling_plan.min_fullfilment-1).send(selling_plan.interval_type.downcase.to_sym)) < Time.now) rescue false
                 - if (defined?(admin_action) && setting.admin_allowed?('subscription_cancellation')) || (!defined?(admin_action) && setting.customer_allowed?('subscription_cancellation') && allow_cancel)
                   button.cancel-subscription-button data-id="#{subscription&.id[/\d+/] rescue nil }" data-line-id="#{ line_item&.id}" data-variant-id="#{line_item&.variant_id}" #{@translation.edit_subscription_popup_ask_a_question.present? ? @translation.edit_subscription_popup_ask_a_question : 'CANCEL SUBSCRIPTION'}
-                - if (defined?(admin_action) && setting.admin_allowed?('cancel_later')) || (!defined?(admin_action) && setting.customer_allowed?('cancel_later') && allow_cancel)  
-                  button.Polaris-Button.cancel_later id = "cancel_later_#{product_id}" type="button" style="margin-right: 1rem;" data-id=product_id
-                    | Cancel Later
-                  input.hide.cancel_later_date type="date" id="cancel_later_date_#{product_id}" data-id=product_id
-                  button.Polaris-Button.cancel_later_submit.hide id="cancel_later_submit_#{product_id}" type="button" style="margin-top: 16px; width: 100%" data-id = product_id data-contractid = contract.id
-                    | Cancel At The Selected Date
-
-                  div.message_cancel_later style="font-size: 20px; margin: 10px; margin-top: 21px; display: none;"
-                
-                - if (defined?(admin_action) && setting.admin_allowed?('pause_later')) || (!defined?(admin_action) && setting.customer_allowed?('pause_later') && allow_cancel)  
-                  button.Polaris-Button.pause_later id = "pause_later_#{product_id}" type="button" style="margin-right: 1rem;" data-id=product_id
-                    | Pause Later
-                  input.hide.pause_later_date type="date" id="pause_later_date_#{product_id}" data-id=product_id
-                  button.Polaris-Button.pause_later_submit.hide id="pause_later_submit_#{product_id}" type="button" style="margin-top: 16px; width: 100%" data-id = product_id data-contractid = contract.id
-                    | Pause At The Selected Date
-
-                  div.message_pause_later style="font-size: 20px; margin: 10px; margin-top: 21px; display: none;"
+                  
             / = p_button text: 'Cancel Subscription', data: { url: action_subscription_path(:cancel), confirm_text: 'Are you sure you want to Cancel your Subscription?' }
 
   .Polaris-Backdrop
@@ -72,15 +56,12 @@ javascript:
     id = $(this).data('id');
     line_id = $(this).data('line-id');
     variant_id = $(this).data('variant-id');
-    url = "https://#{contract.shop.shopify_domain}/a/chargezen_production/subscriptions/"+id+"/remove_line?line_id="+line_id+"&lines_count=1&quantity=1&variant_id="+variant_id+"&action_by=#{action_by}";
+    url = "/a/chargezen_production/subscriptions/"+id+"/remove_line?line_id="+line_id+"&lines_count=1&quantity=1&variant_id="+variant_id+"&action_by=customer";
     $(this).text('Updating..');
     $.ajax({
       url: url,
       type: 'POST',
       contentType: 'application/json',
-      headers: {
-        'access-control-allow-origin': '*',
-      },
       success: function(response) {
         Swal.fire({
           icon: 'success',
@@ -103,15 +84,12 @@ javascript:
     myDate.setDate(myDate.getDate()+1);
     // format a date
     var date = myDate.getDate() + '/' + ("0" + (myDate.getMonth() + 1)).slice(-2) + '/' + myDate.getFullYear();
-    url = "https://#{contract.shop.shopify_domain}/a/chargezen_production/subscriptions/" + contract_id + action + "?billing_date=" + date+"&action_by=#{action_by}"
+    url = "/a/chargezen_production/subscriptions/" + contract_id + action + "?billing_date=" + date+"&action_by=customer"
     $(this).text('Updating..');
     $.ajax({
       url: url,
       type: 'POST',
       contentType: 'application/json',
-      headers: {
-        'access-control-allow-origin': '*',
-      },
       success: function(response) {
         Swal.fire({
           icon: 'success',
@@ -120,75 +98,8 @@ javascript:
         })
         location.reload();
       },
-      error: function(error) {
-        console.log("error",error)
+      error: function(response) {
+
       }
     });
   });
-
-
-  $(".cancel_later").on('click',function() {
-    let id = $(this).data("id");
-    $("#cancel_later_date_"+id).removeClass('hide');
-  });
-  $(".cancel_later_date").on('change',function() {
-    let id = $(this).data("id");
-    $("#cancel_later_submit_"+id).removeClass('hide');
-  });
-  $(".cancel_later_submit").on('click',function() { 
-    let id = $(this).data("id");
-    let contractId = $(this).data("contractid");
-    $.ajax({
-      url: "https://#{contract.shop.shopify_domain}/a/chargezen_production/subscriptions/"+contractId+"/cancel",
-      type: "POST",
-      data: { id: contractId, cancel_later_date: $("#cancel_later_date_"+id).val()},
-      headers: {
-        'access-control-allow-origin': '*',
-      },
-      success: function(result){
-        if(result.success == false){
-          alert( 'Something went wrong, contact support.' );
-          // $('.order-update-status-message').html(result.error.join(','))
-        }else{
-          $(".message_cancel_later").css("display", "block");
-          $(".message_cancel_later").html("Cancel Later Date Updated successfully, reloading..");
-          setTimeout(function(){
-            window.location.reload();
-          }, 300);
-        }
-      }
-    });
-  })
-
-  $(".pause_later").on('click',function() {
-    let id = $(this).data("id");
-    $("#pause_later_date_"+id).removeClass('hide');
-  });
-  $(".pause_later_date").on('change',function() {
-    let id = $(this).data("id");
-    $("#pause_later_submit_"+id).removeClass('hide');
-  });
-  $(".pause_later_submit").on('click',function() { 
-    let id = $(this).data("id");
-    let contractId = $(this).data("contractid");
-    $.ajax({
-      url: "https://#{contract.shop.shopify_domain}/a/chargezen_production/subscriptions/"+contractId+"/pause",
-      type: "POST",
-      data: { id: contractId, pause_later_date: $("#pause_later_date_"+id).val()},
-      headers: {
-        'access-control-allow-origin': '*',
-      },
-      success: function(result){
-        if(result.success == false){
-          alert( 'Something went wrong, contact support.' );
-          // $('.order-update-status-message').html(result.error.join(','))
-        }else{
-          $(".message_pause_later").css("display", "block");
-          $(".message_pause_later").html("Pause Later Date Updated successfully, reloading..");
-          setTimeout(function(){
-            window.location.reload();
-          }, 300);
-        }
-      }
-    });
-  })

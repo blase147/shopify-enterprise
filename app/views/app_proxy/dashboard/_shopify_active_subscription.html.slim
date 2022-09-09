@@ -1,4 +1,3 @@
-- contract = CustomerSubscriptionContract.find_by(shopify_id: subscription.node.id[/\d+/]) rescue nil
 - billing_policy = subscription.node.billing_policy
 - selling_plan_ids = subscription.node.lines.edges.map{|edge| edge.node.selling_plan_id}
 - selling_plan_id = selling_plan_ids.reject{|val| val.nil?}&.first
@@ -55,7 +54,7 @@
           a.btn_inside href="#" rel="modal:open"
             button class="btn-yellow bold hide" id="update-delivery-btn" tabindex="0" data-id="#{@customer&.id}" style="padding: 11px!important;" Confirm Day Change
           = render 'app_proxy/dashboard/delay_order_modal', subscription: subscription.node, next_billing_date: next_billing_date
-          = render 'app_proxy/dashboard/edit_subscription_modal', subscription: subscription.node, line_item: edge.node, product_image: product.images.first&.src, setting: @setting, selling_plan_id: edge.node.selling_plan_id, selling_plan: selling_plan, product_id: product.id, contract: contract, action_by: 'customer'
+          = render 'app_proxy/dashboard/edit_subscription_modal', subscription: subscription.node, line_item: edge.node, product_image: product.images.first&.src, setting: @setting, selling_plan_id: edge.node.selling_plan_id, selling_plan: selling_plan
           - if @setting.customer_allowed?('swap_product')
             / = render 'swap_subscription_modal', subscription: subscription.node, line_item: edge.node
           = render 'upgrade_subscription_modal', subscription: subscription.node, line_item: edge.node, selling_plan_id: edge.node.selling_plan_id, product: product

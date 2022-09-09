@@ -281,8 +281,6 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
           showBilling
           showAccount
           pauseSubscription
-          cancelLater
-          pauseLater
 
           designType
         }
@@ -684,20 +682,20 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                 }}
               >
                 {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  isSubmitting,
-                  setFieldValue,
-                  resetForm,
-                  dirty,
-                  setDirty,
-                  formik,
-                  /* and other goodies */
-                }) => (
+                    values,
+                    errors,
+                    touched,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    isSubmitting,
+                    setFieldValue,
+                    resetForm,
+                    dirty,
+                    setDirty,
+                    formik,
+                    /* and other goodies */
+                  }) => (
                   <Form onSubmit={handleSubmit}>
                     {dirty && (
                       <ContextualSaveBar
@@ -878,7 +876,7 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                                       setFieldValue={setFieldValue}
                                       handleBack={handleBackSetting} />
                                   </>
-                                ) : (
+                                )  : (
                                   ''
                                 )}
                               </Layout.Section>
