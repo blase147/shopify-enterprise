@@ -56,7 +56,7 @@
           = render 'app_proxy/dashboard/delay_order_modal', subscription: subscription.node, next_billing_date: next_billing_date
           = render 'app_proxy/dashboard/edit_subscription_modal', subscription: subscription.node, line_item: edge.node, product_image: product.images.first&.src, setting: @setting, selling_plan_id: edge.node.selling_plan_id, selling_plan: selling_plan
           - if @setting.customer_allowed?('swap_product')
-            = render 'swap_subscription_modal', subscription: subscription.node, line_item: edge.node
+            = render 'swap_subscription_modal', subscription: subscription.node, line_item: edge.node, action_by: "customer"
           = render 'upgrade_subscription_modal', subscription: subscription.node, line_item: edge.node, selling_plan_id: edge.node.selling_plan_id, product: product
           = render 'cancel_subscription_modal', subscription: subscription.node, line_item: edge.node, lines_count: subscription.node.lines.edges.size
       - if @setting.customer_allowed?('upcoming_quantity')
