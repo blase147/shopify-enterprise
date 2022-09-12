@@ -52,7 +52,7 @@
           </a>
           -->
           <div class="subscriptions">
-            <%= render 'app_proxy/dashboard/swap_subscription_modal', subscription: struct_data, line_item: line.node, action_by: 'customer' %>
+            <%# <%= render 'app_proxy/dashboard/swap_subscription_modal', subscription: struct_data, line_item: line.node, action_by: 'customer' %>
           </div>
         <% end %>
         <div id="edit-subscription-modal" title="Basic dialog" class="modal">
@@ -425,7 +425,6 @@
           selected_products = []
           total_meals = meals_on_plan(@customer&.subscription)
           meals_to_select = total_meals
-
           current_week_meals = []
           current_week_meals = WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first["products"] if WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.collection_images&.first.present?
           current_week_meals = WeeklyMenu.where(week: week_day.strftime('%-V').to_i).first&.product_images if current_week_meals.blank?
@@ -971,7 +970,7 @@
       product_ids: product_ids,
       week:  week_number,
       customer_id:  e.target.getAttribute("data-customer-id"),
-      shopify_contract_id: $("#contract-content").data("contract-id")
+      shopify_contract_id: <%= @customer&.shopify_id %>
     }
 
     $.ajax({
@@ -1099,7 +1098,7 @@
     }
     $.ajax({
       type: "get",
-      data: data,
+      data: data+"&action_by=customer",
       url: "/a/chargezen_production/dashboard/skip_next_billing_date",
     })
   });
