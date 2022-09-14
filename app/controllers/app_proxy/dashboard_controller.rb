@@ -203,7 +203,6 @@ class AppProxy::DashboardController < AppProxyController
     if pre_order.persisted?
       pre_order.products = params[:product_ids]
     end
-
     if pre_order.save
       begin_date = Date.commercial(Date.today&.strftime("%Y")&.to_i,params[:week]&.to_i, 1)&.to_date&.strftime("%d/%m/%Y")
       end_date = Date.commercial(Date.today&.to_date&.strftime("%Y")&.to_i,params[:week]&.to_i, 7)&.to_date&.strftime("%d/%m/%Y")

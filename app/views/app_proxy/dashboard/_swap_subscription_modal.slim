@@ -34,7 +34,7 @@
                             = product.node.title
                           p
                             = "#{number_to_currency product.node.variants.edges.first.node.price} / #{subscription.billing_policy.interval_count} #{subscription.billing_policy.interval}"
-                        = form_tag action_subscription_contract_path(:swap_product, subscription.id[/\d+/]), method: :post, :id => "form-#{index}", remote: true do
+                        = form_tag action_subscription_contract_path(:swap_product, subscription.id[/\d+/]), method: :post, :id => "form-#{index}-#{subscription.id[/\d+/]}", remote: true do
                           .variants-wrapper
                             - product.node.variants.edges.each_with_index do |variant, i|
                               label for="input-#{i}"
@@ -47,7 +47,7 @@
                                   input name="variant_id#{index}_#{i}" type="hidden" value="#{variant.node.id}" id="input-#{index}"
                                 = "#{variant.node.title} (#{number_to_currency variant.node.price})"
                               .btn-wrapper
-                                button type="button" class="submit_swap_form" data-index="#{index}" data-productindex="#{i}"
+                                button type="button" class="submit_swap_form" data-index="#{index}" data-productindex="#{i}" data-contract="-#{subscription.id[/\d+/]}"
                                   span #{@translation.swap_subscription_popup_swap_subscription_button.present? ? @translation.swap_subscription_popup_swap_subscription_button : 'SWAP SUBSCRIPTION'} &nbsp;
                                   span
             - else
@@ -58,7 +58,7 @@
 
 javascript: 
   $(".submit_swap_form").on("click",function (){
-    var formId = $(this).attr("data-index");
+    var formId = $(this).attr("data-index") + $(this).attr("data-contract");
     var form = document.getElementById(`form-${formId}`);
     $.ajax({
       type: "post",
