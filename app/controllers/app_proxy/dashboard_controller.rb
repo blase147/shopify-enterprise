@@ -206,7 +206,7 @@ class AppProxy::DashboardController < AppProxyController
     if pre_order.save
       begin_date = Date.commercial(Date.today&.strftime("%Y")&.to_i,params[:week]&.to_i, 1)&.to_date&.strftime("%d/%m/%Y")
       end_date = Date.commercial(Date.today&.to_date&.strftime("%Y")&.to_i,params[:week]&.to_i, 7)&.to_date&.strftime("%d/%m/%Y")
-      description = "Changed products for #{begin_date} - #{end_date} week"
+      description = "Selected meals for #{begin_date} - #{end_date} week"
       contract=CustomerSubscriptionContract.find_by_shopify_id(params[:shopify_contract_id]) rescue nil
       contract&.shop&.subscription_logs&.cancel&.create(subscription_id: contract&.shopify_id,customer_id: contract.id, description: description, action_by: 'customer')
       render json: { status: :ok, customer_id: params[:customer_id], message: 'Pre Order created Successfuly', show_notification: true }
