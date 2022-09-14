@@ -520,7 +520,7 @@
                       </ul>
                     </div>
                   <% end %>
-                  <button id='confirm-current-week-sub-btn', data-customer-id="<%= @customer&.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Selection</button>
+                  <button id='confirm-current-week-sub-btn', data-customer-id="<%= @customer&.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i%>" data-contractid="<%= @customer&.shopify_id %>" class="hide">Confirm Selection</button>
                 </div>
               </div>
             </div>
@@ -650,7 +650,7 @@
                           </ul>
                         </div>
                         <% end %>
-                        <button id='confirm-sub-btn_<%= week_day %>', data-customer-id="<%= @customer&.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" onclick="submitAddMeals(event)" class="hide">Confirm Selection</button>
+                        <button id='confirm-sub-btn_<%= week_day %>', data-customer-id="<%= @customer&.shopify_customer_id %>" data-contractid="<%= @customer&.shopify_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" onclick="submitAddMeals(event)" class="hide">Confirm Selection</button>
                         <!--<button id='confirm-sub-btn', data-customer-id="<%= @customer&.shopify_customer_id %>" data-week="<%= week_day.strftime('%-V').to_i %>" class="hide">Confirm Selection</button>-->
                       </div>
                     </div>
@@ -965,12 +965,11 @@
     $(product_selector).each(function(i, obj) {
       product_ids.push(obj.dataset.id)
     });
-
     let params = {
       product_ids: product_ids,
       week:  week_number,
       customer_id:  e.target.getAttribute("data-customer-id"),
-      shopify_contract_id: <%= @customer&.shopify_id %>
+      shopify_contract_id: e.target.getAttribute("data-contractid")
     }
 
     $.ajax({
@@ -985,7 +984,7 @@
           title: "Success! Reloading Page",
           showConfirmButton: false
         })
-        window.location = '/a/chargezen_production?customer_id=' + response.customer_id;
+        window.location.reload();
       },
       error: function(response) {
 
@@ -1005,7 +1004,7 @@
       product_ids: product_ids,
       week: $(this).data('week'),
       customer_id: $(this).data('customer-id'),
-      shopify_contract_id: <%= @customer&.shopify_id %>
+      shopify_contract_id: $(this).data("contractid")
     }
     $.ajax({
       url: '/a/chargezen_production/dashboard/create_pre_order',
@@ -1019,7 +1018,7 @@
           title: "Success! Reloading Page",
           showConfirmButton: false
         })
-        window.location = '/a/chargezen_production?customer_id=' + response.customer_id;
+        window.location.reload();
       },
       error: function(response) {
 
