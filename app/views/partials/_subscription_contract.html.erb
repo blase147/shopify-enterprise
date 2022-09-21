@@ -513,7 +513,7 @@
                                   </li>
                                 </ul>
                               </div>
-                              <a href="#_"class="green-btn add-to-current-week" data-id="<%= meal["product_id"]&.split('/')&.last %>" data-url="<%= meal["image"] %>" id="<%= meal["product_id"]&.split('/')&.last %>">Add to Week</a>
+                              <a href="#_"class="green-btn add-to-current-week" data-mealtitle="<%=meal["title"]%>"  data-id="<%= meal["product_id"]&.split('/')&.last %>" data-url="<%= meal["image"] %>" id="<%= meal["product_id"]&.split('/')&.last %>">Add to Week</a>
                             </div>
                           </li>
                         <% end %>
@@ -642,7 +642,7 @@
                                     </li>
                                   </ul>
                                 </div>
-                                <a href="#_"class="green-btn" onclick="addToWeek(event,'<%= week_day %>')" data-id="<%= meal["product_id"]&.split('/')&.last %>" data-url="<%= meal["image"] %>" id="<%= meal["product_id"]&.split('/')&.last %>">Add to Week</a>
+                                <a href="#_"class="green-btn" onclick="addToWeek(event,'<%= week_day %>')" data-mealtitle="<%=meal["title"]%>" data-id="<%= meal["product_id"]&.split('/')&.last %>" data-url="<%= meal["image"] %>" id="<%= meal["product_id"]&.split('/')&.last %>">Add to Week</a>
                                 <!-- <a href="#_"class="green-btn add-to-week" data-id="<%= meal["product_id"]&.split('/')&.last %>" data-url="<%= meal["image"] %>" id="<%= meal["product_id"]&.split('/')&.last %>">Add to Week</a> %> -->
                               </div>
                             </li>
@@ -941,7 +941,7 @@
     e.preventDefault();
     image_url = $(this).data('url')
     let pre_order_selector = document.getElementsByClassName(`${week} empty`)[0]
-    pre_order_selector.innerHTML = "<div class='order_inn add_new_order'><div class='holder'><button class='week_dish_remove' onClick='weekDishRemove(event)'>+</button><img src="+ e.target.getAttribute("data-url") + " data-id=" + e.target.getAttribute("data-id") +"></img></div></div>"
+    pre_order_selector.innerHTML = "<div class='order_inn add_new_order'><div class='holder'><button class='week_dish_remove' onClick='weekDishRemove(event)'>+</button><img src='"+ e.target.getAttribute("data-url") + "' data-id=" + e.target.getAttribute("data-id") +"></img><div class='mealtitle'>"+e.target.getAttribute("data-mealtitle")+"</div></div>"
     pre_order_selector.classList.remove("empty");
     $('#confirm-sub-btn_'+week).removeClass('hide');
   };
@@ -950,7 +950,7 @@
     e.preventDefault();
     image_url = $(this).data('url')
     let pre_order_selector = document.getElementsByClassName('empty-current')[0]
-    pre_order_selector.innerHTML = "<div class='order_inn add_new_order'><div class='holder'><button class='current_week_dish_remove' onClick='currentWeekDishRemove(event)'>+</button><img src="+ $(this).data('url') + " data-id=" + $(this).data('id') +"></img></div></div>"
+    pre_order_selector.innerHTML = "<div class='order_inn add_new_order'><div class='holder'><button class='current_week_dish_remove' onClick='currentWeekDishRemove(event)'>+</button><img src='"+ $(this).data('url') + "' data-id=" + $(this).data('id') +"></img><div class='mealtitle'>"+$(this).data("mealtitle")+"</div></div></div>"
     pre_order_selector.classList.remove("empty-current");
     $('#confirm-current-week-sub-btn').removeClass('hide');
   });
