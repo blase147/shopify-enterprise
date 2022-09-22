@@ -6,8 +6,8 @@ module Queries
     argument :refresh, Boolean, required: true
 
     def resolve(start_date:, end_date:, refresh: )
-      s_date = Date.parse(start_date).strftime("%Y-%m-%d")
-      e_date = Date.parse(end_date).strftime("%Y-%m-%d")
+      s_date = start_date&.to_date&.strftime("%Y-%m-%d")
+      e_date = end_date&.to_date&.strftime("%Y-%m-%d")
       FetchRevenueTrendService.new.call(current_shop, start_date: s_date, end_date: e_date, refresh: refresh)
     end
   end
