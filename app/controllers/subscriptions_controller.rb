@@ -177,4 +177,22 @@ class SubscriptionsController < AuthenticatedController
       render js:{ success: :false }.to_json
     end
   end
+
+  def pause
+    result = CustomerSubscriptionContract.pause(params)
+    if result
+      render js:{ success: :true }.to_json
+    else
+      render :json => { error: result[:error] }
+    end
+  end
+
+  def cancel
+    result = CustomerSubscriptionContract.cancel(params)
+    if result
+      render js:{ success: :true }.to_json
+    else
+      render :json => { error: result[:error] }
+    end
+  end
 end

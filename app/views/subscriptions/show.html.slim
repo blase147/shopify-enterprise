@@ -117,10 +117,10 @@
               - if @subscription.status == 'ACTIVE'
                 - product = ShopifyAPI::Product.find(line.node.product_id[/\d+/])
 
-                = render 'app_proxy/dashboard/edit_subscription_modal', subscription: @subscription, line_item: line.node, product_image: product.images.first&.src, admin_action: true, setting: setting, selling_plan_id: line.node.selling_plan_id, selling_plan: selling_plan
+                = render 'app_proxy/dashboard/edit_subscription_admin_modal', subscription: @subscription, line_item: line.node, product_image: product.images.first&.src, admin_action: true, setting: setting, selling_plan_id: line.node.selling_plan_id, selling_plan: selling_plan, action_by: 'admin', product_id: product.id,contract: @customer
                 = render 'app_proxy/dashboard/swap_subscription_modal', subscription: @subscription, line_item: line.node, action_by: 'admin'
-                = render 'app_proxy/dashboard/upgrade_subscription_modal', subscription: @subscription, line_item: line.node, selling_plan_id: line.node.selling_plan_id, product: product
-                = render 'app_proxy/dashboard/cancel_subscription_modal', subscription: @subscription, line_item: line.node, lines_count: @subscription.lines.edges.size
+                = render 'app_proxy/dashboard/upgrade_subscription_modal', subscription: @subscription, line_item: line.node, selling_plan_id: line.node.selling_plan_id, product: product, action_by: 'admin'
+                = render 'app_proxy/dashboard/cancel_subscription_modal', subscription: @subscription, line_item: line.node, lines_count: @subscription.lines.edges.size, action_by: 'admin'
 
       .Polaris-Layout__Section.Polaris-Layout__Section--secondary
         .Polaris-Card

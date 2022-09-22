@@ -42,11 +42,9 @@ const CustomPortal = (props) => {
     document.head.appendChild(elem);
   };
   const handleApplyStyles = () => {
-    const styles = `${values?.styleSubscription || ''} ${
-      values?.styleUpsell || ''
-    } ${values?.styleSidebarPages || ''} ${values?.styleSidebar || ''} ${
-      values?.styleAccountProfile || ''
-    }`;
+    const styles = `${values?.styleSubscription || ''} ${values?.styleUpsell || ''
+      } ${values?.styleSidebarPages || ''} ${values?.styleSidebar || ''} ${values?.styleAccountProfile || ''
+      }`;
     applyStyles(styles);
   };
   const [valueAccountProfile_CSS, setValueAccountProfile_CSS] = useState();
@@ -87,7 +85,7 @@ const CustomPortal = (props) => {
   );
   const options = [
     { label: 'Storeowner and Customer', value: 'storeowner_and_customer' },
-    { label: 'Storeowner Only', value: 'customer' },
+    { label: 'Storeowner Only', value: 'storeowner' },
   ];
 
   const activeSubscriptionOptions = [
@@ -290,9 +288,9 @@ const CustomPortal = (props) => {
                 <h5 className="customize-text">Customize Styles</h5>
               </Stack.Item>
               <Stack.Item>
-              <p className="applied-classes">
-                            Select Theme
-                          </p>
+                <p className="applied-classes">
+                  Select Theme
+                </p>
                 <Select
                   options={themePortalOptions}
                   value={values.portalTheme}
@@ -741,6 +739,24 @@ const CustomPortal = (props) => {
                     <p>&nbsp;</p>
                   </FormLayout.Group>
                   <FormLayout.Group>
+                    <p>Cancel Later</p>
+                    <Select
+                      options={options}
+                      value={
+                        values.cancelLater ||
+                        'storeowner_and_customer'
+                      }
+                      error={
+                        touched.cancelLater &&
+                        errors.cancelLater
+                      }
+                      onChange={(e) =>
+                        setFieldValue('cancelLater', e)
+                      }
+                    />
+                    <p>&nbsp;</p>
+                  </FormLayout.Group>
+                  <FormLayout.Group>
                     <p>Delivery Schedule</p>
                     <Select
                       options={options}
@@ -765,6 +781,20 @@ const CustomPortal = (props) => {
                         touched.pauseSubscription && errors.pauseSubscription
                       }
                       onChange={(e) => setFieldValue('pauseSubscription', e)}
+                    />
+                    <p>&nbsp;</p>
+                  </FormLayout.Group>
+                  <FormLayout.Group>
+                    <p>Pause Later</p>
+                    <Select
+                      options={options}
+                      value={
+                        values.pauseLater || 'storeowner_and_customer'
+                      }
+                      error={
+                        touched.pauseLater && errors.pauseLater
+                      }
+                      onChange={(e) => setFieldValue('pauseLater', e)}
                     />
                     <p>&nbsp;</p>
                   </FormLayout.Group>

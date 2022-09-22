@@ -446,6 +446,7 @@ DEPENDENCIES
   sidekiq-unique-jobs (~> 7.1)
   simple_form
   slim
+  sprockets
   stripe (~> 5.41)
   turbolinks (~> 5)
   twilio-ruby (~> 5.52.0)
@@ -456,4 +457,4 @@ DEPENDENCIES
   whenever
 
 BUNDLED WITH
-   2.3.8
+   2.3.22

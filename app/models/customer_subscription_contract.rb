@@ -119,4 +119,49 @@ class CustomerSubscriptionContract < ApplicationRecord
   def paused?
     status == STATUS[:paused]
   end
+  
+  def self.cancel(params)
+    id = params[:id]
+    if params[:cancel_later_date].present?
+      contract = CustomerSubscriptionContract.find(id&.to_i) rescue nil
+      contract.update(cancel_later: params[:cancel_later_date]&.to_date)
+      return true
+    else
+      result = SubscriptionContractDeleteService.new(id).run
+      if result[:error].present?
+        return result[:error]
+      else
+        return true
+      end
+    end
+  end
+
+  def self.pause(params)
+    id = params[:id]
+    csc = CustomerSubscriptionContract.find_by(shopify_id: id)
+    if params[:stripe_subscription]
+      Stripe::SubscriptionPause.new(csc.api_resource_id, current_shop).pause
+      csc.update(status: 'PAUSED')
+
+      email_notification = csc.shop.setting.email_notifications.find_by_name "Pause Subscription"
+      EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
+      return true
+    else
+      if params[:pause_later_date].present?
+        contract = CustomerSubscriptionContract.find(id&.to_i) rescue nil
+        contract.update(pause_later: params[:pause_later_date]&.to_date)
+       return true
+      else
+        result = SubscriptionContractDeleteService.new(id,nil,true,params[:action_by]).run 'PAUSED'
+        if result[:error].present?
+          return result[:error]
+        else
+          email_notification = csc.shop.setting.email_notifications.find_by_name "Pause Subscription"
+          EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
+          return true
+        end
+      end
+    end
+  end
+
 end
