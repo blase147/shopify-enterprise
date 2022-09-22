@@ -59,29 +59,14 @@
                     p style="font-size: 20px; line-height: 20px"
                       |$
                       = line.node.current_price.amount
-                    div
-                      - if setting.admin_allowed?('pause_subscription')
-                        = link_to action_subscription_contract_path("pause", @subscription.id[/\d+/],"action_by=admin"), remote: true, method: :post, style: 'text-decoration: none;' do
-                          button.Polaris-Button.Polaris-Button--plain
-                            span.Polaris-Button__Content
-                              span.Polaris-Button__Text Pause
                   div style="margin-top: 1.4rem; display: flex; justify-content: space-between;"
                     div.slider-btns
                       .Polaris-Stack__Item
                         - if setting.admin_allowed?('swap_product')
-                          button.Polaris-Button.Polaris-Button--primary type="button" style="margin-right: 1rem;" data-toggle='modal' data-target="#swap-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}"
-                            span.Polaris-Button__Content
-                              span.Polaris-Button__Text.ml-0
-                                | Swap Subscription
                         button.Polaris-Button type="button" style="margin-right: 1rem;" data-toggle='modal' data-target="#editSubscriptionModal-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}"
                           span.Polaris-Button__Content
                             span.Polaris-Button__Text.ml-0
                               | Edit
-                        - if setting.admin_allowed?('subscription_cancellation')
-                          button.Polaris-Button type="button" style="margin-right: 1rem;"  data-toggle='modal' data-target="#cancel-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}"
-                            span.Polaris-Button__Content
-                              span.Polaris-Button__Text.ml-0
-                                | Cancel
                   
                     div
                       p style="font-size: 2rem; line-height: 1.8;" = selling_plan&.name
