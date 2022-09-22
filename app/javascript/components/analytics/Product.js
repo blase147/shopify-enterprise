@@ -24,7 +24,7 @@ const CustomerInsights = () => {
 
   ///Graph Query...
   const fetchReport = gql`
-  query($startDate: String!, $endDate: String!, $refresh: Boolean) {  
+  query($startDate: String!, $endDate: String!, $refresh: Boolean!) {  
     fetchRevenueTrend(startDate: $startDate, endDate: $endDate,refresh: $refresh) {
         skuBySubscriptions {
             sku
