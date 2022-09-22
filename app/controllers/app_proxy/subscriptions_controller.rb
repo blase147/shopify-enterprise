@@ -23,14 +23,21 @@ class AppProxy::SubscriptionsController < AppProxyController
     render 'show', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
-  def cancel
-    id = params[:id]
-    result = SubscriptionContractDeleteService.new(id).run
-
-    if result[:error].present?
-      render json: { error: result[:error] }
+  def pause
+    result = CustomerSubscriptionContract.pause(params)
+    if result
+      render js:{ success: :true }.to_json
     else
-      render js: 'location.reload();'
+      render :json => { error: result[:error] }
+    end
+  end
+
+  def cancel
+    result = CustomerSubscriptionContract.cancel(params)
+    if result
+      render js:{ success: :true }.to_json
+    else
+      render :json => { error: result[:error] }
     end
   end
 

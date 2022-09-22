@@ -176,28 +176,6 @@ module SubscriptionConcern
     end
   end
 
-  def pause
-    id = params[:id]
-    csc = CustomerSubscriptionContract.find_by(shopify_id: id)
-    if params[:stripe_subscription]
-      Stripe::SubscriptionPause.new(csc.api_resource_id, current_shop).pause
-      csc.update(status: 'PAUSED')
-
-      email_notification = csc.shop.setting.email_notifications.find_by_name "Pause Subscription"
-      EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
-      render js: 'location.reload()'
-    else
-      result = SubscriptionContractDeleteService.new(id,nil,true,params[:action_by]).run 'PAUSED'
-      if result[:error].present?
-        render js: "alert('#{result[:error]}');"
-      else
-        email_notification = csc.shop.setting.email_notifications.find_by_name "Pause Subscription"
-        EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
-        render js: 'location.reload()'
-      end
-    end
-  end
-
   def resume
     id = params[:id]
     csc = CustomerSubscriptionContract.find_by(shopify_id: id)

@@ -1,4 +1,4 @@
-module Types
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            module Types
   class SettingType < Types::BaseObject
     field :account_portal_option, String, null: true
     field :portal_theme, String, null: true
@@ -82,7 +82,9 @@ module Types
     field :dunning_offline_invoice, String, null: true
     field :choose_automatic_retry_mode, String, null: true
     field :dunning_card_configure, GraphQL::Types::Boolean, null: true
-
+    field :cancel_later, GraphQL::Types::Boolean, null: true
+    field :pause_later, GraphQL::Types::Boolean, null: true
+    
     #store Information
     field :store_name, String, null: true
     field :store_email, String, null: true
