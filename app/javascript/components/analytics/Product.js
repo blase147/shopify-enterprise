@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef,useContext } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useContext } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { FilterContext } from './../common/Contexts/AnalyticsFilterContext';
@@ -24,8 +24,8 @@ const CustomerInsights = () => {
 
   ///Graph Query...
   const fetchReport = gql`
-  query($startDate: String!, $endDate: String!) {  
-    fetchRevenueTrend(startDate: $startDate, endDate: $endDate) {
+  query($startDate: String!, $endDate: String!, $refresh: Boolean) {  
+    fetchRevenueTrend(startDate: $startDate, endDate: $endDate,refresh: $refresh) {
         skuBySubscriptions {
             sku
             value
@@ -186,59 +186,61 @@ const CustomerInsights = () => {
   };
 
   // const [filters,setFilters,productCharts,setProductCharts]=useContext(FilterContext)
-  const [filters,setFilters]=useState({
-    startDate:new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(2,"days")).subtract(30, 'days'))).format())),
-    endDate:new Date(Date.parse(dayjs(new Date()).subtract(1,"days").format())) 
+  const [filters, setFilters] = useState({
+    startDate: new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(2, "days")).subtract(30, 'days'))).format())),
+    endDate: new Date(Date.parse(dayjs(new Date()).subtract(1, "days").format()))
   })
-  const handleFiltersDates=(dates,span)=>{
-    if(!isEmpty(dates)){
-      const {start,end}=dates;
-      setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD"),span:span});
+  const handleFiltersDates = (dates, span) => {
+    if (!isEmpty(dates)) {
+      const { start, end } = dates;
+      setFilters({ startDate: dayjs(start).format("YYYY-MM-DD"), endDate: dayjs(end).format("YYYY-MM-DD"), span: span });
     }
   }
-  const [getReport, { loading, data }] = useLazyQuery(fetchReport,{fetchPolicy:"network-only"});
+  const [getReport, { loading, data }] = useLazyQuery(fetchReport, { fetchPolicy: "network-only" });
 
   const getReportData = useCallback(() => {
     getReport({
-      variables:{
-        startDate:filters.startDate,
-        endDate:filters.endDate
+      variables: {
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+        refresh: false
       }
     })
   }, [filters, getReport])
 
 
-  useEffect(() => { 
-      getReportData()
+  useEffect(() => {
+    getReportData()
   }, [filters])
 
-  const [chartOptions,setChartOptions]=useState({
-    skuRevenueChart:skuRevenue,
-    skuCustomersChart:skuCustomersChart,
-    skuSubscriptionsChart:skuSubscriptions,
-    insightsChart:PercentVerticalChart
+  const [chartOptions, setChartOptions] = useState({
+    skuRevenueChart: skuRevenue,
+    skuCustomersChart: skuCustomersChart,
+    skuSubscriptionsChart: skuSubscriptions,
+    insightsChart: PercentVerticalChart
   })
 
- const [insightsOptions,setInsightOptions] = useState([])
-  const [insightsData,setInsightsData]=useState({})
+  const [insightsOptions, setInsightOptions] = useState([])
+  const [insightsData, setInsightsData] = useState({})
   const [selectedInsight, setSelectedInsight] = useState('');
   const handleSelectChange = (value) => setSelectedInsight(value);
- 
-  useEffect(()=>{
-    const {insightsChart}=chartOptions;
-    if(!isEmpty(insightsData)){
+
+  useEffect(() => {
+    const { insightsChart } = chartOptions;
+    if (!isEmpty(insightsData)) {
       // billingPolicy
-      const insightOptions=insightsData.map(data=>({label:data.billingPolicy,value:data.billingPolicy}))
+      const insightOptions = insightsData.map(data => ({ label: data.billingPolicy, value: data.billingPolicy }))
       setInsightOptions(insightOptions);
-      const selectedData=insightsData.find(data=>data.billingPolicy===selectedInsight);
-      console.log(selectedData,"--",selectedInsight,"--",insightsOptions)
+      const selectedData = insightsData.find(data => data.billingPolicy === selectedInsight);
+      console.log(selectedData, "--", selectedInsight, "--", insightsOptions)
       const insightChartOptions = {
         ...insightsChart, series: [{
-          type: 'pie', innerSize: '50%', showInLegend: true, data:selectedData.skus.map(f=>[f.sku,parseFloat(f.value) || 0])}]
+          type: 'pie', innerSize: '50%', showInLegend: true, data: selectedData.skus.map(f => [f.sku, parseFloat(f.value) || 0])
+        }]
       }
-      setChartOptions({...chartOptions,insightsChart:insightChartOptions})
+      setChartOptions({ ...chartOptions, insightsChart: insightChartOptions })
     }
-  },[selectedInsight])
+  }, [selectedInsight])
 
   // useEffect(()=>{
   //   if(productCharts.hasData){
@@ -252,7 +254,7 @@ const CustomerInsights = () => {
 
   //     //Charts Data
   //     const { insightsChart, skuCustomersChart, skuRevenueChart, skuSubscriptionsChart } = chartOptions;
-      
+
   //     const newSkuRevenue = {
   //       ...chartOptions.skuRevenueChart, xAxis: { categories: skuByRevenue.map(sku => sku.sku) || [] },
   //       series: [{
@@ -295,31 +297,31 @@ const CustomerInsights = () => {
 
   // },[productCharts])
 
-  useEffect(()=>{
-    if(!isEmpty(data?.fetchRevenueTrend)){
+  useEffect(() => {
+    if (!isEmpty(data?.fetchRevenueTrend)) {
       const {
         skuByFrequency,
         skuByRevenue,
         skuBySubscriptions,
         skuByCustomers
-      }=data.fetchRevenueTrend;
+      } = data.fetchRevenueTrend;
       const { insightsChart, skuCustomersChart, skuRevenueChart, skuSubscriptionsChart } = chartOptions;
-      
 
-      
+
+
       if (!isEmpty(skuByFrequency)) {
         setInsightsData(skuByFrequency)
         setSelectedInsight(skuByFrequency[0]?.billingPolicy)
-      }else{
+      } else {
         setInsightsData({});
         setInsightOptions([]);
         setSelectedInsight('');
       }
-      
+
 
       //Charts Data
-      
-      
+
+
       const newSkuRevenue = {
         ...chartOptions.skuRevenueChart, xAxis: { categories: skuByRevenue.map(sku => sku.sku) || [] },
         series: [{
@@ -352,17 +354,17 @@ const CustomerInsights = () => {
 
       setChartOptions({
         ...chartOptions,
-        insightsChart:PercentVerticalChart,
-        skuCustomersChart:newSkuCustomersChart,
-        skuRevenueChart:newSkuRevenue,
-        skuSubscriptionsChart:newSkuSubscriptions
+        insightsChart: PercentVerticalChart,
+        skuCustomersChart: newSkuCustomersChart,
+        skuRevenueChart: newSkuRevenue,
+        skuSubscriptionsChart: newSkuSubscriptions
       })
     }
-  },[data])
+  }, [data])
 
   return (
     <>
-    {(loading || !data) ? (
+      {(loading || !data) ? (
         <Card>
           <Spinner
             accessibilityLabel="Spinner example"
@@ -371,68 +373,68 @@ const CustomerInsights = () => {
           />
         </Card>
       ) :
-    <FormLayout>
-      <Stack vertical spacing="extraLoose">
-      <Layout>
-            <Layout.Section>
-              <Card title="">
-                <Card.Section>
-                  <div className="rev-date-picker">
-                    <DateRangePicker
-                      start={filters.startDate}
-                      end={filters.endDate}
-                      span={filters.span}
-                      handleDates={handleFiltersDates}
-                    />
+        <FormLayout>
+          <Stack vertical spacing="extraLoose">
+            <Layout>
+              <Layout.Section>
+                <Card title="">
+                  <Card.Section>
+                    <div className="rev-date-picker">
+                      <DateRangePicker
+                        start={filters.startDate}
+                        end={filters.endDate}
+                        span={filters.span}
+                        handleDates={handleFiltersDates}
+                      />
                     </div>
-                  
-                </Card.Section>
-              </Card>
-            </Layout.Section>
-      </Layout>
-        <Layout>
-          <Layout.Section>
-            <Heading>{'  '}</Heading>
-            <HighchartsReact highcharts={Highcharts} options={chartOptions.skuRevenueChart} />
-          </Layout.Section>
-        </Layout>
-        <Layout>
-          <Layout.Section>
-            <Card>
-              <HighchartsReact
-                highcharts={Highcharts}
-                options={chartOptions.skuCustomersChart}
-              />
-            </Card>
-          </Layout.Section>
-        </Layout>
-        <Layout>
-          <Layout.Section>
-            <Heading>{'  '}</Heading>
-            <HighchartsReact highcharts={Highcharts} options={chartOptions.skuSubscriptionsChart} />
-          </Layout.Section>
-        </Layout>
-        <Layout>
-          <Layout.Section>
-            <Card>
-              <div className="insight-chart-select">
-              <Select
-                options={insightsOptions}
-                onChange={handleSelectChange}
-                value={selectedInsight}
-              />
-              </div>
-              <HighchartsReact
-                highcharts={Highcharts}
-                options={chartOptions.insightsChart}
-              />
-            </Card>
-          </Layout.Section>
-        </Layout>
-      </Stack>
-    </FormLayout>
-  }
-  </>
+
+                  </Card.Section>
+                </Card>
+              </Layout.Section>
+            </Layout>
+            <Layout>
+              <Layout.Section>
+                <Heading>{'  '}</Heading>
+                <HighchartsReact highcharts={Highcharts} options={chartOptions.skuRevenueChart} />
+              </Layout.Section>
+            </Layout>
+            <Layout>
+              <Layout.Section>
+                <Card>
+                  <HighchartsReact
+                    highcharts={Highcharts}
+                    options={chartOptions.skuCustomersChart}
+                  />
+                </Card>
+              </Layout.Section>
+            </Layout>
+            <Layout>
+              <Layout.Section>
+                <Heading>{'  '}</Heading>
+                <HighchartsReact highcharts={Highcharts} options={chartOptions.skuSubscriptionsChart} />
+              </Layout.Section>
+            </Layout>
+            <Layout>
+              <Layout.Section>
+                <Card>
+                  <div className="insight-chart-select">
+                    <Select
+                      options={insightsOptions}
+                      onChange={handleSelectChange}
+                      value={selectedInsight}
+                    />
+                  </div>
+                  <HighchartsReact
+                    highcharts={Highcharts}
+                    options={chartOptions.insightsChart}
+                  />
+                </Card>
+              </Layout.Section>
+            </Layout>
+          </Stack>
+        </FormLayout>
+      }
+    </>
   );
 };
 
