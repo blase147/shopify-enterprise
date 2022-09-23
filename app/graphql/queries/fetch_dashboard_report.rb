@@ -5,7 +5,19 @@ module Queries
     argument :end_date, String, required: true
 
     def resolve(start_date:, end_date:)
-      subscriptions = ReportService.new.all_subscriptions
+      redis_subscriptions = $redis.get("subscriptions")
+      if redis_subscriptions.nil?
+        redis_subscriptions = ReportService.new.all_subscriptions.to_json
+        temp=[]
+        redis_subscriptions = JSON.parse(redis_subscriptions)
+        redis_subscriptions.each do |s|
+          temp << s.to_h.deep_transform_keys { |key| key.underscore }
+        end
+        $redis.set("subscriptions", temp.to_json)     
+      end
+      redis_subscriptions = JSON.parse(redis_subscriptions, object_class: OpenStruct)
+      subscriptions = redis_subscriptions
+      # subscriptions = ReportService.new.all_subscriptions
       range = start_date.to_date..end_date.to_date
       orders_service = OrdersService.new(current_shop)
       orders = orders_service.orders_in_range(range.first, range.last, 'id,refunds,created_at,total_price')

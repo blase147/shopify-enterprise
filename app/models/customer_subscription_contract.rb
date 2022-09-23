@@ -26,6 +26,7 @@ class CustomerSubscriptionContract < ApplicationRecord
   after_create :send_opt_in_sms, unless: -> { opt_in_sent }
   after_create :activation_email
   after_create :charge_store
+  after_commit :set_redis_subscriptions
   # default_scope { order(created_at: :asc) }
 
   def log_work
@@ -162,6 +163,10 @@ class CustomerSubscriptionContract < ApplicationRecord
         end
       end
     end
+  end
+
+  def set_redis_subscriptions
+    SetRedisWorker.perform_async(shop_id)
   end
 
 end
