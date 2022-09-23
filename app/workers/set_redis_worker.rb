@@ -9,6 +9,7 @@ class SetRedisWorker
         redis_subscriptions.each do |s|
           temp << s.to_h.deep_transform_keys { |key| key.underscore }
         end
+        $redis.del("subscriptions")
         $redis.set("subscriptions", temp.to_json)  
     end
 end
