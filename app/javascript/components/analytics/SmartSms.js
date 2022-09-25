@@ -141,7 +141,7 @@ const SmartSms = () => {
         data: []
     }, {
         name: 'Outbound SMS',
-        color:"#007EFF",
+        color:"#000000",
         data: []
     }, {
         name: 'Inbound SMS',
@@ -277,7 +277,7 @@ const SmartSms = () => {
           data: messages.map(data => parseInt(data?.data?.totalSms) || 0) || []
         }, {
           name: 'Outbound SMS',
-          color: "#007EFF",
+          color: "#000000",
           data: messages.map(data => parseInt(data?.data?.outboundSms) || 0) || []
         }, {
           name: 'Inbound SMS',

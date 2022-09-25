@@ -7,9 +7,9 @@
   }
 
   .Polaris-Button--primary {
-    background: linear-gradient(180deg, #007eff, #007eff);
-    border-color: #007eff;
-    box-shadow: inset 0 1px 0 0 #007eff, 0 1px 0 0 rgba(22, 29, 37, 0.05),
+    background: linear-gradient(180deg, #000000, #000000);
+    border-color: #000000;
+    box-shadow: inset 0 1px 0 0 #000000, 0 1px 0 0 rgba(22, 29, 37, 0.05),
       0 0 0 0 transparent;
 
     .Polaris-Button__Text {
@@ -17,16 +17,16 @@
     }
 
     &:hover {
-      background: linear-gradient(180deg, #007eff, #18528e);
-      border-color: #007eff;
-      box-shadow: inset 0 1px 0 0 #007eff, 0 1px 0 0 rgba(22, 29, 37, 0.05),
+      background: linear-gradient(180deg, #000000, #18528e);
+      border-color: #000000;
+      box-shadow: inset 0 1px 0 0 #000000, 0 1px 0 0 rgba(22, 29, 37, 0.05),
         0 0 0 0 transparent;
     }
   }
 
   .Polaris-Page__Content {
     .Polaris-Tabs__Wrapper {
-      background: #007eff;
+      background: #000000;
       border-radius: 9px 9px 0px 0px;
 
       .Polaris-Tabs__Title {
@@ -41,7 +41,7 @@
     }
 
     .Polaris-Tabs__Wrapper {
-      background: #007eff;
+      background: #000000;
       border-bottom: unset;
 
       .Polaris-Tabs__Title {
@@ -76,13 +76,13 @@
       li {
         &.slick-active {
           button:before {
-            color: #007eff;
+            color: #000000;
             opacity: unset;
           }
         }
         button:before {
           font-size: 10px;
-          color: #007eff;
+          color: #000000;
           opacity: 0.5;
         }
       }
@@ -118,7 +118,7 @@
     background: white;
     &.Polaris-Button--primary {
       border: none;
-      background: #007eff;
+      background: #000000;
       border-radius: 3px;
     }
     &.Polaris-Button--destructive {
@@ -190,7 +190,7 @@
         margin-left: 29px;
       }
       a {
-        color: #007EFF;
+        color: #000000;
         margin-left: 9px;
       }
 
@@ -226,7 +226,7 @@
     flex-grow: 0;
     flex-shrink: 0;
     // float: right;
-    background: #007EFF;
+    background: #000000;
     padding: 7px 14px 7px 10px;
     border-radius: 3px;
     align-items: center;
