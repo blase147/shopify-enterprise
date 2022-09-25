@@ -822,8 +822,8 @@ const ActiveSubscription = ({Values}) => {
                             <div>
                               <div className="chevron">
                                 <svg fill="none" height={30} viewBox="0 0 30 30" width={30} xmlns="http://www.w3.org/2000/svg">
-                                  <circle cx={15} cy={15} r={14} stroke="#007EFF" strokeWidth={2} />
-                                  <path d="M7.5 12L14.5 19L21.5 12" stroke="#007EFF" strokeWidth={2} />
+                                  <circle cx={15} cy={15} r={14} stroke="#000000" strokeWidth={2} />
+                                  <path d="M7.5 12L14.5 19L21.5 12" stroke="#000000" strokeWidth={2} />
                                 </svg>
                               </div>
                             </div>
@@ -976,8 +976,8 @@ const ActiveSubscription = ({Values}) => {
                             <div>
                               <div className="chevron">
                                 <svg fill="none" height={30} viewBox="0 0 30 30" width={30} xmlns="http://www.w3.org/2000/svg">
-                                  <circle cx={15} cy={15} r={14} stroke="#007EFF" strokeWidth={2} />
-                                  <path d="M7.5 12L14.5 19L21.5 12" stroke="#007EFF" strokeWidth={2} />
+                                  <circle cx={15} cy={15} r={14} stroke="#000000" strokeWidth={2} />
+                                  <path d="M7.5 12L14.5 19L21.5 12" stroke="#000000" strokeWidth={2} />
                                 </svg>
                               </div>
                             </div>

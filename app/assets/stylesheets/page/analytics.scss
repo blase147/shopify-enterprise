@@ -91,7 +91,7 @@
 
       .Polaris-Tabs__Tab.Polaris-Tabs__Tab--selected {
         .Polaris-Tabs__Title {
-          border-bottom: var(--p-override-none, 0.3rem) solid #007eff;
+          border-bottom: var(--p-override-none, 0.3rem) solid #000000;
         }
       }
     }
@@ -199,7 +199,7 @@
       }
     }
     .active-color {
-      background-color: #007EFF;
+      background-color: #000000;
     }
     .dunning-color {
       background-color: #57AAFF;
@@ -282,7 +282,7 @@
               }
             }
             .active-color {
-              background-color: #007EFF;
+              background-color: #000000;
             }
             .dunning-color {
               background-color: #57AAFF;

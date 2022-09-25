@@ -161,7 +161,7 @@ const CustomerInsights = () => {
       height: '400px',
       // width: '720px',
     },
-    colors: ['#007EFF', '#57AAFF', '#979797', '#FFCC00', '#E77320', '#FF0000', '#FF5C00', '#212B36', '#979797', '#007EFF', '#00A023', '#8000A0', '#A0007D', '#F4EC19'],
+    colors: ['#000000', '#57AAFF', '#979797', '#FFCC00', '#E77320', '#FF0000', '#FF5C00', '#212B36', '#979797', '#000000', '#00A023', '#8000A0', '#A0007D', '#F4EC19'],
     title: {
        text: '',
       align: 'center',
@@ -203,7 +203,7 @@ const CustomerInsights = () => {
     ],
   };
   const skuCustomersChart = {
-    colors: ["#0D91AE", "#6B97C5", "#FFF500", "#FFCC00", "#E77320", "#FF0000", "#FF5C00", "#979797", "#007EFF", "#00A023", "#8000A0", "#A0007D", "#F4EC19"],
+    colors: ["#0D91AE", "#6B97C5", "#FFF500", "#FFCC00", "#E77320", "#FF0000", "#FF5C00", "#979797", "#000000", "#00A023", "#8000A0", "#A0007D", "#F4EC19"],
     title: {
       text: 'Top SKUs by Customer Count'
     },
@@ -238,7 +238,7 @@ const CustomerInsights = () => {
       height: '400px',
       // width: '720px',
     },
-    colors: ['#007EFF', '#57AAFF', '#979797', '#FFCC00', '#E77320', '#FF0000', '#FF5C00', '#212B36', '#979797', '#007EFF', '#00A023', '#8000A0', '#A0007D', '#F4EC19'],
+    colors: ['#000000', '#57AAFF', '#979797', '#FFCC00', '#E77320', '#FF0000', '#FF5C00', '#212B36', '#979797', '#000000', '#00A023', '#8000A0', '#A0007D', '#F4EC19'],
     title: {
        text: 'Customers by Subscription Frequency',
       // align: 'center',
@@ -280,7 +280,7 @@ const CustomerInsights = () => {
     ],
   };
   const customerSubscriptionsChart = {
-    colors: ["#007EFF","#007EFF","#007EFF","#007EFF","#212B36","#212B36","#212B36","#212B36" ],
+    colors: ["#000000","#000000","#000000","#000000","#212B36","#212B36","#212B36","#212B36" ],
     chart: {
       type: 'column',
     },

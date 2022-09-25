@@ -3,7 +3,7 @@
     font-size: 26px;
   }
   .Polaris-Card__Header {
-    background: #007eff;
+    background: #000000;
     border-radius: 5px 5px 0px 0px;
     padding: 0;
     .Polaris-Heading {
@@ -23,7 +23,7 @@
       .Polaris-Button {
         &.Polaris-Button--primary {
           border: none;
-          background: #007eff;
+          background: #000000;
           border-radius: 3px;
         }
       }
@@ -128,7 +128,7 @@
   }
   .addUpsellCampaigns {
     span {
-      color: #007eff;
+      color: #000000;
     }
   }
   .product-search {
@@ -147,7 +147,7 @@
   margin-top: 10px;
   .preview {
     margin-right: 20px;
-    background-color: #007EFF;
+    background-color: #000000;
     color: #eee;
     padding: 10px 46px;
     border-radius: 5px;

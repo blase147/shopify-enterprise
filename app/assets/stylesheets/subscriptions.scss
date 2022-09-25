@@ -1,5 +1,5 @@
 @import "owl_carousel";
-$primary: #007EFF;
+$primary: #000000;
 // MODAL POSTION
 .Polaris-Modal-Dialog__Modal {
     @media (max-width: 1000px) {
@@ -486,7 +486,7 @@ div.Polaris-Modal-Dialog__Container {
                 align-items: center;
                 padding: 0;
                 &:active {
-                    border-color: #007EFF;
+                    border-color: #000000;
                 }
             }
             >input {
@@ -602,12 +602,12 @@ div.box-items {
     .campaign_date_title {
         display: flex;
         span {
-            color: #007EFF;
+            color: #000000;
         }
     }
     //
     .product_choice_label {
-        color: #007EFF;
+        color: #000000;
         font-weight: 500;
         font-size: 17px;
         line-height: 14px;
