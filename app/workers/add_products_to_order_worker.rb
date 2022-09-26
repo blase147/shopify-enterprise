@@ -5,7 +5,8 @@ class AddProductsToOrderWorker
     43200
   end
 
-  def perform(shopify_order_id, contract_id)
+  def perform(shopify_order_id, contract_id, params=nil)
+    shopify_order_id = params["order_id"].present? ? params["order_id"] : shopify_order_id
     if shopify_order_id.present? && contract_id.present?
       puts "<============== SideKiq Job for ShopipfyOrder: #{shopify_order_id}, contract_id: #{contract_id} ==============>"
 
@@ -14,10 +15,9 @@ class AddProductsToOrderWorker
       shop = contract.shop
       shop.connect
       meals_on_plan = contract.subscription.split[0].to_i
-
       order = ShopifyAPI::Order.find(shopify_order_id) rescue nil
-
-      expected_order_delivery = CalculateOrderDelivery.new(contract, shop.id).expected_delivery_of_order(order.created_at)
+      
+      expected_order_delivery = CalculateOrderDelivery.new(contract, shop.id).expected_delivery_of_order(order.created_at, params["delivery_day"])
       order_select_by = CalculateOrderDelivery.new(contract, shop.id).cuttoff_for_order(order.created_at)
       week_number = expected_order_delivery.to_date.cweek
 
@@ -31,7 +31,14 @@ class AddProductsToOrderWorker
       cutoff_in_hours = ((order_select_by.to_time.beginning_of_day - Date.today.to_time.beginning_of_day) / 3600).to_i
 
       if order.present? && week_number.present?
+        binding.pry
         pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_number)
+        delivery_day= params["delivery_day"] rescue nil
+        if params["products"].present?
+          pre_order&.update(products: params["products"]&.to_json, order_id: params["order_id"], delivery_day_week_specific: params["delivery_day"], expected_delivery_date: expected_order_delivery,delivery_day_week_specific: delivery_day)
+        else
+          pre_order&.update(order_id: shopify_order_id, expected_delivery_date: expected_order_delivery,delivery_day_week_specific: delivery_day)
+        end
 
         if pre_order.present? || cutoff_in_hours.negative?
           pre_order_products = JSON.parse(pre_order&.products)

@@ -136,7 +136,7 @@ class SubscriptionsController < AuthenticatedController
     end
     products_with_quantitiy = []
     products&.each do |p|
-      products_with_quantitiy << {title: p&.title , quantity: quantity["#{p&.id}"]}
+      products_with_quantitiy << {title: p&.title , quantity: quantity["#{p&.id}"], product_id: p&.id}
     end
     products_with_quantitiy
   end
@@ -194,5 +194,19 @@ class SubscriptionsController < AuthenticatedController
     else
       render :json => { error: result[:error] }
     end
+  end
+
+  def find_weekly_menu_product
+    @products = WeeklyMenu.find_by_week(params[:week])&.product_images rescue nil
+    products = @products&.map{ |c| c["product_id"]&.split("/").last }    
+    @products = fetch_shopify_products(products)
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def update_boxaby_master_preorder
+    data={order_id: params["order_id"], delivery_day: params["delivery_day"], meals: params["meals"] }
+    AddProductsToOrderWorker.perform_async(params[:shopify_order_id],params[:customer_id],data)
   end
 end
