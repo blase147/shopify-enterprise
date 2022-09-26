@@ -136,6 +136,8 @@ Rails.application.routes.draw do
       get :sync_stripe
       post :create_billing_attempt
       post :update_contract_delivery_date_day 
+      get :find_weekly_menu_product
+      post :update_boxaby_master_preorder
     end
 
     member do
