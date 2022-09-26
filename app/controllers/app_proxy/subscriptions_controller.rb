@@ -26,7 +26,7 @@ class AppProxy::SubscriptionsController < AppProxyController
   def pause
     result = CustomerSubscriptionContract.pause(params)
     if result
-      render js:{ success: :true }.to_json
+      render json:{ success: :true }.to_json
     else
       render :json => { error: result[:error] }
     end
@@ -35,7 +35,7 @@ class AppProxy::SubscriptionsController < AppProxyController
   def cancel
     result = CustomerSubscriptionContract.cancel(params)
     if result
-      render js:{ success: :true }.to_json
+      render json:{ success: :true }.to_json
     else
       render :json => { error: result[:error] }
     end
