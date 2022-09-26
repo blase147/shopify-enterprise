@@ -2635,3 +2635,38 @@
     overflow: hidden;
     top: 0;
   }
+
+  .reactivate_btn_div {
+    position: absolute;
+    top: 106px !important;
+    right: 15px;
+  }
+
+  .reactivate_btn_div input#billing_date_resume {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 15px;
+  }
+
+  @media(max-width:767px) {
+
+    .reactivate_btn_div {
+      position: absolute;
+      top: 0;
+      right: 15px;
+      margin-top: -252px;
+    }
+  }
+
+  @media(max-width:480px) {
+
+    .reactivate_btn_div {
+
+      margin-top: -300px;
+    }
+  }
+
+  input.billing_date_resume.resume_subscription {
+    margin-bottom: 7px;
+    width: 100%;
+  }

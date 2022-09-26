@@ -1,6 +1,6 @@
 - if (@cancelled_subscriptions.present? || @cancelled_line_items.present?) && (params[:status].present? ? params[:status] == 'cancelled' : true)
-  .subscription-contract-products
-    - @cancelled_subscriptions.each do |subscription|
+  - @cancelled_subscriptions.each do |subscription|
+    .subscription-contract-products
       - if (subscription.api_source == 'stripe' rescue false)
         / - next unless subscription.api_data.present?
         - product = ShopifyAPI::Product.find(subscription.import_data['product_id'])
@@ -50,8 +50,11 @@
             .grid-item
             - if @setting.customer_allowed?('reactive_subscription')
               .grid-item
-                = link_to action_subscription_contract_path(:resume, subscription.node.id[/\d+/]), class: 'btn_inside reactivate_btn', method: :post, remote: true do
-                  button.btn-yellow.action-btn.modal_btn type='submit' RE-ACTIVATE
+                div.reactivate_btn_div
+                  button.btn-yellow.action-btn.modal_btn.reactive_btn type='button' RE-ACTIVATE
+                  div.showOnReactivate.hide
+                    input type ="date" class="billing_date_resume" class="resume_subscription"
+                    button type='submit' class="submit_reactive_btn" data-subscription="#{subscription.node.id[/\d+/]}" Apply
           .quantity-wrapper
             form
               .quantity-field
@@ -111,3 +114,18 @@
 - elsif ((params[:status].present? && params[:status] == 'cancelled'))
   div.notification-banner
     p.Polaris-Heading No cancelled subscription have been found for your account
+
+javascript: 
+  $(".reactive_btn").on("click",function(){
+    $(".showOnReactivate").removeClass("hide");
+  })
+
+  $(".submit_reactive_btn").on("click",function(){
+    $.ajax({
+      type: 'post',
+      url: `subscriptions/${$(this).data("subscription")}/resume?customer_id=#{params[:customer_id]}&billing_date=${$(".billing_date_resume").val()}`,
+      success: function(){
+        location.reload();
+      }
+    })
+  })
