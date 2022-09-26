@@ -31,7 +31,6 @@ class AddProductsToOrderWorker
       cutoff_in_hours = ((order_select_by.to_time.beginning_of_day - Date.today.to_time.beginning_of_day) / 3600).to_i
 
       if order.present? && week_number.present?
-        binding.pry
         pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_number)
         delivery_day= params["delivery_day"] rescue nil
         if params["products"].present?
