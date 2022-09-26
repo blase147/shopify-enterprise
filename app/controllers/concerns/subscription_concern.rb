@@ -160,7 +160,7 @@ module SubscriptionConcern
           puts "Could not send email. #{e.message}"
         end
         SubscriptionDraftsService.new.commit @draft_id
-        render js: 'location.reload()'
+        render json: {success: 'true'}
       end
     end
   end

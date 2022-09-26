@@ -76,15 +76,19 @@ javascript:
       type: 'POST',
       contentType: 'application/json',
       success: function(response) {
-        Swal.fire({
-          icon: 'success',
-          title: "Success! Reloading Page",
-          showConfirmButton: false
-        })
-        location.reload();
+        if(response.success=="true"){
+          $("#delivery_date_update_message").css("display","flex");
+          $("#delivery_date_update_message").html("Subscription Canceled Successfully");
+          setTimeout(function(){
+            window.location.reload();
+          }, 300);
+        }
+        else{
+          console.log("An error occured",response);
+        }
       },
       error: function(response) {
-
+        console.log("An error occured",response);
       }
     });
   });
@@ -104,15 +108,19 @@ javascript:
       type: 'POST',
       contentType: 'application/json',
       success: function(response) {
-        Swal.fire({
-          icon: 'success',
-          title: "Success! Reloading Page",
-          showConfirmButton: false
-        })
-        location.reload();
+        if(response.success=="true"){
+          $("#delivery_date_update_message").css("display","flex");
+          $("#delivery_date_update_message").html("Subscription Paused Successfully");
+          setTimeout(function(){
+            window.location.reload();
+          }, 300);
+        }
+        else{
+          console.log("An error occured",response);
+        }
       },
       error: function(response) {
-
+        console.log("An error occured",response);
       }
     });
   });
