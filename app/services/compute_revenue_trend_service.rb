@@ -1,7 +1,18 @@
 class ComputeRevenueTrendService < ApplicationService
   def call(shop, start_date:, end_date:)
     orders_service = OrdersService.new(shop)
-    subscriptions = ReportService.new.all_subscriptions
+    redis_subscriptions = $redis.get("subscriptions")
+    if redis_subscriptions.nil?
+      redis_subscriptions = ReportService.new.all_subscriptions.to_json
+      temp=[]
+      redis_subscriptions = JSON.parse(redis_subscriptions)
+      redis_subscriptions.each do |s|
+        temp << s.to_h.deep_transform_keys { |key| key.underscore }
+      end
+      $redis.set("subscriptions", temp.to_json)     
+    end
+    redis_subscriptions = JSON.parse(redis_subscriptions, object_class: OpenStruct)
+    subscriptions = redis_subscriptions
     range = start_date.to_date..end_date.to_date
     orders = orders_service.orders_in_range(range.first, range.last, 'id,refunds,created_at,total_price,current_total_price_set,total_shipping_price_set,source_name')
     data_service = ReportDataService.new(subscriptions, shop, orders, range)

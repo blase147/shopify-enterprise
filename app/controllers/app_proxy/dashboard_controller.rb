@@ -1,9 +1,9 @@
 class AppProxy::DashboardController < AppProxyController
-  skip_before_action :init_session, only: [:index, :fetch_contract]
+  skip_before_action :init_session, only: [:index]
   skip_before_action :set_skip_auth, only: [:fetch_contract]
   before_action :load_subscriptions, except: [:build_a_box, :confirm_box_selection, :index, :fetch_contract, :show_order]
   before_action :load_customer, only: %w(addresses payment_methods settings upcoming build_a_box track_order)
-
+  before_action :fetch_contract, only: [:index]
   def index
     # @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
     if params[:status].present?
@@ -35,12 +35,15 @@ class AppProxy::DashboardController < AppProxyController
     render 'addresses', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
-  def payment_methods(customer_id=nil)
+  def payment_methods(customer_id=nil,orders=nil)
     params[:customer_id] = customer_id if customer_id.present?
-    @orders = ShopifyAPI::Order.find(:all,
-      params: { customer_id: params[:customer_id], limit: 6, page_info: nil }
-    )
-
+    if orders.present?
+      @order=orders
+    else
+      @orders = ShopifyAPI::Order.find(:all,
+        params: { customer_id: params[:customer_id], limit: 6, page_info: nil }
+      )
+    end
     @payment_methods = {}
     @orders.each do |order|
       @payment_methods[order.payment_details.credit_card_number] = order.payment_details if order.try(:payment_details).present?
@@ -311,16 +314,26 @@ class AppProxy::DashboardController < AppProxyController
 
   def load_subscriptions(customer_id=nil)
     shopify_customer_id="gid://shopify/Customer/#{customer_id}" if customer_id.present?
-    shop = CustomerSubscriptionContract.find_by_shopify_customer_id("#{customer_id}")&.shop
-    shop&.connect
-    @setting = shop&.setting
-    @data = CustomerSubscriptionContractsService.new(shopify_customer_id).run
+    redis_customer_subscriptions = $redis.get("#{shopify_customer_id&.split("/").last}_customer_subscriptions")
+    unless redis_customer_subscriptions.present?      
+      redis_customer_subscriptions = CustomerSubscriptionContractsService.new(shopify_customer_id).run&.to_json
+      redis_customer_subscriptions = JSON.parse(redis_customer_subscriptions)
+      redis_customer_subscriptions = redis_customer_subscriptions.deep_transform_keys { |key| key.underscore }
+      updatedData={}
+      redis_customer_subscriptions.map {|k,v| v.class == Array ? (updatedData[k]=[]; v.map {|a| updatedData[k] << a['data'] }) : updatedData[k]=v}
+      redis_customer_subscriptions = updatedData&.to_json
+      $redis.set("#{shopify_customer_id&.split("/").last}_customer_subscriptions", redis_customer_subscriptions)
+    end
+    redis_customer_subscriptions = JSON.parse(redis_customer_subscriptions)
+    redis_customer_subscriptions = JSON.parse(redis_customer_subscriptions.to_json, object_class: OpenStruct)
+    @data = redis_customer_subscriptions
+    
     @stripe_subscriptions = current_shop.customer_subscription_contracts.where(shopify_customer_id: customer_id, api_source: 'stripe') rescue []
-    @subscription_contracts = (@data && @data[:subscriptions] || []) + @stripe_subscriptions
-    @paused_subscriptions = (@data && @data[:paused_subscriptions] || []) + @stripe_subscriptions&.select{|lc| lc.status == 'PAUSED'}
-    @cancelled_subscriptions = (@data && @data[:cancelled_subscriptions] || []) + @stripe_subscriptions&.select{|lc| lc.status == 'CANCELLED'}
-    @active_subscriptions = (@data && @data[:active_subscriptions] || []) + @stripe_subscriptions&.select{|lc| lc.status == 'ACTIVE'}
-    @active_subscriptions_count = params[:active_subscriptions_count].present? ? params[:active_subscriptions_count].to_i : (@data && @data[:active_subscriptions].count || 0)
+    @subscription_contracts = (@data && @data.subscriptions || []) + @stripe_subscriptions
+    @paused_subscriptions = (@data && @data.paused_subscriptions || []) + @stripe_subscriptions&.select{|lc| lc.status == 'PAUSED'}
+    @cancelled_subscriptions = (@data && @data.cancelled_subscriptions || []) + @stripe_subscriptions&.select{|lc| lc.status == 'CANCELLED'}
+    @active_subscriptions = (@data && @data.active_subscriptions || []) + @stripe_subscriptions&.select{|lc| lc.status == 'ACTIVE'}
+    @active_subscriptions_count = params[:active_subscriptions_count].present? ? params[:active_subscriptions_count].to_i : (@data && @data.active_subscriptions.count || 0)
     @cancelled_line_items = RemovedSubscriptionLine.where(customer_id: params[:customer_id])
   end
 end
