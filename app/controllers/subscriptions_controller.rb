@@ -200,6 +200,8 @@ class SubscriptionsController < AuthenticatedController
     @products = WeeklyMenu.find_by_week(params[:week])&.product_images rescue nil
     products = @products&.map{ |c| c["product_id"]&.split("/").last }    
     @products = fetch_shopify_products(products)
+    pre_orders = WorldfarePreOrder.find(params[:preorderId])
+    @pre_order_products = fetch_shopify_products(JSON.parse(pre_orders.products)).map{|p| p[:product_id]}
     respond_to do |format|
       format.js
     end
