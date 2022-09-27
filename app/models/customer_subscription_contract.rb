@@ -5,7 +5,7 @@ class CustomerSubscriptionContract < ApplicationRecord
     active: 'ACTIVE'
   }
   paginates_per 50
-  scope :search, -> (title) { where("(lower(first_name) (lower(last_name) = ? OR lower(first_name) (lower(last_name) like ?))", "#{title&.downcase}%","%#{title&.downcase}%")&.limit(20) }
+  scope :search, -> (title) { where("lower(first_name) like :s OR lower(last_name) like :s OR lower(first_name) || ' ' || lower(last_name) like :s", :s=> "#{title&.downcase}%")&.limit(20) }
   enum gender: [:male, :female]
   belongs_to :shop, foreign_key: :shop_id
   belongs_to :reasons_cancel, optional: true

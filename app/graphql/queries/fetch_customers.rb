@@ -9,14 +9,12 @@ module Queries
     argument :searchquery, String, required: false
 
     def resolve(**args)
-      #current_shop.sync_contracts
       if args[:searchquery].present?
-        customer_subscriptions = current_shop.customer_subscription_contracts.search(args[:searchquery]).where(where_data(args[:status] || 'all')).page(args[:page]).includes(:shop, :additional_contacts, :billing_address).order(order_by(args))
-        {customer_subscriptions: customer_subscriptions, total_count: customer_subscriptions.count, total_pages: 1, page_number: 1}
+        customer_subscriptions = current_shop.customer_subscription_contracts.where(where_data(args[:status] || 'all')).search(args[:searchquery]).page(args[:page]).includes(:shop, :additional_contacts, :billing_address).order(order_by(args))
       else
         customer_subscriptions = current_shop.customer_subscription_contracts.includes(:shop, :additional_contacts, :billing_address).where(where_data(args[:status] || 'all')).page(args[:page]).order(order_by(args))
-        {customer_subscriptions: customer_subscriptions, total_count: customer_subscriptions.count, total_pages: customer_subscriptions.total_pages, page_number: args[:page]}
       end
+      {customer_subscriptions: customer_subscriptions, total_count: customer_subscriptions.count, total_pages: customer_subscriptions.total_pages, page_number: args[:page]}
     end
 
     def where_data(status)
