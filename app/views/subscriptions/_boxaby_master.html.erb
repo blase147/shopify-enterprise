@@ -35,7 +35,7 @@
                             <% end %>
                         </ul>
                     </td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--numeric">
+                    <td class="Polaris-DataTable__Cell Polaripre_orders-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--numeric">
                         <%= pre_order&.order_id %>
                     </td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--numeric">
@@ -47,10 +47,10 @@
     </table>
 
     <!-- The Modal -->
-    <div id="myModal" class="edit_modal">
+    <div id="edit_preorder_modal" class="edit_modal">
         <!-- Modal content -->
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span id="close_edit_preorder_modal" class='close'>&times;</span>
             <div class="edit_preorder">
                 <h1>Edit Preorder</h1>
                 <% week_days = ["Monday", "Tuesday", "Wednesday", "ThrusDay", "Friday", "Saturday"] %>
@@ -79,11 +79,11 @@
 
 <script>
     let currentMeal=[]
-    $(".check_preorder").change(function(){
-        if($(this).is(":checked")&& $(".check_preorder").length==1){
+    $(".check_preorder").on("change",function(){
+        if($(this).is(":checked")&& $(".check_preorder:checked")?.length==1){
             $.ajax({
                 type: 'get',
-                url: `/subscriptions/find_weekly_menu_product?week=${$(this).data("week")}`
+                url: `/subscriptions/find_weekly_menu_product?week=${$(this).data("week")}&preorderId=${$(this).data("preorder")}`
             })
             $("#order_number_preorder").val($(this).data("orderid"))
             $("#edit_delivery_day_preorder").val($(this).data("expecteddelivery"))
@@ -94,12 +94,10 @@
     })
 
     $("#update_change_preorder_btn").on("click",function(){
-
-
-    let selectedValues = [];    
-    $("#meals_options :selected").each(function(){
-        selectedValues.push($(this).val()); 
-    });
+        let selectedValues = [];    
+        $("#meals_options :selected").each(function(){
+            selectedValues.push($(this).val()); 
+        });
         $.ajax({
             type: 'post',
             data: `delivery_day=${$("#edit_delivery_day_preorder").val()}&order_id=${$("#order_number_preorder").val()}&meals=${selectedValues}&customer_id=<%= subscription&.shopify_id %>`,
@@ -107,32 +105,27 @@
             success: function(){
                 $("#upate_preorder_div").html("Updated Successfully");
                 setTimeout(()=>{
-                    $(".close").click();
+                    $("#upate_preorder_div").html("")
+                    $("#edit_preorder_modal").css("display","none");
                 }
                 ,3000)
             }
         })
     })
 
-    var modal = document.getElementById("myModal");
+    $("#myBtn").on("click", function() {
+        $("#edit_preorder_modal").css("display","block");
+    })
 
-    var btn = document.getElementById("myBtn");
+    $("#close_edit_preorder_modal").on("click",function() {
+        $("#edit_preorder_modal").css("display","none");
+    })
 
-    var span = document.getElementsByClassName("close")[0];
-
-    btn.onclick = function() {
-    modal.style.display = "block";
-    }
-
-    span.onclick = function() {
-    modal.style.display = "none";
-    }
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+    $(window).click(function(e) {
+        if (e.target == $("#edit_preorder_modal")) {
+            $("#edit_preorder_modal").css("display","none");
         }
-    }
+    })
 
 </script>
 
