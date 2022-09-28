@@ -27,7 +27,7 @@
 }
 
 .shippingSuiteTable table tbody tr td p:last-child {
-    color: #007EFF;
+    color: #000000;
 }
 .shippingSuiteTable table thead tr th {
     font-weight: 600;
@@ -39,7 +39,7 @@
 
 .shippingSuiteTable table tbody tr td .vieworder button {
     border-radius: 4px;
-    background: #007EFF;
+    background: #000000;
     color: white;
 }
 .shippingSuiteTable table tbody tr td .Polaris-Badge {

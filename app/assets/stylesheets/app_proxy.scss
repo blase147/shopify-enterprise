@@ -1,5 +1,5 @@
 @import 'owl_carousel';
-$primary: #007eff;
+$primary: #000000;
 
 // MODAL POSTION
 .Polaris-Modal-Dialog__Modal {
@@ -363,7 +363,7 @@ div.Polaris-Modal-Dialog__Container {
                 >.update-card {
                     width: 171px;
                     height: 44px;
-                    background: #007eff;
+                    background: #000000;
                     border: none;
                     border-radius: 3px;
                     color: #fff;
@@ -675,7 +675,7 @@ div.Polaris-Modal-Dialog__Container {
                 >button {
                     width: 171px;
                     height: 44px;
-                    background: #007eff;
+                    background: #000000;
                     border: none;
                     border-radius: 3px;
                     color: #fff;
@@ -1088,7 +1088,7 @@ nav.top-nav {
 
     >a#logout-btn {
         font-size: 18px;
-        color: #007eff;
+        color: #000000;
         text-decoration: underline;
         padding: 7px 0px;
         cursor: pointer;
@@ -1312,7 +1312,7 @@ div.notification-banner {
                             padding: 0;
 
                             &:active {
-                                border-color: #007eff;
+                                border-color: #000000;
                             }
                         }
 
@@ -1793,7 +1793,7 @@ div#AppFrameNav {
             align-items: center;
 
             >button {
-                background: #007eff;
+                background: #000000;
                 border-radius: 20px;
                 padding: 10px 15px;
                 color: #fff;
@@ -1922,7 +1922,7 @@ body.chargezen-proxy {
     }
 
     ul.Polaris-Tabs {
-        background: #007eff;
+        background: #000000;
         justify-content: center;
 
         a.Polaris-Tabs__Tab {
@@ -1962,7 +1962,7 @@ body.chargezen-proxy {
         // font-family: 'AvenirLTStdBold';
         .Polaris-Navigation__Item--selected {
             font-weight: 600;
-            color: #007eff;
+            color: #000000;
             background-color: #d4e7fe;
             position: relative;
         }
@@ -2004,9 +2004,9 @@ body.chargezen-proxy {
     }
 
     .Polaris-Button--primary {
-        background: #007eff;
-        border-color: #007eff;
-        box-shadow: inset 0 1px 0 0 #007eff, 0 1px 0 0 rgba(22, 29, 37, 0.05), 0 0 0 0 transparent;
+        background: #000000;
+        border-color: #000000;
+        box-shadow: inset 0 1px 0 0 #000000, 0 1px 0 0 rgba(22, 29, 37, 0.05), 0 0 0 0 transparent;
         color: white;
         border-radius: 5px;
 
@@ -2046,7 +2046,7 @@ body.chargezen-proxy {
         .Polaris-Card {
             padding: 20px 0;
             text-align: center;
-            border: 3px solid #007eff;
+            border: 3px solid #000000;
         }
 
         .check-icon {
@@ -2081,7 +2081,7 @@ body.chargezen-proxy {
         }
 
         .Polaris-Card.active {
-            background: #007eff;
+            background: #000000;
             color: white;
             padding: 20px 10px;
 
@@ -2159,7 +2159,7 @@ body.chargezen-proxy {
             padding: 0;
 
             .Polaris-Banner__Heading.active {
-                background: #007eff;
+                background: #000000;
                 color: white;
                 padding: 15px 22px;
                 border-radius: 20px 20px 0 0;
@@ -2500,7 +2500,7 @@ a[disabled='disabled'] {
 }
 
 .checkout-design .select-option button {
-    background: #007eff;
+    background: #000000;
     border-radius: 26px;
     color: white;
     border: 0;
@@ -2527,7 +2527,7 @@ a[disabled='disabled'] {
 }
 
 .checkout-design .add-img-section button {
-    background: #007eff;
+    background: #000000;
     border-radius: 26px;
     color: white;
     border: 0;
@@ -2557,7 +2557,7 @@ a[disabled='disabled'] {
     position: absolute;
     top: 50%;
     left: 50%;
-    background: #007eff;
+    background: #000000;
     height: 50px;
     width: 50px;
     color: white;
@@ -2590,7 +2590,7 @@ Customer Build a box .checkout-design-1 {
 }
 
 .checkout-design-1 .select-option button {
-    background: #007eff;
+    background: #000000;
     border-radius: 26px;
     color: white;
     border: 0;
