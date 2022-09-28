@@ -148,12 +148,12 @@ export default function App(props) {
               component={CreateCustomer}
             />
             <Route exact path="/analytics" component={Analytics} />
-            <Route exact path="/installation" component={() => <Installation shopifyDomain={props.domain} passwordProtected={passwordProtected}/>} />
+            <Route exact path="/installation" component={() => <Installation shopifyDomain={props.domain} passwordProtected={passwordProtected} />} />
             <Route exact path="/upsell" component={Upsell} />
             <Route exact path="/upsell/:id/edit" component={CreateUpsell} />
             <Route exact path="/upsell/new" component={CreateUpsell} />
 
-            <Route exact path='/build-a-box' component={BuildBox}/>
+            <Route exact path='/build-a-box' component={BuildBox} />
             <Route exact path="/build-a-box/:id/edit" component={CreateBuildBox} />
             <Route exact path="/build-a-box/new" component={CreateBuildBox} />
 

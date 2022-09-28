@@ -1,7 +1,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 {% assign current_subscription = false %}
 
 <!-- active_sub {{ active_sub }}-->
@@ -26,64 +31,20 @@
 
 <div class="customer account c_account">
   <ul class="nav nav-pills nav-justified contract-tabs">
-    <% if @subscription_contracts.present? %>
-      <% @subscription_contracts.each do |contract| %>
-        <li class="contract-tab" id="<%= contract.id %>"></li>
-      <% end %>
-    <% else %>
       <li class="contract-tab" id=""><a href="#"></a></li>
-    <% end %>
   </ul>
 
   <div class="loader">
     <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
   </div>
   <div id="contract-content">
-    
+    <%= render(:partial => 'partials/subscription_contract', locals: { customer: @customer, api_data: @api_data }) %>
   </div>
   
 {% section 'Account_slider' %}
 
-<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
 <script>
-  $(document).ready(function(){
-    $(".contract-tab:first").click();
-  });
-
-  $('.contract-tab').on('click', function(){
-      $('.contract-tabs li.active').removeClass('active');
-      $(this).addClass('active');
-      $('.loader').show();
-      $('#contract-content').html('');
-    id = $(this).attr('id');
-    let local_id = "<%= params[:local_id] %>"
-    let params = {
-      customer_id: <%= params[:customer_id] %>,
-      status: "<%= params[:status] %>",
-      overview: "<%= params[:overview] %>",
-      local_id: local_id === "" ? null : local_id
-    }
-    url = '/a/chargezen_production/dashboard/fetch_contract';
-    $.ajax({
-      url: url,
-      type: 'GET',
-      data: params,
-      contentType: 'application/json',
-      success: function(response) {
-        $('.loader').hide();
-      },
-      error: function(response) {
-
-      }
-    });
-  });
-
+  
   $('.recommended-for .slider-holder').slick({
     infinite: true,
     slidesToShow: 2,
@@ -164,66 +125,6 @@
       }
     });
 
-    // $("#save_information").on('click', function(){
-
-    //     $('.view-input').addClass('disabled');
-    //     $(this).hide();
-    //     $('#edit_information').show();
-
-
-    //       $("form").submit(function (event) {
-    //         var formData = {
-    //           customer_id: '<%= params[:customer_id] %>',
-    //           first_name: $("#first_name").val(),
-    //           last_name: $("#last_name").val(),
-    //           address1: $("#address1").val(),
-    //           address2: $("#address2").val(),
-    //           city: $("#city").val(),
-    //           state: $("#province").val(),
-    //           state: $("#province").val(),
-    //           country: $("#country_name").val(),
-    //           zip: $("#zip").val(),
-    //         };
-
-    //       let payment_url = '<%= action_subscription_contract_path(:update_payment, (customer.id rescue params[:customer_id]) ) %>'
-    //       $.ajax({
-    //         url: '/a/chargezen_production/dashboard/customer_info',
-    //         type: 'POST',
-    //         data: JSON.stringify(formData),
-    //         contentType: 'application/json',
-    //         success: function(response) {
-    //           if($("#credit_card_number").val() != '' && $("#credit_card_name").val() != '' && $("#expiration_date").val() != ''){
-    //             let card_data = {
-    //               card_number: $("#credit_card_number").val(),
-    //               name: $("#credit_card_name").val(),
-    //               verification_value: $('#verification_value').val(),
-    //               // shipping_address: $("#shipping_address").val(),
-    //               exp_year: $("#exp_year").val(),
-    //               exp_month: $("#exp_month").val(),
-    //               company: $("#company").val()
-    //             };
-    //             $.ajax({
-    //               url: payment_url,
-    //               type: 'POST',
-    //               data: JSON.stringify(card_data),
-    //               contentType: 'application/json',
-    //               success: function(response) {
-
-    //                 window.location = window.location.href + '&tab=Account';
-    //               },
-    //               error: function(response) {window.location = window.location.href + '&tab=Account';}
-    //             });
-    //           }else{
-    //             window.location = window.location.href + '&tab=Account';
-    //           }
-    //         },
-    //         error: function(response) {}
-    //       });
-
-
-    //       });
-    //   });
-
     <% if params[:tab] == 'Overview' %>
     Profile($('.overview_tab'), 'Overview',false)
     $('.overview_tab').addClass('active');
@@ -263,14 +164,11 @@
     let name = $('.customer-initial').data('name');
     $('.customer-initial').html(name.substring(0, 2).toUpperCase());
   });
-</script>
 
-<script>
-
-$(function() {
-  var loc = window.location.pathname.split('?')[0];
-  if("/a/chargezen_production/dashboard"=== loc) {
-    $('body').addClass('customer_service_page');
-  }
-}); 
+  $(function() {
+    var loc = window.location.pathname.split('?')[0];
+    if("/a/chargezen_production/dashboard"=== loc) {
+      $('body').addClass('customer_service_page');
+    }
+  }); 
 </script>

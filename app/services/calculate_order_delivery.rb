@@ -55,21 +55,7 @@ class CalculateOrderDelivery
         prev_order_date = time.to_date rescue nil
         prev_order_select_by = prev_order_date.strftime('%A').downcase&.to_sym == cutoff_day ? prev_order_date : prev_order_date.next_occurring(cutoff_day) rescue nil
         prev_order_expected_delivery = prev_order_select_by.next_occurring(delivery_day) rescue nil
-        # if prev_order_expected_delivery.between?(current_date.beginning_of_week, current_date.end_of_week)
-        #   # current_week_select_by = prev_order_select_by
-        #   current_week_expected_delivery = prev_order_expected_delivery
-        # elsif prev_order_expected_delivery.between?((current_date + 1.week).beginning_of_week, (current_date + 1.week).end_of_week)
-        #   # next_week_select_by = prev_order_select_by
-        #   # next_week_expected_delivery = prev_order_expected_delivery
-        # end
       end
-      # if first_expected_delivery.between?(current_date.beginning_of_week, current_date.end_of_week)
-      #   # current_week_select_by = first_select_by
-      #   current_week_expected_delivery = first_expected_delivery
-      # elsif first_expected_delivery.between?((current_date + 1.week).beginning_of_week(:monday), (current_date + 1.week).end_of_week())
-      #   # next_week_select_by = first_select_by
-      #   # next_week_expected_delivery = first_expected_delivery
-      # end trigger
     end
     
     {
@@ -101,7 +87,7 @@ class CalculateOrderDelivery
 
 
   def delivery_setting
-  	DeliveryOption.find_by(shop_id: @shop_id )&.api_response
+  	DeliveryOption.find_by_shop_id(@shop_id )&.api_response
   end
 
   def calculate_for_customer_portal
@@ -117,17 +103,12 @@ class CalculateOrderDelivery
       delivery_day = @contract.delivery_day.downcase&.to_sym rescue fallback_day || "tuesday".to_sym
       cutoff_day = delivery_settings[:settings].filter{|s| s["delivery"].to_sym  == delivery_day }.first["cutoff_day"].to_sym rescue nil
       
-      current_week_select_by = ((current_date - 1.week).beginning_of_week.to_date..(current_date- 1.week).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == cutoff_day&.downcase&.to_sym }
-      current_week_select_by = current_week_select_by&.first
+      current_week_select_by = (((current_date - 1.week).beginning_of_week.to_date..(current_date- 1.week).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == cutoff_day&.downcase&.to_sym })&.first
 
-      current_week_expected_delivery = ((current_date).beginning_of_week.to_date..(current_date).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == delivery_day&.downcase&.to_sym }
-      current_week_expected_delivery = current_week_expected_delivery.first
+      current_week_expected_delivery = (((current_date).beginning_of_week.to_date..(current_date).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == delivery_day&.downcase&.to_sym })&.first
 
-      next_week_select_by = ((current_date).beginning_of_week.to_date..(current_date).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == cutoff_day&.downcase&.to_sym }
-      next_week_select_by = next_week_select_by&.first
-
-      next_week_expected_delivery = ((current_date + 1.week).beginning_of_week.to_date..(current_date + 1.week).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == delivery_day&.downcase&.to_sym }
-      next_week_expected_delivery = next_week_expected_delivery&.first
+      next_week_select_by = (((current_date).beginning_of_week.to_date..(current_date).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == cutoff_day&.downcase&.to_sym })&.first
+      next_week_expected_delivery = (((current_date + 1.week).beginning_of_week.to_date..(current_date + 1.week).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == delivery_day&.downcase&.to_sym })&.first
     end
     {
       current_week_select_by: current_week_select_by, 
