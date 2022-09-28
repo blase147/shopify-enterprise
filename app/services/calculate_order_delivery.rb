@@ -55,21 +55,7 @@ class CalculateOrderDelivery
         prev_order_date = time.to_date rescue nil
         prev_order_select_by = prev_order_date.strftime('%A').downcase&.to_sym == cutoff_day ? prev_order_date : prev_order_date.next_occurring(cutoff_day) rescue nil
         prev_order_expected_delivery = prev_order_select_by.next_occurring(delivery_day) rescue nil
-        # if prev_order_expected_delivery.between?(current_date.beginning_of_week, current_date.end_of_week)
-        #   # current_week_select_by = prev_order_select_by
-        #   current_week_expected_delivery = prev_order_expected_delivery
-        # elsif prev_order_expected_delivery.between?((current_date + 1.week).beginning_of_week, (current_date + 1.week).end_of_week)
-        #   # next_week_select_by = prev_order_select_by
-        #   # next_week_expected_delivery = prev_order_expected_delivery
-        # end
       end
-      # if first_expected_delivery.between?(current_date.beginning_of_week, current_date.end_of_week)
-      #   # current_week_select_by = first_select_by
-      #   current_week_expected_delivery = first_expected_delivery
-      # elsif first_expected_delivery.between?((current_date + 1.week).beginning_of_week(:monday), (current_date + 1.week).end_of_week())
-      #   # next_week_select_by = first_select_by
-      #   # next_week_expected_delivery = first_expected_delivery
-      # end trigger
     end
     
     {
@@ -101,7 +87,7 @@ class CalculateOrderDelivery
 
 
   def delivery_setting
-  	DeliveryOption.find_by(shop_id: @shop_id )&.api_response
+  	DeliveryOption.find_by_shop_id(@shop_id )&.api_response
   end
 
   def calculate_for_customer_portal

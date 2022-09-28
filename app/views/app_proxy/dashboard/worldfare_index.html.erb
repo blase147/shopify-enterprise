@@ -26,13 +26,7 @@
 
 <div class="customer account c_account">
   <ul class="nav nav-pills nav-justified contract-tabs">
-    <% if @subscription_contracts.present? %>
-      <% @subscription_contracts.each do |contract| %>
-        <li class="contract-tab" id="<%= contract.id %>"></li>
-      <% end %>
-    <% else %>
       <li class="contract-tab" id=""><a href="#"></a></li>
-    <% end %>
   </ul>
 
   <div class="loader">
