@@ -1,6 +1,5 @@
 @import 'owl_carousel';
 $primary: #000000;
-
 // MODAL POSTION
 .Polaris-Modal-Dialog__Modal {
     @media (max-width: 1000px) {
@@ -23,7 +22,6 @@ div.Polaris-Modal-Dialog__Container {
 // DELIVERY DELAY MODAL
 .delivery-delay-modal {
     min-height: 500px;
-
     .header {
         width: 100%;
         height: 75px;
@@ -32,37 +30,30 @@ div.Polaris-Modal-Dialog__Container {
         justify-content: flex-start;
         align-items: center;
         padding: 0px 20px;
-
         div {
             outline: 0 none;
-
             >h2 {
                 font-size: 22px;
                 font-weight: bold;
                 margin-left: 40px;
-
                 @media (max-width: 1000px) {
                     font-size: 18px;
                     line-height: 24px;
                     margin-left: 10px;
                 }
             }
-
             >svg {
                 cursor: pointer;
             }
         }
     }
-
     div.append-dp {
         display: none;
-
         .btn-wrapper {
             display: flex;
             justify-content: center;
             margin-top: 20px;
             margin-bottom: 20px;
-
             >button {
                 width: 144px;
                 height: 40px;
@@ -75,7 +66,6 @@ div.Polaris-Modal-Dialog__Container {
                 color: #fff;
                 cursor: pointer;
                 outline: 0 none;
-
                 &.back-dp {
                     background: #fff;
                     color: #000;
@@ -84,7 +74,6 @@ div.Polaris-Modal-Dialog__Container {
                     align-items: center;
                     border: 2px solid #000;
                     margin-right: 20px;
-
                     >span:nth-child(1) {
                         margin-right: 10px;
                     }
@@ -92,15 +81,12 @@ div.Polaris-Modal-Dialog__Container {
             }
         }
     }
-
     input.datepicker-delay {
         display: none;
     }
-
     form>.btn-wrapper {
         display: flex;
         justify-content: center;
-
         >button {
             width: 206px;
             height: 60px;
@@ -113,7 +99,6 @@ div.Polaris-Modal-Dialog__Container {
             color: #fff;
             cursor: pointer;
             outline: 0 none;
-
             &.open-dp {
                 margin-top: 40px;
                 background: #fff;
@@ -122,7 +107,6 @@ div.Polaris-Modal-Dialog__Container {
                 justify-content: center;
                 align-items: center;
                 border: 2px solid #000;
-
                 >span:nth-child(1) {
                     margin-right: 10px;
                 }
@@ -141,80 +125,65 @@ div.Polaris-Modal-Dialog__Container {
         justify-content: space-between;
         align-items: center;
         padding: 0px 20px;
-
         div {
             outline: 0 none;
-
             >h2 {
                 font-size: 22px;
                 font-weight: bold;
                 margin-left: 40px;
-
                 @media (max-width: 1000px) {
                     font-size: 18px;
                     line-height: 24px;
                     margin-left: 10px;
                 }
             }
-
             >svg {
                 cursor: pointer;
             }
         }
     }
-
     .subscription-details {
         padding: 0px 35px;
-
         .img {
             width: 200px;
             height: 100px;
             margin: 30px auto;
-
             img {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
             }
         }
-
         .title {
             padding-bottom: 20px;
             border-bottom: 1px solid #ddd;
-
             h2 {
                 font-size: 18px;
                 font-weight: 900;
                 margin-bottom: 10px;
             }
-
             h3 {
                 font-size: 16px;
                 font-weight: 900;
                 color: #4d506a;
             }
         }
-
         .delivery-charge {
             padding: 20px 0px;
             border-bottom: 1px solid #ddd;
-
             >div {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-
                 &:nth-child(1) {
                     margin-bottom: 16px;
                 }
-
                 h3 {
                     color: #c4c4c4;
                     font-size: 14px;
                     font-weight: bold;
                     text-transform: uppercase;
                 }
-
                 h4 {
                     color: #000;
                     font-size: 14px;
@@ -223,13 +192,11 @@ div.Polaris-Modal-Dialog__Container {
                 }
             }
         }
-
         .btn-wrapper {
             display: flex;
             justify-content: center;
             flex-direction: column;
             padding-bottom: 20px;
-
             >button {
                 width: 100%;
                 height: 40px;
@@ -242,7 +209,6 @@ div.Polaris-Modal-Dialog__Container {
                 background: transparent;
                 cursor: pointer;
                 outline: 0 none;
-
                 &.light {
                     color: #ddd;
                 }
@@ -261,55 +227,44 @@ div.Polaris-Modal-Dialog__Container {
         justify-content: space-between;
         align-items: center;
         padding: 0px 20px;
-
         div {
             outline: 0 none;
-
             >h2 {
                 font-size: 22px;
                 font-weight: bold;
                 margin-left: 40px;
-
                 @media (max-width: 1000px) {
                     font-size: 18px;
                     line-height: 24px;
                     margin-left: 10px;
                 }
-
                 >span.blue {
                     color: $primary;
                 }
             }
-
             >svg {
                 cursor: pointer;
             }
         }
     }
-
     >.form-wrapper {
         padding: 25px 45px;
-
         >form {
             >.field {
                 margin-bottom: 40px;
-
                 .heading_label {
                     display: flex;
                     gap: 3px;
                 }
-
                 .red {
                     color: red;
                 }
-
                 label {
                     font-size: 18px;
                     font-weight: bold;
                     margin-bottom: 10px;
                     display: block;
                 }
-
                 >input {
                     width: 100%;
                     height: 42px;
@@ -320,31 +275,25 @@ div.Polaris-Modal-Dialog__Container {
                     border-radius: 3px;
                 }
             }
-
             >.group {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 column-gap: 30px;
-
                 >.field {
                     margin-bottom: 40px;
-
                     .heading_label {
                         display: flex;
                         gap: 3px;
                     }
-
                     .red {
                         color: red;
                     }
-
                     label {
                         font-size: 18px;
                         font-weight: bold;
                         margin-bottom: 10px;
                         display: block;
                     }
-
                     >input {
                         width: 100%;
                         height: 42px;
@@ -356,10 +305,8 @@ div.Polaris-Modal-Dialog__Container {
                     }
                 }
             }
-
             >.btn-wrapper {
                 margin-top: 40px;
-
                 >.update-card {
                     width: 171px;
                     height: 44px;
@@ -386,66 +333,54 @@ div.Polaris-Modal-Dialog__Container {
         justify-content: space-between;
         align-items: center;
         padding: 0px 20px;
-
         div {
             outline: 0 none;
-
             >h2 {
                 font-size: 22px;
                 font-weight: bold;
                 margin-left: 40px;
-
                 @media (max-width: 1000px) {
                     font-size: 18px;
                     line-height: 24px;
                     margin-left: 10px;
                 }
-
                 >span.blue {
                     color: $primary;
                 }
             }
-
             >svg {
                 cursor: pointer;
             }
         }
     }
-
     .no_plan_img {
         display: flex;
         justify-content: center;
         padding-top: 50px;
         padding-bottom: 91px;
     }
-
     .swap-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 30px;
         padding: 30px;
-
         @media (max-width: 768px) {
             display: block;
         }
-
         >.item {
             box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
             border-radius: 5px;
             padding: 25px 40px;
-
             .img {
                 width: 100%;
                 height: 115px;
                 margin-bottom: 25px;
-
                 >img {
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
                 }
             }
-
             .title {
                 >h2 {
                     font-size: 18px;
@@ -454,27 +389,22 @@ div.Polaris-Modal-Dialog__Container {
                     text-align: center;
                     margin-bottom: 15px;
                 }
-
                 >p {
                     font-size: 14px;
                     text-align: center;
                     color: #acb5bd;
                 }
             }
-
             .variants-wrapper {
                 display: flex;
                 flex-direction: column;
                 padding: 10px 0;
-
                 >label {
                     margin: 5px 0;
                 }
             }
-
             .btn-wrapper {
                 margin-top: 10px;
-
                 >button {
                     width: 100%;
                     height: 40px;
@@ -488,7 +418,6 @@ div.Polaris-Modal-Dialog__Container {
                     cursor: pointer;
                     outline: 0 none;
                     transition: 0.3s all ease-in-out;
-
                     &:hover {
                         background: #43a1ff;
                     }
@@ -508,30 +437,24 @@ div.Polaris-Modal-Dialog__Container {
         justify-content: space-between;
         align-items: center;
         padding: 0px 33px;
-
         div {
             outline: 0 none;
-
             >h2 {
                 font-size: 22px;
                 font-weight: bold;
-
                 @media (max-width: 1000px) {
                     font-size: 18px;
                     line-height: 24px;
                 }
-
                 >span.blue {
                     color: $primary;
                 }
             }
-
             >svg {
                 cursor: pointer;
             }
         }
     }
-
     .warning {
         display: flex;
         justify-content: center;
@@ -539,7 +462,6 @@ div.Polaris-Modal-Dialog__Container {
         flex-direction: column;
         padding: 25px 0px;
         border-bottom: 1px solid #ddd;
-
         >h2 {
             font-size: 20px;
             font-weight: bold;
@@ -548,7 +470,6 @@ div.Polaris-Modal-Dialog__Container {
             text-align: center;
             line-height: 24px;
         }
-
         >h3 {
             font-size: 18px;
             font-weight: bold;
@@ -557,7 +478,6 @@ div.Polaris-Modal-Dialog__Container {
             text-align: center;
             line-height: 24px;
         }
-
         >p {
             font-size: 18px;
             font-weight: bold;
@@ -566,17 +486,14 @@ div.Polaris-Modal-Dialog__Container {
             line-height: 24px;
         }
     }
-
     .btn-wrapper {
         display: flex;
         justify-content: center;
         align-items: center;
         padding: 50px 0;
-
         @media (max-width: 1000px) {
             flex-direction: column;
         }
-
         button {
             width: 228px;
             height: 40px;
@@ -584,18 +501,15 @@ div.Polaris-Modal-Dialog__Container {
             font-size: 14px;
             cursor: pointer;
             outline: 0 none;
-
             &.btn-cancel {
                 border: 1px solid #c6c7c8;
                 background: #fff;
                 margin-right: 20px;
                 font-weight: 600px;
-
                 @media (max-width: 1000px) {
                     margin: 15px 0px;
                 }
             }
-
             &.btn-keep {
                 background: $primary;
                 color: #fff;
@@ -611,39 +525,31 @@ div.Polaris-Modal-Dialog__Container {
     padding-left: 30px;
     box-sizing: border-box;
     overflow: hidden;
-
     @media (max-width: 1000px) {
         padding-right: 30px;
     }
-
     @media (max-width: 600px) {
         padding: 0;
-
         h2.Polaris-DisplayText {
             padding-left: 10px;
         }
     }
-
     >.form-wrapper {
         background: #fff;
         box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
         border-radius: 5px;
         padding: 40px;
         margin: 30px 0;
-
         >form {
             >.group {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 column-gap: 30px;
-
                 @media (max-width: 600px) {
                     display: block;
                 }
-
                 >.field {
                     margin-bottom: 25px;
-
                     >label {
                         font-size: 14px;
                         font-weight: bold;
@@ -651,12 +557,10 @@ div.Polaris-Modal-Dialog__Container {
                         display: block;
                         color: #96a2af;
                         text-transform: uppercase;
-
                         >span.red {
                             color: red;
                         }
                     }
-
                     >input {
                         width: 100%;
                         height: 42px;
@@ -668,10 +572,8 @@ div.Polaris-Modal-Dialog__Container {
                     }
                 }
             }
-
             >.btn-wrapper {
                 margin-top: 10px;
-
                 >button {
                     width: 171px;
                     height: 44px;
@@ -685,45 +587,37 @@ div.Polaris-Modal-Dialog__Container {
             }
         }
     }
-
     >.delivery-details-tile {
         background: #fff;
         box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
         border-radius: 5px;
         padding: 49px 40px;
         margin: 30px 0;
-
         @media (max-width: 600px) {
             padding: 25px 20px;
         }
-
         >.date-details {
             padding-bottom: 20px;
             border-bottom: 1px solid #ddd;
-
             >h2 {
                 font-size: 20px;
                 font-weight: bold;
                 margin-bottom: 10px;
             }
-
             >p {
                 font-size: 14px;
                 font-weight: bold;
                 color: #4d506a;
                 text-transform: uppercase;
-
                 >span.blue {
                     color: $primary;
                 }
             }
         }
-
         >.grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             margin-top: 20px;
-
             >.item {
                 >h2 {
                     font-size: 14px;
@@ -732,18 +626,15 @@ div.Polaris-Modal-Dialog__Container {
                     color: #96a2af;
                     margin-bottom: 10px;
                 }
-
                 >p {
                     font-size: 16px;
                     font-weight: bold;
                     color: #212b36;
                     line-height: 24px;
                 }
-
                 >.btn-wrapper {
                     display: flex;
                     justify-content: flex-end;
-
                     button {
                         width: 83px;
                         height: 37px;
@@ -759,7 +650,6 @@ div.Polaris-Modal-Dialog__Container {
             }
         }
     }
-
     // BILLING DETAILS
     >.billing-details-tile {
         background: #fff;
@@ -768,29 +658,23 @@ div.Polaris-Modal-Dialog__Container {
         padding: 49px 40px;
         margin: 30px 0;
         display: flex;
-
         @media (max-width: 1000px) {
             flex-direction: column;
         }
-
         >.card-information {
             width: 50%;
-
             @media (max-width: 1000px) {
                 width: 100%;
             }
-
             >h2 {
                 font-size: 14px;
                 font-weight: bold;
                 color: #96a2af;
                 text-transform: uppercase;
             }
-
             >.card-details {
                 margin-top: 50px;
                 display: flex;
-
                 >.img {
                     width: 80px;
                     height: 50px;
@@ -802,7 +686,6 @@ div.Polaris-Modal-Dialog__Container {
                     justify-content: center;
                     align-items: center;
                 }
-
                 >.details {
                     >p {
                         font-size: 16px;
@@ -813,10 +696,8 @@ div.Polaris-Modal-Dialog__Container {
                     }
                 }
             }
-
             >.btn-wrapper {
                 margin-top: 30px;
-
                 >button {
                     width: 159px;
                     height: 32px;
@@ -831,30 +712,25 @@ div.Polaris-Modal-Dialog__Container {
                 }
             }
         }
-
         >.address-information {
             width: 50%;
             max-width: 450px;
             background: #fff;
-
             @media (max-width: 1000px) {
                 max-width: unset;
                 width: 100%;
                 margin-top: 30px;
             }
-
             >.header {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 padding-bottom: 30px;
                 border-bottom: 1px solid #ddd;
-
                 >h2 {
                     font-size: 24px;
                     font-weight: bold;
                 }
-
                 >button.edit {
                     border: 0.5px solid #c4cdd5;
                     border-radius: 5px;
@@ -867,17 +743,14 @@ div.Polaris-Modal-Dialog__Container {
                     outline: 0 none;
                 }
             }
-
             >.item {
                 margin: 25px 0px 30px 0px;
-
                 >h3 {
                     font-size: 14px;
                     font-weight: bold;
                     color: #96a2af;
                     margin-bottom: 15px;
                 }
-
                 >p {
                     font-size: 16px;
                     font-weight: bold;
@@ -894,51 +767,42 @@ nav.top-nav {
     align-items: center;
     min-height: 150px;
     background: $primary;
-
     @media (max-width: 900px) {
         flex-direction: column;
         padding: 25px 0;
     }
-
     >.nav-brand {
         font-size: 2.5rem;
         color: #fff;
         font-weight: bold;
-
         @media (max-width: 900px) {
             margin-bottom: 25px;
         }
     }
-
     >.nav-menu {
         @media (max-width: 900px) {
             margin-bottom: 10px;
         }
-
         ul.items {
             list-style: none;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: space-between;
-
             li.item {
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 padding: 0px 10px;
-
                 >a {
                     color: #fff;
                     text-decoration: none;
                     font-size: 2rem;
                     display: block;
                     padding: 0px 10px;
-
                     @media (max-width: 1100px) {
                         font-size: 1.5rem;
                     }
-
                     @media (max-width: 900px) {
                         padding: 0;
                     }
@@ -956,7 +820,6 @@ nav.top-nav {
     justify-content: space-around;
     align-items: center;
     background: #fff;
-
     @media (max-width: 1000px) {
         margin-top: 39px;
         justify-content: flex-start;
@@ -965,16 +828,13 @@ nav.top-nav {
         height: auto;
         padding: 20px;
     }
-
     .details {
         @media (max-width: 768px) {
             padding: 10px 0;
         }
-
         >.profile {
             display: flex;
             align-items: center;
-
             .initials {
                 width: 70px;
                 height: 70px;
@@ -988,7 +848,6 @@ nav.top-nav {
                 align-items: center;
                 border-radius: 50%;
                 margin-right: 30px;
-
                 @media (max-width: 1100px) {
                     width: 50px;
                     height: 50px;
@@ -996,39 +855,32 @@ nav.top-nav {
                     margin-right: 10px;
                 }
             }
-
             .full-name {
                 font-size: 24px;
                 color: #000;
                 text-transform: capitalize;
                 font-weight: bold;
-
                 @media (max-width: 1100px) {
                     font-size: 20px;
                 }
             }
         }
-
         >.contact {
             p:nth-child(1) {
                 font-size: 20px;
-
                 @media (max-width: 1100px) {
                     font-size: 16px;
                 }
             }
-
             p:nth-child(2) {
                 font-size: 16px;
                 margin-top: 10px;
                 color: #4d506a;
-
                 @media (max-width: 1100px) {
                     font-size: 14px;
                 }
             }
         }
-
         >.btn-discount {
             padding: 20px 25px;
             display: block;
@@ -1038,7 +890,6 @@ nav.top-nav {
             border-radius: 31px;
             background: $primary;
             text-decoration: none;
-
             @media (max-width: 1100px) {
                 padding: 10px 15px;
                 font-size: 16px;
@@ -1052,30 +903,24 @@ nav.top-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     &.cancel-text {
         margin-top: 30px;
     }
-
     >p {
         font-size: 18px;
         color: #212b36;
         font-weight: bold;
-
         >span.active {
             color: $primary;
         }
-
         >span.canceled {
             color: red;
         }
-
         @media (max-width: 600px) {
             font-size: 16px;
             padding-left: 10px;
         }
     }
-
     >a.add_weekly_box {
         font-size: 18px;
         color: #212b36;
@@ -1085,7 +930,6 @@ nav.top-nav {
         // display: none;
         padding: 7px 0px;
     }
-
     >a#logout-btn {
         font-size: 18px;
         color: #000000;
@@ -1093,7 +937,6 @@ nav.top-nav {
         padding: 7px 0px;
         cursor: pointer;
     }
-
     >a.add_weekly_box {
         font-size: 18px;
         color: #212b36;
@@ -1113,7 +956,6 @@ nav.top-nav {
     display: none;
     padding: 7px 0px;
     position: relative;
-
     &::after {
         position: absolute;
         content: '';
@@ -1141,12 +983,10 @@ div.notification-banner {
     border-radius: 5px;
     padding: 35px;
     margin: 30px 0;
-
     .Polaris-Modal-Dialog__Modal.Polaris-Modal-Dialog--sizeLarge.cancel-subscription-modal-outer {
         @media (min-width: 65.25em) {
             max-width: 65rem;
         }
-
         h3 {
             text-align: center;
             margin-top: 40px;
@@ -1154,7 +994,6 @@ div.notification-banner {
             font-size: 15px;
             font-weight: 600;
         }
-
         form {
             .variants-wrapper {
                 padding-left: 19%;
@@ -1162,66 +1001,54 @@ div.notification-banner {
             }
         }
     }
-
     >.grid {
         display: grid;
         grid-template-columns: 3fr 2fr 1fr;
         column-gap: 50px;
-
         @media (max-width: 1000px) {
             grid-template-columns: 2fr 1fr;
         }
-
         @media (max-width: 600px) {
             grid-template-columns: 1fr 1fr;
         }
-
         &:not(:nth-child(1)) {
             margin-top: 30px;
         }
-
         // border-bottom: 1px solid #ececec;
         >.grid-item {
             >.img {
                 width: 150px;
                 height: 150px;
                 margin-bottom: 30px;
-
                 >img {
                     width: 100%;
                     height: 100%;
                     object-fit: contain;
                 }
             }
-
             >h4 {
                 font-size: 14px;
                 color: #96a2af;
                 font-weight: bold;
                 margin-bottom: 15px;
                 text-align: right;
-
                 @media (max-width: 600px) {
                     margin-bottom: 10px;
                 }
             }
-
             >p.text {
                 font-size: 18px;
                 color: #212b36;
                 margin-bottom: 15px;
                 font-weight: bold;
-
                 &.right {
                     text-align: right;
                 }
-
                 @media (max-width: 600px) {
                     font-size: 14px;
                     margin-bottom: 6px;
                 }
             }
-
             button.action-btn {
                 border: none;
                 box-sizing: border-box;
@@ -1232,31 +1059,25 @@ div.notification-banner {
                 margin-bottom: 15px;
                 cursor: pointer;
                 outline: 0 none;
-
                 @media (max-width: 1000px) {
                     width: 100%;
                 }
-
                 &.white-btn {
                     border: 0.5px solid #c4cdd5;
                     background: #fff;
                 }
-
                 &.blue-btn {
                     background: $primary;
                     color: #fff;
                 }
-
                 &.text-btn {
                     color: #4d506a;
                     background: #fff;
-
                     @media (max-width: 1000px) {
                         grid-column: 1/3;
                     }
                 }
             }
-
             &:nth-last-child(1) {
                 @media (max-width: 1000px) {
                     grid-column: 1/3;
@@ -1264,7 +1085,6 @@ div.notification-banner {
                     grid-template-columns: 1fr 1fr;
                     gap: 0 20px;
                 }
-
                 @media (max-width: 600px) {
                     display: flex;
                     flex-direction: column;
@@ -1274,31 +1094,25 @@ div.notification-banner {
             }
         }
     }
-
     >.quantity-wrapper {
         padding: 10px 0px;
         border-bottom: 1px solid #c4cdd5;
-
         >form {
             >.quantity-field {
                 display: flex;
-                justify-content: flex-end;
+                justify-content: space-between;
                 align-items: center;
                 min-height: 30px;
-
                 div {
                     display: flex;
                     align-items: center;
-
                     >span.label {
                         font-size: 16px;
                         font-weight: 900;
                         margin-right: 10px;
                     }
-
                     >.btn-wrapper {
                         display: inline-flex;
-
                         >button {
                             width: 20px;
                             height: 20px;
@@ -1310,19 +1124,16 @@ div.notification-banner {
                             justify-content: center;
                             align-items: center;
                             padding: 0;
-
                             &:active {
                                 border-color: #000000;
                             }
                         }
-
                         >input {
                             border: none;
                             -moz-appearance: textfield;
                             outline: 0 none;
                             width: 30px;
                             text-align: center;
-
                             &::-webkit-outer-spin-button,
                             &::-webkit-inner-spin-button {
                                 -webkit-appearance: none;
@@ -1330,15 +1141,12 @@ div.notification-banner {
                             }
                         }
                     }
-
                     >.update-quantity {
                         margin-left: 30px;
                         display: none;
-
                         &.active {
                             display: inline;
                         }
-
                         >button[type='submit'] {
                             border-radius: 12px;
                             border: none;
@@ -1349,17 +1157,14 @@ div.notification-banner {
                             padding: 7px;
                             transition: 0.3s all ease-in-out;
                             cursor: pointer;
-
                             &:hover {
                                 background: #5badff;
                             }
                         }
                     }
-
                     >.chevron {
                         cursor: pointer;
                         transition: 0.3s all ease-in-out;
-
                         &.active {
                             transform: rotate(-180deg);
                         }
@@ -1368,54 +1173,45 @@ div.notification-banner {
             }
         }
     }
-
     >.slide-down {
         padding: 10px 0;
         padding: 10px 0;
         border-bottom: 1px solid #c4cdd5;
         margin-bottom: 50px;
         display: none;
-
         >.item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px 0;
-
             >p {
                 font-size: 16px;
                 font-weight: bold;
                 text-transform: uppercase;
-
                 &:nth-child(1) {
                     color: #c4c4c4;
                 }
-
                 @media (max-width: 600px) {
                     font-size: 14px;
                 }
             }
         }
     }
-
     >.delivery-address {
         margin-top: 30px;
         display: flex;
         justify-content: space-between;
-
         >div {
             >p {
                 font-size: 16px;
                 font-weight: bold;
                 color: #4d506a;
             }
-
             >h3 {
                 font-size: 18px;
                 font-weight: bold;
                 margin-top: 20px;
             }
-
             >button.edit-address {
                 border: 0.5px solid #c4cdd5;
                 border-radius: 5px;
@@ -1434,27 +1230,22 @@ div.notification-banner {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 25px 39px;
-
     @media (max-width: 768px) {
         display: block;
     }
-
     >.group {
         @media (max-width: 768px) {
             margin-bottom: 20px;
         }
-
         >p {
             font-size: 14px;
             font-weight: bold;
             color: #96a2af;
             text-transform: uppercase;
-
             >span.red {
                 color: red;
             }
         }
-
         input,
         select {
             width: 100%;
@@ -1477,23 +1268,19 @@ div.notification-banner {
     border-radius: 5px;
     padding: 40px;
     margin-top: 30px;
-
     @media (max-width: 600px) {
         max-width: unset;
     }
-
     >.header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding-bottom: 30px;
         border-bottom: 1px solid #ddd;
-
         >h2 {
             font-size: 24px;
             font-weight: bold;
         }
-
         >button.edit {
             border: 0.5px solid #c4cdd5;
             border-radius: 5px;
@@ -1506,17 +1293,14 @@ div.notification-banner {
             outline: 0 none;
         }
     }
-
     >.item {
         margin: 25px 0px 30px 0px;
-
         >h3 {
             font-size: 14px;
             font-weight: bold;
             color: #96a2af;
             margin-bottom: 15px;
         }
-
         >p {
             font-size: 16px;
             font-weight: bold;
@@ -1533,60 +1317,48 @@ div.notification-banner {
     border-radius: 5px;
     padding: 50px 40px;
     margin-top: 30px;
-
     >.grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-
         &:not(:nth-last-child(1)) {
             padding-bottom: 25px;
             border-bottom: 1px solid #ddd;
         }
-
         &:not(:nth-child(1)) {
             margin-top: 25px;
         }
-
         @media (max-width: 1000px) {
             grid-template-columns: 1fr 1fr;
         }
-
         >.item {
             @media (max-width: 1000px) {
                 margin-bottom: 20px;
             }
-
             >h2 {
                 font-size: 14px;
                 font-weight: bold;
                 color: #96a2af;
                 margin-bottom: 25px;
-
                 @media (max-width: 1000px) {
                     margin-top: 10px;
                 }
             }
-
             >p {
                 font-size: 16px;
                 font-weight: bold;
-
                 &.blue {
                     color: $primary;
                 }
             }
-
             >.btn-wrapper {
                 display: flex;
                 justify-content: center;
                 align-items: flex-end;
                 height: 100%;
-
                 @media (max-width: 1000px) {
                     align-items: flex-start;
                     flex-direction: column;
                 }
-
                 button {
                     width: 80px;
                     min-height: 32px;
@@ -1595,20 +1367,17 @@ div.notification-banner {
                     font-size: 14px;
                     cursor: pointer;
                     outline: 0 none;
-
                     &.btn-view {
                         border: 1px solid #ddd;
                         background: #fff;
                         color: #4d506a;
                         margin-right: 8px;
                     }
-
                     &.btn-invoice {
                         background: #fff;
                         color: #fff;
                         background: $primary;
                         display: none;
-
                         @media (max-width: 1000px) {
                             margin-top: 10px;
                         }
@@ -1627,45 +1396,36 @@ div#AppFrameNav {
             background: #fff;
         }
     }
-
     .sm-nav-trigger {
         display: none;
         padding: 0px 20px;
         background: #f6f6f6;
         align-items: center;
-
         >.icon-list {
             padding-top: 10px;
             padding-right: 20px;
         }
-
         span {
             font-weight: bold;
-
             &.close {
                 display: none;
             }
         }
-
         >.icon-chevron {
             margin-left: auto;
             padding-top: 6px;
             transform: rotate(180deg);
             transition: 0.3s all ease-in-out;
-
             &.active {
                 transform: rotate(0deg);
             }
         }
-
         @media (max-width: 1000px) {
             display: flex;
         }
     }
-
     >.Polaris-Navigation {
         margin-top: 10px;
-
         @media (max-width: 1000px) {
             position: fixed;
             width: 100%;
@@ -1677,7 +1437,6 @@ div#AppFrameNav {
             display: none;
         }
     }
-
     @media (max-width: 1000px) {
         position: fixed;
         width: 100%;
@@ -1695,21 +1454,18 @@ div#AppFrameNav {
         margin-bottom: 25px;
         margin-top: 30px;
     }
-
     .slider-preview {
         box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
         background: #fff;
         border-radius: 5px;
         padding: 30px;
     }
-
     .preview-item {
         position: relative;
         outline: 0 none;
         background: #fff;
         padding-bottom: 20px;
         border-radius: 5px;
-
         >.img {
             width: 100%;
             max-width: 170px;
@@ -1717,7 +1473,6 @@ div#AppFrameNav {
             border-radius: 5px;
             margin: 0 auto;
             position: relative;
-
             >.cancel {
                 padding: 10px;
                 position: absolute;
@@ -1728,21 +1483,18 @@ div#AppFrameNav {
                 background: #fff;
                 box-shadow: 0 3px 6px rgba(0, 0, 0, 0.04);
             }
-
             >img {
                 width: 100%;
                 height: 100%;
                 object-fit: contain;
             }
         }
-
         >p {
             margin: 20px 0;
             font-size: 16px;
             font-weight: 900;
             text-align: center;
         }
-
         .spinner {
             position: absolute;
             top: 0;
@@ -1753,7 +1505,6 @@ div#AppFrameNav {
             justify-content: center;
             align-items: center;
             background: #ffffff45;
-
             .loader {
                 border: 6px solid #f3f3f3;
                 border-radius: 50%;
@@ -1763,35 +1514,29 @@ div#AppFrameNav {
                 -webkit-animation: spin 2s linear infinite;
                 /* Safari */
                 animation: spin 1s linear infinite;
-
                 @keyframes spin {
                     0% {
                         transform: rotate(0deg);
                     }
-
                     100% {
                         transform: rotate(360deg);
                     }
                 }
             }
         }
-
         .variants-wrapper {
             display: none;
             margin-bottom: 10px;
-
             >label {
                 display: block;
                 padding-left: 20px;
                 margin-bottom: 10px;
             }
         }
-
         .btn-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
-
             >button {
                 background: #000000;
                 border-radius: 20px;
@@ -1845,90 +1590,71 @@ body.chargezen-proxy {
     background: none;
     // font-family: 'AvenirLTStd';
     background: #e5e5e5;
-
     .Polaris-Button__Yes {
         background: #00a023;
         color: white;
     }
-
     .Polaris-Button__No {
         background: #ff0000;
         color: white;
     }
-
     .Polaris-Navigation__Icon img {
         filter: none;
     }
-
     .Polaris-Page {
         margin: 0;
         padding: 0 !important;
         max-width: none;
         background: #e5e5e5;
     }
-
     .Polaris-Page__Content {
         max-width: 1200px;
         margin: 0 auto;
         margin-top: 55px;
-
         .Polaris-Page-Header {
             padding-top: 0;
         }
-
         main span.Polaris-Icon {
             margin-right: 20px;
         }
     }
-
     .mr-10 {
         margin-right: 10px;
     }
-
     .Polaris-Modal {
         display: none;
-
         &.shown {
             display: flex;
         }
-
         .Polaris-FormLayout__Item--firstOne {
             margin-left: 0;
         }
     }
-
     .Polaris-Frame__Main {
         padding-left: 30px;
         padding-right: 30px;
-
         @media (max-width: 600px) {
             padding: 0;
         }
     }
-
     .avatar {
         width: 160px;
         height: 180px;
     }
-
     .datepicker {
         z-index: 999;
     }
-
     .Polaris-Frame,
     .Polaris-Navigation,
     .Polaris-Banner--withinContentContainer {
         background-color: transparent;
     }
-
     ul.Polaris-Tabs {
         background: #000000;
         justify-content: center;
-
         a.Polaris-Tabs__Tab {
             padding: 0 50px;
         }
-
         a {
             color: white;
             // font-family: Avenir LT Std;
@@ -1939,26 +1665,21 @@ body.chargezen-proxy {
             letter-spacing: 0em;
             text-align: left;
         }
-
         .Polaris-Tabs__Tab.Polaris-Tabs__Tab--selected .Polaris-Tabs__Title {
             border-bottom: 2px solid white;
         }
-
         .Polaris-Tabs__Title {
             padding: 1.6rem 0 1rem 0;
             margin-bottom: 8px;
         }
-
         .Polaris-Tabs__Tab.Polaris-Tabs__Tab:hover .Polaris-Tabs__Title {
             font-weight: normal;
             color: #000 !important;
             border-bottom: 2px solid white;
         }
     }
-
     .Polaris-Navigation {
         background: transparent;
-
         // font-family: 'AvenirLTStdBold';
         .Polaris-Navigation__Item--selected {
             font-weight: 600;
@@ -1966,24 +1687,19 @@ body.chargezen-proxy {
             background-color: #d4e7fe;
             position: relative;
         }
-
         a.Polaris-Navigation__Item:hover {
             background-color: #d4e7fe;
         }
-
         li.Polaris-Navigation__ListItem {
             padding: 0 0 10px 0;
         }
-
         .Polaris-Navigation__Text {
             font-size: 14px;
         }
-
         .Polaris-Navigation__Section {
             padding: 0 0 1.6rem 0;
         }
     }
-
     h1 {
         font-size: 48px;
         font-style: normal;
@@ -1993,62 +1709,50 @@ body.chargezen-proxy {
         text-align: left;
         // font-family: 'AvenirLTStdBold';
     }
-
     span.Polaris-Icon.order-icon {
         margin-left: 3px;
     }
-
     .Polaris-Card {
         border-radius: 20px;
         padding: 20px;
     }
-
     .Polaris-Button--primary {
         background: #000000;
         border-color: #000000;
         box-shadow: inset 0 1px 0 0 #000000, 0 1px 0 0 rgba(22, 29, 37, 0.05), 0 0 0 0 transparent;
         color: white;
         border-radius: 5px;
-
         &:hover {
             background: #3e85ce;
             border-color: #3e85ce;
             box-shadow: inset 0 1px 0 0 #3e85ce, 0 1px 0 0 rgba(22, 29, 37, 0.05), 0 0 0 0 transparent;
         }
     }
-
     .refer-tag {
         padding-top: 40%;
-
         &>img {
             padding-left: 36px;
         }
-
         button.Polaris-Button {
             border-radius: 10px;
             text-transform: none;
-
             .Polaris-Navigation__Text {
                 font-size: 11.5px;
             }
         }
     }
-
     .mt-30 {
         margin-top: 30px;
     }
-
     .Polaris-Tabs__Tab:focus {
         box-shadow: none !important;
     }
-
     .payment-methods {
         .Polaris-Card {
             padding: 20px 0;
             text-align: center;
             border: 3px solid #000000;
         }
-
         .check-icon {
             position: absolute;
             margin-right: -1px;
@@ -2056,45 +1760,36 @@ body.chargezen-proxy {
             left: 0px;
             margin-top: -35px;
             margin-left: 161px;
-
             img {
                 width: 30px;
                 height: 30px;
             }
         }
     }
-
     main {
-
         h2,
         h3 {
             font-size: 18px;
             // font-family: 'AvenirLTStdBold';
         }
-
         h3 {
             font-size: 16px;
         }
-
         .Polaris-Layout__AnnotationDescription {
             padding: 10px 0 0px 0;
         }
-
         .Polaris-Card.active {
             background: #000000;
             color: white;
             padding: 20px 10px;
-
             .round-icon {
                 position: absolute;
                 top: 0;
             }
-
             .Polaris-Banner__ContentWrapper {
                 margin-left: 20px;
             }
         }
-
         .round-icon {
             background: white;
             border-radius: 50px;
@@ -2104,15 +1799,12 @@ body.chargezen-proxy {
             padding: 9px;
             margin-top: -1px;
         }
-
         .Polaris-MediaCard {
             .Polaris-MediaCard__MediaContainer:not(.Polaris-MediaCard--portrait) {
                 flex-basis: 15%;
-
                 img {
                     height: 100%;
                     width: 100%;
-
                     div#AppFrameNav {
                         position: fixed;
                         width: 100%;
@@ -2124,27 +1816,21 @@ body.chargezen-proxy {
                     }
                 }
             }
-
             .Polaris-Card__Section {
                 padding: 10px 20px;
             }
-
             .Polaris-MediaCard__InfoContainer:not(.Polaris-MediaCard--portrait) {
                 flex-basis: 85%;
             }
-
             margin-bottom: 10px;
             padding-bottom: 10px;
-
             &:not(:last-child) {
                 border-bottom: 1px solid #ddd;
             }
         }
-
         .Polaris-Stack {
             margin-bottom: 10px;
         }
-
         .active-heading-card {
             div#AppFrameNav {
                 position: fixed;
@@ -2155,29 +1841,23 @@ body.chargezen-proxy {
                 height: 100vh;
                 display: none;
             }
-
             padding: 0;
-
             .Polaris-Banner__Heading.active {
                 background: #000000;
                 color: white;
                 padding: 15px 22px;
                 border-radius: 20px 20px 0 0;
-
                 .Polaris-Heading {
                     font-size: 16px;
                 }
             }
-
             .Polaris-Banner__Content {
                 padding: 20px;
             }
-
             .Polaris-Banner--withinContentContainer {
                 padding: 0;
             }
         }
-
         div#AppFrameNav {
             position: fixed;
             width: 100%;
@@ -2187,11 +1867,9 @@ body.chargezen-proxy {
             height: 100vh;
             display: none;
         }
-
         .pull-right {
             float: right;
         }
-
         .clearfix {
             clear: both;
         }
@@ -2464,7 +2142,6 @@ body.chargezen-proxy {
         transform: translate(-50%, 0);
         transition: transform 0.5s;
     }
-
     .dp-day-of-week,
     .dp-day {
         padding: 0.5em;
@@ -2475,7 +2152,6 @@ body.chargezen-proxy {
     0% {
         transform: translate(-50%, 100%);
     }
-
     100% {
         transform: translate(-50%, -50%);
     }
@@ -2493,7 +2169,6 @@ a[disabled='disabled'] {
 .checkout-design .select-option {
     display: flex;
     justify-content: space-between;
-
     p {
         font-weight: bold;
     }
@@ -2610,7 +2285,6 @@ Customer Build a box .checkout-design-1 {
 
 .checkout-design-1 .img-con {
     position: relative;
-
     //
     img {
         width: 100%;
@@ -2778,7 +2452,6 @@ Customer Build a box .checkout-design-1 {
     .new-desig-parent {
         flex-direction: column-reverse;
     }
-
     .add-img-section {
         max-width: 28%;
     }
@@ -2787,81 +2460,66 @@ Customer Build a box .checkout-design-1 {
 span.cancel-text {
     color: #000 !important;
 }
-
-.rem2 {
-    margin: 3rem;
+.rem2{
+  margin: 3rem;
 }
-
-.track-order-button {
-    border: 1px solid;
-    padding: 0.7rem 4rem;
-    background: transparent;
-    margin-bottom: 1rem;
-    font-size: 1.7rem;
-    color: black;
-    text-decoration: none;
-    text-align: center;
+.track-order-button{
+  border: 1px solid;
+  padding: 0.7rem 4rem;
+  background: transparent;
+  margin-bottom: 1rem;
+  font-size: 1.7rem;
+  color: black;
+  text-decoration: none;
+  text-align: center;
 }
-
-.m-top-3 {
-    margin-top: 3rem;
+.m-top-3{
+  margin-top: 3rem;
 }
-
-.m-top-7 {
-    margin-top: 7rem;
+.m-top-7{
+  margin-top: 7rem;
 }
-
-.elipse-style {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    max-width: 9rem;
-    text-align: center;
+.elipse-style{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 9rem;
+  text-align: center;
 }
-
-.hr-dotted {
-    border: none;
-    border-top: 2px dotted black;
-    color: #fff;
-    background-color: #fff;
-    height: 1px;
-    width: 7rem;
-    margin: 8rem -4rem 0 -4rem;
+.hr-dotted{
+  border: none;
+  border-top: 2px dotted black;
+  color: #fff;
+  background-color: #fff;
+  height: 1px;
+  width: 7rem;
+  margin: 8rem -4rem 0 -4rem;
 }
-
-.hr-dotted-2 {
-    border: none;
-    border-top: 2px dotted black;
-    color: #fff;
-    background-color: #fff;
-    height: 1px;
-    width: 6rem;
-    margin: 8rem -4rem 0 -4rem;
+.hr-dotted-2{
+  border: none;
+  border-top: 2px dotted black;
+  color: #fff;
+  background-color: #fff;
+  height: 1px;
+  width: 6rem;
+  margin: 8rem -4rem 0 -4rem;
 }
-
-.mt-1 {
-    margin-top: 1rem !important;
+.mt-1{
+  margin-top: 1rem !important;
 }
 
 
 .prx-loader {
-    border: 6px solid #f3f3f3;
-    /* Light grey */
-    border-top: 6px solid #3498db;
-    /* Blue */
+    border: 6px solid #f3f3f3; /* Light grey */
+    border-top: 6px solid #3498db; /* Blue */
     border-radius: 50%;
     width: 50px;
     height: 50px;
     animation: prx-spin 2s linear infinite;
-}
-
-@keyframes prx-spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
+  }
+  
+  @keyframes prx-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
