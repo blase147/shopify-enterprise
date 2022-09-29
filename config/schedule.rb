@@ -44,6 +44,6 @@ every 1.hours do
   rake 'analytics:update_analytics'
 end
 
-every :day, at: '10:00pm' do
+every 1.days do
   CheckNextBillingDateWorker.perform_async
 end
