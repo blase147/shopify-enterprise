@@ -92,7 +92,7 @@ class AddOrderLineItem < GraphqlService
     being_order = client.query(client.parse(BEGIN_ORDER), variables: {
       orderID: "gid://shopify/Order/#{@order_id}"
     })
-    calculated_id = being_order&.data&.order_edit_begin&.calculated_order&.id
+    calculated_id = being_order.data.order_edit_begin.calculated_order.id
   end
 
   def fetch_product_varients

@@ -80,8 +80,8 @@ class CalculateOrderDelivery
     }
   end
 
-  def expected_delivery_of_order(order_created_at,specific_delivery_day=nil)
-    delivery_day = specific_delivery_day.present? ? specific_delivery_day.downcase&.to_sym : @contract.delivery_day.downcase&.to_sym
+  def expected_delivery_of_order(order_created_at)
+    delivery_day = @contract.delivery_day.downcase&.to_sym
 
     order_select_by = cuttoff_for_order(order_created_at)
     order_expected_delivery = order_select_by.next_occurring(delivery_day)
