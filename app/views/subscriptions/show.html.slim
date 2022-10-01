@@ -213,7 +213,6 @@
               - if @box_products.present?
                 li data-target="#box-products" Box Products
               li data-target="#contract-actions" Contract History
-              li data-target="#boxaby_master" Boxaby Master
 
 
 
@@ -308,9 +307,6 @@
 
             .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing.hidden.tab#contract-actions
                 = render "subscriptions/subscription_logs", subscription: @customer
-
-            .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing.hidden.tab#boxaby_master
-                = render "subscriptions/boxaby_master", subscription: @customer, customer: customer
 
         / .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
         /   h2.Polaris-Heading.Polaris-TextStyle--variationStrong History
