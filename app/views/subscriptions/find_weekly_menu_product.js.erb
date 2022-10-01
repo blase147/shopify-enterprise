@@ -18,6 +18,8 @@ $('option').mousedown(function(e) {
     return false;
 });
 
-currentMeal = (<%= @pre_order_products %>)
-
+currentMeal=[]
+<% @products&.each do |product| %>
+    currentMeal.push(<%= product[:product_id] %>)
+<% end %>
 $(".weekly_meals_select").val(currentMeal);
