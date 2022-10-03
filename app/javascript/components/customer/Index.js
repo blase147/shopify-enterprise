@@ -414,23 +414,6 @@ const Customers = ({ shopifyDomain }) => {
               <span className="price">{row.language}</span>
             </p>
           </div>,
-          <Button
-            onClick={() => {
-              fetch(`/subscriptions/create_billing_attempt`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Accept: 'application/json',
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify({ id: row.id })
-              })
-                .then((response) => response.json())
-            }}
-          >
-            Create Billing Attempt
-          </Button>
-          ,
           <input type='date' value={row?.deliveryDate} onChange={(e) => {
             fetch(`/subscriptions/update_contract_delivery_date_day`, {
               method: 'POST',
@@ -844,8 +827,7 @@ const Customers = ({ shopifyDomain }) => {
                     'numeric',
                     'text',
                     'text',
-                    'text',
-                    'text',
+                    'text'
                   ]}
                   headings={[
                     'Id',
@@ -857,7 +839,6 @@ const Customers = ({ shopifyDomain }) => {
                     'Product',
                     'Delivery Date',
                     'Delivery Day',
-                    '',
                     '',
                     ''
                   ]}
