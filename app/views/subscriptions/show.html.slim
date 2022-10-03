@@ -114,7 +114,8 @@
 
               .Polaris-Stack.visa-section
                 .Polaris-Stack__Item
-                  - if card.credit_card_company&.downcase == "visa" || card.credit_card_company&.downcase == "mastercard"
+                  - card_company = card&.credit_card_company&.downcase rescue nil
+                  - if card_company.present? && (card_company&.downcase == "visa" || card_company&.downcase == "mastercard")
                     img class="card_logo" src="#{asset_path("#{card.credit_card_company&.downcase}_logo.png")}"
                   - else
                     <svg class="card_logo" width="84" height="57" viewBox="0 0 84 57" fill="none" xmlns="http://www.w3.org/2000/svg">
