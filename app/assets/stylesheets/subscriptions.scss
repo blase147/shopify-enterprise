@@ -1,5 +1,6 @@
 @import "owl_carousel";
 $primary: #000000;
+
 // MODAL POSTION
 .Polaris-Modal-Dialog__Modal {
     @media (max-width: 1000px) {
@@ -23,65 +24,80 @@ div.Polaris-Modal-Dialog__Container {
         justify-content: space-between;
         align-items: center;
         padding: 0px 20px;
+
         div {
             outline: 0 none;
+
             >h2 {
                 font-size: 22px;
                 font-weight: bold;
                 margin-left: 40px;
+
                 @media (max-width: 1000px) {
                     font-size: 18px;
                     line-height: 24px;
                     margin-left: 10px;
                 }
             }
+
             >svg {
                 cursor: pointer;
             }
         }
     }
+
     .subscription-details {
         padding: 0px 35px;
+
         .img {
             width: 200px;
             height: 100px;
             margin: 30px auto;
+
             img {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
             }
         }
+
         .title {
             padding-bottom: 20px;
             border-bottom: 1px solid #ddd;
+
             h2 {
                 font-size: 18px;
                 font-weight: 900;
                 margin-bottom: 10px;
             }
+
             h3 {
                 font-size: 16px;
                 font-weight: 900;
                 color: #4D506A;
             }
         }
+
         .delivery-charge {
             padding: 20px 0px;
             border-bottom: 1px solid #ddd;
+
             >div {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+
                 &:nth-child(1) {
                     margin-bottom: 16px;
                 }
+
                 h3 {
                     color: #C4C4C4;
                     font-size: 14px;
                     font-weight: bold;
                     text-transform: uppercase;
                 }
+
                 h4 {
                     color: #000;
                     font-size: 14px;
@@ -90,11 +106,13 @@ div.Polaris-Modal-Dialog__Container {
                 }
             }
         }
+
         .btn-wrapper {
             display: flex;
             justify-content: center;
             flex-direction: column;
             padding-bottom: 20px;
+
             >button {
                 width: 100%;
                 height: 40px;
@@ -107,6 +125,7 @@ div.Polaris-Modal-Dialog__Container {
                 background: transparent;
                 cursor: pointer;
                 outline: 0 none;
+
                 &.light {
                     color: #ddd;
                 }
@@ -126,48 +145,59 @@ div.Polaris-Modal-Dialog__Container {
         justify-content: space-between;
         align-items: center;
         padding: 0px 20px;
+
         div {
             outline: 0 none;
+
             >h2 {
                 font-size: 22px;
                 font-weight: bold;
                 margin-left: 40px;
+
                 @media (max-width: 1000px) {
                     font-size: 18px;
                     line-height: 24px;
                     margin-left: 10px;
                 }
+
                 >span.blue {
                     color: $primary;
                 }
             }
+
             >svg {
                 cursor: pointer;
             }
         }
     }
+
     .swap-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 30px;
         padding: 30px;
+
         @media (max-width: 768px) {
             display: block;
         }
+
         >.item {
             box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
             border-radius: 5px;
             padding: 25px 40px;
+
             .img {
                 width: 100%;
                 height: 115px;
                 margin-bottom: 25px;
+
                 >img {
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
                 }
             }
+
             .title {
                 >h2 {
                     font-size: 18px;
@@ -176,22 +206,27 @@ div.Polaris-Modal-Dialog__Container {
                     text-align: center;
                     margin-bottom: 15px;
                 }
+
                 >p {
                     font-size: 14px;
                     text-align: center;
                     color: #ACB5BD;
                 }
             }
+
             .variants-wrapper {
                 display: flex;
                 flex-direction: column;
                 padding: 10px 0;
+
                 >label {
                     margin: 5px 0;
                 }
             }
+
             .btn-wrapper {
                 margin-top: 10px;
+
                 >button {
                     width: 100%;
                     height: 40px;
@@ -205,6 +240,7 @@ div.Polaris-Modal-Dialog__Container {
                     cursor: pointer;
                     outline: 0 none;
                     transition: 0.3s all ease-in-out;
+
                     &:hover {
                         background: #43a1ff;
                     }
@@ -224,24 +260,30 @@ div.Polaris-Modal-Dialog__Container {
         justify-content: space-between;
         align-items: center;
         padding: 0px 33px;
+
         div {
             outline: 0 none;
+
             >h2 {
                 font-size: 22px;
                 font-weight: bold;
+
                 @media (max-width: 1000px) {
                     font-size: 18px;
                     line-height: 24px;
                 }
+
                 >span.blue {
                     color: $primary;
                 }
             }
+
             >svg {
                 cursor: pointer;
             }
         }
     }
+
     .warning {
         display: flex;
         justify-content: center;
@@ -249,6 +291,7 @@ div.Polaris-Modal-Dialog__Container {
         flex-direction: column;
         padding: 25px 0px;
         border-bottom: 1px solid #ddd;
+
         >h2 {
             font-size: 20px;
             font-weight: bold;
@@ -257,6 +300,7 @@ div.Polaris-Modal-Dialog__Container {
             text-align: center;
             line-height: 24px;
         }
+
         >h3 {
             font-size: 18px;
             font-weight: bold;
@@ -265,6 +309,7 @@ div.Polaris-Modal-Dialog__Container {
             text-align: center;
             line-height: 24px;
         }
+
         >p {
             font-size: 18px;
             font-weight: bold;
@@ -273,14 +318,17 @@ div.Polaris-Modal-Dialog__Container {
             line-height: 24px;
         }
     }
+
     .btn-wrapper {
         display: flex;
         justify-content: center;
         align-items: center;
         padding: 50px 0;
+
         @media (max-width: 1000px) {
             flex-direction: column;
         }
+
         button {
             width: 228px;
             height: 40px;
@@ -288,15 +336,18 @@ div.Polaris-Modal-Dialog__Container {
             font-size: 14px;
             cursor: pointer;
             outline: 0 none;
+
             &.btn-cancel {
                 border: 1px solid #C6C7C8;
                 background: #fff;
                 margin-right: 20px;
                 font-weight: 600px;
+
                 @media (max-width: 1000px) {
                     margin: 15px 0px;
                 }
             }
+
             &.btn-keep {
                 background: $primary;
                 color: #fff;
@@ -311,28 +362,35 @@ div.Polaris-Modal-Dialog__Container {
     .Polaris-Page {
         max-width: unset;
     }
+
     &.show {
         .Polaris-TextField.Polaris-TextField--hasValue input {
             width: 50px;
         }
+
         .Polaris-Icon {
             width: 1.5rem;
             height: 1.5rem;
             margin-right: 5px;
         }
+
         .Polaris-Layout__Section--oneSix .Polaris-Card {
             min-height: 120px;
         }
+
         .Polaris-TextContainer.Polaris-TextContainer--spacingTight {
             margin-bottom: 5px;
         }
+
         .Polaris-FormLayout__Item--firstOne {
             margin-left: 0;
         }
+
         .mr-10 {
             margin-right: 10px;
         }
     }
+
     .Polaris-Button__Content {
         &>span {
             margin-left: 5px;
@@ -345,13 +403,16 @@ div.Polaris-Modal-Dialog__Container {
     padding-bottom: 3rem;
     padding-top: 3rem;
     border-bottom: 0.1rem solid var(--p-divider, #dfe3e8);
+
     &:nth-last-child(1) {
         border-bottom: 0;
     }
+
     p {
         font-size: 18px;
         width: 160px;
     }
+
     a {
         // margin-right: 6px;
         display: flex;
@@ -359,6 +420,7 @@ div.Polaris-Modal-Dialog__Container {
         color: #000;
         text-decoration: none;
     }
+
     span {
         margin-left: 6px;
         font-weight: 300;
@@ -371,6 +433,7 @@ div.Polaris-Modal-Dialog__Container {
 
 .product-carousel {
     padding: 0 !important;
+
     .product-qty {
         display: flex;
         justify-content: space-between;
@@ -378,9 +441,11 @@ div.Polaris-Modal-Dialog__Container {
         margin-bottom: 47px;
         margin-right: 100px;
     }
+
     #owl-demo {
         position: static;
     }
+
     .owl-carousel.owl-items-display .owl-nav,
     .owl-carousel .owl-dots {
         display: flex;
@@ -388,6 +453,7 @@ div.Polaris-Modal-Dialog__Container {
         top: 17px;
         right: 0;
     }
+
     .owl-carousel .owl-nav button.owl-prev,
     .owl-carousel .owl-nav button.owl-next {
         border: 2px solid;
@@ -399,10 +465,12 @@ div.Polaris-Modal-Dialog__Container {
         justify-content: center;
         align-items: center;
         margin-right: 10px;
+
         &:focus {
             outline: 0 none;
         }
     }
+
     .owl-carousel .owl-nav button.owl-prev span,
     .owl-carousel .owl-nav button.owl-next span {
         display: block;
@@ -410,6 +478,7 @@ div.Polaris-Modal-Dialog__Container {
         width: 100%;
         margin-top: -1px;
     }
+
     .owl-carousel .owl-nav .owl-prev.disabled,
     .owl-carousel .owl-nav .owl-next.disabled {
         display: none;
@@ -429,20 +498,25 @@ div.Polaris-Modal-Dialog__Container {
     // align-items: center;
     padding-bottom: 20px;
     grid-gap: 25px;
+
     span {
         margin-left: 5px;
     }
+
     a {
         color: black;
         display: flex;
         align-items: center;
     }
+
     .slider-btns {
         display: flex;
+
         // padding-bottom: 20px;
         img {
             margin-right: 10px;
         }
+
         a {
             display: flex;
             align-items: center;
@@ -464,16 +538,20 @@ div.Polaris-Modal-Dialog__Container {
     justify-content: space-between;
     align-items: center;
     min-height: 30px;
+
     div {
         display: flex;
         align-items: center;
+
         >span.label {
             font-size: 16px;
             font-weight: 900;
             margin-right: 10px;
         }
+
         >.btn-wrapper {
             display: inline-flex;
+
             >button {
                 width: 20px;
                 height: 20px;
@@ -485,16 +563,19 @@ div.Polaris-Modal-Dialog__Container {
                 justify-content: center;
                 align-items: center;
                 padding: 0;
+
                 &:active {
                     border-color: #000000;
                 }
             }
+
             >input {
                 border: none;
                 -moz-appearance: textfield;
                 outline: 0 none;
                 width: 30px;
                 text-align: center;
+
                 &::-webkit-outer-spin-button,
                 &::-webkit-inner-spin-button {
                     -webkit-appearance: none;
@@ -502,12 +583,15 @@ div.Polaris-Modal-Dialog__Container {
                 }
             }
         }
+
         >.update-quantity {
             margin-left: 30px;
             display: none;
+
             &.active {
                 display: inline;
             }
+
             >button[type="submit"] {
                 border-radius: 12px;
                 border: none;
@@ -518,6 +602,7 @@ div.Polaris-Modal-Dialog__Container {
                 padding: 7px;
                 transition: 0.3s all ease-in-out;
                 cursor: pointer;
+
                 &:hover {
                     background: #5badff;
                 }
@@ -535,6 +620,7 @@ div.Polaris-Modal-Dialog__Container {
     padding-top: 2rem;
     padding-bottom: 2rem;
     border-bottom: 0.1rem solid var(--p-divider, #dfe3e8);
+
     p {
         font-size: 18px;
         line-height: 28px;
@@ -544,15 +630,18 @@ div.Polaris-Modal-Dialog__Container {
 .billing-actions {
     display: flex;
     align-items: center;
+
     .eidt {
         margin-right: 30px;
         display: flex;
         align-items: center;
         margin-left: 20px;
         padding-bottom: 15px;
+
         svg {
             margin-right: 10px;
         }
+
         a {
             text-decoration: none;
             color: #000;
@@ -569,12 +658,14 @@ div.Polaris-Modal-Dialog__Container {
 .resume {
     padding-bottom: 15px;
     margin-top: 30px;
+
     a {
         text-decoration: none;
         display: flex;
         align-items: center;
         color: #000;
     }
+
     .resume-btn {
         margin-left: 6px;
     }
@@ -598,13 +689,16 @@ div.Polaris-Modal-Dialog__Container {
 
 div.box-items {
     padding: 20px 10px 10px 39px;
+
     //
     .campaign_date_title {
         display: flex;
+
         span {
             color: #000000;
         }
     }
+
     //
     .product_choice_label {
         color: #000000;
@@ -613,12 +707,14 @@ div.box-items {
         line-height: 14px;
         margin-top: 28px;
     }
+
     //
     .box_images_collection {
         display: flex;
         gap: 20px;
         margin-top: 16px;
     }
+
     //
     .building-box-product {
         display: flex;
@@ -626,12 +722,14 @@ div.box-items {
         height: 65px;
         width: 65px;
     }
+
     //
     img.box-image-d {
         width: 65px;
         margin-right: 30px;
         background-size: cover;
     }
+
     //
     img.removeIcon {
         position: absolute;
@@ -642,7 +740,7 @@ div.box-items {
 
 .shopify_profile_btn {
     text-decoration: none;
-    color: black;
+    color: #FFFFFF;
 }
 
 .payment-tabs {
@@ -681,20 +779,24 @@ div.box-items {
 }
 
 /* responsive */
-@media only screen and (max-width:1024px){
+@media only screen and (max-width:1024px) {
     .customer-portal .flex-holder {
         flex-direction: column;
     }
+
     .customer-portal .tab-content-holder {
         width: 100%;
         margin-top: 25px;
     }
+
     .customer-portal .tabs-holder {
         top: auto !important;
     }
+
     .customer-portal .tab-content-holder {
         margin-top: 0;
     }
+
     .customer-details .customer-info {
         margin-bottom: 15px;
         flex: 0 0 100%;
@@ -703,36 +805,43 @@ div.box-items {
         width: 100%;
         justify-content: center;
     }
+
     .contact-details h2 {
         text-align: center !important;
         margin-bottom: 0 !important;
         font-size: 20px;
         margin-top: 95px;
     }
+
     .customer-portal .tab-content-holder .sort_by p {
         margin-bottom: 0 !important;
- 
+
     }
+
     .button-holder {
         margin-top: 0 !important;
         padding: 0 5px;
     }
 }
-@media only screen and (max-width:767px){
+
+@media only screen and (max-width:767px) {
     .order-box {
         padding: 15px !important;
-        margin-bottom:25px !important;
+        margin-bottom: 25px !important;
     }
+
     .customer-portal .tabs-holder .Profile_tab {
         gap: 0;
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-start;
     }
+
     .customer-portal .tab-content-holder .sort_by p {
 
         margin: 0 !important;
     }
+
     .customer button {
         font-size: 15px;
         margin: 5px 0px !important;
@@ -747,23 +856,27 @@ div.box-items {
         font-size: 12px !important;
         width: calc(50vw - 10px);
     }
-    .pre_orders + .pre_orders {
+
+    .pre_orders+.pre_orders {
         margin-top: 0;
     }
+
     .customer-portal {
 
         padding: 0 15px;
     }
+
     .customer-details {
         background: #E9DBC3;
         padding: 0;
         margin-bottom: 70px;
     }
+
     .customer-details {
         padding: 0 !important;
     }
 }
 
-.grayed-out{
+.grayed-out {
     background: #ddd;
-} 
+}
