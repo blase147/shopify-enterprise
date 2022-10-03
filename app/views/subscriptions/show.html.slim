@@ -3,12 +3,12 @@
 - billing_policy = @subscription.billing_policy
 - delivery_policy = @subscription.delivery_policy
 - api_order = ShopifyAPI::Order.find(@subscription.origin_order.id[/\d+/]) rescue nil
-- shipping_address = api_order.shipping_address rescue nil
-- formatted_shipping_address = "#{shipping_address.address1} #{shipping_address.city} #{shipping_address.province} #{shipping_address.zip} #{shipping_address.country}" rescue ''
+- address = customer.default_address rescue nil
 - billing_address = api_order.billing_address rescue nil
 - baddress = "#{billing_address.address1} #{billing_address.city} #{billing_address.province} #{billing_address.zip} #{billing_address.country}" rescue ''
 - next_billing_date =  get_next_billing_date(@subscription, current_shop)
 
+- formatted = address.formatted.join(' ').titleize rescue nil
 - formatted_billing_address = baddress
 - address_id = address.id[/\d+/] rescue nil
 - setting = current_shop.setting
@@ -39,21 +39,23 @@
                 h1.Polaris-Heading
                   = customer&.display_name&.titleize
               div
-                p style="font-size: 20px; line-height: 24px" = @subscription&.lines&.edges.first.node.title
+                p Shopify Subscription
               div
-                div style="display: flex; justify-content: flex-end;"
+                div style="display: flex; justify-content: space-between;"
                   p.Polaris-TextStyle--variationStrong
                     | EMAIL
+                  button.Polaris-Button.Polaris-Button--plain type="button" data-toggle='modal' data-target='#customerEditModal'
+                    span.Polaris-Button__Content
+                      span.Polaris-Button__Text Edit
                 p.Polaris-DisplayText.Polaris-TextStyle--variationSubdued #{customer&.email}
 
 
             - @subscription&.lines&.edges&.each do |line|
               - selling_plan = SellingPlan.find_by(shopify_id: line.node.selling_plan_id)
               - if @subscription.status == 'ACTIVE'
-                p Shopify Subscription
                 div.item
                   div style="margin-bottom: 1rem; display: flex; justify-content: space-between; background: #F2F0F9; padding: 1rem 2rem;"
-                    p style="font-size: 2rem; line-height: 1.8;" = selling_plan&.name
+                    p style="font-size: 20px; line-height: 24px" = line.node.title
                     p style="font-size: 20px; line-height: 20px"
                       |$
                       = line.node.current_price.amount
@@ -61,24 +63,30 @@
                     div.slider-btns
                       .Polaris-Stack__Item
                         - if setting.admin_allowed?('swap_product')
-                        button.admin_show_sub_button.edit_button type="button" data-toggle='modal' data-target="#editSubscriptionModal-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}"
-                          | Edit Subscription
-
-                    div.slider-btns
-                      .Polaris-Stack__Item
-                        button.admin_show_sub_button#create_billing_attempt type="button"
-                          | Create Billing Attempt
-
-                    div.slider-btns
-                      .Polaris-Stack__Item
-                        button.admin_show_sub_button type="button"
-                          a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/a/chargezen_production/dashboard?customer_id=#{@customer&.shopify_customer_id}" target="blank"
-                            | Customer Portal
+                        button.Polaris-Button type="button" style="margin-right: 1rem;" data-toggle='modal' data-target="#editSubscriptionModal-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}"
+                          span.Polaris-Button__Content
+                            span.Polaris-Button__Text.ml-0
+                              | Edit
                   
-                    div.slider-btns
-                      button.admin_show_sub_button
-                        a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/admin/customers/#{@customer.shopify_customer_id}?shop=#{@customer.shop.shopify_domain}" target="_parent"
-                          | Shopify Profile
+                    div
+                      p style="font-size: 2rem; line-height: 1.8;" = selling_plan&.name
+                    div
+                      a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/admin/customers/#{@customer.shopify_customer_id}?shop=#{@customer.shop.shopify_domain}" target="_parent"
+                        button.Polaris-Button
+                          span.Polaris-Button__Content
+                            span.Polaris-Button__Text.ml-0
+                              | Shopify Profile
+                  div style="display: flex; justify-content: left;"
+                    .Polaris-Stack__Item style="margin: 16px;"
+                      p.Polaris-Heading Delivery Day
+                      p = @customer&.delivery_day
+                    .Polaris-Stack__Item style="margin: 16px;"
+                      p.Polaris-Heading First Delivery Date
+                      p = @customer&.delivery_date&.strftime("%a, %B %e")
+                      button.Polaris-Button.Polaris-Button--plain type="button" id="edit-delivery-date" Edit
+                      <input type="date" id="new_delivery_date" hidden=true >
+                      button.hidden.Polaris-Button--plain type="button" id="save-delivery-date" Apply
+                    div#delivery_date_update_message
 
               - else
                 - if setting.admin_allowed?('reactive_subscription')
@@ -94,10 +102,10 @@
               - if @subscription.status == 'ACTIVE'
                 - product = ShopifyAPI::Product.find(line.node.product_id[/\d+/])
 
-                = render partial:'app_proxy/dashboard/edit_subscription_admin_modal', locals: { subscription: @subscription, line_item: line.node, product_image: product.images.first&.src, admin_action: true, setting: setting, selling_plan_id: line.node.selling_plan_id, selling_plan: selling_plan, action_by: 'admin', product_id: product.id,contract: @customer}
-                = render partial:'app_proxy/dashboard/swap_subscription_modal', locals: { subscription: @subscription, line_item: line.node, action_by: 'admin'}
-                = render partial:'app_proxy/dashboard/upgrade_subscription_modal', locals: { subscription: @subscription, line_item: line.node, selling_plan_id: line.node.selling_plan_id, product: product, action_by: 'admin'}
-                = render partial:'app_proxy/dashboard/cancel_subscription_modal', locals: { subscription: @subscription, line_item: line.node, lines_count: @subscription.lines.edges.size, action_by: 'admin'}
+                = render 'app_proxy/dashboard/edit_subscription_admin_modal', subscription: @subscription, line_item: line.node, product_image: product.images.first&.src, admin_action: true, setting: setting, selling_plan_id: line.node.selling_plan_id, selling_plan: selling_plan, action_by: 'admin', product_id: product.id,contract: @customer
+                = render 'app_proxy/dashboard/swap_subscription_modal', subscription: @subscription, line_item: line.node, action_by: 'admin'
+                = render 'app_proxy/dashboard/upgrade_subscription_modal', subscription: @subscription, line_item: line.node, selling_plan_id: line.node.selling_plan_id, product: product, action_by: 'admin'
+                = render 'app_proxy/dashboard/cancel_subscription_modal', subscription: @subscription, line_item: line.node, lines_count: @subscription.lines.edges.size, action_by: 'admin'
 
       .Polaris-Layout__Section.Polaris-Layout__Section--secondary
         .Polaris-Card
@@ -114,14 +122,11 @@
 
               .Polaris-Stack.visa-section
                 .Polaris-Stack__Item
-                  - if card.credit_card_company&.downcase == "visa" || card.credit_card_company&.downcase == "mastercard"
-                    img class="card_logo" src="#{asset_path("#{card.credit_card_company&.downcase}_logo.png")}"
-                  - else
-                    <svg class="card_logo" width="84" height="57" viewBox="0 0 84 57" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M73.3681 0.340088H10.6319C4.76952 0.340088 0 5.10961 0 10.9719V45.7789C0 51.6412 4.76952 56.4107 10.6319 56.4107H73.3681C79.2305 56.4107 84 51.6412 84 45.7789V10.9719C84 5.10961 79.2305 0.340088 73.3681 0.340088ZM10.6319 5.64582H73.3681C76.305 5.64582 78.6943 8.03506 78.6943 10.9719V13.0647H5.30573V10.9719C5.30573 8.03506 7.69497 5.64582 10.6319 5.64582ZM78.6943 24.9292H5.30573V18.3705H78.6943V24.9292ZM73.3681 51.105H10.6319C7.69497 51.105 5.30573 48.7157 5.30573 45.7789V30.2349H78.6943V45.7789C78.6943 48.7157 76.305 51.105 73.3681 51.105Z" fill="#000000"/>
-                      <path d="M69.4492 44.4566C70.9949 44.4566 72.2479 43.2035 72.2479 41.6578C72.2479 40.1121 70.9949 38.859 69.4492 38.859C67.9034 38.859 66.6504 40.1121 66.6504 41.6578C66.6504 43.2035 67.9034 44.4566 69.4492 44.4566Z" fill="#212B36"/>
-                      <path d="M61.6018 44.4566C63.1475 44.4566 64.4005 43.2035 64.4005 41.6578C64.4005 40.1121 63.1475 38.859 61.6018 38.859C60.056 38.859 58.803 40.1121 58.803 41.6578C58.803 43.2035 60.056 44.4566 61.6018 44.4566Z" fill="#212B36"/>
-                    </svg>
+                  <svg width="84" height="57" viewBox="0 0 84 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M73.3681 0.340088H10.6319C4.76952 0.340088 0 5.10961 0 10.9719V45.7789C0 51.6412 4.76952 56.4107 10.6319 56.4107H73.3681C79.2305 56.4107 84 51.6412 84 45.7789V10.9719C84 5.10961 79.2305 0.340088 73.3681 0.340088ZM10.6319 5.64582H73.3681C76.305 5.64582 78.6943 8.03506 78.6943 10.9719V13.0647H5.30573V10.9719C5.30573 8.03506 7.69497 5.64582 10.6319 5.64582ZM78.6943 24.9292H5.30573V18.3705H78.6943V24.9292ZM73.3681 51.105H10.6319C7.69497 51.105 5.30573 48.7157 5.30573 45.7789V30.2349H78.6943V45.7789C78.6943 48.7157 76.305 51.105 73.3681 51.105Z" fill="#000000"/>
+                    <path d="M69.4492 44.4566C70.9949 44.4566 72.2479 43.2035 72.2479 41.6578C72.2479 40.1121 70.9949 38.859 69.4492 38.859C67.9034 38.859 66.6504 40.1121 66.6504 41.6578C66.6504 43.2035 67.9034 44.4566 69.4492 44.4566Z" fill="#212B36"/>
+                    <path d="M61.6018 44.4566C63.1475 44.4566 64.4005 43.2035 64.4005 41.6578C64.4005 40.1121 63.1475 38.859 61.6018 38.859C60.056 38.859 58.803 40.1121 58.803 41.6578C58.803 43.2035 60.056 44.4566 61.6018 44.4566Z" fill="#212B36"/>
+                  </svg>
 
                 - if card.present?
                   .Polaris-Stack__Item
@@ -138,7 +143,8 @@
                 i TOTAL SPEND TO DATE:
                 br
                 |$
-                =  api_order&.customer&.total_spent
+                - if api_order.customer.key?("total_spent")
+                  =  api_order.customer.total_spent
 
   .Polaris-Card
     .Polaris-Card__Section
@@ -181,8 +187,8 @@
               <path d="M24.9038 7H11.0964C10.7728 7 10.5105 7.26234 10.5105 7.58594V24.6881C10.5105 24.8435 10.5723 24.9925 10.6821 25.1024L12.408 26.8284C12.6369 27.0572 13.0078 27.0572 13.2367 26.8284L14.5483 25.5168L15.8598 26.8284C15.9697 26.9382 16.1187 27 16.2741 27C16.4295 27 16.5786 26.9383 16.6885 26.8284L18 25.5168L19.3116 26.8284C19.4215 26.9382 19.5706 27 19.7259 27C19.8813 27 20.0304 26.9383 20.1402 26.8284L21.4518 25.5168L22.7634 26.8284C22.8778 26.9428 23.0277 27 23.1777 27C23.3276 27 23.4776 26.9428 23.592 26.8284L25.3179 25.1024C25.4278 24.9925 25.4896 24.8435 25.4896 24.6881V7.58594C25.4897 7.26234 25.2273 7 24.9038 7ZM17.414 11.4012V10.724C17.414 10.4004 17.6764 10.138 18 10.138C18.3236 10.138 18.5859 10.4004 18.5859 10.724V11.3932H19.2552C19.5788 11.3932 19.8412 11.6556 19.8412 11.9792C19.8412 12.3028 19.5788 12.5651 19.2552 12.5651H17.5817C17.2126 12.5651 16.9124 12.8653 16.9124 13.2344C16.9124 13.6034 17.2126 13.9037 17.5817 13.9037H18.4185C19.4337 13.9037 20.2597 14.7296 20.2597 15.7448C20.2597 16.7035 19.5229 17.4931 18.5859 17.578V18.2553C18.5859 18.5788 18.3236 18.8412 18 18.8412C17.6764 18.8412 17.414 18.5788 17.414 18.2553V17.5859H16.7448C16.4212 17.5859 16.1588 17.3236 16.1588 17C16.1588 16.6764 16.4212 16.414 16.7448 16.414H18.4185C18.7875 16.414 19.0878 16.1138 19.0878 15.7448C19.0878 15.3758 18.7876 15.0755 18.4185 15.0755H17.5817C16.5664 15.0755 15.7405 14.2496 15.7405 13.2343C15.7406 12.2757 16.4772 11.4862 17.414 11.4012ZM21.1381 21.9792H14.8621C14.5385 21.9792 14.2761 21.7168 14.2761 21.3932C14.2761 21.0696 14.5385 20.8073 14.8621 20.8073H21.1381C21.4616 20.8073 21.724 21.0696 21.724 21.3932C21.724 21.7168 21.4616 21.9792 21.1381 21.9792Z" fill="white"/>
             </svg>
           .Polaris-Stack__Item
-            p.Polaris-Heading Delivery Day
-            p = "#{@customer&.delivery_day}"&.titleize 
+            p.Polaris-Heading Billing Frequency
+            p = "#{billing_policy.interval_count} #{billing_policy.interval}".titleize
         .Polaris-Stack
           .Polaris-Stack__Item
             <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -191,8 +197,8 @@
             </svg>
 
           .Polaris-Stack__Item
-            p.Polaris-Heading Delivery Date
-            p = @customer&.delivery_date&.strftime("%a, %B %e")
+            p.Polaris-Heading Delivery Schedule
+            p = "#{delivery_policy.interval_count} #{delivery_policy.interval}".titleize
 
   .Polaris-Page__Content
     .Polaris-Layout
@@ -375,7 +381,7 @@
 
           .Polaris-Card__Section
             h2 style="font-size: 14px;font-weight: 700;line-height: 20px;margin-bottom: 1rem;" DELIVERY ADDRESS
-            p.Polaris-TextStyle--variationSubdued = formatted_shipping_address
+            p.Polaris-TextStyle--variationSubdued = formatted
 
 
         - if setting.admin_allowed?('navigation_delivery')
@@ -522,20 +528,5 @@ javascript:
         document.querySelector('ul.payment-tabs li.active').classList.remove('active');
         target.classList.add('active');
       })
-    })
-  })
-  
-  $("#create_billing_attempt").on("click",function(){
-    $("#create_billing_attempt").html("Processing")
-    $.ajax({
-      type: 'post',
-      data: "id=#{@customer.id}",
-      url: "/subscriptions/create_billing_attempt",
-      success: function(){
-        $("#create_billing_attempt").html("Billing Attempt Successfull")
-        setTimeout(function(){
-          $("#create_billing_attempt").html("Create Billing Attempt")
-        },3000)
-      }
     })
   })
