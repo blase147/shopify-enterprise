@@ -3,7 +3,7 @@ class AppProxyController < ApplicationController
   before_action :init_session
   before_action :set_skip_auth
 
-  PER_PAGE = 6
+  PER_PAGE = 10
 
   def current_shop
     return @current_shop if @current_shop.present?

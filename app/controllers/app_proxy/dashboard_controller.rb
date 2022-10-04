@@ -228,8 +228,9 @@ class AppProxy::DashboardController < AppProxyController
     end
     current_shop.connect
     @orders = ShopifyAPI::Order.find(:all,
-      params: { customer_id: params[:customer_id], limit: PER_PAGE, status: 'any' }
+      params: { customer_id: customer_id, limit: PER_PAGE, page_info: params[:page_info] }
     )
+
     if @customer.present?
       @customer&.shop&.connect
       load_subscriptions(@customer&.shopify_customer_id)
@@ -245,6 +246,15 @@ class AppProxy::DashboardController < AppProxyController
   def show_order
     current_shop.connect
     @order = ShopifyAPI::Order.find(params[:id]&.to_i)
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def order_paginate
+    @orders = ShopifyAPI::Order.find(:all,
+      params: { customer_id: params[:customer_id], limit: PER_PAGE, page_info: params[:page_info] }
+    )
     respond_to do |format|
       format.js
     end
