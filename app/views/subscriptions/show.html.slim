@@ -70,14 +70,13 @@
                           | Create Billing Attempt
 
                     div.slider-btns
-                      .Polaris-Stack__Item
+                      a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/a/chargezen_production/dashboard?customer_id=#{"#{@customer.shopify_customer_id}&admin_refcode=#{ENV['ADMIN_REFCODE']}"}" target="_blank"
                         button.admin_show_sub_button type="button"
-                          a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/a/chargezen_production/dashboard?customer_id=#{"#{@customer.shopify_customer_id}&admin_refcode=#{ENV['ADMIN_REFCODE']}"}" target="_blank"
                           | Customer Portal
                   
                     div.slider-btns
-                      button.admin_show_sub_button
-                        a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/admin/customers/#{@customer.shopify_customer_id}?shop=#{@customer.shop.shopify_domain}" target="_parent"
+                      a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/admin/customers/#{@customer.shopify_customer_id}?shop=#{@customer.shop.shopify_domain}" target="_parent"
+                        button.admin_show_sub_button
                           | Shopify Profile
 
               - else
