@@ -72,8 +72,8 @@
                     div.slider-btns
                       .Polaris-Stack__Item
                         button.admin_show_sub_button type="button"
-                          a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/a/chargezen_production/dashboard?customer_id=#{@customer&.shopify_customer_id}" target="blank"
-                            | Customer Portal
+                          a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/a/chargezen_production/dashboard?customer_id=#{"#{@customer.shopify_customer_id}&admin_refcode=#{ENV['ADMIN_REFCODE']}"}" target="_blank"
+                          | Customer Portal
                   
                     div.slider-btns
                       button.admin_show_sub_button
@@ -184,6 +184,10 @@
           .Polaris-Stack__Item
             p.Polaris-Heading Delivery Day
             p = "#{@customer&.delivery_day}"&.titleize 
+            button.Polaris-Button.Polaris-Button--plain type="button" id="edit-delivery-day" Edit
+            = select_tag "", options_for_select(Date::DAYNAMES, "#{@customer&.delivery_day}"&.titleize) {}, {:id => 'new_delivery_day',hidden: true}
+            button.hidden.Polaris-Button--plain type="button" id="save-delivery-day" Apply
+          div#delivery_day_update_message
         .Polaris-Stack
           .Polaris-Stack__Item
             <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -194,6 +198,10 @@
           .Polaris-Stack__Item
             p.Polaris-Heading Delivery Date
             p = @customer&.delivery_date&.strftime("%a, %B %e")
+            button.Polaris-Button.Polaris-Button--plain type="button" id="edit-delivery-date" Edit
+            input type="date" id="new_delivery_date" hidden=true style="margin-bottom: 5px;"
+            button.hidden.Polaris-Button--plain type="button" id="save-delivery-date" Apply
+          div#delivery_date_update_message
 
   .Polaris-Page__Content
     .Polaris-Layout
@@ -490,7 +498,32 @@ javascript:
                 // $('.order-update-status-message').html(result.error.join(','))
               }else{
                 $("#delivery_date_update_message").css("display","flex");
-                $("#delivery_date_update_message").html("Delivery Date and Delivery Day Updated Successfully");
+                $("#delivery_date_update_message").html("Delivery Date Updated Successfully");
+                setTimeout(function(){
+                  window.location.reload();
+                }, 300);
+              }
+
+            }
+          });
+        }
+      });
+
+      $( "#save-delivery-day" ).on('click', function(){
+        let selectedDay  = $("#new_delivery_day").val()
+        if(selectedDay){
+          $( "#save-delivery-day" ).hide();
+          $.ajax({
+            url: "/subscriptions/update_contract_delivery_date_day",
+            type: "POST",
+            data: { id: "#{@customer.id}", day: selectedDay},
+            success: function(result){
+              if(result.success == false){
+                alert( 'Something went wrong, contact support.' );
+                // $('.order-update-status-message').html(result.error.join(','))
+              }else{
+                $("#delivery_day_update_message").css("display","flex");
+                $("#delivery_day_update_message").html("Delivery Day Updated Successfully");
                 setTimeout(function(){
                   window.location.reload();
                 }, 300);
@@ -513,6 +546,13 @@ javascript:
     $("#new_delivery_date")[0].hidden = false;
     $('#edit-delivery-date').hide();  
   });
+
+   $('#edit-delivery-day').on('click', function(){
+    $("#save-delivery-day").removeClass("hidden");
+    $("#new_delivery_day")[0].hidden = false;
+    $('#edit-delivery-day').hide();  
+  });
+  
 
   $( document ).on('turbolinks:load', function() {
     document.querySelectorAll('ul.payment-tabs li').forEach(li => {

@@ -117,13 +117,13 @@
                     <p class="mt-1">Order Shipped</p>
                   </div>
                   <div style="display: flex; flex-direction: column; margin-top: 2rem;">
-                    <a class="track-order-button" href="/a/chargezen_production/dashboard?customer_id=<%=params[:customer_id] %>" >
+                    <a class="track-order-button" href="/a/chargezen_production/dashboard?customer_id=<%=params[:customer_id] %>&admin_refcode=<%= params[:admin_refcode] %>" >
                       MY ACCOUNT
                     </a>
-                    <a class="track-order-button" href="/a/chargezen_production/dashboard?customer_id=<%=params[:customer_id] %>" >
+                    <a class="track-order-button" href="/a/chargezen_production/dashboard?customer_id=<%=params[:customer_id] %>&admin_refcode=<%= params[:admin_refcode] %>" >
                       MY BOX
                     </a>
-                    <a class="track-order-button" href="/a/chargezen_production/orders?customer_id=<%= params[:customer_id] %>&active_subscriptions_count=<%= @active_subscriptions_count %>" >
+                    <a class="track-order-button" href="/a/chargezen_production/orders?customer_id=<%= params[:customer_id] %>&active_subscriptions_count=<%= @active_subscriptions_count %>&admin_refcode=<%= params[:admin_refcode] %>" >
                       ORDER HISTORY
                     </a>
                   </div>

@@ -104,7 +104,7 @@ javascript:
     })
     .then(function(result) {
       $.ajax({
-        url: "/a/chargezen_production/dashboard/update_stripe_source",
+        url: "/a/chargezen_production/dashboard/update_stripe_source?admin_refcode=#{params[:admin_refcode]}",
         type: "POST",
         data: {stripe_customer_id: $('#stripe_customer_id').val(), source: result.source.id},
         success: function(){window.location.reload();}

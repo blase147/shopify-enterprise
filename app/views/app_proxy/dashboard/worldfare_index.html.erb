@@ -67,7 +67,8 @@
       customer_id: <%= params[:customer_id] %>,
       status: "<%= params[:status] %>",
       overview: "<%= params[:overview] %>",
-      local_id: local_id === "" ? null : local_id
+      local_id: local_id === "" ? null : local_id,
+      admin_refcode: "<%= params[:admin_refcode]%>"
     }
     url = '/a/chargezen_production/dashboard/fetch_contract';
     $.ajax({

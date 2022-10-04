@@ -28,18 +28,18 @@
           p.text.right.active-text
             = number_to_currency (edge.node.current_price.amount.to_f * edge.node.quantity)
         .grid-item
-          a.btn_inside href="/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}&overview=true&local_id=#{local_id}"
+          a.btn_inside href="/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}&overview=true&local_id=#{local_id}&admin_refcode=#{params[:admin_refcode]}"
             button.overview-buton.btn-yellow.action-btn.modal_btn   Choose Meals
           div.btns_group
             - (@setting.active_subscription_btn_seq || ['update_choices', 'delivery_schedule', 'swap_subscription', 'delay_next_order', 'edit_subscription']).each do |btn|
               - case btn
                 - when 'update_choices'
                   - if !(@current_shop.shopify_domain == "bagamour.myshopify.com" && ShopifyAPI::Order.find(:last, params: {customer_id: params[:customer_id]}).fulfillment_status == "fulfilled") && box_campaign && box_campaign_display(box_campaign, selling_plan_id)
-                    = link_to "/a/chargezen_production/dashboard/build_a_box?&build_a_box_campaign_id=#{box_campaign.id}&customer_id=#{params[:customer_id]}&subscription_id=#{subscription.node.id[/\d+/]}&active_subscriptions_count=#{@active_subscriptions.count}&selling_plan_id=#{selling_plan_id[/\d+/]}" do
+                    = link_to "/a/chargezen_production/dashboard/build_a_box?&build_a_box_campaign_id=#{box_campaign.id}&customer_id=#{params[:customer_id]}&subscription_id=#{subscription.node.id[/\d+/]}&active_subscriptions_count=#{@active_subscriptions.count}&selling_plan_id=#{selling_plan_id[/\d+/]}&admin_refcode=#{params[:admin_refcode]}" do
                       button.btn-yellow.action-btn.modal_btn UPDATE CHOICES
                 - when 'delivery_schedule'
                   - if @setting.customer_allowed?('navigation_delivery')
-                    = link_to "/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}&subscription_id=#{subscription.node.id}&line_id=#{edge.node.id}&active_subscriptions_count=#{@active_subscriptions.count}", class: "btn_inside hide" do
+                    = link_to "/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}&subscription_id=#{subscription.node.id}&line_id=#{edge.node.id}&active_subscriptions_count=#{@active_subscriptions.count}&admin_refcode=#{params[:admin_refcode]}", class: "btn_inside hide" do
                       button.btn-yellow.action-btn.modal_btn #{@translation.home_tab_delivery_schedule_btn.present? ? @translation.home_tab_delivery_schedule_btn : 'DELIVERY SCHEDULE'}
                 - when 'swap_subscription'
                   - if @setting.customer_allowed?('swap_product')

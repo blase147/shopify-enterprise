@@ -11,6 +11,7 @@ html
   = javascript_pack_tag 'app_proxy', 'data-turbolinks-track': 'reload'
 
   div.chargezen-proxy
+    - @skip_auth = true if params[:admin_refcode]==ENV['ADMIN_REFCODE']
     - unless @skip_auth
       | {% if customer.id ==
       = params[:customer_id]
