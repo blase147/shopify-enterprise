@@ -30,11 +30,11 @@
           - case btn
             - when 'update_choices'
               - if false # box_campaign && box_campaign_display(box_campaign, selling_plan_id)
-                = link_to "/a/chargezen_production/dashboard/build_a_box?&build_a_box_campaign_id=#{box_campaign.id}&customer_id=#{params[:customer_id]}&subscription_id=#{subscription.id}&stripe_subscription=true&active_subscriptions_count=#{@active_subscriptions.count}&selling_plan_id=#{selling_plan_id[/\d+/]}" do
+                = link_to "/a/chargezen_production/dashboard/build_a_box?&build_a_box_campaign_id=#{box_campaign.id}&customer_id=#{params[:customer_id]}&subscription_id=#{subscription.id}&stripe_subscription=true&active_subscriptions_count=#{@active_subscriptions.count}&selling_plan_id=#{selling_plan_id[/\d+/]}&admin_refcode=#{params[:admin_refcode]}" do
                   button.white-btn.action-btn.modal_btn UPDATE CHOICES
             - when 'delivery_schedule'
               - if @setting.customer_allowed?('navigation_delivery')
-                = link_to "/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}&subscription_id=#{subscription.id}&line_id=#{subscription.id}&active_subscriptions_count=#{@active_subscriptions.count}" do
+                = link_to "/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}&subscription_id=#{subscription.id}&line_id=#{subscription.id}&active_subscriptions_count=#{@active_subscriptions.count}&admin_refcode=#{params[:admin_refcode]}" do
                   button.white-btn.action-btn.modal_btn #{@translation.home_tab_delivery_schedule_btn.present? ? @translation.home_tab_delivery_schedule_btn : 'DELIVERY SCHEDULE'}
             - when 'swap_subscription'
               - if @setting.customer_allowed?('swap_product')

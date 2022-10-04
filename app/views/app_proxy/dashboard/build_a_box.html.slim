@@ -150,7 +150,7 @@ javascript:
       var subscriptionId = $(this).attr('data-subscriptionId');
       if (selectedProducts) {
         $.ajax({
-          url: "/a/chargezen_production/dashboard/confirm_box_selection",
+          url: "/a/chargezen_production/dashboard/confirm_box_selection?admin_refcode=#{params[:admin_refcode]}&admin_refcode=#{params[:admin_refcode]}",
           type: "POST",
           data: { product_id: selectedProducts, subscription_id: subscriptionId },
           success: function(result){

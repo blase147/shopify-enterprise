@@ -163,14 +163,13 @@ class SubscriptionsController < AuthenticatedController
 
   def update_contract_delivery_date_day
     contract = CustomerSubscriptionContract.find(params[:id])
-    delivery_date = params[:date]&.to_date.strftime("%d/%m/%Y")
-    delivery_day = delivery_date.to_date.strftime("%A")
-    contract&.delivery_date = delivery_date
-    contract&.delivery_day = delivery_day
+    delivery_date = params[:date]&.to_date&.strftime("%d/%m/%Y")
+    contract&.delivery_date = delivery_date if delivery_date.present?
+    contract&.delivery_day = params[:day] if params[:day].present?
     contract.save
     order = ShopifyAPI::Order.find(contract.api_data["origin_order"]["id"]&.split("/")&.last)
-    order.note_attributes << { name: "Delivery Date", value: delivery_date }
-    order.note_attributes << { name: "Delivery Day", value: delivery_day }
+    order.note_attributes << { name: "Delivery Date", value: delivery_date } if delivery_date.present?
+    order.note_attributes << { name: "Delivery Day", value: params[:day] } if params[:day].present?
     if order.save
       render js:{ success: :true }.to_json
     else

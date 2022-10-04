@@ -3,9 +3,7 @@ class AppProxy::DashboardController < AppProxyController
   skip_before_action :set_skip_auth, only: [:fetch_contract]
   before_action :load_subscriptions, except: [:build_a_box, :confirm_box_selection, :index, :fetch_contract, :show_order]
   before_action :load_customer, only: %w(addresses payment_methods settings upcoming build_a_box track_order)
-
   def index
-    # @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
     if params[:status].present?
       @subscription_contracts = CustomerSubscriptionContract.where(shopify_customer_id: params[:customer_id], status: params[:status]&.upcase)
     else

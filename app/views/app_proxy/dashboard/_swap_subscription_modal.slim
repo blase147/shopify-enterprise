@@ -62,7 +62,7 @@ javascript:
     var form = document.getElementById(`form-${formId}`);
     $.ajax({
       type: "post",
-      data: serialize(form)+"&index="+$(this).attr("data-index")+"&productindex="+$(this).attr("data-productindex")+"&action_by=#{action_by}",
+      data: serialize(form)+"&index="+$(this).attr("data-index")+"&productindex="+$(this).attr("data-productindex")+"&action_by=#{action_by}&admin_refcode=#{params[:admin_refcode]}",
       url: form.getAttribute('action'),
       success: ()=>{
         alert("Swapped")
