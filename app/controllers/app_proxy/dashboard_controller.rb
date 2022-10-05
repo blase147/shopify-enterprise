@@ -292,13 +292,17 @@ class AppProxy::DashboardController < AppProxyController
   def skip_next_billing_date
     contract = CustomerSubscriptionContract.find(params[:id])
     skip_dates = contract&.skip_dates
-    begin_date = Date.commercial(params[:skip_date]&.to_date&.strftime("%Y")&.to_i,params[:skip_date]&.to_date.cweek, 1)
-    end_date = Date.commercial(params[:skip_date]&.to_date&.strftime("%Y")&.to_i,params[:skip_date]&.to_date.cweek, 7)
+    begin_date = params[:skip_date]&.to_date&.beginning_of_week
+    end_date = params[:skip_date]&.to_date&.beginning_of_week
+    skip_week_num = params[:skip_date]&.to_date&.cweek.to_s
+    pre_order = WorldfarePreOrder.where(shopify_contract_id: contract&.shopify_id, week: skip_week_num&.to_i, customer_id: contract&.shopify_customer_id)
     if params["method"]=="skip"
-      skip_dates&.push(params[:skip_date])
+      skip_dates&.push(skip_week_num)
+      pre_order&.update(skip_state: "skipped")
       description = "Skipped weekly meals for #{begin_date} to #{end_date}"
     else
-      skip_dates&.delete(params[:skip_date])
+      skip_dates&.delete(skip_week_num)
+      pre_order&.update(skip_state: nil)
       description = "Un-Skipped weekly meals for #{begin_date} to #{end_date}"
     end
     contract.shop.subscription_logs.cancel.create(subscription_id: contract&.shopify_id,customer_id: contract.id, description: description, action_by: params[:action_by])
