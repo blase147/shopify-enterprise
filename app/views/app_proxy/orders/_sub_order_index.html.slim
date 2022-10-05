@@ -39,3 +39,11 @@ main#AppFrameMain.Polaris-Frame__Main data-has-global-ribbon="false"
                         button.btn-invoice type="button" #{@translation.order_history_tab_invoice.present? ? @translation.order_history_tab_invoice : 'INVOICE'}
         .Polaris-DataTable__Footer
             = render 'app_proxy/orders/paginate_for_order_partial'
+
+javascript: 
+    $(".btn-view").on("click",function(){
+        $.ajax({
+            url: "/a/chargezen_production/dashboard/show_order?id="+ $(this).data("params"),
+            type: 'get',
+        });
+    })

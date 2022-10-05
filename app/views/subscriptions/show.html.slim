@@ -49,37 +49,36 @@
 
             - @subscription&.lines&.edges&.each do |line|
               - selling_plan = SellingPlan.find_by(shopify_id: line.node.selling_plan_id)
-              - if @subscription.status == 'ACTIVE'
-                p Shopify Subscription
-                div.item
-                  div style="margin-bottom: 1rem; display: flex; justify-content: space-between; background: #F2F0F9; padding: 1rem 2rem;"
-                    p style="font-size: 2rem; line-height: 1.8;" = selling_plan&.name
-                    p style="font-size: 20px; line-height: 20px"
-                      |$
-                      = line.node.current_price.amount
-                  div style="margin-top: 1.4rem; display: flex; justify-content: space-between;"
-                    div.slider-btns
-                      .Polaris-Stack__Item
-                        - if setting.admin_allowed?('swap_product')
-                        button.admin_show_sub_button.edit_button type="button" data-toggle='modal' data-target="#editSubscriptionModal-#{line.node.id.split("gid://shopify/SubscriptionLine/")[1]}"
-                          | Edit Subscription
+              p Shopify Subscription
+              div.item
+                div style="margin-bottom: 1rem; display: flex; justify-content: space-between; background: #F2F0F9; padding: 1rem 2rem;"
+                  p style="font-size: 2rem; line-height: 1.8;" = selling_plan&.name
+                  p style="font-size: 20px; line-height: 20px"
+                    |$
+                    = line.node.current_price.amount
+                div style="margin-top: 1.4rem; display: flex; justify-content: space-between;"
+                  div.slider-btns
+                    .Polaris-Stack__Item
+                      - if setting.admin_allowed?('swap_product')
+                      button.admin_show_sub_button.edit_button type="button" data-toggle='modal' data-target="#{@subscription.status == 'ACTIVE' ? "#editSubscriptionModal-#{line.node.id.split('gid://shopify/SubscriptionLine/')[1]}" : ""}"
+                        = @subscription.status == 'ACTIVE' ? "Edit Subscription" : @subscription.status
 
-                    div.slider-btns
-                      .Polaris-Stack__Item
-                        button.admin_show_sub_button#create_billing_attempt type="button"
-                          | Create Billing Attempt
+                  div.slider-btns
+                    .Polaris-Stack__Item
+                      button.admin_show_sub_button id="#{@subscription.status == 'ACTIVE' ? "create_billing_attempt" : ""}" type="button"
+                        | Create Billing Attempt
 
-                    div.slider-btns
-                      a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/a/chargezen_production/dashboard?customer_id=#{"#{@customer.shopify_customer_id}&admin_refcode=#{ENV['ADMIN_REFCODE']}"}" target="_blank"
-                        button.admin_show_sub_button type="button"
-                          | Customer Portal
-                  
-                    div.slider-btns
-                      a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/admin/customers/#{@customer.shopify_customer_id}?shop=#{@customer.shop.shopify_domain}" target="_parent"
-                        button.admin_show_sub_button
-                          | Shopify Profile
+                  div.slider-btns
+                    a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/a/chargezen_production/dashboard?customer_id=#{"#{@customer.shopify_customer_id}&admin_refcode=#{ENV['ADMIN_REFCODE']}"}" target="_blank"
+                      button.admin_show_sub_button type="button"
+                        | Customer Portal
+                
+                  div.slider-btns
+                    a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/admin/customers/#{@customer.shopify_customer_id}?shop=#{@customer.shop.shopify_domain}" target="_parent"
+                      button.admin_show_sub_button
+                        | Shopify Profile
 
-              - else
+              - if @subscription.status != 'ACTIVE'
                 - if setting.admin_allowed?('reactive_subscription')
                   .Polaris-Stack__Item
                     .Polaris-ButtonGroup.resume
@@ -184,7 +183,7 @@
             p.Polaris-Heading Delivery Day
             p = "#{@customer&.delivery_day}"&.titleize 
             button.Polaris-Button.Polaris-Button--plain type="button" id="edit-delivery-day" Edit
-            = select_tag "", options_for_select(Date::DAYNAMES, "#{@customer&.delivery_day}"&.titleize) {}, {:id => 'new_delivery_day',hidden: true}
+            = select_tag "", options_for_select(options_for_delivery_day, "#{@customer&.delivery_day}"&.titleize) {}, {:id => 'new_delivery_day',hidden: true}
             button.hidden.Polaris-Button--plain type="button" id="save-delivery-day" Apply
           div#delivery_day_update_message
         .Polaris-Stack
