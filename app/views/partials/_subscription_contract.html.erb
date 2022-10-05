@@ -436,13 +436,13 @@
         %>
         <div class="pre_orders">
           <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
-          <div class="order-box  <%= hide_display_selection %> <%= week_subscription&.skip_state=="skipped" ? "grayed-out" : "" %>">
+          <div class="order-box  <%= hide_display_selection %> <%= @customer&.skip_dates&.include?("#{week_day&.to_date&.cweek}") ? "grayed-out" : "" %>">
             <div>
               <h2 class="Trial">Week of <%= current_date&.beginning_of_week&.strftime('%A %d %B') %> - <%= current_date&.end_of_week&.strftime('%A %d %B') %></h2>
               <div>
                 <div>
                   <button type="button" class="btn-yellow bold skip_week" style="float: right;" data-week="<%= week_day %>" data-contractId="<%=  @customer&.id %>" >
-                    <%= week_subscription&.skip_state=="skipped" ? "Unskip" : "Skip" %>
+                    <%= @customer&.skip_dates&.include?("#{week_day&.to_date&.cweek}") ? "Unskip" : "Skip" %>
                   </button>
                   <div class="placed_data pdate">
                     <p class="placed">Select Meals By</p>
@@ -454,7 +454,7 @@
                     <p class="placed_dates pdate text-right"><%= @current_week_expected_delivery&.strftime('%A, %d %b %Y') rescue @no_data_message %></p>
                   </div>
                   <% if @current_week_select_by.present? %>
-                    <div class="order_add current-week <%= week_subscription&.skip_state=="skipped" ? "" : "" %>" id="add_box_<%= week_day %>">
+                    <div class="order_add current-week <%= @customer&.skip_dates&.include?("#{week_day&.to_date&.cweek}") ? "" : "" %>" id="add_box_<%= week_day %>">
                       <ul id="psegment" class="pre_segment">
                         <% selected_products.each do |item| %>
                           <% meal_product = current_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
@@ -477,7 +477,6 @@
                       </ul>
                     </div>
                   <% end %>
-
                   <% if current_week_meals.present? %>
                     <div class="meal-options">
                       <ul class="box-items-grid hide" id="box-items-current">
@@ -531,7 +530,6 @@
         <!-- Next Week -->
             <% delivery_date = @customer&.delivery_date rescue nil %>
             <% created_at = Date.parse(@api_data["created_at"]) rescue nil %>
-
             <% current_date = Date.today %>
             <% week_days = [] %>
             <% (1..3).each do |i| %>
@@ -563,7 +561,7 @@
               %>
               <div class="pre_orders" >
                 <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
-                <div class="order-box <%= hide_display_selection  %> <%= week_subscription&.skip_state=="skipped" ? "grayed-out" : "" %>">
+                <div class="order-box <%= hide_display_selection  %> <%= @customer&.skip_dates&.include?("#{week_day&.to_date&.cweek}") ? "grayed-out" : "" %>">
                   <div class="wrap-collabsible">
                     <input id="collapsible<%=i%>" class="toggle collapse_checkbox" type="checkbox">
                     <label for="collapsible<%=i%>" class="lbl-toggle placed">
@@ -572,7 +570,7 @@
                     <div class="collapsible-content">
                       <div class="content-inner">
                         <button type="button" class="btn-yellow bold skip_week" style="float: right;" data-week="<%= week_day %>" data-contractId="<%= @customer&.id %>" >
-                          <%= week_subscription&.skip_state=="skipped" ? "Unskip" : "Skip" %>
+                          <%= @customer&.skip_dates&.include?("#{week_day&.to_date&.cweek}") ? "Unskip" : "Skip" %>
                         </button>
                         <div class="placed_data pdate">
                           <p class="placed">Select Meals By</p>
@@ -585,7 +583,7 @@
                         </div>
 
                         <% if @next_week_select_by.present? %>
-                          <div class="order_add next-week-<%= week_day.strftime('%-V').to_i %> next-week_<%= week_day %> next-week <%= week_subscription&.skip_state=="skipped" ? "hide" : "" %>" id="add_box_<%= week_day %>">
+                          <div class="order_add next-week-<%= week_day.strftime('%-V').to_i %> next-week_<%= week_day %> next-week <%= @customer&.skip_dates&.include?("#{week_day&.to_date&.cweek}") ? "hide" : "" %>" id="add_box_<%= week_day %>">
                             <ul id="psegment" class="pre_segment">
                               <% selected_products.each do |item| %>
                                 <% meal_product = next_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
