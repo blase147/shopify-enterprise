@@ -125,7 +125,7 @@ namespace :subscriptions do
 
   def process_subscription(subscription)
     current_week = Date.today.cweek
-    bill_null_week = current_week - 1
+    bill_null_week = current_week + 1
     customer = CustomerSubscriptionContract.find_by(shopify_id: subscription_id)
     return unless subscription.status == 'ACTIVE' && !customer&.skip_dates&.include?(bill_null_week.to_s)
     subscription_id = subscription.id[/\d+/]
@@ -157,7 +157,7 @@ namespace :subscriptions do
 
   def reprocess_subscription(subscription, subs_log)
     current_week = Date.today.cweek
-    bill_null_week = current_week - 1
+    bill_null_week = current_week + 1
     customer = CustomerSubscriptionContract.find_by(shopify_id: subscription_id)
     return unless subscription.status == 'ACTIVE' && !customer&.skip_dates&.include?(bill_null_week.to_s)
     subscription_id = subscription.id[/\d+/]
