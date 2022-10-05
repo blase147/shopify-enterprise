@@ -47,8 +47,8 @@ class ScheduleSkipService < GraphqlService
 
     p skip_billing_date
     input = {}
-    if customer&.skip_dates.include? "#{skip_billing_date&.strftime('%Y-%m-%d')}"
-      while(customer&.skip_dates.include? "#{skip_billing_date&.strftime('%Y-%m-%d')}")
+    if customer&.skip_dates&.include?("#{skip_billing_date&.to_date&.cweek&.to_s}")
+      while(customer&.skip_dates&.include?("#{skip_billing_date&.to_date&.cweek&.to_s}"))
         skip_billing_date += skip_billing_offset
       end
     end
