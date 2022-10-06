@@ -61,6 +61,57 @@ class ReportService < GraphqlService
     }
   GRAPHQL
 
+  GET_SINGLE_SUBSCRIPTION = <<-GRAPHQL
+    query($id: ID!){
+        subscriptionContract(id: $id) {
+          id
+          createdAt
+          status
+          nextBillingDate
+          billingPolicy {
+            interval
+            intervalCount
+          }
+          customer {
+            id
+          }
+          lines(first: 5) {
+            edges {
+              node {
+                sku
+              }
+            }
+          }
+          orders(first: 15, reverse: true) {
+            edges {
+              node {
+                id
+                createdAt
+                transactions {
+                  amountSet {
+                    presentmentMoney {
+                      amount
+                    }
+                  }
+                  status
+                }
+                totalPriceSet {
+                  presentmentMoney {
+                    amount
+                  }
+                }
+                originalTotalPriceSet {
+                  presentmentMoney {
+                    amount
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    GRAPHQL
+
   def get_subscriptions cursor=nil
     query = GET_SUBSCRIPTIONS
     query = query.gsub("first: #{PAGE}", "first: #{PAGE} after: \"#{cursor}\"") if cursor.present?
@@ -81,9 +132,9 @@ class ReportService < GraphqlService
 
     while has_next_page
       data = get_subscriptions next_cursor
-      subscriptions.push(data.edges || [])
-      has_next_page = data.page_info.has_next_page
-      next_cursor = data.edges.last&.cursor
+      subscriptions.push(data&.edges || [])
+      has_next_page = data&.page_info&.has_next_page || false
+      next_cursor = data&.edges&.last&.cursor
     end
     subscriptions.flatten
   end
@@ -92,6 +143,15 @@ class ReportService < GraphqlService
     requested = cost["actualQueryCost"] || cost["requestedQueryCost"]
     restore_amount = requested - cost["throttleStatus"]["currentlyAvailable"]
     wait_time = (restore_amount/cost["throttleStatus"]["restoreRate"])*1000
-    wait_time = wait_time > 0 ? wait_time : 0
+    wait_time = wait_time > 0 ? wait_time&.ceil : 0
+  end
+
+  def get_single_subscriptions id
+    id = "gid://shopify/SubscriptionContract/#{id}"
+    result = client.query(client.parse(GET_SINGLE_SUBSCRIPTION), variables: { id: id } )
+    result&.data&.subscription_contract
+  rescue Exception => ex
+    p ex.message
+    { error: ex.message }
   end
 end
