@@ -2708,7 +2708,6 @@
 
   // 06/10/2022
 
-
   .preloader {
     position: fixed;
     top: 0;
@@ -2726,18 +2725,52 @@
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     justify-content: center;
+    margin-top: 110px;
   }
 
-  .preloader .loader {
-    width: 75px;
-    height: 75px;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #F6BA2E;
-    border-radius: 50%;
-    -webkit-animation: preloader 2s linear infinite;
-    animation: preloader 2s linear infinite;
-    box-shadow: inset 0 0 8px #ffff6466, 0 0 25px #ffff64cc;
+  .preloader .loader_main {
+    overflow: hidden;
     margin: auto;
+    width: fit-content;
+  }
+
+  .loader {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    background: #fff;
+    border-radius: 50%;
+  }
+
+  .loader:after {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    margin: auto;
+    background: #222b32;
+    border-radius: 50%;
+  }
+
+  .loader:before {
+    content: '';
+    position: absolute;
+    inset: 0px;
+    margin: auto;
+    background: #de3500;
+    animation: crlMugLoader 2s linear infinite alternate;
+  }
+
+  @keyframes crlMugLoader {
+
+    0%,
+    10% {
+      transform: translateY(64px)
+    }
+
+    90%,
+    100% {
+      transform: translateY(0px)
+    }
   }
 
   .preloader .loadingText {

@@ -25,6 +25,14 @@
 <% end %>
 
 <div class="customer account c_account">
+  <div class="preloader">
+    <div class="preloader_sub_div">
+      <div class="loader_main">
+        <span class="loader" style="display: block;"></span>
+      </div>
+      <div class="loadingText">Loading</div>
+    </div>
+  </div>
   <ul class="nav nav-pills nav-justified contract-tabs">
     <% if @subscription_contracts.present? %>
       <% @subscription_contracts.each do |contract| %>
@@ -60,6 +68,7 @@
       $('.contract-tabs li.active').removeClass('active');
       $(this).addClass('active');
       $('.loader').show();
+      $("body").css("overflow","hidden !important")
       $('#contract-content').html('');
     id = $(this).attr('id');
     let local_id = "<%= params[:local_id] %>"
@@ -78,6 +87,7 @@
       contentType: 'application/json',
       success: function(response) {
         $('.loader').hide();
+        $("body").css("overflow","auto !important")
         $('.preloader').fadeOut('slow');
       },
       error: function(response) {
