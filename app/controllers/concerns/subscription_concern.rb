@@ -176,6 +176,28 @@ module SubscriptionConcern
     end
   end
 
+  def skip_next_billing_date
+    contract = CustomerSubscriptionContract.find_by_id params[:id] rescue nil
+    contract ||= CustomerSubscriptionContract.find_by(shopify_id: params[:id])
+    
+    skip_dates = contract&.skip_dates
+    begin_date = params[:skip_date]&.to_date&.beginning_of_week
+    end_date = params[:skip_date]&.to_date&.beginning_of_week
+    skip_week_num = params[:skip_date]&.to_date&.cweek.to_s
+    pre_order = WorldfarePreOrder.where(shopify_contract_id: contract&.shopify_id, week: skip_week_num&.to_i, customer_id: contract&.shopify_customer_id)
+    if params["method"]=="skip"
+      skip_dates&.push(skip_week_num)
+      pre_order&.update(skip_state: "skipped")
+      description = "Skipped weekly meals for #{begin_date} to #{end_date}"
+    else
+      skip_dates&.delete(skip_week_num)
+      pre_order&.update(skip_state: nil)
+      description = "Un-Skipped weekly meals for #{begin_date} to #{end_date}"
+    end
+    contract.shop.subscription_logs.cancel.create(subscription_id: contract&.shopify_id,customer_id: contract.id, description: description, action_by: params[:action_by])
+    contract.update(skip_dates: skip_dates)
+  end
+
   def resume
     id = params[:id]
     csc = CustomerSubscriptionContract.find_by(shopify_id: id)

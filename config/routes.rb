@@ -72,6 +72,9 @@ Rails.application.routes.draw do
       end
     end
     resources :subscriptions do
+      collection do
+        get :skip_next_billing_date
+      end
       member do
         post :pause
         post :cancel
@@ -113,7 +116,6 @@ Rails.application.routes.draw do
         get :fetch_contract
         get :update_delivery_day
         post :portal_skip_schedule
-        get :skip_next_billing_date
         get :show_order
         get :order_paginate
       end
@@ -137,6 +139,7 @@ Rails.application.routes.draw do
       get :sync_stripe
       post :create_billing_attempt
       post :update_contract_delivery_date_day 
+      get :skip_next_billing_date
     end
 
     member do
