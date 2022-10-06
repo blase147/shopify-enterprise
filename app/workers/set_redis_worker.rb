@@ -1,7 +1,7 @@
 class SetRedisWorker
   include Sidekiq::Worker
-  def perform(contrarct_id)
-    contract = CustomerSubscriptionContract.find(contrarct_id)
+  def perform(contract_id)
+    contract = CustomerSubscriptionContract.find(contract_id)
     contract&.shop&.connect
     redis_subscriptions=[]
     if $redis.get("subscriptions").present?
