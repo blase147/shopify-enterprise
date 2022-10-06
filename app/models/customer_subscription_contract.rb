@@ -166,7 +166,7 @@ class CustomerSubscriptionContract < ApplicationRecord
   end
 
   def set_redis_subscriptions
-    SetRedisWorker.perform_async(shop_id)
+    SetRedisWorker.perform_async(self.id)
   end
 
 end
