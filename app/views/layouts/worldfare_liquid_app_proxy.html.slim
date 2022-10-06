@@ -11,6 +11,10 @@ html
   = javascript_pack_tag 'app_proxy', 'data-turbolinks-track': 'reload'
 
   div.chargezen-proxy
+    div class="preloader"
+      div class="preloader_sub_div"
+        div class="loader"
+        div class="loadingText" Loading
     - @skip_auth = true if params[:admin_refcode]==ENV['ADMIN_REFCODE']
     - unless @skip_auth
       | {% if customer.id ==
@@ -29,3 +33,7 @@ html
 javascript:
   const addCSS = s => document.head.appendChild(document.createElement("style")).innerHTML=s;
   addCSS("#{@current_shop&.setting&.style_content.squish}")
+
+
+  
+
