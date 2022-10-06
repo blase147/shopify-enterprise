@@ -53,5 +53,6 @@ class ShopifyContractUpdateWorker
       contract.selling_plan_id = selling_plan&.id
     end
     contract.save
+    SetRedisWorker.perform_async(contract.id)
   end
 end
