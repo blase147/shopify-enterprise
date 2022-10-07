@@ -1,0 +1,273 @@
+<div class="top_meals">
+
+<div class="header_links">
+<div class="header_inner">
+<div class="Link_wrapper">
+<div class="link_section">
+  <a href="#">Popular</a>
+  <a href="#">Vegetarian</a>
+  <a href="#">Gluten-Free</a>
+  </div>
+  </div>
+ 
+
+  <div class="filter_section">
+    <h3>Filter:</h3>
+    <form action="">
+      <div class="filter">
+        <span>Allergies</span>
+      </div>
+    </form>
+  </div>
+   </div>
+</div>
+<% 
+  current_week_meals=current_week_meals(params[:week_day])
+  selected_products = []
+  total_meals = meals_on_plan(@customer&.subscription)
+  meals_to_select = total_meals - selected_products.length
+  left_meals = total_meals - selected_products.length
+  week_subscription = WorldfarePreOrder.find_by(shopify_contract_id: @customer&.shopify_id, customer_id: @customer&.shopify_customer_id, week: params[:week_day]&.to_date&.strftime('%-V').to_i )
+  week_subscription_products = []
+  if week_subscription.present? && current_week_meals.present?
+    selected_products = JSON.parse(week_subscription.products)
+    selected_products_with_quantity = Hash.new(0)
+
+    # iterate over the array, counting duplicate entries
+    selected_products&.each do |v|
+      selected_products_with_quantity["#{v}"&.strip] += 1
+    end
+
+    meals_to_select = total_meals - selected_products.count
+  end
+%>
+<div class="add_meals_main_div">
+  <div class="left_add_to_meal">
+      <ul class="meals_list">
+         <% current_week_meals&.each do |meal| %>
+          <% if meal.present? %>
+            <li class="box-item-grid" id="<%= meal["product_id"]&.split('/')&.last %>">
+                <div id="items-list" class="innerImageBlock">
+                  <div class="box-item-img">
+                      <img src=<%= meal["image"] || asset_path( 'No-image-found.jpg' ) %>>
+                  </div>
+                  <div class="box-item-information">
+                      <h5><%= meal["title"] %></h5>
+                      <span><%= truncate(meal["description"], :length => 50) %></span>
+                  </div>
+                  <div class="add_to_week">
+                      <span class="quantity_under_btn quantity_<%= meal["product_id"]&.split('/')&.last %>"><%= selected_products_with_quantity["#{meal["product_id"]&.split('/')&.last}"] if selected_products_with_quantity.present? %></span>
+                      <button class="add_meal_btn plusValue add_to_current_week" onclick='increment_quantity(event)' data-mealtitle="<%=meal["title"]%>"  data-id="<%= meal["product_id"]&.split('/')&.last %>" data-imgurl="<%= meal["image"].present? ?  meal["image"] : asset_path( 'No-image-found.jpg' ) %>" data-quantityid="quantity_<%= meal["product_id"]&.split('/')&.last %>">
+                      +
+                      </button>
+                      <button class="add_meal_btn_2 plusValue add_to_current_week" onclick='increment_quantity(event)' data-mealtitle="<%=meal["title"]%>"  data-id="<%= meal["product_id"]&.split('/')&.last %>" data-imgurl="<%= meal["image"] %>" data-quantityid="quantity_<%= meal["product_id"]&.split('/')&.last %>">Add to box</button>
+                  </div>
+                </div>
+            </li>
+          <% end %>
+         <% end %>
+      </ul>
+   </div>
+   <div class="right_add_to_meal">
+      <div class="product-notification-wrapper page-width desk_tabs" id="product-notification-wrapper">
+         <div id="product-notification-v2" class="product-notification product-inset" aria-modal="true" aria-label="Item added to your cart" role="dialog" tabindex="-1">
+            <div id="cart-notification-product-v2" class="cart-notification-product">
+               <div id="shopify-section-cart-notification-product0v2" class="shopify-section">
+                  <div id="cart-notification-product-v2">
+                     <div class="product-notification__header">
+                        <div class="product_header_text">
+                           <button type="button" class="product-notification__close modal__close-button link link--text focus-inset" aria-label="Close">
+                           <span class="close">×</span>
+                           </button>
+                           <div class="dishes_header">
+                              <div class="dishes-limit">
+                                <span class="sub_data remaining_box">Add <span class="remaing_meals"><%= total_meals - selected_products.count %></span> More Meals!</span>
+                                <span class="sub_data box_full hide">You box is full, checkout now!</span>
+                              </div>
+                              <select class="change_meal_plan">
+                                <option class="change_meal_option">Change</option>
+                              </select>
+                           </div>
+                           <div class="product_number_out">
+                              <span class="product_remaing_number">
+                                <span class="selected_meals_number"><%= "#{selected_products.count}" %></span>
+                                <span class="total_meals"><%= "/#{total_meals}" %></span>
+                              </span>
+                              <cart-remove-all class="clear_all_meals">Clear all</cart-remove-all>
+                           </div>
+                           <div class="footer_icon"> + </div>
+                        </div>
+                        <div class="meals_full_mssg hide">you cannot add more items</div>
+                     </div>
+                  </div>
+                  <div class="side">
+                     <div id="main-cart-items-v2" class="dish_options">
+                        <cart-items class="cart-items">
+                          <% selected_products_with_quantity&.each do |item, qty| %>
+                            <% meal_product = current_week_meals.filter{|m| "#{m["product_id"][/\d+/]}"&.strip == "#{item}"&.strip}.first %>
+                            <% if  meal_product.present? %>
+                              <div id="dish_<%= meal_product['product_id'][/\d+/] %>" class="order_add current-week dish_single">
+                                <img src="<%= meal_product['image'] rescue nil %>" data-id="<%= meal_product['product_id'][/\d+/] %>" data-saved="true">
+                                <span class="qut">
+                                  <h3><%= meal_product&['title'] rescue nil %></h3>
+                                  <div class="qut-box">
+                                      <button class="minus-value" data-id="<%= meal_product["product_id"]&.split('/')&.last %>" data-quantityid="quantity_<%= meal_product["product_id"]&.split('/')&.last %>" type="button" onclick="decrement_quantity(event)">
+                                        -
+                                      </button>
+                                      <input class="input-quantity quantity_<%= meal_product["product_id"]&.split('/')&.last %>" value="<%= qty %>" min="0" id="Quantity-1" data-index="1" readonly="">
+                                      <button class="plusValue" data-quantityid="quantity_<%= meal_product["product_id"]&.split('/')&.last %>" data-id="<%= meal_product["product_id"]&.split('/')&.last %>" onclick="increment_quantity(event)" type="button">
+                                        +
+                                      </button>
+                                  </div>
+                                </span>
+                              </div>
+                            <% end %>
+                          <% end %>
+                        </cart-items>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="cart-notification__links">
+            <button class="button button--primary button--full-width confirm-current-week-sub-btn disabled_button" onclick="submitAddMeals(event)" name="checkout" form="cart" disabled="disabled">Checkout</button>
+         </div>
+      </div>
+   </div>
+</div>
+</div>
+<script>
+  $("body").addClass("add_meals_body");
+  // JS Global Variables   
+    var totalMeals = <%= total_meals %>;
+    var leftMeals = totalMeals - $(".selected_meals_number").html();
+    let product_ids = [];
+    
+  // Push Selected Products
+    <% if selected_products.present? %>
+      <% selected_products&.each do |item| %>
+        product_ids.push(<%= item %>);
+      <% end %>
+    <% end %>
+
+  //increment quantity
+  function increment_quantity(e){
+    if(+$(".selected_meals_number").html() < totalMeals){
+      product_ids.push(e.target.getAttribute("data-id"))
+      let quantity_div = e.target.getAttribute("data-quantityid")
+      $(`.${quantity_div}`)?.html(+$(`.${quantity_div}`).html()+1)
+      $(`.${quantity_div}`)?.val(+$(`.${quantity_div}`).html())
+      $(".selected_meals_number").html( +$(".selected_meals_number").html() + 1)
+      changeRemaingMeals();
+    }
+  }
+
+  //decrement quantity
+  //increment quantity
+  function decrement_quantity(e){
+    let id = e.target.getAttribute("data-id");
+    if(+$(".selected_meals_number").html() >= 1){
+      index = product_ids.indexOf(id);
+      product_ids.splice(index, 1);
+      let quantity_div = e.target.getAttribute("data-quantityid")
+      $(`.${quantity_div}`)?.html(+$(`.${quantity_div}`).html()-1)
+      $(`.${quantity_div}`)?.val(+$(`.${quantity_div}`).html())
+      $(".selected_meals_number").html( +$(".selected_meals_number").html() - 1)
+      changeRemaingMeals();
+    }
+    
+    if(+$(".quantity_"+id).val() === 0){
+      let dishDiv= "#dish_"+id
+      $(dishDiv).remove()
+    }
+  }
+
+   //change remaing meals
+   function changeRemaingMeals(){
+     leftMeals = totalMeals - $(".selected_meals_number").html()
+     $(".remaing_meals").html(leftMeals);
+     if(leftMeals == 0){
+        $(".remaining_box").addClass("hide");
+        $(".box_full").removeClass("hide");
+        $(".meals_full_mssg").removeClass("hide");
+        $(".confirm-current-week-sub-btn").removeClass("disabled_button");
+        $(".confirm-current-week-sub-btn").removeAttr("disabled")
+     }
+      else{
+        $(".remaining_box").removeClass("hide");
+        $(".box_full").addClass("hide");
+        $(".meals_full_mssg").addClass("hide");
+        $(".confirm-current-week-sub-btn").addClass("disabled_button");
+        $(".confirm-current-week-sub-btn").attr("disabled", "disabled")
+      }
+   }
+  $(".add_to_current_week")?.on('click', function(){
+    changeRemaingMeals();
+    if(+$(".selected_meals_number").html() < totalMeals){
+      let quantity_div = $(this).data("quantityid");
+      if($(`.${quantity_div}`)?.html() == 1){
+        $(".cart-items").append("<div class='dish_single' id='dish_"+ $(this).data('id') +"'> \
+                                    <img src='"+ $(this).data('imgurl') + "' data-id=" + $(this).data('id') +"></img> \
+                                    <span class='qut'> \
+                                      <h3>"+$(this).data("mealtitle")+"</h3>  \
+                                      <div class='qut-box'> \
+                                            <button class='minus-value' type='button' data-id="+$(this).data("id")+" data-quantityid=" + $(this).data('quantityid') +" onclick='decrement_quantity(event)'> \
+                                                - \
+                                            </button> \
+                                            <input class='input-quantity "+$(this).data('quantityid')+"' value='1' min='0' id='Quantity-1' data-index='1'> \
+                                            <button class='plusValue' type='button' data-id="+$(this).data("id")+" data-quantityid=" + $(this).data('quantityid') +" onclick='increment_quantity(event)'> \
+                                                  + \
+                                            </button> \
+                                        </div> \
+                                    </div>"); 
+      }
+    }
+  });
+
+  $(".clear_all_meals").on("click",function(){
+    $(".cart-items").html("");
+    $(".selected_meals_number").html(0);
+    changeRemaingMeals();
+    product_ids = [];
+  })
+
+  function submitAddMeals(e){
+    $(this).prop('disabled', true);
+    $(this).text('Processing..');
+    week_number = <%= params[:week_day]&.to_date&.strftime('%-V').to_i %>
+    // product_selector = '.order_add.next-week-'+week_number + ' img'
+
+    // let product_ids = []
+    // $(product_selector).each(function(i, obj) {
+    //   product_ids.push(obj.dataset.id)
+    // });
+    console.log("product_ids",product_ids);
+    let params = {
+      product_ids: product_ids,
+      week:  week_number,
+      customer_id: <%= @customer&.shopify_customer_id %> ,
+      shopify_contract_id: <%= @customer&.shopify_id %>
+    }
+
+    $.ajax({
+      url: '/a/chargezen_production/dashboard/create_pre_order',
+      type: 'POST',
+      data: JSON.stringify(params),
+      contentType: 'application/json',
+      success: function(response) {
+        window.location.replace("/a/chargezen_production/dashboard?customer_id=<%= @customer&.shopify_customer_id%>&overview=true&local_id=<%= @customer&.id%>");
+      },
+      error: function(response) {
+
+      }
+    });
+  };
+
+</script>
+<style>
+   .add_meals_main_div {
+   margin: 185px;
+   display: flex;
+   justify-content: space-between;
+   }
+</style>

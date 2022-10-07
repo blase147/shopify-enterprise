@@ -105,4 +105,12 @@ module AppProxyHelper
   def paused_or_cancel_plan?
     @customer&.cancelled? || @customer&.paused?
   end
+
+  def current_week_meals(week_day)
+    week_day =  "#{week_day}"&.strip&.to_date&.cweek
+    current_week_meals = []
+    current_week_meals = WeeklyMenu.where(week: week_day).first&.collection_images&.first["products"] if WeeklyMenu.where(week: week_day).first&.collection_images&.first.present?
+    current_week_meals = WeeklyMenu.where(week: week_day).first&.product_images if current_week_meals.blank?
+    return current_week_meals
+  end
 end
