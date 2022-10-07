@@ -394,7 +394,7 @@
                 - current_billing_date = Date.current
                 .text-par style="display: flex; justify-content: space-between;" class="#{@customer&.skip_dates&.include?("#{current_billing_date&.to_date&.cweek}") ? "grayed-out" : ""}"
                   p.text
-                    = "Week of #{current_billing_date&.beginning_of_week&.strftime("%B %e")} - #{current_billing_date&.beginning_of_week&.strftime("%e")}"
+                    = "Week of #{current_billing_date&.beginning_of_week&.strftime("%B %e")} - #{current_billing_date&.end_of_week&.strftime("%e")}"
                   button.Polaris-Button.Polaris-Button--plain.skip_week_link data-id = "#{@subscription.id[/\d+/]}" data-skipdate="#{current_billing_date}" data-method="#{@customer&.skip_dates&.include?("#{current_billing_date&.to_date&.cweek}") ? "unskip" : "skip"}" 
                     span.Polaris-Button__Content
                       span.Polaris-Button__Text #{@customer&.skip_dates&.include?("#{current_billing_date&.to_date&.cweek}") ? "Unskip" : "Skip"}
@@ -403,7 +403,7 @@
                   -  billing_date = current_billing_date.to_date + (index * billing_policy.interval_count).send(billing_policy.interval.downcase)
                   .text-par style="display: flex; justify-content: space-between;" class="#{@customer&.skip_dates&.include?("#{billing_date&.to_date&.cweek}") ? "grayed-out" : ""}"
                     p.text
-                      =  "Week of #{billing_date&.beginning_of_week&.strftime("%B %e")} - #{billing_date&.beginning_of_week&.strftime("%e")}"
+                      =  "Week of #{billing_date&.beginning_of_week&.strftime("%B %e")} - #{billing_date&.end_of_week&.strftime("%e")}"
                     button.Polaris-Button.Polaris-Button--plain.skip_week_link data-id = "#{@subscription.id[/\d+/]}" data-skipdate="#{billing_date}" data-method="#{@customer&.skip_dates&.include?("#{billing_date&.to_date&.cweek}") ? "unskip" : "skip"}"
                       span.Polaris-Button__Content
                         span.Polaris-Button__Text #{@customer&.skip_dates&.include?("#{billing_date&.to_date&.cweek}") ? "Unskip" : "Skip"}
