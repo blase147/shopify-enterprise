@@ -17,13 +17,13 @@
   {% assign is_trail = true %}
 {% endif %}
 
+<% unless params[:action] == "add_meals" %> 
 <% active_sub_main = customer_order.line_items.find{|item| item.name.downcase.include?('Box'.downcase)} rescue nil %>
 <% if active_sub_main %>
   {% assign active_sub = <%= active_sub_main.product_id %> %}
 <% else %>
   {% assign active_sub = false %}
 <% end %>
-
 <div class="customer account c_account">
   <div class="preloader">
     <div class="preloader_sub_div">
@@ -286,3 +286,6 @@ $(function() {
   }
 }); 
 </script>
+<% else %>
+  <%= render 'add_meals' %>
+<% end %>

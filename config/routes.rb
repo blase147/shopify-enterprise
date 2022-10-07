@@ -118,6 +118,7 @@ Rails.application.routes.draw do
         post :portal_skip_schedule
         get :show_order
         get :order_paginate
+        post :add_meals 
       end
     end
 

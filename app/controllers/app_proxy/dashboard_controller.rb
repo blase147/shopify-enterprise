@@ -288,6 +288,12 @@ class AppProxy::DashboardController < AppProxyController
       render js: 'location.reload()'
     end
   end
+
+  def add_meals 
+    @setting = current_shop&.setting
+    @customer = CustomerSubscriptionContract.find(params[:local_id])
+    render "#{current_setting.portal_theme}index", content_type: 'application/liquid', layout: "#{current_setting.portal_theme}liquid_app_proxy"
+  end  
   
   private ##
 
