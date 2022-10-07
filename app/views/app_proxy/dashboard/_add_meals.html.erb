@@ -2,13 +2,6 @@
 
 <div class="header_links">
 <div class="header_inner">
-<div class="Link_wrapper">
-<div class="link_section">
-  <a href="#">Popular</a>
-  <a href="#">Vegetarian</a>
-  <a href="#">Gluten-Free</a>
-  </div>
-  </div>
  
 
   <div class="filter_section">
@@ -248,6 +241,7 @@
       url: '/a/chargezen_production/dashboard/create_pre_order',
       type: 'POST',
       data: JSON.stringify(params),
+      contentType: 'application/json'
     });
      window.location.replace("/a/chargezen_production/dashboard?customer_id=<%= @customer&.shopify_customer_id%>&overview=true&local_id=<%= @customer&.id%>");
   };
