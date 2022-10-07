@@ -242,15 +242,14 @@
       type: 'POST',
       data: JSON.stringify(params),
       contentType: 'application/json',
-    });
-     window.location.replace("/a/chargezen_production/dashboard?customer_id=<%= @customer&.shopify_customer_id%>&overview=true&local_id=<%= @customer&.id%>");
-  };
+      success: function(response) {
+        window.location.replace("/a/chargezen_production/dashboard?customer_id=<%= @customer&.shopify_customer_id%>&overview=true&local_id=<%= @customer&.id%>");
+      },
+      error: function(response) {
 
-  $(document).ready(function(){
-      $('.loader').hide();
-      $("body").css("overflow","auto")
-      $('.preloader').fadeOut('slow');
-  })
+      }
+    });
+  };
 </script>
 <style>
    .add_meals_main_div {
