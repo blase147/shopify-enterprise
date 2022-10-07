@@ -253,16 +253,15 @@
       url: '/a/chargezen_production/dashboard/create_pre_order',
       type: 'POST',
       data: JSON.stringify(params),
-      contentType: 'application/json',
-      success: function(response) {
-        window.location.replace("/a/chargezen_production/dashboard?customer_id=<%= @customer&.shopify_customer_id%>&overview=true&local_id=<%= @customer&.id%>");
-      },
-      error: function(response) {
-
-      }
     });
+     window.location.replace("/a/chargezen_production/dashboard?customer_id=<%= @customer&.shopify_customer_id%>&overview=true&local_id=<%= @customer&.id%>");
   };
 
+  $(document).ready(function(){
+      $('.loader').hide();
+      $("body").css("overflow","auto")
+      $('.preloader').fadeOut('slow');
+  })
 </script>
 <style>
    .add_meals_main_div {
