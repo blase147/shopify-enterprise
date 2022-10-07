@@ -236,6 +236,7 @@
     $(this).prop('disabled', true);
     $(this).text('Processing..');
     week_number = <%= params[:week_day]&.to_date&.strftime('%-V').to_i %>
+    console.log("product_ids",product_ids);
     let params = {
       product_ids: product_ids,
       week:  week_number,
