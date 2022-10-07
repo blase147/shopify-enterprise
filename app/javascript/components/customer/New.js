@@ -32,6 +32,7 @@ import AppLayout from '../layout/Layout';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import customerIDICon from '../../../assets/images/icons/customerID.svg';
 import addICon from '../../../assets/images/icons/add.svg';
+import LoadingScreen from '../LoadingScreen';
 
 const CreateCustomer = () => {
   const formRef = useRef(null);
@@ -368,11 +369,7 @@ const CreateCustomer = () => {
           }
         >
           {loading && id && (
-            <Spinner
-              accessibilityLabel="Spinner example"
-              size="large"
-              color="teal"
-            />
+            <LoadingScreen />
           )}
           {(formData || !id) && (
             <Formik
@@ -590,19 +587,19 @@ const CreateCustomer = () => {
                             index == 0
                               ? []
                               : [
-                                  {
-                                    content: 'Remove',
-                                    onAction: () => {
-                                      setFieldValue(
-                                        'additionalContacts',
-                                        handleRemovingAdditionalContacts(
-                                          values,
-                                          index
-                                        )
-                                      );
-                                    },
+                                {
+                                  content: 'Remove',
+                                  onAction: () => {
+                                    setFieldValue(
+                                      'additionalContacts',
+                                      handleRemovingAdditionalContacts(
+                                        values,
+                                        index
+                                      )
+                                    );
                                   },
-                                ]
+                                },
+                              ]
                           }
                         >
                           <FormLayout>

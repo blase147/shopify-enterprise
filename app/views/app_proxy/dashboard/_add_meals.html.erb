@@ -129,8 +129,8 @@
                </div>
             </div>
          </div>
-         <div class="cart-notification__links">
-            <button class="button button--primary button--full-width confirm-current-week-sub-btn disabled_button" onclick="submitAddMeals(event)" name="checkout" form="cart" disabled="disabled">Confirm Meals</button>
+         <div class="">
+            <button type="button" class="button button--primary button--full-width confirm-current-week-sub-btn disabled_button" onclick="submitAddMeals(event)" disabled="disabled">Confirm Meals</button>
          </div>
       </div>
    </div>
@@ -232,16 +232,10 @@
   })
 
   function submitAddMeals(e){
+    e.preventDefault();
     $(this).prop('disabled', true);
     $(this).text('Processing..');
     week_number = <%= params[:week_day]&.to_date&.strftime('%-V').to_i %>
-    // product_selector = '.order_add.next-week-'+week_number + ' img'
-
-    // let product_ids = []
-    // $(product_selector).each(function(i, obj) {
-    //   product_ids.push(obj.dataset.id)
-    // });
-    console.log("product_ids",product_ids);
     let params = {
       product_ids: product_ids,
       week:  week_number,

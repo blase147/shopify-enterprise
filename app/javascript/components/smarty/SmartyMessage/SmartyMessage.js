@@ -16,6 +16,7 @@ import dayjs from 'dayjs';
 import ToggleButton from 'react-toggle-button';
 import { useHistory } from 'react-router';
 import TableSkeleton from '../../common/TableSkeleton';
+import LoadingScreen from '../../LoadingScreen';
 
 const SmartyMessage = ({ handleEditSmartyMessage }) => {
   const fetchQuery = gql`
@@ -155,36 +156,32 @@ const SmartyMessage = ({ handleEditSmartyMessage }) => {
               rows={
                 !loading && data
                   ? data?.fetchSmartyMessages?.smartyMessages?.map((msg, i) => [
-                      i + 1,
-                      msg.title,
-                      dayjs(msg.updatedAt).format('DD MMM HH:mm'),
-                      0,
-                      0,
-                      `$0.00`,
-                      <ToggleButton
-                        inactiveLabel={''}
-                        activeLabel={''}
-                        value={false}
-                        onToggle={(value) => {
-                          console.log('toggle');
-                        }}
-                      />,
-                      <Button
-                        primary
-                        onClick={() => handleEditSmartyMessage(msg.id)}
-                      >
-                        Edit
-                      </Button>,
-                    ])
+                    i + 1,
+                    msg.title,
+                    dayjs(msg.updatedAt).format('DD MMM HH:mm'),
+                    0,
+                    0,
+                    `$0.00`,
+                    <ToggleButton
+                      inactiveLabel={''}
+                      activeLabel={''}
+                      value={false}
+                      onToggle={(value) => {
+                        console.log('toggle');
+                      }}
+                    />,
+                    <Button
+                      primary
+                      onClick={() => handleEditSmartyMessage(msg.id)}
+                    >
+                      Edit
+                    </Button>,
+                  ])
                   : []
               }
             />
             {loading && (
-              <Spinner
-                accessibilityLabel="Spinner example"
-                size="large"
-                color="teal"
-              />
+              <LoadingScreen />
             )}
 
             {/* <table className="message-table">

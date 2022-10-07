@@ -22,6 +22,7 @@ import { isEmpty } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState, useContext } from 'react';
 import CounterUp from 'react-countup';
 import DateRangePicker from '../common/DatePicker/DateRangePicker';
+import LoadingScreen from '../LoadingScreen';
 import { FilterContext } from './../common/Contexts/AnalyticsFilterContext';
 
 const RevenueTrends = () => {
@@ -1208,11 +1209,7 @@ const RevenueTrends = () => {
     <>
       {loading ? (
         <Card>
-          <Spinner
-            accessibilityLabel="Spinner example"
-            size="large"
-            color="teal"
-          />
+          <LoadingScreen />
         </Card>
       ) :
         <FormLayout>

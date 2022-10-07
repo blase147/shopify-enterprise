@@ -19,6 +19,7 @@ import {
 import dayjs from 'dayjs'
 import { isEmpty } from 'lodash';
 import DateRangePicker from '../common/DatePicker/DateRangePicker';
+import LoadingScreen from '../LoadingScreen';
 
 const CustomerInsights = () => {
 
@@ -366,11 +367,7 @@ const CustomerInsights = () => {
     <>
       {(loading || !data) ? (
         <Card>
-          <Spinner
-            accessibilityLabel="Spinner example"
-            size="large"
-            color="teal"
-          />
+          <LoadingScreen />
         </Card>
       ) :
         <FormLayout>

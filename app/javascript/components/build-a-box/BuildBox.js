@@ -29,6 +29,7 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 import _ from 'lodash';
 
 import AppLayout from '../layout/Layout';
+import LoadingScreen from '../LoadingScreen';
 const ButtonRemove = (props) => {
   const {
     selectedCampaignsForRemove,
@@ -299,9 +300,8 @@ const BuildBox = ({ handleForm, handleBack }) => {
             <Stack.Item>
               <Stack>
                 <div
-                  className={`${
-                    selectedCampaignsForRemove.length === 0 ? 'hidden' : ''
-                  }`}
+                  className={`${selectedCampaignsForRemove.length === 0 ? 'hidden' : ''
+                    }`}
                 >
                   <ButtonRemove
                     compaigns={campaigns}
@@ -366,11 +366,7 @@ const BuildBox = ({ handleForm, handleBack }) => {
                 initialSortColumnIndex={1}
               />
               {loading && (
-                <Spinner
-                  accessibilityLabel="Spinner example"
-                  size="large"
-                  color="teal"
-                />
+                <LoadingScreen />
               )}
             </Card.Section>
           </Card>

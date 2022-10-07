@@ -32,6 +32,7 @@ import dayjs from 'dayjs';
 import SearchProduct from '../upsell/SearchProduct';
 import Preview from './Preview';
 import SearchVariants from './SearchVariants';
+import LoadingScreen from '../LoadingScreen';
 
 const FixedPlan = () => {
   const GET_SELLING_PLAN = gql`
@@ -299,11 +300,7 @@ const FixedPlan = () => {
           ]}
         >
           {loading && id && (
-            <Spinner
-              accessibilityLabel="Spinner example"
-              size="large"
-              color="teal"
-            />
+            <LoadingScreen />
           )}
           {(planData || !id) && (
             <Formik
@@ -312,14 +309,14 @@ const FixedPlan = () => {
                 planData
                   ? planData
                   : {
-                      internalName: '',
-                      planSelectorTitle: '',
-                      publicName: '',
-                      active: true,
-                      productIds: [],
-                      variantIds: [],
-                      sellingPlans: [{ ...initialValues }],
-                    }
+                    internalName: '',
+                    planSelectorTitle: '',
+                    publicName: '',
+                    active: true,
+                    productIds: [],
+                    variantIds: [],
+                    sellingPlans: [{ ...initialValues }],
+                  }
               }
               onSubmit={(values, { setSubmitting, setDirty }) => {
                 values.productIds = allProducts || [];
@@ -332,7 +329,7 @@ const FixedPlan = () => {
                   values.sellingPlans[index].deliveryIntervalType =
                     values.sellingPlans[index].deliveryIntervalType ||
                     initialValues.deliveryIntervalType;
-                  if(!plan.firstDelivery && plan.shippingDates && plan.shippingDates.length > 0){
+                  if (!plan.firstDelivery && plan.shippingDates && plan.shippingDates.length > 0) {
                     values.sellingPlans[index].firstDelivery = initialValues.firstDelivery;
                   }
                   // values.sellingPlans[index].productIds = allProducts[index] || [];
@@ -596,22 +593,22 @@ const FixedPlan = () => {
                         sectioned
                         actions={
                           (!id && index != 0) ||
-                          (id &&
-                            values.sellingPlans.filter((p) => !p._destroy)
-                              .length > 1)
+                            (id &&
+                              values.sellingPlans.filter((p) => !p._destroy)
+                                .length > 1)
                             ? [
-                                {
-                                  content: 'Remove',
-                                  onAction: () => {
-                                    setFieldValue(
-                                      `sellingPlans[${index}]._destroy`,
-                                      true
-                                    );
-                                    let dates = selectedDate.slice(index, 1);
-                                    setSelectedDate(dates);
-                                  },
+                              {
+                                content: 'Remove',
+                                onAction: () => {
+                                  setFieldValue(
+                                    `sellingPlans[${index}]._destroy`,
+                                    true
+                                  );
+                                  let dates = selectedDate.slice(index, 1);
+                                  setSelectedDate(dates);
                                 },
-                              ]
+                              },
+                            ]
                             : []
                         }
                       >
@@ -801,7 +798,7 @@ const FixedPlan = () => {
                           <FormLayout.Group>
                             <Select
                               label="Interval"
-                              value={plan.deliveryIntervalCount === null ? initialValues.deliveryIntervalCount : plan.deliveryIntervalCount }
+                              value={plan.deliveryIntervalCount === null ? initialValues.deliveryIntervalCount : plan.deliveryIntervalCount}
                               error={
                                 touched.sellingPlans?.[index]?.deliveryIntervalCount &&
                                 errors.sellingPlans?.[index]?.deliveryIntervalCount
@@ -817,7 +814,7 @@ const FixedPlan = () => {
                             <Select
                               options={interOptions}
                               label="  "
-                              value={plan.deliveryIntervalType === null ? initialValues.deliveryIntervalType : plan.deliveryIntervalType }
+                              value={plan.deliveryIntervalType === null ? initialValues.deliveryIntervalType : plan.deliveryIntervalType}
                               error={
                                 touched.sellingPlans?.[index]?.deliveryIntervalType &&
                                 errors.sellingPlans?.[index]?.deliveryIntervalType
@@ -832,7 +829,7 @@ const FixedPlan = () => {
                           </FormLayout.Group>
 
                           <TextContainer>
-                          <br />
+                            <br />
                             <Subheading>TRIAL PERIOD</Subheading>
                           </TextContainer>
                           <FormLayout.Group>
@@ -980,17 +977,17 @@ const FixedPlan = () => {
                                 </div>
                                 {values.sellingPlans[index]?.billingDates
                                   .length > 0 && (
-                                  <div className="add-date-btn">
-                                    <Button
-                                      primary
-                                      onClick={() =>
-                                        clearDate('billingDate', index)
-                                      }
-                                    >
-                                      + Add
-                                    </Button>
-                                  </div>
-                                )}
+                                    <div className="add-date-btn">
+                                      <Button
+                                        primary
+                                        onClick={() =>
+                                          clearDate('billingDate', index)
+                                        }
+                                      >
+                                        + Add
+                                      </Button>
+                                    </div>
+                                  )}
                               </div>
 
                               {/* <div>
@@ -1087,17 +1084,17 @@ const FixedPlan = () => {
                                   ))}
                                   {values.sellingPlans[index]?.shippingDates
                                     .length > 0 && (
-                                    <div className="add-date-btn">
-                                      <Button
-                                        primary
-                                        onClick={() =>
-                                          clearDate('shippingDate', index)
-                                        }
-                                      >
-                                        + Add
-                                      </Button>
-                                    </div>
-                                  )}
+                                      <div className="add-date-btn">
+                                        <Button
+                                          primary
+                                          onClick={() =>
+                                            clearDate('shippingDate', index)
+                                          }
+                                        >
+                                          + Add
+                                        </Button>
+                                      </div>
+                                    )}
                                 </div>
                                 <div>
                                   <Select

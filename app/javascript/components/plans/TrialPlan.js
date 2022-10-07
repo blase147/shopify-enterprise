@@ -27,6 +27,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import LayoutIndex from '../layout/Layout';
 
 import { gql, useMutation, useLazyQuery } from '@apollo/client';
+import LoadingScreen from '../LoadingScreen';
 
 const TrialPlan = () => {
   const GET_SELLING_PLAN = gql`
@@ -175,11 +176,7 @@ const TrialPlan = () => {
           ]}
         >
           {loading && id && (
-            <Spinner
-              accessibilityLabel="Spinner example"
-              size="large"
-              color="teal"
-            />
+            <LoadingScreen />
           )}
           {(planData || !id) && (
             <Formik
@@ -188,11 +185,11 @@ const TrialPlan = () => {
                 planData
                   ? planData
                   : {
-                      internalName: '',
-                      planSelectorTitle: '',
-                      publicName: '',
-                      sellingPlans: [{ ...initialValues }],
-                    }
+                    internalName: '',
+                    planSelectorTitle: '',
+                    publicName: '',
+                    sellingPlans: [{ ...initialValues }],
+                  }
               }
               onSubmit={(values, { setSubmitting, setDirty }) => {
                 if (id) {
@@ -390,19 +387,19 @@ const TrialPlan = () => {
                         title="Selling Plan"
                         sectioned
                         actions={
-                          ((!id && index != 0) || (id && values.sellingPlans.filter(p=>!p._destroy).length>1))
+                          ((!id && index != 0) || (id && values.sellingPlans.filter(p => !p._destroy).length > 1))
                             ? []
                             : [
-                                {
-                                  content: 'Remove',
-                                  onAction: () => {
-                                    setFieldValue(
-                                      `sellingPlans[${index}]._destroy`,
-                                      true
-                                    );
-                                  },
+                              {
+                                content: 'Remove',
+                                onAction: () => {
+                                  setFieldValue(
+                                    `sellingPlans[${index}]._destroy`,
+                                    true
+                                  );
                                 },
-                              ]
+                              },
+                            ]
                         }
                       >
                         <FormLayout>

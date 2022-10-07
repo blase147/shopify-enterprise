@@ -54,6 +54,7 @@ import ZipCodes from './ZipCodes';
 import EnableDebug from './EnableDebug';
 import StripeSettings from './StripeSettings';
 import DeliveryOption from "./DeliveryOption";
+import LoadingScreen from '../LoadingScreen';
 
 const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
   // form data ########################################################
@@ -607,11 +608,7 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
           <>
             {loading && (
               <Card>
-                <Spinner
-                  accessibilityLabel="Spinner example"
-                  size="large"
-                  color="teal"
-                />
+                <LoadingScreen />
               </Card>
             )}
             {formErrors.length > 0 && (

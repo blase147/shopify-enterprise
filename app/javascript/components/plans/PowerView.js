@@ -43,6 +43,7 @@ import dayjs from 'dayjs';
 import SearchProduct from '../upsell/SearchProduct';
 import Preview from './Preview';
 import SearchVariants from './SearchVariants';
+import LoadingScreen from '../LoadingScreen';
 
 const PowerView = () => {
   const GET_SELLING_PLAN = gql`
@@ -399,11 +400,7 @@ const PowerView = () => {
           ]}
         >
           {loading && id && (
-            <Spinner
-              accessibilityLabel="Spinner example"
-              size="large"
-              color="teal"
-            />
+            <LoadingScreen />
           )}
           {planData && (
             <Formik

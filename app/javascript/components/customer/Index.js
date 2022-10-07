@@ -20,6 +20,7 @@ import swapIcon from '../../../assets/images/icons/swap.svg';
 import AppLayout from '../layout/Layout';
 import moment from 'moment';
 import { Pagination } from "@shopify/polaris";
+import LoadingScreen from '../LoadingScreen';
 
 
 // import json2csv from 'json2csv';
@@ -846,11 +847,7 @@ const Customers = ({ shopifyDomain }) => {
                 />
               </div>
               {loading && (
-                <Spinner
-                  accessibilityLabel="Spinner example"
-                  size="large"
-                  color="teal"
-                />
+                <LoadingScreen />
               )}
               <div style={{ width: '100%', justifyContent: 'center', display: 'flex' }}>
                 <Pagination

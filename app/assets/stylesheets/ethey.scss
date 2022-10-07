@@ -3112,13 +3112,13 @@ div#upate_preorder_div {
 }
 
 
-.top_meals .right_add_to_meal .cart-notification__links button.button {
+.top_meals .right_add_to_meal button.button {
   position: relative;
   z-index: 99;
   border-radius: 0;
 }
 
-.top_meals .right_add_to_meal .cart-notification__links button.disabled_button {
+.top_meals .right_add_to_meal button.disabled_button {
   background: #ebeded;
   color: #384443;
 }
@@ -5626,5 +5626,23 @@ div#upate_preorder_div {
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .order-box .pre_segment {
+    flex-wrap: wrap;
+    justify-content: space-between !important;
+  }
+
+  .order-box .pre_segment .pre_segment_order {
+    width: 45% !important;
+  }
+}
+
+@media only screen and (max-width: 550px) {
+  .pre_segment .order_inn {
+    width: 47% !important;
+    gap: 5px;
   }
 }

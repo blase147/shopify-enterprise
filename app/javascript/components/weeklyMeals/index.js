@@ -20,6 +20,7 @@ import OrderMangementTable from './OrderMangementTable';
 import { Link } from 'react-router-dom';
 import OrderDetail from './OrderDetail';
 import './AvenirFont/stylesheet.css';
+import LoadingScreen from '../LoadingScreen';
 
 const index = ({ handleBack }) => {
   const days = ['all', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
@@ -422,11 +423,7 @@ const index = ({ handleBack }) => {
               </div>
             ))*/}
               {(loading || deliveryData.loading) && (
-                <Spinner
-                  accessibilityLabel="Spinner example"
-                  size="large"
-                  color="teal"
-                />
+                <LoadingScreen />
               )}
             </Card.Section>
           </Card>
