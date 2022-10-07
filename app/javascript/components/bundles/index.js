@@ -11,6 +11,7 @@ import {
   Icon,
 } from '@shopify/polaris';
 import { MobileBackArrowMajor } from '@shopify/polaris-icons';
+import LoadingScreen from '../LoadingScreen';
 
 const Bundles = ({ handleForm, handleBack }) => {
   const [bundles, setBundles] = useState([]);
@@ -64,11 +65,7 @@ const Bundles = ({ handleForm, handleBack }) => {
         </Stack>
         <br />
         {loading ? (
-          <Spinner
-            accessibilityLabel="Spinner example"
-            size="large"
-            color="teal"
-          />
+          <LoadingScreen />
         ) : bundles.length === 0 ? (
           <EmptyState
             heading="Generate Bundles"
@@ -87,17 +84,17 @@ const Bundles = ({ handleForm, handleBack }) => {
             rows={
               !loading && bundles && bundles.length > 0
                 ? bundles.map((bundle) => [
-                    bundle.internal_name,
-                    bundle?.location?.replace('_', ' '),
-                    <div style={{display: 'flex', justifyContent: 'space-around'}}>
-                      <Button primary onClick={() => handleForm(bundle.id)}>
-                        Edit
-                      </Button>
-                      <Button destructive onClick={() => removeBundleGroup(bundle.id)}>
-                        Delete
-                      </Button>
-                    </div>
-                  ])
+                  bundle.internal_name,
+                  bundle?.location?.replace('_', ' '),
+                  <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                    <Button primary onClick={() => handleForm(bundle.id)}>
+                      Edit
+                    </Button>
+                    <Button destructive onClick={() => removeBundleGroup(bundle.id)}>
+                      Delete
+                    </Button>
+                  </div>
+                ])
                 : []
             }
           />

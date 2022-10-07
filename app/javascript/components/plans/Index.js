@@ -29,6 +29,7 @@ import {
 
 import { gql, useMutation, useQuery } from '@apollo/client';
 import Modals from './Modals';
+import LoadingScreen from '../LoadingScreen';
 
 const ButtonRemove = (props) => {
   const {
@@ -304,9 +305,8 @@ const SellingPlans = () => {
                 <Stack.Item>
                   <Stack>
                     <div
-                      className={`${
-                        selectedPlansForRemove.length === 0 ? 'hidden' : ''
-                      }`}
+                      className={`${selectedPlansForRemove.length === 0 ? 'hidden' : ''
+                        }`}
                     >
                       <ButtonRemove
                         formatRows={formatRows}
@@ -366,11 +366,7 @@ const SellingPlans = () => {
                   initialSortColumnIndex={1}
                 />
                 {loading && (
-                  <Spinner
-                    accessibilityLabel="Spinner example"
-                    size="large"
-                    color="teal"
-                  />
+                  <LoadingScreen />
                 )}
               </Card>
             </Layout.Section>

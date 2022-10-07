@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback,useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
 import AppLayout from '../layout/Layout';
@@ -26,22 +26,23 @@ import getStart from 'images/get_start.svg';
 import _, { map } from 'lodash';
 import integrations from '../../lib/integrations';
 import { groupBy } from '../common/utils/utils';
+import LoadingScreen from '../LoadingScreen';
 
-const Integrations = ({handleBack,handleForm}) => {
+const Integrations = ({ handleBack, handleForm }) => {
 
-  const mapCatagory=useMemo(() =>({
-    all:"",
-    sale:"sales",
-    marketing:"marketing",
-    report:"reporting_and_analytics",
-    collabration:"collaboration",
-    accounting:"accounting",
-    customer:"customer_support_and_success",
-    contract:"contract_management",
-    tax:"tax_management"
-  }),[])
+  const mapCatagory = useMemo(() => ({
+    all: "",
+    sale: "sales",
+    marketing: "marketing",
+    report: "reporting_and_analytics",
+    collabration: "collaboration",
+    accounting: "accounting",
+    customer: "customer_support_and_success",
+    contract: "contract_management",
+    tax: "tax_management"
+  }), [])
 
-  const IntegerationsQuery=gql`
+  const IntegerationsQuery = gql`
   query($type:String!){
       fetchIntegrations(type: $type) {
           id
@@ -66,7 +67,7 @@ const Integrations = ({handleBack,handleForm}) => {
     id: item.id,
   }));
   tabs = [
-    ...(process.env.APP_TYPE=="public" ? [{ content: 'All', id: 'all' }]:[])
+    ...(process.env.APP_TYPE == "public" ? [{ content: 'All', id: 'all' }] : [])
   ].concat(tabs);
 
   const [selected, setSelected] = useState(0);
@@ -77,25 +78,25 @@ const Integrations = ({handleBack,handleForm}) => {
     setCategory(tabs[selectedTabIndex].id);
   }, []);
 
-  const [fetchIntegrations,{data:integerations,loading}]=useLazyQuery(IntegerationsQuery,{fetchPolicy:"network-only"})
+  const [fetchIntegrations, { data: integerations, loading }] = useLazyQuery(IntegerationsQuery, { fetchPolicy: "network-only" })
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchIntegrations({
-      variables:{
-        type:mapCatagory[category]
+      variables: {
+        type: mapCatagory[category]
       }
     })
-  },[category])
+  }, [category])
 
-  let lodas= category=="all" && _.groupBy(integerations?.fetchIntegrations,"integrationType") || [];
+  let lodas = category == "all" && _.groupBy(integerations?.fetchIntegrations, "integrationType") || [];
   return (
-      <>
+    <>
 
-      <div fullWidth title={process.env.APP_TYPE=="public"?"Integrate with ChargeZen":"Integrations"}>
+      <div fullWidth title={process.env.APP_TYPE == "public" ? "Integrate with ChargeZen" : "Integrations"}>
         <Layout>
 
           <Layout.Section>
-            <div className="back-button pointer" style={{float:"left"}} onClick={handleBack}>
+            <div className="back-button pointer" style={{ float: "left" }} onClick={handleBack}>
               <Icon
                 source={MobileBackArrowMajor}
                 color="base" />
@@ -118,53 +119,49 @@ const Integrations = ({handleBack,handleForm}) => {
           </Layout.Section>
           {/* Data from API's */}
           <Layout.Section>
-          <Heading><span style={{textTransform:"capitalize"}} >{category}</span></Heading>
-          {
-            (loading) ? (
-              <Card>
-                <Spinner
-                  accessibilityLabel="Spinner example"
-                  size="large"
-                  color="teal"
-                />
-              </Card>
-            ):
-                  <>
+            <Heading><span style={{ textTransform: "capitalize" }} >{category}</span></Heading>
+            {
+              (loading) ? (
+                <Card>
+                  <LoadingScreen />
+                </Card>
+              ) :
+                <>
                   {
-                    category=="all" ?
+                    category == "all" ?
                       <>
                         {
-                         lodas && Object.keys(lodas).map((key, i) => (
-                          <Layout.Section>
+                          lodas && Object.keys(lodas).map((key, i) => (
+                            <Layout.Section>
                               <Heading>{_.startCase(key)}</Heading>
-                            <Stack spacing="loose">
-                              {lodas[key]?.map((childItem, i) => (
-                                <Link
-                                  // to={{ pathname: `/integration-detail/${childItem.id}/${childItem.name}/${childItem.keys}`, state: { credentials: childItem.credentials } }}
-                                  onClick={()=>handleForm({id:childItem.id,keys:childItem.keys,title:childItem.name})}
-                                  className="roundedCard"
-                                  key={i}
-                                >
-                                  <Stack.Item>
-                                    <Card sectioned>
-                                      <Stack alignment="center">
-                                        <Stack.Item>
-                                        <img src={require(`images/${childItem.name?.split(" ").join("").toLowerCase()}`)} style={{ maxWidth: "80px" }} />
-                                        </Stack.Item>
-                                        <Stack.Item fill>
-                                          <DisplayText size="small">
-                                            {childItem.name}
-                                          </DisplayText>
-                                        </Stack.Item>
-                                      </Stack>
-                                    </Card>
-                                  </Stack.Item>
-                                </Link>
-                              ))}
-                            </Stack>
-                          </Layout.Section>
-                        ))}
-                      </>:
+                              <Stack spacing="loose">
+                                {lodas[key]?.map((childItem, i) => (
+                                  <Link
+                                    // to={{ pathname: `/integration-detail/${childItem.id}/${childItem.name}/${childItem.keys}`, state: { credentials: childItem.credentials } }}
+                                    onClick={() => handleForm({ id: childItem.id, keys: childItem.keys, title: childItem.name })}
+                                    className="roundedCard"
+                                    key={i}
+                                  >
+                                    <Stack.Item>
+                                      <Card sectioned>
+                                        <Stack alignment="center">
+                                          <Stack.Item>
+                                            <img src={require(`images/${childItem.name?.split(" ").join("").toLowerCase()}`)} style={{ maxWidth: "80px" }} />
+                                          </Stack.Item>
+                                          <Stack.Item fill>
+                                            <DisplayText size="small">
+                                              {childItem.name}
+                                            </DisplayText>
+                                          </Stack.Item>
+                                        </Stack>
+                                      </Card>
+                                    </Stack.Item>
+                                  </Link>
+                                ))}
+                              </Stack>
+                            </Layout.Section>
+                          ))}
+                      </> :
                       <>
                         <Stack spacing="loose">
                           {
@@ -179,7 +176,7 @@ const Integrations = ({handleBack,handleForm}) => {
                                     <Stack alignment="center">
                                       <Stack.Item>
                                         {
-                                          console.log("hello",item.name?.split(" ").join("").toLowerCase())
+                                          console.log("hello", item.name?.split(" ").join("").toLowerCase())
                                         }
                                         <img src={require(`images/${item.name?.split(" ").join("").toLowerCase()}`)} style={{ maxWidth: "80px" }} />
                                       </Stack.Item>
@@ -197,8 +194,8 @@ const Integrations = ({handleBack,handleForm}) => {
                         </Stack>
                       </>
                   }
-                  </>
-          }
+                </>
+            }
           </Layout.Section>
         </Layout>
       </div>

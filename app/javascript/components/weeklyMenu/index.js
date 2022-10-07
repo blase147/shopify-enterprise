@@ -29,6 +29,7 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 import _ from 'lodash';
 
 import AppLayout from '../layout/Layout';
+import LoadingScreen from '../LoadingScreen';
 const ButtonRemove = (props) => {
   const {
     selectedMenusForRemove,
@@ -235,9 +236,8 @@ const Index = ({ handleForm, handleBack }) => {
             <Stack.Item>
               <Stack>
                 <div
-                  className={`${
-                    selectedMenusForRemove.length === 0 ? 'hidden' : ''
-                  }`}
+                  className={`${selectedMenusForRemove.length === 0 ? 'hidden' : ''
+                    }`}
                 >
                   <ButtonRemove
                     menus={menus}
@@ -302,11 +302,7 @@ const Index = ({ handleForm, handleBack }) => {
                 initialSortColumnIndex={1}
               />
               {loading && (
-                <Spinner
-                  accessibilityLabel="Spinner example"
-                  size="large"
-                  color="teal"
-                />
+                <LoadingScreen />
               )}
             </Card.Section>
           </Card>

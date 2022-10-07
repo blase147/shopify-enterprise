@@ -29,6 +29,7 @@ import {
 } from '@shopify/polaris-icons';
 
 import { gql, useMutation, useQuery } from '@apollo/client';
+import LoadingScreen from '../LoadingScreen';
 
 const ButtonRemove = (props) => {
   const {
@@ -94,7 +95,7 @@ const ButtonRemove = (props) => {
   );
 };
 
-const Upsell = ({handleBack,handleForm}) => {
+const Upsell = ({ handleBack, handleForm }) => {
   const history = useHistory();
 
   const GET_UPSELL_CAMPAIGNS = gql`
@@ -172,7 +173,7 @@ const Upsell = ({handleBack,handleForm}) => {
         <div className={`${row.status == 'publish' ? 'active' : 'draft'}`}>
           <Badge>{row.status == 'publish' ? 'Active' : 'Draft'}</Badge>
         </div>
-        <Link onClick={()=>handleForm(row.id)} key={row.id}>
+        <Link onClick={() => handleForm(row.id)} key={row.id}>
           {row.internalName}
         </Link>
       </div>,
@@ -215,130 +216,125 @@ const Upsell = ({handleBack,handleForm}) => {
 
   return (
     <Frame>
-          {saveSuccess && (
-            <Toast
-              content="Upsell campaign groups is deleted"
-              onDismiss={hideSaveSuccess}
-            />
-          )}
-          {formErrors.length > 0 && (
-            <>
-              <Banner
-                title="Upsell campaign group could not be saved"
-                status="critical"
-              >
-                <List type="bullet">
-                  {formErrors.map((message, index) => (
-                    <List.Item key={index}>{message.message}</List.Item>
-                  ))}
-                </List>
-              </Banner>
-              <br />
-            </>
-          )}
-          <Layout>
+      {saveSuccess && (
+        <Toast
+          content="Upsell campaign groups is deleted"
+          onDismiss={hideSaveSuccess}
+        />
+      )}
+      {formErrors.length > 0 && (
+        <>
+          <Banner
+            title="Upsell campaign group could not be saved"
+            status="critical"
+          >
+            <List type="bullet">
+              {formErrors.map((message, index) => (
+                <List.Item key={index}>{message.message}</List.Item>
+              ))}
+            </List>
+          </Banner>
+          <br />
+        </>
+      )}
+      <Layout>
 
-                <Layout.Section>
-                  <div className="back-button pointer" onClick={handleBack}>
-                    <Icon
-                      source={MobileBackArrowMajor}
-                      color="base" />
-                  </div>
-                </Layout.Section>
-            <Layout.Section>
+        <Layout.Section>
+          <div className="back-button pointer" onClick={handleBack}>
+            <Icon
+              source={MobileBackArrowMajor}
+              color="base" />
+          </div>
+        </Layout.Section>
+        <Layout.Section>
+          <Stack>
+            <Stack.Item>
+              <Select
+                label="Campaigns"
+                labelInline
+                options={optionsCampaigns}
+                onChange={(status) => {
+                  setCampaignStatus(status);
+                }}
+                value={campaignStatus}
+              />
+            </Stack.Item>
+            <Stack.Item fill></Stack.Item>
+            <Stack.Item>
               <Stack>
-                <Stack.Item>
-                  <Select
-                    label="Campaigns"
-                    labelInline
-                    options={optionsCampaigns}
-                    onChange={(status) => {
-                      setCampaignStatus(status);
-                    }}
-                    value={campaignStatus}
-                  />
-                </Stack.Item>
-                <Stack.Item fill></Stack.Item>
-                <Stack.Item>
-                  <Stack>
-                    <div
-                      className={`${
-                        selectedCampaignsForRemove.length === 0 ? 'hidden' : ''
-                      }`}
-                    >
-                      <ButtonRemove
-                        formatRows={formatRows}
-                        setCampaigns={setCampaigns}
-                        setFilterCampaigns={setFilterCampaigns}
-                        setFormErrors={setFormErrors}
-                        setSaveSuccess={setSaveSuccess}
-                        selectedCampaignsForRemove={selectedCampaignsForRemove}
-                        setSelectedCampaignsForRemove={
-                          setSelectedCampaignsForRemove
-                        }
-                      />
-                    </div>
-                    <Button
-                      primary
-                      icon={MobilePlusMajor}
-                      onClick={() => handleForm("")}
-                    >
-                      Create Campaign
-                    </Button>
-                  </Stack>
-                </Stack.Item>
-              </Stack>
-            </Layout.Section>
-            <Layout.Section>
-              <Card>
-              <Card.Section>
-                <div className="search">
-                  <label className="head-search">
-                    {filterCampaigns.length} Campaigns
-                  </label>
-                  <TextField
-                    value={searchValue}
-                    onChange={(value) => setSearchValue(value)}
-                    prefix={<Icon source={SearchMajor} color="inkLighter" />}
-                    placeholder="Search for Name"
+                <div
+                  className={`${selectedCampaignsForRemove.length === 0 ? 'hidden' : ''
+                    }`}
+                >
+                  <ButtonRemove
+                    formatRows={formatRows}
+                    setCampaigns={setCampaigns}
+                    setFilterCampaigns={setFilterCampaigns}
+                    setFormErrors={setFormErrors}
+                    setSaveSuccess={setSaveSuccess}
+                    selectedCampaignsForRemove={selectedCampaignsForRemove}
+                    setSelectedCampaignsForRemove={
+                      setSelectedCampaignsForRemove
+                    }
                   />
                 </div>
-
-                <DataTable
-                  columnContentTypes={[
-                    'text',
-                    'text',
-                    'text',
-                    'text',
-                    'text',
-                    'text',
-                  ]}
-                  headings={[
-                    '',
-                    'Campaigns',
-                    'Campaign Period',
-                    'Created',
-                    'Pricing Model',
-                    'Trial Period',
-                  ]}
-                  rows={filterCampaigns}
-                  sortable={[false, false, true, false, false, false]}
-                  defaultSortDirection="descending"
-                  initialSortColumnIndex={1}
+                <Button
+                  primary
+                  icon={MobilePlusMajor}
+                  onClick={() => handleForm("")}
+                >
+                  Create Campaign
+                </Button>
+              </Stack>
+            </Stack.Item>
+          </Stack>
+        </Layout.Section>
+        <Layout.Section>
+          <Card>
+            <Card.Section>
+              <div className="search">
+                <label className="head-search">
+                  {filterCampaigns.length} Campaigns
+                </label>
+                <TextField
+                  value={searchValue}
+                  onChange={(value) => setSearchValue(value)}
+                  prefix={<Icon source={SearchMajor} color="inkLighter" />}
+                  placeholder="Search for Name"
                 />
-                {loading && (
-                  <Spinner
-                    accessibilityLabel="Spinner example"
-                    size="large"
-                    color="teal"
-                  />
-                )}
-                </Card.Section>
-              </Card>
-            </Layout.Section>
-          </Layout>
-       
-      </Frame>
+              </div>
+
+              <DataTable
+                columnContentTypes={[
+                  'text',
+                  'text',
+                  'text',
+                  'text',
+                  'text',
+                  'text',
+                ]}
+                headings={[
+                  '',
+                  'Campaigns',
+                  'Campaign Period',
+                  'Created',
+                  'Pricing Model',
+                  'Trial Period',
+                ]}
+                rows={filterCampaigns}
+                sortable={[false, false, true, false, false, false]}
+                defaultSortDirection="descending"
+                initialSortColumnIndex={1}
+              />
+              {loading && (
+                <LoadingScreen />
+              )}
+            </Card.Section>
+          </Card>
+        </Layout.Section>
+      </Layout>
+
+    </Frame>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useCallback,useEffect,useLayoutEffect } from "react";
+import React, { useState, useCallback, useEffect, useLayoutEffect } from "react";
 import {
   AppProvider,
   Card,
@@ -11,6 +11,7 @@ import { gql, useLazyQuery } from '@apollo/client';
 import { isEmpty } from "lodash";
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
+import LoadingScreen from "../LoadingScreen";
 
 TimeAgo.addDefaultLocale(en);
 const Notification = () => {
@@ -18,7 +19,7 @@ const Notification = () => {
   const timeAgo = new TimeAgo('en-US');
 
 
-const notificationQuery=gql`
+  const notificationQuery = gql`
 query($page: String!) {
   fetchSubscriptionLogs(page: $page){
       subscriptionLogs
@@ -38,27 +39,27 @@ query($page: String!) {
 }
 `;
 
-const [page, setPage] = useState(1);
-const [hasMore, setHasMore] = useState(false);
-const [totalPages,setTotalPages]=useState(1);
-const [rendered,setRendered]=useState(false);
-const [feeds,setFeeds]=useState([])
-const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notificationQuery,{fetchPolicy:"network-only"});
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
+  const [rendered, setRendered] = useState(false);
+  const [feeds, setFeeds] = useState([])
+  const [fetchNotifications, { loading, data: notifications, error }] = useLazyQuery(notificationQuery, { fetchPolicy: "network-only" });
 
   const [popoverActive, setPopoverActive] = useState(false);
 
   const togglePopoverActive = useCallback(
     () => {
-      if(!popoverActive){
+      if (!popoverActive) {
         setRendered(true);
         setFeeds([]);
         setPage(1);
         fetchNotifications({
-          variables:{
-            page:page.toString()
+          variables: {
+            page: page.toString()
           }
         });
-      }else{
+      } else {
         setPage(1);
       }
       setPopoverActive((popoverActive) => !popoverActive);
@@ -67,10 +68,10 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
   );
 
   useEffect(() => {
-    if(rendered && totalPages <= page && popoverActive && page!=1){
+    if (rendered && totalPages <= page && popoverActive && page != 1) {
       fetchNotifications({
-        variables:{
-          page:page.toString()
+        variables: {
+          page: page.toString()
         }
       });
     }
@@ -81,80 +82,80 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
     const nextPage = page + 1;
     if (nextPage > totalPages) {
       setHasMore(false);
-    }else
-    setPage(nextPage);
+    } else
+      setPage(nextPage);
   }
 
-  useEffect(()=>{
-    if(notifications?.fetchSubscriptionLogs?.totalPages){
-      let pages=parseInt(notifications?.fetchSubscriptionLogs?.totalPages);
-      pages>1 && setHasMore(true);
+  useEffect(() => {
+    if (notifications?.fetchSubscriptionLogs?.totalPages) {
+      let pages = parseInt(notifications?.fetchSubscriptionLogs?.totalPages);
+      pages > 1 && setHasMore(true);
       setTotalPages(parseInt(notifications?.fetchSubscriptionLogs?.totalPages))
-      setFeeds([...feeds,...notifications?.fetchSubscriptionLogs?.subscriptionLogs])
+      setFeeds([...feeds, ...notifications?.fetchSubscriptionLogs?.subscriptionLogs])
     }
-  },[notifications])
+  }, [notifications])
 
-  useEffect(()=>{
-    if(!popoverActive){
+  useEffect(() => {
+    if (!popoverActive) {
       setFeeds([]);
       setPage(0);
       setHasMore(false);
       setTotalPages(0);
     }
 
-  },[popoverActive])
+  }, [popoverActive])
 
-  const icon =(text)=> (
-    <span style={{display:"flex"}}>
-    <span style={{marginRight:"5px"}}>{text}</span>
-    <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="18.0645" height="18.0645" rx="9.03226" fill="white" />
-      <rect x="12" y="0.0645142" width="4.83871" height="4.83871" rx="2.41935" fill="#FF0000" />
-      <path d="M9.03217 13.3332C9.50529 13.3332 9.89238 12.9461 9.89238 12.473H8.17195C8.17195 12.7011 8.26258 12.9199 8.42391 13.0813C8.58523 13.2426 8.80403 13.3332 9.03217 13.3332ZM11.6128 10.7526V8.60202C11.6128 7.28159 10.9074 6.17621 9.67733 5.88374V5.59127C9.67733 5.23428 9.38916 4.94611 9.03217 4.94611C8.67518 4.94611 8.38701 5.23428 8.38701 5.59127V5.88374C7.1526 6.17621 6.45152 7.27729 6.45152 8.60202V10.7526L5.59131 11.6128V12.0429H12.473V11.6128L11.6128 10.7526Z" fill="#000000" />
-    </svg>
+  const icon = (text) => (
+    <span style={{ display: "flex" }}>
+      <span style={{ marginRight: "5px" }}>{text}</span>
+      <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="18.0645" height="18.0645" rx="9.03226" fill="white" />
+        <rect x="12" y="0.0645142" width="4.83871" height="4.83871" rx="2.41935" fill="#FF0000" />
+        <path d="M9.03217 13.3332C9.50529 13.3332 9.89238 12.9461 9.89238 12.473H8.17195C8.17195 12.7011 8.26258 12.9199 8.42391 13.0813C8.58523 13.2426 8.80403 13.3332 9.03217 13.3332ZM11.6128 10.7526V8.60202C11.6128 7.28159 10.9074 6.17621 9.67733 5.88374V5.59127C9.67733 5.23428 9.38916 4.94611 9.03217 4.94611C8.67518 4.94611 8.38701 5.23428 8.38701 5.59127V5.88374C7.1526 6.17621 6.45152 7.27729 6.45152 8.60202V10.7526L5.59131 11.6128V12.0429H12.473V11.6128L11.6128 10.7526Z" fill="#000000" />
+      </svg>
     </span>
   )
   const activator = (
     <div>
-    <Button primary onClick={togglePopoverActive} >
-      {icon("Revenue Live Feed")}
-    </Button>
+      <Button primary onClick={togglePopoverActive} >
+        {icon("Revenue Live Feed")}
+      </Button>
     </div>
   );
 
-  const mapAction={
-    "opt-in":"new",
-    "skip":"skip",
-    "cancel":"cancelled",
-    "swap":"swap",
-    "restart":"restart",
-    "upgrade":"upgrade",
-    "downgrade":"downgrade"
+  const mapAction = {
+    "opt-in": "new",
+    "skip": "skip",
+    "cancel": "cancelled",
+    "swap": "swap",
+    "restart": "restart",
+    "upgrade": "upgrade",
+    "downgrade": "downgrade"
   }
 
-  const getColor=(action)=>{
-    switch(action){
+  const getColor = (action) => {
+    switch (action) {
       case "opt-in":
         return "green";
-      break;
+        break;
       case "skip":
         return "blue";
-      break;
+        break;
       case "cancel":
         return "red";
-      break;
+        break;
       case "upgrade":
         return "blue";
-      break;
+        break;
       case "downgrade":
         return "blue";
-      break;
+        break;
       case "swap":
         return "blue";
-      break;
+        break;
       case "restart":
         return "green";
-      break;
+        break;
       default:
         return "blue"
     }
@@ -175,15 +176,11 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
               <Card title="Live Notifications" sectioned>
                 {
                   (loading && isEmpty(feeds)) ?
-                    <Spinner
-                      accessibilityLabel="Spinner example"
-                      size="large"
-                      color="teal"
-                    /> :
+                    <LoadingScreen /> :
                     <>
-                  {
-                  !isEmpty(feeds) && rendered &&
-                  <>
+                      {
+                        !isEmpty(feeds) && rendered &&
+                        <>
                           <div id="scrollableDiv" style={{ overflow: "auto", maxHeight: "450px", overscrollBehavior: "none" }}>
                             <InfiniteScroll
                               dataLength={feeds.length}
@@ -193,11 +190,7 @@ const [fetchNotifications,{loading,data:notifications,error}]=useLazyQuery(notif
                               loader={loading &&
                                 <div className="notification-wrapper">
                                   <Card>
-                                    <Spinner
-                                      accessibilityLabel="Spinner example"
-                                      size="large"
-                                      color="teal"
-                                    />
+                                    <LoadingScreen />
                                   </Card>
                                 </div>
 

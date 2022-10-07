@@ -39,6 +39,7 @@ import SearchCollection from '../plans/SearchCollection';
 import SearchProduct from '../plans/SearchProduct';
 import SearchPlan from '../upsell/SearchPlan';
 import RangePickr from './RangePickr';
+import LoadingScreen from '../LoadingScreen';
 
 const CreateBuildBox = ({ id, handleClose }) => {
   const options = [...Array(99).keys()].map((foo) => (foo + 1).toString());
@@ -240,7 +241,7 @@ const CreateBuildBox = ({ id, handleClose }) => {
       selectedProducts &&
       formRef.current &&
       formRef.current?.values.buildABoxCampaign.productImages !=
-        selectedProducts
+      selectedProducts
     ) {
       formRef.current.setFieldValue(
         'buildABoxCampaign.productImages',
@@ -254,7 +255,7 @@ const CreateBuildBox = ({ id, handleClose }) => {
       selectedCollections &&
       formRef.current &&
       formRef.current?.values.buildABoxCampaign.collectionImages !=
-        selectedCollections
+      selectedCollections
     ) {
       formRef.current.setFieldValue(
         'buildABoxCampaign.collectionImages',
@@ -324,11 +325,7 @@ const CreateBuildBox = ({ id, handleClose }) => {
         ]}
       >
         {loading && id && (
-          <Spinner
-            accessibilityLabel="Spinner example"
-            size="large"
-            color="teal"
-          />
+          <LoadingScreen />
         )}
         {(campaignData || !id) && (
           <Formik
@@ -632,7 +629,7 @@ const CreateBuildBox = ({ id, handleClose }) => {
                                     parseInt(e)
                                   );
                                 }}
-                                // placeholder="1"
+                              // placeholder="1"
                               />
                             </div>
                           </FormLayout.Group>
@@ -677,106 +674,106 @@ const CreateBuildBox = ({ id, handleClose }) => {
                           <FormLayout.Group>
                             {values?.buildABoxCampaign?.boxSubscriptionType ===
                               'collection' && (
-                              <div className="box-subscription-search">
-                                <TextContainer>Collection</TextContainer>
-                                <SearchCollection
-                                  selectedOptions={selectedCollectionOptions}
-                                  setSelectedOptions={
-                                    setSelectedCollectionOptions
-                                  }
-                                  selectedCollections={selectedCollections}
-                                  setSelectedCollections={
-                                    setSelectedCollections
-                                  }
-                                />
-                              </div>
-                            )}
+                                <div className="box-subscription-search">
+                                  <TextContainer>Collection</TextContainer>
+                                  <SearchCollection
+                                    selectedOptions={selectedCollectionOptions}
+                                    setSelectedOptions={
+                                      setSelectedCollectionOptions
+                                    }
+                                    selectedCollections={selectedCollections}
+                                    setSelectedCollections={
+                                      setSelectedCollections
+                                    }
+                                  />
+                                </div>
+                              )}
                             {values?.buildABoxCampaign?.boxSubscriptionType ===
                               'products' && (
-                              <div className="box-subscription-search">
-                                <TextContainer>Product</TextContainer>
-                                <SearchProduct
-                                  selectedOptions={selectedProductOptions}
-                                  setSelectedOptions={setSelectedProductOptions}
-                                  selectedProducts={selectedProducts}
-                                  setSelectedProducts={setSelectedProducts}
-                                />
-                              </div>
-                            )}
+                                <div className="box-subscription-search">
+                                  <TextContainer>Product</TextContainer>
+                                  <SearchProduct
+                                    selectedOptions={selectedProductOptions}
+                                    setSelectedOptions={setSelectedProductOptions}
+                                    selectedProducts={selectedProducts}
+                                    setSelectedProducts={setSelectedProducts}
+                                  />
+                                </div>
+                              )}
                           </FormLayout.Group>
                           {values?.buildABoxCampaign?.boxSubscriptionType ===
                             'collection' && (
-                            <div className="collection-stack">
-                              {selectedCollections?.map(
-                                (collection, i) =>
-                                  collection._destroy === false && (
-                                    <div
-                                      key={i}
-                                      className="building-box-collection"
-                                    >
-                                      <div>{collection?.collectionTitle}</div>
-                                      <Stack>
-                                        {collection.products?.map(
-                                          (product, j) =>
-                                            product._destroy === false && (
-                                              <div
-                                                key={j}
-                                                className="building-box-product"
-                                              >
-                                                <img
-                                                  className="product"
-                                                  src={product?.image}
-                                                />
-                                                <img
-                                                  className="removeIcon"
-                                                  onClick={() => {
-                                                    handleRemoveCollectionProduct(
-                                                      i,
-                                                      j
-                                                    );
-                                                  }}
-                                                  src={removeIcon}
-                                                />
-                                              </div>
-                                            )
-                                        )}
-                                      </Stack>
-                                    </div>
-                                  )
-                              )}
-                            </div>
-                          )}
-                          {values?.buildABoxCampaign?.boxSubscriptionType ===
-                            'products' && (
-                            <div className="product-stack">
-                              <div>
-                                Selected products (subscription box options)
-                              </div>
-                              <Stack>
-                                {selectedProducts?.map(
-                                  (product, i) =>
-                                    product._destroy === false && (
+                              <div className="collection-stack">
+                                {selectedCollections?.map(
+                                  (collection, i) =>
+                                    collection._destroy === false && (
                                       <div
                                         key={i}
-                                        className="building-box-product"
+                                        className="building-box-collection"
                                       >
-                                        <img
-                                          className="product"
-                                          src={product?.image}
-                                        />
-                                        <img
-                                          onClick={() => {
-                                            handleRemoveProduct(i);
-                                          }}
-                                          className="removeIcon"
-                                          src={removeIcon}
-                                        />
+                                        <div>{collection?.collectionTitle}</div>
+                                        <Stack>
+                                          {collection.products?.map(
+                                            (product, j) =>
+                                              product._destroy === false && (
+                                                <div
+                                                  key={j}
+                                                  className="building-box-product"
+                                                >
+                                                  <img
+                                                    className="product"
+                                                    src={product?.image}
+                                                  />
+                                                  <img
+                                                    className="removeIcon"
+                                                    onClick={() => {
+                                                      handleRemoveCollectionProduct(
+                                                        i,
+                                                        j
+                                                      );
+                                                    }}
+                                                    src={removeIcon}
+                                                  />
+                                                </div>
+                                              )
+                                          )}
+                                        </Stack>
                                       </div>
                                     )
                                 )}
-                              </Stack>
-                            </div>
-                          )}
+                              </div>
+                            )}
+                          {values?.buildABoxCampaign?.boxSubscriptionType ===
+                            'products' && (
+                              <div className="product-stack">
+                                <div>
+                                  Selected products (subscription box options)
+                                </div>
+                                <Stack>
+                                  {selectedProducts?.map(
+                                    (product, i) =>
+                                      product._destroy === false && (
+                                        <div
+                                          key={i}
+                                          className="building-box-product"
+                                        >
+                                          <img
+                                            className="product"
+                                            src={product?.image}
+                                          />
+                                          <img
+                                            onClick={() => {
+                                              handleRemoveProduct(i);
+                                            }}
+                                            className="removeIcon"
+                                            src={removeIcon}
+                                          />
+                                        </div>
+                                      )
+                                  )}
+                                </Stack>
+                              </div>
+                            )}
                         </div>
                       </FormLayout>
                     </Card.Section>

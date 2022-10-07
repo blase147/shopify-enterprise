@@ -34,6 +34,7 @@ import { isEmpty } from 'lodash';
 import DateRangePicker from '../common/DatePicker/DateRangePicker';
 import dayjs from 'dayjs';
 import Notification from './Notification';
+import LoadingScreen from '../LoadingScreen';
 
 const Dashboard = (props) => {
   const history = useHistory();
@@ -745,11 +746,7 @@ const Dashboard = (props) => {
           {loading || !data ? (
             <Layout.Section>
               <Card>
-                <Spinner
-                  accessibilityLabel="Spinner example"
-                  size="large"
-                  color="teal"
-                />
+                <LoadingScreen />
               </Card>
             </Layout.Section>
           ) : (
@@ -763,12 +760,12 @@ const Dashboard = (props) => {
                           <Card sectioned>
                             <Stack>
                               <Stack.Item>
-                                <div style={{display: 'flex'}}>
+                                <div style={{ display: 'flex' }}>
                                   <TextStyle variation="strong">
                                     {item.section}
                                   </TextStyle>
                                   {item.info && (
-                                    <div style={{marginLeft: '0.4rem'}}>
+                                    <div style={{ marginLeft: '0.4rem' }}>
                                       <Tooltip content={item.info}>
                                         <Icon source={InfoMinor} />
                                       </Tooltip>
@@ -818,7 +815,7 @@ const Dashboard = (props) => {
                                       start={0}
                                       end={Number.parseFloat(
                                         sectionListData[item.key]?.value ||
-                                          item?.amount
+                                        item?.amount
                                       ).toFixed(2)}
                                       duration={1.5}
                                       decimals={item.type == 'currency' ? 2 : 0}

@@ -31,6 +31,7 @@ import {
 import { Form } from 'formik';
 import DateRangePicker from '../common/DatePicker/DateRangePicker';
 import { isEmpty } from 'lodash';
+import LoadingScreen from '../LoadingScreen';
 
 
 
@@ -94,74 +95,74 @@ const SmartSms = () => {
     }
 }
   `;
-  const messagesChartOptions={
+  const messagesChartOptions = {
     chart: {
-        type: 'area'
+      type: 'area'
     },
     title: {
-        text: ''
+      text: ''
     },
     subtitle: {
-        text: ''
+      text: ''
     },
     xAxis: {
-        categories: [],
-        tickmarkPlacement: 'on',
-        title: {
-            enabled: false
-        }
+      categories: [],
+      tickmarkPlacement: 'on',
+      title: {
+        enabled: false
+      }
     },
     yAxis: {
-        title: {
-            text: ''
-        },
-        labels: {
-            formatter: function () {
-                return this.value;
-            }
+      title: {
+        text: ''
+      },
+      labels: {
+        formatter: function () {
+          return this.value;
         }
+      }
     },
     tooltip: {
-        split: true,
+      split: true,
     },
     plotOptions: {
-        area: {
-            stacking: 'normal',
-            lineColor: '#666666',
-            lineWidth: 1,
-            marker: {
-                lineWidth: 1,
-                lineColor: '#666666'
-            }
+      area: {
+        stacking: 'normal',
+        lineColor: '#666666',
+        lineWidth: 1,
+        marker: {
+          lineWidth: 1,
+          lineColor: '#666666'
         }
+      }
     },
     series: [{
-        name: 'Total SMS',
-        color:"#00A023",
-        data: []
+      name: 'Total SMS',
+      color: "#00A023",
+      data: []
     }, {
-        name: 'Outbound SMS',
-        color:"#000000",
-        data: []
+      name: 'Outbound SMS',
+      color: "#000000",
+      data: []
     }, {
-        name: 'Inbound SMS',
-        color:"#FFA000",
-        data: []
+      name: 'Inbound SMS',
+      color: "#FFA000",
+      data: []
     }]
-}
+  }
 
   /// cards ... List 1
-  const productListKeys=[
-    {section:"Product Swaps",key:"swapCount"},
-    {section:"Skipped Orders",key:"skipCount"}
+  const productListKeys = [
+    { section: "Product Swaps", key: "swapCount" },
+    { section: "Skipped Orders", key: "skipCount" }
   ]
-  const [sectionProductList,setSectionProductList] = useState({
-    swapCount:{
+  const [sectionProductList, setSectionProductList] = useState({
+    swapCount: {
       percent: 0,
       up: true,
       value: '0',
     },
-    skipCount:{
+    skipCount: {
       percent: 0,
       up: true,
       value: '0'
@@ -169,73 +170,73 @@ const SmartSms = () => {
   });
 
   /// cards ... List 2
-  const serviceListKeys=[
-    {section:"SmartySMS Opt-out",key:"optOutMessages"},
-    {section:"Delayed Orders",key:"delayCount"},
-    {section:"Canceled Subscriptions",key:"cancelCount"},
-    {section:"Add One-time Item Revenue",key:"oneTimeRevenue",prefix :"$" , decimal:true}
+  const serviceListKeys = [
+    { section: "SmartySMS Opt-out", key: "optOutMessages" },
+    { section: "Delayed Orders", key: "delayCount" },
+    { section: "Canceled Subscriptions", key: "cancelCount" },
+    { section: "Add One-time Item Revenue", key: "oneTimeRevenue", prefix: "$", decimal: true }
   ]
-  const [sectionServiceList,setSectionServiceList] = useState({
-    optOutMessages:{
+  const [sectionServiceList, setSectionServiceList] = useState({
+    optOutMessages: {
       percent: 0,
       up: true,
       value: '0',
     },
-    delayCount:{
+    delayCount: {
       percent: 0,
       up: true,
       value: '0'
     },
-    cancelCount:{
+    cancelCount: {
       percent: 0,
       up: true,
       value: '0'
     },
-    oneTimeRevenue:{
+    oneTimeRevenue: {
       percent: 0,
       up: true,
       value: '0'
     }
   });
 
-  const [swappedCards,setSwappedCards]=useState({
-    mostSwapedProduct:{image:"",title:""},
-    mostSwapedProductTo:{image:"",title:""},
-    mostSkippedProduct:{image:"",title:""}
+  const [swappedCards, setSwappedCards] = useState({
+    mostSwapedProduct: { image: "", title: "" },
+    mostSwapedProductTo: { image: "", title: "" },
+    mostSkippedProduct: { image: "", title: "" }
   })
 
-  const [chartOptions,setChartOptions]=useState({
-    messagesChart:messagesChartOptions
+  const [chartOptions, setChartOptions] = useState({
+    messagesChart: messagesChartOptions
   })
-    // const [filters,setFilters]=useContext(FilterContext)
-    const [filters,setFilters]=useState({
-      startDate:new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(2,"days")).subtract(30, 'days'))).format())),
-      endDate:new Date(Date.parse(dayjs(new Date()).subtract(1,"days").format())) 
-    })
-    const handleFiltersDates=(dates,span)=>{
-      if(!isEmpty(dates)){
-        const {start,end}=dates;
-        setFilters({startDate:dayjs(start).format("YYYY-MM-DD"),endDate:dayjs(end).format("YYYY-MM-DD"),span:span});
-      }
+  // const [filters,setFilters]=useContext(FilterContext)
+  const [filters, setFilters] = useState({
+    startDate: new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(2, "days")).subtract(30, 'days'))).format())),
+    endDate: new Date(Date.parse(dayjs(new Date()).subtract(1, "days").format()))
+  })
+  const handleFiltersDates = (dates, span) => {
+    if (!isEmpty(dates)) {
+      const { start, end } = dates;
+      setFilters({ startDate: dayjs(start).format("YYYY-MM-DD"), endDate: dayjs(end).format("YYYY-MM-DD"), span: span });
     }
+  }
 
-    const [getReport, { loading, data:reportData }] = useLazyQuery(fetchReport,{fetchPolicy:"network-only"});
+  const [getReport, { loading, data: reportData }] = useLazyQuery(fetchReport, { fetchPolicy: "network-only" });
 
   const getReportData = useCallback(() => {
     getReport({
-      variables:{
-        startDate:filters.startDate,
-        endDate:filters.endDate
+      variables: {
+        startDate: filters.startDate,
+        endDate: filters.endDate
       }
     })
-  }, [filters,getReport])
+  }, [filters, getReport])
 
   useEffect(() => {
     getReportData()
   }, [filters])
 
-  useEffect(()=>{
-    if(!isEmpty(reportData?.fetchSmsAnalytics)){
+  useEffect(() => {
+    if (!isEmpty(reportData?.fetchSmsAnalytics)) {
 
       const {
         swapCount,
@@ -249,25 +250,25 @@ const SmartSms = () => {
         mostSwapedProduct,
         mostSwapedProductTo,
         mostSkippedProduct,
-        
+
         //Charts data
         messages
-      }=reportData?.fetchSmsAnalytics;
+      } = reportData?.fetchSmsAnalytics;
 
-    setSectionProductList(prevList=>({
-      swapCount:swapCount || prevList.swapCount,
-      skipCount:skipCount || prevList.skipCount
-    }))
+      setSectionProductList(prevList => ({
+        swapCount: swapCount || prevList.swapCount,
+        skipCount: skipCount || prevList.skipCount
+      }))
 
-    setSectionServiceList(prevList=>({
-      optOutMessages:optOutMessages || prevList.optOutMessages,
-      delayCount:delayCount || prevList.delayCount,
-      oneTimeRevenue:oneTimeRevenue || prevList.oneTimeRevenue,
-      cancelCount:cancelCount || prevList.cancelCount
-    }))
+      setSectionServiceList(prevList => ({
+        optOutMessages: optOutMessages || prevList.optOutMessages,
+        delayCount: delayCount || prevList.delayCount,
+        oneTimeRevenue: oneTimeRevenue || prevList.oneTimeRevenue,
+        cancelCount: cancelCount || prevList.cancelCount
+      }))
 
-    setSwappedCards({...swappedCards,mostSwapedProduct:mostSwapedProduct,mostSwapedProductTo:mostSwapedProductTo,mostSkippedProduct:mostSkippedProduct});
-    //Set Chart Options...
+      setSwappedCards({ ...swappedCards, mostSwapedProduct: mostSwapedProduct, mostSwapedProductTo: mostSwapedProductTo, mostSkippedProduct: mostSkippedProduct });
+      //Set Chart Options...
 
       const newMessagesChartOptions = {
         ...messagesChartOptions, xAxis: { ...messagesChartOptions.xAxis, categories: messages.map(data => data.date) || [] },
@@ -286,202 +287,198 @@ const SmartSms = () => {
         }]
       };
 
-    setChartOptions({
-      ...chartOptions,
-      messagesChart:newMessagesChartOptions
-    })
-  }
+      setChartOptions({
+        ...chartOptions,
+        messagesChart: newMessagesChartOptions
+      })
+    }
 
-  },[reportData])
+  }, [reportData])
   return (
     <>
-    {(loading || !reportData) ? (
-      <Card>
-        <Spinner
-          accessibilityLabel="Spinner example1"
-          size="large"
-          color="teal"
-        />
-      </Card>
+      {(loading || !reportData) ? (
+        <Card>
+          <LoadingScreen />
+        </Card>
       ) :
-      <FormLayout>
+        <FormLayout>
           <Layout>
+            <Layout.Section>
+              <Card title="">
+                <Card.Section>
+                  <div className="rev-date-picker">
+                    <DateRangePicker
+                      start={filters.startDate}
+                      end={filters.endDate}
+                      span={filters.span}
+                      handleDates={handleFiltersDates}
+                    />
+                  </div>
+
+                </Card.Section>
+              </Card>
+            </Layout.Section>
+          </Layout>
+          <div className="card-tabs">
+            <Layout>
+              {/* <Layout.Section secondary> */}
+              <div className="container-left customer-count">
                 <Layout.Section>
-                  <Card title="">
-                    <Card.Section>
-                      <div className="rev-date-picker">
-                        <DateRangePicker
-                          start={filters.startDate}
-                          end={filters.endDate}
-                          span={filters.span}
-                          handleDates={handleFiltersDates}
-                        />
-                        </div>
-                      
-                    </Card.Section>
-                  </Card>
-                </Layout.Section>
-          </Layout>
-        <div className="card-tabs">
-          <Layout>
-          {/* <Layout.Section secondary> */}
-          <div className="container-left customer-count">
-            <Layout.Section>
-              <Stack vertical distribution="equalSpacing">
-                {productListKeys?.map((item, i) => (
-                  <Stack.Item>
-                    <Card sectioned>
-                    <div className="count-section">
-                       
-                          <TextStyle variation="strong">
-                            {item.section}
-                          </TextStyle>
-                          <TextStyle
-                            variation={sectionProductList[item.key]?.up ? 'positive' : 'negative'}
-                            
-                          >
-                            <Icon
-                              source={sectionProductList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
-                              color={sectionProductList[item.key]?.up ? 'green' : 'red'}
-                            />
-                            {Math.abs(sectionProductList[item.key].percent) || 0}%
-                          </TextStyle>
-                        
-                        </div>
-                      <Stack>
-                        <Stack.Item>
-                          <DisplayText size="medium">
+                  <Stack vertical distribution="equalSpacing">
+                    {productListKeys?.map((item, i) => (
+                      <Stack.Item>
+                        <Card sectioned>
+                          <div className="count-section">
+
                             <TextStyle variation="strong">
-                            <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionProductList[item.key]?.value)} duration={1.5} />
+                              {item.section}
                             </TextStyle>
-                          </DisplayText>
-                        </Stack.Item>
-                      </Stack>
-                    </Card>
-                  </Stack.Item>
-                  ))}
-              </Stack>
-            </Layout.Section>
-          </div>
-          {/* </Layout.Section> */}
-          <div className="container-right">
-            <Layout.Section>
-              <div className="card-chart">
-                <Card>
-                <HighchartsReact
-                    highcharts={Highcharts}
-                    options={chartOptions.messagesChart}
-                  />
-                </Card>
+                            <TextStyle
+                              variation={sectionProductList[item.key]?.up ? 'positive' : 'negative'}
+
+                            >
+                              <Icon
+                                source={sectionProductList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                                color={sectionProductList[item.key]?.up ? 'green' : 'red'}
+                              />
+                              {Math.abs(sectionProductList[item.key].percent) || 0}%
+                            </TextStyle>
+
+                          </div>
+                          <Stack>
+                            <Stack.Item>
+                              <DisplayText size="medium">
+                                <TextStyle variation="strong">
+                                  <CounterUp prefix={item?.prefix || ""} suffix={item?.suffix || ""} start={0} end={Number.parseFloat(sectionProductList[item.key]?.value)} duration={1.5} />
+                                </TextStyle>
+                              </DisplayText>
+                            </Stack.Item>
+                          </Stack>
+                        </Card>
+                      </Stack.Item>
+                    ))}
+                  </Stack>
+                </Layout.Section>
               </div>
-            </Layout.Section>
+              {/* </Layout.Section> */}
+              <div className="container-right">
+                <Layout.Section>
+                  <div className="card-chart">
+                    <Card>
+                      <HighchartsReact
+                        highcharts={Highcharts}
+                        options={chartOptions.messagesChart}
+                      />
+                    </Card>
+                  </div>
+                </Layout.Section>
+              </div>
+            </Layout>
+
+
           </div>
-          </Layout>
-          
-         
-        </div>
           <Layout>
             <Layout.Section>
               <div className="smart-card">
                 <Stack distribution="fill" wrap={true}>
                   {
-                  serviceListKeys?.map((item, i) => (
-                    <>
-                    <Stack.Item >
-                      <Card sectioned>
-                        <Stack>
-                          <Stack.Item fill>
-                            <TextStyle variation="strong">
-                              {item.section} 
-                            </TextStyle>
-                          </Stack.Item>
-                          <Stack.Item>
-                            <TextStyle
-                              variation={sectionServiceList[item.key]?.up ? 'positive' : 'negative'}
-                            >
-                            <Icon
-                              source={sectionServiceList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
-                              color={sectionServiceList[item.key]?.up ? 'green' : 'red'}
-                            />
-                            {Math.abs(sectionServiceList[item.key]?.percent) || 0}%
-                            </TextStyle>
-                          </Stack.Item>
-                        </Stack>
+                    serviceListKeys?.map((item, i) => (
+                      <>
+                        <Stack.Item >
+                          <Card sectioned>
+                            <Stack>
+                              <Stack.Item fill>
+                                <TextStyle variation="strong">
+                                  {item.section}
+                                </TextStyle>
+                              </Stack.Item>
+                              <Stack.Item>
+                                <TextStyle
+                                  variation={sectionServiceList[item.key]?.up ? 'positive' : 'negative'}
+                                >
+                                  <Icon
+                                    source={sectionServiceList[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                                    color={sectionServiceList[item.key]?.up ? 'green' : 'red'}
+                                  />
+                                  {Math.abs(sectionServiceList[item.key]?.percent) || 0}%
+                                </TextStyle>
+                              </Stack.Item>
+                            </Stack>
 
-                        <Stack>
-                          <Stack.Item>
-                            <DisplayText size="medium">
-                              <TextStyle variation="strong">
-                              <CounterUp prefix={item.prefix || ''} suffix={item.suffix || ''} start={0} end={Number.parseFloat(sectionServiceList[item.key]?.value || 0).toFixed(2)} duration={1.5} decimals={item?.decimal ?2:0} />
-                              </TextStyle>
-                            </DisplayText>
-                          </Stack.Item>
-                        </Stack>
-                      </Card>
-                    </Stack.Item>
-                  </>
+                            <Stack>
+                              <Stack.Item>
+                                <DisplayText size="medium">
+                                  <TextStyle variation="strong">
+                                    <CounterUp prefix={item.prefix || ''} suffix={item.suffix || ''} start={0} end={Number.parseFloat(sectionServiceList[item.key]?.value || 0).toFixed(2)} duration={1.5} decimals={item?.decimal ? 2 : 0} />
+                                  </TextStyle>
+                                </DisplayText>
+                              </Stack.Item>
+                            </Stack>
+                          </Card>
+                        </Stack.Item>
+                      </>
                     ))}
                 </Stack>
               </div>
             </Layout.Section>
-            </Layout>
+          </Layout>
 
           <div className="image-card-section">
             <Layout>
-            <Layout.Section>
-              <Stack distribution="fill">
+              <Layout.Section>
+                <Stack distribution="fill">
                   <Stack.Item>
                     <div className="smarty-card-section">
                       <Stack>
                         <Stack.Item fill>
-                        <Card sectioned>
-                          <TextStyle small>Most Swapped Product From </TextStyle>
-                          <div className="img-section">
-                            { swappedCards?.mostSwapedProduct?.image &&
-                              <img src={swappedCards?.mostSwapedProduct?.image || ""}/>
-                            }
-                          </div>
-                          <p>{swappedCards?.mostSwapedProduct?.title || "No Data Yet"}</p>
-                          <small>Not enough data to calculate this metric.</small>
-                        </Card>
+                          <Card sectioned>
+                            <TextStyle small>Most Swapped Product From </TextStyle>
+                            <div className="img-section">
+                              {swappedCards?.mostSwapedProduct?.image &&
+                                <img src={swappedCards?.mostSwapedProduct?.image || ""} />
+                              }
+                            </div>
+                            <p>{swappedCards?.mostSwapedProduct?.title || "No Data Yet"}</p>
+                            <small>Not enough data to calculate this metric.</small>
+                          </Card>
                         </Stack.Item>
                         <Stack.Item fill>
-                        <Card sectioned>
-                          <TextStyle small>Most Swapped Product To </TextStyle>
-                          <div className="img-section">
-                            { swappedCards?.mostSwapedProductTo?.image &&
-                              <img src={swappedCards?.mostSwapedProductTo?.image || ""}/>
-                            }
-                          </div>
-                          <p>{swappedCards?.mostSwapedProductTo?.title || "No Data Yet"}</p>
-                          <small>Not enough data to calculate this metric.</small>
-                        </Card>
+                          <Card sectioned>
+                            <TextStyle small>Most Swapped Product To </TextStyle>
+                            <div className="img-section">
+                              {swappedCards?.mostSwapedProductTo?.image &&
+                                <img src={swappedCards?.mostSwapedProductTo?.image || ""} />
+                              }
+                            </div>
+                            <p>{swappedCards?.mostSwapedProductTo?.title || "No Data Yet"}</p>
+                            <small>Not enough data to calculate this metric.</small>
+                          </Card>
                         </Stack.Item>
                         <Stack.Item fill>
-                        <Card sectioned>
-                          <TextStyle small>Most Skipped Product</TextStyle>
-                          <div className="img-section">
-                            { swappedCards?.mostSkippedProduct?.image &&
-                              <img src={swappedCards?.mostSkippedProduct?.image || ""}/>
-                            }
-                          </div>
-                          <p><b>{swappedCards?.mostSkippedProduct?.title || "No Data Yet"}</b> </p>
-                          <small>Not enough data to calculate this metric.</small>
-                        </Card>
+                          <Card sectioned>
+                            <TextStyle small>Most Skipped Product</TextStyle>
+                            <div className="img-section">
+                              {swappedCards?.mostSkippedProduct?.image &&
+                                <img src={swappedCards?.mostSkippedProduct?.image || ""} />
+                              }
+                            </div>
+                            <p><b>{swappedCards?.mostSkippedProduct?.title || "No Data Yet"}</b> </p>
+                            <small>Not enough data to calculate this metric.</small>
+                          </Card>
                         </Stack.Item>
                       </Stack>
-                   
+
                     </div>
                   </Stack.Item>
-               
-              </Stack>
+
+                </Stack>
               </Layout.Section>
             </Layout>
           </div>
 
-      </FormLayout>
-    }
-   </>
+        </FormLayout>
+      }
+    </>
   )
 }
 

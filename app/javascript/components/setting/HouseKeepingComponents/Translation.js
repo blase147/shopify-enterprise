@@ -15,6 +15,7 @@ import {
 import { MobileBackArrowMajor } from '@shopify/polaris-icons';
 import { gql, useLazyQuery, useMutation } from '@apollo/client';
 import { isEmpty } from 'lodash';
+import LoadingScreen from '../../LoadingScreen';
 const Translation = ({ handleBack }) => {
   const fetchSettingQuery = gql`
     query {
@@ -498,11 +499,7 @@ const Translation = ({ handleBack }) => {
         </Layout.Section>
         {fetchLoading ? (
           <Card>
-            <Spinner
-              accessibilityLabel="Spinner example"
-              size="large"
-              color="teal"
-            />
+            <LoadingScreen />
           </Card>
         ) : (
           <div className="translation-page">

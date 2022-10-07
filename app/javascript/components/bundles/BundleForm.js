@@ -24,6 +24,7 @@ import DeleteSVG from '../../../assets/images/delete.svg';
 import toPath from 'lodash/toPath';
 import { Formik, setIn } from 'formik';
 import * as yup from 'yup';
+import LoadingScreen from '../LoadingScreen';
 
 const BundleForm = ({ id, handleClose }) => {
   const [bundleGroup, setBundleGroup] = useState(null);
@@ -105,11 +106,7 @@ const BundleForm = ({ id, handleClose }) => {
         <Icon source={MobileBackArrowMajor} color="base" />
       </div>
       {loading && id && (
-        <Spinner
-          accessibilityLabel="Spinner example"
-          size="large"
-          color="teal"
-        />
+        <LoadingScreen />
       )}
       {(bundleGroup || !id) && (
         <Formik
@@ -250,51 +247,51 @@ const BundleForm = ({ id, handleClose }) => {
 
                     {values?.triggers ==
                       'customer_is_subscribed_to_subscription_plan' && (
-                      <>
-                        <FormLayout.Group>
-                          <div className="build-box-search">
-                            <TextContainer>
-                              <Subheading>Subscription plan</Subheading>
-                            </TextContainer>
-                            <Select
-                              options={[{ label: 'is any', value: 'is_any' }]}
-                              label=""
-                              value={'is_any'}
-                            />
-
-                            <div className="search">
-                              <SearchPlan
-                                idForTextField={`serchPlan-${Math.random()}`}
-                                value={values?.selling_plans || []}
-                                setFieldValue={setFieldValue}
-                                fieldName={`selling_plans`}
-                                allSelectedPlans={allSelectedPlans || []}
-                                setAllSelectedPlans={setAllSelectedPlans}
+                        <>
+                          <FormLayout.Group>
+                            <div className="build-box-search">
+                              <TextContainer>
+                                <Subheading>Subscription plan</Subheading>
+                              </TextContainer>
+                              <Select
+                                options={[{ label: 'is any', value: 'is_any' }]}
+                                label=""
+                                value={'is_any'}
                               />
+
+                              <div className="search">
+                                <SearchPlan
+                                  idForTextField={`serchPlan-${Math.random()}`}
+                                  value={values?.selling_plans || []}
+                                  setFieldValue={setFieldValue}
+                                  fieldName={`selling_plans`}
+                                  allSelectedPlans={allSelectedPlans || []}
+                                  setAllSelectedPlans={setAllSelectedPlans}
+                                />
+                              </div>
                             </div>
-                          </div>
-                        </FormLayout.Group>
-                        <FormLayout.Group>
-                          <Stack vertical={true}>
-                            {allSelectedPlans &&
-                              allSelectedPlans?.map((plan, i) => (
-                                <Stack.Item key={i}>
-                                  <div className="selected-plan-container">
-                                    <span>{plan?.sellingPlanName}</span>
-                                    <img
-                                      src={DeleteSVG}
-                                      onClick={() =>
-                                        handleRemovePlan(plan.sellingPlanId)
-                                      }
-                                      alt="Delete"
-                                    />
-                                  </div>
-                                </Stack.Item>
-                              ))}
-                          </Stack>
-                        </FormLayout.Group>
-                      </>
-                    )}
+                          </FormLayout.Group>
+                          <FormLayout.Group>
+                            <Stack vertical={true}>
+                              {allSelectedPlans &&
+                                allSelectedPlans?.map((plan, i) => (
+                                  <Stack.Item key={i}>
+                                    <div className="selected-plan-container">
+                                      <span>{plan?.sellingPlanName}</span>
+                                      <img
+                                        src={DeleteSVG}
+                                        onClick={() =>
+                                          handleRemovePlan(plan.sellingPlanId)
+                                        }
+                                        alt="Delete"
+                                      />
+                                    </div>
+                                  </Stack.Item>
+                                ))}
+                            </Stack>
+                          </FormLayout.Group>
+                        </>
+                      )}
                   </FormLayout>
                   <Checkbox
                     label="Fixed price bundle"
@@ -473,15 +470,14 @@ const BundleForm = ({ id, handleClose }) => {
                               >
                                 {values.fixed_pricing
                                   ? ((bundle?.price_per_item || 0) *
-                                      (bundle?.quantity_limit || 0) &&
-                                      `$ ${
-                                        (bundle?.price_per_item || 0) *
-                                        (bundle?.quantity_limit || 0)
-                                      }`) ||
-                                    '-'
+                                    (bundle?.quantity_limit || 0) &&
+                                    `$ ${(bundle?.price_per_item || 0) *
+                                    (bundle?.quantity_limit || 0)
+                                    }`) ||
+                                  '-'
                                   : (bundle?.price_per_item &&
-                                      `${100 - bundle?.price_per_item} %`) ||
-                                    '-'}
+                                    `${100 - bundle?.price_per_item} %`) ||
+                                  '-'}
                               </p>
                             </div>
                           </FormLayout.Group>

@@ -32,6 +32,7 @@ import dayjs from 'dayjs';
 import { gql, useMutation, useLazyQuery } from '@apollo/client';
 import DatePickr from '../common/DatePicker/DatePickr';
 import removeIcon from '../../../assets/images/subscriptionsPlans/removeProduct.svg';
+import LoadingScreen from '../LoadingScreen';
 
 const BuildABoxPlan = () => {
   const { id } = useParams();
@@ -286,7 +287,7 @@ const BuildABoxPlan = () => {
       selectedCollections &&
       formRef.current &&
       formRef.current?.values.sellingPlans[0].collectionImages !=
-        selectedCollections
+      selectedCollections
     ) {
       formRef.current.setFieldValue(
         'sellingPlans[0].collectionImages',
@@ -354,11 +355,7 @@ const BuildABoxPlan = () => {
           ]}
         >
           {loading && id && (
-            <Spinner
-              accessibilityLabel="Spinner example"
-              size="large"
-              color="teal"
-            />
+            <LoadingScreen />
           )}
 
           {(planData || !id) && (
@@ -369,11 +366,11 @@ const BuildABoxPlan = () => {
                 planData
                   ? planData
                   : {
-                      internalName: '',
-                      planSelectorTitle: '',
-                      publicName: '',
-                      sellingPlans: [{ ...initialValues }],
-                    }
+                    internalName: '',
+                    planSelectorTitle: '',
+                    publicName: '',
+                    sellingPlans: [{ ...initialValues }],
+                  }
               }
               onSubmit={(values, { setSubmitting, setDirty }) => {
                 if (id) {
@@ -576,20 +573,20 @@ const BuildABoxPlan = () => {
                         sectioned
                         actions={
                           (!id && index != 0) ||
-                          (id &&
-                            values.sellingPlans.filter((p) => !p._destroy)
-                              .length > 1)
+                            (id &&
+                              values.sellingPlans.filter((p) => !p._destroy)
+                                .length > 1)
                             ? [
-                                {
-                                  content: 'Remove',
-                                  onAction: () => {
-                                    setFieldValue(
-                                      `sellingPlans[${index}]._destroy`,
-                                      true
-                                    );
-                                  },
+                              {
+                                content: 'Remove',
+                                onAction: () => {
+                                  setFieldValue(
+                                    `sellingPlans[${index}]._destroy`,
+                                    true
+                                  );
                                 },
-                              ]
+                              },
+                            ]
                             : []
                         }
                       >
@@ -944,7 +941,7 @@ const BuildABoxPlan = () => {
                                     parseInt(e)
                                   );
                                 }}
-                                // placeholder="1"
+                              // placeholder="1"
                               />
                             </div>
                           </FormLayout.Group>
@@ -1157,17 +1154,17 @@ const BuildABoxPlan = () => {
                               </div>
                               {values.sellingPlans[index]?.billingDates.length >
                                 0 && (
-                                <div className="add-date-btn">
-                                  <Button
-                                    primary
-                                    onClick={() =>
-                                      clearDate('billingDate', index)
-                                    }
-                                  >
-                                    + Add
-                                  </Button>
-                                </div>
-                              )}
+                                  <div className="add-date-btn">
+                                    <Button
+                                      primary
+                                      onClick={() =>
+                                        clearDate('billingDate', index)
+                                      }
+                                    >
+                                      + Add
+                                    </Button>
+                                  </div>
+                                )}
                             </div>
                             <div className="muti-input-wrapper">
                               <div className="date-input">
@@ -1227,17 +1224,17 @@ const BuildABoxPlan = () => {
                                 )}
                                 {values.sellingPlans[index]?.shippingDates
                                   .length > 0 && (
-                                  <div className="add-date-btn">
-                                    <Button
-                                      primary
-                                      onClick={() =>
-                                        clearDate('shippingDate', index)
-                                      }
-                                    >
-                                      + Add
-                                    </Button>
-                                  </div>
-                                )}
+                                    <div className="add-date-btn">
+                                      <Button
+                                        primary
+                                        onClick={() =>
+                                          clearDate('shippingDate', index)
+                                        }
+                                      >
+                                        + Add
+                                      </Button>
+                                    </div>
+                                  )}
                               </div>
                               <div>
                                 <Select
