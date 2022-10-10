@@ -4,6 +4,7 @@ class SetRedisWorker
     contract = CustomerSubscriptionContract.find(contract_id)
     contract&.shop&.connect
     redis_subscriptions=[]
+    $redis = Redis.new
     if $redis.get("subscriptions").present?
       redis_subscriptions = JSON.parse($redis.get("subscriptions"))
       current_sub = JSON.parse(ReportService.new.get_single_subscriptions(contract.shopify_id).to_json) rescue nil
