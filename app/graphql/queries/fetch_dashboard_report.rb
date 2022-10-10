@@ -5,6 +5,7 @@ module Queries
     argument :end_date, String, required: true
 
     def resolve(start_date:, end_date:)
+      $redis = Redis.new
       redis_subscriptions = $redis.get("subscriptions")
       if redis_subscriptions.nil?
         redis_subscriptions = ReportService.new.all_subscriptions.to_json
