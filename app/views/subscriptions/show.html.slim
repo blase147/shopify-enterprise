@@ -64,9 +64,20 @@
                         = @subscription.status == 'ACTIVE' ? "Edit Subscription" : @subscription.status
 
                   div.slider-btns
-                    .Polaris-Stack__Item
-                      button.admin_show_sub_button id="#{@subscription.status == 'ACTIVE' ? "create_billing_attempt" : ""}" type="button"
-                        | Create Billing Attempt
+                    - if @subscription.status == "ACTIVE"
+                        .Polaris-Stack__Item
+                          button.admin_show_sub_button id="#{@subscription.status == 'ACTIVE' ? "create_billing_attempt" : ""}" type="button"
+                            | Create Billing Attempt
+                    - else 
+                      - if setting.admin_allowed?('reactive_subscription')
+                        .Polaris-Stack__Item
+                          .Polaris-ButtonGroup.resume
+                            .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
+                              button style='text-decoration: none;'
+                                span.resume-btn type="button" Restart Subscription
+                          <input type="text" id="resume-datepicker" hidden=true>
+                        = link_to action_subscription_contract_path(:resume, @subscription.id[/\d+/]), remote: true, method: :post, style: 'text-decoration: none;display: flex; justify-content: center' do
+                          button.hidden.Polaris-Button--plain.admin_portal_apply_button type="button" id="resume-billing-btn" Apply
 
                   div.slider-btns
                     a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/a/chargezen_production/dashboard?customer_id=#{"#{@customer.shopify_customer_id}&admin_refcode=#{ENV['ADMIN_REFCODE']}"}" target="_blank"
@@ -77,17 +88,6 @@
                     a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/admin/customers/#{@customer.shopify_customer_id}?shop=#{@customer.shop.shopify_domain}" target="_parent"
                       button.admin_show_sub_button
                         | Shopify Profile
-
-              - if @subscription.status != 'ACTIVE'
-                - if setting.admin_allowed?('reactive_subscription')
-                  .Polaris-Stack__Item
-                    .Polaris-ButtonGroup.resume
-                      .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
-                        = link_to "#", remote: true, style: 'text-decoration: none;' do
-                          span.resume-btn type="button" Resume
-                          <input type="text" id="resume-datepicker" hidden=true>
-                        = link_to action_subscription_contract_path(:resume, @subscription.id[/\d+/]), remote: true, method: :post, style: 'text-decoration: none;' do
-                          button.hidden.Polaris-Button--plain type="button" id="resume-billing-btn" Apply
 
               - if @subscription.status == 'ACTIVE'
                 - product = ShopifyAPI::Product.find(line.node.product_id[/\d+/])
