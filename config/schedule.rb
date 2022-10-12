@@ -43,7 +43,3 @@ end
 every 1.days do
   rake 'analytics:update_analytics'
 end
-
-every 1.days do
-  CheckNextBillingDateWorker.perform_async
-end
