@@ -166,10 +166,6 @@ class EmailService::Base < ApplicationService
         shopify_store_email: shop_email,
         confirmation_url: object[:confirmation_url]
       }
-    when "Fill PreOrder"
-      {
-        name: object[:customer].name
-      }
     when "Account Activation URL"
       {
         first_name: object[:customer].first_name&.humanize,
