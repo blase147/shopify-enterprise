@@ -16,7 +16,7 @@ namespace :subscriptions do
     Shop.find_each do |shop|
       shop.connect
       shop.subscription_logs.pending_executions.each do |subs_log|
-        subscription = SubscriptionContractService.new(subs_log.subscription_id).run
+        subscription = SubscriptionContractService.new(subs_log&.subscription_id).run
         reprocess_subscription(subscription, subs_log)
       end
     end
