@@ -44,6 +44,10 @@ const EmailNotification = (props) => {
         'Sent to customers when they cancel all subscription and become inactive',
     },
     {
+      name: 'Fill PreOrder',
+      content: 'Sent to customers when the meals for each week is finalized.',
+    },
+    {
       name: 'Recurring Charge Confirmation',
       content: 'Sent to customers when their recurring payment is processed',
     },
