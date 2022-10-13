@@ -45,7 +45,7 @@ const EmailNotification = (props) => {
     },
     {
       name: 'Fill PreOrder',
-      content: 'Sent to customers as a reminder of their order.',
+      content: 'Sent to customers when the meals for each week is finalized.',
     },
     {
       name: 'Recurring Charge Confirmation',
