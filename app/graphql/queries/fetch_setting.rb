@@ -13,7 +13,7 @@ module Queries
           {name: 'Subscription Activation 2 Hours', description: 'Sent to customers after 2 hours of their first sign up for a subscription', status: true, slug: "customer" },
           {name: 'Subscription Activation', description: 'Sent to customers when they first sign up for a subscription', status: true, slug: "customer" },
           {name: 'Subscription Cancellation', description: 'Sent to customers when they cancel all subscription and become inactive', status: true, slug: "customer" },
-          {name: 'Fill PreOrder', description: 'Sent to customers when the meals for each week is finalized.', status: true, slug: "customer"},
+          {name: 'Fill PreOrder', description: 'Sent to customers as a reminder of their order.', status: true, slug: "customer"},
           {name: 'Recurring Charge Confirmation', description: 'Sent to customers when their recurring payment is processed', status: true, slug: "customer"},
           {name: 'Upcoming Charge', description: 'Sent to customers 3 days before their card is charged for renewal', status: true, slug: "customer" },
           {name: 'Out of Stock', description: 'Sent to customers when purchase runs out of stock', status: true, slug: "customer" },
