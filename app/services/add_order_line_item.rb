@@ -87,10 +87,7 @@ class AddOrderLineItem < GraphqlService
     end
 
     result = finish_order_edit(calculated_order_id)
-    # update preorder
-    pre_order.update(order_id: @shopify_order_id, expected_delivery_date: @expected_order_delivery)
-    # Send email notification to user after filling order
-    PreOrderEmailNotificationWorker.perform_in(360.seconds, @contract_id, @week_number)
+    result = preorder_update
     result
   end
 
@@ -126,5 +123,12 @@ class AddOrderLineItem < GraphqlService
       id: calculated_order_id
     })
     commit_variant.data
+  end
+  
+  def preorder_uodate
+        # update preorder
+    pre_order.update(order_id: @shopify_order_id, expected_delivery_date: @expected_order_delivery)
+    # Send email notification to user after filling order
+    PreOrderEmailNotificationWorker.perform_in(360.seconds, @contract_id, @week_number)
   end
 end
