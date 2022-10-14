@@ -80,6 +80,7 @@ class SendEmailService
         pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_number)
         order = ShopifyAPI::Order.find(pre_order&.order_id) rescue nil
         expected_order_delivery = pre_order.expected_delivery_date
+        delivery_day = expected_order_delivery.to_date.strftime("%A")
 
         products = []
         
@@ -89,7 +90,7 @@ class SendEmailService
 
         email_notification = shop.setting.email_notifications.find_by_name "Fill PreOrder"
         customer_object = {customer: contract}
-        sent= EmailService::Send.new(email_notification).send_email({customer: contract, delivery_date: expected_order_delivery&.strftime("%Y-%m-%d"), products:  products.to_sentence}) if email_notification.present? && contract.shop.setting.email_service.present?
+        sent= EmailService::Send.new(email_notification).send_email({customer: contract, day: delivery_day, delivery_date: expected_order_delivery&.to_date.strftime("%B %d, %Y"), products:  products.to_sentence}) if email_notification.present? && contract.shop.setting.email_service.present?
         if sent
           SiteLog.create(log_type: SiteLog::TYPES[:email_success], message: "PreOrderEmailNotification sent")
         else
