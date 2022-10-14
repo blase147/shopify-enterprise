@@ -69,17 +69,17 @@ class SendEmailService
         sent= EmailService::Send.new(email_notification).send_email({customer: contract}) if email_notification.present? && contract.shop.setting.email_service.present?
         return sent
     end
-     def send_fill_preorder_email(contract_id, week_numberr)
+     def send_fill_preorder_email(contract_id, week_number)
         contract = CustomerSubscriptionContract.find_by_id contract_id
         contract ||= CustomerSubscriptionContract.find_by(shopify_id: contract_id)
 
         shop = contract.shop
         shop&.connect
         meals_on_plan = contract.subscription.split[0].to_i
-        pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_numberr)
+        pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_number)
         order = ShopifyAPI::Order.find(pre_order&.order_id) rescue nil
         expected_order_delivery = pre_order.expected_delivery_date
-        delivery_day = expected_order_delivery
+        delivery_day = expected_order_delivery&.to_date.strftime("%A")
 
         products = []
         
