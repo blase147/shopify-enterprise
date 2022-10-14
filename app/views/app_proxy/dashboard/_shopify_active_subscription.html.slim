@@ -99,7 +99,7 @@
         .item
           p #{@translation.home_tab_est_next_delivery.present? ? @translation.home_tab_est_next_delivery : 'est. next delivery'}
           p
-            = (expected_delivery_date(subscription&.node&.id[/\d+/] ))
+            = (expected_delivery_date(subscription&.node&.id[/\d+/], subscription&.node&.orders&.edges&.first&.node&.id[/\d+/] ))
         .item
           p #{@translation.home_tab_last_card_charge.present? ? @translation.home_tab_last_card_charge : 'last card charge'}
           p -
