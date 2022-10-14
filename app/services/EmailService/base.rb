@@ -49,7 +49,6 @@ class EmailService::Base < ApplicationService
         myshopify_url: myshopify_url,
         customer_first_name: object[:customer].first_name&.humanize,
         date: object[:delivery_date],
-        delivery_day: object[:delivery_day],
         products: object[:products]
       }
     when "Order fulfiled"
