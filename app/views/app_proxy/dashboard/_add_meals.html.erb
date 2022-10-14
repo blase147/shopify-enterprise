@@ -44,7 +44,7 @@
                       <span><%= truncate(meal["description"], :length => 50) %></span>
                   </div>
                   <div class="add_to_week">
-                      <span class="quantity_under_btn quantity_<%= meal["product_id"]&.split('/')&.last %>"><%= selected_products_with_quantity["#{meal["product_id"]&.split('/')&.last}"] if selected_products_with_quantity.present? %></span>
+                      <span class="quantity_under_btn quantity_<%= meal["product_id"]&.split('/')&.last %>"><%= selected_products_with_quantity.present? ? selected_products_with_quantity["#{meal["product_id"]&.split('/')&.last}"] : "0" %></span>
                       <button class="add_meal_btn plusValue add_to_current_week" onclick='increment_quantity(event)' data-mealtitle="<%=meal["title"]%>"  data-id="<%= meal["product_id"]&.split('/')&.last %>" data-imgurl="<%= meal["image"].present? ?  meal["image"] : asset_path( 'No-image-found.jpg' ) %>" data-quantityid="quantity_<%= meal["product_id"]&.split('/')&.last %>">
                       +
                       </button>
@@ -68,8 +68,8 @@
                            <span class="close">×</span>
                            </button>
                            <div class="dishes_header">
-                              <div class="dishes-limit">
-                                <span class="sub_data box_full hide">You box is full, checkout now!</span>
+                              <div class="dishes-limit-box">
+                                <div class="remaining_box"></div>
                               </div>
                               <select class="change_meal_plan">
                                 <option class="change_meal_option">Change</option>
@@ -77,7 +77,7 @@
                            </div>
                            <div class="product_number_out">
                               <span class="product_remaing_number">
-                                <span class="selected_meals_number"><%= "#{selected_products.count}" %></span>
+                                <span class="selected_meals_number"><%= "#{selected_products&.count&.to_i}" %></span>
                                 <span class="total_meals"><%= "/#{total_meals}" %></span>
                               </span>
                               <cart-remove-all class="clear_all_meals">Clear all</cart-remove-all>
@@ -126,10 +126,11 @@
 <script>
   $("body").addClass("add_meals_body");
   // JS Global Variables   
-    var totalMeals = <%= total_meals %>;
-    var leftMeals = totalMeals - $(".selected_meals_number").html();
+    var totalMeals = <%= total_meals&.to_i %>;
+    var leftMeals = totalMeals - +$(".selected_meals_number").html();
+    console.log("leftmeals",leftMeals,totalMeals)
     let product_ids = [];
-    
+    changeRemaingMeals();
   // Push Selected Products
     <% if selected_products.present? %>
       <% selected_products&.each do |item| %>
@@ -169,20 +170,18 @@
     }
   }
 
-   //change remaing meals
-   function changeRemaingMeals(){
-     leftMeals = totalMeals - $(".selected_meals_number").html()
-     $(".remaing_meals").html(leftMeals);
+  //change remaing meals
+  function changeRemaingMeals(){
+     leftMeals = totalMeals - +$(".selected_meals_number").html();
+     console.log("leftmeals",leftMeals,totalMeals)
      if(leftMeals == 0){
-        $(".remaining_box").addClass("hide");
-        $(".box_full").removeClass("hide");
+        $(".remaining_box").html("You box is full, checkout now!");
         $(".meals_full_mssg").removeClass("hide");
         $(".confirm-current-week-sub-btn").removeClass("disabled_button");
         $(".confirm-current-week-sub-btn").removeAttr("disabled")
      }
       else{
-        $(".remaining_box").removeClass("hide");
-        $(".box_full").addClass("hide");
+        $(".remaining_box").html(`Add ${+leftMeals} More Meals`);
         $(".meals_full_mssg").addClass("hide");
         $(".confirm-current-week-sub-btn").addClass("disabled_button");
         $(".confirm-current-week-sub-btn").attr("disabled", "disabled")
@@ -213,6 +212,7 @@
 
   $(".clear_all_meals").on("click",function(){
     $(".cart-items").html("");
+    $(".quantity_under_btn").html(0);
     $(".selected_meals_number").html(0);
     changeRemaingMeals();
     product_ids = [];

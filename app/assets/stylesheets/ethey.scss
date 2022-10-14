@@ -2987,6 +2987,9 @@ div#upate_preorder_div {
 }
 
 .add_meals_main_div .right_add_to_meal .product-notification-wrapper {
+
+  position: sticky !important;
+  top: 120px;
   width: 100%;
   border: 1px solid #DDE2E2;
   padding: 0 !important;
@@ -2997,7 +3000,23 @@ div#upate_preorder_div {
   min-height: 48px;
 }
 
+.meals_full_mssg {
+  background: black;
+  color: white;
+  text-align: center;
+  text-transform: capitalize;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 5px;
+}
 
+.dishes-limit-box {
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 21px;
+  color: #384443;
+  display: block;
+}
 
 .top_meals .add_meals_main_div .right_add_to_meal .cart-notification-product {
   padding-top: 0;
