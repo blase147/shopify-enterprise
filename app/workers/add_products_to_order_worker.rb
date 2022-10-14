@@ -51,7 +51,7 @@ class AddProductsToOrderWorker
           
         else
           # Enque sidekiq job to create Pre-Order on select by
-          FillPreOrderWorker.perform_in(cutoff_in_hours.hours-12.hours, contract.id, shopify_order_id, week_number)
+          FillPreOrderWorker.perform_in(cutoff_in_hours.hours-12.hours, contract.id, shopify_order_id, week_number, expected_order_delivery)
         end
       else
         puts "Rake task is aborting as order not found"
