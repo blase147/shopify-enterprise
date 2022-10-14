@@ -19,7 +19,7 @@ class AddProductsToOrderWorker
 
       expected_order_delivery = CalculateOrderDelivery.new(contract, shop.id).expected_delivery_of_order(order.created_at)
       order_select_by = CalculateOrderDelivery.new(contract, shop.id).cuttoff_for_order(order.created_at)
-      week_numberr = expected_order_delivery.to_date.cweek
+      week_number = expected_order_delivery.to_date.cweek
 
       if order.present?
         note_attributes = order&.note_attributes
@@ -30,8 +30,8 @@ class AddProductsToOrderWorker
 
       cutoff_in_hours = ((order_select_by.to_time.beginning_of_day - Date.today.to_time.beginning_of_day) / 3600).to_i
 
-      if order.present? && week_numberr.present?
-        pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_numberr)
+      if order.present? && week_number.present?
+        pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_number)
         
 
         if pre_order.present? || cutoff_in_hours.negative?
@@ -46,13 +46,13 @@ class AddProductsToOrderWorker
           pre_order.reload
           pre_order_products = JSON.parse(pre_order.products)
 
-          result = AddOrderLineItem.new(shopify_order_id, pre_order_products, contract_id, week_numberr).call
+          result = AddOrderLineItem.new(shopify_order_id, pre_order_products, contract_id, week_number).call
           puts result.order_edit_commit.order.id
           puts result.order_edit_commit.user_errors
           
         else
           # Enque sidekiq job to create Pre-Order on select by
-          FillPreOrderWorker.perform_in(cutoff_in_hours.hours-12.hours, contract.id, shopify_order_id, week_numberr)
+          FillPreOrderWorker.perform_in(cutoff_in_hours.hours-12.hours, contract.id, shopify_order_id, week_number)
         end
       else
         puts "Rake task is aborting as order not found"
