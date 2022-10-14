@@ -114,8 +114,7 @@ module AppProxyHelper
     return current_week_meals
   end
 
-  def expected_delivery_date(contract_id)
-    order_id = CustomerSubscriptionContract.find_by_shopify_id(contract_id)&.api_data["orders"]["edges"].first["node"]["id"][/\d+/] rescue nil
+  def expected_delivery_date(contract_id,order_id)
     return WorldfarePreOrder.where(shopify_contract_id: contract_id,order_id: order_id)&.first&.expected_delivery_date&.strftime("%a, %B %e") rescue nil
   end
 end
