@@ -23,7 +23,7 @@
                 div
                   h3 #{@translation.edit_subscription_popup_est_next_delivery.present? ? @translation.edit_subscription_popup_est_next_delivery : 'est. next delivery'}
                   h4
-                    = (subscription.next_billing_date.to_date + 4.days).strftime("%a, %B %e")
+                    = (expected_delivery_date(subscription&.id[/\d+/] ))
                 div
                   h3 #{@translation.edit_subscription_popup_next_card_charge.present? ? @translation.edit_subscription_popup_next_card_charge : 'NEXt card charge'}
                   h4
