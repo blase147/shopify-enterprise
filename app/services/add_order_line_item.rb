@@ -67,9 +67,12 @@ class AddOrderLineItem < GraphqlService
     }
   GRAPHQL
 
-  def initialize(order_id, product_ids)
+  def initialize(order_id, product_ids, contract_id, week_number, expected_order_delivery)
     @order_id = order_id
     @product_ids = product_ids
+    @contract_id = contract_id
+    @week_number = week_number
+    @expected_order_delivery = expected_order_delivery
   end
 
   def call
