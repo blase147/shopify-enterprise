@@ -48,6 +48,7 @@ class EmailService::Base < ApplicationService
         storename: storename,
         myshopify_url: myshopify_url,
         customer_first_name: object[:customer].first_name&.humanize,
+        day: object[:day],
         date: object[:delivery_date],
         products: object[:products]
       }
