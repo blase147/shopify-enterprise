@@ -220,15 +220,16 @@
             .Polaris-DataTable.tab#history style="margin: 1rem"
               p style="margin: 1rem 0;" All timestamps are in Eastern Time (US)
               .Polaris-DataTable__ScrollContainer
-                table.Polaris-DataTable__Table
+                table.Polaris-DataTable__Table#historytable
                   thead
                     tr style="background: #000000;"
                       th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn.Polaris-DataTable__Cell--header scope="col" style="color: #FFFFFF" Status
                       th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn.Polaris-DataTable__Cell--header scope="col" style="color: #FFFFFF" Description
                       th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn.Polaris-DataTable__Cell--header scope="col" style="color: #FFFFFF" Date
                   tbody
-                    - @subscription.orders.edges.each do |order|
-                      - order.node.events.edges.each do |event|
+                    - orders = []
+                    - @subscription.orders.edges&.map{|order| order.node.events.edges.map{|event| orders << event}}
+                    - orders&.each do |event|
                         tr.Polaris-DataTable__TableRow
                           td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"
                             span.Polaris-Badge.Polaris-Badge--statusSuccess Success
@@ -431,12 +432,14 @@
                 /           span.Polaris-Button__Text Skip
 
     = render 'layouts/shared/footer'
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+<script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 javascript:
   $( function() {
+      $("#historytable").dataTable({"bFilter": false, "bInfo": false,"bLengthChange" : false, "pageLength" : 9});
       $( "#datepicker" ).datepicker({
-        dateFormat: 'yy-mm-dd'
+        dateFormat: 'yy-mm-dd' 
       });
 
       $( "#resume-datepicker" ).datepicker({
