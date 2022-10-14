@@ -113,4 +113,9 @@ module AppProxyHelper
     current_week_meals = WeeklyMenu.where(week: week_day).first&.product_images if current_week_meals.blank?
     return current_week_meals
   end
+
+  def expected_delivery_date(contract_id)
+    order_id = CustomerSubscriptionContract.find_by_shopify_id(contract_id)&.api_data["orders"]["edges"].first["node"]["id"][/\d+/] rescue nil
+    return WorldfarePreOrder.where(shopify_contract_id: contract_id,order_id: order_id)&.first&.expected_delivery_date&.strftime("%a, %B %e") rescue nil
+  end
 end
