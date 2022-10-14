@@ -1,14 +1,13 @@
 class FillPreOrderWorker
   include Sidekiq::Worker
 
-  def perform(contract_id, shopify_order_id)
+  def perform(contract_id, shopify_order_id, week_number)
     puts "<============== SideKiq Job for contract_id: #{contract_id} running now... ==============>"
     contract = CustomerSubscriptionContract.find_by_id contract_id
     contract ||= CustomerSubscriptionContract.find_by(shopify_id: contract_id)
 
     shop = contract.shop
     shop.connect
-    week_number = Date.current.cweek
     meals_on_plan = contract.subscription.split[0].to_i
 
     pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_number)
@@ -26,7 +25,7 @@ class FillPreOrderWorker
     pre_order.reload
     pre_order_products = JSON.parse(pre_order.products)
 
-    result = AddOrderLineItem.new(shopify_order_id, pre_order_products).call
+    result = AddOrderLineItem.new(shopify_order_id, pre_order_products, contract_id, week_number).call
   rescue => e
     params = {contract_id: contract_id}
     message = "#{e.message} from #{e.backtrace.first}"
