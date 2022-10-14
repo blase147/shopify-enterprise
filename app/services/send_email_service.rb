@@ -11,7 +11,7 @@ class SendEmailService
             products << product&.title unless product&.title&.downcase&.include? "meals"
         end
 
-        EmailService::Send.new(email_notification).send_email({customer: contract, order_details: "Order Number: #{order_number} Meals: #{products.to_sentence}", delivery_date: expected_order_delivery }) if email_notification.present? && contract.shop.setting.email_service.present?
+        EmailService::Send.new(email_notification).send_email({customer: contract, order_details: "Order Number: #{order_number} Meals: #{products.to_sentence}", delivery_date: expected_order_delivery.to_date.strftime("%A %B %d %Y") }) if email_notification.present? && contract.shop.setting.email_service.present?
     end
 
     def send_subscription_activation_email(contract_id)
