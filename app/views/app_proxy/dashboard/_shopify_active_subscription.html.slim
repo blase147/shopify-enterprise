@@ -99,7 +99,7 @@
         .item
           p #{@translation.home_tab_est_next_delivery.present? ? @translation.home_tab_est_next_delivery : 'est. next delivery'}
           p
-            = (DateTime.parse(subscription.node.next_billing_date) + 4.days).strftime("%a, %B %e")
+            = (expected_delivery_date(subscription&.node&.id[/\d+/] ))
         .item
           p #{@translation.home_tab_last_card_charge.present? ? @translation.home_tab_last_card_charge : 'last card charge'}
           p -
