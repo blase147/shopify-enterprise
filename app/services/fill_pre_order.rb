@@ -10,7 +10,7 @@ class FillPreOrder
       products_to_be_added = meals_on_plan - pre_order_products.count
       unless manual_update_required?
         if pre_order_products.count < meals_on_plan
-          last_week_number = Date.today.cweek - 1
+          last_week_number = Date.today.cweek 
           last_week_order = WorldfarePreOrder.where(shopify_contract_id: @subscription_contract.shopify_id, week: last_week_number).last
           if last_week_order.present?
             last_week_products = JSON.parse(last_week_order.products)
