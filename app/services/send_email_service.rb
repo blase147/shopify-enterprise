@@ -89,7 +89,7 @@ class SendEmailService
 
         email_notification = shop.setting.email_notifications.find_by_name "Fill PreOrder"
         customer_object = {customer: contract}
-        sent= EmailService::Send.new(email_notification).send_email({customer: contract, products:  products.to_sentence}) if email_notification.present? && contract.shop.setting.email_service.present?
+        sent= EmailService::Send.new(email_notification).send_email({customer: contract, delivery_date: expected_order_delivery&.strftime("%Y-%m-%d"), products:  products.to_sentence}) if email_notification.present? && contract.shop.setting.email_service.present?
         if sent
           SiteLog.create(log_type: SiteLog::TYPES[:email_success], message: "PreOrderEmailNotification sent")
         else
