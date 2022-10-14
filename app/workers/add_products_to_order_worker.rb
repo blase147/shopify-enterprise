@@ -32,6 +32,7 @@ class AddProductsToOrderWorker
 
       if order.present? && week_number.present?
         pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_number)
+        pre_order.update(order_id: shopify_order_id, expected_delivery_date: expected_order_delivery)
 
         if pre_order.present? || cutoff_in_hours.negative?
           pre_order_products = JSON.parse(pre_order&.products)
