@@ -37,7 +37,6 @@ class AddProductsToOrderWorker
         if pre_order.present? || cutoff_in_hours.negative?
           pre_order_products = JSON.parse(pre_order&.products)
           pre_order_ids = [pre_order.id]
-          pre_order.update(order_id: shopify_order_id, expected_delivery_date: expected_order_delivery)
 
           if pre_order_products.count < meals_on_plan
             FillPreOrder.new(pre_order_ids, contract.id).fill
@@ -46,13 +45,13 @@ class AddProductsToOrderWorker
           pre_order.reload
           pre_order_products = JSON.parse(pre_order.products)
 
-          result = AddOrderLineItem.new(shopify_order_id, pre_order_products, contract_id).call
+          result = AddOrderLineItem.new(shopify_order_id, pre_order_products, contract_id, week_number, expected_order_delivery).call
           puts result.order_edit_commit.order.id
           puts result.order_edit_commit.user_errors
           
         else
           # Enque sidekiq job to create Pre-Order on select by
-          FillPreOrderWorker.perform_in(cutoff_in_hours.hours-12.hours, contract.id, shopify_order_id)
+          FillPreOrderWorker.perform_in(cutoff_in_hours.hours-12.hours, contract.id, shopify_order_id, week_number, expected_order_delivery)
         end
       else
         puts "Rake task is aborting as order not found"

@@ -86,7 +86,9 @@ class AddOrderLineItem < GraphqlService
     result = finish_order_edit(calculated_order_id)
     result
     # Send email notification to user after filling order
-    PreOrderEmailNotificationWorker.perform_async(contract.id)
+    PreOrderEmailNotificationWorker.perform_async(contract_id, week_number)
+     # update preorder
+    pre_order.update(order_id: shopify_order_id, expected_delivery_date: expected_order_delivery)
   end
 
 
