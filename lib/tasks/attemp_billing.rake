@@ -126,9 +126,9 @@ namespace :subscriptions do
   def process_subscription(subscription)
     current_week = Date.today.cweek
     bill_null_week = current_week + 1
+    subscription_id = subscription.id[/\d+/]
     customer = CustomerSubscriptionContract.find_by(shopify_id: subscription_id)
     return unless subscription.status == 'ACTIVE' && !customer&.skip_dates&.include?(bill_null_week.to_s)
-    subscription_id = subscription.id[/\d+/]
     billing_date = get_next_billing_date(subscription, customer.shop)
     if billing_date.utc.beginning_of_day == Time.current.utc.beginning_of_day
       result = SubscriptionBillingAttempService.new(subscription.id).run
@@ -158,9 +158,9 @@ namespace :subscriptions do
   def reprocess_subscription(subscription, subs_log)
     current_week = Date.today.cweek
     bill_null_week = current_week + 1
+    subscription_id = subscription.id[/\d+/]
     customer = CustomerSubscriptionContract.find_by(shopify_id: subscription_id)
     return unless subscription.status == 'ACTIVE' && !customer&.skip_dates&.include?(bill_null_week.to_s)
-    subscription_id = subscription.id[/\d+/]
     billing_date = get_next_billing_date(subscription, customer.shop)
     if customer.present? && customer.shop.sms_setting.present? && customer.shop.sms_setting.failed_renewal.present? && customer.retry_count<=customer.shop.setting.payment_retries
       if billing_date.utc.beginning_of_day + ((customer.shop.setting.payment_delay_retries || 0)*customer.retry_count).days == Time.current.utc.beginning_of_day
