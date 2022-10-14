@@ -72,7 +72,7 @@ class AddOrderLineItem < GraphqlService
     @product_ids = product_ids
   end
 
-  def call
+  def call(contract_id, week_number, expected_order_delivery)
     calculated_order_id = order_edit_begin
 
     product_variants = fetch_product_varients
