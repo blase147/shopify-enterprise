@@ -32,11 +32,12 @@ class AddProductsToOrderWorker
 
       if order.present? && week_number.present?
         pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_number)
-        pre_order.update(order_id: shopify_order_id, expected_delivery_date: expected_order_delivery)
+        
 
         if pre_order.present? || cutoff_in_hours.negative?
           pre_order_products = JSON.parse(pre_order&.products)
           pre_order_ids = [pre_order.id]
+          pre_order.update(order_id: shopify_order_id, expected_delivery_date: expected_order_delivery)
 
           if pre_order_products.count < meals_on_plan
             FillPreOrder.new(pre_order_ids, contract.id).fill
@@ -48,6 +49,7 @@ class AddProductsToOrderWorker
           result = AddOrderLineItem.new(shopify_order_id, pre_order_products).call
           puts result.order_edit_commit.order.id
           puts result.order_edit_commit.user_errors
+          
         else
           # Enque sidekiq job to create Pre-Order on select by
           FillPreOrderWorker.perform_in(cutoff_in_hours.hours-12.hours, contract.id, shopify_order_id)
