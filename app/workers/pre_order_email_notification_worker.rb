@@ -1,7 +1,7 @@
 class PreOrderEmailNotificationWorker
   include Sidekiq::Worker
 
-  def perform(contract_id, week_numberr)
+  def perform(contract_id, week_number)
         SendEmailService.new.send_fill_preorder_email(contract_id, week_number)
     end
 
