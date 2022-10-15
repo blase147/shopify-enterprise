@@ -37,7 +37,7 @@ class AddOrderLineItem < GraphqlService
 
   COMMIT_DONE = <<-GRAPHQL
     mutation($id: ID!) {
-      orderEditCommit(id: $id, notifyCustomer: false, staffNote: "I edited the order! It was me!") {
+      orderEditCommit(id: $id, notifyCustomer: true, staffNote: "Updated meals for upcoming delivery") {
         order {
           id
         }
