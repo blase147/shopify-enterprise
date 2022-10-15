@@ -14,6 +14,10 @@ class FillPreOrderWorker
     if pre_order.blank?
       pre_order = WorldfarePreOrder.create(shop_id: shop.id, shopify_contract_id: contract.shopify_id, week: week_number, customer_id: contract.shopify_customer_id, products: "[]", created_by: WorldfarePreOrder::CREATION_TYPES[:rake])
     end
+     # update preorder
+     pre_order.update(order_id: shopify_order_id, expected_delivery_date: expected_order_delivery)
+     # Send email notification to user after filling order
+     PreOrderEmailNotificationWorker.perform_in(600.seconds, contract_id, week_number)
 
     pre_order_products = JSON.parse(pre_order.products)
     pre_order_ids = [pre_order.id]
@@ -25,7 +29,7 @@ class FillPreOrderWorker
     pre_order.reload
     pre_order_products = JSON.parse(pre_order.products)
 
-    result = AddOrderLineItem.new(shopify_order_id, pre_order_products).call(contract_id, week_number, expected_order_delivery)
+    result = AddOrderLineItem.new(shopify_order_id, pre_order_products).call
   rescue => e
     params = {contract_id: contract_id}
     message = "#{e.message} from #{e.backtrace.first}"
