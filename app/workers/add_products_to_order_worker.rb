@@ -49,6 +49,7 @@ class AddProductsToOrderWorker
           puts result.order_edit_commit.order.id
           puts result.order_edit_commit.user_errors
           
+          elsif pre_order.present?
           # update preorder
           pre_order.update(order_id: shopify_order_id, expected_delivery_date: expected_order_delivery)
            # Send email notification to user after filling order
