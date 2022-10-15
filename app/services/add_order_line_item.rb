@@ -67,21 +67,21 @@ class AddOrderLineItem < GraphqlService
     }
   GRAPHQL
 
-  def initialize(order_id, product_ids, contract_id, week_number, expected_order_delivery)
+  def initialize(order_id, product_ids)
     @order_id = order_id
     @product_ids = product_ids
-    @contract_id = contract_id
-    @week_number = week_number 
-    @expected_order_delivery = expected_order_delivery
+
   end
 
-  def call
-    contract = CustomerSubscriptionContract.find_by_id @contract_id
-    pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: @week_number)
+  def call(contract_id, week_number, expected_order_delivery)
+    
+    contract = CustomerSubscriptionContract.find_by_id contract_id
+    pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_number)
     # update preorder
-    pre_order.update(order_id: @order_id, expected_delivery_date: @expected_order_delivery)
+    pre_order.update(order_id: @order_id, expected_delivery_date: expected_order_delivery)
     # Send email notification to user after filling order
-    PreOrderEmailNotificationWorker.perform_in(360.seconds, @contract_id, @week_number)
+    PreOrderEmailNotificationWorker.perform_in(360.seconds, contract_id, week_number)
+    
     calculated_order_id = order_edit_begin
 
     product_variants = fetch_product_varients
