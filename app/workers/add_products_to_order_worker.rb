@@ -45,7 +45,7 @@ class AddProductsToOrderWorker
           pre_order.reload
           pre_order_products = JSON.parse(pre_order.products)
 
-          result = AddOrderLineItem.new(shopify_order_id, pre_order_products, contract_id, week_number, expected_order_delivery).call
+          result = AddOrderLineItem.new(shopify_order_id, pre_order_products, contract.id, week_number, expected_order_delivery).call
           puts result.order_edit_commit.order.id
           puts result.order_edit_commit.user_errors
           
