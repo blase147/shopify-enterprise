@@ -25,7 +25,7 @@ class FillPreOrderWorker
     pre_order.reload
     pre_order_products = JSON.parse(pre_order.products)
 
-    result = AddOrderLineItem.new(shopify_order_id, pre_order_products, contract_id, week_number, expected_order_delivery).call
+    result = AddOrderLineItem.new(shopify_order_id, pre_order_products).call(contract_id, week_number, expected_order_delivery)
   rescue => e
     params = {contract_id: contract_id}
     message = "#{e.message} from #{e.backtrace.first}"
