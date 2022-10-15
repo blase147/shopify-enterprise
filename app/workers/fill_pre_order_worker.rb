@@ -1,7 +1,7 @@
 class FillPreOrderWorker
   include Sidekiq::Worker
 
-  def perform(contract_id, shopify_order_id, week_number)
+  def perform(contract_id, shopify_order_id, week_number, expected_order_delivery)
     puts "<============== SideKiq Job for contract_id: #{contract_id} running now... ==============>"
     contract = CustomerSubscriptionContract.find_by_id contract_id
     contract ||= CustomerSubscriptionContract.find_by(shopify_id: contract_id)
@@ -14,6 +14,7 @@ class FillPreOrderWorker
     if pre_order.blank?
       pre_order = WorldfarePreOrder.create(shop_id: shop.id, shopify_contract_id: contract.shopify_id, week: week_number, customer_id: contract.shopify_customer_id, products: "[]", created_by: WorldfarePreOrder::CREATION_TYPES[:rake])
     end
+    
 
     pre_order_products = JSON.parse(pre_order.products)
     pre_order_ids = [pre_order.id]
@@ -26,6 +27,10 @@ class FillPreOrderWorker
     pre_order_products = JSON.parse(pre_order.products)
 
     result = AddOrderLineItem.new(shopify_order_id, pre_order_products).call
+     # update preorder
+     pre_order.update(order_id: shopify_order_id, expected_delivery_date: expected_order_delivery)
+     # Send email notification to user after filling order
+     PreOrderEmailNotificationWorker.perform_in(600.seconds, contract_id, week_number)
   rescue => e
     params = {contract_id: contract_id}
     message = "#{e.message} from #{e.backtrace.first}"
