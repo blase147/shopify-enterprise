@@ -70,11 +70,9 @@ class AddOrderLineItem < GraphqlService
   def initialize(order_id, product_ids)
     @order_id = order_id
     @product_ids = product_ids
-
   end
 
-  def call(contract_id, week_number, expected_order_delivery)
-    
+  def call
     calculated_order_id = order_edit_begin
 
     product_variants = fetch_product_varients
@@ -87,12 +85,6 @@ class AddOrderLineItem < GraphqlService
 
     result = finish_order_edit(calculated_order_id)
     result
-    contract = CustomerSubscriptionContract.find_by_id contract_id
-    pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_number)
-    # update preorder
-    pre_order.update(order_id: @order_id, expected_delivery_date: expected_order_delivery)
-    # Send email notification to user after filling order
-    PreOrderEmailNotificationWorker.perform_in(360.seconds, contract_id, week_number)
   end
 
 
@@ -128,5 +120,4 @@ class AddOrderLineItem < GraphqlService
     })
     commit_variant.data
   end
-  
 end
