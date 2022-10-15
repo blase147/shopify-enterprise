@@ -52,7 +52,7 @@ class AddProductsToOrderWorker
           # update preorder
           pre_order.update(order_id: shopify_order_id, expected_delivery_date: expected_order_delivery)
            # Send email notification to user after filling order
-          PreOrderEmailNotificationWorker.perform_in(600.seconds, contract_id, week_number)
+          PreOrderEmailNotificationWorker.perform_in(600.seconds, contract.id, week_number)
           
         else
           # Enque sidekiq job to create Pre-Order on select by
