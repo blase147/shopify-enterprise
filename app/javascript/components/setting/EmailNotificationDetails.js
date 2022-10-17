@@ -21,6 +21,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { data } from 'jquery';
 
 const emailNotificationsDetails = (props) => {
   const codeTextArea = useRef(null);
@@ -99,6 +100,42 @@ const emailNotificationsDetails = (props) => {
     </div>
   );
 
+  const uploadCallback = (file, callback) => {
+    console.log(file);
+    return new Promise((resolve, reject) => {
+      const reader = new window.FileReader();
+      console.log(reader);
+      reader.onloadend = async () => {
+        const form_data = new FormData();
+        form_data.append("file", file);
+        let res = await uploadFile(form_data);
+        console.log("image_url", res)
+        // setValue("thumbnail", res);
+        resolve({ data: { link: res } });
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+  const config = {
+    image: { uploadCallback: uploadCallback }
+  }
+  console.log("config", config);
+
+  const uploadFile = async (formData) => {
+    let imageURL;
+    await fetch("/email_images/upload_email_image", {
+      method: 'POST',
+      body: formData
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("data", data);
+        imageURL = data?.image_url
+        console.log("dataimg", imageURL, data.image_url)
+      })
+    return imageURL
+
+  }
   return (
     <div className="noti-detail">
       <div className="container-left">
@@ -169,6 +206,7 @@ const emailNotificationsDetails = (props) => {
 
                 <label>Email Message</label>
                 <Editor
+                  toolbar={config}
                   editorState={editorState}
                   defaultContentState={
                     values.emailNotifications[index]?.emailMessage
@@ -238,11 +276,11 @@ const emailNotificationsDetails = (props) => {
             <Stack distribution="equalSpacing">
               {/* <Button primary>Enabled</Button> */}
               {values.emailNotifications[index]?.status ? (
-                <Button primary onClick={() => {}}>
+                <Button primary onClick={() => { }}>
                   Enabled
                 </Button>
               ) : (
-                <Button onClick={() => {}}>Disabled</Button>
+                <Button onClick={() => { }}>Disabled</Button>
               )}
               <Switch
                 // onChange={setFieldValue(

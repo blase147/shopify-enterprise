@@ -7,6 +7,13 @@ local:
   root: <%= Rails.root.join("storage") %>
 
 # Use rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
+digitalocean:
+  service: S3
+  endpoint: <%= ENV["DIGITALOCEAN_ENDPOINT"] %>
+  access_key_id: <%= ENV["DIGITALOCEAN_KEY"] %>
+  secret_access_key: <%= ENV["DIGITALOCEAN_SECRET"] %>
+  bucket: "chargezen"
+  region: unused
 # amazon:
 #   service: S3
 #   access_key_id: <%= Rails.application.credentials.dig(:aws, :access_key_id) %>

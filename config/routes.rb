@@ -173,6 +173,12 @@ Rails.application.routes.draw do
 
   resources :select_plan, only: [:index, :create]
 
+  resources :email_images, only: [] do
+    collection do 
+      post :upload_email_image
+    end
+  end
+
   get 'subscription/charge', to: 'callback#charge'
   resources :zip_codes, only: [:index, :create]
   delete 'zip_codes', to: 'zip_codes#destroy'
