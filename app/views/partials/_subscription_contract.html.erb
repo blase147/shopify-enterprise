@@ -459,7 +459,7 @@
                     <div class="order_add current-week <%= @customer&.skip_dates&.include?("#{week_day&.to_date&.cweek}") ? "" : "" %>" id="add_box_<%= week_day %>">
                       <ul id="psegment" class="pre_segment">
                         <% selected_products&.each do |item| %>
-                          <% meal_product = current_week_meals.filter{|m| m["product_id"][/\d+/] == item}.first %>
+                          <% meal_product = current_week_meals.filter{|m| "#{m["product_id"][/\d+/]}"&.strip == "#{item}"&.strip}.first %>
                           <% if  meal_product.present? %>
                             <div class="order_inn center" >
                               <div class="holder">

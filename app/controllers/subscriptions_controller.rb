@@ -129,6 +129,7 @@ class SubscriptionsController < AuthenticatedController
   end
 
   def fetch_shopify_products(product_ids)
+    product_ids = product_ids&.map(&:to_s)
     products = ShopifyAPI::Product.where(ids: product_ids.join(', '), fields: 'id,title')
     quantity = Hash.new(0)
     product_ids&.each do |v|
