@@ -79,7 +79,7 @@ class SendEmailService
         pre_order = WorldfarePreOrder.find_by(shopify_contract_id: contract.shopify_id, week: week_number)
         order = ShopifyAPI::Order.find(pre_order&.order_id) rescue nil
         expected_order_delivery = pre_order.expected_delivery_date
-        delivery_day = expected_order_delivery&.to_date.strftime("%A")
+        delivery_day = expected_order_delivery&.to_date&.strftime("%A")
 
         products = []
         

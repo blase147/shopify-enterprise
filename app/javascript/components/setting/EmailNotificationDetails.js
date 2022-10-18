@@ -22,11 +22,14 @@ import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { data } from 'jquery';
+import PreviewEmail from './PreviewEmail';
 
 const emailNotificationsDetails = (props) => {
   const codeTextArea = useRef(null);
   const [valueFromName, setValueFromName] = useState();
   const [showEditorCode, setShowEditorCode] = useState(false);
+  const [previewHtml, setPreviewHtml] = useState("");
+  const [previewActive, setPreviewActive] = useState(false);
   const handleChangeFormName = useCallback(
     (newValue) => setValueFromName(newValue),
     []
@@ -40,6 +43,7 @@ const emailNotificationsDetails = (props) => {
     (value) => setSelectedSettingEnabled(value),
     []
   );
+
   const html_text = `<!DOCTYPE html>
   <html lang="en">
   <head>
@@ -117,9 +121,8 @@ const emailNotificationsDetails = (props) => {
     });
   };
   const config = {
-    image: { uploadCallback: uploadCallback }
+    image: { uploadCallback: uploadCallback, defaultSize: { height: 'auto', width: '100%' } }
   }
-  console.log("config", config);
 
   const uploadFile = async (formData) => {
     let imageURL;
@@ -136,9 +139,11 @@ const emailNotificationsDetails = (props) => {
     return imageURL
 
   }
+
   return (
     <div className="noti-detail">
       <div className="container-left">
+        <PreviewEmail previewActive={previewActive} setPreviewActive={setPreviewActive} previewHtml={previewHtml} />
         <Card.Section>
           <Stack vertical>
             <Stack.Item>
@@ -323,7 +328,15 @@ const emailNotificationsDetails = (props) => {
           <TextContainer>
             <Heading h4>Actions</Heading>
             <Button fullWidth>Send a test email</Button>
-            <Button fullWidth>Preview</Button>
+            <Button fullWidth
+              onClick={() => {
+                setPreviewHtml(values.emailNotifications[index]?.emailMessage)
+                setPreviewActive(true)
+              }
+              }
+            >
+              Preview
+            </Button>
           </TextContainer>
         </Card.Section>
       </div>

@@ -14,6 +14,7 @@ import {
 } from '@shopify/polaris';
 import { MobileBackArrowMajor } from '@shopify/polaris-icons';
 import Switch from 'react-switch';
+import PreviewEmail from './PreviewEmail';
 const EmailNotification = (props) => {
   //SettingToggle
   const [active, setActive] = useState(false);
@@ -21,87 +22,6 @@ const EmailNotification = (props) => {
   const handleToggle = useCallback(() => setActive((active) => !active), []);
 
   const contentStatus = active ? 'Disable' : 'Enable';
-  const listCustomerNotification = [
-    {
-      name: 'Missing Delivery Date',
-      content: 'Sent to customers when delivery date is missing form their subscription',
-    },
-    {
-      name: 'Subscription Activation 2 Hours',
-      content: 'Sent to customers after 2 hours of their first sign up for a subscription',
-    },
-    {
-      name: 'Subscription Activation',
-      content: 'Sent to customers when they first sign up for a subscription',
-    },
-    {
-      name: 'Account Activation URL',
-      content: 'Send the account activation link to the customer',
-    },
-    {
-      name: 'Subscription Cancellation',
-      content:
-        'Sent to customers when they cancel all subscription and become inactive',
-    },
-    {
-      name: 'Fill PreOrder',
-      content: 'Sent to customers when the meals for each week is finalized.',
-    },
-    {
-      name: 'Recurring Charge Confirmation',
-      content: 'Sent to customers when their recurring payment is processed',
-    },
-    {
-      name: 'Upcoming Charge',
-      content:
-        'Sent to customers 3 days before their card is charged for renewal',
-    },
-    {
-      name: 'Out of Stock',
-      content: 'Sent to customersth="/customers" component={Customers}',
-      name: 'Delayed checkout payment failed',
-      content: 'Sent to customers when a delayed checkout charge is declined',
-    },
-
-    {
-      name: 'Card expiring',
-      content:
-        'Sent to customers when their credit card is about to expire. Emails will be sent out',
-    },
-    {
-      name: 'Refund',
-      content: 'Sent to customers when charge is refunded',
-    },
-    {
-      name: 'Get account access',
-      content:
-        'Sent to customers when they enter their email to access their subscriptions',
-    },
-    {
-      name: 'Payment Re-authentication',
-      content:
-        'Sent to your customers when their payment source needs to be re-authenticated.',
-    },
-  ];
-  const listNotificationLast = [
-    {
-      name: 'Cancellation Alert',
-      content: 'Sent to storeowner when customer cancels an item',
-    },
-    {
-      name: 'Error Charge Processed',
-      content: 'Sent to storeowner when a recurring payment is processed',
-    },
-    {
-      name: 'Variant not found',
-      content:
-        'Sent to storeowner when variant not found error occurs in an order',
-    },
-    {
-      name: 'Customer Action Log',
-      content: 'Sent to storeowner, daily log of customer’s actions',
-    },
-  ];
 
   const [selectedSetting, setSelectedSetting] = useState(true);
 
