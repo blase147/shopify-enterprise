@@ -5,7 +5,7 @@
       div
         p.Polaris-DisplayText.Polaris-DisplayText--sizeMedium YOUR SUBSCRIPTION
       div.notification-banner
-        p.Polaris-Heading #{@translation.home_tab_no_subscriptions_found.present? ? @translation.home_tab_no_subscriptions_found : 'No subscription have been found for your account'}
+        p.Polaris-Heading #{@translation&.home_tab_no_subscriptions_found.present? ? @translation&.home_tab_no_subscriptions_found : 'No subscription have been found for your account'}
   - else
     div.content-wrapper
       - if !params[:status].present? || (params[:status].present? && params[:status] == 'active')
