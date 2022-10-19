@@ -99,3 +99,6 @@ gem "bugsnag", "~> 6.24"
 gem 'newrelic_rpm'
 
 gem 'sprockets'
+
+gem 'aws-sdk' 
+gem "aws-sdk-s3", require: false
