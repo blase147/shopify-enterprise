@@ -140,6 +140,114 @@ const emailNotificationsDetails = (props) => {
 
   }
 
+  function customChunkRenderer(nodeName, node) {
+    const allowedNodes = [
+      "div",
+      "table",
+      "tbody",
+      "tr",
+      "th",
+      "td",
+      "thead",
+      "style"
+    ];
+
+    if (allowedNodes.includes(nodeName)) {
+      return {
+        type: nodeName.toString().toUpperCase(),
+        mutability: "MUTABLE",
+        data: {
+          // Pass whatever you want here (like id, or classList, etc.)
+          innerText: node.innerText,
+          innerHTML: node.innerHTML
+        }
+      };
+    }
+    return null;
+  }
+
+  function entityMapper(entity) {
+    console.log("entity.data.style", entity);
+
+    if (entity.type === "DIV") {
+      return `<div style=${entity.data.style}>${entity.data.innerHTML}</div>`;
+    }
+    if (entity.type === "TABLE") {
+      return `<table style=${entity.data.style}>${entity.data.innerHTML}</table>`;
+    }
+    if (entity.type === "TBODY") {
+      return `<tbody style=${entity.data.style}>${entity.data.innerHTML}</tbody>`;
+    }
+    if (entity.type === "TR") {
+      return `<tr style=${entity.data.style}>${entity.data.innerHTML}</tr>`;
+    }
+    if (entity.type === "TH") {
+      return `<th style=${entity.data.style}>${entity.data.innerHTML}</th>`;
+    }
+    if (entity.type === "TD") {
+      return `<td style=${entity.data.style}>${entity.data.innerHTML}</td>`;
+    }
+    if (entity.type === "STYLE") {
+      return `<style>${entity.data.innerHTML}</style>`;
+    }
+    return "";
+  }
+
+  function entityMapperToComponent(entity) {
+    console.log("style", entity?.data.style);
+
+    if (entity.type === "DIV") {
+      return () => (
+        <div dangerouslySetInnerHTML={{ __html: entity.data.innerHTML }} />
+      );
+    }
+    if (entity.type === "TABLE") {
+      return () => (
+        <table dangerouslySetInnerHTML={{ __html: entity.data.innerHTML }} />
+      );
+    }
+    if (entity.type === "TBODY") {
+      return (
+        <tbody dangerouslySetInnerHTML={{ __html: entity.data.innerHTML }} />
+      );
+    }
+    if (entity.type === "TR") {
+      return () => (
+        <tr dangerouslySetInnerHTML={{ __html: entity.data.innerHTML }} />
+      );
+    }
+    if (entity.type === "TH") {
+      return () => (
+        <th dangerouslySetInnerHTML={{ __html: entity.data.innerHTML }} />
+      );
+    }
+    if (entity.type === "TD") {
+      return () => (
+        <td dangerouslySetInnerHTML={{ __html: entity.data.innerHTML }} />
+      );
+    }
+    if (entity.type === "STYLE") {
+      return () => <style>{entity.data.innerHTML}</style>;
+    }
+
+    return "";
+  }
+
+  function customBlockRenderFunc(block, config) {
+    console.log("block", block);
+    console.log("config", config);
+    if (block.getType() === "atomic") {
+      const contentState = config.getEditorState().getCurrentContent();
+      const entity = contentState.getEntity(block.getEntityAt(0));
+      console.log("contentState", entity);
+
+      return {
+        component: entityMapperToComponent(entity)
+      };
+    }
+    return undefined;
+  }
+
   return (
     <div className="noti-detail">
       <div className="container-left">
@@ -220,6 +328,7 @@ const emailNotificationsDetails = (props) => {
                   wrapperClassName="wrapperClassName"
                   editorClassName="draftEditorWrapper"
                   editorClassName={showEditorCode ? 'editorHide' : 'editor'}
+                  customBlockRenderFunc={customBlockRenderFunc}
                   onEditorStateChange={(e) => {
                     setEditorState(e);
                     setFieldValue(
