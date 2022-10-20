@@ -37,9 +37,9 @@ class SubscriptionContractDeleteService < GraphqlService
       elsif status == "PAUSED"
         description = customer.name+",paused,"+product.title
         if @type == "sms"
-          customer.shop.subscription_logs.sms.restart.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id, action_by: @customer_type)
+          customer.shop.subscription_logs.sms.restart.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id, action_by: @customer_type, action_type: "pause")
         else
-          customer.shop.subscription_logs.restart.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id, action_by: @customer_type)
+          customer.shop.subscription_logs.restart.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id, action_by: @customer_type, action_type: "pause")
         end
       elsif status == "RESUMED"
         description = customer.name+",resumed,"+product.title
