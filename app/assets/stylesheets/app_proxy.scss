@@ -1817,20 +1817,6 @@ div#AppFrameNav {
     display: none;
 }
 
-@font-face {
-    font-family: 'AvenirLTStd';
-    font-style: normal;
-    font-weight: normal;
-    src: asset-url('AvenirLTProBook.woff') format('woff');
-}
-
-@font-face {
-    font-family: 'AvenirLTStdBold';
-    font-style: normal;
-    font-weight: normal;
-    src: asset-url('AvenirLTProHeavy.woff') format('woff');
-}
-
 .turbolinks-progress-bar {
     height: 5px;
     background-color: #2980c1;
