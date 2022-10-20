@@ -137,6 +137,7 @@ const Customers = ({ shopifyDomain }) => {
   const [moneySpent, setMoneySpent] = useState(null);
   const [taggedWith, setTaggedWith] = useState(null);
   const [queryValue, setQueryValue] = useState(null);
+  const [loadingScreen, setLoadingScreen] = useState(false);
 
   const handleMoneySpentChange = useCallback(
     (value) => setMoneySpent(value),
@@ -389,6 +390,7 @@ const Customers = ({ shopifyDomain }) => {
           <a
             href={`/subscriptions/${row.shopifyId}?shop=${row.shopDomain}&local_id=${row.id}`}
             key={row.id}
+            onClick={() => { setLoadingScreen(true) }}
           >{`${row.firstName} ${row.lastName}`}</a>,
           row.createdAt,
           apiData == "" ? "" : moment(apiData?.next_billing_date)?.format('MMMM Do YYYY, h:mm:ss a'),
@@ -706,6 +708,11 @@ const Customers = ({ shopifyDomain }) => {
             <br />
           </>
         )}
+        {loadingScreen && (
+          <>
+            <LoadingScreen />
+          </>
+        )}
         <Page
           title="Subscriptions Orders"
           primaryAction={
@@ -847,7 +854,7 @@ const Customers = ({ shopifyDomain }) => {
                 />
               </div>
               {loading && (
-                <LoadingScreen />
+                <Spinner />
               )}
               <div style={{ width: '100%', justifyContent: 'center', display: 'flex' }}>
                 <Pagination
