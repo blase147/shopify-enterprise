@@ -9,6 +9,20 @@ $primary: #000000;
     }
 }
 
+@font-face {
+    font-family: 'GilroyLight';
+    font-style: normal;
+    font-weight: normal;
+    src: url('../fonts/Gilroy-Light.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GilroyBold';
+    font-style: normal;
+    font-weight: normal;
+    src: url('../fonts/Gilroy-ExtraBold.otf') format('opentype');
+}
+
 div.Polaris-Modal-Dialog__Container {
     justify-content: flex-start;
     margin-top: 50px;
@@ -2864,4 +2878,17 @@ span.cancel-text {
     100% {
         transform: rotate(360deg);
     }
+}
+
+body {
+    font-family: 'GilroyLight' !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'GilroyBold' !important;
 }

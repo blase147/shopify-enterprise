@@ -1,3 +1,17 @@
+@font-face {
+  font-family: 'GilroyLight';
+  font-style: normal;
+  font-weight: normal;
+  src: url('../fonts/Gilroy-Light.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'GilroyBold';
+  font-style: normal;
+  font-weight: normal;
+  src: url('../fonts/Gilroy-ExtraBold.otf') format('opentype');
+}
+
 .pull-right {
   float: right;
 }
@@ -5676,4 +5690,17 @@ div#upate_preorder_div {
   fill: black !important;
   color: black;
   opacity: 1 !important;
+}
+
+body {
+  font-family: 'GilroyLight' !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'GilroyBold' !important;
 }
