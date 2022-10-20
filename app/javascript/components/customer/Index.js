@@ -388,9 +388,13 @@ const Customers = ({ shopifyDomain }) => {
             }
           />,
           <a
-            href={`/subscriptions/${row.shopifyId}?shop=${row.shopDomain}&local_id=${row.id}`}
+            style={{ cursor: 'pointer' }}
             key={row.id}
-            onClick={() => { setLoadingScreen(true) }}
+            onClick={(e) => {
+              e.preventDefault();
+              setLoadingScreen(true);
+              window.location.replace(`/subscriptions/${row.shopifyId}?shop=${row.shopDomain}&local_id=${row.id}`);
+            }}
           >{`${row.firstName} ${row.lastName}`}</a>,
           row.createdAt,
           apiData == "" ? "" : moment(apiData?.next_billing_date)?.format('MMMM Do YYYY, h:mm:ss a'),
