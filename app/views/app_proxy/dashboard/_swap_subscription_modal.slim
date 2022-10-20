@@ -32,7 +32,7 @@
                         .title
                           h2
                             = product.node.title
-                          p
+                          p.price_per_week
                             = "#{number_to_currency product.node.variants.edges.first.node.price} / #{subscription.billing_policy.interval_count} #{subscription.billing_policy.interval}"
                         = form_tag action_subscription_contract_path(:swap_product, subscription.id[/\d+/]), method: :post, :id => "form-#{index}-#{subscription.id[/\d+/]}", remote: true do
                           .variants-wrapper
@@ -45,11 +45,9 @@
                                   input name="variant_id#{index}_#{i}" type="hidden" value="#{variant.node.id}" checked='checked' id="input-#{index}"
                                 - else
                                   input name="variant_id#{index}_#{i}" type="hidden" value="#{variant.node.id}" id="input-#{index}"
-                                = "#{variant.node.title} (#{number_to_currency variant.node.price})"
                               .btn-wrapper
                                 button type="button" class="submit_swap_form" data-index="#{index}" data-productindex="#{i}" data-contract="-#{subscription.id[/\d+/]}"
-                                  span #{@translation.swap_subscription_popup_swap_subscription_button.present? ? @translation.swap_subscription_popup_swap_subscription_button : 'SWAP SUBSCRIPTION'} &nbsp;
-                                  span
+                                  | #{@translation.swap_subscription_popup_swap_subscription_button.present? ? @translation.swap_subscription_popup_swap_subscription_button : 'SWAP SUBSCRIPTION'}
             - else
               p.Polaris-Heading No other subscription products available
 
