@@ -1,6 +1,6 @@
 class ShopifyContractUpdateWorker
   include Sidekiq::Worker
-
+  sidekiq_options :retry => 3, :dead => false
   def perform(shop_id, id)
     shop = Shop.find(shop_id)
     shop.connect
