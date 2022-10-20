@@ -8,10 +8,11 @@ import {
 } from "@shopify/polaris";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { gql, useLazyQuery } from '@apollo/client';
-import { isEmpty } from "lodash";
+import _, { isEmpty } from "lodash";
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import LoadingScreen from "../LoadingScreen";
+import dayjs from "dayjs";
 
 TimeAgo.addDefaultLocale(en);
 const Notification = () => {
@@ -20,24 +21,25 @@ const Notification = () => {
 
 
   const notificationQuery = gql`
-query($page: String!) {
-  fetchSubscriptionLogs(page: $page){
-      subscriptionLogs
-      {
-          id
-          actionType
-          createdAt
-          description
-          note
-          amount
-          event
+    query($page: String!) {
+      fetchSubscriptionLogs(page: $page){
+          subscriptionLogs
+          {
+              id
+              actionType
+              createdAt
+              description
+              note
+              amount
+              event
+              customerName
+          }
+          totalCount
+          totalPages
+          pageNumber
       }
-      totalCount
-      totalPages
-      pageNumber
-  }
-}
-`;
+    }
+  `;
 
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
@@ -130,7 +132,9 @@ query($page: String!) {
     "swap": "swap",
     "restart": "restart",
     "upgrade": "upgrade",
-    "downgrade": "downgrade"
+    "downgrade": "downgrade",
+    "meal_selection": "meal selection",
+    "pause": "pause"
   }
 
   const getColor = (action) => {
@@ -205,6 +209,7 @@ query($page: String!) {
                                           <div className="conent-inner-wrapper">
                                             <div className={`content-color-${getColor(notification?.actionType)}`}></div>
                                             <div className={"main-content"}>
+                                              <div className="main-0">Customer :- {_.capitalize(notification?.customerName)}</div>
                                               <div className="main-1">
                                                 <p><strong>{notification?.description?.split(",")[0] || ' '}</strong> <small>{notification?.description?.split(",")[1] || ' '}</small> <strong>{notification?.description?.split(",")[2] || ' '}</strong></p>
                                               </div>
@@ -231,7 +236,7 @@ query($page: String!) {
                                             </div>
                                           </div>
                                           <div className={`price-content price-${getColor(notification?.actionType)}`}>{notification?.amount ? `${notification?.actionType == 'cancel' ? "-" : notification?.actionType == 'new' ? '+' : " "}${notification?.amount}` : " "}</div>
-                                          <div className={"time-content"}>{timeAgo.format(Date.parse(new Date(`${notification?.createdAt} ${'UTC'}`).toString()))}</div>
+                                          <div className={"time-content"}>Date:- {dayjs(new Date(`${notification?.createdAt}`))?.format("YYYY-MM-DD")}</div>
                                         </div>
                                       </Card>
                                     </div>
