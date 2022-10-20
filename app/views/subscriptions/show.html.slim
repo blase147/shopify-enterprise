@@ -15,6 +15,48 @@
 - subscription_logs = @customer.subscription_logs.order(created_at: :desc).limit(10)
 - @translation = current_shop.translation
 
+
+
+//Billing Attempt Confirmation Modal
+- if @subscription.status == "ACTIVE"
+  div#confirm_billing_attempt_modal.hide
+    div.PolarisPortalsContainer
+      div.modal-Polarisportal1
+        div
+          div.Polaris-Modal-Dialog__Container
+            div.Polaris-Modal-Dialog
+              div.Polaris-Modal-Dialog__Modal
+                div.Polaris-Modal-Header
+                  div#Polarismodal-header1.Polaris-Modal-Header__Title
+                    h2.Polaris-DisplayText.Polaris-DisplayText--sizeSmall
+                      | Create Billing Attempt
+                  button.Polaris-Modal-CloseButton.close_billing_confirm aria-label="Close"
+                    span.Polaris-Icon.Polaris-Icon--colorBase.Polaris-Icon--applyColor
+                      span.Polaris-VisuallyHidden
+                      svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true"
+                        path d="m11.414 10 6.293-6.293a1 1 0 1 0-1.414-1.414l-6.293 6.293-6.293-6.293a1 1 0 0 0-1.414 1.414l6.293 6.293-6.293 6.293a1 1 0 1 0 1.414 1.414l6.293-6.293 6.293 6.293a.998.998 0 0 0 1.707-.707.999.999 0 0 0-.293-.707l-6.293-6.293z"
+                div.Polaris-Modal__BodyWrapper
+                  div.Polaris-Modal__Body.Polaris-Scrollable.Polaris-Scrollable--vertical data-polaris-scrollable="true"
+                    section.Polaris-Modal-Section
+                      div.Polaris-TextContainer
+                        p Are you sure?
+                div class="Polaris-Modal-Footer"
+                  div class="Polaris-Modal-Footer__FooterContent"
+                    div class="Polaris-Stack Polaris-Stack--alignmentCenter"
+                      div class="Polaris-Stack__Item Polaris-Stack__Item--fill"
+                      div class="Polaris-Stack__Item"
+                        div class="Polaris-ButtonGroup billing_attempt_buttons"
+                          div class="Polaris-ButtonGroup__Item"
+                            button id="create_billing_attempt" class="Polaris-Button Polaris-Button--primary" type="button" style="background: green"
+                              span class="Polaris-Button__Content"
+                                span class="Polaris-Button__Text" Yes
+                          div class="Polaris-ButtonGroup__Item"
+                            button class="Polaris-Button Polaris-Button--primary" type="button" style="background: red"
+                              span class="Polaris-Button__Content"
+                                span class="Polaris-Button__Text close_billing_confirm"  No
+        div class="Polaris-Backdrop"
+
+//Main Page
 .Polaris-Page
   .Polaris-Page-Header.Polaris-Page-Header--isSingleRow.Polaris-Page-Header--hasNavigation.Polaris-Page-Header--mobileView.Polaris-Page-Header--mediumTitle
     .Polaris-Page-Header__Navigation
@@ -66,7 +108,7 @@
                   div.slider-btns
                     - if @subscription.status == "ACTIVE"
                         .Polaris-Stack__Item
-                          button.admin_show_sub_button id="#{@subscription.status == 'ACTIVE' ? "create_billing_attempt" : ""}" type="button"
+                          button.admin_show_sub_button id="#{@subscription.status == 'ACTIVE' ? "open_billing_confirm" : ""}" type="button"
                             | Create Billing Attempt
                     - else 
                       - if setting.admin_allowed?('reactive_subscription')
@@ -573,9 +615,10 @@ javascript:
       data: "id=#{@customer.id}",
       url: "/subscriptions/create_billing_attempt",
       success: function(){
-        $("#create_billing_attempt").html("Billing Attempt Successfull")
+        $("#confirm_billing_attempt_modal .Polaris-TextContainer").html("<p>Billing Attempt Successfull. Please wait....</p>");
+        $(".billing_attempt_buttons").html("")
         setTimeout(function(){
-          $("#create_billing_attempt").html("Create Billing Attempt")
+          window.location.reload();
         },3000)
       }
     })
@@ -593,4 +636,12 @@ javascript:
         window.location.reload();
       }
     })
+  })
+
+  $(".close_billing_confirm").on("click",function(){
+    $("#confirm_billing_attempt_modal").addClass("hide");
+  })
+
+  $("#open_billing_confirm").on("click",function(){
+    $("#confirm_billing_attempt_modal").removeClass("hide");
   })
