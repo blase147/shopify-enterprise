@@ -50,8 +50,9 @@
                   - if @setting.customer_allowed?('frequency')
                     button.delivery-schedule.btn-yellow.action-btn.modal_btn.hide data-toggle="modal" data-target="#delayOrderModal-#{subscription.node.id[/\d+/]}" #{@translation.home_tab_delay_next_order_btn.present? ? @translation.home_tab_delay_next_order_btn : 'DELAY NEXT ORDER'}
           - @customer = CustomerSubscriptionContract.find(local_id)
-          h4 Change Delivery Day:
-          = select_tag "delivery_day", options_for_select(options_for_delivery_day, :selected=>@customer&.delivery_day), {prompt: "Select Delivery Day", :class =>"select_combobox",:onchange=>"reset_form(this.id,'page_type_msg');", data: {day: @customer&.delivery_day} }
+          div.change_delivery_day
+            h4 Change Delivery Day:
+            = select_tag "delivery_day", options_for_select(options_for_delivery_day, :selected=>@customer&.delivery_day), {prompt: "Select Delivery Day", :class =>"select_combobox",:onchange=>"reset_form(this.id,'page_type_msg');", data: {day: @customer&.delivery_day} }
           a.btn_inside href="#" rel="modal:open"
             button class="btn-yellow bold hide" id="update-delivery-btn" tabindex="0" data-id="#{@customer&.id}" style="padding: 11px!important;" Confirm Day Change
           = render 'app_proxy/dashboard/delay_order_modal', subscription: subscription.node, next_billing_date: next_billing_date, action_by: "customer"
