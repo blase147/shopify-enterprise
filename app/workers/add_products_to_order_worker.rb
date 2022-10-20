@@ -25,6 +25,7 @@ class AddProductsToOrderWorker
         note_attributes = order&.note_attributes
 
         order.note_attributes << { name: "Expected Delivery Date", value: expected_order_delivery.strftime('%d/%m/%Y') }
+        order.tags << "#{ expected_order_delivery.strftime('%d/%m/%Y') }"
         order.save
       end
 
