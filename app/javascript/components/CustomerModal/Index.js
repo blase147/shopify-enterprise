@@ -634,7 +634,7 @@ const CustomerModal = ({ shopifyDomain }) => {
   }
 
   return (
-    <AppLayout typePage="customers" tabIndex="2">
+    <AppLayout typePage="customers" tabIndex="6">
       <Frame>
         {saveSuccess && (
           <Toast

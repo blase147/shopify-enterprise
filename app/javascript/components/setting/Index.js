@@ -596,7 +596,7 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
   }, [selectedTitleTab]);
 
   return (
-    <AppLayout typePage="settings" tabIndex="7">
+    <AppLayout typePage="settings" tabIndex="8">
       <Frame>
         {passwordConfirmed ? (
           // <Page title="Settings">
