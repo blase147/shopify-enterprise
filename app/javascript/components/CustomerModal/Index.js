@@ -243,19 +243,16 @@ const CustomerModal = ({ shopifyDomain }) => {
   const [searchQuery, setSearchQuery] = useState();
   // -------------------
   const GET_CUSTOMERS = gql`
-    query($sortColumn: String, $sortDirection: String, $page: String, $status: String, $searchquery: String) {
-      fetchCustomerModal(sortColumn: $sortColumn, sortDirection: $sortDirection, page: $page,status: $status, searchquery: $searchquery) {
+    query($page: String) {
+      fetchCustomerModel(page: $page) {
         customerSubscriptions{
-          shopifyCustomerId
+          shopifyId
           name
           email
-          contracts{
-            status
-            subscription
-          }
+          contracts
         }
-        totalCount
         totalPages
+        totalCount
         pageNumber
       }
     }
@@ -264,30 +261,17 @@ const CustomerModal = ({ shopifyDomain }) => {
     fetchPolicy: 'no-cache',
     variables: {
       page: page.toString(),
-      searchquery: searchQuery,
-      status: status,
     },
 
   });
 
   useEffect(() => {
-    if (searchQuery) {
-      refetch({
-        variables: {
-          page: page.toString(),
-          searchquery: searchQuery,
-        }
-      });
-    } else {
-      refetch({
-        variables: {
-          page: page.toString(),
-          status: status
-        }
-      });
-    }
-    setTotalPages(data?.fetchCustomerModal?.totalPages)
-  }, [page, status, searchQuery]);
+    refetch({
+      variables: {
+        page: page.toString()
+      }
+    });
+  }, [page]);
 
   const handleFiltersQueryChange = (value) => {
     console.log("fsdafdsafdfwe", value, value.length);
@@ -300,7 +284,7 @@ const CustomerModal = ({ shopifyDomain }) => {
   }
 
   useEffect(() => {
-    setTotalPages(data?.fetchCustomerModal?.totalPages)
+    setTotalPages(data?.fetchCustomerModel?.totalPages)
     if (+page < +totalPages) {
       setHasMore(true);
     }
@@ -357,24 +341,29 @@ const CustomerModal = ({ shopifyDomain }) => {
           row.name,
           row.email,
           <ul>
-            {row?.contracts?.map((contract) => {
-              return (
-                <li className='contracts_list'>
-                  {contract?.subscription} :
-                  <span
-                    className={
-                      contract.status === 'PAUSED'
-                        ? 'cancelled'
-                        : row.status === 'ACTIVE'
-                          ? 'active'
-                          : 'future'
-                    }
-                  >
-                    <Badge>{capitalize(contract?.status)}</Badge>
-                  </span>
-                </li>
+            {
+              row?.contracts && (
+                JSON.parse(row?.contracts)?.map((contract) => {
+                  contract = JSON.parse(contract)
+                  return (
+                    <li className='contracts_list'>
+                      {contract?.subscription} :
+                      <span
+                        className={
+                          contract?.status === 'PAUSED'
+                            ? 'cancelled'
+                            : row.status === 'ACTIVE'
+                              ? 'active'
+                              : 'future'
+                        }
+                      >
+                        <Badge>{capitalize(contract?.status)}</Badge>
+                      </span>
+                    </li>
+                  )
+                })
               )
-            })}
+            }
           </ul>
         ] : []
     });
@@ -407,9 +396,9 @@ const CustomerModal = ({ shopifyDomain }) => {
   // }, [selectedCustomers]);
 
   useEffect(() => {
-    if (data && data.fetchCustomerModal) {
-      let rowsData = formatRows(data.fetchCustomerModal?.customerSubscriptions);
-      setCustomers(data.fetchCustomerModal?.customerSubscriptions);
+    if (data && data.fetchCustomerModel) {
+      let rowsData = formatRows(data.fetchCustomerModel?.customerSubscriptions);
+      setCustomers(data.fetchCustomerModel?.customerSubscriptions);
       // console.log('data: ', data);
     }
   }, [data]);

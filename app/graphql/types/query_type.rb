@@ -5,7 +5,7 @@
     field :fetch_setting, resolver: Queries::FetchSetting
     field :fetch_themes, resolver: Queries::FetchThemes
     field :fetch_customers, resolver: Queries::FetchCustomers
-    field :fetch_customer_modal, resolver: Queries::FetchCustomerModal
+    field :fetch_customer_model, resolver: Queries::FetchCustomerModel
     field :fetch_customer, resolver: Queries::FetchCustomer
 
     field :fetch_campaigns, resolver: Queries::FetchUpsellCampaignGroups
