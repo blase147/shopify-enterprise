@@ -623,7 +623,7 @@ const CustomerModal = ({ shopifyDomain }) => {
   }
 
   return (
-    <AppLayout typePage="customers" tabIndex="6">
+    <AppLayout typePage="customers" tabIndex="3">
       <Frame>
         {saveSuccess && (
           <Toast
@@ -650,7 +650,7 @@ const CustomerModal = ({ shopifyDomain }) => {
           </>
         )}
         <Page
-          title="Customer Modal"
+          title="Subscription Customers"
           primaryAction={
             <ButtonGroup>
               <Button onClick={() => { }}>

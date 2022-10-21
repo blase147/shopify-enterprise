@@ -32,11 +32,11 @@ import {
 import _, { isEmpty } from 'lodash';
 import * as yup from 'yup';
 
-import { gql, useMutation, useQuery,useLazyQuery } from '@apollo/client';
+import { gql, useMutation, useQuery, useLazyQuery } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 
-const Installation = ({shopifyDomain, passwordProtected}) => {
-  const confirmPasswordQuery=gql`
+const Installation = ({ shopifyDomain, passwordProtected }) => {
+  const confirmPasswordQuery = gql`
   query($password:String!)
     {
       confirmPassword(password:$password) {
@@ -119,32 +119,31 @@ const Installation = ({shopifyDomain, passwordProtected}) => {
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
   const [passwordConfirmed, setPasswordConfirmed] = useState(!passwordProtected)
   const [password, setPassword] = useState("")
-  const [passwordError,setPasswordError]=useState("")
-  const [confirmPassword,{data:confirmPasswordRes,loading:passwordLoading}]=useLazyQuery(confirmPasswordQuery,{fetchPolicy:"network-only"})
+  const [passwordError, setPasswordError] = useState("")
+  const [confirmPassword, { data: confirmPasswordRes, loading: passwordLoading }] = useLazyQuery(confirmPasswordQuery, { fetchPolicy: "network-only" })
 
-  const verifyPassword =()=>{
-    if(!isEmpty(password)){
+  const verifyPassword = () => {
+    if (!isEmpty(password)) {
       confirmPassword({
-        variables:{
-          password:password
+        variables: {
+          password: password
         }
       })
     }
   }
 
-  useEffect(()=>{
-      if(confirmPasswordRes?.confirmPassword?.success)
-      {
-        setPasswordConfirmed(true);
-      }else{
-        setPasswordError(confirmPasswordRes?.errors[0]?.message)
-      }
-  },[confirmPasswordRes])
+  useEffect(() => {
+    if (confirmPasswordRes?.confirmPassword?.success) {
+      setPasswordConfirmed(true);
+    } else {
+      setPasswordError(confirmPasswordRes?.errors[0]?.message)
+    }
+  }, [confirmPasswordRes])
 
   return (
-    <AppLayout typePage="Installation" tabIndex='4'>
+    <AppLayout typePage="Installation" tabIndex='5'>
       <Frame>
-        { passwordConfirmed
+        {passwordConfirmed
           ? (
             <Page title="Installation instructions">
               {saveSuccess && (
