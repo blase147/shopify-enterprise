@@ -28,6 +28,11 @@ const Nav = (props) => {
       path: '/customers',
     },
     {
+      content: 'Subscription Customers',
+      id: 'customerModal',
+      path: '/customer-model'
+    },
+    {
       content: 'Analytics',
       id: 'analytics',
       path: '/analytics',
@@ -41,11 +46,6 @@ const Nav = (props) => {
       content: 'Tiazen',
       id: 'tiazen',
       path: '/tiazen',
-    },
-    {
-      content: 'Customer Modal',
-      id: 'customerModal',
-      path: '/customer-model'
     },
     // {
     //   content: 'Upsell Campaigns',

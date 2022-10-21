@@ -4,7 +4,7 @@ import RevenueTrends from './RevenueTrends';
 import CustomerInsights from './CustomerInsights';
 import Retention from './Retention';
 import Product from './Product';
-import {FilterContextProvider} from './../common/Contexts/AnalyticsFilterContext';
+import { FilterContextProvider } from './../common/Contexts/AnalyticsFilterContext';
 import {
   Card,
   Select,
@@ -52,38 +52,38 @@ const Analytics = () => {
     }
   ];
   return (
-    <AppLayout typePage="Analytics" tabIndex="3">
+    <AppLayout typePage="Analytics" tabIndex="4">
       <Page title="Analytics">
         <FilterContextProvider>
-        <Tabs
-          tabs={tabAnalytics}
-          selected={selectedTitleTab}
-          onSelect={handleTabChange}
-        >
-          {selectedTitleTab === 0 ? (
-            <RevenueTrends />
-          ) : selectedTitleTab === 1 ? (
-            <div className="customer-insight">
-              <CustomerInsights />
-            </div>
-          ) 
-          :
-          (process.env.APP_TYPE=="public" && selectedTitleTab === 2) ? (
-            <div className="retention">
-              <Retention />
-            </div>
-          )
-          : selectedTitleTab === (process.env.APP_TYPE=="public" ?3:2) ?(
-            <div className="product">
-              <Product />
-            </div>
-          ):selectedTitleTab === (process.env.APP_TYPE=="public" ?4:3) ?(
-            <>
-            <SmartSms />
-            </>
-          ):
-          ""}
-        </Tabs>
+          <Tabs
+            tabs={tabAnalytics}
+            selected={selectedTitleTab}
+            onSelect={handleTabChange}
+          >
+            {selectedTitleTab === 0 ? (
+              <RevenueTrends />
+            ) : selectedTitleTab === 1 ? (
+              <div className="customer-insight">
+                <CustomerInsights />
+              </div>
+            )
+              :
+              (process.env.APP_TYPE == "public" && selectedTitleTab === 2) ? (
+                <div className="retention">
+                  <Retention />
+                </div>
+              )
+                : selectedTitleTab === (process.env.APP_TYPE == "public" ? 3 : 2) ? (
+                  <div className="product">
+                    <Product />
+                  </div>
+                ) : selectedTitleTab === (process.env.APP_TYPE == "public" ? 4 : 3) ? (
+                  <>
+                    <SmartSms />
+                  </>
+                ) :
+                  ""}
+          </Tabs>
         </FilterContextProvider>
       </Page>
     </AppLayout>

@@ -67,7 +67,7 @@ const Index = () => {
   ];
 
   return (
-    <AppLayout typePage="tiazen" tabIndex="5">
+    <AppLayout typePage="tiazen" tabIndex="6">
       <Page
         title={
           selectedSetting
