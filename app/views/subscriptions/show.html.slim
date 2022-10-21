@@ -141,7 +141,7 @@
                 = render partial:'app_proxy/dashboard/cancel_subscription_modal', locals: { subscription: @subscription, line_item: line.node, lines_count: @subscription.lines.edges.size, action_by: 'admin'}
 
       .Polaris-Layout__Section.Polaris-Layout__Section--secondary
-        .Polaris-Card
+        .Polaris-Card.billing_card
           .Polaris-Card__Section
             div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;"
               h1.Polaris-Heading Billing Information

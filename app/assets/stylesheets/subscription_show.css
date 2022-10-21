@@ -1,3 +1,15 @@
+@media(max-width:1900px) {
+    div#history-tabs {
+        height: 627px;
+    }
+}
+
+@media(max-width:1366px) {
+    div#history-tabs {
+        height: 670px;
+    }
+}
+
 @media only screen and (max-width: 1200px) and (max-width: 1300px) {
     .Polaris-Layout__Section.subscription_show_table {
         flex: 2 2 43rem;
@@ -12,4 +24,8 @@
         min-width: 11%;
         max-width: 50%;
     }
+}
+
+.billing_card {
+    height: 216px;
 }
