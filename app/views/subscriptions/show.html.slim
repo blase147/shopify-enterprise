@@ -1,3 +1,4 @@
+= stylesheet_link_tag 'subscription_show', media: 'all', 'data-turbolinks-track': 'reload'
 - customer = @subscription.customer
 - order = @subscription.origin_order
 - billing_policy = @subscription.billing_policy
@@ -245,7 +246,7 @@
 
   .Polaris-Page__Content
     .Polaris-Layout
-      .Polaris-Layout__Section
+      .Polaris-Layout__Section.subscription_show_table
         .Polaris-Card
           .Polaris-Card__Section#history-tabs
             ul.payment-tabs
