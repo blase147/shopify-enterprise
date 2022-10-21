@@ -1,21 +1,3 @@
-@font-face {
-  font-family: 'GilroyBold';
-  src: url('GilroyExtraBold.woff2') format('woff2'),
-    url('GilroyExtraBold.woff') format('woff');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Gilroy';
-  src: url('GilroyLight.woff2') format('woff2'),
-    url('GilroyLight.woff') format('woff');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
 .pull-right {
   float: right;
 }
@@ -192,7 +174,7 @@ select {
   -webkit-tap-highlight-color: transparent;
   display: block;
   background: #000;
-  font-family: 'GilroyBold';
+  font-family: Vulf_Sans;
   font-style: normal;
   font-weight: 400;
   line-height: 85%;
@@ -321,7 +303,7 @@ button.sub_button.active {
   font-size: 14px;
   font-weight: 300;
   color: #384443;
-  font-family: '' Gilroy'';
+  font-family: 'Ainslie';
 }
 
 .customer-details .customer-info .details a {
@@ -345,7 +327,7 @@ button.sub_button.active {
   font-size: 14px !important;
   font-weight: 300 !important;
   color: #384443 !important;
-  font-family: '' Gilroy'' !important;
+  font-family: 'Ainslie' !important;
   justify-content: flex-start !important;
 }
 
@@ -357,7 +339,7 @@ button.sub_button.active {
 .btn-yellow a {
   text-transform: uppercase;
   font-size: 12px !important;
-  font-family: '' Gilroy'' !important;
+  font-family: 'Ainslie' !important;
   background: #F6BA2E !important;
   color: #000 !important;
   box-shadow: none !important;
@@ -423,7 +405,7 @@ button.sub_button.active {
 
 .customer-portal .tab-content-holder .account-holder h1 {
   margin: 0 0 20px !important;
-  font-family: '' Gilroy'';
+  font-family: 'Ainslie';
   font-weight: bold;
   color: #384443;
   font-size: 34px;
@@ -431,7 +413,7 @@ button.sub_button.active {
 
 .customer-portal .tab-content-holder .account-holder h3 {
   margin: 20px 0 0 !important;
-  font-family: '' Gilroy'';
+  font-family: 'Ainslie';
   font-weight: 700;
   color: #384443;
   font-size: 18px;
@@ -439,7 +421,7 @@ button.sub_button.active {
 
 .customer-portal .tab-content-holder .account-holder p.t-align-left.block.subdued {
   font-weight: normal;
-  font-family: '' Gilroy'';
+  font-family: 'Ainslie';
   font-size: 18px !important;
   margin-bottom: 5px;
 }
@@ -468,13 +450,13 @@ button.sub_button.active {
 
 .customer-portal .tab-content-holder .sort_by p {
   margin-bottom: 7%;
-  font-family: "'Gilroy'" !important;
+  font-family: "Ainslie" !important;
   font-weight: normal !important;
   font-size: 16px !important;
 }
 
 .customer-portal .tab-content-holder .sort_by select {
-  font-family: "'Gilroy'" !important;
+  font-family: "Ainslie" !important;
   font-weight: normal !important;
   font-size: 16px !important;
   padding: 0 0 0 10px;
@@ -495,7 +477,7 @@ button.sub_button.active {
 }
 
 .customer-portal .tabs-holder .Profile_tab button {
-  font-family: "'Gilroy'" !important;
+  font-family: "Ainslie" !important;
 }
 
 .customer-portal .tabs-holder .Profile_tab button.active {
@@ -555,7 +537,7 @@ button.sub_button.active {
   display: block;
   text-align: left;
   margin-bottom: 15px;
-  font-family: '' Gilroy'';
+  font-family: 'Ainslie';
 }
 
 .customer-portal .box-holder .boxes .details p strong {
@@ -625,7 +607,7 @@ button.sub_button.active {
   display: block !important;
   text-align: left !important;
   font-weight: 300 !important;
-  font-family: '' Gilroy'' !important;
+  font-family: 'Ainslie' !important;
   margin-bottom: 10px !important;
 }
 
@@ -710,7 +692,7 @@ button.sub_button.active {
 
 .order-box h2 {
   margin: 0 0 12px !important;
-  font-family: '' Gilroy'';
+  font-family: 'Ainslie';
   font-weight: bold;
   font-size: 34px;
 }
@@ -719,7 +701,7 @@ button.sub_button.active {
   display: block !important;
   text-align: left !important;
   font-weight: 300 !important;
-  font-family: '' Gilroy'' !important;
+  font-family: 'Ainslie' !important;
   font-weight: 100 !important;
   font-size: 20px !important;
   color: #384443 !important;
@@ -729,7 +711,7 @@ button.sub_button.active {
 .order-box .placed {
   display: block !important;
   text-align: left !important;
-  font-family: '' Gilroy'' !important;
+  font-family: 'Ainslie' !important;
   font-weight: 600 !important;
   font-size: 22px !important;
   color: #384443 !important;
@@ -743,7 +725,7 @@ button.sub_button.active {
 }
 
 .order-box .skip_week a {
-  font-family: '' Gilroy'' !important;
+  font-family: 'Ainslie' !important;
   font-weight: 600 !important;
   font-size: 22px !important;
   text-decoration: none;
@@ -810,7 +792,7 @@ button.sub_button.active {
 .order-box .product_section .order_inn h5 {
   font-size: 16px;
   line-height: 1.4;
-  font-family: '' Gilroy'';
+  font-family: 'Ainslie';
   font-weight: bold;
 }
 
@@ -821,7 +803,7 @@ button.sub_button.active {
 .order-box .order_status p {
   display: block !important;
   text-align: left !important;
-  font-family: '' Gilroy'' !important;
+  font-family: 'Ainslie' !important;
   font-weight: 600 !important;
   font-size: 22px !important;
   color: #384443 !important;
@@ -877,7 +859,7 @@ button.sub_button.active {
   display: block;
   text-align: left;
   width: auto;
-  font-family: '' Gilroy'';
+  font-family: 'Ainslie';
   font-weight: bold;
 }
 
@@ -913,7 +895,7 @@ button.sub_button.active {
 .support-section h1,
 .subscription-box h2 {
   text-align: center;
-  font-family: '' Gilroy'';
+  font-family: 'Ainslie';
   margin: 0 0 10px !important;
 }
 
@@ -1380,7 +1362,7 @@ ul.box-items-grid {
 }
 
 .box-item-information span {
-  font-family: '' Gilroy'';
+  font-family: 'Ainslie';
   font-size: 13px;
   line-height: normal;
   color: #384443;
@@ -1395,7 +1377,7 @@ ul.box-items-grid {
   font-size: 16px;
   font-weight: 900;
   color: #384443;
-  font-family: '' Gilroy'';
+  font-family: 'Ainslie';
   margin: 5px 0px;
 }
 
@@ -1418,7 +1400,7 @@ ul.box-items-grid {
 }
 
 div#items-list .green-btn {
-  font-family: '' Gilroy'';
+  font-family: 'Ainslie';
   background: #88B363;
   border-radius: 5px;
   font-weight: 900;
@@ -1958,7 +1940,7 @@ body .subscription-contract-products>.quantity-wrapper>form>.quantity-field>div 
   font-weight: 900;
   margin-right: 10px;
   color: black;
-  font-family: "'Gilroy'" !important;
+  font-family: "Ainslie" !important;
   font-style: normal;
   font-weight: 900;
   font-size: 16px;
@@ -2834,7 +2816,7 @@ div#upate_preorder_div {
 .add_meals_main_div .left_add_to_meal ul.meals_list li.box-item-grid .box-item-information h5 {
   font-size: 18px;
   font-weight: 400;
-  font-family: 'Gilroy';
+  font-family: Ainslie;
   color: #384443;
   line-height: 24px;
   margin-bottom: 10px;
@@ -2851,7 +2833,7 @@ div#upate_preorder_div {
 
 .add_meals_main_div .left_add_to_meal ul.meals_list li.box-item-grid .add_to_week {
   text-align: right;
-  font-family: 'Gilroy';
+  font-family: Ainslie;
   display: flex;
   justify-content: end;
   align-items: center;
@@ -2926,7 +2908,7 @@ div#upate_preorder_div {
 .top_meals .header_links .header_inner {
   display: flex;
   justify-content: space-between;
-  font-family: '' Gilroy'';
+  font-family: 'Ainslie';
   max-width: 100%;
   width: 100%;
 }
@@ -3063,7 +3045,7 @@ div#upate_preorder_div {
 .top_meals .add_meals_main_div .right_add_to_meal .cart-notification-product .product_header_text .product_number_out span.product_remaing_number>span {
   font-size: 20px;
   font-weight: bold;
-  font-family: 'Gilroy';
+  font-family: Ainslie;
 }
 
 .top_meals .add_meals_main_div .right_add_to_meal .cart-notification-product .product_header_text .product_number_out cart-remove-all.clear_all_meals {
@@ -3546,7 +3528,7 @@ ul.box-items-grid {
 }
 
 .box-item-information span {
-  font-family: '' Gilroy'';
+  font-family: 'Ainslie';
   font-size: 13px;
   line-height: normal;
   color: #384443;
@@ -3561,7 +3543,7 @@ ul.box-items-grid {
   font-size: 16px;
   font-weight: 900;
   color: #384443;
-  font-family: '' Gilroy'';
+  font-family: 'Ainslie';
   margin: 5px 0px;
 }
 
@@ -3584,7 +3566,7 @@ ul.box-items-grid {
 }
 
 div#items-list .green-btn {
-  font-family: '' Gilroy'';
+  font-family: 'Ainslie';
   background: #88B363;
   border-radius: 5px;
   font-weight: 900;
@@ -4125,7 +4107,7 @@ body .subscription-contract-products>.quantity-wrapper>form>.quantity-field>div 
   font-weight: 900;
   margin-right: 10px;
   color: black;
-  font-family: "'Gilroy'" !important;
+  font-family: "Ainslie" !important;
   font-style: normal;
   font-weight: 900;
   font-size: 16px;
@@ -5275,12 +5257,12 @@ div#upate_preorder_div {
 .add_meals_main_div .left_add_to_meal {
   max-width: calc(100% - 320px);
   width: 100%;
-  font-family: 'Gilroy';
+  font-family: Ainslie;
   padding-right: 50px;
 }
 
 .top_meals .add_meals_main_div .right_add_to_meal {
-  font-family: '' Gilroy'';
+  font-family: 'Ainslie';
   width: 100%;
   z-index: 1;
   max-width: 320px;
@@ -5341,7 +5323,7 @@ div#upate_preorder_div {
   .add_meals_main_div .left_add_to_meal {
     max-width: 100%;
     width: 100%;
-    font-family: 'Gilroy';
+    font-family: Ainslie;
     padding-right: 0;
   }
 
@@ -5694,17 +5676,4 @@ div#upate_preorder_div {
   fill: black !important;
   color: black;
   opacity: 1 !important;
-}
-
-body {
-  font-family: 'Gilroy' !important;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: 'GilroyBold' !important;
 }
