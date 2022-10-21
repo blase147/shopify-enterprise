@@ -42,6 +42,11 @@ const Nav = (props) => {
       id: 'tiazen',
       path: '/tiazen',
     },
+    {
+      content: 'Customer Modal',
+      id: 'customerModal',
+      path: '/customer-model'
+    },
     // {
     //   content: 'Upsell Campaigns',
     //   id: 'upsell',

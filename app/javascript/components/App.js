@@ -34,6 +34,7 @@ import CreateUpsell from './upsell/New';
 import Tiazen from './Tiazen/Index'
 import Toolbox from './Toolbox/Index'
 import PowerView from './plans/PowerView';
+import CustomerModal from './CustomerModal/Index';
 
 
 
@@ -84,7 +85,8 @@ export default function App(props) {
               path="/"
               component={() => <Dashboard domain={props.domain} />}
             />
-            <Route exact path="/subscription-plans" component={SellingPlans} />
+            <Route exact path="/customer-model" component={CustomerModal} />,
+            <Route exact path="/subscription-plans" component={SellingPlans} />,
             <Route
               exact
               path="/fixed-subscription-plans/:id"
@@ -148,12 +150,12 @@ export default function App(props) {
               component={CreateCustomer}
             />
             <Route exact path="/analytics" component={Analytics} />
-            <Route exact path="/installation" component={() => <Installation shopifyDomain={props.domain} passwordProtected={passwordProtected}/>} />
+            <Route exact path="/installation" component={() => <Installation shopifyDomain={props.domain} passwordProtected={passwordProtected} />} />
             <Route exact path="/upsell" component={Upsell} />
             <Route exact path="/upsell/:id/edit" component={CreateUpsell} />
             <Route exact path="/upsell/new" component={CreateUpsell} />
 
-            <Route exact path='/build-a-box' component={BuildBox}/>
+            <Route exact path='/build-a-box' component={BuildBox} />
             <Route exact path="/build-a-box/:id/edit" component={CreateBuildBox} />
             <Route exact path="/build-a-box/new" component={CreateBuildBox} />
 
