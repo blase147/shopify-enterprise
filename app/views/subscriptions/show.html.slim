@@ -250,9 +250,9 @@
         .Polaris-Card
           .Polaris-Card__Section#history-tabs
             ul.payment-tabs
-              li.active data-target="#history" Shopify Order Log
+              li.active data-target="#history" Logs
               li data-target="#payment-history" Payment History
-              li data-target="#pre-orders" Pre Orders
+              li data-target="#pre-orders" Weekly Menu
               li data-target="#billing-attempts" Billing Attempts
               - if @box_products.present?
                 li data-target="#box-products" Box Products
@@ -280,7 +280,7 @@
                           td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop = DateTime.parse(event.node.created_at).strftime("%a, %B %e %T")
 
             .Polaris-DataTable.hidden.tab#payment-history style="margin: 1rem"
-              p style="margin: 1rem 0;" All timestamps are in Eastern Time (US)
+              p style="margin: 1rem 0;" All timestamps are in UTC Time 
               .Polaris-DataTable__ScrollContainer
                 table.Polaris-DataTable__Table
                   thead
