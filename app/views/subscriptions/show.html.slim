@@ -250,7 +250,7 @@
         .Polaris-Card
           .Polaris-Card__Section#history-tabs
             ul.payment-tabs
-              li.active data-target="#history" History
+              li.active data-target="#history" Shopify Order Log
               li data-target="#payment-history" Payment History
               li data-target="#pre-orders" Pre Orders
               li data-target="#billing-attempts" Billing Attempts
@@ -291,7 +291,7 @@
                   tbody
                     - @subscription.orders.edges.each do |order|
                       tr.Polaris-DataTable__TableRow
-                        th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"= DateTime.parse(order.node.created_at).strftime("%b %d, %H:%M%P")
+                        th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"= DateTime.parse(order.node.created_at).strftime("%a, %B %e %T")
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= order.node.name
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--numeric $#{order.node.total_received_set.presentment_money.amount}
 
