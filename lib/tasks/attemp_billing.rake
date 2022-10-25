@@ -137,11 +137,11 @@ namespace :subscriptions do
           message_service = SmsService::MessageGenerateService.new(shop, customer, subscription)
           message = message_service.content('Charge - Failure')
           TwilioServices::SendSms.call(from: shop.phone, to: customer.phone, message: message)
-          customer.update_columns(failed_at: Time.current)
-          SubscriptionLog.create(billing_status: :failure, executions: (customer.shop.setting.payment_retries.to_i>0 ? true : false), customer_id: customer.id, shop_id: customer.shop_id, subscription_id: subscription_id)
-          email_notification = customer.shop.setting.email_notifications.find_by_name "Card declined"
-          EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
         end
+         customer.update_columns(failed_at: Time.current)
+         SubscriptionLog.create(billing_status: :failure, executions: (customer.shop.setting.payment_retries.to_i>0 ? true : false), customer_id: customer.id, shop_id: customer.shop_id, subscription_id: subscription_id)
+         email_notification = customer.shop.setting.email_notifications.find_by_name "Card declined"
+         EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
       else
         charge_store(result[:data].id, subscription_id, customer.shop)
         upcoming_date = get_upcoming_billing_date(subscription, customer.shop)
