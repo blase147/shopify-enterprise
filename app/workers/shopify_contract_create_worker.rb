@@ -40,6 +40,9 @@ class ShopifyContractCreateWorker
             delivery_day = note&.value
           end
         end
+        
+        order.tags << "#{ delivery_date, delivery_day) }"
+        order.save
 
         note_hash = JSON.parse(order&.note) rescue {}
        unless delivery_date.present?
