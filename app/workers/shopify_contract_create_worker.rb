@@ -41,7 +41,8 @@ class ShopifyContractCreateWorker
           end
         end
         
-        order.tags << "#{ delivery_date, delivery_day }"
+        order.tags << "#{ delivery_date }"
+        order.tags << "#{ delivery_day }"
         order.save
 
         note_hash = JSON.parse(order&.note) rescue {}
