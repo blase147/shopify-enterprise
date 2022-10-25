@@ -54,7 +54,7 @@ namespace :subscriptions do
       result = SubscriptionContractsService.new.all_subscriptions
       subscriptions = result[:subscriptions] || []
       subscriptions.each do |subscription|
-        check_for_renewal(subscription.node)
+        renewal_reminder(subscription.node)
       end
     end
   end
@@ -197,7 +197,7 @@ namespace :subscriptions do
     p e.message
   end
 
-  def check_for_renewal(subscription)
+  def renewal_reminder(subscription)
     return unless subscription.status == 'ACTIVE'
 
     customer = CustomerSubscriptionContract.find_by(shopify_id: subscription.id[/\d+/])
@@ -210,21 +210,15 @@ namespace :subscriptions do
         message = message_service.content('Charge - Reminder')
         TwilioServices::SendSms.call(from: shop.phone, to: customer.phone, message: message)
       end
+     elsif billing_date.utc.beginning_of_day.to_date == (Time.current-3.days).utc.beginning_of_day.to_date
+      email_notification = customer.shop.setting.email_notifications.find_by_name "Upcoming Charge"
+      EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
     end
   rescue StabdardError => e
     p e.message
   end
 
-  def renewal_reminder(subscription)
-    return unless subscription.status == 'ACTIVE'
 
-    customer = CustomerSubscriptionContract.find_by(shopify_id: subscription.id[/\d+/])
-    billing_date = get_next_billing_date(subscription, customer.shop)
-    if billing_date.utc.beginning_of_day.to_date == (Time.current-3.days).utc.beginning_of_day.to_date
-      email_notification = customer.shop.setting.email_notifications.find_by_name "Upcoming Charge"
-      EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
-    end
-  end
 
   def charge_store(billing_id, subscription_id, shop)
     if ENV['APP_TYPE'] == 'public'
