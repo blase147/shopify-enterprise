@@ -145,7 +145,6 @@ namespace :subscriptions do
       else
         charge_store(result[:data].id, subscription_id, customer.shop)
         upcoming_date = get_upcoming_billing_date(subscription, customer.shop)
-        ScheduleSkipService.new(subscription_id).run(upcoming_date.present? ? { billing_date: upcoming_date } : nil)
         SubscriptionLog.create(billing_status: :success, customer_id: customer.id, shop_id: customer.shop_id, subscription_id: subscription_id)
         email_notification = customer.shop.setting.email_notifications.find_by_name "Recurring Charge Confirmation"
         EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
