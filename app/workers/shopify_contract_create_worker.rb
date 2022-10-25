@@ -65,7 +65,6 @@ class ShopifyContractCreateWorker
         
         contract.save
       end
-      SetRedisWorker.perform_async(contract.id)
       #Send Activation 2 hour email
       SendActivationTwoHourEmailWorker.perform_in(2.hours,contract.id, delivery_date)
       
