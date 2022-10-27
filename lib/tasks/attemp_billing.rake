@@ -139,13 +139,15 @@ namespace :subscriptions do
           TwilioServices::SendSms.call(from: shop.phone, to: customer.phone, message: message)
         end
          customer.update_columns(failed_at: Time.current)
-         SubscriptionLog.create(billing_status: :failure, executions: (customer.shop.setting.payment_retries.to_i>0 ? true : false), customer_id: customer.id, shop_id: customer.shop_id, subscription_id: subscription_id)
+         description = "Billing attempt failed. Error :- #{result[:error]}"
+         SubscriptionLog.create(description: description, billing_status: :failure, executions: (customer.shop.setting.payment_retries.to_i>0 ? true : false), customer_id: customer.id, shop_id: customer.shop_id, subscription_id: subscription_id)
          email_notification = customer.shop.setting.email_notifications.find_by_name "Card declined"
          EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
       else
         charge_store(result[:data].id, subscription_id, customer.shop)
         upcoming_date = get_upcoming_billing_date(subscription, customer.shop)
-        SubscriptionLog.create(billing_status: :success, customer_id: customer.id, shop_id: customer.shop_id, subscription_id: subscription_id)
+        description = "Billing attempt successfull for #{customer&.subscription} subscription. Subscription Id :- #{subscription_id}"
+        SubscriptionLog.create(description: description, billing_status: :success, customer_id: customer.id, shop_id: customer.shop_id, subscription_id: subscription_id)
         email_notification = customer.shop.setting.email_notifications.find_by_name "Recurring Charge Confirmation"
         EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
       end
