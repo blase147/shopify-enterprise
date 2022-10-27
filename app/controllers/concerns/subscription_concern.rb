@@ -182,7 +182,7 @@ module SubscriptionConcern
     
     skip_dates = contract&.skip_dates
     begin_date = params[:skip_date]&.to_date&.beginning_of_week
-    end_date = params[:skip_date]&.to_date&.beginning_of_week
+    end_date = params[:skip_date]&.to_date&.end_of_week
     skip_week_num = params[:skip_date]&.to_date&.cweek.to_s
     pre_order = WorldfarePreOrder.where(shopify_contract_id: contract&.shopify_id, week: skip_week_num&.to_i, customer_id: contract&.shopify_customer_id)
     if params["method"]=="skip"

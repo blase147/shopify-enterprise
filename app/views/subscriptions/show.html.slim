@@ -280,7 +280,7 @@
                           td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop = DateTime.parse(event.node.created_at).strftime("%a, %B %e %T")
 
             .Polaris-DataTable.hidden.tab#payment-history style="margin: 1rem"
-              p style="margin: 1rem 0;" All timestamps are in UTC Time 
+              p style="margin: 1rem 0;" All timestamps are in EST Time 
               .Polaris-DataTable__ScrollContainer
                 table.Polaris-DataTable__Table
                   thead
@@ -291,7 +291,7 @@
                   tbody
                     - @subscription.orders.edges.each do |order|
                       tr.Polaris-DataTable__TableRow
-                        th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"= DateTime.parse(order.node.created_at).strftime("%a, %B %e %T")
+                        th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"= DateTime.parse(order.node.created_at)&.in_time_zone("EST")&.strftime("%a, %B %e %T")
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= order.node.name
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--numeric $#{order.node.total_received_set.presentment_money.amount}
 
@@ -304,7 +304,7 @@
                       th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header aria-sort="none" data-polaris-header-cell="true" scope="col"  style="color: #FFFFFF" Week
                       th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header aria-sort="none" data-polaris-header-cell="true" scope="col"  style="color: #FFFFFF" Products
                   tbody
-                    - @pre_orders.each do |pre_order|
+                    - (@pre_orders&.sort_by {|p| p&.week} )&.reverse&.each do |pre_order|
                       tr.Polaris-DataTable__TableRow
                         th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"= pre_order.week
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop

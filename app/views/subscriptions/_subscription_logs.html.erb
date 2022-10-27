@@ -17,7 +17,7 @@
             <% subscription&.subscription_logs&.order(created_at: :desc)&.each_with_index do |subscription_log,i| %>
                 <tr class="Polaris-DataTable__TableRow">
                     <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--firstColumn" scope="row">
-                        <%= subscription_log&.created_at %>
+                        <%= subscription_log&.created_at&.in_time_zone("EST") %>
                     </th>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop">
                         <%= subscription_log&.description %>
