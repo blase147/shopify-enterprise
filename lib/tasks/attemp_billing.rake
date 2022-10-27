@@ -209,7 +209,7 @@ namespace :subscriptions do
         message = message_service.content('Charge - Reminder')
         TwilioServices::SendSms.call(from: shop.phone, to: customer.phone, message: message)
       end
-     elsif billing_date.utc.beginning_of_day.to_date == (Time.current-3.days).utc.beginning_of_day.to_date
+     elsif billing_date.utc.beginning_of_day.to_date == (Time.current+3.days).utc.beginning_of_day.to_date
       email_notification = customer.shop.setting.email_notifications.find_by_name "Upcoming Charge"
       EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
     end
