@@ -11,7 +11,6 @@ html
   = javascript_pack_tag 'app_proxy', 'data-turbolinks-track': 'reload'
 
   div.chargezen-proxy
-  
     - @skip_auth = true if params[:admin_refcode]==ENV['ADMIN_REFCODE']
     - unless @skip_auth
       | {% if customer.id ==
@@ -21,9 +20,10 @@ html
     = yield
     - unless @skip_auth
       | {% else %}
-      p style="margin-left: 4rem;"
-        | You don't have access to view this. Please make sure you
-        a href="/account/login"  login.
+      - if "#{params[:admin_refcode]}".strip ==  "#{@auth}"&.strip
+        = yield
+      - else
+          = render "partials/password_less_login_form"
       | {% endif %}
 
 

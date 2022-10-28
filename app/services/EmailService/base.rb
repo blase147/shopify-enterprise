@@ -2,6 +2,8 @@ class EmailService::Base < ApplicationService
 
   def subject(object)
    case @email_notification.name
+    when "Passwordless Login OTP"
+      "OTP for Login"
     when "Changes Reminder"
       "Changes Reminder"
     when "Order fulfiled"
@@ -51,6 +53,13 @@ class EmailService::Base < ApplicationService
         day: object[:day],
         date: object[:delivery_date],
         products: object[:products]
+      }
+    when "Passwordless Login OTP"
+      {
+        storename: storename,
+        myshopify_url: myshopify_url,
+        customer_first_name: object[:customer].first_name&.humanize,
+        otp: object[:otp]
       }
     when "Order fulfiled"
       {

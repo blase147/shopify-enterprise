@@ -122,6 +122,13 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :password_less_login, only: [:index] do
+      collection do
+        post :send_otp_passwordless_login
+        post :auth_with_otp
+      end
+    end
+
     root 'dashboard#index'
   end
 
