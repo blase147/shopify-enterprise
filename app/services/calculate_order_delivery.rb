@@ -99,6 +99,7 @@ class CalculateOrderDelivery
       current_week_expected_delivery = nil
     else
       prev_order_date = @api_data["orders"]["edges"].first["node"]["created_at"].to_date rescue nil
+      
       delivery_settings = delivery_setting
       fallback_day = delivery_settings[:settings].first["delivery"].to_sym      
       delivery_day = @contract.delivery_day.downcase&.to_sym rescue fallback_day || "tuesday".to_sym
