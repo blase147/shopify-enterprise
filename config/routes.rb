@@ -126,9 +126,9 @@ Rails.application.routes.draw do
       collection do
         post :send_otp_passwordless_login
         post :auth_with_otp
+        delete :log_out
       end
     end
-
     root 'dashboard#index'
   end
 

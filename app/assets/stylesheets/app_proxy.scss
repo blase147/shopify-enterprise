@@ -2867,12 +2867,20 @@ span.cancel-text {
 }
 
 .passwordLessLogin {
-    max-width: 355px;
+    max-width: 300px;
+    max-height: 70vh;
+    height: 70vh;
     margin: 106px auto;
 }
 
+@media screen and (max-width: 600px) {
+    .passwordLessLogin {
+        max-width: 100%;
+    }
+}
+
 .passwordLessLogin #get_otp_button,
-.passwordLessLogin .subscription-details #submit_otp {
+.passwordLessLogin #submit_otp {
     min-height: 47px;
     width: 100%;
     text-align: center;
@@ -2891,7 +2899,8 @@ span.cancel-text {
     margin-top: 20px;
 }
 
-.passwordLessLogin #email {
+.passwordLessLogin #email,
+.passwordLessLogin #otp_field {
     width: 100%;
     background-color: white;
     color: rgb(17, 17, 17);
@@ -2928,4 +2937,44 @@ span.cancel-text {
     text-align: center;
     margin: auto;
     margin-bottom: 25px;
+}
+
+
+.sub_header {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 25px;
+}
+
+.sub_header_title {
+    font-weight: bold;
+    font-size: 14px;
+    color: rgb(17, 17, 17);
+}
+
+.passwordLessLogin .Polaris-Card {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.passwordLessLogin .input {
+    margin-top: 8px;
+}
+
+.passwordLessLogin input#email:focus-visible,
+.passwordLessLogin input#otp_field:focus-visible {
+    border: none;
+    outline: 1px solid;
+}
+
+.passwordLessLogin .card_body .label_div label {
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.passwordLessLogin input#otp_field::-webkit-inner-spin-button,
+.passwordLessLogin input#otp_field::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }

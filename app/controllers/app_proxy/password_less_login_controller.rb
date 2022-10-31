@@ -35,4 +35,10 @@ class AppProxy::PasswordLessLoginController < AppProxyController
             render json:{error: "You have entered wrong OTP"}
         end
     end 
+
+    def log_out
+        $redis = Redis.new
+        $redis.del("#{params[:email]&.downcase&.strip}_auth")
+        redirect_to "/a/chargezen_production/password_less_login"
+    end
 end
