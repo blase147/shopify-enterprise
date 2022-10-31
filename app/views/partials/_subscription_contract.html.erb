@@ -464,7 +464,7 @@
                           <% if  meal_product.present? %>
                             <div class="order_inn center" >
                               <div class="holder">
-                                  <a href='/a/chargezen_production/dashboard/add_meals?local_id=<%= @customer&.id %>&week_day=<%= week_day %>' data-method=post>
+                                  <a href='/a/chargezen_production/dashboard/add_meals?local_id=<%= @customer&.id %>&week_day=<%= week_day %>&admin_refcode=<%= params[:admin_refcode]%>' data-method=post>
                                     <span class='dish_remove'>x</span>
                                   </a>
                                   <img src="<%= meal_product['image'] rescue nil %>" data-id="<%= meal_product['product_id'][/\d+/] %>" data-saved="true">
@@ -476,7 +476,7 @@
                         <% meals_to_select.times do %>
                           <li class="pre_segment_order empty-current">
                             <a href="#_" id="box-item-current">
-                              <%= link_to "/a/chargezen_production/dashboard/add_meals?local_id=#{params[:local_id]}&week_day=#{week_day}", method: :post do %>
+                              <%= link_to "/a/chargezen_production/dashboard/add_meals?local_id=#{params[:local_id]}&week_day=#{week_day}&admin_refcode=#{params[:admin_refcode]}", method: :post do %>
                                 <button><span>+</span><p>Add to box</p></button>
                             <% end %>
                             </a>
@@ -560,7 +560,7 @@
                                 <% meal_product = next_week_meals.filter{|m| "#{m["product_id"][/\d+/]}"&.strip == "#{item}"&.strip}.first %>
                                 <div class="order_inn center" >
                                   <div class="holder">
-                                    <a href='/a/chargezen_production/dashboard/add_meals?local_id=<%= @customer&.id %>&week_day=<%= week_day %>' data-method=post >
+                                    <a href='/a/chargezen_production/dashboard/add_meals?local_id=<%= @customer&.id %>&week_day=<%= week_day %>&admin_refcode=<%= params[:admin_refcode]%>' data-method=post >
                                       <span class='dish_remove'>x</span>
                                     </a>
                                     <img src="<%= meal_product['image'] rescue asset_path( 'No-image-found.jpg' ) %>" data-id="<%= meal_product['product_id'][/\d+/]  rescue "" %>" data-saved="true">
@@ -571,7 +571,7 @@
                               <% meals_to_select.times do %>
                                 <li class="pre_segment_order <%= week_day %> empty">
                                   <a href="#_" id="box-item">
-                                    <%= link_to "/a/chargezen_production/dashboard/add_meals?local_id=#{params[:local_id]}&week_day=#{week_day}", method: :post do %>
+                                    <%= link_to "/a/chargezen_production/dashboard/add_meals?local_id=#{params[:local_id]}&week_day=#{week_day}&admin_refcode=#{params[:admin_refcode]}", method: :post do %>
                                       <button class="<%= week_day %>"><span>+</span><p>Add to box</p></button>
                                     <% end %>
                                   </a>
