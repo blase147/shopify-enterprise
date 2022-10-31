@@ -247,22 +247,26 @@ module SubscriptionConcern
       EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
       render js: 'location.reload()'
     else
-      if csc.status == 'PAUSED'
-        result = SubscriptionContractDeleteService.new(id,nil,true,params[:action_by]).run 'RESUMED'
+      if params[:billing_date]&.to_date < (Date.today + 1.day)
+        render json:{error: "Please select a valid date."}
       else
-        result = SubscriptionContractDeleteService.new(id,nil,true,params[:action_by]).run 'ACTIVE'
-      end      
-      if params[:billing_date].present? && result[:error].blank?
-        SetNextBillingDate.new(csc.shopify_id, params[:billing_date]).run
-      end
+        if csc.status == 'PAUSED'
+          result = SubscriptionContractDeleteService.new(id,nil,true,params[:action_by]).run 'RESUMED'
+        else
+          result = SubscriptionContractDeleteService.new(id,nil,true,params[:action_by]).run 'ACTIVE'
+        end      
+        if params[:billing_date].present? && result[:error].blank?
+          SetNextBillingDate.new(csc.shopify_id, params[:billing_date]).run
+        end
 
-      if result[:error].present?
-        render js: "alert('#{result[:error]}');"
-      else
-        ShopifyContractUpdateWorker.perform_async(csc&.shop_id, csc&.shopify_id)
-        email_notification = csc.shop.setting.email_notifications.find_by_name "Resume Subscription"
-        EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
-        render js: 'location.reload()'
+        if result[:error].present?
+          render js: "alert('#{result[:error]}');"
+        else
+          ShopifyContractUpdateWorker.perform_async(csc&.shop_id, csc&.shopify_id)
+          email_notification = csc.shop.setting.email_notifications.find_by_name "Resume Subscription"
+          EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
+          render js: 'location.reload()'
+        end
       end
     end
   end

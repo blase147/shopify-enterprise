@@ -118,7 +118,8 @@
                             .Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain
                               button style='text-decoration: none;'
                                 span.resume-btn type="button" Restart Subscription
-                          <input type="text" id="resume-datepicker" hidden=true>
+                          label for="resume-datepicker" class="hide label_resume_date_picker" Choose date to restart card on file
+                          input type="text" id="resume-datepicker" hidden=true
                         = link_to action_subscription_contract_path(:resume, @subscription.id[/\d+/]), remote: true, method: :post, style: 'text-decoration: none;display: flex; justify-content: center' do
                           button.hidden.Polaris-Button--plain.admin_portal_apply_button type="button" id="resume-billing-btn" Apply
 
@@ -485,14 +486,19 @@ javascript:
         dateFormat: 'yy-mm-dd' 
       });
 
+      let today = new Date(); 
+      let nextDay = new Date(today.setDate(today.getDate() + 1));
+
       $( "#resume-datepicker" ).datepicker({
-        dateFormat: 'yy-mm-dd'
+        dateFormat: 'yy-mm-dd',
+        minDate: nextDay
       });
 
       $( ".resume-btn" ).on('click', function(e){
         e.preventDefault();
         $("#resume-billing-btn").removeClass("hidden");
         $("#resume-datepicker")[0].hidden = false;
+        $(".label_resume_date_picker").removeClass("hide")
         $('#resume-datepicker').datepicker( "show" );
       });
 

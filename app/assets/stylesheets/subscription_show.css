@@ -29,3 +29,9 @@
 .billing_card {
     height: 216px;
 }
+
+label.label_resume_date_picker {
+    font-size: 11px;
+    font-weight: 800;
+    display: block;
+}
