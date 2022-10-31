@@ -117,4 +117,10 @@ module AppProxyHelper
   def expected_delivery_date(contract_id,order_id)
     return WorldfarePreOrder.where(shopify_contract_id: contract_id,order_id: order_id)&.first&.expected_delivery_date&.strftime("%a, %B %e") rescue nil
   end
+
+  def get_auth_token(email)
+    $redis = Redis.new
+    @auth = $redis.get("#{email}_auth")
+    return @auth
+  end
 end
