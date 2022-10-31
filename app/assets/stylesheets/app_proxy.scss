@@ -2865,3 +2865,67 @@ span.cancel-text {
         transform: rotate(360deg);
     }
 }
+
+.passwordLessLogin {
+    max-width: 355px;
+    margin: 106px auto;
+}
+
+.passwordLessLogin #get_otp_button,
+.passwordLessLogin .subscription-details #submit_otp {
+    min-height: 47px;
+    width: 100%;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: rgb(17, 17, 17);
+    padding: 14px 20px;
+    border-radius: 8px;
+    outline: 0px;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    border: none;
+    margin-top: 20px;
+}
+
+.passwordLessLogin #email {
+    width: 100%;
+    background-color: white;
+    color: rgb(17, 17, 17);
+    min-height: 47px;
+    padding: 8px 12px;
+    font-size: 16px;
+    border-color: rgb(221, 221, 221);
+    border-radius: 8px;
+    border-width: 2px;
+    outline: none;
+    border-style: solid;
+    font-family: inherit;
+    text-rendering: inherit;
+    -webkit-font-smoothing: inherit;
+    text-size-adjust: inherit;
+    cursor: initial;
+    margin: 0px;
+}
+
+.passwordLessLogin div#main_error_div {
+    margin-top: 18px;
+    background: red;
+    color: white;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.passwordLessLogin div#error_message {
+    background: red;
+    color: white !important;
+    padding: 10px;
+    border-radius: 15px;
+    max-width: fit-content;
+    text-align: center;
+    margin: auto;
+    margin-bottom: 25px;
+}

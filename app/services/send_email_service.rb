@@ -69,7 +69,8 @@ class SendEmailService
         sent= EmailService::Send.new(email_notification).send_email({customer: contract}) if email_notification.present? && contract.shop.setting.email_service.present?
         return sent
     end
-     def send_fill_preorder_email(contract_id, week_number)
+
+    def send_fill_preorder_email(contract_id, week_number)
         contract = CustomerSubscriptionContract.find_by_id contract_id
         contract ||= CustomerSubscriptionContract.find_by(shopify_id: contract_id)
 
@@ -97,6 +98,18 @@ class SendEmailService
         end
         
         
+        return sent
+    end
+
+    def send_otp_passwordless_login(contract, otp)
+        email_notification = contract.shop.setting.email_notifications.find_by_name "Passwordless Login OTP"
+        
+        sent= EmailService::Send.new(email_notification).send_email({customer: contract,otp: otp}) if email_notification.present? && contract.shop.setting.email_service.present?
+        if sent
+            SiteLog.create(log_type: SiteLog::TYPES[:email_success], message: "PreOrderEmailNotification sent")
+        else
+            SiteLog.create(log_type: SiteLog::TYPES[:email_failure], params: {id: contract.id, shopify_id: contract.shopify_customer_id })
+        end
         return sent
     end
 end

@@ -9,6 +9,9 @@ class AppProxy::DashboardController < AppProxyController
     else
       @subscription_contracts = CustomerSubscriptionContract.where(shopify_customer_id: params[:customer_id])
     end
+    email = @subscription_contracts&.last&.email
+    $redis = Redis.new
+    @auth = $redis.get("#{email}_auth")
     render "#{current_setting.portal_theme}index", content_type: 'application/liquid', layout: "#{current_setting.portal_theme}liquid_app_proxy"
   end
 
