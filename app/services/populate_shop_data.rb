@@ -60,6 +60,7 @@ class PopulateShopData
     @shop.smarty_messages.create(title: 'Charge - Failure', body: "Hey {{first_name}}!, we are unable to charge your order, someone from our support team will be in touch with you soon.")
 
     @shop.smarty_messages.create(title: 'Charge - Reminder', body: "Hey {{first_name}}! We are preparing to ship your order of {{subscription_title}}. To manage your future orders via SMS, save this number and reply with 'HEY' at any time")
+    @shop.smarty_messages.create(title: 'Login - OTP', body: "Hi {{first_name}},Your OTP to login Ethey Meals is {{otp}}.It is valid for 15 minutes only.")
 
     #Cancellation Reasons
     @shop.smarty_cancellation_reasons.create(name: 'I want a different product or variety', winback: :swap)
@@ -93,6 +94,9 @@ class PopulateShopData
     @shop.smarty_variables.create(name: 'manage_subscriptions_url')
     @shop.smarty_variables.create(name: 'cancellation_reasons')
     @shop.smarty_variables.create(name: '@shop_name')
+
+    #OTP
+    @shop.smarty_variables.create(name: 'otp')
 
 
     #integrations
