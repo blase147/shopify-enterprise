@@ -23,7 +23,7 @@ class CustomerSubscriptionContract < ApplicationRecord
   accepts_nested_attributes_for :billing_address,
   reject_if: :all_blank, allow_destroy: true
 
-  after_create :send_opt_in_sms, unless: -> { opt_in_sent }
+  # after_create :send_opt_in_sms, unless: -> { opt_in_sent }
   after_create :activation_email
   after_create :charge_store
   # default_scope { order(created_at: :asc) }
