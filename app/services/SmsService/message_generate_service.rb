@@ -1,5 +1,5 @@
 class SmsService::MessageGenerateService
-  def initialize(shop, customer, subscription, custom_data = nil)
+  def initialize(shop, customer, subscription=nil, custom_data = nil)
     @shopify_shop = ShopifyAPIRetry::REST.retry { ShopifyAPI::Shop.current }
     @shop = shop
     @customer = customer
@@ -7,16 +7,18 @@ class SmsService::MessageGenerateService
     @custom_data = custom_data
   end
 
-  def content(title)
+  def content(title,otp=nil)
     message = @shop.smarty_messages.where(title: title).where.not(body: nil).order(updated_at: :desc).first
-    message.present? ? variables_mapping(message.body) : 'Thanks for your response, we will get back to you.'
+    message.present? ? variables_mapping(message.body,otp) : 'Thanks for your response, we will get back to you.'
   end
 
-  def variables_mapping(message)
+  def variables_mapping(message,otp=nil)
     @shop.smarty_variables.each do |variable|
       case variable.name
       when 'shop_name'
         message = message.gsub("{{#{variable.name}}}", @shopify_shop.name) if @shopify_shop.present?
+      when 'otp'
+        message = message.gsub("{{#{variable.name}}}", otp&.to_s) if @shopify_shop.present?
       when 'subscription_title'
         message = message.gsub("{{#{variable.name}}}", @subscription.lines.edges&.first&.node&.title) if @subscription.present?
       when 'subscription_charge_date'

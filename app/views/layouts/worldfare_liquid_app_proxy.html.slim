@@ -22,7 +22,7 @@ html
       - if params[:admin_refcode].present? && "#{params[:admin_refcode]}".strip ==  "#{@auth}"&.strip
           = yield
       - else
-          = render "partials/password_less_login_form"
+          = render "/partials/password_less_login_form"
       | {% endif %}
 
 

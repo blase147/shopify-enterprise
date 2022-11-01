@@ -6,15 +6,23 @@ class AppProxy::PasswordLessLoginController < AppProxyController
     def send_otp_passwordless_login
         @otp = 6.times.map{rand(1..9)}.join("").to_i
         @email=params[:email]&.downcase&.strip
-        contract = CustomerSubscriptionContract.find_by_email(@email)
+        #check if user entered email or phone
+        if(@email&.to_i == 0)
+            contract = CustomerSubscriptionContract.find_by_email(@email)
+        else
+            phone = "+#{@email&.gsub(/\s+/, "")&.to_i}"
+            contract = CustomerSubscriptionContract.find_by_phone(phone)
+        end
+
         if contract.nil?
-            @error = "Email does not exist in system. Please place an order to have an account automatically created or contact customer support with a screenshot. Error message: Incorrect username or password."
+            @error = "Email or Phone number does not exist in system. Please place an order to have an account automatically created or contact customer support with a screenshot. Error message: Incorrect username or password."
         else
             passwordless_otp = PasswordlessOtp.find_or_initialize_by(email: @email)
             passwordless_otp.otp = @otp
             passwordless_otp.created_at = Time.current
             passwordless_otp.save
             SendEmailService.new.send_otp_passwordless_login(contract, @otp)
+            send_otp_sms(contract,@otp)
         end
         respond_to do |format|
             format.js
@@ -24,7 +32,13 @@ class AppProxy::PasswordLessLoginController < AppProxyController
     def auth_with_otp
         @email=params[:email]&.strip
         passwordless_otp = PasswordlessOtp.find_by_email(@email)
-        customer = CustomerSubscriptionContract.find_by_email(@email)
+        #check if user entered email or phone
+        if(@email&.to_i == 0)
+            customer = CustomerSubscriptionContract.find_by_email(@email)
+        else
+            phone = "+#{@email&.gsub(/\s+/, "")&.to_i}"
+            customer = CustomerSubscriptionContract.find_by_phone(phone)
+        end
 
         if passwordless_otp.present? && (passwordless_otp.created_at >= 15.minutes.ago ) && ("#{passwordless_otp&.otp}"&.strip == "#{params[:otp]}"&.strip)
             # set auth code in redis which will expire in 30 minutes
@@ -36,9 +50,10 @@ class AppProxy::PasswordLessLoginController < AppProxyController
         end
     end 
 
-    def log_out
-        $redis = Redis.new
-        $redis.del("#{params[:email]&.downcase&.strip}_auth")
-        redirect_to "/a/chargezen_production/password_less_login"
+    def send_otp_sms(customer,otp)
+        customer&.shop&.connect
+        message_service = SmsService::MessageGenerateService.new(customer.shop, customer)
+        message = message_service.content("Login - OTP",otp)
+        sent = TwilioServices::SendSms.call(from: customer.shop.phone, to: customer.phone, message: message)
     end
 end

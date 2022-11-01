@@ -2867,7 +2867,7 @@ span.cancel-text {
 }
 
 .passwordLessLogin {
-    max-width: 300px;
+    max-width: 480px;
     max-height: 70vh;
     height: 70vh;
     margin: 106px auto;
@@ -2875,7 +2875,20 @@ span.cancel-text {
 
 @media screen and (max-width: 600px) {
     .passwordLessLogin {
-        max-width: 100%;
+        max-width: 100% !important;
+    }
+}
+
+.passwordLessLogin .main_heading h2 {
+    font-weight: 400;
+    line-height: 2.4rem;
+    margin: 0;
+    font-size: 32px !important;
+}
+
+@media screen and (max-width: 480px) {
+    .passwordLessLogin .main_heading h2 {
+        font-size: 25px !important;
     }
 }
 
