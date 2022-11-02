@@ -16,7 +16,7 @@ html
       | {% if customer.id ==
       = params[:customer_id]
       | %}
-      = yield
+    = yield
     - unless @skip_auth
       | {% else %}
       - if params[:admin_refcode].present? && "#{params[:admin_refcode]}".strip ==  "#{@auth}"&.strip
