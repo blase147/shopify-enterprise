@@ -2,11 +2,11 @@ class CreateCustomerModalService
     def self.create(shop_id, customer, contracts=nil)
         address = customer.default_address || customer.defaultAddress
         id = customer&.id
-        id = customer&.id[/\d+/] if id.is_a?(String) && id.include?('SubscriptionContract')
-        customer_modal = CustomerModal.find_or_initialize_by(shopify_id: id)
+        id = customer&.id[/\d+/] if id.is_a?(String) && id.include?('Customer')
+        customer_modal = CustomerModal.find_or_initialize_by(shopify_id: id&.to_i)
         customer_modal.email = customer.email
-        customer_modal.first_name = customer.first_name
-        customer_modal.last_name = customer.last_name
+        customer_modal.first_name = customer.first_name || customer.firstName
+        customer_modal.last_name = customer.last_name || customer.lastName
         customer_modal.phone = customer.phone
         customer_modal.api_data = customer
         customer_modal.country = address&.country 

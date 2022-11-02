@@ -18,7 +18,7 @@ class SmsService::MessageGenerateService
       when 'shop_name'
         message = message.gsub("{{#{variable.name}}}", @shopify_shop.name) if @shopify_shop.present?
       when 'otp'
-        message = message.gsub("{{#{variable.name}}}", otp&.to_s) if @shopify_shop.present?
+        message = message.gsub("{{#{variable.name}}}", "#{otp}") if @shopify_shop.present?
       when 'subscription_title'
         message = message.gsub("{{#{variable.name}}}", @subscription.lines.edges&.first&.node&.title) if @subscription.present?
       when 'subscription_charge_date'

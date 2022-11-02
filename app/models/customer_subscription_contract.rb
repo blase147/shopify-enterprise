@@ -23,7 +23,7 @@ class CustomerSubscriptionContract < ApplicationRecord
   accepts_nested_attributes_for :billing_address,
   reject_if: :all_blank, allow_destroy: true
 
-  # after_create :send_opt_in_sms, unless: -> { opt_in_sent }
+  after_create :send_opt_in_sms, unless: -> { opt_in_sent }
   after_create :activation_email
   after_create :charge_store
   # default_scope { order(created_at: :asc) }
@@ -47,8 +47,9 @@ class CustomerSubscriptionContract < ApplicationRecord
     shop.connect
     message_service = SmsService::MessageGenerateService.new(shop, self, nil)
     message = message_service.content('Opt-in')
-    if phone.present? && shop.phone.present?
-      TwilioServices::SendSms.call(from: shop.phone, to: phone, message: message)
+    customer_modal = CustomerModal.find_by_shopify_id(shopify_customer_id)
+    if customer_modal&.phone.present? && shop.phone.present?
+      TwilioServices::SendSms.call(from: shop.phone, to: customer_modal&.phone, message: message)
       # shop.sms_logs.opt_in.create(customer_id: id)
       # shop.subscription_logs.opt_in.sms.create(customer_id: id)
       log_work
