@@ -123,4 +123,10 @@ module AppProxyHelper
     @auth = $redis.get("#{email}_auth")
     return @auth
   end
+
+  def admin_auth_token
+    $redis = Redis.new
+    @auth = $redis.get("admin_auth_token")
+    return @auth&.strip
+  end
 end

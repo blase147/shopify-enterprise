@@ -39,7 +39,7 @@
         <% if get_auth_token(@customer&.email)&.present? && params[:admin_refcode].present? %>
           <a href="/a/chargezen_production/password_less_login/log_out?email=<%= @customer&.email %>" data-method="delete">Log Out</a>
         <% else %>
-          <a href="/account/logout" data-method="delete">Log Out</a>
+          <a href="/account/logout/" class="logout" >Log Out</a>
         <% end %>
       </div>
     </div>
