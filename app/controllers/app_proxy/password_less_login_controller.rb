@@ -56,4 +56,10 @@ class AppProxy::PasswordLessLoginController < AppProxyController
         message = message_service.content("Login - OTP",otp)
         sent = TwilioServices::SendSms.call(from: customer.shop.phone, to: customer.phone, message: message)
     end
+
+    def log_out
+        $redis = Redis.new
+        $redis.del("#{params[:email]&.downcase&.strip}_auth")
+        redirect_to "/a/chargezen_production/password_less_login"
+    end
 end
