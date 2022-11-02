@@ -24,7 +24,8 @@ class ShopifyContractUpdateWorker
       api_source: 'shopify',
       api_data: data.to_h.deep_transform_keys { |key| key.underscore }
     )
-
+    customer_modal_contract = {"subscription": contract.subscription, "status": contract.status}
+    CreateCustomerModalService.create(shop.id, data.customer,customer_modal_contract)
     if contract.api_data.present?
       order_id = contract.api_data["origin_order"]["id"].split("/").last
       order = ShopifyAPI::Order.find(order_id) rescue nil

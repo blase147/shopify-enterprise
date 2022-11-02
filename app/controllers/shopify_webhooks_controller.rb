@@ -91,6 +91,19 @@ class ShopifyWebhooksController < ApplicationController
     head :no_content
   end
 
+  def customer_create
+    shop = Shop.find_by(shopify_domain: shop_domain)
+    data = JSON.parse(params&.to_json, object_class: OpenStruct)
+    CreateCustomerModalService.create(shop.id,data)
+    head :no_content
+  end
+
+  def customer_update
+    shop = Shop.find_by(shopify_domain: shop_domain)
+    data = JSON.parse(params&.to_json, object_class: OpenStruct)
+    CreateCustomerModalService.create(shop.id,data)
+    head :no_content
+  end
 
   private
 

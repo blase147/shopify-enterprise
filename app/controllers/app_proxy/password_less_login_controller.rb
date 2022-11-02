@@ -8,10 +8,10 @@ class AppProxy::PasswordLessLoginController < AppProxyController
         @email=params[:email]&.downcase&.strip
         #check if user entered email or phone
         if(@email&.to_i == 0)
-            contract = CustomerSubscriptionContract.find_by_email(@email)
+            contract = CustomerModal.find_by_email(@email)
         else
             phone = "+#{@email&.gsub(/\s+/, "")&.to_i}"
-            contract = CustomerSubscriptionContract.find_by_phone(phone)
+            contract = CustomerModal.find_by_phone(phone)
         end
 
         if contract.nil?
@@ -34,17 +34,17 @@ class AppProxy::PasswordLessLoginController < AppProxyController
         passwordless_otp = PasswordlessOtp.find_by_email(@email)
         #check if user entered email or phone
         if(@email&.to_i == 0)
-            customer = CustomerSubscriptionContract.find_by_email(@email)
+            customer = CustomerModal.find_by_email(@email)
         else
             phone = "+#{@email&.gsub(/\s+/, "")&.to_i}"
-            customer = CustomerSubscriptionContract.find_by_phone(phone)
+            customer = CustomerModal.find_by_phone(phone)
         end
 
         if passwordless_otp.present? && (passwordless_otp.created_at >= 15.minutes.ago ) && ("#{passwordless_otp&.otp}"&.strip == "#{params[:otp]}"&.strip)
             # set auth code in redis which will expire in 30 minutes
             auth_token = SecureRandom.urlsafe_base64(nil, false)
             $redis.set("#{customer.email}_auth", auth_token, options = {ex: 1800})
-            redirect_to "/a/chargezen_production/dashboard?customer_id=#{customer&.shopify_customer_id}&admin_refcode=#{auth_token}"
+            redirect_to "/a/chargezen_production/dashboard?customer_id=#{customer&.shopify_id}&admin_refcode=#{auth_token}"
         else
             render json:{error: "You have entered wrong OTP"}
         end

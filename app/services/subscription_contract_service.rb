@@ -72,6 +72,11 @@ class SubscriptionContractService < GraphqlService
               formatted
               address1
               address2
+              phone
+              zip
+              province
+              country
+              city
             }
           }
           originOrder {
@@ -197,6 +202,11 @@ class SubscriptionContractService < GraphqlService
               formatted
               address1
               address2
+              phone
+              zip
+              province
+              country
+              city
             }
           }
           originOrder {

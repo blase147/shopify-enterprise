@@ -19,7 +19,9 @@ ShopifyApp.configure do |config|
     { topic: 'orders/updated', address: "#{ENV['HOST']}shopify_webhooks/order_updated", fields: ["id", "financial_status", "updated_at"]},
     { topic: 'subscription_contracts/create', address: "#{ENV['HOST']}shopify_webhooks/subscription_contract_create", fields: ["id"]},
     { topic: 'subscription_contracts/update', address: "#{ENV['HOST']}shopify_webhooks/subscription_contract_update", fields: ["id"]},
-    { topic: 'subscription_billing_attempts/success', address: "#{ENV['HOST']}shopify_webhooks/billing_attempt_success", fields: ["id"]}
+    { topic: 'subscription_billing_attempts/success', address: "#{ENV['HOST']}shopify_webhooks/billing_attempt_success", fields: ["id"]},
+    { topic: 'customers/create', address: "#{ENV['HOST']}shopify_webhooks/customer_create" },
+    { topic: 'customers/update', address: "#{ENV['HOST']}shopify_webhooks/customer_update" },
   ]
 end
 

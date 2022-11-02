@@ -30,7 +30,8 @@ Rails.application.routes.draw do
   post '/shopify_webhooks/subscription_contract_create', to: 'shopify_webhooks#subscription_contract_create'
   post '/shopify_webhooks/subscription_contract_update', to: 'shopify_webhooks#subscription_contract_update'
   post '/shopify_webhooks/billing_attempt_success', to: 'shopify_webhooks#billing_attempt_success'
-
+  post '/shopify_webhooks/customer_create', to: 'shopify_webhooks#customer_create'
+  post '/shopify_webhooks/customer_update', to: 'shopify_webhooks#customer_update'
   post '/webhooks/stripe/subscription', to: 'stripe_webhooks#subscription'
 
   post '/shipping_suites/sync_orders', to: 'shipping_suites#sync_orders'
