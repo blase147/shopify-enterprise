@@ -9,5 +9,6 @@ module Types
     field :total_count, Integer, null: true
     field :created_at, Integer, null: true
     field :usage_count, Integer, null: true
+    field :status, Boolean, null: true
   end
 end

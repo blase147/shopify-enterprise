@@ -6,8 +6,9 @@ class TwilioServices::SmsCallback < ApplicationService
   def call
     shop = Shop.where(phone: @params['To']).last
     # needs attention
+    customer_modal = shop.customer_modal.where(phone: @params['From'])
     @customer = shop.customer_subscription_contracts.where.not(shopify_customer_id: nil).where(phone: @params['From']).last
-    if @customer.present?
+    if customer_modal.present?
       process_callback
     else
       TwilioServices::SendSms.call(from: @params['To'], to: @params['From'], message: "Your phone number was not found in our database, please make sure you set the right phone number in your user profile at #{ENV['SHOP']}")

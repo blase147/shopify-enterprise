@@ -43,6 +43,7 @@ const SmartyMessage = ({ handleEditSmartyMessage }) => {
           updatedAt
           createdAt
           usageCount
+          status
         }
       }
     }
@@ -62,7 +63,7 @@ const SmartyMessage = ({ handleEditSmartyMessage }) => {
     offset: 0,
   });
 
-  const [getMessages, { loading, data, error }] = useLazyQuery(fetchQuery, {
+  const [getMessages, { loading, data, error, refetch }] = useLazyQuery(fetchQuery, {
     fetchPolicy: 'cache-and-network',
   });
 
@@ -89,7 +90,13 @@ const SmartyMessage = ({ handleEditSmartyMessage }) => {
     },
     [setFilters, filters.limit]
   );
-
+  const updateStatus = (mssgId, status) => {
+    fetch("/sms_flows/update_smart_message_status", {
+      method: 'POST',
+      body: JSON.stringify({ id: mssgId, status: status })
+    })
+      .then((response) => refetch())
+  }
   return (
     <Layout>
       <Card>
@@ -165,9 +172,10 @@ const SmartyMessage = ({ handleEditSmartyMessage }) => {
                     <ToggleButton
                       inactiveLabel={''}
                       activeLabel={''}
-                      value={false}
-                      onToggle={(value) => {
-                        console.log('toggle');
+                      value={msg.status}
+                      onToggle={() => {
+                        let msgStatus = msg.status ? false : true
+                        updateStatus(msg.id, msgStatus)
                       }}
                     />,
                     <Button

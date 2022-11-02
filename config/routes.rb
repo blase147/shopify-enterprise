@@ -5,7 +5,11 @@ Rails.application.routes.draw do
 
   resources :bundles, only: [:destroy]
   resources :bundle_groups
-  resources :sms_flows
+  resources :sms_flows do 
+    collection do
+      post :update_smart_message_status
+    end
+  end
   if Rails.env.development?
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "graphql#execute"
   end
