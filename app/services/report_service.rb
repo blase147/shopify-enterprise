@@ -118,7 +118,7 @@ class ReportService < GraphqlService
     result = ShopifyAPIRetry::GraphQL.retry(:wait => 10, :tries => 5) do
       client.query(client.parse(query))
     end
-    sleep calculate_wait_time(result&.extensions["cost"])
+    sleep CalculateShopifyWaitTime.calculate_wait_time(result&.extensions["cost"])
     result&.data&.subscription_contracts
   rescue Exception => ex
     p ex.message
@@ -137,13 +137,6 @@ class ReportService < GraphqlService
       next_cursor = data&.edges&.last&.cursor
     end
     subscriptions.flatten
-  end
-
-  def calculate_wait_time(cost)
-    requested = cost["actualQueryCost"] || cost["requestedQueryCost"]
-    restore_amount = requested - cost["throttleStatus"]["currentlyAvailable"]
-    wait_time = (restore_amount/cost["throttleStatus"]["restoreRate"])*1000
-    wait_time = wait_time > 0 ? wait_time&.ceil : 0
   end
 
   def get_single_subscriptions id
