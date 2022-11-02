@@ -11,7 +11,6 @@ html
   = javascript_pack_tag 'app_proxy', 'data-turbolinks-track': 'reload'
 
   div.chargezen-proxy
-    - @skip_auth = true if params[:admin_refcode]==ENV['ADMIN_REFCODE']
     - unless @skip_auth
       | {% if customer.id ==
       = params[:customer_id]
@@ -19,7 +18,7 @@ html
     = yield
     - unless @skip_auth
       | {% else %}
-      - if params[:admin_refcode].present? && "#{params[:admin_refcode]}".strip ==  "#{@auth}"&.strip
+      - if params[:admin_refcode].present? && (("#{params[:admin_refcode]}".strip ==  "#{@auth}"&.strip) || ("#{params[:admin_refcode]}".strip ==  admin_auth_token()))
           = yield
       - else
           = render "/partials/password_less_login_form"

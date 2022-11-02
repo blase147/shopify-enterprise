@@ -128,6 +128,7 @@ Rails.application.routes.draw do
         post :send_otp_passwordless_login
         post :auth_with_otp
         delete :log_out
+        post :generate_admin_token
       end
     end
     root 'dashboard#index'
