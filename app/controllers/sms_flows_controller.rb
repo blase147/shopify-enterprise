@@ -54,6 +54,10 @@ class SmsFlowsController < AuthenticatedController
 
   end
 
+  def update_smart_message_status
+    SmartyMessage.find(params[:id])&.update(status: params[:status])
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_sms_flow

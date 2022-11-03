@@ -37,10 +37,11 @@ namespace :subscriptions do
         unless subscription.is_a?(Hash)
           conversation = customer.sms_conversations.order(created_at: :asc).first
           if conversation.present? && conversation.sms_messages.present? && conversation.sms_messages.order(created_at: :asc).first.command != 'STOP'
+            customer_modal = CustomerModal.find_by_shopify_id(customer&.shopify_customer_id)
             message_service = SmsService::MessageGenerateService.new(customer.shop, customer, subscription)
             message = message_service.content('Opt-in - success')
             p message
-            TwilioServices::SendSms.call(from: shop.phone, to: customer.phone, message: message)
+            TwilioServices::SendSms.call(from: shop.phone, to: customer_modal.phone, message: message) if shop.phone.present? && customer_modal&.phone.present?
           end
         end
       end
@@ -134,9 +135,10 @@ namespace :subscriptions do
       result = SubscriptionBillingAttempService.new(subscription.id).run
       if result[:error].present?
         if customer.present? && customer.shop.sms_setting.present? && customer.shop.sms_setting.failed_renewal.present?
+          customer_modal = CustomerModal.find_by_shopify_id(customer&.shopify_customer_id)
           message_service = SmsService::MessageGenerateService.new(shop, customer, subscription)
           message = message_service.content('Charge - Failure')
-          TwilioServices::SendSms.call(from: shop.phone, to: customer.phone, message: message)
+          TwilioServices::SendSms.call(from: shop.phone, to: customer_modal.phone, message: message) if shop.phone.present? && customer_modal&.phone.present?
         end
          customer.update_columns(failed_at: Time.current)
          description = "Billing attempt failed for #{customer&.subscription} subscription. Subscription Id :- #{subscription_id}. Error :- #{result[:error]}"
@@ -167,9 +169,10 @@ namespace :subscriptions do
       if billing_date.utc.beginning_of_day + ((customer.shop.setting.payment_delay_retries || 0)*customer.retry_count).days == Time.current.utc.beginning_of_day
         result = SubscriptionBillingAttempService.new(subscription.id).run
         if result[:error].present?
+          customer_modal = CustomerModal.find_by_shopify_id(customer&.shopify_customer_id)
           message_service = SmsService::MessageGenerateService.new(shop, customer, subscription)
           message = message_service.content('Charge - Failure')
-          TwilioServices::SendSms.call(from: shop.phone, to: customer.phone, message: message)
+          TwilioServices::SendSms.call(from: shop.phone, to: customer_modal.phone, message: message) if shop.phone.present? && customer_modal&.phone.present?
           customer.update_columns(failed_at: Time.current, retry_count: customer.retry_count.succ)
           if customer.retry_count>=customer.shop.setting.payment_retries
             subs_log.update(billing_status: :churn, executions: false)
@@ -207,9 +210,10 @@ namespace :subscriptions do
     if customer.present? && sms_setting.present? && sms_setting.renewal_reminder.present? && sms_setting.renewal_duration.present?
       renewal_day = sms_setting.renewal_duration.split(' ')
       if (billing_date.utc.beginning_of_day - renewal_day[0].to_i.send(renewal_day[1])).beginning_of_day == Time.current.utc.beginning_of_day
+        customer_modal = CustomerModal.find_by_shopify_id(customer&.shopify_customer_id)
         message_service = SmsService::MessageGenerateService.new(shop, customer, subscription)
         message = message_service.content('Charge - Reminder')
-        TwilioServices::SendSms.call(from: shop.phone, to: customer.phone, message: message)
+        TwilioServices::SendSms.call(from: shop.phone, to: customer_modal&.phone, message: message) if shop.phone.present? && customer_modal&.phone.present?
       end
      elsif billing_date.utc.beginning_of_day.to_date == (Time.current+3.days).utc.beginning_of_day.to_date
       email_notification = customer.shop.setting.email_notifications.find_by_name "Upcoming Charge"
