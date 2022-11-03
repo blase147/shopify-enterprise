@@ -10,19 +10,25 @@ class AppProxy::PasswordLessLoginController < AppProxyController
         if(@email&.to_i == 0)
             contract = CustomerModal.find_by_email(@email)
         else
-            phone = "+#{@email&.gsub(/\s+/, "")&.to_i}"
-            contract = CustomerModal.find_by_phone(phone)
+            phone = "+#{@email&.gsub(/\s+/, "")&.to_i}" 
+            contracts = CustomerModal.where("phone = '#{phone}' or address_phone_number = '#{phone}' ") 
+
+            contract = contracts&.first
         end
 
         if contract.nil?
             @error = "Email or Phone number does not exist in system. Please place an order to have an account automatically created or contact customer support with a screenshot. Error message: Incorrect username or password."
         else
-            passwordless_otp = PasswordlessOtp.find_or_initialize_by(email: @email)
-            passwordless_otp.otp = @otp
-            passwordless_otp.created_at = Time.current
-            passwordless_otp.save
-            SendEmailService.new.send_otp_passwordless_login(contract, @otp)
-            send_otp_sms(contract,@otp)
+            if contracts.present? && contracts.count > 1
+                @error = "We found more than one account associated with this phone number.Please enter the specific email address you intend to login with at this time."
+            else
+                passwordless_otp = PasswordlessOtp.find_or_initialize_by(email: @email)
+                passwordless_otp.otp = @otp
+                passwordless_otp.created_at = Time.current
+                passwordless_otp.save
+                SendEmailService.new.send_otp_passwordless_login(contract, @otp)
+                send_otp_sms(contract,@otp)
+            end
         end
         respond_to do |format|
             format.js
@@ -37,7 +43,8 @@ class AppProxy::PasswordLessLoginController < AppProxyController
             customer = CustomerModal.find_by_email(@email)
         else
             phone = "+#{@email&.gsub(/\s+/, "")&.to_i}"
-            customer = CustomerModal.find_by_phone(phone)
+            customer =  CustomerModal.where("phone = '#{phone}' or address_phone_number = '#{phone}' ")
+            customer = customer&.first
         end
 
         if passwordless_otp.present? && (passwordless_otp.created_at >= 15.minutes.ago ) && ("#{passwordless_otp&.otp}"&.strip == "#{params[:otp]}"&.strip)
@@ -53,8 +60,9 @@ class AppProxy::PasswordLessLoginController < AppProxyController
     def send_otp_sms(customer,otp)
         customer&.shop&.connect
         message_service = SmsService::MessageGenerateService.new(customer.shop, customer)
+        phone = customer.phone || customer.address_phone_number
         message = message_service.content("Login - OTP",otp)
-        sent = TwilioServices::SendSms.call(from: customer.shop.phone, to: customer.phone, message: message)
+        sent = TwilioServices::SendSms.call(from: customer.shop.phone, to: phone, message: message) rescue nil
     end
 
     def log_out
