@@ -50,6 +50,7 @@ class CustomerSubscriptionContract < ApplicationRecord
     customer_modal = CustomerModal.find_by_shopify_id(shopify_customer_id)
     if customer_modal&.phone.present? && shop.phone.present?
       TwilioServices::SendSms.call(from: shop.phone, to: customer_modal&.phone, message: message)
+      OptInSuccessWorker.perform_in(30.minutes, self.id)
       # shop.sms_logs.opt_in.create(customer_id: id)
       # shop.subscription_logs.opt_in.sms.create(customer_id: id)
       log_work
