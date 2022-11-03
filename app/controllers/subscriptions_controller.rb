@@ -159,7 +159,24 @@ class SubscriptionsController < AuthenticatedController
 
   def create_billing_attempt
     id = params["id"].to_i
-    CreateBillingAttemptService.new().run(id)
+    customer = CustomerSubscriptionContract.find id rescue nil
+    if customer.present?
+      customer.shop.connect
+      subscription_id = customer&.shopify_id
+      subscription = ReportService.new.get_single_subscriptions(subscription_id)
+      result = CreateBillingAttemptService.new().run(id)
+      if result[:error].present?
+        # send failed transaction email
+        email_notification = customer.shop.setting.email_notifications.find_by_name "Card declined"
+        EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
+      else
+        CreateBillingAttemptService.charge_store(result[:data].id, subscription_id, customer.shop)
+        description = "Billing attempt successfull for #{customer&.subscription} subscription. Subscription Id :- #{subscription_id}"
+        SubscriptionLog.create(description: description, billing_status: :success, customer_id: customer.id, shop_id: customer.shop_id, subscription_id: subscription_id)
+        email_notification = customer.shop.setting.email_notifications.find_by_name "Recurring Charge Confirmation"
+        EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
+      end
+    end
   end
 
   def update_contract_delivery_date_day
