@@ -48,8 +48,8 @@ class ShopifyAllContractUpdateWorker
                     delivery_day = note&.value
                     end
                 end
-                contract.delivery_date = delivery_date&.to_date
-                contract.delivery_day = delivery_day
+                contract.delivery_date = delivery_date&.to_date rescue contract.delivery_date
+                contract.delivery_day = delivery_day rescue contract.delivery_day
                 end
             end
             
