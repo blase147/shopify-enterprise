@@ -79,6 +79,7 @@ class ReportService < GraphqlService
             edges {
               node {
                 sku
+                title
               }
             }
           }
