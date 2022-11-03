@@ -57,7 +57,7 @@ const SmartyMessage = ({ handleEditSmartyMessage }) => {
   const [searchValue, setSearchValue] = useState('');
   const [filters, setFilters] = useState({
     searchValue: '',
-    order: 'updated_at',
+    order: 'created_at',
     type: 'DESC',
     limit: 25,
     offset: 0,
@@ -93,6 +93,9 @@ const SmartyMessage = ({ handleEditSmartyMessage }) => {
   const updateStatus = (mssgId, status) => {
     fetch("/sms_flows/update_smart_message_status", {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ id: mssgId, status: status })
     })
       .then((response) => refetch())
