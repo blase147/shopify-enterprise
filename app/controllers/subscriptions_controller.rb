@@ -166,15 +166,20 @@ class SubscriptionsController < AuthenticatedController
       subscription = ReportService.new.get_single_subscriptions(subscription_id)
       result = CreateBillingAttemptService.new().run(id)
       if result[:error].present?
+        customer.update_columns(failed_at: Time.current)
+        description = "Billing attempt failed for #{customer&.subscription} subscription. Subscription Id :- #{subscription_id}. Error :- #{result[:error]}"
+        SubscriptionLog.create(description: description, billing_status: :failure, executions: (customer.shop.setting.payment_retries.to_i>0 ? true : false), customer_id: customer.id, shop_id: customer.shop_id, subscription_id: subscription_id, action_by: 'admin')
         # send failed transaction email
         email_notification = customer.shop.setting.email_notifications.find_by_name "Card declined"
         EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
+        render json:{error: true}
       else
         CreateBillingAttemptService.charge_store(result[:data].id, subscription_id, customer.shop)
         description = "Billing attempt successfull for #{customer&.subscription} subscription. Subscription Id :- #{subscription_id}"
-        SubscriptionLog.create(description: description, billing_status: :success, customer_id: customer.id, shop_id: customer.shop_id, subscription_id: subscription_id)
+        SubscriptionLog.create(description: description, billing_status: :success, customer_id: customer.id, shop_id: customer.shop_id, subscription_id: subscription_id, action_by: 'admin')
         email_notification = customer.shop.setting.email_notifications.find_by_name "Recurring Charge Confirmation"
         EmailService::Send.new(email_notification).send_email({customer: customer, line_name: subscription.lines.edges.collect{|c| c.node.title}.to_sentence}) unless email_notification.nil?
+        render json:{success: true}
       end
     end
   end
