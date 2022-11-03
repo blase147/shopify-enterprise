@@ -29,11 +29,11 @@ class CreateBillingAttemptService < GraphqlService
         })      
         errors =  result.data.subscription_billing_attempt_create.nil? ? result.original_hash["errors"][0]["message"] : 
               result.data.subscription_billing_attempt_create.subscription_billing_attempt.error_message.present? ? 
-              result.data.subscription_billing_attempt_create.subscription_billing_attempt.error_message : nil
-
+              result.data.subscription_billing_attempt_create.subscription_billing_attempt.error_message : 
+              result.data.subscription_billing_attempt_create.subscription_billing_attempt.order.nil? ? "No order is returned" : nil
         raise errors if errors.present?
-
-        return { error: nil, data: result.data.subscription_billing_attempt_create.subscription_billing_attempt }
+        data = { error: nil, data: result.data.subscription_billing_attempt_create.subscription_billing_attempt }
+        return data
     rescue Exception => ex
         p ex.message
         { error: ex.message }

@@ -78,8 +78,8 @@ class ReportService < GraphqlService
           lines(first: 5) {
             edges {
               node {
-                sku
                 title
+                sku
               }
             }
           }

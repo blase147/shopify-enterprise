@@ -616,13 +616,18 @@ javascript:
   })
   
   $("#create_billing_attempt").on("click",function(){
-    $("#create_billing_attempt").html("Processing")
+     $("#confirm_billing_attempt_modal .Polaris-TextContainer").html("<p>Billing attempt is attempting…</p>");
     $.ajax({
       type: 'post',
       data: "id=#{@customer.id}",
       url: "/subscriptions/create_billing_attempt",
-      success: function(){
-        $("#confirm_billing_attempt_modal .Polaris-TextContainer").html("<p>Billing Attempt Successfull. Please wait....</p>");
+      success: function(response){
+        if(response?.error){       
+          console.log(response?.error)   
+          $("#confirm_billing_attempt_modal .Polaris-TextContainer").html("<p>Billing attempt was unsuccessful</p>");
+        }else{
+           $("#confirm_billing_attempt_modal .Polaris-TextContainer").html("<p>Billing attempt was successful</p>");
+        }
         $(".billing_attempt_buttons").html("")
         setTimeout(function(){
           window.location.reload();

@@ -141,7 +141,7 @@ class EmailService::Base < ApplicationService
       #   storename: storename,
       #   myshopify_url: myshopify_url,
       #   subscription_line_item: object[:line_name],
-      #   card_update_link: ,
+      #   card_update_link: "",
       #   shopify_store_email: shop_email
       # }
       false
