@@ -55,7 +55,9 @@ class SubscriptionContractDeleteService < GraphqlService
         else
           customer.shop.subscription_logs.restart.create(subscription_id: @id,customer_id: customer.id, product_name: product.title, note: note, description: description, amount: amount, product_id: product.id, action_by: @customer_type)
         end
+        status = "RESTARTED"
       end
+      SendEmailService.new.send_status_subscription(customer, product.title, status)
     rescue
       true
     end

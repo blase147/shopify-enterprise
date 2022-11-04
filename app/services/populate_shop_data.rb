@@ -62,6 +62,33 @@ class PopulateShopData
     @shop.smarty_messages.create(title: 'Charge - Reminder', body: "Hey {{first_name}}! We are preparing to ship your order of {{subscription_title}}. To manage your future orders via SMS, save this number and reply with 'HEY' at any time")
     @shop.smarty_messages.create(title: 'Login - OTP', body: "Hi {{first_name}},Your OTP to login Ethey Meals is {{otp}}.It is valid for 15 minutes only.")
 
+    #meal_selection
+    @shop.smarty_messages.create(title: 'Meal selction', body: "Hi {{first_name}}!, You have successfully selected meals for {{begin_date}} - {{end_date}} week.")
+
+    #skip meals success
+    @shop.smarty_messages.create(title: 'Skip Meal', body: "Hi {{first_name}}!, Meal is skipped from {{begin_date}} to {{end_date}}")
+
+    #paused subscription success
+    @shop.smarty_messages.create(title: 'Paused Subscription', body: "Hi {{first_name}}!, Your {{product_title}} subscription is paused successfully.")
+
+    #cancelled subscription success
+    @shop.smarty_messages.create(title: 'Cancelled Subscription', body: "Hi {{first_name}}!, Your {{product_title}} subscription is cancelled successfully.")
+
+    #resumed subscription success
+    @shop.smarty_messages.create(title: 'Resumed Subscription', body: "Hi {{first_name}}!, Your {{product_title}} subscription is resumed successfully.")
+
+    #restarted subscription success
+    @shop.smarty_messages.create(title: 'Restarted Subscription', body: "Hi {{first_name}}!, Your {{product_title}} subscription is restarted successfully.")
+
+    #Choose Meals success
+    @shop.smarty_messages.create(title: 'Choose Meals', body: "Hi {{first_name}}!, You have successfully selected meals for {{begin_date}} - {{end_date}} week.")
+
+    #Swap subscription success
+    @shop.smarty_messages.create(title: 'Restarted Subscription', body: "Hi {{first_name}}!, Your subscription is swapped to {{variant_title}} successsfully.")
+
+    #Un-Skip Meal success
+    @shop.smarty_messages.create(title: 'Restarted Subscription', body: "Hi {{first_name}}!, You have successfully unskipped {{product_title}} subscription from {{begin_date}} to {{end_date}}.")
+
     #Cancellation Reasons
     @shop.smarty_cancellation_reasons.create(name: 'I want a different product or variety', winback: :swap)
     @shop.smarty_cancellation_reasons.create(name: 'I already have more than I need', winback: :skip)
@@ -70,8 +97,12 @@ class PopulateShopData
     @shop.smarty_cancellation_reasons.create(name: 'This is too expensive')
     @shop.smarty_cancellation_reasons.create(name: 'Other reason')
     @shop.smarty_cancellation_reasons.create(name: 'This was created by accident')
+    
 
-
+    @shop.smarty_variables.create(name: 'product_title')
+    @shop.smarty_variables.create(name: 'variant_title')
+    @shop.smarty_variables.create(name: 'begin_date')
+    @shop.smarty_variables.create(name: 'end_date')
     #Billing Update
     @shop.smarty_variables.create(name: 'card_brand - card_last4')
     @shop.smarty_variables.create(name: 'card_exp_month/card_exp_year')
