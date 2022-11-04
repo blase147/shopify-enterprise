@@ -14,8 +14,8 @@
             - if @translation.home_tab_active_subscriptions.present?
               span #{@translation.home_tab_active_subscriptions}
             - else
-              span MY &nbsp;
-              span.active ACTIVE &nbsp;
+              span MY
+              span.active ACTIVE
               span #{(@cancelled_subscriptions.count rescue 0 )> 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION'}
           / a.add_weekly_box.promo-tag-I href="#"
           /   span #{@setting.promo_tagline1_content.present? ? @setting.promo_tagline1_content : 'Add one more weekly box'}
@@ -29,16 +29,16 @@
               - if @translation.cancelled_tab_cancelled_subscriptions.present?
                 span #{@translation.cancelled_tab_cancelled_subscriptions}
               - else
-                span MY &nbsp;
-                span.canceled CANCELLED &nbsp;
+                span MY
+                span.canceled CANCELLED
                 span #{(@cancelled_subscriptions.count rescue 0 + @cancelled_line_items.count rescue 0) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION' rescue nil} 
         = render partial: 'app_proxy/dashboard/cancelled_subscriptions'
       - if !params[:status].present? || (params[:status].present? && params[:status] == 'paused')
         - if ((@paused_subscriptions.count) > 0) || params[:status] == 'paused'
           div.display-text.cancel-text
             p
-              span MY &nbsp;
-              span.canceled PAUSED &nbsp;
+              span MY
+              span.canceled PAUSED
               span #{(@paused_subscriptions.count) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION'}
         = render partial: 'paused_subscriptions'
 javascript:

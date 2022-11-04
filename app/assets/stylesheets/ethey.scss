@@ -2524,11 +2524,6 @@ body .customer-portal .tabs-holder .Profile_tab button {
     text-transform: uppercase;
   }
 
-  .customer_service_page .customer-portal .flex-holder .content-wrapper .display-text p span.active {
-    margin-left: -17px;
-    margin-right: -17px;
-  }
-
   .customer_service_page .customer-portal .flex-holder .content-wrapper .display-text p {
     text-align: center;
     justify-content: center;
@@ -4792,13 +4787,6 @@ body .customer-portal .tabs-holder .Profile_tab button {
     text-transform: uppercase;
   }
 
-
-
-  .customer_service_page .customer-portal .flex-holder .content-wrapper .display-text p span.active {
-    margin-left: -17px;
-    margin-right: -17px;
-  }
-
   .customer_service_page .customer-portal .flex-holder .content-wrapper .display-text p {
     text-align: center;
     justify-content: center;
@@ -4946,13 +4934,6 @@ label#nav_label {
   line-height: 25px;
   letter-spacing: 2px;
   text-transform: uppercase;
-}
-
-
-
-.customer_service_page .customer-portal .flex-holder .content-wrapper .display-text p span.active {
-  margin-left: -17px;
-  margin-right: -17px;
 }
 
 .customer_service_page .customer-portal .flex-holder .content-wrapper .display-text p {
@@ -5755,4 +5736,9 @@ div#contract-content .customer-details .logut_button a.logout {
     position: static;
     max-width: 100%;
   }
+}
+
+.customer_service_page .customer-portal .flex-holder .content-wrapper .display-text p {
+  display: flex;
+  gap: 5px;
 }

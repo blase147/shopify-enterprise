@@ -70,10 +70,4 @@ class AppProxy::PasswordLessLoginController < AppProxyController
         $redis.del("#{params[:email]&.downcase&.strip}_auth")
         redirect_to "/a/chargezen_production/password_less_login"
     end
-
-    def generate_admin_token
-        auth_token = SecureRandom.urlsafe_base64(nil, false)
-        $redis.set("admin_auth_token", auth_token, options = {ex: 1800})
-        redirect_to "/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}&admin_refcode=#{auth_token}" 
-    end
 end

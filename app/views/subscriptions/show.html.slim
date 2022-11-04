@@ -124,8 +124,9 @@
                           button.hidden.Polaris-Button--plain.admin_portal_apply_button type="button" id="resume-billing-btn" Apply
 
                   div.slider-btns
-                    a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/a/chargezen_production/password_less_login/generate_admin_token?customer_id=#{"#{@customer.shopify_customer_id}"}" data-method="post" target="_blank"
-                      button.admin_show_sub_button type="button"
+                    - auth_token = generate_admin_token()
+                    a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/a/chargezen_production/dashboard?customer_id=#{"#{@customer.shopify_customer_id}"}&admin_refcode=#{auth_token}" target="_blank"
+                      button.admin_show_sub_button type="submit"
                         | Customer Portal
                 
                   div.slider-btns
