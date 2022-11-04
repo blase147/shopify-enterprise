@@ -1719,13 +1719,14 @@ span.current-week-dish-remove {
 }
 
 .collapsible-content {
-  max-height: 0px;
+  display: none;
   overflow: hidden;
-  transition: max-height .25s ease-in-out;
+  transition: all .25s ease-in-out;
 }
 
 .toggle:checked+.lbl-toggle+.collapsible-content {
   max-height: fit-content;
+  display: block;
 }
 
 .toggle:checked+.lbl-toggle {
@@ -5706,11 +5707,6 @@ div#upate_preorder_div {
   .logut_button {
     width: 100%;
     bottom: 0;
-  }
-
-  .customer button {
-    width: auto;
-    color: #fff ! important;
   }
 
   .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:nth-child(2) h4 {

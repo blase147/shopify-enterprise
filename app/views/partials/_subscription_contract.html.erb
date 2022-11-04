@@ -529,15 +529,15 @@
                   meals_to_select = total_meals - selected_products.count
                 end
               %>
-              <div class="pre_orders" >
+              <div class="pre_orders">
                 <div class="grey-layer <%= @subscription_paused ? '' : 'hide' %>">Your Subscription is paused!</div>
-                <div class="order-box <%= hide_display_selection  %> <%= @customer&.skip_dates&.include?("#{week_day&.to_date&.cweek}") ? "grayed-out" : "" %>">
-                  <div class="wrap-collabsible">
+                <div class="order-box <%= hide_display_selection  %> <%= @customer&.skip_dates&.include?("#{week_day&.to_date&.cweek}") ? "grayed-out" : "" %>" for="collapsible<%=i%>">
+                  <div class="wrap-collabsible" for="collapsible<%=i%>">
                     <input id="collapsible<%=i%>" class="toggle collapse_checkbox" type="checkbox">
                     <label for="collapsible<%=i%>" class="lbl-toggle placed">
                       <h2 class="Trial">Week of <%= (current_date + 1.week).beginning_of_week.strftime('%A %d %B') %> - <%= (current_date + 1.week).end_of_week.strftime('%A %d %B, %Y')%> </h2>
                     </label>
-                    <div class="collapsible-content">
+                    <div class="collapsible-content" for="collapsible<%=i%>">
                       <div class="content-inner">
                         <% if (week_subscription&.order_id.present? &&  (week_subscription&.status != "canceled" || week_subscription&.status != "refunded"))%>
                           <button type="button" style="background: gray !important; float: right;" class="btn-yellow bold action-btn modal_btn" data-target="#already_paid_message_modal" data-toggle="modal" style="float: right;" data-week="<%= week_day %>" data-contractId="<%= @customer&.id %>" style="background: gray!important;" >
@@ -598,17 +598,17 @@
             <% if created_at.present? %>
               <% week_number = created_at.cweek %>
               <div class="past_orders">
-                <div class='order-box'>
+                <div class='order-box' for="collapsible_first_order">
                   <% if DateTime.now.cweek == week_number && customer_order&.line_items.present? && customer_order&.line_items.count > 5 %>
                     <h2 class="Trial">Past Week</h2>
                   <% elsif DateTime.now.cweek == week_number %>
                     <h2 class="Trial">Past Week</h2>
                   <% end %>
-                  <div class="orders">
-                    <div class="wrap-collabsible">
+                  <div class="orders" for="collapsible_first_order">
+                    <div class="wrap-collabsible" for="collapsible_first_order">
                       <input id="collapsible_first_order" class="toggle collapse_checkbox" type="checkbox">
                       <label for="collapsible_first_order" class="lbl-toggle placed">First Order:</label>
-                      <div class="collapsible-content">
+                      <div class="collapsible-content" for="collapsible_first_order">
                         <div class="content-inner">
                           <p>
                             <p class="placed_dates "><%= Date.commercial(created_at.strftime('%Y').to_i, (created_at.strftime('%W').to_i - 1), 1).next_week(delivery_day_sym.to_sym) rescue nil %></p>
@@ -630,7 +630,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="order_status">
+                  <div class="order_status" for="collapsible_first_order">
                     <div class="Status">
                       <p class="s_name">Status:</p>
                       <p class="s_data"><%= @api_data["status"] %></p>
@@ -983,4 +983,13 @@
       $("#nav_label").addClass("closed")
     }
   })
+
+  //open collapsible on hover
+  $(".lbl-toggle, .collapsible-content, .wrap-collabsible, .order-box, .orders, .order_status").hover(function() {
+    $("#"+$(this).attr("for")).prop('checked', false);
+    $(this).scrollTop = 0;
+  }).mouseover(function() {
+      $("#"+$(this).attr("for")).prop('checked', true);
+      $(this).scrollTop = 0;
+  });
 </script>
