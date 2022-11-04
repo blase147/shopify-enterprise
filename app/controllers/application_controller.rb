@@ -29,4 +29,12 @@ class ApplicationController < ActionController::Base
     session[:shop] ||= params[:shop]
     session[:session] ||= params[:session]
   end
+
+  def generate_admin_token
+    auth_token = SecureRandom.urlsafe_base64(nil, false)
+    $redis.set("admin_auth_token", auth_token, options = {ex: 1800})
+    return auth_token
+  end
+
+  helper_method :generate_admin_token
 end

@@ -295,6 +295,7 @@ class AppProxy::DashboardController < AppProxyController
 
   def add_meals 
     @setting = current_shop&.setting
+    @auth = params[:admin_refcode]
     @customer = CustomerSubscriptionContract.find(params[:local_id])
     params[:customer_id] = @customer.shopify_customer_id
     render "#{current_setting.portal_theme}index", content_type: 'application/liquid', layout: "#{current_setting.portal_theme}liquid_app_proxy"    
