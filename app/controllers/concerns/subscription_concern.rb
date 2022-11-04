@@ -99,6 +99,7 @@ module SubscriptionConcern
         description = @customer.name+",swaped,"+variant.title
         # amount = (product.quantity * variant.price.to_f).round(2).to_s
         current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id, product_name: variant.title, note: note, description: description, product_id: variant_id&.split("/")&.last, swaped_product_id: variant.product_id, action_by: params[:action_by])
+        SendEmailService.new.send_swap_subscription(@customer, variant.title)
         # redirect_to "/a/chargezen_production?customer_id=#{@customer.shopify_customer_id}"        
         render js: 'window.location.reload(false)'
       end
@@ -189,10 +190,12 @@ module SubscriptionConcern
       skip_dates&.push(skip_week_num)
       pre_order&.update(skip_state: "skipped")
       description = "Skipped weekly meals for #{begin_date} to #{end_date}"
+      SendEmailService.new.send_skip_meal(contract, begin_date, end_date)
     else
       skip_dates&.delete(skip_week_num)
       pre_order&.update(skip_state: nil)
       description = "Un-Skipped weekly meals for #{begin_date} to #{end_date}"
+      SendEmailService.new.send_unskip_meal(contract, begin_date, end_date)
     end
     contract.shop.subscription_logs.cancel.create(subscription_id: contract&.shopify_id,customer_id: contract.id, description: description, action_by: params[:action_by])
     contract.update(skip_dates: skip_dates)

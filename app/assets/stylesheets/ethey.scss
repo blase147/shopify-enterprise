@@ -2617,11 +2617,6 @@ label#nav_label {
   }
 }
 
-@media(max-width:480px) {
-  .reactivate_btn_div {
-    margin-top: -300px;
-  }
-}
 
 input.billing_date_resume.resume_subscription {
   margin-bottom: 7px;
@@ -5036,15 +5031,15 @@ label#nav_label {
     right: 15px;
     margin-top: -252px;
   }
-}
 
-@media(max-width:480px) {
-
-  .reactivate_btn_div {
-
-    margin-top: -300px;
+  .with_show_reactvate {
+    position: static;
+    margin-top: -20px;
+    margin-bottom: 20px;
   }
 }
+
+
 
 input.billing_date_resume.resume_subscription {
   margin-bottom: 7px;
@@ -5685,4 +5680,83 @@ div#upate_preorder_div {
 
 .logut_button a {
   text-decoration: none !important;
+}
+
+@media only screen and (max-width:767px) {
+  .customer-details .customer-info {
+    margin-bottom: 20px;
+    position: static;
+  }
+
+  .customer-details .contact-details {
+    margin-bottom: 10px;
+  }
+
+  .customer-details .contact-details h2 {
+    font-size: 21px;
+    margin-top: 0;
+  }
+
+  .logut_button a.logout {
+    position: static;
+    width: 100%;
+    text-align: right;
+  }
+
+  .logut_button {
+    width: 100%;
+    bottom: 0;
+  }
+
+  .customer button {
+    width: auto;
+    color: #fff ! important;
+  }
+
+  .customer_service_page .customer-portal .flex-holder .content-wrapper .subscription-contract-products .grid .grid-item:nth-child(2) h4 {
+    font-size: 15px;
+  }
+
+  .order-box .pre_segment .pre_segment_order button span {
+    color: black;
+  }
+
+  .order-box .pre_segment .pre_segment_order button p {
+    font-size: 15px;
+  }
+}
+
+
+
+.customer_service_page h2 {
+  font-size: 25px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+div#contract-content .customer-details .logut_button {
+  padding-top: 7px;
+}
+
+div#contract-content .customer-details .logut_button a.logout {
+  position: static;
+  display: block;
+}
+
+
+
+.with_show_reactvate {
+  position: absolute;
+  top: 163px;
+  right: 19px;
+  width: 100%;
+  max-width: 336px;
+}
+
+
+@media only screen and (max-width:767px) {
+  .with_show_reactvate {
+    position: static;
+    max-width: 100%;
+  }
 }

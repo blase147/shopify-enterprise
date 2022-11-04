@@ -106,7 +106,68 @@ class SendEmailService
         
         sent= EmailService::Send.new(email_notification).send_email({customer: contract,otp: otp}) if email_notification.present? && contract.shop.setting.email_service.present?
         if sent
-            SiteLog.create(log_type: SiteLog::TYPES[:email_success], message: "PreOrderEmailNotification sent")
+            SiteLog.create(log_type: SiteLog::TYPES[:email_success], message: "Passwordless Login OTP sent")
+        else
+            SiteLog.create(log_type: SiteLog::TYPES[:email_failure], params: {id: contract.id, shopify_id: contract.shopify_customer_id })
+        end
+        return sent
+    end
+
+    #-----------------------Contract Actions Emails----------------------
+    def send_skip_meal(contract, begin_date, end_date)
+        email_notification = contract.shop.setting.email_notifications.find_by_name "Skip Meal"
+        
+        sent= EmailService::Send.new(email_notification).send_email({customer: contract, begin_date: begin_date, end_date: end_date}) if email_notification.present? && contract.shop.setting.email_service.present?
+        if sent
+            SiteLog.create(log_type: SiteLog::TYPES[:email_success], message: "Skip Meal sent")
+        else
+            SiteLog.create(log_type: SiteLog::TYPES[:email_failure], params: {id: contract.id, shopify_id: contract.shopify_customer_id })
+        end
+        return sent
+    end
+
+    def send_unskip_meal(contract, begin_date, end_date)
+        email_notification = contract.shop.setting.email_notifications.find_by_name "Un-Skip Meal"
+        
+        sent= EmailService::Send.new(email_notification).send_email({customer: contract, begin_date: begin_date, end_date: end_date}) if email_notification.present? && contract.shop.setting.email_service.present?
+        if sent
+            SiteLog.create(log_type: SiteLog::TYPES[:email_success], message: "Un-Skip Meal sent")
+        else
+            SiteLog.create(log_type: SiteLog::TYPES[:email_failure], params: {id: contract.id, shopify_id: contract.shopify_customer_id })
+        end
+        return sent
+    end
+
+    def send_status_subscription(contract, product_title, status)
+        email_notification = contract.shop.setting.email_notifications.find_by_name "#{status&.humanize} Subscription"
+        
+        sent= EmailService::Send.new(email_notification).send_email({customer: contract, product_title: product_title}) if email_notification.present? && contract.shop.setting.email_service.present?
+        if sent
+            SiteLog.create(log_type: SiteLog::TYPES[:email_success], message: status)
+        else
+            SiteLog.create(log_type: SiteLog::TYPES[:email_failure], params: {id: contract.id, shopify_id: contract.shopify_customer_id })
+        end
+        return sent
+    end
+
+    def send_swap_subscription(contract, variant_title)
+        email_notification = contract.shop.setting.email_notifications.find_by_name "Swap Subscription"
+        
+        sent= EmailService::Send.new(email_notification).send_email({customer: contract, variant_title: variant_title}) if email_notification.present? && contract.shop.setting.email_service.present?
+        if sent
+            SiteLog.create(log_type: SiteLog::TYPES[:email_success], message: "Swap Subscription sent")
+        else
+            SiteLog.create(log_type: SiteLog::TYPES[:email_failure], params: {id: contract.id, shopify_id: contract.shopify_customer_id })
+        end
+        return sent
+    end
+
+    def send_choose_meals(contract, begin_date, end_date)
+        email_notification = contract.shop.setting.email_notifications.find_by_name "Choose Meals"
+        
+        sent= EmailService::Send.new(email_notification).send_email({customer: contract, begin_date: begin_date, end_date: end_date}) if email_notification.present? && contract.shop.setting.email_service.present?
+        if sent
+            SiteLog.create(log_type: SiteLog::TYPES[:email_success], message: "Choose Meals sent")
         else
             SiteLog.create(log_type: SiteLog::TYPES[:email_failure], params: {id: contract.id, shopify_id: contract.shopify_customer_id })
         end

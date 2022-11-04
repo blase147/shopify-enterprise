@@ -2,6 +2,23 @@ class EmailService::Base < ApplicationService
 
   def subject(object)
    case @email_notification.name
+    when "Skip Meal"
+      "You skipped meal"
+    when "Un-Skip Meal"
+      "You un-skipped meal"
+    when "Paused Subscription"
+      "Your subscription is paused"
+    when "Cancelled Subscription"
+      "Your subscription is cancelled"
+    when "Resumed Subscription"
+      "Your subscription is resumed"
+    when "Restarted Subscription"
+      "Your subscription is restarted"
+    when "Swap Subscription"
+      "Your Subscription is swapped"
+    when "Choose Meals"
+      "You choosed some meals"
+
     when "Passwordless Login OTP"
       "OTP for Login"
     when "Changes Reminder"
@@ -184,6 +201,52 @@ class EmailService::Base < ApplicationService
         customer_portal_link: customer_portal_link,
         shopify_store_email: shop_email,
       }
+    when "Skip Meal"
+      {
+        product_title: object[:customer]&.subscription&.humanize,
+        customer_name: object[:customer].name&.humanize,
+        begin_date: object[:begin_date],
+        end_date: object[:end_date]
+      }
+    when "Un-Skip Meal"
+      {
+        product_title: object[:customer]&.subscription&.humanize,
+        customer_name: object[:customer].name&.humanize,
+        begin_date: object[:begin_date],
+        end_date: object[:end_date]
+      }
+    when "Paused Subscription"
+      {
+        customer_name: object[:customer].name&.humanize,
+        product_title: object[:product_title]
+      }
+    when "Cancelled Subscription"
+      {
+        customer_name: object[:customer].name&.humanize,
+        product_title: object[:product_title]
+      }
+    when "Resumed Subscription"
+      {
+        customer_name: object[:customer].name&.humanize,
+        product_title: object[:product_title]
+      }
+    when "Restarted Subscription"
+      {
+        customer_name: object[:customer].name&.humanize,
+        product_title: object[:product_title]
+      }
+    when "Swap Subscription"
+      {
+        customer_name: object[:customer].name&.humanize,
+        variant_title: object[:variant_title]
+      }
+    when "Choose Meals"
+      {
+        customer_name: object[:customer].name&.humanize,
+        begin_date: object[:begin_date],
+        end_date: object[:end_date]
+      }
+
     else
       false
     end

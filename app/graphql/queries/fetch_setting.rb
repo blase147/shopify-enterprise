@@ -7,6 +7,15 @@ module Queries
       @setting = current_shop.setting || current_shop.create_setting
       if @setting.email_notifications.blank?
         email_notifications = [
+          {name: "Skip Meal",description: 'Sent to customer when a meal is skipped', status: true, slug: "customer" },
+          {name: "Un-Skip Meal",description: 'Sent to customer when a meal is un-skipped', status: true, slug: "customer" },
+          {name: "Paused Subscription",description: 'Sent to customer when subscription is paused', status: true, slug: "customer" },
+          {name: "Cancelled Subscription",description: 'Sent to customer when a subscription is cancelled', status: true, slug: "customer" },
+          {name: "Resumed Subscription",description: 'Sent to customer when a subscription is resumed', status: true, slug: "customer" },
+          {name: "Restarted Subscription",description: 'Sent to customer when a subscription is resumed', status: true, slug: "customer" },
+          {name: "Swap Subscription",description: 'Sent to customer when a subscription is swapped', status: true, slug: "customer" },
+          {name: "Choose Meals",description: 'Sent to customer when they make changes in their meals', status: true, slug: "customer" },
+
           {name: 'Changes Reminder', description: 'Sent to customers when a recurring order occurs', status: true, slug: "customer" },
           {name: 'Passwordless Login OTP', description: 'Send OTP to customer for passwordless login', status: true, slug: "customer" },
           {name: 'Order fulfiled', description: 'Sent to customers when an order is fulfiled)', status: true, slug: "customer" },
