@@ -105,13 +105,13 @@ class CalculateOrderDelivery
       delivery_day = @contract.delivery_day.downcase&.to_sym rescue fallback_day || "tuesday".to_sym
       cutoff_day = delivery_settings[:settings].filter{|s| s["delivery"].to_sym  == delivery_day }.first["cutoff_day"].to_sym rescue nil
       
-      current_week_select_by = (((current_date - 1.week).beginning_of_week.to_date..(current_date- 1.week).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == cutoff_day&.downcase&.to_sym })&.first
-
-      current_week_expected_delivery = (((current_date).beginning_of_week.to_date..(current_date).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == delivery_day&.downcase&.to_sym })&.first
-
-      next_week_select_by = (((current_date).beginning_of_week.to_date..(current_date).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == cutoff_day&.downcase&.to_sym })&.first
       
+      current_week_expected_delivery = (((current_date).beginning_of_week.to_date..(current_date).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == delivery_day&.downcase&.to_sym })&.first
+      current_week_select_by = current_week_expected_delivery.prev_occurring(cutoff_day&.downcase&.to_sym)
+
       next_week_expected_delivery = (((current_date + 1.week).beginning_of_week.to_date..(current_date + 1.week).end_of_week.to_date).select { |date| date&.strftime("%A")&.downcase&.to_sym == delivery_day&.downcase&.to_sym })&.first
+      next_week_select_by = next_week_expected_delivery.prev_occurring(cutoff_day&.downcase&.to_sym)
+      
 
     end
     {
