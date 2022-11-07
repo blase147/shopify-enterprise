@@ -27,7 +27,7 @@
     <div class="preloader">
     <div class="preloader_sub_div">
       <div class="loader_main">
-        <span class="loader" style="display: block;"></span>
+        <span class="loader"></span>
       </div>
       <div class="loadingText">Loading</div>
     </div>
@@ -41,10 +41,6 @@
       <li class="contract-tab" id=""><a href="#"></a></li>
     <% end %>
   </ul>
-
-  <div class="loader">
-    <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
-  </div>
   <div id="contract-content">
     
   </div>
@@ -81,13 +77,13 @@
     id = $(this).attr('id');
     let local_id = "<%= params[:local_id] %>"
     let params = {
-      customer_id: <%= params[:customer_id] %>,
+      customer: <%= params[:customer] %>,
       status: "<%= params[:status] %>",
       overview: "<%= params[:overview] %>",
       local_id: local_id === "" ? null : local_id,
-      admin_refcode: "<%= params[:admin_refcode]%>"
+      token: "<%= params[:token]%>"
     }
-    url = '/a/chargezen_production/dashboard/fetch_contract';
+    url = '/a/chargezen/dashboard/fetch_contract';
     $.ajax({
       url: url,
       type: 'GET',
@@ -154,12 +150,12 @@
   $(document).ready(function (){
     $(".submit_pre_order").on('click', function(e){
       $.ajax({
-        url: '/a/chargezen_production/dashboard/pre_order',
+        url: '/a/chargezen/dashboard/pre_order',
         type: 'POST',
         data: JSON.stringify($(this).data('pre_order')),
         contentType: 'application/json',
         success: function(response) {
-          window.location = '/a/chargezen_production?customer_id=' + response.customer_id;
+          window.location = '/a/chargezen?customer=' + response.customer_id;
         },
         error: function(response) {}
       });
@@ -193,7 +189,7 @@
 
     //       $("form").submit(function (event) {
     //         var formData = {
-    //           customer_id: '<%= params[:customer_id] %>',
+    //           customer_id: '<%= params[:customer] %>',
     //           first_name: $("#first_name").val(),
     //           last_name: $("#last_name").val(),
     //           address1: $("#address1").val(),
@@ -205,9 +201,9 @@
     //           zip: $("#zip").val(),
     //         };
 
-    //       let payment_url = '<%= action_subscription_contract_path(:update_payment, (customer.id rescue params[:customer_id]) ) %>'
+    //       let payment_url = '<%= action_subscription_contract_path(:update_payment, (customer.id rescue params[:customer]) ) %>'
     //       $.ajax({
-    //         url: '/a/chargezen_production/dashboard/customer_info',
+    //         url: '/a/chargezen/dashboard/customer_info',
     //         type: 'POST',
     //         data: JSON.stringify(formData),
     //         contentType: 'application/json',
@@ -267,12 +263,12 @@
       }
     <% if active_sub_main.present? && active_sub_main.id.present? %>
       $.ajax({
-        url: "/a/chargezen_production/subscriptions/<%= active_sub_main.id %>/update_subscription",
+        url: "/a/chargezen/subscriptions/<%= active_sub_main.id %>/update_subscription",
         type: 'POST',
-        data: JSON.stringify({customer_id: '<%= params[:customer_id] %>', quantity: $('#sub_list_slide_box li button.active').find('input[type=hidden]').val() }),
+        data: JSON.stringify({customer_id: '<%= params[:customer] %>', quantity: $('#sub_list_slide_box li button.active').find('input[type=hidden]').val() }),
         contentType: 'application/json',
         success: function(response) {
-          window.location.reload();// = '/a/chargezen_production?customer_id=' + response.customer_id;
+          window.location.reload();// = '/a/chargezen?customer=' + response.customer_id;
         },
         error: function(response) {}
       });
@@ -289,7 +285,7 @@
 
 $(function() {
   var loc = window.location.pathname.split('?')[0];
-  if("/a/chargezen_production/dashboard"=== loc) {
+  if("/a/chargezen/dashboard"=== loc) {
     $('body').addClass('customer_service_page');
   }
 }); 

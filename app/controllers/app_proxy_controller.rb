@@ -12,7 +12,7 @@ class AppProxyController < ApplicationController
   end
 
   def customer_id
-    params[:customer_id]
+    params[:customer]
   end
 
   def current_setting

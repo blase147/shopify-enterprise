@@ -7,7 +7,7 @@ main#AppFrameMain.Polaris-Frame__Main data-has-global-ribbon="false"
             .Polaris-Page-Header__BreadcrumbWrapper
               nav[role="navigation"]
                 - if @theme&.downcase === "worldfare_"
-                    a.Polaris-Breadcrumbs__Breadcrumb[data-polaris-unstyled="true" href=href="/a/chargezen_production/orders?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" ]
+                    a.Polaris-Breadcrumbs__Breadcrumb[data-polaris-unstyled="true" href=href="/a/chargezen/orders?customer=#{params[:customer]}&active_subscriptions_count=#{@active_subscriptions_count}" ]
                         span.Polaris-Breadcrumbs__ContentWrapper
                             span.Polaris-Icon
                                 svg style="margin-bottom: 9px;height: 13px;" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 376.83"

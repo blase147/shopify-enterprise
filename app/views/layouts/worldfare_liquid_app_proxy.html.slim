@@ -13,12 +13,12 @@ html
   div.chargezen-proxy
     - unless @skip_auth
       | {% if customer.id ==
-      = params[:customer_id]
+      = params[:customer]
       | %}
     = yield
     - unless @skip_auth
       | {% else %}
-      - if params[:admin_refcode].present? && (("#{params[:admin_refcode]}".strip ==  "#{@auth}"&.strip) || ("#{params[:admin_refcode]}".strip ==  admin_auth_token()))
+      - if params[:token].present? && (("#{params[:token]}".strip ==  "#{@auth}"&.strip) || ("#{params[:token]}".strip ==  admin_auth_token()))
           = yield
       - else
           = render "/partials/password_less_login_form"

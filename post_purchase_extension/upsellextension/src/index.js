@@ -46,7 +46,7 @@ extend('Checkout::PostPurchase::ShouldRender', async (args) => {
 async function getRenderData() {
   return {
     couldBe: 'anything',
-    redirect_url: 'https://hitched-staging.myshopify.com/a/chargezen_production/dashboard/build_a_box?customer_id=5879558340774&subscription_id=1964736678&active_subscriptions_count=2&selling_plan_id=631996582'
+    redirect_url: 'https://hitched-staging.myshopify.com/a/chargezen/dashboard/build_a_box?customer=5879558340774&subscription_id=1964736678&active_subscriptions_count=2&selling_plan_id=631996582'
   };
 }
 /**
@@ -59,7 +59,7 @@ async function getRenderData() {
 render('Checkout::PostPurchase::Render', () => <App />);
 // Top-level React component
 export function App() {
-  const {extensionPoint, storage} = useExtensionInput();
+  const { extensionPoint, storage } = useExtensionInput();
   const initialState = storage.initialData;
   debugger
   return (
@@ -71,9 +71,9 @@ export function App() {
       <Layout
         maxInlineSize={0.95}
         media={[
-          {viewportSize: 'small', sizes: [1, 30, 1]},
-          {viewportSize: 'medium', sizes: [300, 30, 0.5]},
-          {viewportSize: 'large', sizes: [400, 30, 0.33]},
+          { viewportSize: 'small', sizes: [1, 30, 1] },
+          { viewportSize: 'medium', sizes: [300, 30, 0.5] },
+          { viewportSize: 'large', sizes: [400, 30, 0.33] },
         ]}
       >
         <View>

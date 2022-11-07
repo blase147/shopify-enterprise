@@ -51,7 +51,7 @@ class AppProxy::PasswordLessLoginController < AppProxyController
             # set auth code in redis which will expire in 30 minutes
             auth_token = SecureRandom.urlsafe_base64(nil, false)
             $redis.set("#{customer.email}_auth", auth_token, options = {ex: 1800})
-            redirect_to "/a/chargezen_production/dashboard?customer_id=#{customer&.shopify_id}&admin_refcode=#{auth_token}"
+            redirect_to "/a/chargezen/dashboard?customer=#{customer&.shopify_id}&token=#{auth_token}"
         else
             render json:{error: "You have entered wrong OTP"}
         end
@@ -68,6 +68,6 @@ class AppProxy::PasswordLessLoginController < AppProxyController
     def log_out
         $redis = Redis.new
         $redis.del("#{params[:email]&.downcase&.strip}_auth")
-        redirect_to "/a/chargezen_production/password_less_login"
+        redirect_to "/a/chargezen/password_less_login"
     end
 end

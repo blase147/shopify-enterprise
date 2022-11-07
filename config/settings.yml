@@ -5,4 +5,4 @@ snippets:
   customer_portal_frame: "{% render 'chargezen-customer-portal-frame' %}"
   customer_portal_link: "{% render 'chargezen-customer-portal-link' %}"
   version: 'v0.1'
-  proxy_path: 'a/chargezen_production'
+  proxy_path: 'a/chargezen'
