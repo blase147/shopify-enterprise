@@ -5735,3 +5735,44 @@ div#contract-content .customer-details .logut_button a.logout {
   display: flex;
   gap: 5px;
 }
+
+
+@media only screen and (max-width:767px) {
+
+  html,
+  body {
+    min-height: inherit;
+    height: auto;
+  }
+
+  .customer_service_page .customer-details .customer-info {
+    flex: 0 0 70%;
+    order: 1;
+    text-align: left;
+    display: inline-flex;
+    justify-content: flex-start;
+  }
+
+  .customer_service_page .customer-details .contact-details {
+    order: 3;
+  }
+
+  .customer_service_page .customer-details .logut_button {
+    flex: 0 0 25%;
+    order: 2;
+    padding: 0 !important;
+  }
+
+  .customer_service_page .customer-details .container::before,
+  .customer_service_page .customer-details .container::after {
+    display: none;
+  }
+
+  .customer_service_page .customer-details .container {
+    align-items: flex-start;
+  }
+
+  div#contract-content .customer-details .logut_button a.logout {
+    margin-top: 17px;
+  }
+}

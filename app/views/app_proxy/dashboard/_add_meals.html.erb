@@ -227,7 +227,7 @@
     let params = {
       product_ids: product_ids,
       week:  week_number,
-      customer_id: <%= @customer&.shopify_customer_id %> ,
+      customer: <%= @customer&.shopify_customer_id %> ,
       shopify_contract_id: <%= @customer&.shopify_id %>
     }
 
