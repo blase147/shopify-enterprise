@@ -183,7 +183,7 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
     fetchPolicy: 'network-only',
   });
 
-  const UPDATE_SETTING = gql`
+  const [UPDATE_SETTING, setUpdateSetting] = useState(gql`
     mutation ($input: UpdateSettingInput!) {
       updateSetting(input: $input) {
         setting {
@@ -226,17 +226,6 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
             title
             returnContent
             _destroy
-          }
-
-          emailNotifications {
-            name
-            status
-            fromName
-            fromEmail
-            emailSubject
-            emailMessage
-            slug
-            description
           }
           additionalSendAccountAfterCheckout
           bbcStoreowner
@@ -289,7 +278,8 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
         }
       }
     }
-  `;
+  `);
+
   const [updateSetting] = useMutation(UPDATE_SETTING);
 
   useEffect(() => {
@@ -796,6 +786,7 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                                       setFieldValue={setFieldValue}
                                       handleSubmit={handleSubmit}
                                       handleBack={handleBackSetting}
+                                      setUpdateSetting={setUpdateSetting}
                                     />
                                   </div>
                                 ) : selectedSetting === 'store_information' ? (
