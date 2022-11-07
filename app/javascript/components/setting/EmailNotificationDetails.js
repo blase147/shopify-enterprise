@@ -23,6 +23,7 @@ import htmlToDraft from 'html-to-draftjs';
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { data } from 'jquery';
 import PreviewEmail from './PreviewEmail';
+import { gql } from '@apollo/client';
 
 const emailNotificationsDetails = (props) => {
   const codeTextArea = useRef(null);
@@ -63,7 +64,29 @@ const emailNotificationsDetails = (props) => {
     index,
     setSelectedIndex,
     handleSubmit,
+    setUpdateSetting
   } = props;
+
+  useEffect(() => {
+    setUpdateSetting(gql`
+      mutation ($input: UpdateSettingInput!) {
+        updateSetting(input: $input) {
+          setting {
+            emailNotifications {
+              name
+              status
+              fromName
+              fromEmail
+              emailSubject
+              emailMessage
+              slug
+              description
+            }
+          }
+        }
+      }
+    `)
+  }, []);
 
   const submit = async () => {
     await handleSubmit();

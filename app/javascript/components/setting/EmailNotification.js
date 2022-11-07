@@ -29,7 +29,7 @@ const EmailNotification = (props) => {
     (value) => setSelectedSetting(value),
     []
   );
-  const { values, touched, errors, setFieldValue, handleSubmit, handleBack } =
+  const { values, touched, errors, setFieldValue, handleSubmit, handleBack, setUpdateSetting } =
     props;
   const listAdditionalSetting = [
     {
@@ -104,6 +104,7 @@ const EmailNotification = (props) => {
           errors={errors}
           setSelectedIndex={setSelectedIndex}
           handleSubmit={handleSubmit}
+          setUpdateSetting={setUpdateSetting}
         />
       ) : (
         <div className={`${selectedIndex != null ? 'hidden' : ''}`}>
