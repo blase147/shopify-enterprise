@@ -118,8 +118,7 @@ class CalculateOrderDelivery
       current_week_select_by: current_week_select_by, 
       current_week_expected_delivery: current_week_expected_delivery,
       next_week_select_by: next_week_select_by,
-      next_week_expected_delivery: next_week_expected_delivery,
-      cutoff_day: cutoff_day
+      next_week_expected_delivery: next_week_expected_delivery
     }
 
   end
