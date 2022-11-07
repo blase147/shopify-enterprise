@@ -12,9 +12,9 @@ if (Shopify.checkout) {
   let box_products = getCookie('box_items');
   if (box_products) {
     $.ajax({
-      url: "/a/chargezen_production/build_a_box/add_product",
+      url: "/a/chargezen/build_a_box/add_product",
       type: "POST",
-      data: { box_products : box_products, order_id: Shopify.checkout.order_id, created_at: Shopify.checkout.created_at, customer_id: Shopify.checkout.customer_id },
+      data: { box_products : box_products, order_id: Shopify.checkout.order_id, created_at: Shopify.checkout.created_at, customer: Shopify.checkout.customer_id },
       success: function(result){
         console.log(result)
       }

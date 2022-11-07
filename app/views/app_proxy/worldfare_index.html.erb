@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 {{ 'customer.css' | asset_url | stylesheet_tag }}
-<% customer = ShopifyAPI::Customer.find(params[:customer_id]) rescue nil %>
+<% customer = ShopifyAPI::Customer.find(params[:customer]) rescue nil %>
 <% customer_order = ShopifyAPI::Order.find(:first, params: {customer_id: customer.id} ) rescue nil %>
 
 <% active_sub = customer_order.line_items.find{|item| item.name.downcase.include?('box')} rescue nil %>
@@ -1279,7 +1279,7 @@
                 week_day = current_date + 14.days
                 week_days << week_day.strftime('%Y%m%d')
               end
-              week_subscription = WorldfarePreOrder.find_by( customer_id: params[:customer_id], week: week_days.last )
+              week_subscription = WorldfarePreOrder.find_by( customer_id: params[:customer], week: week_days.last )
               week_subscription_products = nil
               if week_subscription.present?
                 week_subscription_products = ShopifyAPI::Product.where(ids: week_subscription.products, fields: 'id,title,images') rescue nil
@@ -1302,17 +1302,17 @@
                           <div class="order_inn center" >
                             <img src="<%= selected_product.images.first.src rescue nil %>">
                             <h5><%= selected_product.title rescue nil %> </h5>
-                            <h6><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>">Edit</a></h6>
+                            <h6><a href="https://worldfare.com/collections/the-menu-customers?customer=<%= params[:customer] %>&week=<%= i %>">Edit</a></h6>
                           </div>
                         <% elsif week_subscription_products.present? %>
                           <% week_subscription_product = week_subscription_products[key-1].present? ? week_subscription_products[key-1] : nil %>
                           <div class="order_inn center" >
                             <img src="<%= week_subscription_product.images.first.src rescue nil %>">
                             <h5><%= week_subscription_product.title rescue nil %> </h5>
-                            <h6><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>">Edit</a></h6>
+                            <h6><a href="https://worldfare.com/collections/the-menu-customers?customer=<%= params[:customer] %>&week=<%= i %>">Edit</a></h6>
                           </div>
                         <% else %>
-                          <li class="pre_segment_order"><a href="https://worldfare.com/collections/the-menu-customers?customer_id=<%= params[:customer_id] %>&week=<%= i %>"><button><span>+</span><p>Add to box</p></button></a></li>
+                          <li class="pre_segment_order"><a href="https://worldfare.com/collections/the-menu-customers?customer=<%= params[:customer] %>&week=<%= i %>"><button><span>+</span><p>Add to box</p></button></a></li>
                         <% end %>
                       <% end %>
                     <% end %>
@@ -1322,7 +1322,7 @@
             </div>
           <% end %>
           <% if params[:product_ids].present? && params[:week] %>
-          <button data-pre_order="<%= { customer_id: params[:customer_id],week: week_days[params[:week].to_i-1], products: params[:product_ids] }.to_json %>" class="submit_pre_order">Save Changes</button>
+          <button data-pre_order="<%= { customer_id: params[:customer],week: week_days[params[:week].to_i-1], products: params[:product_ids] }.to_json %>" class="submit_pre_order">Save Changes</button>
           <% end %>
         </div>
 
@@ -1371,12 +1371,12 @@
   $(document).ready(function (){
     $(".submit_pre_order").on('click', function(e){
       $.ajax({
-        url: '/a/chargezen_production/dashboard/pre_order',
+        url: '/a/chargezen/dashboard/pre_order',
         type: 'POST',
         data: JSON.stringify($(this).data('pre_order')),
         contentType: 'application/json',
         success: function(response) {
-          window.location = '/a/chargezen_production?customer_id=' + response.customer_id;
+          window.location = '/a/chargezen?customer=' + response.customer_id;
         },
         error: function(response) {}
       });

@@ -74,7 +74,7 @@ javascript:
     id = $(this).data('id');
     line_id = $(this).data('line-id');
     variant_id = $(this).data('variant-id');
-    url = "/a/chargezen_production/subscriptions/"+id+"/remove_line?line_id="+line_id+"&lines_count=1&quantity=1&variant_id="+variant_id+"&action_by=customer&admin_refcode=#{params[:admin_refcode]}";
+    url = "/a/chargezen/subscriptions/"+id+"/remove_line?line_id="+line_id+"&lines_count=1&quantity=1&variant_id="+variant_id+"&action_by=customer&token=#{params[:token]}";
     $(this).text('Updating..');
     $.ajax({
       url: url,
@@ -102,7 +102,7 @@ javascript:
     myDate.setDate(myDate.getDate()+1);
     // format a date
     var date = myDate.getDate() + '/' + ("0" + (myDate.getMonth() + 1)).slice(-2) + '/' + myDate.getFullYear();
-    url = "/a/chargezen_production/subscriptions/" + contract_id + action + "?billing_date=" + date+"&action_by=customer&admin_refcode=#{params[:admin_refcode]}"
+    url = "/a/chargezen/subscriptions/" + contract_id + action + "?billing_date=" + date+"&action_by=customer&token=#{params[:token]}"
     $(this).text('Updating..');
     $.ajax({
       url: url,
@@ -134,10 +134,10 @@ javascript:
     let id = $(this).data("id");
     let contractId = $(this).data("contractid");
     $.ajax({
-      url: "/a/chargezen_production/subscriptions/"+contractId+"/cancel",
+      url: "/a/chargezen/subscriptions/"+contractId+"/cancel",
       type: "POST",
       contentType: 'application/json',
-      data: JSON.stringify({ id: contractId, cancel_later_date: $("#cancel_later_date_"+id).val(),action_by: 'customer',admin_refcode: "#{params[:admin_refcode]}"}),
+      data: JSON.stringify({ id: contractId, cancel_later_date: $("#cancel_later_date_"+id).val(),action_by: 'customer',token: "#{params[:token]}"}),
       headers: {
         'access-control-allow-origin': '*',
       },
@@ -169,10 +169,10 @@ javascript:
     let id = $(this).data("id");
     let contractId = $(this).data("contractid");
     $.ajax({
-      url: "/a/chargezen_production/subscriptions/"+contractId+"/pause",
+      url: "/a/chargezen/subscriptions/"+contractId+"/pause",
       type: "POST",
       contentType: 'application/json',
-      data: JSON.stringify({ id: contractId, pause_later_date: $("#pause_later_date_"+id).val(), action_by: 'customer', admin_refcode: "#{params[:admin_refcode]}"}),
+      data: JSON.stringify({ id: contractId, pause_later_date: $("#pause_later_date_"+id).val(), action_by: 'customer', token: "#{params[:token]}"}),
       headers: {
         'access-control-allow-origin': '*',
       },

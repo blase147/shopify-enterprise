@@ -3,7 +3,7 @@ class AppProxy::SubscriptionsController < AppProxyController
   include SubscriptionConcern
 
   def index
-    customer_id = "gid://shopify/Customer/#{params[:customer_id]}"
+    customer_id = "gid://shopify/Customer/#{params[:customer]}"
     @data = CustomerSubscriptionContractsService.new(customer_id).run params[:cursor]
     @subscription_contracts = @data[:subscriptions] || []
 
@@ -16,8 +16,8 @@ class AppProxy::SubscriptionsController < AppProxyController
     product_id = @subscription.lines.edges.first.node.product_id[/\d+/]
     @product = ShopifyAPI::Product.find(product_id)
 
-    unless params[:customer_id] == @subscription.customer.id[/\d+/]
-      redirect_to "/a/chargezen_production/subscriptions/?customer_id=#{params[:customer_id]}"
+    unless params[:customer] == @subscription.customer.id[/\d+/]
+      redirect_to "/a/chargezen/subscriptions/?customer=#{params[:customer]}"
     end
 
     render 'show', content_type: 'application/liquid', layout: 'liquid_app_proxy'
@@ -75,8 +75,8 @@ class AppProxy::SubscriptionsController < AppProxyController
       flash[:error] = result[:error]
       render js: "alert('#{result[:error]}'); hideLoading()"
     else
-      if params[:quantity].present? && params[:customer_id].present?
-        customer = ShopifyAPI::Customer.find( params[:customer_id] )
+      if params[:quantity].present? && params[:customer].present?
+        customer = ShopifyAPI::Customer.find( params[:customer] )
         if customer.present?
           tags = ["#{params[:quantity]}box"]
           customer.tags.split(',').each do |tag|
@@ -105,7 +105,7 @@ class AppProxy::SubscriptionsController < AppProxyController
   end
 
   def update_payment
-    contract = CustomerSubscriptionContract.find_by(shopify_customer_id: params[:customer_id], api_source: 'stripe')
+    contract = CustomerSubscriptionContract.find_by(shopify_customer_id: params[:customer], api_source: 'stripe')
 
     if contract
       response = Stripe::Customer.create_source(

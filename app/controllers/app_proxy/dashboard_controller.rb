@@ -5,9 +5,9 @@ class AppProxy::DashboardController < AppProxyController
   before_action :load_customer, only: %w(addresses payment_methods settings upcoming build_a_box track_order)
   def index
     if params[:status].present?
-      @subscription_contracts = CustomerSubscriptionContract.where(shopify_customer_id: params[:customer_id], status: params[:status]&.upcase)
+      @subscription_contracts = CustomerSubscriptionContract.where(shopify_customer_id: params[:customer], status: params[:status]&.upcase)
     else
-      @subscription_contracts = CustomerSubscriptionContract.where(shopify_customer_id: params[:customer_id])
+      @subscription_contracts = CustomerSubscriptionContract.where(shopify_customer_id: params[:customer])
     end
     email = @subscription_contracts&.last&.email
     $redis = Redis.new
@@ -37,9 +37,9 @@ class AppProxy::DashboardController < AppProxyController
   end
 
   def payment_methods(customer_id=nil)
-    params[:customer_id] = customer_id if customer_id.present?
+    params[:customer] = customer_id if customer_id.present?
     @orders = ShopifyAPI::Order.find(:all,
-      params: { customer_id: params[:customer_id], limit: 6, page_info: nil }
+      params: { customer_id: params[:customer], limit: 6, page_info: nil }
     )
 
     @payment_methods = {}
@@ -76,14 +76,14 @@ class AppProxy::DashboardController < AppProxyController
 
   # worldfare
   def pre_order
-    sub_pre_order = WorldfarePreOrder.find_by(customer_id: params[:customer_id], week: params[:week])
+    sub_pre_order = WorldfarePreOrder.find_by(customer_id: params[:customer], week: params[:week])
     if sub_pre_order.nil?
-      sub_pre_order = WorldfarePreOrder.create(shop_id: current_shop.id, customer_id: params[:customer_id], week: params[:week], products: params[:products])
+      sub_pre_order = WorldfarePreOrder.create(shop_id: current_shop.id, customer_id: params[:customer], week: params[:week], products: params[:products])
     else
       sub_pre_order.update( products: params[:products] )
     end
     sub_pre_order.save
-    render json: { status: :ok, customer_id: params[:customer_id], message: 'Success', show_notification: true }
+    render json: { status: :ok, customer_id: params[:customer], message: 'Success', show_notification: true }
   end
 
   def settings
@@ -136,10 +136,10 @@ class AppProxy::DashboardController < AppProxyController
     end
     link = ''
     begin
-      customer_id = "gid://shopify/Customer/#{params[:customer_id]}"
+      customer_id = "gid://shopify/Customer/#{params[:customer]}"
       @data = CustomerSubscriptionContractsService.new(customer_id).run params[:cursor]
       @subscription_contracts = @data[:subscriptions]
-      # @customer = CustomerSubscriptionContract.find_by(shopify_customer_id: params[:customer_id])
+      # @customer = CustomerSubscriptionContract.find_by(shopify_customer_id: params[:customer])
       # if @customer.nil? && params[:subscription_id].present?
       #   ShopifyContractCreateWorker.new.perform(current_shop.id, params[:subscription_id])
       #   @customer = CustomerSubscriptionContract.find_by_shopify_id(params[:subscription_id])
@@ -178,7 +178,7 @@ class AppProxy::DashboardController < AppProxyController
 
   def customer_info
    
-    shopify_customer = ShopifyAPI::Customer.find( params[:customer_id] )
+    shopify_customer = ShopifyAPI::Customer.find( params[:customer] )
     shopify_customer.first_name = params[:first_name]
     shopify_customer.last_name = params[:last_name]
     shopify_customer.addresses << {
@@ -197,9 +197,9 @@ class AppProxy::DashboardController < AppProxyController
   end
 
   def create_pre_order
-    pre_order = WorldfarePreOrder.find_by(shopify_contract_id: params[:shopify_contract_id], customer_id: params[:customer_id], week: params[:week])
+    pre_order = WorldfarePreOrder.find_by(shopify_contract_id: params[:shopify_contract_id], customer_id: params[:customer], week: params[:week])
     if pre_order.nil?
-      pre_order = WorldfarePreOrder.new(shopify_contract_id: params[:shopify_contract_id], shop_id: current_shop.id, customer_id: params[:customer_id], week: params[:week], products: params[:product_ids], created_by: WorldfarePreOrder::CREATION_TYPES[:customer])
+      pre_order = WorldfarePreOrder.new(shopify_contract_id: params[:shopify_contract_id], shop_id: current_shop.id, customer_id: params[:customer], week: params[:week], products: params[:product_ids], created_by: WorldfarePreOrder::CREATION_TYPES[:customer])
     end
     if pre_order.persisted?
       pre_order.products = params[:product_ids]
@@ -211,9 +211,9 @@ class AppProxy::DashboardController < AppProxyController
       contract=CustomerSubscriptionContract.find_by_shopify_id(params[:shopify_contract_id]) rescue nil
       contract&.shop&.subscription_logs&.cancel&.create(subscription_id: contract&.shopify_id,customer_id: contract.id, description: description, action_by: 'customer',action_type: "meal_selection")
       SendEmailService.new.send_choose_meals(contract, begin_date, end_date)
-      render json: { status: :ok, customer_id: params[:customer_id], message: 'Pre Order created Successfuly', show_notification: true }
+      render json: { status: :ok, customer_id: params[:customer], message: 'Pre Order created Successfuly', show_notification: true }
     else
-      render json: { customer_id: params[:customer_id], message: pre_order.errors.full_messages, show_notification: true }
+      render json: { customer_id: params[:customer], message: pre_order.errors.full_messages, show_notification: true }
     end
   end
 
@@ -224,10 +224,10 @@ class AppProxy::DashboardController < AppProxyController
       @customer = CustomerSubscriptionContract.find(params[:local_id])
     else
       if params[:status].present?
-        @customer = CustomerSubscriptionContract.where(shopify_customer_id: "#{params[:customer_id]}", status: params[:status]&.upcase).first
+        @customer = CustomerSubscriptionContract.where(shopify_customer_id: "#{params[:customer]}", status: params[:status]&.upcase).first
       end
       if @customer.nil?
-        @customer = CustomerSubscriptionContract.where(shopify_customer_id: "#{params[:customer_id]}").first
+        @customer = CustomerSubscriptionContract.where(shopify_customer_id: "#{params[:customer]}").first
       end
     end
     current_shop.connect
@@ -257,7 +257,7 @@ class AppProxy::DashboardController < AppProxyController
 
   def order_paginate
     @orders = ShopifyAPI::Order.find(:all,
-      params: { customer_id: params[:customer_id], limit: PER_PAGE, page_info: params[:page_info] }
+      params: { customer_id: params[:customer], limit: PER_PAGE, page_info: params[:page_info] }
     )
     respond_to do |format|
       format.js
@@ -295,9 +295,9 @@ class AppProxy::DashboardController < AppProxyController
 
   def add_meals 
     @setting = current_shop&.setting
-    @auth = params[:admin_refcode]
+    @auth = params[:token]
     @customer = CustomerSubscriptionContract.find(params[:local_id])
-    params[:customer_id] = @customer.shopify_customer_id
+    params[:customer] = @customer.shopify_customer_id
     render "#{current_setting.portal_theme}index", content_type: 'application/liquid', layout: "#{current_setting.portal_theme}liquid_app_proxy"    
   end  
   
@@ -325,6 +325,6 @@ class AppProxy::DashboardController < AppProxyController
     @cancelled_subscriptions = (@data && @data[:cancelled_subscriptions] || []) + @stripe_subscriptions&.select{|lc| lc.status == 'CANCELLED'}
     @active_subscriptions = (@data && @data[:active_subscriptions] || []) + @stripe_subscriptions&.select{|lc| lc.status == 'ACTIVE'}
     @active_subscriptions_count = params[:active_subscriptions_count].present? ? params[:active_subscriptions_count].to_i : (@data && @data[:active_subscriptions].count || 0)
-    @cancelled_line_items = RemovedSubscriptionLine.where(customer_id: params[:customer_id])
+    @cancelled_line_items = RemovedSubscriptionLine.where(customer_id: params[:customer])
   end
 end

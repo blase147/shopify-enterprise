@@ -100,7 +100,7 @@ module SubscriptionConcern
         # amount = (product.quantity * variant.price.to_f).round(2).to_s
         current_shop.subscription_logs.swap.create(subscription_id: params[:id], customer_id: @customer.id, product_name: variant.title, note: note, description: description, product_id: variant_id&.split("/")&.last, swaped_product_id: variant.product_id, action_by: params[:action_by])
         SendEmailService.new.send_swap_subscription(@customer, variant.title)
-        # redirect_to "/a/chargezen_production?customer_id=#{@customer.shopify_customer_id}"        
+        # redirect_to "/a/chargezen?customer_id=#{@customer.shopify_customer_id}"        
         render js: 'window.location.reload(false)'
       end
     end
@@ -143,14 +143,14 @@ module SubscriptionConcern
       set_draft_contract
       if params[:lines_count].to_i > 1
         result = SubscriptionDraftsService.new.remove(@draft_id, params[:line_id])
-        RemovedSubscriptionLine.create(subscription_id: params[:id], customer_id: params[:customer_id], variant_id: params[:variant_id], quantity: params[:quantity] )
+        RemovedSubscriptionLine.create(subscription_id: params[:id], customer_id: params[:customer], variant_id: params[:variant_id], quantity: params[:quantity] )
       else
         result = SubscriptionContractDeleteService.new(params[:id],nil,true,params[:action_by]).run
       end
       if result[:error].present?
         render js: "alert('#{result[:error]}'); hideLoading()"
       else
-        customer = CustomerSubscriptionContract.find_by_shopify_id params[:customer_id]
+        customer = CustomerSubscriptionContract.find_by_shopify_id params[:customer]
         customer.update(reasons_cancel_id: params[:reasons_cancel_id]) if !customer.nil? && params[:reasons_cancel_id].present?
         begin
           email_notification = customer.shop.setting.email_notifications.find_by_name "Subscription Cancellation"

@@ -19,7 +19,7 @@ html
   div.chargezen-proxy
     - unless @skip_auth
       | {% if customer.id ==
-      = params[:customer_id]
+      = params[:customer]
       | %}
 
     = render 'app_proxy/shared/tabs'

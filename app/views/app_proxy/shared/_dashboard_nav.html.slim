@@ -17,7 +17,7 @@ nav.Polaris-Navigation.account
     ul.Polaris-Navigation__Section.account-sidebar
       li.Polaris-Navigation__ListItem
         .Polaris-Navigation__ItemWrapper
-          a.Polaris-Navigation__Item class=active_nav('dashboard', 'index') href="/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}" tabindex="0"
+          a.Polaris-Navigation__Item class=active_nav('dashboard', 'index') href="/a/chargezen/dashboard?customer=#{params[:customer]}" tabindex="0"
             .Polaris-Navigation__Icon
               svg.Polaris-Icon__Svg aria-hidden="true" fill="none" focusable="false" viewbox=("0 0 20 20")
                 path d=("M6.63672 1.84473H19.016") stroke="#4D506A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
@@ -33,12 +33,12 @@ nav.Polaris-Navigation.account
               li.Polaris-Navigation__ListItem
                 .Polaris-Navigation__ItemWrapper.active-subscription
                   span.Polaris-Navigation__Text
-                    = link_to "/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}&status=active", class: 'Polaris-Navigation__Item', data: {'polaris-unstyled': true}, tab_index: '0', aria: {disabled: false} do
+                    = link_to "/a/chargezen/dashboard?customer=#{params[:customer]}&status=active", class: 'Polaris-Navigation__Item', data: {'polaris-unstyled': true}, tab_index: '0', aria: {disabled: false} do
                       span.Polaris-Navigation__Text
                         span class=("#{params[:status] == "active" ? 'sub-active' : ''}") #{@translation.sidebar_active.present? ? @translation.sidebar_active : 'Active'}
               li.Polaris-Navigation__ListItem
                 .Polaris-Navigation__ItemWrapper.cancel-subscription
-                = link_to "/a/chargezen_production/dashboard?customer_id=#{params[:customer_id]}&status=cancelled", class: 'Polaris-Navigation__Item', data: {'polaris-unstyled': true}, tab_index: '0', aria: {disabled: false} do
+                = link_to "/a/chargezen/dashboard?customer=#{params[:customer]}&status=cancelled", class: 'Polaris-Navigation__Item', data: {'polaris-unstyled': true}, tab_index: '0', aria: {disabled: false} do
                   span.Polaris-Navigation__Text
                     span class=("#{params[:status] == "cancelled" ? 'sub-active' : ''}") #{@translation.sidebar_cancelled.present? ? @translation.sidebar_cancelled : 'Cancelled'}
 
@@ -53,7 +53,7 @@ nav.Polaris-Navigation.account
 
       li.Polaris-Navigation__ListItem
         .Polaris-Navigation__ItemWrapper
-          a.Polaris-Navigation__Item class=active_nav('pages', 'Track Order') href="/a/chargezen_production/dashboard/track_order?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
+          a.Polaris-Navigation__Item class=active_nav('pages', 'Track Order') href="/a/chargezen/dashboard/track_order?customer=#{params[:customer]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
             .Polaris-Navigation__Icon
               span.Polaris-Icon
                 svg fill="none" height="18" viewbox=("0 0 22 18") width="22" xmlns="http://www.w3.org/2000/svg"
@@ -68,7 +68,7 @@ nav.Polaris-Navigation.account
       - if @setting&.show_delivery_schedule.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
-            a.Polaris-Navigation__Item class=active_nav('dashboard', 'upcoming') href="/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
+            a.Polaris-Navigation__Item class=active_nav('dashboard', 'upcoming') href="/a/chargezen/dashboard/upcoming?customer=#{params[:customer]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
               .Polaris-Navigation__Icon
                 span.Polaris-Icon
                   svg fill="none" height="18" viewbox=("0 0 22 18") width="22" xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +84,7 @@ nav.Polaris-Navigation.account
       - if @setting&.show_order_history.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
-            a.Polaris-Navigation__Item class=(active_nav('orders', 'index') || active_nav('orders', 'show')) href="/a/chargezen_production/orders?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
+            a.Polaris-Navigation__Item class=(active_nav('orders', 'index') || active_nav('orders', 'show')) href="/a/chargezen/orders?customer=#{params[:customer]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
               div style="margin-right: 20px;display: flex;align-items: center;justify-content: center;height: 100%;"
                 span style="display: flex;align-items: center;justify-content: center;"
                   svg fill="none" height="19" viewbox=("0 0 16 19") width="16" xmlns="http://www.w3.org/2000/svg"
@@ -96,7 +96,7 @@ nav.Polaris-Navigation.account
 
       / li.Polaris-Navigation__ListItem
       /   .Polaris-Navigation__ItemWrapper
-      /     a.Polaris-Navigation__Item class=active_nav('dashboard', 'order_history') href="/a/chargezen_production/dashboard/order_history?customer_id=#{params[:customer_id]}" tabindex="0"
+      /     a.Polaris-Navigation__Item class=active_nav('dashboard', 'order_history') href="/a/chargezen/dashboard/order_history?customer=#{params[:customer]}" tabindex="0"
       /       .Polaris-Navigation__Icon
       /         span.Polaris-Icon.order-icon
       /           svg.Polaris-Icon__Svg aria-hidden="true" fill="none" focusable="false" viewbox=("0 0 20 20")
@@ -107,7 +107,7 @@ nav.Polaris-Navigation.account
       - if @setting&.show_address.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
-            a.Polaris-Navigation__Item class=active_nav('dashboard', 'addresses') href="/a/chargezen_production/dashboard/addresses?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
+            a.Polaris-Navigation__Item class=active_nav('dashboard', 'addresses') href="/a/chargezen/dashboard/addresses?customer=#{params[:customer]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
               .Polaris-Navigation__Icon
                 span.Polaris-Icon
                   = icon_tag 'address'
@@ -117,7 +117,7 @@ nav.Polaris-Navigation.account
       - if @setting&.show_billing.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
-            a.Polaris-Navigation__Item class=active_nav('dashboard', 'payment_methods') href="/a/chargezen_production/dashboard/payment_methods?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
+            a.Polaris-Navigation__Item class=active_nav('dashboard', 'payment_methods') href="/a/chargezen/dashboard/payment_methods?customer=#{params[:customer]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
               .Polaris-Navigation__Icon
                 span.Polaris-Icon
                   svg.Polaris-Icon__Svg fill="none" height="16" viewbox=("0 0 16 16") width="16" xmlns="http://www.w3.org/2000/svg"
@@ -132,7 +132,7 @@ nav.Polaris-Navigation.account
       - if @setting&.show_account.present?
         li.Polaris-Navigation__ListItem
           .Polaris-Navigation__ItemWrapper
-            a.Polaris-Navigation__Item class=active_nav('dashboard', 'settings') href="/a/chargezen_production/dashboard/settings?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
+            a.Polaris-Navigation__Item class=active_nav('dashboard', 'settings') href="/a/chargezen/dashboard/settings?customer=#{params[:customer]}&active_subscriptions_count=#{@active_subscriptions_count}" tabindex="0"
               .Polaris-Navigation__Icon
                 span.Polaris-Icon
                   svg fill="none" height="18" viewbox=("0 0 18 18") width="18" xmlns="http://www.w3.org/2000/svg"

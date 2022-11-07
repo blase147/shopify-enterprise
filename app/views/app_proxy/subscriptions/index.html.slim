@@ -42,7 +42,7 @@
                   - id = subscription.id[/\d+/]
                   tr.Polaris-DataTable__TableRow
                     th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
-                      a.Polaris-Link data-polaris-unstyled="true" href="/a/chargezen_production/subscriptions/#{id}?customer_id=#{params[:customer_id]}"= id
+                      a.Polaris-Link data-polaris-unstyled="true" href="/a/chargezen/subscriptions/#{id}?customer=#{params[:customer]}"= id
                     td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop
                       = DateTime.parse(subscription.created_at).strftime("%d %b %Y")
                     td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop

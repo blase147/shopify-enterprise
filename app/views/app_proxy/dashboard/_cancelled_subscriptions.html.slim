@@ -15,7 +15,7 @@
           .grid-item
           - if @setting.customer_allowed?('reactive_subscription')
             .grid-item
-              = link_to action_subscription_contract_path(:resume, subscription.id, "stripe_subscription=true&admin_refcode=#{params[:admin_refcode]}"), class: 'btn_inside  reactivate_btn', method: :post, remote: true do
+              = link_to action_subscription_contract_path(:resume, subscription.id, "stripe_subscription=true&token=#{params[:token]}"), class: 'btn_inside  reactivate_btn', method: :post, remote: true do
                 button.btn-yellow.action-btn.modal_btn type='submit' RE-ACTIVATE
         .quantity-wrapper
           form
@@ -94,7 +94,7 @@
           .grid-item
           - if @setting.customer_allowed?('reactive_subscription')
             .grid-item
-              = link_to action_subscription_contract_path(:add_product, subscription.node.id[/\d+/], "quantity=#{line_item.quantity}&line_item_id=#{line_item.id}&variant_id=#{line_item.variant_id[/\d+/]}&admin_refcode=#{params[:admin_refcode]}"), class: 'resume-btn btn_inside reactivate_btn', remote: true, method: :post do
+              = link_to action_subscription_contract_path(:add_product, subscription.node.id[/\d+/], "quantity=#{line_item.quantity}&line_item_id=#{line_item.id}&variant_id=#{line_item.variant_id[/\d+/]}&token=#{params[:token]}"), class: 'resume-btn btn_inside reactivate_btn', remote: true, method: :post do
                 button.btn-yellow.action-btn.modal_btn #{@translation.cancelled_tab_reactivate_btn.present? ? @translation.cancelled_tab_reactivate_btn : 'RE-ACTIVATE'}
         .quantity-wrapper
           form
@@ -126,7 +126,7 @@ javascript:
   $(".submit_reactive_btn").on("click",function(){
     $.ajax({
       type: 'post',
-      url: `subscriptions/${$(this).data("subscription")}/resume?customer_id=#{params[:customer_id]}&billing_date=${$(".billing_date_resume").val()}&admin_refcode=#{params[:admin_refcode]}`,
+      url: `subscriptions/${$(this).data("subscription")}/resume?customer=#{params[:customer]}&billing_date=${$(".billing_date_resume").val()}&token=#{params[:token]}`,
       success: function(){
         if(response?.error){
           $(".error_resume_message").html(`${response?.error}`)

@@ -20,7 +20,7 @@ module ApplicationHelper
   end
 
   def action_subscription_path(action, query = '')
-    "/a/chargezen_production/subscriptions/#{params[:id]}/#{action}?customer_id=#{params[:customer_id]} #{query.present? ? "&#{query}" : ''}"
+    "/a/chargezen/subscriptions/#{params[:id]}/#{action}?customer=#{params[:customer]} #{query.present? ? "&#{query}" : ''}"
   end
 
   def app_path path
@@ -35,7 +35,7 @@ module ApplicationHelper
     if params[:controller] == 'subscriptions'
       "/subscriptions/#{contract_id}/#{action}?#{query.present? ? "#{query}" : ''}"
     else
-      "/a/chargezen_production/subscriptions/#{contract_id}/#{action}?customer_id=#{params[:customer_id]}#{query.present? ? "&#{query}" : ''}"
+      "/a/chargezen/subscriptions/#{contract_id}/#{action}?customer=#{params[:customer]}#{query.present? ? "&#{query}" : ''}"
     end
   end
 end

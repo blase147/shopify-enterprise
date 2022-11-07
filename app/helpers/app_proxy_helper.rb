@@ -1,6 +1,6 @@
 module AppProxyHelper
   def proxy_path controller, options={}
-    "/a/chargezen_production/#{controller}?customer_id=#{params[:customer_id]}&#{options}"
+    "/a/chargezen/#{controller}?customer=#{params[:customer]}&#{options}"
   end
 
   def icon_tag icon

@@ -34,7 +34,7 @@ main#AppFrameMain.Polaris-Frame__Main data-has-global-ribbon="false"
                     - if @theme&.downcase == "worldfare_"
                         button.btn-view type="button" data-params="#{order.id}" #{@translation.order_history_tab_view.present? ? @translation.order_history_tab_view : 'VIEW'}
                     - else 
-                        = link_to "/a/chargezen_production/orders/#{order.id}?customer_id=#{params[:customer_id]}&active_subscriptions_count=#{@active_subscriptions_count}" do
+                        = link_to "/a/chargezen/orders/#{order.id}?customer=#{params[:customer]}&active_subscriptions_count=#{@active_subscriptions_count}" do
                             button.btn-view type="button" #{@translation.order_history_tab_view.present? ? @translation.order_history_tab_view : 'VIEW'}
                         button.btn-invoice type="button" #{@translation.order_history_tab_invoice.present? ? @translation.order_history_tab_invoice : 'INVOICE'}
         .Polaris-DataTable__Footer
@@ -43,7 +43,7 @@ main#AppFrameMain.Polaris-Frame__Main data-has-global-ribbon="false"
 javascript: 
     $(".btn-view").on("click",function(){
         $.ajax({
-            url: "/a/chargezen_production/dashboard/show_order?id="+ $(this).data("params"),
+            url: "/a/chargezen/dashboard/show_order?id="+ $(this).data("params"),
             type: 'get',
         });
     })

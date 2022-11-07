@@ -60,10 +60,14 @@ javascript:
     var form = document.getElementById(`form-${formId}`);
     $.ajax({
       type: "post",
-      data: serialize(form)+"&index="+$(this).attr("data-index")+"&productindex="+$(this).attr("data-productindex")+"&action_by=#{action_by}&admin_refcode=#{params[:admin_refcode]}",
+      data: serialize(form)+"&index="+$(this).attr("data-index")+"&productindex="+$(this).attr("data-productindex")+"&action_by=#{action_by}&token=#{params[:token]}",
       url: form.getAttribute('action'),
       success: ()=>{
-        alert("Swapped")
+        Swal.fire({
+          icon: 'success',
+          title: "Success! Reloading Page",
+          showConfirmButton: false
+        })
         window.location.reload()
       },
       error: (error)=>{

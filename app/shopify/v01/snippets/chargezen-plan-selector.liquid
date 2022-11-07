@@ -414,7 +414,7 @@
         // console.log(value);
       });
 
-      jQuery.get('/a/chargezen_production/selling_plans/plan_type', { 'selling_plan_id': {{product.selling_plan_groups[0].selling_plans[0].id}} }, function(data, status) {
+      jQuery.get('/a/chargezen/selling_plans/plan_type', { 'selling_plan_id': {{product.selling_plan_groups[0].selling_plans[0].id}} }, function(data, status) {
         if (data.success == true) {
           $(".build_a_box_plan_chk").text('true');
         }

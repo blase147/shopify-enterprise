@@ -232,12 +232,12 @@
     }
 
     $.ajax({
-      url: '/a/chargezen_production/dashboard/create_pre_order',
+      url: '/a/chargezen/dashboard/create_pre_order',
       type: 'POST',
       data: JSON.stringify(params),
       contentType: 'application/json',
       success: function(response) {
-        window.location.replace("/a/chargezen_production/dashboard?customer_id=<%= @customer&.shopify_customer_id%>&overview=true&local_id=<%= @customer&.id%>&admin_refcode=<%= params[:admin_refcode]%>");
+        window.location.replace("/a/chargezen/dashboard?customer=<%= @customer&.shopify_customer_id%>&overview=true&local_id=<%= @customer&.id%>&token=<%= params[:token]%>");
       },
       error: function(response) {
 

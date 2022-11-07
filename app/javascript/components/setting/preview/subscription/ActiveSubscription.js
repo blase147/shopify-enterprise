@@ -1,59 +1,59 @@
 import parse from 'html-react-parser';
 import React from 'react';
 
-const ActiveSubscription = ({Values}) => {
+const ActiveSubscription = ({ Values }) => {
   console.log(Values)
   return (
     <div className="preview-changes">
-    <p className="preview-changes-text">You’re previewing your changes</p>
-        <div className="info-banner">
-          <div className="details">
-            <div className="profile">
-              <div className="initials">IA</div>
-              <div className="full-name">Ipsum Antely</div>
-            </div>
+      <p className="preview-changes-text">You’re previewing your changes</p>
+      <div className="info-banner">
+        <div className="details">
+          <div className="profile">
+            <div className="initials">IA</div>
+            <div className="full-name">Ipsum Antely</div>
           </div>
-          <div className="details">
-            <div className="contact">
-              <p>{parse(Values?.contactBoxContent || '')}</p>
-              <p>Monday - Friday 8:30 - 18:30</p>
-            </div>
-          </div>
-          {
-            Values?.showPromoButton==='true' &&
-            <div className="details"><a className="btn-discount" href="#">{Values?.promoButtonContent}</a></div>
-          }
-
         </div>
-        <div className="Polaris-Page__Content">
-          <div className="Polaris-Layout">
-            <div className="Polaris-Layout__Section">
-              <div className="Dashboard_wrapper__3SFrh">
-                <div className="Polaris-Frame" data-has-navigation="true" data-polaris-layer="true" style={{paddingTop:'25px'}}>
-                  <div>
-                    <div id="AppFrameNav">
-                      <div className="sm-nav-trigger">
-                        <div className="icon-list">
-                          <svg aria-hidden="true" fill="none" focusable="false" height="24px" viewBox="0 0 20 20" width="24px">
-                            <path d="M6.63672 1.84473H19.016" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
-                            <path d="M6.63672 7.55811H19.016" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
-                            <path d="M6.63672 13.272H19.016" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
-                            <path d="M1.875 1.84473H1.88356" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
-                            <path d="M1.875 7.55811H1.88356" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
-                            <path d="M1.875 13.272H1.88356" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
-                          </svg>
-                        </div><span className="open">OPEN ACCOUNT MENU</span><span className="close">CLOSE ACCOUNT MENU</span>
-                        <div className="icon-chevron">
-                          <svg fill="none" height="24px" viewBox="0 0 17 10" width="24px" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M1.5 1L8.5 8L15.5 1" stroke="#4D506A" strokeWidth={2} />
-                          </svg>
-                        </div>
+        <div className="details">
+          <div className="contact">
+            <p>{parse(Values?.contactBoxContent || '')}</p>
+            <p>Monday - Friday 8:30 - 18:30</p>
+          </div>
+        </div>
+        {
+          Values?.showPromoButton === 'true' &&
+          <div className="details"><a className="btn-discount" href="#">{Values?.promoButtonContent}</a></div>
+        }
+
+      </div>
+      <div className="Polaris-Page__Content">
+        <div className="Polaris-Layout">
+          <div className="Polaris-Layout__Section">
+            <div className="Dashboard_wrapper__3SFrh">
+              <div className="Polaris-Frame" data-has-navigation="true" data-polaris-layer="true" style={{ paddingTop: '25px' }}>
+                <div>
+                  <div id="AppFrameNav">
+                    <div className="sm-nav-trigger">
+                      <div className="icon-list">
+                        <svg aria-hidden="true" fill="none" focusable="false" height="24px" viewBox="0 0 20 20" width="24px">
+                          <path d="M6.63672 1.84473H19.016" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
+                          <path d="M6.63672 7.55811H19.016" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
+                          <path d="M6.63672 13.272H19.016" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
+                          <path d="M1.875 1.84473H1.88356" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
+                          <path d="M1.875 7.55811H1.88356" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
+                          <path d="M1.875 13.272H1.88356" stroke="#4D506A" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
+                        </svg>
+                      </div><span className="open">OPEN ACCOUNT MENU</span><span className="close">CLOSE ACCOUNT MENU</span>
+                      <div className="icon-chevron">
+                        <svg fill="none" height="24px" viewBox="0 0 17 10" width="24px" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M1.5 1L8.5 8L15.5 1" stroke="#4D506A" strokeWidth={2} />
+                        </svg>
                       </div>
-                      <nav className="Polaris-Navigation account">
-                        <div className="Polaris-Navigation__PrimaryNavigation Polaris-Scrollable Polaris-Scrollable--vertical" data-polaris-scrollable="true">
-                          <ul className="Polaris-Navigation__Section account-sidebar">
+                    </div>
+                    <nav className="Polaris-Navigation account">
+                      <div className="Polaris-Navigation__PrimaryNavigation Polaris-Scrollable Polaris-Scrollable--vertical" data-polaris-scrollable="true">
+                        <ul className="Polaris-Navigation__Section account-sidebar">
                           {
-                            Values?.showSubscription==="true" &&
+                            Values?.showSubscription === "true" &&
                             <li className="Polaris-Navigation__ListItem">
                               <div className="Polaris-Navigation__ItemWrapper">
                                 <a className="Polaris-Navigation__Item Polaris-Navigation__Item--selected" tabIndex={0}>
@@ -86,7 +86,7 @@ const ActiveSubscription = ({Values}) => {
                           }
 
                           {
-                            Values.showDeliverySchedule==="true" &&
+                            Values.showDeliverySchedule === "true" &&
                             <li className="Polaris-Navigation__ListItem">
                               <div className="Polaris-Navigation__ItemWrapper">
                                 <a className="Polaris-Navigation__Item" tabIndex={0}>
@@ -95,7 +95,7 @@ const ActiveSubscription = ({Values}) => {
                             </li>
                           }
                           {
-                            Values.showOrderHistory==="true" &&
+                            Values.showOrderHistory === "true" &&
                             <li className="Polaris-Navigation__ListItem">
                               <div className="Polaris-Navigation__ItemWrapper">
                                 <a className="Polaris-Navigation__Item" tabIndex={0}>
@@ -104,7 +104,7 @@ const ActiveSubscription = ({Values}) => {
                             </li>
                           }
                           {
-                            Values.showAddress==="true" &&
+                            Values.showAddress === "true" &&
                             <li className="Polaris-Navigation__ListItem">
                               <div className="Polaris-Navigation__ItemWrapper">
                                 <a className="Polaris-Navigation__Item" tabIndex={0}>
@@ -113,7 +113,7 @@ const ActiveSubscription = ({Values}) => {
                             </li>
                           }
                           {
-                            Values.showBilling==="true" &&
+                            Values.showBilling === "true" &&
                             <li className="Polaris-Navigation__ListItem">
                               <div className="Polaris-Navigation__ItemWrapper">
                                 <a className="Polaris-Navigation__Item" tabIndex={0}>
@@ -122,7 +122,7 @@ const ActiveSubscription = ({Values}) => {
                             </li>
                           }
                           {
-                            Values.showAccount==="true" &&
+                            Values.showAccount === "true" &&
                             <li className="Polaris-Navigation__ListItem">
                               <div className="Polaris-Navigation__ItemWrapper">
                                 <a className="Polaris-Navigation__Item" tabIndex={0}>
@@ -131,16 +131,16 @@ const ActiveSubscription = ({Values}) => {
                             </li>
                           }
 
-                          </ul>
-                        </div>
-                      </nav>
-                    </div>
+                        </ul>
+                      </div>
+                    </nav>
                   </div>
+                </div>
                 {
-                  Values?.showSubscription==="true" &&
+                  Values?.showSubscription === "true" &&
                   <div className="content-wrapper">
                     <div className="display-text">
-                      <p><span>MY &nbsp;</span><span className="active">ACTIVE &nbsp;</span><span>SUBSCRIPTION</span></p><a style={{marginRight:'30px'}}className="add_weekly_box promo-tag-I" href="#"><span >{parse(Values?.promoTagline1Content || '')}</span><svg fill="none" height={12} viewBox="0 0 20 12" width={20} xmlns="http://www.w3.org/2000/svg"><path d="M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z" fill="black" /></svg></a></div>
+                      <p><span>MY &nbsp;</span><span className="active">ACTIVE &nbsp;</span><span>SUBSCRIPTION</span></p><a style={{ marginRight: '30px' }} className="add_weekly_box promo-tag-I" href="#"><span >{parse(Values?.promoTagline1Content || '')}</span><svg fill="none" height={12} viewBox="0 0 20 12" width={20} xmlns="http://www.w3.org/2000/svg"><path d="M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z" fill="black" /></svg></a></div>
                     <div className="subscription-contract-products">
                       <div className="grid">
                         <div className="grid-item">
@@ -175,7 +175,7 @@ const ActiveSubscription = ({Values}) => {
                                         <div>
                                           <h2>Delay/Speedup your next shipment</h2></div>
                                       </div>
-                                      <form className="simple_form subscription" action="/a/chargezen_production/subscriptions/1080164558/update_subscription?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                      <form className="simple_form subscription" action="/a/chargezen/subscriptions/1080164558/update_subscription?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                         <div className="input hidden subscription_id">
                                           <input className="hidden" type="hidden" name="subscription[id]" id="subscription_id" />
                                         </div>
@@ -191,7 +191,7 @@ const ActiveSubscription = ({Values}) => {
                                         </div>
                                       </form>
                                       <div className="options-btn-wrapper">
-                                        <form className="simple_form subscription" action="/a/chargezen_production/subscriptions/1080164558/update_subscription?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                        <form className="simple_form subscription" action="/a/chargezen/subscriptions/1080164558/update_subscription?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                           <div className="input hidden subscription_id">
                                             <input className="hidden" type="hidden" name="subscription[id]" id="subscription_id" />
                                           </div>
@@ -202,7 +202,7 @@ const ActiveSubscription = ({Values}) => {
                                             <button type="submit">DELAY FOR 2 WEEKS</button>
                                           </div>
                                         </form>
-                                        <form className="simple_form subscription" action="/a/chargezen_production/subscriptions/1080164558/update_subscription?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                        <form className="simple_form subscription" action="/a/chargezen/subscriptions/1080164558/update_subscription?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                           <div className="input hidden subscription_id">
                                             <input className="hidden" type="hidden" name="subscription[id]" id="subscription_id" />
                                           </div>
@@ -213,7 +213,7 @@ const ActiveSubscription = ({Values}) => {
                                             <button type="submit">DELAY FOR 1 MONTHS</button>
                                           </div>
                                         </form>
-                                        <form className="simple_form subscription" action="/a/chargezen_production/subscriptions/1080164558/update_subscription?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                        <form className="simple_form subscription" action="/a/chargezen/subscriptions/1080164558/update_subscription?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                           <div className="input hidden subscription_id">
                                             <input className="hidden" type="hidden" name="subscription[id]" id="subscription_id" />
                                           </div>
@@ -224,7 +224,7 @@ const ActiveSubscription = ({Values}) => {
                                             <button type="submit">DELAY FOR 2 MONTHS</button>
                                           </div>
                                         </form>
-                                        <form className="simple_form subscription" action="/a/chargezen_production/subscriptions/1080164558/update_subscription?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                        <form className="simple_form subscription" action="/a/chargezen/subscriptions/1080164558/update_subscription?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                           <div className="input hidden subscription_id">
                                             <input className="hidden" type="hidden" name="subscription[id]" id="subscription_id" />
                                           </div>
@@ -308,7 +308,7 @@ const ActiveSubscription = ({Values}) => {
                                             <h2>Deluxe Black Velvet Candle</h2>
                                             <p>$129.95 / 1 DAY</p>
                                           </div>
-                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen_production/subscriptions/1080164558/swap_product?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen/subscriptions/1080164558/swap_product?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                             <div className="variants-wrapper">
                                               <label htmlFor="input-0">
                                                 <input className="hidden" name="line_id" type="text" defaultValue="gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" />
@@ -334,7 +334,7 @@ const ActiveSubscription = ({Values}) => {
                                             <h2>Deluxe 24K Magic Candle</h2>
                                             <p>$129.95 / 1 DAY</p>
                                           </div>
-                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen_production/subscriptions/1080164558/swap_product?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen/subscriptions/1080164558/swap_product?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                             <div className="variants-wrapper">
                                               <label htmlFor="input-0">
                                                 <input className="hidden" name="line_id" type="text" defaultValue="gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" />
@@ -360,7 +360,7 @@ const ActiveSubscription = ({Values}) => {
                                             <h2>24K Magic Candle</h2>
                                             <p>$49.95 / 1 DAY</p>
                                           </div>
-                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen_production/subscriptions/1080164558/swap_product?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen/subscriptions/1080164558/swap_product?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                             <div className="variants-wrapper">
                                               <label htmlFor="input-0">
                                                 <input className="hidden" name="line_id" type="text" defaultValue="gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" />
@@ -386,7 +386,7 @@ const ActiveSubscription = ({Values}) => {
                                             <h2>24K Magic</h2>
                                             <p>$44.95 / 1 DAY</p>
                                           </div>
-                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen_production/subscriptions/1080164558/swap_product?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen/subscriptions/1080164558/swap_product?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                             <div className="variants-wrapper">
                                               <label htmlFor="input-0">
                                                 <input className="hidden" name="line_id" type="text" defaultValue="gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" />
@@ -416,7 +416,7 @@ const ActiveSubscription = ({Values}) => {
                                             <h2>California Love</h2>
                                             <p>$44.95 / 1 DAY</p>
                                           </div>
-                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen_production/subscriptions/1080164558/swap_product?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen/subscriptions/1080164558/swap_product?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                             <div className="variants-wrapper">
                                               <label htmlFor="input-0">
                                                 <input className="hidden" name="line_id" type="text" defaultValue="gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" />
@@ -446,7 +446,7 @@ const ActiveSubscription = ({Values}) => {
                                             <h2>California Love Aroma Mist</h2>
                                             <p>$49.95 / 1 DAY</p>
                                           </div>
-                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen_production/subscriptions/1080164558/swap_product?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen/subscriptions/1080164558/swap_product?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                             <div className="variants-wrapper">
                                               <label htmlFor="input-0">
                                                 <input className="hidden" name="line_id" type="text" defaultValue="gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" />
@@ -496,7 +496,7 @@ const ActiveSubscription = ({Values}) => {
                                             <h2>Deluxe Black Velvet Candle</h2>
                                             <p>$129.95 / 1 DAY</p>
                                           </div>
-                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen_production/subscriptions/1080164558/swap_product?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen/subscriptions/1080164558/swap_product?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                             <div className="variants-wrapper">
                                               <label>
                                                 <input className="hidden" name="line_id" type="text" defaultValue="gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" />
@@ -522,7 +522,7 @@ const ActiveSubscription = ({Values}) => {
                                             <h2>Deluxe Desert Rose Candle</h2>
                                             <p>$129.95 / 1 DAY</p>
                                           </div>
-                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen_production/subscriptions/1080164558/swap_product?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen/subscriptions/1080164558/swap_product?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                             <div className="variants-wrapper">
                                               <label>
                                                 <input className="hidden" name="line_id" type="text" defaultValue="gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" />
@@ -548,7 +548,7 @@ const ActiveSubscription = ({Values}) => {
                                             <h2>Deluxe Midnight in Paris Candle</h2>
                                             <p>$129.95 / 1 DAY</p>
                                           </div>
-                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen_production/subscriptions/1080164558/swap_product?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen/subscriptions/1080164558/swap_product?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                             <div className="variants-wrapper">
                                               <label>
                                                 <input className="hidden" name="line_id" type="text" defaultValue="gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" />
@@ -574,7 +574,7 @@ const ActiveSubscription = ({Values}) => {
                                             <h2>Deluxe November Rain Candle</h2>
                                             <p>$129.95 / 1 DAY</p>
                                           </div>
-                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen_production/subscriptions/1080164558/swap_product?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen/subscriptions/1080164558/swap_product?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                             <div className="variants-wrapper">
                                               <label>
                                                 <input className="hidden" name="line_id" type="text" defaultValue="gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" />
@@ -600,7 +600,7 @@ const ActiveSubscription = ({Values}) => {
                                             <h2>Deluxe California Love Candle</h2>
                                             <p>$129.95 / 1 DAY</p>
                                           </div>
-                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen_production/subscriptions/1080164558/swap_product?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen/subscriptions/1080164558/swap_product?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                             <div className="variants-wrapper">
                                               <label>
                                                 <input className="hidden" name="line_id" type="text" defaultValue="gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" />
@@ -626,7 +626,7 @@ const ActiveSubscription = ({Values}) => {
                                             <h2>Deluxe Mystify Candle</h2>
                                             <p>$129.95 / 1 DAY</p>
                                           </div>
-                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen_production/subscriptions/1080164558/swap_product?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen/subscriptions/1080164558/swap_product?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                             <div className="variants-wrapper">
                                               <label>
                                                 <input className="hidden" name="line_id" type="text" defaultValue="gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" />
@@ -652,7 +652,7 @@ const ActiveSubscription = ({Values}) => {
                                             <h2>Deluxe Dream On Candle</h2>
                                             <p>$129.95 / 1 DAY</p>
                                           </div>
-                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen_production/subscriptions/1080164558/swap_product?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen/subscriptions/1080164558/swap_product?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                             <div className="variants-wrapper">
                                               <label>
                                                 <input className="hidden" name="line_id" type="text" defaultValue="gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" />
@@ -678,7 +678,7 @@ const ActiveSubscription = ({Values}) => {
                                             <h2>Deluxe Sweetest Taboo Candle</h2>
                                             <p>$129.95 / 1 DAY</p>
                                           </div>
-                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen_production/subscriptions/1080164558/swap_product?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen/subscriptions/1080164558/swap_product?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                             <div className="variants-wrapper">
                                               <label>
                                                 <input className="hidden" name="line_id" type="text" defaultValue="gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" />
@@ -704,7 +704,7 @@ const ActiveSubscription = ({Values}) => {
                                             <h2>Deluxe My Way Candle</h2>
                                             <p>$129.95 / 1 DAY</p>
                                           </div>
-                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen_production/subscriptions/1080164558/swap_product?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen/subscriptions/1080164558/swap_product?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                             <div className="variants-wrapper">
                                               <label>
                                                 <input className="hidden" name="line_id" type="text" defaultValue="gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" />
@@ -730,7 +730,7 @@ const ActiveSubscription = ({Values}) => {
                                             <h2>Deluxe 24K Magic Candle</h2>
                                             <p>$129.95 / 1 DAY</p>
                                           </div>
-                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen_production/subscriptions/1080164558/swap_product?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen/subscriptions/1080164558/swap_product?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                             <div className="variants-wrapper">
                                               <label>
                                                 <input className="hidden" name="line_id" type="text" defaultValue="gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" />
@@ -756,7 +756,7 @@ const ActiveSubscription = ({Values}) => {
                                             <h2>DaVinci360</h2>
                                             <p>$599.99 / 1 DAY</p>
                                           </div>
-                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen_production/subscriptions/1080164558/swap_product?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                                          <form id="form-gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" action="/a/chargezen/subscriptions/1080164558/swap_product?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                                             <div className="variants-wrapper">
                                               <label>
                                                 <input className="hidden" name="line_id" type="text" defaultValue="gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" />
@@ -816,7 +816,7 @@ const ActiveSubscription = ({Values}) => {
                         </div>
                       </div>
                       <div className="quantity-wrapper">
-                        <form action="/a/chargezen_production/subscriptions/1080164558/update_quantity?customer_id=5029176705230" data-remote encType="multipart/form-data" method="post">
+                        <form action="/a/chargezen/subscriptions/1080164558/update_quantity?customer=5029176705230" data-remote encType="multipart/form-data" method="post">
                           <div className="quantity-field">
                             <div><span className="label active-text">Quantity:</span><span className="btn-wrapper"><button className="minus-quantity" type="button"><svg fill="none" height={8} viewBox="0 0 7 2" width={8} xmlns="http://www.w3.org/2000/svg"><path d="M7 0H0V1.5H7V0Z" fill="#637381" /></svg></button><input className="quatity-val" name="quantity" type="number" defaultValue={2} /><button className="plus-quantity" type="button"><svg fill="none" height={8} viewBox="0 0 8 8" width={8} xmlns="http://www.w3.org/2000/svg"><path d="M0 3.08V4.508H3.08V7.588H4.508V4.508H7.588V3.08H4.508V0H3.08V3.08H0Z" fill="#212B36" /></svg></button><input className="prev-quantity" type="hidden" defaultValue={2} /></span><span className="update-quantity"><input className="hidden" name="line_item_id" type="text" defaultValue="gid://shopify/SubscriptionLine/e690d228-6f59-4402-99fc-12ce1596ee1e" /><button type="submit">APPLY</button></span></div>
                             <div>
@@ -862,7 +862,7 @@ const ActiveSubscription = ({Values}) => {
                       </div>
                       <div className="Polaris-Modal" id="deliveryEditModal">
                         <div className="Polaris-Modal-Dialog__Container" data-polaris-layer="true" data-polaris-overlay="true">
-                          <form className="simple_form address" action="/a/chargezen_production/subscriptions/1080164558/update_shiping_detail?customer_id=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
+                          <form className="simple_form address" action="/a/chargezen/subscriptions/1080164558/update_shiping_detail?customer=5029176705230" acceptCharset="UTF-8" data-remote="true" method="post">
                             <div aria-labelledby="Polarismodal-header20" className="Polaris-Modal-Dialog" role="dialog" tabIndex={-1}>
                               <div className="Polaris-Modal-Dialog__Modal Polaris-Modal-Dialog--sizeLarge">
                                 <div className="Polaris-Modal__BodyWrapper">
@@ -997,12 +997,12 @@ const ActiveSubscription = ({Values}) => {
                     </div>
                   </div>
                 }
-                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
   )
 }
 

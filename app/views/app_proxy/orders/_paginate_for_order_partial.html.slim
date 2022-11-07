@@ -13,7 +13,7 @@ javascript:
    $(".change_page").on("click",function(){
     $.ajax({
       type: 'get',
-      data: `customer_id=#{params[:customer_id]}&page_info=${$(this).data("pageinfo")}`,
-      url: `/a/chargezen_production/dashboard/order_paginate`,
+      data: `customer=#{params[:customer]}&page_info=${$(this).data("pageinfo")}`,
+      url: `/a/chargezen/dashboard/order_paginate`,
     })
   })

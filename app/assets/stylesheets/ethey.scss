@@ -4949,14 +4949,6 @@ label#nav_label {
   width: 100%;
 }
 
-.customer_service_page .customer-portal .tab-content-holder .flex.left-button button#edit_information {
-  margin-top: 0 !important;
-  margin-bottom: 0px !important;
-  display: flex;
-  justify-content: center;
-  width: 92%;
-}
-
 .customer_service_page .customer-portal .tabs-holder .Profile_tab {
   background-color: #fff;
   margin-bottom: 0 ! important;
@@ -5537,6 +5529,7 @@ div#upate_preorder_div {
   height: 64px;
   background: #fff;
   border-radius: 50%;
+  display: block;
 }
 
 .loader:after {

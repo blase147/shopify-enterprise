@@ -125,7 +125,7 @@
 
                   div.slider-btns
                     - auth_token = generate_admin_token()
-                    a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/a/chargezen_production/dashboard?customer_id=#{"#{@customer.shopify_customer_id}"}&admin_refcode=#{auth_token}" target="_blank"
+                    a.shopify_profile_btn href="https://#{@customer.shop.shopify_domain}/a/chargezen/dashboard?customer=#{"#{@customer.shopify_customer_id}"}&token=#{auth_token}" target="_blank"
                       button.admin_show_sub_button type="submit"
                         | Customer Portal
                 

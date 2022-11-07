@@ -8,12 +8,12 @@
         if (addresses_link) {
             var injectInto = addresses_link.closest('div');
             const linkToDashboard = document.createElement('div');
-            linkToDashboard.innerHTML = `<a href='/a/chargezen_production?{{ cz_params }}'>Manage Subscriptions</a>`;
+            linkToDashboard.innerHTML = `<a href='/a/chargezen?{{ cz_params }}'>Manage Subscriptions</a>`;
             injectInto.append(linkToDashboard);
         } else {
             var injectInto = document.querySelector('body');
             const linkToDashboard = document.createElement('a');
-            linkToDashboard.innerHTML = `<a href='/a/chargezen_production?{{ cz_params }}'>Manage Subscriptions</a>`
+            linkToDashboard.innerHTML = `<a href='/a/chargezen?{{ cz_params }}'>Manage Subscriptions</a>`
             const wrapper = document.createElement('div');
             wrapper.classList.add('container');
             wrapper.append(linkToDashboard);
@@ -21,7 +21,7 @@
         }
     });
   {% else %}
-    window.location.href = '/a/chargezen_production?{{ cz_params }}';
+    window.location.href = '/a/chargezen?{{ cz_params }}';
   {% endif %}
 </script>
 {% endif %}
