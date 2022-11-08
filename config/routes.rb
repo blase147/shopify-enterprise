@@ -124,7 +124,6 @@ Rails.application.routes.draw do
         get :show_order
         get :order_paginate
         post :add_meals 
-        get :get_subscription_payment
       end
     end
 

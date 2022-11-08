@@ -40,7 +40,6 @@ class CustomerService < GraphqlService
                   expiresSoon
                   lastDigits
                   name
-                  brand
                 }
                 ... on CustomerShopPayAgreement {
                   lastDigits
