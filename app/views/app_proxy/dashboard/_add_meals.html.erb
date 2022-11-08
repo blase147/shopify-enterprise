@@ -45,10 +45,10 @@
                   </div>
                   <div class="add_to_week">
                       <span class="quantity_under_btn quantity_<%= meal["product_id"]&.split('/')&.last %>"><%= selected_products_with_quantity.present? ? selected_products_with_quantity["#{meal["product_id"]&.split('/')&.last}"] : "0" %></span>
-                      <button class="add_meal_btn plusValue add_to_current_week" onclick='increment_quantity(event)' data-mealtitle="<%=meal["title"]%>"  data-id="<%= meal["product_id"]&.split('/')&.last %>" data-imgurl="<%= meal["image"].present? ?  meal["image"] : asset_path( 'No-image-found.jpg' ) %>" data-quantityid="quantity_<%= meal["product_id"]&.split('/')&.last %>">
+                      <button class="add_meal_btn plusValue add_to_current_week" data-mealtitle="<%=meal["title"]%>"  data-id="<%= meal["product_id"]&.split('/')&.last %>" data-imgurl="<%= meal["image"].present? ?  meal["image"] : asset_path( 'No-image-found.jpg' ) %>" data-quantityid="quantity_<%= meal["product_id"]&.split('/')&.last %>">
                       +
                       </button>
-                      <button class="add_meal_btn_2 plusValue add_to_current_week" onclick='increment_quantity(event)' data-mealtitle="<%=meal["title"]%>"  data-id="<%= meal["product_id"]&.split('/')&.last %>" data-imgurl="<%= meal["image"] %>" data-quantityid="quantity_<%= meal["product_id"]&.split('/')&.last %>">Add to box</button>
+                      <button class="add_meal_btn_2 plusValue add_to_current_week" data-mealtitle="<%=meal["title"]%>"  data-id="<%= meal["product_id"]&.split('/')&.last %>" data-imgurl="<%= meal["image"] %>" data-quantityid="quantity_<%= meal["product_id"]&.split('/')&.last %>">Add to box</button>
                   </div>
                 </div>
             </li>
@@ -102,7 +102,7 @@
                                         -
                                       </button>
                                       <input class="input-quantity quantity_<%= meal_product["product_id"]&.split('/')&.last %>" value="<%= qty %>" min="0" id="Quantity-1" data-index="1" readonly="">
-                                      <button class="plusValue" data-quantityid="quantity_<%= meal_product["product_id"]&.split('/')&.last %>" data-id="<%= meal_product["product_id"]&.split('/')&.last %>" onclick="increment_quantity(event)" type="button">
+                                      <button class="plusValue" data-quantityid="quantity_<%= meal_product["product_id"]&.split('/')&.last %>" data-id="<%= meal_product["product_id"]&.split('/')&.last %>" onclick="incrementQuantityWithEvent(event)" type="button">
                                         +
                                       </button>
                                   </div>
@@ -138,11 +138,15 @@
       <% end %>
     <% end %>
 
+  function incrementQuantityWithEvent(e){
+    let productId = e.target.getAttribute("data-id");
+    let quantity_div = e.target.getAttribute("data-quantityid")
+    increment_quantity(productId, quantity_div )
+  }
   //increment quantity
-  function increment_quantity(e){
+  function increment_quantity(productId, quantity_div){
     if(+$(".selected_meals_number").html() < totalMeals){
-      product_ids.push(e.target.getAttribute("data-id"))
-      let quantity_div = e.target.getAttribute("data-quantityid")
+      product_ids.push(productId)
       $(`.${quantity_div}`)?.html(+$(`.${quantity_div}`).html()+1)
       $(`.${quantity_div}`)?.val(+$(`.${quantity_div}`).html())
       $(".selected_meals_number").html( +$(".selected_meals_number").html() + 1)
@@ -175,7 +179,7 @@
      leftMeals = totalMeals - +$(".selected_meals_number").html();
      console.log("leftmeals",leftMeals,totalMeals)
      if(leftMeals == 0){
-        $(".remaining_box").html("You box is full, checkout now!");
+        $(".remaining_box").html("Your box is full, checkout now!");
         $(".meals_full_mssg").removeClass("hide");
         $(".confirm-current-week-sub-btn").removeClass("disabled_button");
         $(".confirm-current-week-sub-btn").removeAttr("disabled")
@@ -188,10 +192,9 @@
       }
    }
   $(".add_to_current_week")?.on('click', function(){
-    changeRemaingMeals();
     if(+$(".selected_meals_number").html() < totalMeals){
       let quantity_div = $(this).data("quantityid");
-      if($(`.${quantity_div}`)?.html() == 1){
+      if($(`.${quantity_div}`)?.html() == 0){
         $(".cart-items").append("<div class='dish_single' id='dish_"+ $(this).data('id') +"'> \
                                     <img src='"+ $(this).data('imgurl') + "' data-id=" + $(this).data('id') +"></img> \
                                     <span class='qut'> \
@@ -201,13 +204,16 @@
                                                 - \
                                             </button> \
                                             <input class='input-quantity "+$(this).data('quantityid')+"' value='1' min='0' id='Quantity-1' data-index='1'> \
-                                            <button class='plusValue' type='button' data-id="+$(this).data("id")+" data-quantityid=" + $(this).data('quantityid') +" onclick='increment_quantity(event)'> \
+                                            <button class='plusValue' type='button' data-id="+$(this).data("id")+" data-quantityid=" + $(this).data('quantityid') +" onclick='incrementQuantityWithEvent((event)'> \
                                                   + \
                                             </button> \
                                         </div> \
                                     </div>"); 
       }
     }
+    productId = $(this).attr("data-id");
+    quantity_div = $(this).attr("data-quantityid")
+    increment_quantity(productId, quantity_div )
   });
 
   $(".clear_all_meals").on("click",function(){
