@@ -1,6 +1,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  resources :ways_to_earn_points
   mount Sidekiq::Web => "/#{ENV['SIDEKIQ_SECRET']}"
 
   resources :bundles, only: [:destroy]
