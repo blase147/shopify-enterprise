@@ -71,6 +71,7 @@ class CustomerService < GraphqlService
     }
   GRAPHQL
 
+  
   def initialize params
     @shop = params[:shop]
   end
