@@ -5776,3 +5776,10 @@ div#contract-content .customer-details .logut_button a.logout {
     margin-top: 17px;
   }
 }
+
+select#change_subscription {
+  width: fit-content;
+  border: 1px solid gray;
+  border-radius: 7px;
+  color: gray;
+}
