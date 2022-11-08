@@ -301,17 +301,6 @@ class AppProxy::DashboardController < AppProxyController
     render "#{current_setting.portal_theme}index", content_type: 'application/liquid', layout: "#{current_setting.portal_theme}liquid_app_proxy"    
   end  
   
-  def get_subscription_payment
-    @current_contract = CustomerSubscriptionContract.find_by_shopify_id(params[:subscription_id])
-    load_subscriptions(params[:customer])
-    @payment_method = SubscriptionContractService.new(@current_contract.shopify_id).get_subscription_payment_method
-    @shopify_customer = CustomerService.new({shop: current_shop}).get_customer(customer_id)
-    @current_contract&.shop.connect
-    respond_to do |format|
-      format.js
-    end
-  end
-
   private ##
 
   def fetch_products(products)

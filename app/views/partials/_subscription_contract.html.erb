@@ -992,10 +992,4 @@
       $("#"+$(this).attr("for")).prop('checked', true);
       $(this).scrollTop = 0;
   });
-
-   $.ajax({
-      type: "get",
-      data: "subscription_id=<%=subscription.id[/\d+/] %>&customer=<%= params[:customer] %>",
-      url: "/a/chargezen/dashboard/get_subscription_payment"
-    })
 </script>

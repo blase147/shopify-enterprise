@@ -231,46 +231,6 @@ class SubscriptionContractService < GraphqlService
       }
     GRAPHQL
 
-
-    GET_SUBSCRIPTION_WITH_PAYMENT_METHOD = <<-GRAPHQL
-      query($id: ID!){
-        subscriptionContract(id: $id) {
-          id
-          customerPaymentMethod {
-            id
-            instrument {
-              ... on CustomerCreditCard {
-                billingAddress {
-                  address1
-                  city
-                  country
-                  province
-                  zip
-                }
-                expiryMonth
-                expiryYear
-                expiresSoon
-                lastDigits
-                name
-                brand
-              }
-              ... on CustomerShopPayAgreement {
-                lastDigits
-                expiryMonth
-                expiryYear
-                expiresSoon
-                inactive
-                isRevocable
-                lastDigits
-                maskedNumber
-                name  
-              }
-            }
-          }
-        }
-      }
-    GRAPHQL
-
   def initialize id
     @id = id
   end
@@ -282,19 +242,6 @@ class SubscriptionContractService < GraphqlService
       "gid://shopify/SubscriptionContract/#{@id}"
     end
     result = ShopifyAPIRetry::GraphQL.retry { client.query(client.parse(GET_QUERY), variables: { id: id} ) }
-    return result.data.subscription_contract
-  rescue Exception => ex
-    p ex.message
-    { error: ex.message }
-  end
-
-  def get_subscription_payment_method
-    id = if @id.is_a?(String) && @id.include?('SubscriptionContract')
-      @id
-    else
-      "gid://shopify/SubscriptionContract/#{@id}"
-    end
-    result = ShopifyAPIRetry::GraphQL.retry { client.query(client.parse(GET_SUBSCRIPTION_WITH_PAYMENT_METHOD), variables: { id: id} ) }
     return result.data.subscription_contract
   rescue Exception => ex
     p ex.message
