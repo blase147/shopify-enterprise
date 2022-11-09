@@ -129,4 +129,9 @@ module AppProxyHelper
     @auth = $redis.get("admin_auth_token")
     return @auth&.strip
   end
+
+  def all_contracts customer_id
+    return CustomerSubscriptionContract.where(shopify_customer_id: customer_id)
+  end
+  
 end
