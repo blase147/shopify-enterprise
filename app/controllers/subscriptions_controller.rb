@@ -165,6 +165,11 @@ class SubscriptionsController < AuthenticatedController
       subscription_id = customer&.shopify_id
       subscription = ReportService.new.get_single_subscriptions(subscription_id)
       result = CreateBillingAttemptService.new().run(id)
+      while result[:error].nil? && result[:data]&.ready == false
+        billing = SubscriptionBillingAttempService.new(subscription.id).get_attempt(result[:data]&.id)
+        result[:error] = billing[:error] rescue nil
+        result[:data] = billing.data.subscription_billing_attempt rescue (result[:error] = billing[:error])
+      end 
       if result[:error].present?
         customer.update_columns(failed_at: Time.current)
         description = "Billing attempt failed for #{customer&.subscription} subscription. Subscription Id :- #{subscription_id}. Error :- #{result[:error]}"

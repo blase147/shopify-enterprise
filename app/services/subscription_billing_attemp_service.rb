@@ -25,6 +25,7 @@ class SubscriptionBillingAttempService < GraphqlService
         order {
           id
         }
+        errorMessage
         ready
       }
     }
@@ -41,10 +42,7 @@ class SubscriptionBillingAttempService < GraphqlService
     })
 
     p result
-    errors =  result.data.subscription_billing_attempt_create.nil? ? result.original_hash["errors"][0]["message"] : 
-              result.data.subscription_billing_attempt_create.subscription_billing_attempt.error_message.present? ? 
-              result.data.subscription_billing_attempt_create.subscription_billing_attempt.error_message : 
-              result.data.subscription_billing_attempt_create.subscription_billing_attempt.order.nil? ? "No order is returned" : nil
+    errors =  result.data&.subscription_billing_attempt_create.nil? ? result.original_hash["errors"][0]["message"] : nil
 
     raise errors if errors.present?
 
@@ -58,6 +56,11 @@ class SubscriptionBillingAttempService < GraphqlService
     result = client.query(client.parse(GET_BILLING_ATTEMPT), variables: { id: id })
 
     p result
+    errors =  result.data&.subscription_billing_attempt.nil? ? result.original_hash["errors"][0]["message"] : 
+              result.data.subscription_billing_attempt.error_message.present? ? result.data.subscription_billing_attempt.error_message : nil
+
+    raise errors if errors.present?
+    return result
   rescue Exception => ex
     p ex.message
     { error: ex.message }
