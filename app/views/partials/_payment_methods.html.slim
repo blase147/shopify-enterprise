@@ -13,7 +13,7 @@
           - payment_method = @payment_method&.customer_payment_method
           - data = @payment_method&.customer_payment_method
           - cardtype = data&.instrument&.__typename
-          - if cardtype === "CustomerShopPayAgreement"
+          - if cardtype == "CustomerShopPayAgreement"
             - billing_address = @shopify_customer&.default_address
           - else                      
             - billing_address = @shopify_customer&.payment_methods&.edges&.first&.node&.instrument&.billing_address
