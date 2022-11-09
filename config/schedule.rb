@@ -9,8 +9,9 @@ end
 
 every 1.days do
   rake 'subscriptions:attemp_billing'
-  rake 'subscriptions:retries_attemp_billing'
 end
+
+#  rake 'subscriptions:retries_attemp_billing'
 
 # every 1.minutes do
 #   rake 'subscriptions:expire_conversation'
