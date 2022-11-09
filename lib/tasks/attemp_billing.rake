@@ -133,6 +133,11 @@ namespace :subscriptions do
     billing_date = get_next_billing_date(subscription, customer.shop)
     if billing_date.utc.beginning_of_day == Time.current.utc.beginning_of_day
       result = SubscriptionBillingAttempService.new(subscription.id).run
+      while result[:error].nil? && result[:data]&.ready == false
+        billing = SubscriptionBillingAttempService.new(subscription.id).get_attempt(result[:data]&.id)
+        result[:error] = billing[:error] rescue nil
+        result[:data] = billing.data.subscription_billing_attempt rescue (result[:error] = billing[:error])
+      end 
       if result[:error].present?
         if customer.present? && customer.shop.sms_setting.present? && customer.shop.sms_setting.failed_renewal.present?
           customer_modal = CustomerModal.find_by_shopify_id(customer&.shopify_customer_id)
@@ -168,6 +173,11 @@ namespace :subscriptions do
     if customer.present? && customer.shop.sms_setting.present? && customer.shop.sms_setting.failed_renewal.present? && customer.retry_count<=customer.shop.setting.payment_retries
       if billing_date.utc.beginning_of_day + ((customer.shop.setting.payment_delay_retries || 0)*customer.retry_count).days == Time.current.utc.beginning_of_day
         result = SubscriptionBillingAttempService.new(subscription.id).run
+        while result[:error].nil? && result[:data]&.ready == false
+          billing = SubscriptionBillingAttempService.new(subscription.id).get_attempt(result[:data]&.id)
+          result[:error] = billing[:error] rescue nil
+          result[:data] = billing.data.subscription_billing_attempt rescue (result[:error] = billing[:error])
+        end 
         if result[:error].present?
           customer_modal = CustomerModal.find_by_shopify_id(customer&.shopify_customer_id)
           message_service = SmsService::MessageGenerateService.new(shop, customer, subscription)
