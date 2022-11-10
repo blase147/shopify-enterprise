@@ -51,7 +51,6 @@ boot_api() {
 
 main() {
   echo "bootstrapping dependencies"
-  rm tmp/pids/server.pid || true
   install_nodejs
   install_node_modules
   install_bundle
