@@ -58,6 +58,11 @@ gem "shopify_api_retry"
 gem 'bcrypt', '~> 3.1.7'
 gem 'faraday'
 
+gem "pghero"
+gem "pg_query", ">= 2"
+
+gem "nokogiri"
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -87,6 +92,8 @@ gem 'config'
 # yanked v0.3.5
 #gem "mimemagic", github: "mimemagicrb/mimemagic", ref: "01f92d86d15d85cfd0f20dabd025dcbd36a8a60f"
 
+gem "marcel"
+
 gem "sidekiq-unique-jobs", "~> 7.1"
 gem 'httparty'
 
@@ -99,6 +106,8 @@ gem "bugsnag", "~> 6.24"
 gem 'newrelic_rpm'
 
 gem 'sprockets'
+
+gem 'devise'
 
 gem 'aws-sdk' 
 gem "aws-sdk-s3", require: false

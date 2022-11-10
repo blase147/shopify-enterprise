@@ -2,6 +2,7 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   mount Sidekiq::Web => "/#{ENV['SIDEKIQ_SECRET']}"
+  mount PgHero::Engine, at: "/chargezen_pghero"
 
   resources :bundles, only: [:destroy]
   resources :bundle_groups
