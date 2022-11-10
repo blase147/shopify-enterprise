@@ -1401,6 +1401,12 @@ GEM
     connection_pool (2.2.3)
     crass (1.0.6)
     deep_merge (1.2.1)
+    devise (4.8.1)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 4.1.0)
+      responders
+      warden (~> 1.2.3)
     dotenv (2.7.6)
     dotenv-rails (2.7.6)
       dotenv (= 2.7.6)
@@ -1450,6 +1456,7 @@ GEM
       railties (>= 3.2, < 6.2)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    google-protobuf (3.21.9)
     graphiql-rails (1.7.0)
       railties
       sprockets-rails
@@ -1536,8 +1543,13 @@ GEM
       activesupport
       omniauth-oauth2 (~> 1.5.0)
     open4 (1.3.4)
+    orm_adapter (0.5.0)
     percentage (1.4.1)
     pg (1.2.3)
+    pg_query (2.2.0)
+      google-protobuf (>= 3.19.2)
+    pghero (3.0.1)
+      activerecord (>= 6)
     popper_js (1.16.0)
     pry (0.13.1)
       coderay (~> 1.1)
@@ -1594,6 +1606,9 @@ GEM
       activemodel
     redis (4.2.5)
     regexp_parser (1.8.2)
+    responders (3.0.1)
+      actionpack (>= 5.0)
+      railties (>= 5.0)
     ruby-vips (2.0.17)
       ffi (~> 1.9)
     ruby2_keywords (0.0.2)
@@ -1663,6 +1678,8 @@ GEM
       nokogiri (>= 1.6, < 2.0)
     tzinfo (1.2.8)
       thread_safe (~> 0.1)
+    warden (1.2.9)
+      rack (>= 2.0.9)
     web-console (4.1.0)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -1702,6 +1719,7 @@ DEPENDENCIES
   carrierwave
   cocoon
   config
+  devise
   dotenv-rails
   faraday
   font-awesome-rails
@@ -1712,10 +1730,14 @@ DEPENDENCIES
   kaminari
   klaviyo
   listen (~> 3.2)
+  marcel
   mina
   newrelic_rpm
+  nokogiri
   percentage (~> 1.4, >= 1.4.1)
   pg (>= 0.18, < 2.0)
+  pg_query (>= 2)
+  pghero
   pry-rails
   puma (~> 4.1)
   rack-cors
