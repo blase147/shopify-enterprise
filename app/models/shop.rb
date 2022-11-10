@@ -6,7 +6,7 @@ class Shop < ActiveRecord::Base
   def api_version
     ShopifyApp.configuration.api_version
   end
-
+  belongs_to :user_shop, optional: true
   has_many :selling_plan_groups, dependent: :destroy
   has_many :ways_to_earn_points, dependent: :destroy
   has_one :setting, dependent: :destroy
@@ -28,6 +28,7 @@ class Shop < ActiveRecord::Base
   has_many :integrations, dependent: :destroy
   has_many :ship_engine_orders, dependent: :destroy
   has_many :customer_modals
+  has_many :user_shop, dependent: :destroy
   has_one :lock_password
   has_one :translation, dependent: :destroy
   after_create :build_setting

@@ -1,0 +1,165 @@
+.devise_main_page {
+    display: flex;
+}
+
+.devise_main_page .left_page {
+    width: 100%;
+    max-width: 36%;
+    padding: 0 10px;
+
+    background-color: #0d1013;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-flow: column;
+    position: relative;
+}
+
+.devise_main_page .right_devise_page {
+    width: 100%;
+    max-width: 64%;
+    background: aliceblue;
+    position: relative;
+}
+
+.devise_main_page .right_devise_page img {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+}
+
+.devise_main_page .left_page * {
+    color: #fff !important;
+}
+
+
+.devise_main_page .left_page h2 {
+    margin-bottom: 15px;
+    font-size: 32px;
+    font-weight: 500;
+}
+
+.devise_main_page .left_page form {
+    width: 100%;
+    max-width: 400px;
+}
+
+
+.devise_main_page .left_page form .form-inputs .input {
+    display: flex;
+    margin: 0 0 15px;
+}
+
+.devise_main_page .left_page form .form-inputs .input input {
+    width: 100%;
+    font-size: var(--font-size);
+    padding: 15px;
+    border-radius: 8px;
+    border: var(--input-border);
+    background-color: transparent;
+    color: var(--white);
+    transition: border 0.4s ease-in-out, background-color 0.4s ease-in-out;
+    border: 1px solid #d3d3d3;
+}
+
+.devise_main_page .left_page form .form-inputs .input label {
+    display: none;
+}
+
+
+
+.devise_main_page .left_page form .form-inputs .input input#user_remember_me {
+    width: auto;
+}
+
+
+
+.devise_main_page .left_page form .form-inputs .input.user_remember_me label.boolean.optional {
+    display: block;
+}
+
+
+.devise_main_page .left_page form .form-actions input.button {
+    background-color: rgb(31, 224, 197);
+    border-radius: 6px !important;
+    display: block;
+    margin: 12px auto 20px;
+    padding: 3px;
+    width: 100%;
+    max-width: 100%;
+    font-weight: 600;
+    border: none;
+    min-height: 44px;
+}
+
+.devise_main_page .left_page .ethey_logo_div {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.devise_main_page .right_devise_page:after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #0d1013 0%, rgba(13, 16, 19, 0) 100%);
+    display: block;
+    position: absolute;
+    top: 0;
+}
+
+@media only screen and (max-width: 767px) {
+    .devise_main_page .left_page {
+        max-width: 100%;
+        padding: 0 30px 0;
+        background-color: transparent;
+        display: flex;
+        height: 100vh;
+        background-image: image-url("ethey_signup_image.png");
+    }
+
+    .devise_main_page .left_page:after {
+        background: rgba(0, 0, 0, 0.8);
+        width: 100%;
+        height: 100%;
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    .devise_main_page .left_page>div {
+        position: relative;
+        z-index: 1;
+    }
+
+    .devise_main_page .left_page form,
+    .devise_main_page .left_page h2,
+    .devise_main_page .left_page a {
+        position: relative;
+        z-index: 1;
+    }
+
+    .devise_main_page .right_devise_page {
+        display: none;
+    }
+
+}
+
+.user_password {
+    margin-bottom: 0px !important;
+}
+
+.minimum_character_hint {
+    margin: 0 0 15px;
+    text-align: left;
+}

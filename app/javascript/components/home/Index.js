@@ -738,7 +738,7 @@ const Dashboard = (props) => {
               </Layout.Section>
             </div>
             <Layout.Section>
-              <div class="feeds-container">
+              <div className="feeds-container">
                 <Notification />
               </div>
             </Layout.Section>
@@ -884,8 +884,8 @@ const Dashboard = (props) => {
             domain={props.domain}
           />
         </Layout>
-      </Page>
-    </AppLayout>
+      </Page >
+    </AppLayout >
   );
 };
 export default Dashboard;

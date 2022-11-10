@@ -1,7 +1,10 @@
 class ApplicationController < ActionController::Base
   before_action :set_hmac
 
+  before_action :verify_user
   helper_method :current_setting
+
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   def current_setting
     return @current_setting if @current_setting.present?
@@ -37,4 +40,20 @@ class ApplicationController < ActionController::Base
   end
 
   helper_method :generate_admin_token
+
+  def verify_user
+    # redirect_to new_user_session_path unless current_user.present?
+  end
+
+  def after_sign_in_path_for(resource)
+    user_shop = UserShop.find_or_create_by( user_id: current_user.id)
+    super(resource)
+  end
+
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:email, :password, :password_confirmation,:first_name, :last_name)}
+    devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:role, :email, :password, :current_password,:first_name, :last_name)}
+  end
 end

@@ -5,6 +5,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <body class='chargezen'>
-    <%= react_component("App", { domain: @shop_origin, enablePassword: @enable_password }) %>
+    <%= react_component("App", { domain: @shop_origin, enablePassword: @enable_password, allShops: @all_shops }) %>
   </body>
 </html>
+<script>
+    localStorage.removeItem("currentuser");
+    localStorage.removeItem("allShops");
+    <% if current_user.present? %>
+      localStorage.setItem("currentuser", "<%= current_user&.full_name&.titleize%>");
+    <% end %>
+
+    <% if params[:shopify_domain].present? %>
+      localStorage.removeItem("currentShopDomain")
+      localStorage.setItem("currentShopDomain", "<%= params[:shopify_domain] %>")
+    <% end %>
+</script>
