@@ -10,8 +10,8 @@ class UpdateLoyalityPointsService
                 if order&.financial_status == "canceled" || order&.financial_status == "refunded"
                     total_points = customer&.loyalty_points - (spent_amount * 5)
                 elsif order&.financial_status == "paid"
-                    total_points = (spent_amount * 5)
-                    total_points = total_points + customer&.loyalty_points if customer&.loyalty_points.present?
+                    total_points = (spent_amount&.to_f * place_order_way&.points_awarded&.to_f)
+                    total_points = total_points&.to_f + customer&.loyalty_points&.to_f if customer&.loyalty_points.present?
                 end
                 customer.update(loyalty_points: total_points)
             end

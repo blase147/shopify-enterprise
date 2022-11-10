@@ -65,7 +65,15 @@ const EditWaysToEarn = ({ formData, setFormData, setEditForm, refetch, formError
                                    autoComplete="off"
                                  /> */}
                                 <TextField
-                                    label="Points awarded"
+                                    label={
+                                        (formData?.title == "Place an Order" && formData?.title == '0') ? (
+                                            <div className='order_summary'>
+                                                Customers earn {formData?.pointsAwarded} points for every $1 spent
+                                            </div>
+                                        )
+                                            :
+                                            "Points awarded"
+                                    }
                                     type="number"
                                     value={formData?.pointsAwarded}
                                     onChange={(e) => {
@@ -86,13 +94,6 @@ const EditWaysToEarn = ({ formData, setFormData, setEditForm, refetch, formError
                     <Layout.Section secondary>
                         <Card title="Summary">
                             <Card.Section>
-                                {
-                                    (formData?.title == "Place an Order" && formData?.title == '0') && (
-                                        <div className='order_summary'>
-                                            Customers earn 5 points for every $1 spent
-                                        </div>
-                                    )
-                                }
                                 <TextField
                                     multiline={2}
                                     value={formData?.summary}

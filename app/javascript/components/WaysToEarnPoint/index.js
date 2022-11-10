@@ -137,12 +137,6 @@ const WaysToEarnPoint = () => {
                                                             <Stack.Item fill={true}>{pointsAwarded}</Stack.Item>
                                                             <Stack.Item fill={true}>
                                                                 <ul>
-                                                                    {
-                                                                        title == "Place an Order" && (
-                                                                            <li>
-                                                                                Customers earn 5 points for every $1 spent
-                                                                            </li>)
-                                                                    }
                                                                     <li>
                                                                         {summary}
                                                                     </li>
