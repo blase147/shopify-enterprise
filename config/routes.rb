@@ -1,6 +1,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  devise_for :users
   resources :ways_to_earn_points
   mount Sidekiq::Web => "/#{ENV['SIDEKIQ_SECRET']}"
   mount PgHero::Engine, at: "/chargezen_pghero"
@@ -191,6 +192,13 @@ Rails.application.routes.draw do
   resources :email_images, only: [] do
     collection do 
       post :upload_email_image
+    end
+  end
+
+  resources :user_shops, only: [] do
+    collection do
+      post :authorize_user_shop
+      post :create_user_shop_child
     end
   end
 

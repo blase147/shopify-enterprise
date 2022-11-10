@@ -10,7 +10,7 @@ class GraphqlController < AuthenticatedController
     query = params[:query]
 
     operation_name = params[:operationName]
-    context = { current_shop: current_shop } rescue {}
+    context = { current_shop: current_shop, current_user: (current_user rescue nil) } rescue {}
 
     result = ChargezenSchema.execute(
       query, variables: variables,  context: context, operation_name: operation_name
