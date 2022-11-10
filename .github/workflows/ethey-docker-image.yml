@@ -1,8 +1,8 @@
-name: Ethey Docker Image CI
+name: shopapp Docker Image CI
 
 on:
   push:
-    branches: [ ethey ]
+    branches: [ main-production ]
 
 jobs:
 
@@ -14,16 +14,16 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: ethey
+        ref: main-production
     - name: Get current date
       id: date
       run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag codilitymohsin/ethey:release
+      run: docker build . --file Dockerfile --tag codilitymohsin/shopapp:release
     - name: Login to Docker Hub
       run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
     - name: Push to Dockerhub
-      run: docker push codilitymohsin/ethey:release
+      run: docker push codilitymohsin/shopapp:release
     - name: Cleanup
       run: docker image prune -f
