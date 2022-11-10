@@ -22,6 +22,17 @@ module Chargezen
     config.eager_load_paths += [
       config.root.join('app', 'services')
     ]
+    
+     if ENV["RAILS_LOG_TO_STDOUT"].present?
+      logger           = ActiveSupport::Logger.new(STDOUT)
+      logger.formatter = config.log_formatter
+      config.logger    = ActiveSupport::TaggedLogging.new(logger)
+    end
+
+    config.to_prepare do
+      Devise::SessionsController.layout "devise"
+      Devise::RegistrationsController.layout "devise"
+    end
 
     ShopifyAPI::Base.headers['X-GraphQL-Cost-Include-Fields'] = 'true'
   end
