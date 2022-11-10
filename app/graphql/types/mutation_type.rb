@@ -12,9 +12,7 @@ module Types
     field :add_customers, mutation: Mutations::AddCustomers
     field :update_customer, mutation: Mutations::UpdateCustomer
     field :delete_customers, mutation: Mutations::DeleteCustomers
-
     field :add_ways_to_earn_points, mutation: Mutations::AddWaysToEarnPoints
-
 
     field :add_campaign, mutation: Mutations::AddUpsellCampaignGroup
     field :update_campaign, mutation: Mutations::UpdateUpsellCampaignGroup

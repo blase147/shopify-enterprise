@@ -78,6 +78,11 @@ const Nav = (props) => {
       id: 'settings',
       path: '/app-settings',
     },
+    {
+      content: 'Ways To Earn',
+      id: 'ways to earn',
+      path: '/ways-to-earn',
+    }
   ];
 
   return (

@@ -8,6 +8,7 @@ class Shop < ActiveRecord::Base
   end
 
   has_many :selling_plan_groups, dependent: :destroy
+  has_many :ways_to_earn_points, dependent: :destroy
   has_one :setting, dependent: :destroy
   has_many :customer_subscription_contracts, dependent: :destroy
   has_many :zip_codes, dependent: :destroy

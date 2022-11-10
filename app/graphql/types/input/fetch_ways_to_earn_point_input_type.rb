@@ -1,11 +1,11 @@
 module Types
   module Input
     class FetchWaysToEarnPointInputType < Types::BaseInputObject
-      field :title, String, null: true
-      field :id, ID, null: true
-      field :points_awarded, String, null: true
-      field :status, Boolean, null: true
-      field :summary, String, null: true
+      argument :points_awarded, String,required: false
+      argument :title, String, required: true
+      argument :id, ID, required: false
+      argument :status, Boolean, required: false
+      argument :summary, String, required: false
     end
   end
 end
