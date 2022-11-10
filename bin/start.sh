@@ -27,7 +27,7 @@ install_nodejs() {
   # source bashrc
   echo "installing nodejs"
   source_rc
-  nvm install 10.17
+  nvm install 12.22.8
 }
 
 install_node_modules() {
