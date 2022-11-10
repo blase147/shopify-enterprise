@@ -29,6 +29,7 @@ class ShopifyWebhooksController < ApplicationController
         end
         generate_and_send_account_activation_email
       end
+      UpdateLoyalityPointsService.update_order_loyality_points(shop, params[:id])
     rescue => e
       p e
     end
@@ -41,6 +42,7 @@ class ShopifyWebhooksController < ApplicationController
     preorder&.update(status: "canceled")
     shop = Shop.find_by(shopify_domain: shop_domain)
     ShopifyOrderCancelWorker.perform_async(shop.id, params[:id])
+    UpdateLoyalityPointsService.update_order_loyality_points(shop, params[:id])
     head :no_content
   end
 
@@ -55,6 +57,7 @@ class ShopifyWebhooksController < ApplicationController
     if params[:financial_status] == "refunded"
       preorder = WorldfarePreOrder.find_by(order_id: params[:id])
       preorder&.update(status: "refunded")
+      UpdateLoyalityPointsService.update_order_loyality_points(shop, params[:id])
     end
     head :no_content
   end

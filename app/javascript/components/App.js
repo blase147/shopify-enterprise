@@ -35,6 +35,7 @@ import Tiazen from './Tiazen/Index'
 import Toolbox from './Toolbox/Index'
 import PowerView from './plans/PowerView';
 import CustomerModal from './CustomerModal/Index';
+import WaysToEarnPoint from './WaysToEarnPoint';
 
 
 
@@ -80,6 +81,11 @@ export default function App(props) {
       <AppProvider i18n={enTranslations} theme={{}}>
         <ApolloProvider client={client}>
           <Switch>
+            <Route
+              exact
+              path="/ways-to-earn"
+              component={WaysToEarnPoint}
+            />
             <Route
               exact
               path="/"
