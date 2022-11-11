@@ -157,6 +157,8 @@ Rails.application.routes.draw do
       post :create_billing_attempt
       post :update_contract_delivery_date_day 
       get :skip_next_billing_date
+      post :customer_migration
+      get :fetch_customers_from_shopify
     end
 
     member do

@@ -207,7 +207,7 @@ class SubscriptionsController < AuthenticatedController
 
   def pause
     result = CustomerSubscriptionContract.pause(params)
-    if result
+  if result
       render json:{ success: :true }.to_json
     else
       render :json => { error: result[:error] }
@@ -221,5 +221,15 @@ class SubscriptionsController < AuthenticatedController
     else
       render :json => { error: result[:error] }
     end
+  end
+
+  def fetch_customers_from_shopify
+    @customers = FetchWithQueryFromShopify.new.fetch_customers(params[:query])
+    render json:{ status: :ok, customers: @customers}.to_json
+  end
+
+  def customer_migration
+    contract = SubscriptionContractDraftService.new(params).fetch_customer
+    render json:{status: :ok, response: contract}.to_json
   end
 end

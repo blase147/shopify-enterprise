@@ -1,0 +1,77 @@
+.customer_migration .Polaris-FormLayout--grouped .Polaris-FormLayout__Item label .form-control {
+    display: block;
+    width: 100%;
+    margin: 7px 0;
+    height: 46px;
+    border: 1px solid #ddd;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 10px;
+}
+
+.customer_migration .Polaris-FormLayout__Item .Polaris-Page {
+    margin-left: inherit;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    border-radius: inherit;
+}
+
+.customer_migration .module-integrations .Polaris-Card {
+    border-radius: 10px;
+    overflow: hidden ! important;
+}
+
+.customer_migration table.Polaris-DataTable__Table thead {
+    background: #007eff;
+    color: #fff;
+}
+
+.customer_migration table.Polaris-DataTable__Table thead th {
+    color: #fff;
+}
+
+.customer_migration table.Polaris-DataTable__Table thead th button {
+    color: #fff;
+}
+
+.customer_migration button.Polaris-Button {
+    background-color: #007eff ! important;
+    color: #fff ! important;
+    border: none ! important;
+}
+
+.customer_migration button.Polaris-Button {
+    background: #007eff ! important;
+    color: #fff ! important;
+    border: none ! important;
+}
+
+.customer_migration .selected_row {
+    background-color: #ddd;
+}
+
+.customer_migration .Polaris-FormLayout__Items {
+    margin-top: 15px;
+}
+
+.customer_migration .Polaris-DataTable__Table tbody tr.Polaris-DataTable__TableRow th,
+.customer_migration .Polaris-DataTable__Table tbody tr.Polaris-DataTable__TableRow td {
+    padding: 0 ! important;
+    padding-left: 0px ! important;
+
+}
+
+.customer_migration .Polaris-DataTable__Table tbody tr.Polaris-DataTable__TableRow th>div,
+.customer_migration .Polaris-DataTable__Table tbody tr.Polaris-DataTable__TableRow td>div {
+
+    display: flex;
+    align-items: center;
+    padding: 16px 16px;
+    min-height: 53px;
+}
+
+.customer_migration .module-integrations .Polaris-Card {
+    overflow: hidden ! important;
+
+}
