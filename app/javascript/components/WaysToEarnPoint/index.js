@@ -63,112 +63,110 @@ const WaysToEarnPoint = () => {
     }, [waysToEarn])
 
     return (
-        <AppLayout typePage="Ways To Earn Points" tabIndex='9'>
-            <Frame>
-                {saveSuccess && (
-                    <Toast
-                        content="Ways To Earn Points is saved"
-                        onDismiss={hideSaveSuccess}
+        <Frame>
+            {saveSuccess && (
+                <Toast
+                    content="Ways To Earn Points is saved"
+                    onDismiss={hideSaveSuccess}
+                />
+            )}
+            {formErrors.length > 0 && (
+                <>
+                    <Banner
+                        title="Ways To Earn Points could not be saved"
+                        status="critical"
+                    >
+                        <List type="bullet">
+                            {formErrors.map((message, index) => (
+                                <List.Item key={index}>{message.message}</List.Item>
+                            ))}
+                        </List>
+                    </Banner>
+                    <br />
+                </>
+            )}
+            {
+                editForm ?
+                    <EditWaysToEarn
+                        setFormData={setFormData}
+                        formData={formData}
+                        refetch={refetch}
+                        setEditForm={setEditForm}
+                        formErrors={formErrors}
+                        setFormErrors={setFormErrors}
+                        saveSuccess={saveSuccess}
+                        setSaveSuccess={setSaveSuccess}
+                        titleOptions={titleOptions}
                     />
-                )}
-                {formErrors.length > 0 && (
-                    <>
-                        <Banner
-                            title="Ways To Earn Points could not be saved"
-                            status="critical"
-                        >
-                            <List type="bullet">
-                                {formErrors.map((message, index) => (
-                                    <List.Item key={index}>{message.message}</List.Item>
-                                ))}
-                            </List>
-                        </Banner>
-                        <br />
-                    </>
-                )}
-                {
-                    editForm ?
-                        <EditWaysToEarn
-                            setFormData={setFormData}
-                            formData={formData}
-                            refetch={refetch}
-                            setEditForm={setEditForm}
-                            formErrors={formErrors}
-                            setFormErrors={setFormErrors}
-                            saveSuccess={saveSuccess}
-                            setSaveSuccess={setSaveSuccess}
-                            titleOptions={titleOptions}
-                        />
+                    :
+                    loading ?
+                        <LoadingScreen />
                         :
-                        loading ?
-                            <LoadingScreen />
-                            :
 
-                            <Page
-                                title='Actions'
-                                primaryAction={
-                                    <ButtonGroup>
-                                        <Button onClick={() => {
-                                            setFormData({ id: '', title: '', pointsAwarded: 1, summary: '', status: true });
-                                            setEditForm(true);
-                                        }}>
-                                            Add Ways To Earn
-                                        </Button>
-                                    </ButtonGroup>
-                                }>
-                                <Card>
-                                    <Card.Section>
-                                        <ResourceList
-                                            items={rowData}
-                                            renderItem={(item) => {
-                                                const { id, title, pointsAwarded, status, summary } = item;
-                                                return (
-                                                    <ResourceItem
-                                                        id={id}
-                                                    >
-                                                        <Stack distribution="fillEvenly">
-                                                            {/* <Icon
+                        <Page
+                            title='Actions'
+                            primaryAction={
+                                <ButtonGroup>
+                                    <Button onClick={() => {
+                                        setFormData({ id: '', title: '', pointsAwarded: 1, summary: '', status: true });
+                                        setEditForm(true);
+                                    }}>
+                                        Add Ways To Earn
+                                    </Button>
+                                </ButtonGroup>
+                            }>
+                            <Card>
+                                <Card.Section>
+                                    <ResourceList
+                                        items={rowData}
+                                        renderItem={(item) => {
+                                            const { id, title, pointsAwarded, status, summary } = item;
+                                            return (
+                                                <ResourceItem
+                                                    id={id}
+                                                >
+                                                    <Stack distribution="fillEvenly">
+                                                        {/* <Icon
                                                 source={StoreMinor}
                                                 color="base"
                                             /> */}
-                                                            <Stack.Item fill={true}>{id}</Stack.Item>
-                                                            <Stack.Item fill={true}>
-                                                                {title}
-                                                            </Stack.Item>
-                                                            <Stack.Item fill={true}>
-                                                                {status ? <Badge status="success">Active</Badge> : <Badge >Disabled</Badge>}
-                                                            </Stack.Item>
+                                                        <Stack.Item fill={true}>{id}</Stack.Item>
+                                                        <Stack.Item fill={true}>
+                                                            {title}
+                                                        </Stack.Item>
+                                                        <Stack.Item fill={true}>
+                                                            {status ? <Badge status="success">Active</Badge> : <Badge >Disabled</Badge>}
+                                                        </Stack.Item>
 
-                                                            <Stack.Item fill={true}>{pointsAwarded}</Stack.Item>
-                                                            <Stack.Item fill={true}>
-                                                                <ul>
-                                                                    <li>
-                                                                        {summary}
-                                                                    </li>
-                                                                </ul>
-                                                            </Stack.Item>
-                                                            <Stack.Item fill={true}>
-                                                                <Button
-                                                                    primary
-                                                                    onClick={() => {
-                                                                        setFormData({ id: id, title: title, pointsAwarded: pointsAwarded, summary: summary, status: status });
-                                                                        setEditForm(true);
-                                                                    }}
-                                                                >
-                                                                    Edit
-                                                                </Button>
-                                                            </Stack.Item>
-                                                        </Stack>
-                                                    </ResourceItem>
-                                                );
-                                            }}
-                                        />
-                                    </Card.Section>
-                                </Card>
-                            </Page>
-                }
-            </Frame>
-        </AppLayout>
+                                                        <Stack.Item fill={true}>{pointsAwarded}</Stack.Item>
+                                                        <Stack.Item fill={true}>
+                                                            <ul>
+                                                                <li>
+                                                                    {summary}
+                                                                </li>
+                                                            </ul>
+                                                        </Stack.Item>
+                                                        <Stack.Item fill={true}>
+                                                            <Button
+                                                                primary
+                                                                onClick={() => {
+                                                                    setFormData({ id: id, title: title, pointsAwarded: pointsAwarded, summary: summary, status: status });
+                                                                    setEditForm(true);
+                                                                }}
+                                                            >
+                                                                Edit
+                                                            </Button>
+                                                        </Stack.Item>
+                                                    </Stack>
+                                                </ResourceItem>
+                                            );
+                                        }}
+                                    />
+                                </Card.Section>
+                            </Card>
+                        </Page>
+            }
+        </Frame>
     )
 }
 
