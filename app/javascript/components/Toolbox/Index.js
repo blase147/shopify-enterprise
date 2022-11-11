@@ -14,6 +14,7 @@ import ShippingSuit from '../shippingSuit/index';
 import WeeklyMealsList from '../weeklyMeals/index';
 import WeeklyMenuList from '../weeklyMenu/index';
 import WeeklyMenu from '../weeklyMenu/weeklyMenuForm';
+import CustomerMigration from '../CustomerMigration';
 
 const Index = () => {
 
@@ -66,7 +67,13 @@ const Index = () => {
         title: "Weekly Menu",
         img: EmailImage,
         desc: "Manage upsell settings and customization for you and your customers."
-      }
+      },
+      {
+        key: "migrate",
+        title: "Customer Migrations",
+        img: EmailImage,
+        desc: "Manage upsell settings and customization for you and your customers."
+      },
       // {
       //     key: "",
       //     title: "Products",
@@ -126,7 +133,14 @@ const Index = () => {
                             {
                               !showEditPage ? <WeeklyMenuList handleBack={handleBackSetting} handleForm={handleEditPage} />
                                 : <WeeklyMenu id={editId} handleClose={handleCloseEditPage} />
-                            }</> : ''
+                            }
+                          </>
+                          : selectedSetting === 'migrate' ?
+                            <>
+                              {
+                                <CustomerMigration handleBack={handleBackSetting} handleForm={handleEditPage} />
+                              }
+                            </> : ''
                 }
               </Layout.Section>
             </Layout>

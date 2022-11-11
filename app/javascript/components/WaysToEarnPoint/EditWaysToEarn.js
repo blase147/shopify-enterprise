@@ -53,20 +53,12 @@ const EditWaysToEarn = ({ formData, setFormData, setEditForm, refetch, formError
                                 <Select
                                     label="Title"
                                     options={titleOptions}
-                                    onChange={(e) => setFormData({ ...formData, title: e })}
+                                    onChange={(e) => { setFormData({ ...formData, title: e }) }}
                                     value={formData?.title}
                                 />
-                                {/* <TextField
-                                label="Title"
-                                 type="text"
-                                value={formData?.title}
-                                 onChange={(e) => setFormData({ ...formData, title: e })}
-                                  error={fieldError?.title}
-                                   autoComplete="off"
-                                 /> */}
                                 <TextField
                                     label={
-                                        (formData?.title == "Place an Order" && formData?.title == '0') ? (
+                                        (formData?.title == "Place an Order") ? (
                                             <div className='order_summary'>
                                                 Customers earn {formData?.pointsAwarded} points for every $1 spent
                                             </div>

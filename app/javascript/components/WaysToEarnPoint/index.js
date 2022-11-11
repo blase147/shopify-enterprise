@@ -49,7 +49,7 @@ const WaysToEarnPoint = () => {
             let allTitles = JSON.parse(data?.fetchWaysToEarnPoint?.allTitles)
             let allTitleArr = []
             Object.keys(allTitles)?.map((k, v) => {
-                allTitleArr.push({ label: `${k}`, value: v })
+                allTitleArr.push({ label: `${k}`, value: `${k}` })
             })
             console.log("allTitle", allTitleArr, data?.fetchWaysToEarnPoint?.allTitles)
             setTitleOptions(allTitleArr)
@@ -108,7 +108,12 @@ const WaysToEarnPoint = () => {
                                 title='Actions'
                                 primaryAction={
                                     <ButtonGroup>
-                                        <Button onClick={() => setEditForm(true)}>Add Ways To Earn</Button>
+                                        <Button onClick={() => {
+                                            setFormData({ id: '', title: '', pointsAwarded: 1, summary: '', status: true });
+                                            setEditForm(true);
+                                        }}>
+                                            Add Ways To Earn
+                                        </Button>
                                     </ButtonGroup>
                                 }>
                                 <Card>

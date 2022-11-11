@@ -8,7 +8,7 @@ import {
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import "./nav_style.scss";
-import { HomeMajor, SettingsMinor, AnalyticsMajor, HintMajor, ProfileMajor, InstallMinor } from "@shopify/polaris-icons";
+import { HomeMajor, SettingsMinor, AnalyticsMajor, HintMajor, ProfileMajor, InstallMinor, CustomersMajor } from "@shopify/polaris-icons";
 import { MangeIcon, SubscriptionIcon, ToolboxIcon } from './CustomIcon';
 import BoxabyLogo from "./../../images/BoxabyLogo.png";
 
@@ -81,6 +81,7 @@ const Nav = (props) => {
           accessTabs?.customer_modal ? (
             {
               label: 'Subscription Customers',
+              icon: CustomersMajor,
               url: '/customer-model',
               onClick: () => setActiveTab("customerModal"),
               selected: window.location.pathname == "/customer-model" ? true : false,

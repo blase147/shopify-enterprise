@@ -10,6 +10,7 @@ module Types
     field :selling_plans, [Types::SellingPlanType], null: false
 
     field :billing_period, String, null: true
+    field :shopify_id, String, null: true
     field :price, String, null: true
     field :subscription_model, String, null: true
     field :trial_period, String, null: true

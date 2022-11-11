@@ -32,7 +32,6 @@ import dayjs from 'dayjs';
 import SearchProduct from '../upsell/SearchProduct';
 import Preview from './Preview';
 import SearchVariants from './SearchVariants';
-import LoadingScreen from '../LoadingScreen';
 
 const FixedPlan = () => {
   const GET_SELLING_PLAN = gql`
@@ -107,6 +106,17 @@ const FixedPlan = () => {
     })
   );
 
+  var daysOfTheWeek = ['Disabled', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const monthsOfTheYear = ['Disabled', "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+  const cutOffYearOptions = [];
+  monthsOfTheYear.map((foo, index) =>
+    cutOffYearOptions.push({
+      label: foo,
+      value: index,
+    })
+  );
+
   const firstDeliveryOptions = [
     { label: 'ASAP', value: 'ASAP' },
     { label: 'NEXT', value: 'NEXT' },
@@ -145,7 +155,7 @@ const FixedPlan = () => {
     trialAdjustmentType: 'FIXED_AMOUNT',
     trialAdjustmentValue: '0',
     billingDates: [],
-    shippingDates: [],
+    shippingDates: [{ type: 'DAY', day: 0, month: 0 }],
     firstDelivery: 'ASAP',
     shippingCutOff: 1,
     _destroy: false,
@@ -166,11 +176,51 @@ const FixedPlan = () => {
   const [allProducts, setAllProducts] = useState([]);
   const [allVarients, setAllVarients] = useState([]);
   const [updated, setUpdated] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState('DAY');
+  const [cutOffOptions, setCutoffOptions] = useState([]);
+  const [showAdvanceSettings, setShhowAdvanceSettings] = useState(false);
 
+  const changeCutoffOptions = (selectedPlan) => {
+    let newCutOffOptions = []
+    if (selectedPlan === 'MONTH' || selectedPlan === 'YEAR') {
+      [...Array(32).keys()].map((date) =>
+        newCutOffOptions.push({
+          label: date === 0 ? 'Disabled' : selectedPlan === 'MONTH' ? `${date}${nth(date + 1)} of month` : `${date}${nth(date + 1)}`,
+          value: date,
+        })
+      );
+    }
+    else if (selectedPlan === 'WEEK') {
+      daysOfTheWeek.map((day, index) =>
+        newCutOffOptions.push({
+          label: day,
+          value: index,
+        })
+      );
+    }
+    setCutoffOptions(newCutOffOptions);
+  }
+
+  const nth = (d) => {
+    if (d > 3 && d < 21) return 'th';
+    switch (d % 10) {
+      case 1: return "st";
+      case 2: return "nd";
+      case 3: return "rd";
+      default: return "th";
+    }
+  }
   useEffect(() => {
     if (data) {
       setPlanData(data.fetchPlanGroup);
-
+      const CHECK = data.fetchPlanGroup?.sellingPlans?.length > 0;
+      if (CHECK) {
+        setSelectedPlan(data.fetchPlanGroup?.sellingPlans[0]?.deliveryIntervalType);
+        changeCutoffOptions(data.fetchPlanGroup?.sellingPlans[0]?.deliveryIntervalType)
+      }
+      if (JSON.parse(data.fetchPlanGroup?.sellingPlans[0]?.shippingDates[0])?.day != 0) {
+        setShhowAdvanceSettings(true);
+      }
       // let products=[];
       // let variants=[];
       // data?.fetchPlanGroup?.sellingPlans.forEach(plan=>{
@@ -180,6 +230,9 @@ const FixedPlan = () => {
       setAllProducts(data.fetchPlanGroup.productIds || []);
       setAllVarients(data.fetchPlanGroup.variantIds || []);
     }
+
+
+
   }, [data]);
 
   const validationSchema = yup.object().shape({
@@ -287,6 +340,8 @@ const FixedPlan = () => {
     return plans;
   });
 
+
+
   return (
     <AppLayout typePage="sellingPlanForm" tabIndex={1}>
       <Frame>
@@ -300,7 +355,11 @@ const FixedPlan = () => {
           ]}
         >
           {loading && id && (
-            <LoadingScreen />
+            <Spinner
+              accessibilityLabel="Spinner example"
+              size="large"
+              color="teal"
+            />
           )}
           {(planData || !id) && (
             <Formik
@@ -332,6 +391,15 @@ const FixedPlan = () => {
                   if (!plan.firstDelivery && plan.shippingDates && plan.shippingDates.length > 0) {
                     values.sellingPlans[index].firstDelivery = initialValues.firstDelivery;
                   }
+                  if (values.sellingPlans[index].shippingDates && values.sellingPlans[index].shippingDates.length > 0) {
+                    // console.log("===========month===",values.sellingPlans[index])
+                    if (values.sellingPlans[index].deliveryIntervalType == 'WEEK' || (values.sellingPlans[index].deliveryIntervalType == "MONTH")) {
+                      delete values.sellingPlans[index].shippingDates[0]['month']
+                    }
+
+                    values.sellingPlans[index].shippingDates[0] = JSON.stringify(values.sellingPlans[index].shippingDates[0]);
+                  }
+
                   // values.sellingPlans[index].productIds = allProducts[index] || [];
                   // values.sellingPlans[index].variantIds = allVarients[index] || [];
                 });
@@ -819,12 +887,23 @@ const FixedPlan = () => {
                                 touched.sellingPlans?.[index]?.deliveryIntervalType &&
                                 errors.sellingPlans?.[index]?.deliveryIntervalType
                               }
-                              onChange={(e) =>
+                              onChange={(e) => {
                                 setFieldValue(
                                   `sellingPlans[${index}].deliveryIntervalType`,
                                   e
-                                )
-                              }
+                                );
+                                plan.shippingDates == undefined ?
+                                  setFieldValue(
+                                    `sellingPlans[${index}].shippingDates`,
+                                    [{ type: `${e.toUpperCase()}DAY` }]
+                                  ) :
+                                  setFieldValue(
+                                    `sellingPlans[${index}].shippingDates[0].type`,
+                                    `${e.toUpperCase()}DAY`
+                                  )
+                                setSelectedPlan(e);
+                                changeCutoffOptions(e);
+                              }}
                             />
                           </FormLayout.Group>
 
@@ -918,137 +997,66 @@ const FixedPlan = () => {
                               <i> pro</i>{' '}
                             </p>
                           </TextContainer>
-                          <FormLayout.Group>
+                          <Button onClick={() => setShhowAdvanceSettings(!showAdvanceSettings)}>{showAdvanceSettings ? 'Hide Advnace Settings' : 'Show Advance Settings'}</Button>
+                          {showAdvanceSettings && <FormLayout.Group>
                             <div className="muti-input-wrapper">
                               <div>
-                                <div className="date-input">
-                                  <label> Specific billing date </label>
-                                  <DatePickr
-                                    handleDate={setDate}
-                                    type={'billingDate'}
-                                    index={index}
-                                    date={selectedDate}
-                                    callback={setFieldValue}
-                                    selectedDate={
-                                      values.sellingPlans[index]
-                                        ?.billingDates[0]
+                                <div className="date-input new">
+                                  {
+
+                                    console.log("plan.shippingDates[0])?.day", plan, " shipping", plan.shippingDates[0])
+                                  }
+                                  <Select
+                                    value={!isNaN(plan.shippingDates[0]?.day) ? plan.shippingDates[0]?.day : JSON.parse(plan.shippingDates[0])?.day}
+                                    label="Specific shipping date"
+                                    error={
+                                      touched.sellingPlans?.[index]
+                                        ?.shippingDates[0]?.day &&
+                                      errors.sellingPlans?.[index]
+                                        ?.shippingDates[0]?.day
                                     }
-                                    input={`sellingPlans[${index}].billingDates`}
-                                    existingValues={
-                                      values.sellingPlans[index]?.billingDates
+                                    disabled={!(selectedPlan !== 'DAY')}
+                                    onChange={(e) =>
+                                      plan.shippingDates !== undefined ?
+                                        setFieldValue(
+                                          `sellingPlans[${index}].shippingDates[0].day`,
+                                          Number(e)
+                                        ) :
+                                        setFieldValue(
+                                          `sellingPlans[${index}].shippingDates`,
+                                          [{ day: Number(e) }]
+                                        )
                                     }
-                                    setUpdated={setUpdated}
+                                    options={cutOffOptions}
                                   />
-                                </div>
-                                <div className="date-list-items">
-                                  {values.sellingPlans[index]?.billingDates.map(
-                                    (date, i) => (
-                                      <div className="date-input-group">
-                                        <label> Next billing date: </label>
-                                        <div className="date-item-wrapper">
-                                          <p>
-                                            {dayjs(date, 'YYYY-MM-DD').format(
-                                              'MMM DD, YYYY'
-                                            )}
-                                          </p>
-                                          <img
-                                            className="pointer"
-                                            src={DeleteSVG}
-                                            onClick={() => {
-                                              setFieldValue(
-                                                `sellingPlans[${index}].billingDates`,
-                                                removeDate(
-                                                  values.sellingPlans[index]
-                                                    ?.billingDates,
-                                                  i
-                                                )
-                                              );
-                                              removeSelectedDate(
-                                                'billingDate',
-                                                index,
-                                                values.sellingPlans[index]
-                                              );
-                                            }}
-                                          />
-                                        </div>
-                                      </div>
-                                    )
-                                  )}
-                                </div>
-                                {values.sellingPlans[index]?.billingDates
-                                  .length > 0 && (
-                                    <div className="add-date-btn">
-                                      <Button
-                                        primary
-                                        onClick={() =>
-                                          clearDate('billingDate', index)
+                                  {selectedPlan === 'YEAR' &&
+                                    <>
+                                      <Select
+                                        value={!isNaN(plan.shippingDates[0]?.month) ? plan.shippingDates[0]?.month : JSON.parse(plan.shippingDates[0])?.month}
+                                        label="Month"
+                                        error={
+                                          touched.sellingPlans?.[index]
+                                            ?.shippingDates &&
+                                          errors.sellingPlans?.[index]
+                                            ?.shippingDates
                                         }
-                                      >
-                                        + Add
-                                      </Button>
-                                    </div>
-                                  )}
-                              </div>
-
-                              {/* <div>
-                                {console.log('Plan', plan)}
-                                <Select
-                                  value={plan.billingCutOff}
-                                  label="Cutoff days"
-                                  error={
-                                    touched.sellingPlans?.[index]
-                                      ?.billingCutOff &&
-                                    errors.sellingPlans?.[index]?.billingCutOff
+                                        onChange={(e) =>
+                                          plan.shippingDates !== undefined ?
+                                            setFieldValue(
+                                              `sellingPlans[${index}].shippingDates[0].month`,
+                                              Number(e)
+                                            ) :
+                                            setFieldValue(
+                                              `sellingPlans[${index}].shippingDates[0]`,
+                                              [{ month: Number(e) }]
+                                            )
+                                        }
+                                        options={cutOffYearOptions}
+                                      />
+                                    </>
                                   }
-                                  onChange={(e) =>
-                                    setFieldValue(
-                                      `sellingPlans[${index}].billingCutOff`,
-                                      e
-                                    )
-                                  }
-                                  options={billingCutOffOptions}
-                                />
-
-                                <Select
-                                  label="First Billing"
-                                  value={plan.firstBilling}
-                                  error={
-                                    touched.sellingPlans?.[index]
-                                      ?.firstBilling &&
-                                    errors.sellingPlans?.[index]?.firstBilling
-                                  }
-                                  onChange={(e) =>
-                                    setFieldValue(
-                                      `sellingPlans[${index}].firstBilling`,
-                                      e
-                                    )
-                                  }
-                                  options={firstBillingOptions}
-                                />
-                              </div> */}
-                            </div>
-                            <div className="muti-input-wrapper">
-                              <div>
-                                <div className="date-input">
-                                  <label> Specific shipping date </label>
-                                  <DatePickr
-                                    handleDate={setDate}
-                                    type={'shippingDate'}
-                                    date={selectedDate}
-                                    index={index}
-                                    callback={setFieldValue}
-                                    selectedDate={
-                                      values.sellingPlans[index]
-                                        ?.shippingDates[0]
-                                    }
-                                    input={`sellingPlans[${index}].shippingDates`}
-                                    existingValues={
-                                      values.sellingPlans[index]?.shippingDates
-                                    }
-                                    setUpdated={setUpdated}
-                                  />
                                 </div>
-                                <div className="date-list-items">
+                                {/* <div className="date-list-items">
                                   {values.sellingPlans[
                                     index
                                   ]?.shippingDates.map((date, i) => (
@@ -1084,19 +1092,19 @@ const FixedPlan = () => {
                                   ))}
                                   {values.sellingPlans[index]?.shippingDates
                                     .length > 0 && (
-                                      <div className="add-date-btn">
-                                        <Button
-                                          primary
-                                          onClick={() =>
-                                            clearDate('shippingDate', index)
-                                          }
-                                        >
-                                          + Add
-                                        </Button>
-                                      </div>
-                                    )}
-                                </div>
-                                <div>
+                                    <div className="add-date-btn">
+                                      <Button
+                                        primary
+                                        onClick={() =>
+                                          clearDate('shippingDate', index)
+                                        }
+                                      >
+                                        + Add
+                                      </Button>
+                                    </div>
+                                  )}
+                                </div> */}
+                                <div className="new-days-cutoff">
                                   <Select
                                     value={plan.shippingCutOff}
                                     label="Cutoff days"
@@ -1136,6 +1144,7 @@ const FixedPlan = () => {
                               </div>
                             </div>
                           </FormLayout.Group>
+                          }
                         </FormLayout>
                       </Card>
                     </div>

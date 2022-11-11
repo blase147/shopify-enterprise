@@ -395,13 +395,17 @@ module SubscriptionPlan
   end
 
   def plan_anchor(selling_plan)
-    if selling_plan.billing_dates.present? && selling_plan.interval_type != "DAY"
-      billing_date = Date.parse(selling_plan.billing_dates.first)
-      {
-        type: "YEARDAY",
-        day: billing_date.mday,
-        month: billing_date.month
+    if selling_plan.shipping_dates.present? && selling_plan.interval_type != "DAY"
+      shipping_info = JSON.parse(selling_plan.shipping_dates.first)
+      return if shipping_info["day"].zero?
+
+      # billing_date = Date.parse(selling_plan.shipping_dates.first)
+      anchor_hash = {
+        type: shipping_info["type"],
+        day: shipping_info["day"],
       }
+      anchor_hash.merge!(month: shipping_info["month"]) if shipping_info["month"].present?
+      anchor_hash
     end
   end
 
