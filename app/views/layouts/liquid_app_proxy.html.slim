@@ -18,23 +18,27 @@ html
       }
   div.chargezen-proxy
     - unless @skip_auth
-      | {% if customer.id ==
+      | {% if customer.id.present? && customer.id ==
       = params[:customer]
       | %}
-
     = render 'app_proxy/shared/tabs'
-
-    .Polaris-Page
-      .Polaris-Page__Content
-        .Polaris-Layout
-          .Polaris-Layout__Section
-            .Dashboard_wrapper__3SFrh
-              = yield
+      .Polaris-Page
+        .Polaris-Page__Content
+          .Polaris-Layout
+            .Polaris-Layout__Section
+              .Dashboard_wrapper__3SFrh
+                = yield
     - unless @skip_auth
       | {% else %}
-      p style="margin-left: 4rem;"
-        | You don't have access to view this. Please make sure you
-        a href="/account/login"  login.
+      - if params[:token].present? && (("#{params[:token]}".strip ==  "#{@auth}"&.strip) || ("#{params[:token]}".strip ==  admin_auth_token()))
+        .Polaris-Page
+          .Polaris-Page__Content
+            .Polaris-Layout
+              .Polaris-Layout__Section
+                .Dashboard_wrapper__3SFrh
+                  = yield
+      - else
+        = render partial: "/partials/password_less_login_form"
       | {% endif %}
 
 

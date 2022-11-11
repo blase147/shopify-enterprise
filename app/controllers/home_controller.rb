@@ -7,7 +7,7 @@ class HomeController < ApplicationController
       unless session[:shop_id] # ensure cookie session as well
         session[:shop_id] = Shop.find_by(shopify_domain: current_shopify_domain)&.id
       end
-      if ENV['APP_TYPE'] == 'public' && current_shop.recurring_charge_id.blank?
+      if ENV['APP_TYPE'] == 'public' && current_shop&.recurring_charge_id&.blank?
         redirect_to select_plan_index_path
       else
         @shop_origin = current_shopify_domain
@@ -36,8 +36,7 @@ class HomeController < ApplicationController
   def redirection
     shop = Shop.all
     user = UserShop.all
-    if current_user.present?
-    else 
+    unless current_user.present?
       if shop.present? && !user.present?
         redirect_to "/users/sign_up" 
       elsif shop.present? && user.present?

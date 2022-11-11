@@ -11,8 +11,8 @@
       - if !params[:status].present? || (params[:status].present? && params[:status] == 'active')
         div.display-text
           p
-            - if @translation.home_tab_active_subscriptions.present?
-              span #{@translation.home_tab_active_subscriptions}
+            - if @translation&.home_tab_active_subscriptions.present?
+              span #{@translation&.home_tab_active_subscriptions}
             - else
               span MY
               span.active ACTIVE
@@ -26,19 +26,19 @@
       - if !params[:status].present? || (params[:status].present? && params[:status] == 'cancelled')
         div.display-text.cancel-text
           p
-            - if @translation.cancelled_tab_cancelled_subscriptions.present?
-              span #{@translation.cancelled_tab_cancelled_subscriptions}
+            - if @translation&.cancelled_tab_cancelled_subscriptions.present?
+              span #{@translation&.cancelled_tab_cancelled_subscriptions}
             - else
               span MY
               span.canceled CANCELLED
-              span #{(@cancelled_subscriptions.count + @cancelled_line_items.count) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION'}
+              span #{(@cancelled_subscriptions&.count + @cancelled_line_items&.count rescue 0) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION'}
         = render partial: 'cancelled_subscriptions'
       - if !params[:status].present? || (params[:status].present? && params[:status] == 'paused')
         div.display-text.cancel-text
           p
             span MY
             span.canceled PAUSED
-            span #{(@paused_subscriptions.count) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION'}
+            span #{(@paused_subscriptions&.count) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION' rescue 'SUBSCRIPTION'} 
         = render partial: 'paused_subscriptions'
 javascript:
 
