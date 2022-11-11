@@ -42,7 +42,7 @@ const Nav = (props) => {
           ) : {},
           accessTabs?.manage_plan_access ? (
             {
-              label: 'Subscripton Plans',
+              label: 'Subscription Plans',
               icon: () => <MangeIcon />,
               url: '/subscription-plans',
               onClick: () => setActiveTab("mplan"),
@@ -62,7 +62,7 @@ const Nav = (props) => {
         subNavigationItems: [
           accessTabs?.subscription_orders_access ? (
             {
-              label: 'Subscriptions Orders',
+              label: 'Subscription Orders',
               icon: () => <SubscriptionIcon />,
               url: '/customers',
               onClick: () => setActiveTab("suborder"),
@@ -98,7 +98,7 @@ const Nav = (props) => {
         selected: true,
         subNavigationItems: [
           {
-            label: "Mange Staff",
+            label: "Manage Staff",
             icon: ProfileMajor,
             url: "/manage-staff",
             onClick: () => setActiveTab("mplan"),
