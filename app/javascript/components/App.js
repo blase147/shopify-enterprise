@@ -35,7 +35,6 @@ import Tiazen from './Tiazen/Index'
 import Toolbox from './Toolbox/Index'
 import PowerView from './plans/PowerView';
 import CustomerModal from './CustomerModal/Index';
-import WaysToEarnPoint from './WaysToEarnPoint';
 
 import InstallShop from './InstallShop';
 import ManageStaff from './ManageStaff';
@@ -126,11 +125,6 @@ export default function App(props) {
           <ApolloProvider client={client}>
             <Switch>
               <Route exact path="/manage-staff" component={ManageStaff} />
-              <Route
-                exact
-                path="/ways-to-earn"
-                component={WaysToEarnPoint}
-              />
               <Route
                 exact
                 path="/"

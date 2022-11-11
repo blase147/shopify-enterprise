@@ -131,15 +131,6 @@ const Nav = (props) => {
               selected: window.location.pathname == "/toolbox" ? true : false,
             }
           ) : {},
-          accessTabs?.ways_to_earn ? (
-            {
-              label: 'Ways To Earn',
-              icon: SettingsMinor,
-              onClick: () => setActiveTab("waysToEarn"),
-              selected: window.location.pathname == "/ways-to-earn" ? true : false,
-              url: '/ways-to-earn',
-            }
-          ) : {},
           accessTabs?.settings_access ? (
             {
               label: "Settings",

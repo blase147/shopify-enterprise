@@ -11,8 +11,10 @@ import BuildBox from '../build-a-box/BuildBox';
 import CreateBuildBox from '../build-a-box/CreateBuildBox';
 import Bundles from '../bundles';
 import BundleForm from '../bundles/BundleForm';
+import WaysToEarnPoint from '../WaysToEarnPoint';
 
 const Index = () => {
+  const accessSettings = JSON.parse(localStorage.getItem("accessSettings"))
   const [selectedSetting, setSelectedSetting] = useState('');
   const [editId, setEditId] = useState('');
   const [showEditPage, setShowEditPage] = useState(false);
@@ -64,6 +66,14 @@ const Index = () => {
       img: InformationImage,
       desc: 'Allow your customers to build bundles.',
     },
+    accessTabs?.ways_to_earn && (
+      {
+        key: 'waysToEarnPoint',
+        title: 'Ways To Earn Points ',
+        img: InformationImage,
+        desc: 'Create or update ways to earn points.',
+      }
+    )
   ];
 
   return (
@@ -157,9 +167,14 @@ const Index = () => {
                         />
                       )}
                     </>
-                  ) : (
-                    ''
-                  )}
+                  ) : selectedSetting == "waysToEarnPoint" ? (
+                    <>
+                      <WaysToEarnPoint />
+                    </>
+                  ) :
+                    (
+                      ''
+                    )}
                 </Layout.Section>
               </Layout>
             </>
