@@ -36,8 +36,7 @@ class HomeController < ApplicationController
   def redirection
     shop = Shop.all
     user = UserShop.all
-    if current_user.present?
-    else 
+    unless current_user.present?
       if shop.present? && !user.present?
         redirect_to "/users/sign_up" 
       elsif shop.present? && user.present?

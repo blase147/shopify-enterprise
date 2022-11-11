@@ -10,7 +10,7 @@ import { useHistory } from 'react-router-dom';
 import "./nav_style.scss";
 import { HomeMajor, SettingsMinor, AnalyticsMajor, HintMajor, ProfileMajor, InstallMinor, CustomersMajor } from "@shopify/polaris-icons";
 import { MangeIcon, SubscriptionIcon, ToolboxIcon } from './CustomIcon';
-import BoxabyLogo from "./../../images/BoxabyLogo.png";
+import ChargeZenLogo from "./../../images/ChargeZenLogo.svg";
 
 
 const Nav = (props) => {
@@ -150,7 +150,7 @@ const Nav = (props) => {
   return (
     <div className='navBar'>
       <div className='logo'>
-        <img src={BoxabyLogo} />
+        <img src={ChargeZenLogo} />
       </div>
       {
         navigations.length > 0 ?

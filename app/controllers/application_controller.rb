@@ -35,7 +35,8 @@ class ApplicationController < ActionController::Base
 
   def generate_admin_token
     auth_token = SecureRandom.urlsafe_base64(nil, false)
-    $redis.set("admin_auth_token", auth_token, options = {ex: 1800})
+    redis = Redis.new
+    redis.set("admin_auth_token", auth_token, options = {ex: 1800})
     return auth_token
   end
 
