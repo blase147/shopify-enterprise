@@ -139,7 +139,14 @@ const Nav = (props) => {
               onClick: () => setActiveTab("settings"),
               selected: window.location.pathname == "/app-settings" ? true : false,
             }
-          ) : {}
+          ) : {},
+          {
+            label: "Integeration",
+            icon: SettingsMinor,
+            url: '/integrations',
+            onClick: () => setActiveTab("integrations"),
+            selected: window.location.pathname == "/integrations" ? true : false,
+          }
         ]
       })
     }
