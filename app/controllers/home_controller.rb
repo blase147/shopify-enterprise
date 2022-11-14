@@ -37,13 +37,13 @@ class HomeController < ApplicationController
     shop = Shop.all
     user = UserShop.all
     unless current_user.present?
-      if shop.present? && !user.present?
-        redirect_to "/users/sign_up" 
-      elsif shop.present? && user.present?
-        redirect_to "/users/sign_in"
-      else
-        redirect_to "/users/sign_up" 
-      end
+        if shop.present? && !user.present? && !request.url.to_s.include?("/users/sign_up")
+          redirect_to "/users/sign_up" 
+        elsif shop.present? && user.present? && !request.url.to_s.include?("/users/sign_in")
+          redirect_to "/users/sign_in"
+        else
+          redirect_to "/users/sign_up" unless request.url.to_s.include?("/users/sign_up")
+        end
     end
   end
 
