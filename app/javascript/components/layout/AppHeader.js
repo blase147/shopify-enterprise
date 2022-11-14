@@ -14,10 +14,11 @@ const AppHeader = (props) => {
         window.location.replace(`/?shopify_domain=${value}`)
     }, []);
     const [allShops, setAllShops] = useState();
-
     useEffect(() => {
-        setAllShops(JSON.parse(localStorage.getItem("allShops")))
-    }, [allShops])
+        const shopsArray = (localStorage.getItem("allShops") ? JSON.parse(localStorage.getItem("allShops")) : '')
+        setAllShops(shopsArray)
+    }, [localStorage.getItem("allShops")])
+
     const [value, setValue] = useState('');
 
     const handleChange = useCallback((newValue) => setValue(newValue), []);

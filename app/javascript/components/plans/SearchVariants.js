@@ -10,7 +10,7 @@ import {
 } from '@shopify/polaris';
 
 const SearchVariants = (props) => {
-  const { value, setFieldValue, fieldName, allVariants, error,setAllVarients } = props;
+  const { value, setFieldValue, fieldName, allVariants, error, setAllVarients } = props;
   // Search variant to add
   const GET_VARIANTS = gql`
   query ($query: String!) {
@@ -57,7 +57,6 @@ const SearchVariants = (props) => {
             })
           })
         );
-
         return result;
       });
     }
@@ -98,11 +97,11 @@ const SearchVariants = (props) => {
         }
 
         if (flag) {
-        allVariants ? allVariants.push({
+          allVariants ? allVariants.push({
             title: variant.value,
             variantId: variant.id,
             image: variant.images[0]
-          }):allVariants=[{
+          }) : allVariants = [{
             title: variant.value,
             variantId: variant.id,
             image: variant.images[0]
@@ -139,14 +138,14 @@ const SearchVariants = (props) => {
       </div>
     </React.Fragment>
   );
-
   return (
     <Autocomplete
-      options={variantList}
+      options={variantList ?? variantList}
       selected={selectedOptions}
       onSelect={updateSelection}
       textField={textField}
       emptyState={emptyState}
+      willLoadMoreResults={true}
     />
   );
 };
