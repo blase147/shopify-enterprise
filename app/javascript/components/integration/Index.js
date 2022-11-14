@@ -27,6 +27,7 @@ import _, { map } from 'lodash';
 import integrations from '../../lib/integrations';
 import { groupBy } from '../common/utils/utils';
 import LoadingScreen from '../LoadingScreen';
+import IntegrationDetail from "../integration/Detail"
 
 const Integrations = ({ handleBack, handleForm }) => {
 
@@ -89,117 +90,130 @@ const Integrations = ({ handleBack, handleForm }) => {
   }, [category])
 
   let lodas = category == "all" && _.groupBy(integerations?.fetchIntegrations, "integrationType") || [];
+  const [detail, setDetail] = useState(false);
+  const [editId, setEditId] = useState();
+  const [editTitle, setEditTitle] = useState();
+  const [editKeys, setEditKeys] = useState();
+  const handleCloseEditPage = () => {
+    setDetail(false)
+  }
   return (
-    <>
+    <AppLayout typePage="sellingPlanForm" tabIndex={1}>
+      <Frame>
+        <Page>
+          {detail ?
+            <IntegrationDetail id={editId} title={editTitle} keys={editKeys} handleClose={handleCloseEditPage} />
+            :
+            <div fullWidth title={process.env.APP_TYPE == "public" ? "Integrate with ChargeZen" : "Integrations"}>
+              <Layout>
 
-      <div fullWidth title={process.env.APP_TYPE == "public" ? "Integrate with ChargeZen" : "Integrations"}>
-        <Layout>
-
-          <Layout.Section>
-            <div className="back-button pointer" style={{ float: "left" }} onClick={handleBack}>
-              <Icon
-                source={MobileBackArrowMajor}
-                color="base" />
-            </div>
-          </Layout.Section>
-          <Layout.Section>
-            <Button>
-              <img src={getStart} width="20" />
-              <span>Get Started</span>
-            </Button>
-          </Layout.Section>
-          <Layout.Section>
-            <Card>
-              <Tabs
-                tabs={tabs}
-                selected={selected}
-                onSelect={handleTabChange}
-              ></Tabs>
-            </Card>
-          </Layout.Section>
-          {/* Data from API's */}
-          <Layout.Section>
-            <Heading><span style={{ textTransform: "capitalize" }} >{category}</span></Heading>
-            {
-              (loading) ? (
-                <Card>
-                  <LoadingScreen />
-                </Card>
-              ) :
-                <>
+                <Layout.Section>
+                  <div className="back-button pointer" style={{ float: "left" }} onClick={handleBack}>
+                    <Icon
+                      source={MobileBackArrowMajor}
+                      color="base" />
+                  </div>
+                </Layout.Section>
+                <Layout.Section>
+                  <Button>
+                    <img src={getStart} width="20" />
+                    <span>Get Started</span>
+                  </Button>
+                </Layout.Section>
+                <Layout.Section>
+                  <Card>
+                    <Tabs
+                      tabs={tabs}
+                      selected={selected}
+                      onSelect={handleTabChange}
+                    ></Tabs>
+                  </Card>
+                </Layout.Section>
+                {/* Data from API's */}
+                <Layout.Section>
+                  <Heading><span style={{ textTransform: "capitalize" }} >{category}</span></Heading>
                   {
-                    category == "all" ?
+                    (loading) ? (
+                      <Card>
+                        <LoadingScreen />
+                      </Card>
+                    ) :
                       <>
                         {
-                          lodas && Object.keys(lodas).map((key, i) => (
-                            <Layout.Section>
-                              <Heading>{_.startCase(key)}</Heading>
-                              <Stack spacing="loose">
-                                {lodas[key]?.map((childItem, i) => (
-                                  <Link
-                                    // to={{ pathname: `/integration-detail/${childItem.id}/${childItem.name}/${childItem.keys}`, state: { credentials: childItem.credentials } }}
-                                    onClick={() => handleForm({ id: childItem.id, keys: childItem.keys, title: childItem.name })}
-                                    className="roundedCard"
-                                    key={i}
-                                  >
-                                    <Stack.Item>
-                                      <Card sectioned>
-                                        <Stack alignment="center">
+                          category == "all" ?
+                            <>
+                              {
+                                lodas && Object.keys(lodas).map((key, i) => (
+                                  <Layout.Section>
+                                    <Heading>{_.startCase(key)}</Heading>
+                                    <Stack spacing="loose">
+                                      {lodas[key]?.map((childItem, i) => (
+                                        <Button onClick={() => {
+                                          setEditId(childItem?.id)
+                                          setEditTitle(childItem?.name)
+                                          setEditKeys(childItem?.keys)
+                                          setDetail(true)
+                                        }}>
                                           <Stack.Item>
-                                            <img src={require(`images/${childItem.name?.split(" ").join("").toLowerCase()}`)} style={{ maxWidth: "80px" }} />
+                                            <Card sectioned>
+                                              <Stack alignment="center">
+                                                <Stack.Item>
+                                                  <img src={require(`images/${childItem.name?.split(" ").join("").toLowerCase()}`)} style={{ maxWidth: "80px" }} />
+                                                </Stack.Item>
+                                                <Stack.Item fill>
+                                                  <DisplayText size="small">
+                                                    {childItem.name}
+                                                  </DisplayText>
+                                                </Stack.Item>
+                                              </Stack>
+                                            </Card>
                                           </Stack.Item>
-                                          <Stack.Item fill>
-                                            <DisplayText size="small">
-                                              {childItem.name}
-                                            </DisplayText>
-                                          </Stack.Item>
-                                        </Stack>
-                                      </Card>
-                                    </Stack.Item>
-                                  </Link>
-                                ))}
-                              </Stack>
-                            </Layout.Section>
-                          ))}
-                      </> :
-                      <>
-                        <Stack spacing="loose">
-                          {
-                            integerations?.fetchIntegrations && integerations?.fetchIntegrations?.map(item => (
-                              <Link
-                                to={{ pathname: `/integration-detail/${item.id}/${item.name}/${item.keys}`, state: { credentials: item.credentials } }}
-                                className="roundedCard"
-                                key={item.id}
-                              >
-                                <Stack.Item>
-                                  <Card sectioned>
-                                    <Stack alignment="center">
-                                      <Stack.Item>
-                                        {
-                                          console.log("hello", item.name?.split(" ").join("").toLowerCase())
-                                        }
-                                        <img src={require(`images/${item.name?.split(" ").join("").toLowerCase()}`)} style={{ maxWidth: "80px" }} />
-                                      </Stack.Item>
-                                      <Stack.Item fill>
-                                        <DisplayText size="small">
-                                          {item.name}
-                                        </DisplayText>
-                                      </Stack.Item>
+                                        </Button>
+                                      ))}
                                     </Stack>
-                                  </Card>
-                                </Stack.Item>
-                              </Link>
-                            ))
-                          }
-                        </Stack>
+                                  </Layout.Section>
+                                ))}
+                            </> :
+                            <>
+                              <Stack spacing="loose">
+                                {
+                                  integerations?.fetchIntegrations && integerations?.fetchIntegrations?.map(item => (
+
+                                    <Button onClick={() => {
+                                      setEditId(item?.id)
+                                      setEditTitle(item?.name)
+                                      setEditKeys(item?.keys)
+                                      setDetail(true)
+                                    }}>
+                                      <Stack.Item>
+                                        <Card sectioned>
+                                          <Stack alignment="center">
+                                            <Stack.Item>
+                                              <img src={require(`images/${item.name?.split(" ").join("").toLowerCase()}`)} style={{ maxWidth: "80px" }} />
+                                            </Stack.Item>
+                                            <Stack.Item fill>
+                                              <DisplayText size="small">
+                                                {item.name}
+                                              </DisplayText>
+                                            </Stack.Item>
+                                          </Stack>
+                                        </Card>
+                                      </Stack.Item>
+                                    </Button>
+                                  ))
+                                }
+                              </Stack>
+                            </>
+                        }
                       </>
                   }
-                </>
-            }
-          </Layout.Section>
-        </Layout>
-      </div>
-    </>
+                </Layout.Section>
+              </Layout>
+            </div>
+          }
+        </Page>
+      </Frame>
+    </AppLayout>
   );
 };
 
