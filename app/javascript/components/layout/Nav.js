@@ -29,6 +29,7 @@ const Nav = (props) => {
       navigation.push({
         url: "",
         label: 'Main Menu',
+        disabled: true,
         selected: true,
         subNavigationItems: [
           accessTabs?.dashboard_access ? (
@@ -58,6 +59,7 @@ const Nav = (props) => {
       navigation.push({
         url: "",
         label: 'Workspace',
+        disabled: true,
         selected: true,
         subNavigationItems: [
           accessTabs?.subscription_orders_access ? (
@@ -96,6 +98,7 @@ const Nav = (props) => {
         url: "",
         label: 'General',
         selected: true,
+        disabled: true,
         subNavigationItems: [
           {
             label: "Manage Staff",

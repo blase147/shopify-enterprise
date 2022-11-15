@@ -340,8 +340,14 @@ const FixedPlan = () => {
     return plans;
   });
 
-
-
+  const validateJson = (jsonObject) => {
+    try {
+      return JSON.parse(jsonObject);
+    } catch (e) {
+      return jsonObject
+    }
+  }
+  console.log("planData", planData)
   return (
     <AppLayout typePage="sellingPlanForm" tabIndex={1}>
       <Frame>
@@ -397,7 +403,7 @@ const FixedPlan = () => {
                       delete values.sellingPlans[index].shippingDates[0]['month']
                     }
 
-                    values.sellingPlans[index].shippingDates[0] = JSON.stringify(values.sellingPlans[index].shippingDates[0]);
+                    values.sellingPlans[index].shippingDates[0] = _.isString(values.sellingPlans[index].shippingDates[0]) ? values.sellingPlans[index].shippingDates[0] : JSON.stringify(values.sellingPlans[index].shippingDates[0]);
                   }
 
                   // values.sellingPlans[index].productIds = allProducts[index] || [];
@@ -895,11 +901,17 @@ const FixedPlan = () => {
                                 plan.shippingDates == undefined ?
                                   setFieldValue(
                                     `sellingPlans[${index}].shippingDates`,
-                                    [{ type: `${e.toUpperCase()}DAY` }]
+                                    [{ type: `${e.toUpperCase()}DAY`, day: 0 }]
                                   ) :
-                                  setFieldValue(
-                                    `sellingPlans[${index}].shippingDates[0].type`,
-                                    `${e.toUpperCase()}DAY`
+                                  (
+                                    setFieldValue(
+                                      `sellingPlans[${index}].shippingDates[0].type`,
+                                      `${e.toUpperCase()}DAY`
+                                    ),
+                                    setFieldValue(
+                                      `sellingPlans[${index}].shippingDates[0].day`,
+                                      0
+                                    )
                                   )
                                 setSelectedPlan(e);
                                 changeCutoffOptions(e);
@@ -1007,7 +1019,7 @@ const FixedPlan = () => {
                                     console.log("plan.shippingDates[0])?.day", plan, " shipping", plan.shippingDates[0])
                                   }
                                   <Select
-                                    value={!isNaN(plan.shippingDates[0]?.day) ? plan.shippingDates[0]?.day : JSON.parse(plan.shippingDates[0])?.day}
+                                    value={!isNaN(plan.shippingDates[0]?.day) ? plan.shippingDates[0]?.day : validateJson(plan.shippingDates[0])?.day}
                                     label="Specific shipping date"
                                     error={
                                       touched.sellingPlans?.[index]
@@ -1016,23 +1028,24 @@ const FixedPlan = () => {
                                         ?.shippingDates[0]?.day
                                     }
                                     disabled={!(selectedPlan !== 'DAY')}
-                                    onChange={(e) =>
-                                      plan.shippingDates !== undefined ?
-                                        setFieldValue(
-                                          `sellingPlans[${index}].shippingDates[0].day`,
-                                          Number(e)
-                                        ) :
-                                        setFieldValue(
-                                          `sellingPlans[${index}].shippingDates`,
-                                          [{ day: Number(e) }]
-                                        )
+                                    onChange={(e) => {
+                                      // setFieldValue(
+                                      //   `sellingPlans[${index}].shippingDates[0].type`,
+                                      //   values?.sellingPlans[index].shippingDates[0].type,
+                                      // )
+                                      setFieldValue(
+                                        `sellingPlans[${index}].shippingDates[0].day`,
+                                        Number(e)
+                                      )
+                                      console.log("values?.sellingPlans[index].shippingDates[0].type", values);
+                                    }
                                     }
                                     options={cutOffOptions}
                                   />
                                   {selectedPlan === 'YEAR' &&
                                     <>
                                       <Select
-                                        value={!isNaN(plan.shippingDates[0]?.month) ? plan.shippingDates[0]?.month : JSON.parse(plan.shippingDates[0])?.month}
+                                        value={!isNaN(plan.shippingDates[0]?.month) ? plan.shippingDates[0]?.month : validateJson(plan.shippingDates[0])?.month}
                                         label="Month"
                                         error={
                                           touched.sellingPlans?.[index]
@@ -1040,16 +1053,17 @@ const FixedPlan = () => {
                                           errors.sellingPlans?.[index]
                                             ?.shippingDates
                                         }
-                                        onChange={(e) =>
-                                          plan.shippingDates !== undefined ?
-                                            setFieldValue(
-                                              `sellingPlans[${index}].shippingDates[0].month`,
-                                              Number(e)
-                                            ) :
-                                            setFieldValue(
-                                              `sellingPlans[${index}].shippingDates[0]`,
-                                              [{ month: Number(e) }]
-                                            )
+                                        onChange={(e) => {
+                                          // setFieldValue(
+                                          //   `sellingPlans[${index}].shippingDates[0].type`,
+                                          //   values?.sellingPlans[index].shippingDates[0].type,
+                                          // )
+                                          setFieldValue(
+                                            `sellingPlans[${index}].shippingDates[0].month`,
+                                            Number(e)
+                                          )
+                                          console.log("values?.sellingPlans[index].shippingDates[0].type", values);
+                                        }
                                         }
                                         options={cutOffYearOptions}
                                       />
