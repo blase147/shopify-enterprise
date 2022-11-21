@@ -91,7 +91,7 @@ const SearchProduct = (props) => {
   const handelSelected = (selected) => {
     if (
       selected.length >
-        selectedProducts.filter((item) => item._destroy === false).length &&
+      selectedProducts.filter((item) => item._destroy === false).length &&
       !selectedProducts.find((product) => product.value === selected[0])
     ) {
       setSelectedOptions(selected);
@@ -107,7 +107,7 @@ const SearchProduct = (props) => {
 
         if (isHave != -1) {
           newProductList[isHave]._destroy = false;
-        } else {  
+        } else {
           newProductList.push({
             productId: productList[newItemIndex].value,
             image: productList[newItemIndex].image,

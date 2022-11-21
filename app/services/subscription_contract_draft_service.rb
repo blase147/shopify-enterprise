@@ -102,7 +102,7 @@ class SubscriptionContractDraftService < GraphqlService
       result = client.query(client.parse(CUSTOMER_QUERY), variables: { id: @customer_id })
       errors = result.data.customer.errors
       raise errors.first.message if errors.present?
-  
+      
       @customer_address = result.data.customer.default_address.to_h
       if result.data.customer.payment_methods.edges.first.nil?
         raise "NO Payment Method Found"
@@ -144,7 +144,7 @@ class SubscriptionContractDraftService < GraphqlService
                 provinceCode: @customer_address["provinceCode"],
                 countryCode: @customer_address["countryCode"],
                 phone: @customer_address["phone"],
-                zip: @customer_address["zip"]
+                zip: @customer_address["zip"],
               }
             }
           },

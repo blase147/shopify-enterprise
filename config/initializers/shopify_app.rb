@@ -23,6 +23,9 @@ ShopifyApp.configure do |config|
     { topic: 'subscription_billing_attempts/success', address: "#{ENV['HOST']}shopify_webhooks/billing_attempt_success", fields: ["id"]},
     { topic: 'customers/create', address: "#{ENV['HOST']}shopify_webhooks/customer_create" },
     { topic: 'customers/update', address: "#{ENV['HOST']}shopify_webhooks/customer_update" },
+    { topic: 'customer_payment_methods/create', address: "#{ENV['HOST']}shopify_webhooks/customer_payment_method_create" },
+    { topic: 'customer_payment_methods/update', address: "#{ENV['HOST']}shopify_webhooks/customer_payment_method_update" },
+    { topic: 'customer_payment_methods/revoke', address: "#{ENV['HOST']}shopify_webhooks/customer_payment_method_revoke" },
   ]
 end
 

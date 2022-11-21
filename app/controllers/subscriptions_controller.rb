@@ -229,7 +229,18 @@ class SubscriptionsController < AuthenticatedController
   end
 
   def customer_migration
-    contract = SubscriptionContractDraftService.new(params).fetch_customer
+    if params[:payment_method] == "stripe"
+      customer = CustomerModal.find_by_shopify_id(params[:customer_id])
+      @stripe_customer = Stripe::Customer.list({}, api_key: current_shop.stripe_api_key).data.filter{|c| c.email == customer.email}[0]
+      if @stripe_customer.present?
+        CustomerService.new({shop: current_shop}).create_customer_payment_remote_method(@stripe_customer&.id, param[:customer_id])
+        $creating_params=params
+      else
+        render json:{error: :true, response: "This customer doesn't have stripe account"}.to_json
+      end
+    else
+      contract = SubscriptionContractDraftService.new(params).fetch_customer
+    end
     render json:{status: :ok, response: contract}.to_json
   end
 end

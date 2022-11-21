@@ -1,7 +1,7 @@
 class ShopifyContractCreateWorker
   include Sidekiq::Worker
 
-  def perform(shop_id, id, order_id)
+  def perform(shop_id, id, order_id=nil)
     unless CustomerSubscriptionContract.find_by(shopify_id: id)
       shop = Shop.find(shop_id)
       data = shop.with_shopify_session do
@@ -30,8 +30,8 @@ class ShopifyContractCreateWorker
       customer_modal_contract = {"subscription": contract.subscription, "status": contract.status}
       CreateCustomerModalService.create(shop.id, data.customer,customer_modal_contract)
       if contract.api_data.present?
-        order_id = contract.api_data["origin_order"]["id"].split("/").last
-        order = ShopifyAPI::Order.find(order_id)
+        orderid = contract.api_data["origin_order"]["id"].split("/").last
+        order = ShopifyAPI::Order.find(orderid)
         notes = order.note_attributes
         delivery_day = nil
         delivery_date = nil

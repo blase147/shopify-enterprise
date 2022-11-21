@@ -40,6 +40,9 @@ Rails.application.routes.draw do
   post '/shopify_webhooks/customer_create', to: 'shopify_webhooks#customer_create'
   post '/shopify_webhooks/customer_update', to: 'shopify_webhooks#customer_update'
   post '/webhooks/stripe/subscription', to: 'stripe_webhooks#subscription'
+  post '/shopify_webhooks/customer_payment_method_create', to: 'shopify_webhooks#customer_payment_method_create'
+  post '/shopify_webhooks/customer_payment_method_update', to: 'shopify_webhooks#customer_payment_method_update'
+  post '/shopify_webhooks/customer_payment_method_revoke', to: 'shopify_webhooks#customer_payment_method_revoke'
 
   post '/shipping_suites/sync_orders', to: 'shipping_suites#sync_orders'
 

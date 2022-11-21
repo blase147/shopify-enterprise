@@ -103,8 +103,22 @@ class ShopifyWebhooksController < ApplicationController
 
   def customer_update
     shop = Shop.find_by(shopify_domain: shop_domain)
-    data = JSON.parse(params&.to_json, object_class: OpenStruct)
+    data = JSON.parse(params&.to_json, object_class: OpenStruct) rescue nil
     CreateCustomerModalService.create(shop.id,data)
+    head :no_content
+  end
+
+  def customer_payment_method_create
+    $creating_params[:payment_method_id] = params.id if $creating_params.present?
+    CreateContractWithPaymentMethodRemoteWorker.perform_async($creating_params) if $creating_params.present?
+    head :no_content
+  end
+
+  def customer_payment_method_update
+    head :no_content
+  end
+
+  def customer_payment_method_revoke
     head :no_content
   end
 
@@ -133,6 +147,7 @@ class ShopifyWebhooksController < ApplicationController
     message = "#{e.message} from #{e.backtrace.first}"
     SiteLog.create(log_type: SiteLog::TYPES[:email_failure], message: message, params: params)
   end
+
 end
 
 =begin
