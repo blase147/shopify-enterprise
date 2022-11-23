@@ -134,7 +134,8 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :password_less_login, only: [:index] do
+    get "/passwordlesslogin",to: "password_less_login#index"
+    resources :password_less_login, only: [] do
       collection do
         post :send_otp_passwordless_login
         post :auth_with_otp

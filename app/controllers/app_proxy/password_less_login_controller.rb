@@ -68,6 +68,6 @@ class AppProxy::PasswordLessLoginController < AppProxyController
     def log_out
         $redis = Redis.new
         $redis.del("#{params[:email]&.downcase&.strip}_auth")
-        redirect_to "/a/chargezen/password_less_login"
+        redirect_to "/a/chargezen/passwordlesslogin"
     end
 end

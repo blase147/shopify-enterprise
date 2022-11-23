@@ -5,7 +5,11 @@
 - delivery_policy = @subscription.delivery_policy
 - api_order = ShopifyAPI::Order.find(@subscription.origin_order.id[/\d+/]) rescue nil
 - shipping_address = api_order.shipping_address rescue nil
-- formatted_shipping_address = "#{shipping_address.address1} #{shipping_address.city} #{shipping_address.province} #{shipping_address.zip} #{shipping_address.country}" rescue ''
+- default_address = customer.default_address
+- if api_order.present?
+  - formatted_shipping_address = "#{shipping_address.address1} #{shipping_address.city} #{shipping_address.province} #{shipping_address.zip} #{shipping_address.country}" rescue ''
+- else 
+  - formatted_shipping_address = "#{default_address.address1} #{default_address.city} #{default_address.province} #{default_address.zip} #{default_address.country}" rescue ''
 - billing_address = api_order.billing_address rescue nil
 - baddress = "#{billing_address.address1} #{billing_address.city} #{billing_address.province} #{billing_address.zip} #{billing_address.country}" rescue ''
 - next_billing_date =  get_next_billing_date(@subscription, current_shop)
@@ -151,15 +155,15 @@
                 button.Polaris-Button.Polaris-Button--plain
                     span.Polaris-Button__Content Edit
 
-            - if api_order.present?
-              - card = api_order.payment_details rescue nil
-              - billing_address = api_order.billing_address
+            - if @payment_method.present?
+              - card = @payment_method.customer_payment_method.instrument rescue nil
+              - billing_address = @payment_method.billing_address rescue default_address
 
               .Polaris-Stack.visa-section
                 .Polaris-Stack__Item
-                  - card_company = card&.credit_card_company&.downcase rescue nil
+                  - card_company = card&.brand&.downcase rescue nil
                   - if card_company.present? && (card_company&.downcase == "visa" || card_company&.downcase == "mastercard")
-                    img class="card_logo" src="#{asset_path("#{card.credit_card_company&.downcase}_logo.png")}"
+                    img class="card_logo" src="#{asset_path("#{card.brand&.downcase}_logo.png")}"
                   - else
                     <svg class="card_logo" width="84" height="57" viewBox="0 0 84 57" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M73.3681 0.340088H10.6319C4.76952 0.340088 0 5.10961 0 10.9719V45.7789C0 51.6412 4.76952 56.4107 10.6319 56.4107H73.3681C79.2305 56.4107 84 51.6412 84 45.7789V10.9719C84 5.10961 79.2305 0.340088 73.3681 0.340088ZM10.6319 5.64582H73.3681C76.305 5.64582 78.6943 8.03506 78.6943 10.9719V13.0647H5.30573V10.9719C5.30573 8.03506 7.69497 5.64582 10.6319 5.64582ZM78.6943 24.9292H5.30573V18.3705H78.6943V24.9292ZM73.3681 51.105H10.6319C7.69497 51.105 5.30573 48.7157 5.30573 45.7789V30.2349H78.6943V45.7789C78.6943 48.7157 76.305 51.105 73.3681 51.105Z" fill="#000000"/>
@@ -170,13 +174,12 @@
                 - if card.present?
                   .Polaris-Stack__Item
                     p
-                      = card.credit_card_company
+                      = card&.brand&.humanize
                       span.Polaris-TextStyle--variationStrong style="margin-left: 0.5rem;"
-                        = card.credit_card_number[/\d+/]
-                    - if card.respond_to?(:credit_card_expiration_month)
-                      p
-                        | Exp. Date
-                        span.Polaris-TextStyle--variationStrong #{card.credit_card_expiration_month}/#{card.credit_card_expiration_year}
+                        = card.last_digits[/\d+/]
+                    p
+                      | Exp. Date
+                      span.Polaris-TextStyle--variationStrong #{card.expiry_month}/#{card.expiry_year}
 
               p style="font-size: 18px; line-height: 18px; margin-top: 1rem; font-family: Avenir LT Std;"
                 i TOTAL SPEND TO DATE:
