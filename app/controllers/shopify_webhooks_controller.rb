@@ -109,11 +109,6 @@ class ShopifyWebhooksController < ApplicationController
   end
 
   def customer_payment_method_create
-    if $creating_params.present? && $creating_params[:customer_id][/\d+/]&.to_i == params[:customer_id]&.to_i
-      data = $creating_params
-      data[:data][:payment_method_id] = params[:admin_graphql_api_id] if data.present? && params[:admin_graphql_api_id].present?
-      CreateContractWithPaymentMethodRemoteWorker.perform_async(shop_domain,data.to_json) if data.present?
-    end
     head :no_content
   end
 
