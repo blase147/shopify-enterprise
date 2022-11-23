@@ -8,7 +8,7 @@ import "./style.css";
 import CustomerAutocomplete from './CustomerAutocomplete';
 import SellingPlans from './SellingPlans';
 const CustomerMigration = () => {
-    const [formField, setFormField] = useState({ customer_id: '', next_billing_date: '', delivery_date: '', delivery_price: '', variant_id: '', quantity: '', current_price: '', billing_policy_interval: '', billing_policy_interval_count: '', delivery_policy_interval: '', delivery_policy_interval_count: '' })
+    const [formField, setFormField] = useState({ customer_id: '', next_billing_date: '', delivery_date: '', delivery_price: '', variant_id: '', quantity: '', current_price: '', billing_policy_interval: '', billing_policy_interval_count: '', delivery_policy_interval: '', delivery_policy_interval_count: '', payment_method: '' })
     const handleChange = (e) => {
         setFormField({ ...formField, [e.target.name]: e.target.value })
     }
@@ -55,6 +55,17 @@ const CustomerMigration = () => {
                     <FormLayout.Group>
                         <label>
                             <CustomerAutocomplete fetchCustomers={fetchCustomers} deselectedOptions={deselectedOptions} setSelectedCustomers={setSelectedCustomers} />
+                        </label>
+                    </FormLayout.Group>
+                </FormLayout>
+                <FormLayout>
+                    <FormLayout.Group>
+                        <label>
+                            Select Customer Payment Method: {"\n"}
+                            <select className="form-control" onChange={(e) => handleChange(e)} name="payment_method" >
+                                <option value="shopify_payment">Shopify Payment</option>
+                                <option value="stripe">Strip</option>
+                            </select>
                         </label>
                     </FormLayout.Group>
                 </FormLayout>

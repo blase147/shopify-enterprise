@@ -71,6 +71,25 @@ class CustomerService < GraphqlService
     }
   GRAPHQL
 
+  CUSTOMER_PAYMENT_CREATE = <<-GRAPHQL
+    mutation($customerId: ID!, $remoteReference: CustomerPaymentMethodRemoteInput!) {
+      customerPaymentMethodRemoteCreate(
+        customerId: $customerId,
+        remoteReference: $remoteReference
+      ) {
+        customerPaymentMethod {
+          id
+          instrument {
+            ... on CustomerCreditCard {
+              brand
+              lastDigits
+            }
+          }
+        }
+      }
+    }
+  GRAPHQL
+
   def initialize params
     @shop = params[:shop]
   end
@@ -157,5 +176,10 @@ class CustomerService < GraphqlService
   rescue Exception => ex
     p ex.message
     { error: ex.message }
+  end
+
+  def create_customer_payment_remote_method(stripe_customer_id, shopify_customer_id)
+    result = client.query(client.parse(CUSTOMER_PAYMENT_CREATE), variables: { customerId: shopify_customer_id, remoteReference: { stripePaymentMethod:{customerId: stripe_customer_id}}} )
+    p result.to_json
   end
 end
