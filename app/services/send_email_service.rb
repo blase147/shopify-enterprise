@@ -16,13 +16,15 @@ class SendEmailService
 
     def send_subscription_activation_email(contract_id)
         contract = CustomerSubscriptionContract.find(contract_id)
-        email_notification = contract.shop.setting.email_notifications.find_by_name "Subscription Activation"
-        products = []
-        order_number = contract.api_data["origin_order"]["id"]&.split("/").last
-        contract&.origin_order_meals&.each do |product|
-            products << product["node"]["product"]["title"] unless product["node"]["product"]["title"]&.downcase&.include? "meals"
+        if contract.present?
+            email_notification = contract.shop.setting.email_notifications.find_by_name "Subscription Activation"
+            products = []
+            order_number = contract.api_data["origin_order"]["id"]&.split("/").last
+            contract&.origin_order_meals&.each do |product|
+                products << product["node"]["product"]["title"] unless product["node"]["product"]["title"]&.downcase&.include? "meals"
+            end
+            EmailService::Send.new(email_notification).send_email({customer: contract, order_details_first: "Order Number: #{order_number} Meals: #{products.to_sentence}", delivery_date_first: contract.delivery_date }) if email_notification.present? && contract.shop.setting.email_service.present?
         end
-        EmailService::Send.new(email_notification).send_email({customer: contract, order_details_first: "Order Number: #{order_number} Meals: #{products.to_sentence}", delivery_date_first: contract.delivery_date }) if email_notification.present? && contract.shop.setting.email_service.present?
     end
 
     def send_missing_delivery_date_email(contract_id,delivery_date)

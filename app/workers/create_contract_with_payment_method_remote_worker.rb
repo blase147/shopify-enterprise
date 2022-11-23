@@ -1,10 +1,14 @@
 class CreateContractWithPaymentMethodRemoteWorker
     include Sidekiq::Worker  
-    def perform
-        params=$creating_params
-        if params.present?
-            contract = SubscriptionContractDraftService.new(params).fetch_customer
+    def perform(shop_domain,data)
+        data = JSON.parse(data, object_class: OpenStruct) rescue nil
+        if data.present?
+            shop = Shop.find_by(shopify_domain: shop_domain)
+            shop.connect
+            contract = SubscriptionContractDraftService.new(data).fetch_customer
+            p contract.to_json
+            p contract.to_json
+            $creating_params = nil
         end
-        $creating_params=nil
     end
 end

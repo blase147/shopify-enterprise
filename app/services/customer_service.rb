@@ -179,7 +179,7 @@ class CustomerService < GraphqlService
   end
 
   def create_customer_payment_remote_method(stripe_customer_id, shopify_customer_id)
-    shopify_customer_id = "gid://shopify/Customer/#{shopify_customer_id}"
     result = client.query(client.parse(CUSTOMER_PAYMENT_CREATE), variables: { customerId: shopify_customer_id, remoteReference: { stripePaymentMethod:{customerId: stripe_customer_id}}} )
+    p result.to_json
   end
 end

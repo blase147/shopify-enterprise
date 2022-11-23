@@ -96,6 +96,7 @@ class SubscriptionContractDraftService < GraphqlService
       @data = data["data"]
       @customer_id = data["customer_id"]
       @selling_plan = FetchWithQueryFromShopify.new.fetch_sellingplans(data["sellingplan"])
+      @payment_id = data["data"]["payment_method_id"]
     end
   
     def fetch_customer
@@ -104,10 +105,12 @@ class SubscriptionContractDraftService < GraphqlService
       raise errors.first.message if errors.present?
       
       @customer_address = result.data.customer.default_address.to_h
-      if result.data.customer.payment_methods.edges.first.nil?
-        raise "NO Payment Method Found"
-      else
-        @payment_id = result.data.customer.payment_methods.edges.first.node.id
+      unless @payment_id.present?
+        if result.data.customer.payment_methods.edges.first.nil?
+          raise "NO Payment Method Found"
+        else
+          @payment_id = result.data.customer.payment_methods.edges.first.node.id
+        end
       end
       create 
     rescue Exception => ex
