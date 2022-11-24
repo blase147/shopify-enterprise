@@ -4,6 +4,7 @@
 - billing_policy = @subscription.billing_policy
 - delivery_policy = @subscription.delivery_policy
 - api_order = ShopifyAPI::Order.find(@subscription.origin_order.id[/\d+/]) rescue nil
+- shopify_customer = ShopifyAPI::Customer.find(customer.id[/\d+/])
 - shipping_address = api_order.shipping_address rescue nil
 - default_address = customer.default_address
 - if api_order.present?
@@ -185,7 +186,7 @@
                 i TOTAL SPEND TO DATE:
                 br
                 |$
-                =  api_order&.customer&.total_spent rescue api_order&.current_total_price_set&.shop_money&.amount rescue ''
+                =  shopify_customer&.total_spent rescue ''
 
   .Polaris-Card
     .Polaris-Card__Section

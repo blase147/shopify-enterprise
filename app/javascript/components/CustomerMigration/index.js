@@ -4,6 +4,7 @@ import {
     FormLayout,
     Button,
     Frame,
+    Toast,
 } from '@shopify/polaris';
 import "./style.css";
 import CustomerAutocomplete from './CustomerAutocomplete';
@@ -26,7 +27,9 @@ const CustomerMigration = () => {
         }).then(response => response.json())
             .then((data) => {
                 setToastActive(true)
-                setFormField(initFormValues)
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000)
             });
     }
 
@@ -59,7 +62,7 @@ const CustomerMigration = () => {
             <Frame>
                 {
                     toastActive && (
-                        <Toast content="Your request is beign processed." onDismiss={toggleToastActive} />
+                        <Toast content="Your request is beign processed. Reloading..." onDismiss={toggleToastActive} />
                     )
                 }
                 <Form>
