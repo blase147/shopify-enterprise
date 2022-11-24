@@ -98,122 +98,120 @@ const Integrations = ({ handleBack, handleForm }) => {
     setDetail(false)
   }
   return (
-    <AppLayout typePage="sellingPlanForm" tabIndex={1}>
-      <Frame>
-        <Page>
-          {detail ?
-            <IntegrationDetail id={editId} title={editTitle} keys={editKeys} handleClose={handleCloseEditPage} />
-            :
-            <div fullWidth title={process.env.APP_TYPE == "public" ? "Integrate with ChargeZen" : "Integrations"}>
-              <Layout>
+    <Frame>
+      <Page>
+        {detail ?
+          <IntegrationDetail id={editId} title={editTitle} keys={editKeys} handleClose={handleCloseEditPage} />
+          :
+          <div fullWidth title={process.env.APP_TYPE == "public" ? "Integrate with ChargeZen" : "Integrations"}>
+            <Layout>
 
-                <Layout.Section>
-                  <div className="back-button pointer" style={{ float: "left" }} onClick={handleBack}>
-                    <Icon
-                      source={MobileBackArrowMajor}
-                      color="base" />
-                  </div>
-                </Layout.Section>
-                <Layout.Section>
-                  <Button>
-                    <img src={getStart} width="20" />
-                    <span>Get Started</span>
-                  </Button>
-                </Layout.Section>
-                <Layout.Section>
-                  <Card>
-                    <Tabs
-                      tabs={tabs}
-                      selected={selected}
-                      onSelect={handleTabChange}
-                    ></Tabs>
-                  </Card>
-                </Layout.Section>
-                {/* Data from API's */}
-                <Layout.Section>
-                  <Heading><span style={{ textTransform: "capitalize" }} >{category}</span></Heading>
-                  {
-                    (loading) ? (
-                      <Card>
-                        <LoadingScreen />
-                      </Card>
-                    ) :
-                      <>
-                        {
-                          category == "all" ?
-                            <>
+              <Layout.Section>
+                <div className="back-button pointer" style={{ float: "left" }} onClick={handleBack}>
+                  <Icon
+                    source={MobileBackArrowMajor}
+                    color="base" />
+                </div>
+              </Layout.Section>
+              <Layout.Section>
+                <Button>
+                  <img src={getStart} width="20" />
+                  <span>Get Started</span>
+                </Button>
+              </Layout.Section>
+              <Layout.Section>
+                <Card>
+                  <Tabs
+                    tabs={tabs}
+                    selected={selected}
+                    onSelect={handleTabChange}
+                  ></Tabs>
+                </Card>
+              </Layout.Section>
+              {/* Data from API's */}
+              <Layout.Section>
+                <Heading><span style={{ textTransform: "capitalize" }} >{category}</span></Heading>
+                {
+                  (loading) ? (
+                    <Card>
+                      <LoadingScreen />
+                    </Card>
+                  ) :
+                    <>
+                      {
+                        category == "all" ?
+                          <>
+                            {
+                              lodas && Object.keys(lodas).map((key, i) => (
+                                <Layout.Section>
+                                  <Heading>{_.startCase(key)}</Heading>
+                                  <Stack spacing="loose">
+                                    {lodas[key]?.map((childItem, i) => (
+                                      <Button onClick={() => {
+                                        setEditId(childItem?.id)
+                                        setEditTitle(childItem?.name)
+                                        setEditKeys(childItem?.keys)
+                                        setDetail(true)
+                                      }}>
+                                        <Stack.Item>
+                                          <Card sectioned>
+                                            <Stack alignment="center">
+                                              <Stack.Item>
+                                                <img src={require(`images/${childItem.name?.split(" ").join("").toLowerCase()}`)} style={{ maxWidth: "80px" }} />
+                                              </Stack.Item>
+                                              <Stack.Item fill>
+                                                <DisplayText size="small">
+                                                  {childItem.name}
+                                                </DisplayText>
+                                              </Stack.Item>
+                                            </Stack>
+                                          </Card>
+                                        </Stack.Item>
+                                      </Button>
+                                    ))}
+                                  </Stack>
+                                </Layout.Section>
+                              ))}
+                          </> :
+                          <>
+                            <Stack spacing="loose">
                               {
-                                lodas && Object.keys(lodas).map((key, i) => (
-                                  <Layout.Section>
-                                    <Heading>{_.startCase(key)}</Heading>
-                                    <Stack spacing="loose">
-                                      {lodas[key]?.map((childItem, i) => (
-                                        <Button onClick={() => {
-                                          setEditId(childItem?.id)
-                                          setEditTitle(childItem?.name)
-                                          setEditKeys(childItem?.keys)
-                                          setDetail(true)
-                                        }}>
-                                          <Stack.Item>
-                                            <Card sectioned>
-                                              <Stack alignment="center">
-                                                <Stack.Item>
-                                                  <img src={require(`images/${childItem.name?.split(" ").join("").toLowerCase()}`)} style={{ maxWidth: "80px" }} />
-                                                </Stack.Item>
-                                                <Stack.Item fill>
-                                                  <DisplayText size="small">
-                                                    {childItem.name}
-                                                  </DisplayText>
-                                                </Stack.Item>
-                                              </Stack>
-                                            </Card>
-                                          </Stack.Item>
-                                        </Button>
-                                      ))}
-                                    </Stack>
-                                  </Layout.Section>
-                                ))}
-                            </> :
-                            <>
-                              <Stack spacing="loose">
-                                {
-                                  integerations?.fetchIntegrations && integerations?.fetchIntegrations?.map(item => (
+                                integerations?.fetchIntegrations && integerations?.fetchIntegrations?.map(item => (
 
-                                    <Button onClick={() => {
-                                      setEditId(item?.id)
-                                      setEditTitle(item?.name)
-                                      setEditKeys(item?.keys)
-                                      setDetail(true)
-                                    }}>
-                                      <Stack.Item>
-                                        <Card sectioned>
-                                          <Stack alignment="center">
-                                            <Stack.Item>
-                                              <img src={require(`images/${item.name?.split(" ").join("").toLowerCase()}`)} style={{ maxWidth: "80px" }} />
-                                            </Stack.Item>
-                                            <Stack.Item fill>
-                                              <DisplayText size="small">
-                                                {item.name}
-                                              </DisplayText>
-                                            </Stack.Item>
-                                          </Stack>
-                                        </Card>
-                                      </Stack.Item>
-                                    </Button>
-                                  ))
-                                }
-                              </Stack>
-                            </>
-                        }
-                      </>
-                  }
-                </Layout.Section>
-              </Layout>
-            </div>
-          }
-        </Page>
-      </Frame>
-    </AppLayout>
+                                  <Button onClick={() => {
+                                    setEditId(item?.id)
+                                    setEditTitle(item?.name)
+                                    setEditKeys(item?.keys)
+                                    setDetail(true)
+                                  }}>
+                                    <Stack.Item>
+                                      <Card sectioned>
+                                        <Stack alignment="center">
+                                          <Stack.Item>
+                                            <img src={require(`images/${item.name?.split(" ").join("").toLowerCase()}`)} style={{ maxWidth: "80px" }} />
+                                          </Stack.Item>
+                                          <Stack.Item fill>
+                                            <DisplayText size="small">
+                                              {item.name}
+                                            </DisplayText>
+                                          </Stack.Item>
+                                        </Stack>
+                                      </Card>
+                                    </Stack.Item>
+                                  </Button>
+                                ))
+                              }
+                            </Stack>
+                          </>
+                      }
+                    </>
+                }
+              </Layout.Section>
+            </Layout>
+          </div>
+        }
+      </Page>
+    </Frame>
   );
 };
 
