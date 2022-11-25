@@ -13,22 +13,22 @@
               .Polaris-Header-Title__TitleAndSubtitleWrapper
                 .Polaris-Header-Title
                   h2.Polaris-DisplayText
-                    - if @translation.account_tab_my_account_detail.present?
-                      span.Polaris-TextStyle--variationStrong #{@translation.account_tab_my_account_detail}
+                    - if @translation&.account_tab_my_account_detail.present?
+                      span.Polaris-TextStyle--variationStrong #{@translation&.account_tab_my_account_detail}
                     - else
                       span.Polaris-TextStyle--variationStrong MY&nbsp;
                       span.Polaris-TextStyle--variationStrong style="color: #000000" ACCOUNT
                       span.Polaris-TextStyle--variationStrong &nbsp;DETAILS
             div.notification-banner
-              p.Polaris-Heading #{@translation.account_tab_no_subscriptions_found.present? ? @translation.account_tab_no_subscriptions_found : 'No subscription have been found for your account'}
+              p.Polaris-Heading #{@translation&.account_tab_no_subscriptions_found.present? ? @translation&.account_tab_no_subscriptions_found : 'No subscription have been found for your account'}
         - else
           div.content-wrapper
             div
               .Polaris-Header-Title__TitleAndSubtitleWrapper
                 .Polaris-Header-Title
                   h2.Polaris-DisplayText
-                    - if @translation.account_tab_my_account_detail.present?
-                      span.Polaris-TextStyle--variationStrong #{@translation.account_tab_my_account_detail}
+                    - if @translation&.account_tab_my_account_detail.present?
+                      span.Polaris-TextStyle--variationStrong #{@translation&.account_tab_my_account_detail}
                     - else
                       span.Polaris-TextStyle--variationStrong MY&nbsp;
                       span.Polaris-TextStyle--variationStrong style="color: #000000" ACCOUNT
@@ -38,19 +38,19 @@
                 = hidden_field_tag :id, @customer.shopify_id
                 .group
                   .field
-                    label.account-label #{@translation.account_tab_first_name.present? ? @translation.account_tab_first_name : 'FIRST NAME'}
+                    label.account-label #{@translation&.account_tab_first_name.present? ? @translation&.account_tab_first_name : 'FIRST NAME'}
                     input.account-input type="text" name="first_name" placeholder="#{@customer.first_name}" value="#{@customer.try(:first_name)}"
                   .field
                     label.account-label
-                      span #{@translation.account_tab_last_name.present? ? @translation.account_tab_last_name : 'LAST NAME'}
+                      span #{@translation&.account_tab_last_name.present? ? @translation&.account_tab_last_name : 'LAST NAME'}
                       span.red*
                     input.account-input type="text" name="last_name" placeholder="#{@customer.last_name}" value="#{@customer.try(:last_name)}"
                 .group
                   .field
                     label.account-label
-                      span #{@translation.account_tab_email.present? ? @translation.account_tab_email : 'EMAIL'}
+                      span #{@translation&.account_tab_email.present? ? @translation&.account_tab_email : 'EMAIL'}
                       span.red*
                     input.account-input type="text" name="email" placeholder="#{@customer.email}"  value="#{@customer.try(:email)}"
                   .field
                 .btn-wrapper
-                  button.update-btn type="submit" #{@translation.account_tab_save_button.present? ? @translation.account_tab_save_button : 'SAVE'}
+                  button.update-btn type="submit" #{@translation&.account_tab_save_button.present? ? @translation&.account_tab_save_button : 'SAVE'}

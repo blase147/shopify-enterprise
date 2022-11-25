@@ -7,8 +7,8 @@
             .header
               div
                 h2
-                  - if @translation.swap_subscription_popup_swap_subscription_to.present?
-                    span #{@translation.swap_subscription_popup_swap_subscription_to.gsub('{Product}', product.title)}
+                  - if @translation&.swap_subscription_popup_swap_subscription_to.present?
+                    span #{@translation&.swap_subscription_popup_swap_subscription_to.gsub('{Product}', product.title)}
                   - else
                     span Swap&nbsp;
                     span.blue
@@ -40,7 +40,7 @@
                             = "#{variant.node.title} (#{number_to_currency variant.node.price})"
                       .btn-wrapper
                         button type="submit"
-                          span #{@translation.swap_subscription_popup_swap_subscription_button.present? ? @translation.swap_subscription_popup_swap_subscription_button : 'SWAP SUBSCRIPTION'} &nbsp;
+                          span #{@translation&.swap_subscription_popup_swap_subscription_button.present? ? @translation&.swap_subscription_popup_swap_subscription_button : 'SWAP SUBSCRIPTION'} &nbsp;
                           span
                           svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg"
                             path d=("M14.5148 0.514648L13.6239 1.40555L17.5882 5.36991H0V6.62985H17.5882L13.6239 10.5942L14.5148 11.4851L20 5.99984L14.5148 0.514648Z") fill="white" /

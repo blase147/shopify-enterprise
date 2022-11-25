@@ -50,15 +50,15 @@
               .address-information
                 .header
                   h2.card-heading = "#{@customer&.first_name.present? ? @customer&.first_name : '-'} #{@customer&.last_name.present? ? @customer&.last_name : '-'}"
-                  / button.edit.card-btn  type="button" data-toggle="modal" data-target="#editAddressModal" #{@translation.billing_tab_edit.present? ? @translation.billing_tab_edit : 'Edit'}
+                  / button.edit.card-btn  type="button" data-toggle="modal" data-target="#editAddressModal" #{@translation&.billing_tab_edit.present? ? @translation&.billing_tab_edit : 'Edit'}
                 .item
-                  h3.card-heading #{@translation.billing_tab_phone.present? ? @translation.billing_tab_phone : 'PHONE'}
+                  h3.card-heading #{@translation&.billing_tab_phone.present? ? @translation&.billing_tab_phone : 'PHONE'}
                   p.card-text = @customer&.phone.present? ? @customer&.phone : '-'
                 .item
-                  h3card-heading #{@translation.billing_tab_company.present? ? @translation.billing_tab_company : 'COMPANY'}
+                  h3card-heading #{@translation&.billing_tab_company.present? ? @translation&.billing_tab_company : 'COMPANY'}
                   p.card-text = @customer&.company.present? ? @customer&.company : '-'
                 .item
-                  h3card-heading #{@translation.billing_tab_address.present? ? @translation.billing_tab_address : 'ADDRESS'}
+                  h3card-heading #{@translation&.billing_tab_address.present? ? @translation&.billing_tab_address : 'ADDRESS'}
                   p.card-text = billing_address.present? ? billing_address.address1 : '-'
 / = render 'edit_address_modal'
 - if @payment_type == 'SHOPIFY'

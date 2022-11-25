@@ -35,15 +35,15 @@ module AppProxyHelper
 
   def get_next_shipping_date(subscription, shop)
     selling_plan_id = get_selling_plan_id(subscription)
-    return subscription.next_billing_date.to_date unless selling_plan_id.present?
+    return subscription.next_billing_date.to_date rescue nil
 
-    selling_plan = SellingPlan.joins(:selling_plan_group).where(selling_plan_groups: { shop_id: shop.id }).find_by(shopify_id: selling_plan_id)
-    if selling_plan.present? && selling_plan.shipping_dates.present?
-      next_date = selling_plan.shipping_dates.select{ |plan| plan.to_date > Date.today }.sort.first
-      next_date.present? ? next_date.to_date : subscription.next_billing_date.to_date
-    else
-      subscription.next_billing_date.to_date
-    end
+    # selling_plan = SellingPlan.joins(:selling_plan_group).where(selling_plan_groups: { shop_id: shop.id }).find_by(shopify_id: selling_plan_id)
+    # if selling_plan.present? && selling_plan.shipping_dates.present?
+    #   next_date = selling_plan.shipping_dates.select{ |plan| plan.to_date > Date.today }.sort.first
+    #   next_date.present? ? next_date.to_date : subscription.next_billing_date.to_date
+    # else
+    #   subscription.next_billing_date.to_date
+    # end
   end
 
   def get_all_shipping_dates(subscription, shop)
@@ -52,7 +52,7 @@ module AppProxyHelper
 
     selling_plan = SellingPlan.joins(:selling_plan_group).where(selling_plan_groups: { shop_id: shop.id }).find_by(shopify_id: selling_plan_id)
     if selling_plan.present? && selling_plan.shipping_dates.present?
-      selling_plan.shipping_dates.select{ |plan| plan.to_date > Date.today }.sort
+      selling_plan.shipping_dates.select{ |plan| plan.to_date  > Date.today }.sort rescue []
     end
   end
 

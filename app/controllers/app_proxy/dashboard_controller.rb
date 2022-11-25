@@ -335,7 +335,8 @@ class AppProxy::DashboardController < AppProxyController
     @customer = current_shop.customer_subscription_contracts.find_by_shopify_customer_id(customer_id)
   end
 
-  def load_subscriptions(customer_id=nil)
+  def load_subscriptions(customerid=nil)
+    customer_id = customerid || params[:customer]
     shopify_customer_id="gid://shopify/Customer/#{customer_id}" if customer_id.present?
     shop = CustomerSubscriptionContract.find_by_shopify_customer_id("#{customer_id}")&.shop
     shop&.connect

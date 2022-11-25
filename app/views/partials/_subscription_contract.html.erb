@@ -198,7 +198,7 @@
                       <path d="M21.4922 1.48877H3.95977C2.88389 1.48877 2.01172 2.42151 2.01172 3.5721V16.0721C2.01172 17.2227 2.88389 18.1554 3.95977 18.1554H21.4922C22.5681 18.1554 23.4403 17.2227 23.4403 16.0721V3.5721C23.4403 2.42151 22.5681 1.48877 21.4922 1.48877Z" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
                       <path d="M2.01172 7.44141H23.4403" stroke="#384443" stroke-width="2.52583" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    <span class="Polaris-Navigation__Text"> <%= @translation.sidebar_subscription.present? ? @translation.sidebar_subscription : 'Subscription' %></span>
+                    <span class="Polaris-Navigation__Text"> <%= @translation&.sidebar_subscription.present? ? @translation&.sidebar_subscription : 'Subscription' %></span>
                   </div>            
                 </a>
               <div>
@@ -210,7 +210,7 @@
                       <span class="Polaris-Navigation__Text">
                         <%= link_to "/a/chargezen/dashboard?customer=#{params[:customer]}&status=active&token=#{params[:token]}", class: 'Polaris-Navigation__Item', data: {'polaris-unstyled': true}, tab_index: '0', aria: {disabled: false} do %>
                           <span class="Polaris-Navigation__Text">
-                            <span class="<%= params[:status] == "active" ? 'sub-active' : ''%>"><%=@translation.sidebar_active.present? ? @translation.sidebar_active : 'Active' %></span>
+                            <span class="<%= params[:status] == "active" ? 'sub-active' : ''%>"><%=@translation&.sidebar_active.present? ? @translation&.sidebar_active : 'Active' %></span>
                           </span>
                         <% end %>
                       </span>
@@ -221,7 +221,7 @@
                     <div class="Polaris-Navigation__ItemWrapper cancel-subscription">
                       <span class="Polaris-Navigation__Text">
                         <%= link_to "/a/chargezen/dashboard?customer=#{params[:customer]}&status=cancelled&token=#{params[:token]}", class: 'Polaris-Navigation__Item', data: {'polaris-unstyled': true}, tab_index: '0', aria: {disabled: false} do %>
-                          <span class="<%= params[:status] == "cancelled" ? 'sub-active' : ''%>"><%= @translation.sidebar_cancelled.present? ? @translation.sidebar_cancelled : 'Cancelled' %></span>
+                          <span class="<%= params[:status] == "cancelled" ? 'sub-active' : ''%>"><%= @translation&.sidebar_cancelled.present? ? @translation&.sidebar_cancelled : 'Cancelled' %></span>
                         <% end %>
                       </span>
                       </span>

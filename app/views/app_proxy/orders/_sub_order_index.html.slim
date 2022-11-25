@@ -10,8 +10,8 @@ main#AppFrameMain.Polaris-Frame__Main data-has-global-ribbon="false"
                   .Polaris-Header-Title__TitleAndSubtitleWrapper
                     .Polaris-Header-Title
                       h2.Polaris-DisplayText.main-heading
-                        - if @translation.order_history_tab_my_order_history.present?
-                          span.Polaris-TextStyle--variationStrong #{@translation.order_history_tab_my_order_history}
+                        - if @translation&.order_history_tab_my_order_history.present?
+                          span.Polaris-TextStyle--variationStrong #{@translation&.order_history_tab_my_order_history}
                         - else
                           span.Polaris-TextStyle--variationStrong MY&nbsp;
                           span.Polaris-TextStyle--variationStrong style="color: #000000" ORDER&nbsp;
@@ -21,22 +21,22 @@ main#AppFrameMain.Polaris-Frame__Main data-has-global-ribbon="false"
             - @orders.each do |order|
               .grid
                 .item
-                  h2.order-text-heading #{@translation.order_history_tab_order_no.present? ? @translation.order_history_tab_order_no : 'ORDER #'}
+                  h2.order-text-heading #{@translation&.order_history_tab_order_no.present? ? @translation&.order_history_tab_order_no : 'ORDER #'}
                   p.order-text = order.order_number
                 .item
-                  h2.order-text-heading #{@translation.order_history_tab_date.present? ? @translation.order_history_tab_date : 'DATE'}
+                  h2.order-text-heading #{@translation&.order_history_tab_date.present? ? @translation&.order_history_tab_date : 'DATE'}
                   p.order-text = DateTime.parse(order.created_at).strftime("%d %b %Y")
                 .item
-                  h2.order-text-heading #{@translation.order_history_tab_amount.present? ? @translation.order_history_tab_amount : 'AMOUNT'}
+                  h2.order-text-heading #{@translation&.order_history_tab_amount.present? ? @translation&.order_history_tab_amount : 'AMOUNT'}
                   p.blue = number_to_currency order.total_price.to_f rescue nil
                 .item
                   .btn-wrapper
                     - if @theme&.downcase == "worldfare_"
-                        button.btn-view type="button" data-params="#{order.id}" #{@translation.order_history_tab_view.present? ? @translation.order_history_tab_view : 'VIEW'}
+                        button.btn-view type="button" data-params="#{order.id}" #{@translation&.order_history_tab_view.present? ? @translation&.order_history_tab_view : 'VIEW'}
                     - else 
                         = link_to "/a/chargezen/orders/#{order.id}?customer=#{params[:customer]}&active_subscriptions_count=#{@active_subscriptions_count}" do
-                            button.btn-view type="button" #{@translation.order_history_tab_view.present? ? @translation.order_history_tab_view : 'VIEW'}
-                        button.btn-invoice type="button" #{@translation.order_history_tab_invoice.present? ? @translation.order_history_tab_invoice : 'INVOICE'}
+                            button.btn-view type="button" #{@translation&.order_history_tab_view.present? ? @translation&.order_history_tab_view : 'VIEW'}
+                        button.btn-invoice type="button" #{@translation&.order_history_tab_invoice.present? ? @translation&.order_history_tab_invoice : 'INVOICE'}
         .Polaris-DataTable__Footer
             = render 'app_proxy/orders/paginate_for_order_partial'
 
