@@ -49,70 +49,70 @@ const Billing = (props) => {
             <TextStyle variation="subdued">Settings</TextStyle>
           </p>
         </div>
-      </Layout.Section>
-      <Card>
-        <Card.Section>
-          <div className="billing">
-            <FormLayout>
-              <DisplayText size="small" element="h6">
+        <Card>
+          <Card.Section>
+            <div className="billing">
+              <FormLayout>
+                <DisplayText size="small" element="h6">
+                  <TextStyle variation="subdued">
+                    Control how to bill your customers
+                  </TextStyle>
+                </DisplayText>
+                <Select
+                  label="Retry failed payments"
+                  value={values.paymentRetries}
+                  error={touched.paymentRetries && errors.paymentRetries}
+                  onChange={(e) => setFieldValue('paymentRetries', e)}
+                  options={options_retry}
+                />
                 <TextStyle variation="subdued">
-                  Control how to bill your customers
+                  The number of times to retry a failed payment before the
+                  subscription is cancelled
                 </TextStyle>
-              </DisplayText>
-              <Select
-                label="Retry failed payments"
-                value={values.paymentRetries}
-                error={touched.paymentRetries && errors.paymentRetries}
-                onChange={(e) => setFieldValue('paymentRetries', e)}
-                options={options_retry}
-              />
-              <TextStyle variation="subdued">
-                The number of times to retry a failed payment before the
-                subscription is cancelled
-              </TextStyle>
 
-              <Select
-                label="Delay before retrying a failed payment"
-                value={values.paymentDelayRetries}
-                error={
-                  touched.paymentDelayRetries && errors.paymentDelayRetries
-                }
-                onChange={(e) => setFieldValue('paymentDelayRetries', e)}
-                options={options_delay}
-              />
-              <TextStyle variation="subdued">
-                Specify the interval after which you want to retry card charge.
-              </TextStyle>
+                <Select
+                  label="Delay before retrying a failed payment"
+                  value={values.paymentDelayRetries}
+                  error={
+                    touched.paymentDelayRetries && errors.paymentDelayRetries
+                  }
+                  onChange={(e) => setFieldValue('paymentDelayRetries', e)}
+                  options={options_delay}
+                />
+                <TextStyle variation="subdued">
+                  Specify the interval after which you want to retry card charge.
+                </TextStyle>
 
-              <Select
-                label="If a card charge fails after max tries"
-                value={values.maxFailStrategy}
-                error={touched.maxFailStrategy && errors.maxFailStrategy}
-                onChange={(e) => setFieldValue('maxFailStrategy', e)}
-                options={options_strategy}
-              />
+                <Select
+                  label="If a card charge fails after max tries"
+                  value={values.maxFailStrategy}
+                  error={touched.maxFailStrategy && errors.maxFailStrategy}
+                  onChange={(e) => setFieldValue('maxFailStrategy', e)}
+                  options={options_strategy}
+                />
 
-              <TextStyle variation="subdued">
-                Order Cancelation Options
-              </TextStyle>
+                <TextStyle variation="subdued">
+                  Order Cancelation Options
+                </TextStyle>
 
-              <Select
-                label="Order Cancelation Options"
-                value={values.orderCancelOption}
-                error={touched.orderCancelOption && errors.orderCancelOption}
-                onChange={(e) => setFieldValue('orderCancelOption', e)}
-                options={order_cancel_options}
-              />
+                <Select
+                  label="Order Cancelation Options"
+                  value={values.orderCancelOption}
+                  error={touched.orderCancelOption && errors.orderCancelOption}
+                  onChange={(e) => setFieldValue('orderCancelOption', e)}
+                  options={order_cancel_options}
+                />
 
-              <TextStyle variation="subdued">
-              day of production options
-              </TextStyle>
+                <TextStyle variation="subdued">
+                  day of production options
+                </TextStyle>
 
 
-            </FormLayout>
-          </div>
-        </Card.Section>
-      </Card>
+              </FormLayout>
+            </div>
+          </Card.Section>
+        </Card>
+      </Layout.Section>
     </Layout>
   );
 };

@@ -1,0 +1,18 @@
+.settings-container .back-button {
+    padding: 8px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    display: flex;
+    gap: 8px;
+}
+
+.settings-container .EmailNotification .noti-detail {
+    display: flex;
+}
+
+.settings-container .EmailNotification button.Polaris-Button.Polaris-Button--plain.Polaris-Button--textAlignLeft {
+    background: transparent !important;
+}

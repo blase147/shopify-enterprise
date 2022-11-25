@@ -55,6 +55,7 @@ import EnableDebug from './EnableDebug';
 import StripeSettings from './StripeSettings';
 import DeliveryOption from "./DeliveryOption";
 import LoadingScreen from '../LoadingScreen';
+import "./settings.scss"
 
 const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
   // form data ########################################################
@@ -540,44 +541,7 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
       desc: 'Set Delivery Options.',
     }
   ];
-  const tabs = [
-    {
-      id: 'house',
-      content: 'House keeping',
-    },
-    {
-      id: 'billing',
-      content: 'Billing',
-    },
-    {
-      id: 'customer-portal',
-      content: 'Customer Portal',
-    },
-    {
-      id: 'email-notification',
-      content: 'Email Notification',
-    },
-    // {
-    //   id: 'dunning',
-    //   content: 'Dunning',
-    // },
-    ...(process.env.APP_TYPE == 'public'
-      ? [
-        {
-          id: 'store-information',
-          content: 'StoreInformation',
-        },
-      ]
-      : []),
-    // {
-    //   id: 'legal',
-    //   content: 'Legal',
-    // },
-    {
-      id: 'product-extension',
-      content: 'Product Extension',
-    },
-  ];
+
   const history = useHistory();
   useEffect(() => {
     if (saveSuccess) {
@@ -589,13 +553,7 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
     <AppLayout typePage="settings" tabIndex="8">
       <Frame>
         {passwordConfirmed ? (
-          // <Page title="Settings">
-          //   <Tabs
-          //     tabs={tabs}
-          //     selected={selectedTitleTab}
-          //     onSelect={handleTabChange}
-          //   >
-          <>
+          <Page title="Settings">
             {loading && (
               <Card>
                 <LoadingScreen />
@@ -712,9 +670,6 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                       <div className="settings-container">
                         {!selectedSetting && (
                           <>
-                            <div>
-                              <h1>Settings</h1>
-                            </div>
                             <div>
                               <Card>
                                 <Card.Section>
@@ -880,9 +835,8 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
               </Formik>
             )}
 
-            {/* </Tabs>
-            </Page> */}
-          </>
+          </Page>
+
         ) : (
           <Page title="Password protected">
             <Layout>

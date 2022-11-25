@@ -33,25 +33,25 @@ const ProductExtention = ({
               <TextStyle variation="subdued">Settings</TextStyle>
             </p>
           </div>
+          <Card>
+            <Card.Section>
+              <div className="billing">
+                <FormLayout>
+                  <DisplayText size="small" element="h6">
+                    <TextStyle variation="subdued">Product Extention</TextStyle>
+                  </DisplayText>
+                  <Select
+                    label="Design"
+                    value={values.designType}
+                    error={touched.designType && errors.designType}
+                    onChange={(e) => setFieldValue('designType', e)}
+                    options={options}
+                  />
+                </FormLayout>
+              </div>
+            </Card.Section>
+          </Card>
         </Layout.Section>
-        <Card>
-          <Card.Section>
-            <div className="billing">
-              <FormLayout>
-                <DisplayText size="small" element="h6">
-                  <TextStyle variation="subdued">Product Extention</TextStyle>
-                </DisplayText>
-                <Select
-                  label="Design"
-                  value={values.designType}
-                  error={touched.designType && errors.designType}
-                  onChange={(e) => setFieldValue('designType', e)}
-                  options={options}
-                />
-              </FormLayout>
-            </div>
-          </Card.Section>
-        </Card>
       </Layout>
     </div>
   );

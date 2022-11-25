@@ -17,9 +17,9 @@ import {
   SettingToggle, Checkbox
 } from '@shopify/polaris';
 import { post } from 'jquery';
-import {Text} from "html-react-parser";
+import { Text } from "html-react-parser";
 
-const DeliveryOption = ( {handleBack} ) => {
+const DeliveryOption = ({ handleBack }) => {
   const [monday, setMonday] = useState(false);
   const [mondayTime, setMondayTime] = useState('00:00');
   const [mondayProd, setMondayProd] = useState('');
@@ -88,91 +88,91 @@ const DeliveryOption = ( {handleBack} ) => {
 
 
   const time = [
-    {label: '00:00', value: '00:00'},
-    {label: '01:00', value: '01:00'},
-    {label: '02:00', value: '02:00'},
-    {label: '03:00', value: '03:00'},
-    {label: '04:00', value: '04:00'},
-    {label: '05:00', value: '05:00'},
-    {label: '06:00', value: '06:00'},
-    {label: '07:00', value: '07:00'},
-    {label: '08:00', value: '08:00'},
-    {label: '09:00', value: '09:00'},
-    {label: '10:00', value: '10:00'},
-    {label: '11:00', value: '11:00'},
-    {label: '12:00', value: '12:00'},
-    {label: '13:00', value: '13:00'},
-    {label: '14:00', value: '14:00'},
-    {label: '15:00', value: '15:00'},
-    {label: '16:00', value: '16:00'},
-    {label: '17:00', value: '17:00'},
-    {label: '18:00', value: '18:00'},
-    {label: '19:00', value: '19:00'},
-    {label: '20:00', value: '20:00'},
-    {label: '21:00', value: '21:00'},
-    {label: '22:00', value: '22:00'},
-    {label: '23:00', value: '23:00'},
+    { label: '00:00', value: '00:00' },
+    { label: '01:00', value: '01:00' },
+    { label: '02:00', value: '02:00' },
+    { label: '03:00', value: '03:00' },
+    { label: '04:00', value: '04:00' },
+    { label: '05:00', value: '05:00' },
+    { label: '06:00', value: '06:00' },
+    { label: '07:00', value: '07:00' },
+    { label: '08:00', value: '08:00' },
+    { label: '09:00', value: '09:00' },
+    { label: '10:00', value: '10:00' },
+    { label: '11:00', value: '11:00' },
+    { label: '12:00', value: '12:00' },
+    { label: '13:00', value: '13:00' },
+    { label: '14:00', value: '14:00' },
+    { label: '15:00', value: '15:00' },
+    { label: '16:00', value: '16:00' },
+    { label: '17:00', value: '17:00' },
+    { label: '18:00', value: '18:00' },
+    { label: '19:00', value: '19:00' },
+    { label: '20:00', value: '20:00' },
+    { label: '21:00', value: '21:00' },
+    { label: '22:00', value: '22:00' },
+    { label: '23:00', value: '23:00' },
 
 
   ]
   const [errorMsg, setErrorMsg] = useState('')
-  const toastMarkup = function(msg){ setErrorMsg(msg); }
+  const toastMarkup = function (msg) { setErrorMsg(msg); }
 
-  const submission = function (){
+  const submission = function () {
     var delivery_sets = {
       delivery_option: deliveryOptions
     };
 
     var settings = [];
     setErrorMsg('');
-    if( monday ){
-      if( mondayProd == '' || mondayTime == '' ){
+    if (monday) {
+      if (mondayProd == '' || mondayTime == '') {
         toastMarkup('Please select cutoff day/time for Monday.')
         return false;
       }
-      settings[settings.length] = {delivery: 'monday', cutoff_day: mondayProd, cutoff_time: mondayTime};
+      settings[settings.length] = { delivery: 'monday', cutoff_day: mondayProd, cutoff_time: mondayTime };
     }
-    if( tuesday ){
-      if( tuesdayProd == '' || tuesdayTime == '' ){
+    if (tuesday) {
+      if (tuesdayProd == '' || tuesdayTime == '') {
         toastMarkup('Please select cutoff day/time for Tuesday.')
         return false;
       }
-      settings[settings.length] = {delivery: 'tuesday', cutoff_day: tuesdayProd, cutoff_time: tuesdayTime};
+      settings[settings.length] = { delivery: 'tuesday', cutoff_day: tuesdayProd, cutoff_time: tuesdayTime };
     }
-    if( wednesday ){
-      if( wednesdayProd == '' || wednesdayTime == '' ){
+    if (wednesday) {
+      if (wednesdayProd == '' || wednesdayTime == '') {
         toastMarkup('Please select cutoff day/time for Wednesday.')
         return false;
       }
-      settings[settings.length] = {delivery: 'wednesday', cutoff_day: wednesdayProd, cutoff_time: wednesdayTime};
+      settings[settings.length] = { delivery: 'wednesday', cutoff_day: wednesdayProd, cutoff_time: wednesdayTime };
     }
-    if( thursday ){
-      if( thursdayProd == '' || thursdayTime == '' ){
+    if (thursday) {
+      if (thursdayProd == '' || thursdayTime == '') {
         toastMarkup('Please select cutoff day/time for Thursday.')
         return false;
       }
-      settings[settings.length] = {delivery: 'thursday', cutoff_day: thursdayProd, cutoff_time: thursdayTime};
+      settings[settings.length] = { delivery: 'thursday', cutoff_day: thursdayProd, cutoff_time: thursdayTime };
     }
-    if( friday ){
-      if( fridayTime == '' || fridayProd == '' ){
+    if (friday) {
+      if (fridayTime == '' || fridayProd == '') {
         toastMarkup('Please select cutoff day/time for Friday.')
         return false;
       }
-      settings[settings.length] = {delivery: 'friday', cutoff_day: fridayProd, cutoff_time: fridayTime};
+      settings[settings.length] = { delivery: 'friday', cutoff_day: fridayProd, cutoff_time: fridayTime };
     }
-    if( saturday ){
-      if( saturdayProd == '' || saturdayTime == '' ){
+    if (saturday) {
+      if (saturdayProd == '' || saturdayTime == '') {
         toastMarkup('Please select cutoff day/time for Saturday.')
         return false;
       }
-      settings[settings.length] = {delivery: 'saturday', cutoff_day: saturdayProd, cutoff_time: saturdayTime};
+      settings[settings.length] = { delivery: 'saturday', cutoff_day: saturdayProd, cutoff_time: saturdayTime };
     }
-    if( sunday ){
-      if( sundayProd == '' || sundayProd == '' ){
+    if (sunday) {
+      if (sundayProd == '' || sundayProd == '') {
         toastMarkup('Please select cutoff day/time for Sunday.')
         return false;
       }
-      settings[settings.length] = {delivery: 'sunday', cutoff_day: sundayProd, cutoff_time: sundayProd};
+      settings[settings.length] = { delivery: 'sunday', cutoff_day: sundayProd, cutoff_time: sundayProd };
     }
     delivery_sets.settings = settings;
 
@@ -196,7 +196,7 @@ const DeliveryOption = ( {handleBack} ) => {
       });
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     fetch('/settings/delivery_options', {
       headers: {
         'Content-Type': 'application/json',
@@ -207,36 +207,36 @@ const DeliveryOption = ( {handleBack} ) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        if( data.options && data.options.settings != null ){
+        if (data.options && data.options.settings != null) {
           let settings = data.options.settings;
-          for( let i = 0; i < settings.length; i++ ){
-            if( settings[i].delivery == 'monday' ){
+          for (let i = 0; i < settings.length; i++) {
+            if (settings[i].delivery == 'monday') {
               setMonday(true);
-              setMondayProd( settings[i].cutoff_day );
+              setMondayProd(settings[i].cutoff_day);
               setMondayTime(settings[i].cutoff_time);
-            }else if( settings[i].delivery == 'tuesday' ){
+            } else if (settings[i].delivery == 'tuesday') {
               setTuesday(true);
-              setTuesdayProd( settings[i].cutoff_day );
+              setTuesdayProd(settings[i].cutoff_day);
               setTuesdayTime(settings[i].cutoff_time);
-            }else if( settings[i].delivery == 'wednesday' ){
+            } else if (settings[i].delivery == 'wednesday') {
               setWednesday(true);
-              setWednesdayProd( settings[i].cutoff_day );
+              setWednesdayProd(settings[i].cutoff_day);
               setWednesdayTime(settings[i].cutoff_time);
-            }else if( settings[i].delivery == 'thursday' ){
+            } else if (settings[i].delivery == 'thursday') {
               setThursday(true);
-              setThursdayProd( settings[i].cutoff_day );
+              setThursdayProd(settings[i].cutoff_day);
               setThursdayTime(settings[i].cutoff_time);
-            }else if( settings[i].delivery == 'friday' ){
+            } else if (settings[i].delivery == 'friday') {
               setFriday(true);
-              setFridayProd( settings[i].cutoff_day );
+              setFridayProd(settings[i].cutoff_day);
               setFridayTime(settings[i].cutoff_time);
-            }else if( settings[i].delivery == 'saturday' ){
+            } else if (settings[i].delivery == 'saturday') {
               setSaturday(true);
-              setSaturdayProd( settings[i].cutoff_day );
+              setSaturdayProd(settings[i].cutoff_day);
               setSaturdayTime(settings[i].cutoff_time);
-            }else if( settings[i].delivery == 'sunday' ){
+            } else if (settings[i].delivery == 'sunday') {
               setSunday(true);
-              setSundayProd( settings[i].cutoff_day );
+              setSundayProd(settings[i].cutoff_day);
               setSundayTime(settings[i].cutoff_time);
             }
           }
@@ -256,176 +256,176 @@ const DeliveryOption = ( {handleBack} ) => {
               <TextStyle variation="subdued">Delivery Options</TextStyle>
             </p>
           </div>
+          <Card>
+            <Card.Section>
+              <div className="delivery">
+                <FormLayout>
+
+                  <Checkbox
+                    label="Monday"
+                    checked={monday}
+                    onChange={useCallback((newChecked) => setMonday(newChecked), [])}
+                  />
+                  <Select
+                    label="Cutoff Day"
+                    value={mondayProd}
+                    onChange={useCallback((newChecked) => setMondayProd(newChecked), [])}
+                    options={day_of_production_options}
+                  />
+                  <Select
+                    label="Cutoff Time"
+                    value={mondayTime}
+                    onChange={useCallback((newChecked) => setMondayTime(newChecked), [])}
+                    autoComplete="off"
+                    options={time}
+                    type="time"
+                  />
+                  <hr />
+
+                  <Checkbox
+                    label="Tuesday"
+                    checked={tuesday}
+                    onChange={useCallback((newChecked) => setTuesday(newChecked), [])}
+                  />
+                  <Select
+                    label="Cutoff Day"
+                    value={tuesdayProd}
+                    onChange={useCallback((newChecked) => setTuesdayProd(newChecked), [])}
+                    options={day_of_production_options}
+                  />
+                  <Select
+                    options={time}
+                    label="Cutoff Time"
+                    value={tuesdayTime}
+                    onChange={useCallback((newChecked) => setTuesdayTime(newChecked), [])}
+                    autoComplete="off"
+                    type="time"
+                  />
+                  <hr />
+
+                  <Checkbox
+                    label="Wednesday"
+                    checked={wednesday}
+                    onChange={useCallback((newChecked) => setWednesday(newChecked), [])}
+                  />
+                  <Select
+                    label="Cutoff Day"
+                    value={wednesdayProd}
+                    onChange={useCallback((newChecked) => setWednesdayProd(newChecked), [])}
+                    options={day_of_production_options}
+                  />
+                  <Select
+                    options={time}
+                    label="Cutoff Time"
+                    value={wednesdayTime}
+                    onChange={useCallback((newChecked) => setWednesdayTime(newChecked), [])}
+                    autoComplete="off"
+                    type="time"
+                  />
+                  <hr />
+
+                  <Checkbox
+                    label="Thursday"
+                    checked={thursday}
+                    onChange={useCallback((newChecked) => setThursday(newChecked), [])}
+                  />
+                  <Select
+                    label="Cutoff Day"
+                    value={thursdayProd}
+                    onChange={useCallback((newChecked) => setThursdayProd(newChecked), [])}
+                    options={day_of_production_options}
+                  />
+                  <Select
+                    options={time}
+                    label="Cutoff Time"
+                    value={thursdayTime}
+                    onChange={useCallback((newChecked) => setThursdayTime(newChecked), [])}
+                    autoComplete="off"
+                    type="time"
+                  />
+                  <hr />
+
+                  <Checkbox
+                    label="Friday"
+                    checked={friday}
+                    onChange={useCallback((newChecked) => setFriday(newChecked), [])}
+                  />
+                  <Select
+                    label="Cutoff Day"
+                    value={fridayProd}
+                    onChange={useCallback((newChecked) => setFridayProd(newChecked), [])}
+                    options={day_of_production_options}
+                  />
+                  <Select
+                    options={time}
+                    label="Cutoff Time"
+                    value={fridayTime}
+                    onChange={useCallback((newChecked) => setFridayTime(newChecked), [])}
+                    autoComplete="off"
+                    type="time"
+                  />
+                  <hr />
+
+                  <Checkbox
+                    label="Saturday"
+                    checked={saturday}
+                    onChange={useCallback((newChecked) => setSaturday(newChecked), [])}
+                  />
+                  <Select
+                    label="Cutoff Day"
+                    value={saturdayProd}
+                    onChange={useCallback((newChecked) => setSaturdayProd(newChecked), [])}
+                    options={day_of_production_options}
+                  />
+                  <Select
+                    options={time}
+                    label="Cutoff Time"
+                    value={saturdayTime}
+                    onChange={useCallback((newChecked) => setSaturdayTime(newChecked), [])}
+                    autoComplete="off"
+                    type="time"
+                  />
+                  <hr />
+
+                  <Checkbox
+                    label="Sunday"
+                    checked={sunday}
+                    onChange={useCallback((newChecked) => setSunday(newChecked), [])}
+                  />
+                  <Select
+                    label="Cutoff Day"
+                    value={sundayProd}
+                    onChange={useCallback((newChecked) => setSundayProd(newChecked), [])}
+                    options={day_of_production_options}
+                  />
+                  <Select
+                    options={time}
+                    label="Cutoff Time"
+                    value={sundayTime}
+                    onChange={useCallback((newChecked) => setSundayTime(newChecked), [])}
+                    autoComplete="off"
+                    type="time"
+                  />
+                  <hr />
+
+                  <Select
+                    label="Delivery Options"
+                    value={deliveryOptions}
+                    onChange={useCallback((newChecked) => setDeliveryOptions(newChecked), [])}
+                    options={d_options}
+                  />
+
+                  <DisplayText size="small">{errorMsg}</DisplayText>
+                  <Button
+
+                    class="primary"
+                    onClick={submission}
+                  >Submit</Button>
+                </FormLayout>
+              </div>
+            </Card.Section>
+          </Card>
         </Layout.Section>
-        <Card>
-          <Card.Section>
-            <div className="delivery">
-              <FormLayout>
-
-                <Checkbox
-                  label="Monday"
-                  checked={monday}
-                  onChange={useCallback((newChecked) => setMonday(newChecked), [])}
-                />
-                <Select
-                  label="Cutoff Day"
-                  value={mondayProd}
-                  onChange={useCallback((newChecked) => setMondayProd(newChecked), [])}
-                  options={day_of_production_options}
-                />
-                <Select
-                  label="Cutoff Time"
-                  value={mondayTime}
-                  onChange={useCallback((newChecked) => setMondayTime(newChecked), [])}
-                  autoComplete="off"
-                  options={time}
-                  type="time"
-                />
-                <hr/>
-
-                <Checkbox
-                  label="Tuesday"
-                  checked={tuesday}
-                  onChange={useCallback((newChecked) => setTuesday(newChecked), [])}
-                />
-                <Select
-                  label="Cutoff Day"
-                  value={tuesdayProd}
-                  onChange={useCallback((newChecked) => setTuesdayProd(newChecked), [])}
-                  options={day_of_production_options}
-                />
-                <Select
-                  options={time}
-                  label="Cutoff Time"
-                  value={tuesdayTime}
-                  onChange={useCallback((newChecked) => setTuesdayTime(newChecked), [])}
-                  autoComplete="off"
-                  type="time"
-                />
-                <hr/>
-
-                <Checkbox
-                  label="Wednesday"
-                  checked={wednesday}
-                  onChange={useCallback((newChecked) => setWednesday(newChecked), [])}
-                />
-                <Select
-                  label="Cutoff Day"
-                  value={wednesdayProd}
-                  onChange={useCallback((newChecked) => setWednesdayProd(newChecked), [])}
-                  options={day_of_production_options}
-                />
-                <Select
-                  options={time}
-                  label="Cutoff Time"
-                  value={wednesdayTime}
-                  onChange={useCallback((newChecked) => setWednesdayTime(newChecked), [])}
-                  autoComplete="off"
-                  type="time"
-                />
-                <hr/>
-
-                <Checkbox
-                  label="Thursday"
-                  checked={thursday}
-                  onChange={useCallback((newChecked) => setThursday(newChecked), [])}
-                />
-                <Select
-                  label="Cutoff Day"
-                  value={thursdayProd}
-                  onChange={useCallback((newChecked) => setThursdayProd(newChecked), [])}
-                  options={day_of_production_options}
-                />
-                <Select
-                  options={time}
-                  label="Cutoff Time"
-                  value={thursdayTime}
-                  onChange={useCallback((newChecked) => setThursdayTime(newChecked), [])}
-                  autoComplete="off"
-                  type="time"
-                />
-                <hr/>
-
-                <Checkbox
-                  label="Friday"
-                  checked={friday}
-                  onChange={useCallback((newChecked) => setFriday(newChecked), [])}
-                />
-                <Select
-                  label="Cutoff Day"
-                  value={fridayProd}
-                  onChange={useCallback((newChecked) => setFridayProd(newChecked), [])}
-                  options={day_of_production_options}
-                />
-                <Select
-                  options={time}
-                  label="Cutoff Time"
-                  value={fridayTime}
-                  onChange={useCallback((newChecked) => setFridayTime(newChecked), [])}
-                  autoComplete="off"
-                  type="time"
-                />
-                <hr/>
-
-                <Checkbox
-                  label="Saturday"
-                  checked={saturday}
-                  onChange={useCallback((newChecked) => setSaturday(newChecked), [])}
-                />
-                <Select
-                  label="Cutoff Day"
-                  value={saturdayProd}
-                  onChange={useCallback((newChecked) => setSaturdayProd(newChecked), [])}
-                  options={day_of_production_options}
-                />
-                <Select
-                  options={time}
-                  label="Cutoff Time"
-                  value={saturdayTime}
-                  onChange={useCallback((newChecked) => setSaturdayTime(newChecked), [])}
-                  autoComplete="off"
-                  type="time"
-                />
-                <hr/>
-
-                <Checkbox
-                  label="Sunday"
-                  checked={sunday}
-                  onChange={useCallback((newChecked) => setSunday(newChecked), [])}
-                />
-                <Select
-                  label="Cutoff Day"
-                  value={sundayProd}
-                  onChange={useCallback((newChecked) => setSundayProd(newChecked), [])}
-                  options={day_of_production_options}
-                />
-                <Select
-                  options={time}
-                  label="Cutoff Time"
-                  value={sundayTime}
-                  onChange={useCallback((newChecked) => setSundayTime(newChecked), [])}
-                  autoComplete="off"
-                  type="time"
-                />
-                <hr/>
-
-                <Select
-                  label="Delivery Options"
-                  value={deliveryOptions}
-                  onChange={useCallback((newChecked) => setDeliveryOptions(newChecked), [])}
-                  options={d_options}
-                />
-
-                <DisplayText size="small">{errorMsg}</DisplayText>
-                <Button
-
-                  class="primary"
-                onClick={submission}
-                >Submit</Button>
-              </FormLayout>
-            </div>
-          </Card.Section>
-        </Card>
       </Layout>
     </>
   );

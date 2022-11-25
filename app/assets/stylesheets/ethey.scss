@@ -5783,3 +5783,15 @@ select#change_subscription {
   border-radius: 7px;
   color: gray;
 }
+
+@media (max-width: 1440px) {
+  .slider-btns button {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 1324px) {
+  .slider-btns button {
+    font-size: 10.8px;
+  }
+}
