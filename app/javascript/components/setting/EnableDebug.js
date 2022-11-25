@@ -21,24 +21,24 @@ import { post } from 'jquery';
 const EnableDebug = ({ handleBack }) => {
   const [active, setActive] = useState(false);
   const handleToggle = () => {
-    fetch('/debug_mode?status='+(!active),{
+    fetch('/debug_mode?status=' + (!active), {
       method: 'POST',
     })
-    .then((response) => response.json())
-    .then((data) => {
-      setActive(!active);
-    })
+      .then((response) => response.json())
+      .then((data) => {
+        setActive(!active);
+      })
   }
 
-  useEffect(()=>{
-    fetch('/debug_mode',{
+  useEffect(() => {
+    fetch('/debug_mode', {
       method: 'GET',
     })
-    .then((response) => response.json())
-    .then((data) => {
-      setActive(data.debug_mode);
-    })
-  },[])
+      .then((response) => response.json())
+      .then((data) => {
+        setActive(data.debug_mode);
+      })
+  }, [])
 
   return (
     <>
@@ -50,27 +50,27 @@ const EnableDebug = ({ handleBack }) => {
               <TextStyle variation="subdued">Settings</TextStyle>
             </p>
           </div>
+          <Card>
+            <Card.Section>
+              <div className="billing">
+                <FormLayout>
+                  <DisplayText size="small" element="h6">
+                    <TextStyle variation="subdued">Debug Mode Status</TextStyle>
+                  </DisplayText>
+                  <SettingToggle
+                    action={{
+                      content: active ? 'Deactivate' : 'Activate',
+                      onAction: handleToggle,
+                    }}
+                    enabled={active}
+                  >
+                    Debugging mode is <TextStyle variation="strong">{active ? 'activated' : 'deactivated'}</TextStyle>.
+                  </SettingToggle>
+                </FormLayout>
+              </div>
+            </Card.Section>
+          </Card>
         </Layout.Section>
-        <Card>
-          <Card.Section>
-            <div className="billing">
-              <FormLayout>
-                <DisplayText size="small" element="h6">
-                  <TextStyle variation="subdued">Debug Mode Status</TextStyle>
-                </DisplayText>
-                <SettingToggle
-                  action={{
-                    content: active ? 'Deactivate' : 'Activate',
-                    onAction: handleToggle,
-                  }}
-                  enabled={active}
-                >
-                  Debugging mode is <TextStyle variation="strong">{ active ? 'activated' : 'deactivated' }</TextStyle>.
-                </SettingToggle>
-              </FormLayout>
-            </div>
-          </Card.Section>
-        </Card>
       </Layout>
     </>
   );

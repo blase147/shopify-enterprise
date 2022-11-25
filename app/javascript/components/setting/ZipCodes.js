@@ -380,57 +380,56 @@ const ZipCodes = ({ handleBack }) => {
               <TextStyle variation="subdued">Settings</TextStyle>
             </p>
           </div>
-        </Layout.Section>
-        <Card>
-          {zipCodes ? (
-            zipCodes.length > 0 ? (
-              <ResourceList
-                resourceName={resourceName}
-                items={zipCodes}
-                renderItem={renderItem}
-                selectedItems={selectedItems}
-                onSelectionChange={setSelectedItems}
-                promotedBulkActions={promotedBulkActions}
-              />
+          <Card>
+            {zipCodes ? (
+              zipCodes.length > 0 ? (
+                <ResourceList
+                  resourceName={resourceName}
+                  items={zipCodes}
+                  renderItem={renderItem}
+                  selectedItems={selectedItems}
+                  onSelectionChange={setSelectedItems}
+                  promotedBulkActions={promotedBulkActions}
+                />
+              ) : (
+                <Card.Section>
+                  <p>You currently have no areas added for Zip Codes.</p>
+                </Card.Section>
+              )
             ) : (
               <Card.Section>
-                <p>You currently have no areas added for Zip Codes.</p>
+                <p>Loading.</p>
               </Card.Section>
-            )
-          ) : (
+            )}
+          </Card>
+          <Card>
             <Card.Section>
-              <p>Loading.</p>
+              <div className="billing">
+                <FormLayout>
+                  <DisplayText size="small" element="h6">
+                    <TextStyle variation="subdued">Zip Codes</TextStyle>
+                  </DisplayText>
+                  <Select
+                    label="State Name"
+                    options={options}
+                    onChange={handleSelectChange}
+                    value={stateName}
+                  />
+                  <TextField
+                    label="City"
+                    value={city}
+                    onChange={handleCityChange}
+                    autoComplete="off"
+                  />
+                  <Button primary onClick={handleGoRequest}>
+                    Go!
+                  </Button>
+                  {errorMsg && <p style={{ color: 'red' }}>{errorMsg}</p>}
+                </FormLayout>
+              </div>
             </Card.Section>
-          )}
-        </Card>
-        <Card>
-          <Card.Section>
-            <div className="billing">
-              <FormLayout>
-                <DisplayText size="small" element="h6">
-                  <TextStyle variation="subdued">Zip Codes</TextStyle>
-                </DisplayText>
-                <Select
-                  label="State Name"
-                  options={options}
-                  onChange={handleSelectChange}
-                  value={stateName}
-                />
-                <TextField
-                  label="City"
-                  value={city}
-                  onChange={handleCityChange}
-                  autoComplete="off"
-                />
-                <Button primary onClick={handleGoRequest}>
-                  Go!
-                </Button>
-                {errorMsg && <p style={{ color: 'red' }}>{errorMsg}</p>}
-              </FormLayout>
-            </div>
-          </Card.Section>
-        </Card>
-        {/* {ZipCodeView && (
+          </Card>
+          {/* {ZipCodeView && (
           <Card sectioned>
             <h3>Added the following Zip Codes:</h3>
             <List type="bullet">
@@ -440,6 +439,7 @@ const ZipCodes = ({ handleBack }) => {
             </List>
           </Card>
         )} */}
+        </Layout.Section>
       </Layout>
     </>
   );

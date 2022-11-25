@@ -94,188 +94,190 @@ const EmailNotification = (props) => {
             <TextStyle variation="subdued">Settings</TextStyle>
           </p>
         </div>
-      </Layout.Section>
-      {selectedIndex != null ? (
-        <EmailNotificationDetails
-          setFieldValue={setFieldValue}
-          values={values}
-          index={selectedIndex}
-          touched={touched}
-          errors={errors}
-          setSelectedIndex={setSelectedIndex}
-          handleSubmit={handleSubmit}
-          setUpdateSetting={setUpdateSetting}
-        />
-      ) : (
-        <div className={`${selectedIndex != null ? 'hidden' : ''}`}>
-          {/* <Layout> */}
-          <Card.Section>
-            <Stack vertical>
-              <Stack.Item>
-                <Heading h4>
-                  <TextStyle variation="subdued">
-                    These emails are automatically sent out to either you (the
-                    store owner) or the customer.
-                  </TextStyle>
-                </Heading>
-              </Stack.Item>
-              <Stack.Item>
-                <Heading>Customer Notifications</Heading>
-              </Stack.Item>
-              <Select
-                label="Email Service"
-                options={emailOptions}
-                onChange={(value) => setFieldValue('emailService', value)}
-                value={values.emailService}
-              />
-              {values.emailNotifications?.map(
-                (item, i) =>
-                  item.slug === 'customer' && (
-                    <Stack.Item key={i}>
-                      <Stack distribution="equalSpacing">
-                        <Stack.Item>
-                          <Button
-                            plain
-                            textAlign="left"
-                            onClick={() => setSelectedIndex(i)}
-                          >
-                            <TextStyle variation="strong">
-                              <a>{item.name}</a>
-                            </TextStyle>
-                          </Button>
-                          <br />
-                          <TextStyle>{item.description}</TextStyle>
-                        </Stack.Item>
-                        <Stack.Item>
-                          {item.status ? (
-                            <Button
-                              primary
-                              onClick={() =>
-                                setFieldValue(
-                                  `emailNotifications[${i}].status`,
-                                  false
-                                )
-                              }
-                            >
-                              Enabled
-                            </Button>
-                          ) : (
-                            <Button
-                              onClick={() =>
-                                setFieldValue(
-                                  `emailNotifications[${i}].status`,
-                                  true
-                                )
-                              }
-                            >
-                              Disabled
-                            </Button>
-                          )}
-                        </Stack.Item>
-                      </Stack>
-                    </Stack.Item>
-                  )
-              )}
-            </Stack>
-          </Card.Section>
-
-          <Card.Section>
-            <Stack vertical>
-              <Stack.Item>
-                <Heading>Store Owner Notifications</Heading>
-              </Stack.Item>
-              {values.emailNotifications?.map(
-                (item, i) =>
-                  item.slug === 'store_owner' && (
-                    <Stack.Item key={i}>
-                      <Stack distribution="equalSpacing">
-                        <Stack.Item>
-                          <Button
-                            plain
-                            textAlign="left"
-                            onClick={() => setSelectedIndex(i)}
-                          >
-                            <TextStyle variation="strong">
-                              <a>{item.name}</a>
-                            </TextStyle>
-                          </Button>
-                          <br />
-                          <TextStyle>{item.description}</TextStyle>
-                        </Stack.Item>
-                        <Stack.Item>
-                          {item.status ? (
-                            <Button
-                              primary
-                              onClick={() =>
-                                setFieldValue(
-                                  `emailNotifications[${i}].status`,
-                                  false
-                                )
-                              }
-                            >
-                              Enabled
-                            </Button>
-                          ) : (
-                            <Button
-                              onClick={() =>
-                                setFieldValue(
-                                  `emailNotifications[${i}].status`,
-                                  true
-                                )
-                              }
-                            >
-                              Disabled
-                            </Button>
-                          )}
-                        </Stack.Item>
-                      </Stack>
-                    </Stack.Item>
-                  )
-              )}
-            </Stack>
-          </Card.Section>
-
-          <Card.Section>
-            <Stack vertical>
-              <Stack.Item>
-                <Heading>Additional Settings</Heading>
-              </Stack.Item>
-
-              {listAdditionalSetting?.map((item, i) => (
-                <Stack.Item key={i}>
-                  <Stack distribution="equalSpacing">
-                    <Stack.Item>
-                      <TextStyle>{item.title}</TextStyle>
-
-                      <br />
+        {selectedIndex != null ? (
+          <EmailNotificationDetails
+            setFieldValue={setFieldValue}
+            values={values}
+            index={selectedIndex}
+            touched={touched}
+            errors={errors}
+            setSelectedIndex={setSelectedIndex}
+            handleSubmit={handleSubmit}
+            setUpdateSetting={setUpdateSetting}
+          />
+        ) : (
+          <div className={`${selectedIndex != null ? 'hidden' : ''}`}>
+            {/* <Layout> */}
+            <Card>
+              <Card.Section>
+                <Stack vertical>
+                  <Stack.Item>
+                    <Heading h4>
                       <TextStyle variation="subdued">
-                        {item.description}
+                        These emails are automatically sent out to either you (the
+                        store owner) or the customer.
                       </TextStyle>
+                    </Heading>
+                  </Stack.Item>
+                  <Stack.Item>
+                    <Heading>Customer Notifications</Heading>
+                  </Stack.Item>
+                  <Select
+                    label="Email Service"
+                    options={emailOptions}
+                    onChange={(value) => setFieldValue('emailService', value)}
+                    value={values.emailService}
+                  />
+                  {values.emailNotifications?.map(
+                    (item, i) =>
+                      item.slug === 'customer' && (
+                        <Stack.Item key={i}>
+                          <Stack distribution="equalSpacing">
+                            <Stack.Item>
+                              <Button
+                                plain
+                                textAlign="left"
+                                onClick={() => setSelectedIndex(i)}
+                              >
+                                <TextStyle variation="strong">
+                                  <a>{item.name}</a>
+                                </TextStyle>
+                              </Button>
+                              <br />
+                              <TextStyle>{item.description}</TextStyle>
+                            </Stack.Item>
+                            <Stack.Item>
+                              {item.status ? (
+                                <Button
+                                  primary
+                                  onClick={() =>
+                                    setFieldValue(
+                                      `emailNotifications[${i}].status`,
+                                      false
+                                    )
+                                  }
+                                >
+                                  Enabled
+                                </Button>
+                              ) : (
+                                <Button
+                                  onClick={() =>
+                                    setFieldValue(
+                                      `emailNotifications[${i}].status`,
+                                      true
+                                    )
+                                  }
+                                >
+                                  Disabled
+                                </Button>
+                              )}
+                            </Stack.Item>
+                          </Stack>
+                        </Stack.Item>
+                      )
+                  )}
+                </Stack>
+              </Card.Section>
+
+              <Card.Section>
+                <Stack vertical>
+                  <Stack.Item>
+                    <Heading>Store Owner Notifications</Heading>
+                  </Stack.Item>
+                  {values.emailNotifications?.map(
+                    (item, i) =>
+                      item.slug === 'store_owner' && (
+                        <Stack.Item key={i}>
+                          <Stack distribution="equalSpacing">
+                            <Stack.Item>
+                              <Button
+                                plain
+                                textAlign="left"
+                                onClick={() => setSelectedIndex(i)}
+                              >
+                                <TextStyle variation="strong">
+                                  <a>{item.name}</a>
+                                </TextStyle>
+                              </Button>
+                              <br />
+                              <TextStyle>{item.description}</TextStyle>
+                            </Stack.Item>
+                            <Stack.Item>
+                              {item.status ? (
+                                <Button
+                                  primary
+                                  onClick={() =>
+                                    setFieldValue(
+                                      `emailNotifications[${i}].status`,
+                                      false
+                                    )
+                                  }
+                                >
+                                  Enabled
+                                </Button>
+                              ) : (
+                                <Button
+                                  onClick={() =>
+                                    setFieldValue(
+                                      `emailNotifications[${i}].status`,
+                                      true
+                                    )
+                                  }
+                                >
+                                  Disabled
+                                </Button>
+                              )}
+                            </Stack.Item>
+                          </Stack>
+                        </Stack.Item>
+                      )
+                  )}
+                </Stack>
+              </Card.Section>
+
+              <Card.Section>
+                <Stack vertical>
+                  <Stack.Item>
+                    <Heading>Additional Settings</Heading>
+                  </Stack.Item>
+
+                  {listAdditionalSetting?.map((item, i) => (
+                    <Stack.Item key={i}>
+                      <Stack distribution="equalSpacing">
+                        <Stack.Item>
+                          <TextStyle>{item.title}</TextStyle>
+
+                          <br />
+                          <TextStyle variation="subdued">
+                            {item.description}
+                          </TextStyle>
+                        </Stack.Item>
+                        <Stack.Item>
+                          <div className="switch">
+                            <Switch
+                              onChange={item.onChange}
+                              checked={item.checked}
+                              error={item.error}
+                              onColor="#86d3ff"
+                              onHandleColor="#2693e6"
+                              handleDiameter={30}
+                              uncheckedIcon={false}
+                              checkedIcon={false}
+                              boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+                              activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+                            />
+                          </div>
+                        </Stack.Item>
+                      </Stack>
                     </Stack.Item>
-                    <Stack.Item>
-                      <div className="switch">
-                        <Switch
-                          onChange={item.onChange}
-                          checked={item.checked}
-                          error={item.error}
-                          onColor="#86d3ff"
-                          onHandleColor="#2693e6"
-                          handleDiameter={30}
-                          uncheckedIcon={false}
-                          checkedIcon={false}
-                          boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-                          activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
-                        />
-                      </div>
-                    </Stack.Item>
-                  </Stack>
-                </Stack.Item>
-              ))}
-            </Stack>
-          </Card.Section>
-          {/* </Layout> */}
-        </div>
-      )}
+                  ))}
+                </Stack>
+              </Card.Section>
+            </Card>
+            {/* </Layout> */}
+          </div>
+        )}
+      </Layout.Section>
     </Layout>
   );
 };
