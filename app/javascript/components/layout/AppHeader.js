@@ -11,15 +11,21 @@ const AppHeader = (props) => {
     const [selectedShop, setSelectedShop] = useState(props?.domain);
     const handleSelectChange = useCallback((value) => {
         setSelectedShop(value)
+        localStorage.setItem("selectedShop", value)
         window.location.replace(`/?shopify_domain=${value}`)
     }, []);
     const [allShops, setAllShops] = useState();
     useEffect(() => {
         const shopsArray = (localStorage.getItem("allShops") ? JSON.parse(localStorage.getItem("allShops")) : '')
         setAllShops(shopsArray)
+
     }, [localStorage.getItem("allShops")])
 
     const [value, setValue] = useState('');
+
+    useEffect(() => {
+        setSelectedShop(localStorage.getItem("selectedShop"))
+    }, [localStorage.getItem("selectedShop")])
 
     const handleChange = useCallback((newValue) => setValue(newValue), []);
     return (
@@ -35,7 +41,7 @@ const AppHeader = (props) => {
                             <p className='changeStoreDiv'>
                                 <Select
                                     options={allShops}
-                                    onChange={() => handleSelectChange()}
+                                    onChange={(e) => handleSelectChange(e)}
                                     value={selectedShop}
                                 />
                             </p>
