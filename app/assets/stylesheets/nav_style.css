@@ -1,0 +1,418 @@
+@font-face {
+    font-family: 'Gilroy';
+    font-style: normal;
+    font-weight: normal;
+    src: url('./../../../assets/fonts/Gilroy-Regular.ttf') format('truetype');
+}
+
+.navBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: black !important;
+    color: white;
+    font-family: 'Gilroy';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 14px;
+    line-height: 125%;
+    position: fixed;
+}
+
+.logout_link {
+    margin: 8px;
+}
+
+.navBar .logout_link span {
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.navBar .logout_link a {
+    text-decoration: none;
+    background: black;
+    color: #ffff;
+    border-radius: 4px;
+    font-weight: 600;
+    padding: 5px 10px;
+    font-size: 12px;
+    margin: 0 0 0 auto;
+}
+
+.app-content .logout_link {
+    display: flex !important;
+    align-items: center;
+    flex-flow: column;
+    justify-content: center;
+    padding-right: 15px;
+}
+
+.app-content .logout_link span {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.app-content .logout_link>div {
+    max-width: 100%;
+    display: block !important;
+}
+
+.dashboardArea,
+.loginWithoutShopMain {
+    display: flex;
+    width: 98%;
+}
+
+.navBar {
+    display: unset;
+    height: 100vh;
+    padding-top: 40px;
+    background: #F6F6F7;
+    box-shadow: inset -1px 0px 0px #E4E5E7;
+    width: 100%;
+    max-width: 291px;
+    transition: all 0.5s ease-in-out;
+}
+
+.navBar .sidBartabs ul.Polaris-Tabs.Polaris-Tabs--fillSpace {
+    display: grid;
+}
+
+.navBar .sidBartabs ul.Polaris-Tabs.Polaris-Tabs--fillSpace {
+    height: 100%;
+}
+
+.sidBartabs .Polaris-Tabs.Polaris-Tabs__TabMeasurer {
+    visibility: visible;
+    display: unset;
+    width: 100%;
+}
+
+.navBar .sidBartabs {
+    flex: 0 0 100%;
+    max-width: 100%;
+    width: 100%;
+    height: 100%;
+}
+
+.navBar .sidBartabs>div {
+    height: 100%;
+}
+
+.navBar .sidBartabs>div ul.Polaris-Tabs.Polaris-Tabs--fillSpace {
+    display: none;
+}
+
+.navBar .sidBartabs>div .Polaris-Tabs__Wrapper {
+    height: 100%;
+}
+
+.sidBartabs .Polaris-Tabs.Polaris-Tabs__TabMeasurer li.Polaris-Tabs__TabContainer {
+    display: block;
+    text-align: left;
+    height: unset;
+}
+
+.sidBartabs .Polaris-Tabs.Polaris-Tabs__TabMeasurer li.Polaris-Tabs__TabContainer button span.Polaris-Tabs__Title {
+    text-align: left;
+}
+
+.sidBartabs .Polaris-Tabs.Polaris-Tabs__TabMeasurer li.Polaris-Tabs__TabContainer button {
+    padding: 0;
+}
+
+
+
+.navBar .sidBartabs ul li a span {
+    margin-left: 15px;
+    font-family: 'Gilroy';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 14px;
+    line-height: 125%;
+    color: #ffff;
+}
+
+.navBar .sidBartabs ul li a span.Polaris-Icon svg {
+    fill: #5c6ac4;
+}
+
+.navBar .sidBartabs ul li {
+    margin-bottom: 3px;
+}
+
+.navBar .sidBartabs nav.Polaris-Navigation {
+    min-width: 100%;
+}
+
+
+
+.navBar .sidBartabs ul li a {
+    padding: 1px 0;
+    margin: 0;
+    border-radius: 0;
+    position: relative;
+}
+
+.navBar .sidBartabs ul li a span.Polaris-Navigation__Text {
+    padding-top: 4px;
+}
+
+.navBar .sidBartabs ul li a span.Polaris-Navigation__Text {
+    padding-top: 5px;
+}
+
+.navBar .sidBartabs ul li .Polaris-Navigation__Icon svg.Polaris-Icon__Svg path {
+    fill: #ffff;
+}
+
+.navBar .sidBartabs ul li a.Polaris-Navigation--subNavigationActive span.Polaris-Icon svg path {
+    fill: #fff;
+}
+
+.navBar .sidBartabs ul li .Polaris-Navigation--subNavigationActive:before {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 36px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.navBar .sidBartabs ul li:hover:before {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 36px;
+    background: transparent !important;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+body .Polaris-Frame {
+    overflow: auto;
+    padding-top: 40px;
+}
+
+body.chargezen {
+    overflow: auto;
+}
+
+.module-navbar .app_content {
+    position: relative;
+    left: 291px;
+    max-width: calc(100% - 291px);
+    width: 100%;
+    transition: all 0.5s ease-in-out;
+}
+
+.navBar .sidBartabs .Polaris-Navigation {
+    background: black;
+}
+
+.navBar .changeStoreDiv {
+    padding: 0 22px;
+}
+
+.changeStoreDiv .Polaris-Select {
+    color: black;
+}
+
+.navBar .sidBartabs ul li a span.Polaris-Navigation__Text {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 23px;
+    color: #51CBFF;
+    text-transform: uppercase;
+}
+
+.Polaris-Navigation__Item:hover {
+    background-color: transparent;
+}
+
+.Polaris-Navigation__SecondaryNavigation .Polaris-Collapsible {
+    opacity: 1 !important;
+}
+
+
+.Polaris-Navigation__SecondaryNavigation li.Polaris-Navigation__ListItem a span {
+    font-family: 'Avenir';
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 18px !important;
+    line-height: 25px;
+    color: #CCD2E3 !important;
+    text-transform: capitalize !important;
+}
+
+.Polaris-Navigation__SecondaryNavigation .Polaris-Navigation__List li:hover:before {
+    background: #1B2B65 !important;
+    border-radius: 5px;
+}
+
+.Polaris-Navigation__SecondaryNavigation .Polaris-Navigation__List li:hover * {
+    color: #fff;
+}
+
+.navBar .sidBartabs ul li:hover * {
+    color: #fff;
+}
+
+.navBar .sidBartabs ul li:hover span.Polaris-Icon svg path {
+    fill: #fff;
+}
+
+.Polaris-Navigation__SecondaryNavigation .Polaris-Navigation--subNavigationActive {
+    background: #1B2B65 !important;
+    border-radius: 5px !important;
+    padding: 10px 0px !important;
+}
+
+.Polaris-Navigation__Item {
+    padding: 0 16px !important;
+
+}
+
+.Polaris-Navigation__SecondaryNavigation .Polaris-Navigation__Item {
+    padding: 1px 0 !important;
+}
+
+.navBar .logo {
+    align-items: center;
+    display: flex;
+    margin-bottom: 21px;
+}
+
+
+.header_main_div {
+    justify-content: space-between;
+    display: flex;
+
+}
+
+.header_main_div .second_div,
+.header_main_div .header_main_div .first_div {
+    display: flex;
+    align-items: center;
+}
+
+.notification {
+    width: 100%;
+    border-left: 1px solid #DADADA;
+    max-width: 50px;
+    position: relative;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+}
+
+.main_header h2 {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 22px;
+    color: #000000;
+    padding-bottom: 20px;
+
+}
+
+.user_details:before {
+    content: '';
+    position: absolute;
+    right: 16px;
+    width: 1px;
+    height: 100%;
+    right: -19px;
+    background: #DADADA;
+}
+
+.user_details {
+    position: relative;
+}
+
+
+.header_main_div .first_div {
+    display: flex;
+    align-items: center;
+}
+
+.status {
+    font-style: normal;
+    font-weight: 800;
+    font-size: 12px;
+    line-height: 16px;
+    color: #30D988;
+    position: relative;
+    height: 35px;
+    display: flex;
+    align-items: center;
+
+}
+
+
+.first_div {
+    display: flex;
+    align-items: center;
+}
+
+.header_main_div .search_div {
+    position: relative;
+    padding-left: 20px;
+    margin-left: 15px;
+}
+
+.header_main_div .search_icon {
+    position: absolute;
+    left: 32px;
+    top: 8px;
+    z-index: 1024;
+
+}
+
+.header_main_div .search_icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.main_header {
+    padding: 25px;
+    border-bottom: 1px solid #DADADA;
+
+}
+
+.header_main_div .search_icon path {
+    fill: #828282;
+}
+
+.header_main_div .search_div input {
+    padding: 0 40px;
+}
+
+.header_main_div .search_div .Polaris-TextField {
+    border: 0 !important;
+}
+
+.header_main_div .Polaris-TextField__Backdrop {
+    border: 0;
+    background: transparent;
+}
+
+
+.status:before {
+    position: absolute;
+    content: '';
+    width: 7px;
+    height: 7px;
+    background: #30D988;
+    border-radius: 50%;
+    left: -6px;
+    top: 13px;
+}
+
+.navBar .logo img {
+    margin: auto;
+}

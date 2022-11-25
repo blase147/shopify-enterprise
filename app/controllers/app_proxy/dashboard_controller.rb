@@ -2,22 +2,32 @@ class AppProxy::DashboardController < AppProxyController
   skip_before_action :init_session, only: [:index, :fetch_contract]
   skip_before_action :set_skip_auth, only: [:fetch_contract]
   before_action :load_subscriptions, except: [:build_a_box, :confirm_box_selection, :index, :fetch_contract, :show_order]
-  before_action :load_customer, only: %w(addresses payment_methods settings upcoming build_a_box track_order)
+  before_action :load_customer, only: %w(index addresses payment_methods settings upcoming build_a_box track_order)
+  before_action :current_setting
   def index
-    if params[:status].present?
-      @subscription_contracts = CustomerSubscriptionContract.where(shopify_customer_id: params[:customer], status: params[:status]&.upcase)
+    if current_setting&.portal_theme.present?
+      customer_email = CustomerSubscriptionContract.find_by_shopify_customer_id(params[:customer])&.email
+      if params[:status].present?
+        @subscription_contracts = CustomerSubscriptionContract.where(shopify_customer_id: params[:customer], status: params[:status]&.upcase)
+      else
+        @subscription_contracts = CustomerSubscriptionContract.where(shopify_customer_id: params[:customer])
+      end
     else
-      @subscription_contracts = CustomerSubscriptionContract.where(shopify_customer_id: params[:customer])
+      products = ProductService.new.list
+      @swap_products = products.is_a?(Hash) ? nil : products&.select { |p| p.node.requires_selling_plan == true }
+      load_subscriptions(params[:customer])
     end
-    email = @subscription_contracts&.last&.email
     $redis = Redis.new
-    @auth = $redis.get("#{email}_auth")
-    render "#{current_setting.portal_theme}index", content_type: 'application/liquid', layout: "#{current_setting.portal_theme}liquid_app_proxy"
+    @auth = $redis.get("#{customer_email}_auth")
+    render "#{current_setting&.portal_theme}index", content_type: 'application/liquid', layout: "#{current_setting&.portal_theme}liquid_app_proxy"
   end
 
+  def current_setting
+    @setting = current_shop&.setting
+  end
   def subscription
     render 'subscription', content_type: 'application/liquid', layout: 'liquid_app_proxy'
-  end
+  end 
 
   def upcoming
     # @skip_auth = Rails.env.development? || params[:pwd] == 'craycray'
@@ -36,8 +46,8 @@ class AppProxy::DashboardController < AppProxyController
     render 'addresses', content_type: 'application/liquid', layout: 'liquid_app_proxy'
   end
 
-  def payment_methods(customer_id=nil)
-    params[:customer] = customer_id if customer_id.present?
+  def payment_methods(customerid=nil)
+    params[:customer] = customerid if customerid.present?
     @orders = ShopifyAPI::Order.find(:all,
       params: { customer_id: params[:customer], limit: 6, page_info: nil }
     )
@@ -173,7 +183,7 @@ class AppProxy::DashboardController < AppProxyController
   end
 
   def update_theme
-    current_setting.update(portal_theme: params[:theme_name])
+    current_setting&.update(portal_theme: params[:theme_name])
   end
 
   def customer_info
@@ -219,7 +229,7 @@ class AppProxy::DashboardController < AppProxyController
 
   def fetch_contract
     @translation = current_shop&.translation
-    @theme = "#{current_setting.portal_theme}"
+    @theme = "#{current_setting&.portal_theme}"
     if params[:local_id].present?
       @customer = CustomerSubscriptionContract.find(params[:local_id])
     else
@@ -298,7 +308,7 @@ class AppProxy::DashboardController < AppProxyController
     @auth = params[:token]
     @customer = CustomerSubscriptionContract.find(params[:local_id])
     params[:customer] = @customer.shopify_customer_id
-    render "#{current_setting.portal_theme}index", content_type: 'application/liquid', layout: "#{current_setting.portal_theme}liquid_app_proxy"    
+    render "#{current_setting&.portal_theme}index", content_type: 'application/liquid', layout: "#{current_setting&.portal_theme}liquid_app_proxy"    
   end  
   
   def get_subscription_payment
@@ -320,7 +330,8 @@ class AppProxy::DashboardController < AppProxyController
   end
 
   def load_customer
-    # CustomerSubscriptionContract.update_contracts(shopify_customer_id, current_shop)
+    current_shop.connect
+    CustomerSubscriptionContract.update_contracts(shopify_customer_id, current_shop)
     @customer = current_shop.customer_subscription_contracts.find_by_shopify_customer_id(customer_id)
   end
 

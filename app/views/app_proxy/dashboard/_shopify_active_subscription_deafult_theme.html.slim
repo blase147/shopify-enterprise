@@ -1,0 +1,167 @@
+- contract = CustomerSubscriptionContract.find_by(shopify_id: subscription.node.id[/\d+/]) rescue nil
+- local_subscription = JSON.parse(contract.api_data.to_json, object_class: OpenStruct) rescue nil
+- billing_policy = subscription.node.billing_policy
+-# selling_plan_ids = subscription.node.lines.edges.map{|edge| edge.node.selling_plan_id}
+- selling_plan_ids = local_subscription.lines.edges.map{|edge| edge.node.selling_plan_id} rescue nil
+- selling_plan_id = selling_plan_ids.reject{|val| val.nil?}&.first rescue nil
+- selling_plan = SellingPlan.find_by(shopify_id: selling_plan_id)
+
+- if true
+  - next_billing_date = get_next_billing_date(subscription.node, @current_shop)
+  - box_campaign = BuildABoxCampaign.joins(:build_a_box_campaign_group).where(build_a_box_campaign_groups: { shop_id: @current_shop.id, location: 'customer_portal' }).where("'#{selling_plan_id[/\d+/]}' = ANY (selling_plan_ids)").first rescue nil
+
+  .subscription-contract-products data-campagin="#{box_campaign.present? ? box_campaign.to_json : []}"
+    - subscription.node.lines.edges.each_with_index do |edge, index|
+      - product = ShopifyAPI::Product.find(edge.node.product_id[/\d+/])
+      .grid
+        .grid-item
+          .img.account-img
+            img src=product.images.first&.src alt=""
+          p.text.active-text
+            = product.title
+          p.text.active-text
+            = "#{number_to_currency edge.node.current_price.amount} / #{billing_policy.interval_count} #{billing_policy.interval}"
+          p.text.active-text
+            = edge.node.selling_plan_name
+        .grid-item
+          h4 NEXT CARD CHARGE
+          p.text.right.active-text
+            = next_billing_date.strftime("%a, %B %e")
+          p.text.right.active-text
+            = number_to_currency (edge.node.current_price.amount.to_f * edge.node.quantity)
+        .grid-item
+          - (@setting.active_subscription_btn_seq || ['update_choices', 'delivery_schedule', 'swap_subscription', 'delay_next_order', 'edit_subscription']).each do |btn|
+            - case btn
+              - when 'update_choices'
+                - if box_campaign.present? && box_campaign_display(box_campaign, selling_plan_id)
+                  = link_to "/a/chargezen_production/dashboard/build_a_box?&build_a_box_campaign_id=#{box_campaign.id}&customer_id=#{params[:customer_id]}&subscription_id=#{subscription.node.id[/\d+/]}&active_subscriptions_count=#{@active_subscriptions.count}&selling_plan_id=#{selling_plan_id[/\d+/]}" do
+                    button.action-btn style="font-size: 13px" UPDATE CHOICES
+              - when 'delivery_schedule'
+                - if @setting.customer_allowed?('navigation_delivery')
+                  = link_to "/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}&subscription_id=#{subscription.node.id}&line_id=#{edge.node.id}&active_subscriptions_count=#{@active_subscriptions.count}" do
+                    button.action-btn style="font-size: 13px" #{@translation&.home_tab_delivery_schedule_btn.present? ? @translation&.home_tab_delivery_schedule_btn : 'DELIVERY SCHEDULE'}
+              - when 'swap_subscription'
+                - if @setting.customer_allowed?('swap_product')
+                  button.action-btn style="font-size: 13px" type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#swap-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" SWAP SUBSCRIPTION
+              - when 'edit_subscription'
+                button.edit-subscription.action-btn style="font-size: 13px" data-toggle="modal" data-target="#editSubscriptionModal-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" #{@translation&.home_tab_edit_subscription_btn.present? ? @translation&.home_tab_edit_subscription_btn : 'Edit Subscription'}
+              - when 'delay_next_order'
+                - if @setting.customer_allowed?('frequency')
+                  button.delivery-schedule.action-btn style="font-size: 13px" data-toggle="modal" data-target="#delayOrderModal-#{subscription.node.id[/\d+/]}" #{@translation&.home_tab_delay_next_order_btn.present? ? @translation&.home_tab_delay_next_order_btn : 'DELAY NEXT ORDER'}
+          = render 'delay_order_modal', subscription: subscription.node, next_billing_date: next_billing_date, action_by: "customer"
+          = render 'edit_subscription_modal', subscription: subscription.node, line_item: edge.node, product_image: product.images.first&.src, product_id: product.id, setting: @setting, selling_plan_id: edge.node.selling_plan_id, selling_plan: selling_plan , contract_id: contract.id, action_by: "customer"
+          - if @setting.customer_allowed?('swap_product')
+            = render 'swap_subscription_modal', subscription: subscription.node, line_item: edge.node, action_by: "customer"
+          = render 'upgrade_subscription_modal', subscription: subscription.node, line_item: edge.node, selling_plan_id: edge.node.selling_plan_id, product: product, action_by: "customer"
+          = render 'cancel_subscription_modal', subscription: subscription.node, line_item: edge.node, lines_count: subscription.node.lines.edges.size, action_by: "customer"
+      - if @setting.customer_allowed?('upcoming_quantity')
+        .quantity-wrapper
+          form action="#{action_subscription_contract_path(:update_quantity, subscription.node.id[/\d+/])}" method='post' data-remote=true enctype="multipart/form-data"
+            .quantity-field
+              div
+                span.label.active-text #{@translation&.home_tab_quantity.present? ? @translation&.home_tab_quantity : 'Quantity'}:
+                span.btn-wrapper
+                  button.minus-quantity type="button"
+                    svg fill="none" height="8" viewbox=("0 0 7 2") width="8" xmlns="http://www.w3.org/2000/svg"
+                      path d=("M7 0H0V1.5H7V0Z") fill="#637381" /
+
+                  input.quatity-val type="number" name="quantity" value="#{edge.node.quantity}"/
+                  button.plus-quantity type="button"
+                    svg fill="none" height="8" viewbox=("0 0 8 8") width="8" xmlns="http://www.w3.org/2000/svg"
+                      path d=("M0 3.08V4.508H3.08V7.588H4.508V4.508H7.588V3.08H4.508V0H3.08V3.08H0Z") fill="#212B36" /
+                  input.prev-quantity type="hidden" value="#{edge.node.quantity}"/
+                span.update-quantity
+                  input.hidden type="text" name="line_item_id" value="#{edge.node.id}"/
+                  button type="submit" APPLY
+              div
+                div.chevron
+                  svg fill="none" height="30" viewbox=("0 0 30 30") width="30" xmlns="http://www.w3.org/2000/svg"
+                    circle cx="15" cy="15" r="14" stroke="#007EFF" stroke-width="2" /
+                    path d=("M7.5 12L14.5 19L21.5 12") stroke="#007EFF" stroke-width="2" /
+      - else
+        .quantity-wrapper
+          form action="" method='post' data-remote=true enctype="multipart/form-data"
+            .quantity-field
+              div
+                span.label.active-text #{@translation&.home_tab_quantity.present? ? @translation&.home_tab_quantity : 'Quantity'}:
+                span.label.active-text= edge.node.quantity
+      .slide-down
+        .item
+          p #{@translation&.home_tab_start_date.present? ? @translation&.home_tab_start_date : 'start date'}
+          p
+            = DateTime.parse(subscription.node.created_at).strftime("%a, %B %e")
+        .item
+          p #{@translation&.home_tab_est_next_delivery.present? ? @translation&.home_tab_est_next_delivery : 'est. next delivery'}
+          p
+            = (DateTime.parse(subscription.node.next_billing_date) + 4.days).strftime("%a, %B %e")
+        .item
+          p #{@translation&.home_tab_last_card_charge.present? ? @translation&.home_tab_last_card_charge : 'last card charge'}
+          p -
+        .item
+          p #{@translation&.home_tab_quantity.present? ? @translation&.home_tab_quantity : 'quantity'}
+          p
+            = edge.node.quantity
+    - if @setting.customer_allowed?('shiping_address')
+      .delivery-address
+        div
+          p.text.active-text #{@translation&.home_tab_delivery_address.present? ? @translation&.home_tab_delivery_address : 'DELIVERY ADDRESS'}
+          h3.active-text
+            = subscription.node.delivery_method.address.address1
+          div.weekly-account
+          a.add_weekly_box.promo-tag-II href="#"
+            - if @setting.promo_tagline2_content.present?
+              span #{@setting.promo_tagline2_content}
+            - elsif @translation&.home_tab_apply_discount.present?
+              span #{@translation&.home_tab_apply_discount}
+            - else
+              'Apply Discount'
+            svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg"
+              path d=("M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z") fill="black" /
+        div
+          button data-toggle="modal" data-target="#deliveryEditModal" #{@translation&.home_tab_edit_btn.present? ? @translation&.home_tab_edit_btn : 'EDIT'}
+      = render 'edit_delivery_address_modal', subscription: subscription.node
+  - line_products = subscription.node.lines.edges.map{|edge| edge.node.product_id[/\d+/]}
+  - campaigns = UpsellCampaign.joins(:upsell_campaign_group).where(upsell_campaign_groups: {status: :publish}).where("rule_customer = 't' AND rule_customer_value ->> 'sellingPlanId' = ?", selling_plan_id).select("product_offer AS product_offer, offer_title, button_text_accept, show_offer_title")
+  - product_ids = []
+  - campaigns.each do |campaign|
+    - product_ids.push((campaign.product_offer.is_a? Array) ? campaign.product_offer.map{|a| a["product_id"][/\d+/]} : campaign.product_offer['product_id'][/\d+/])
+  - product_ids = product_ids.flatten - line_products
+  - upsell_products = product_ids.present? ? ShopifyAPI::Product.where(ids: product_ids.join(',')) : nil
+  - if upsell_products.present?
+    .carousal-container.preview-container
+      h2.offerTitle
+        - if campaigns&.first&.show_offer_title
+          - if campaigns.first.offer_title.present?
+            = campaigns.first.offer_title
+          - elsif @translation&.upsell_title.present?
+            = @translation&.upsell_title
+          - else
+            'Hey there! There's is an offer for you!'
+      .owl-carousel.owl-theme.account-carousel
+        - upsell_products.each do |product|
+          .preview-item
+            .img.carousel-img
+              - if product.images.first.present?
+                img alt="" height="100%" src=product.images.first&.src
+            p.carousel-text
+              = product.title
+              - if product.title.size <= 38
+                br /
+            .spinner
+              .loader
+            = form_tag action_subscription_contract_path(:add_product, subscription.node.id[/\d+/]), method: :post, :id => "form-#{product.id}", remote: true do
+              .variants-wrapper
+                - product.variants.each_with_index do |variant, index|
+                  label
+                    - if index.zero?
+                      input name="variant_id" type="radio" value="#{variant.id}" checked='checked'
+                    - else
+                      input name="variant_id" type="radio" value="#{variant.id}"
+                    = "#{variant.title} (#{number_to_currency variant.price})"
+              .btn-wrapper
+                - btn_text = campaigns.first.button_text_accept.present? ? campaigns.first.button_text_accept : (@translation&.home_tab_add_subscription.present? ? @translation&.home_tab_add_subscription : 'Add')
+                button.btn-variant type="button"
+                  = btn_text
+              .btn-wrapper
+                button type="submit" style=("display: none;")
+                  = btn_text

@@ -37,7 +37,7 @@
 
                 button class="pause-subscription" data-path="/pause" data-contractid="#{subscription&.id[/\d+/] rescue nil }" Pause Subscription
 
-                - disable_swap = controller_name == 'dashboard' && !current_setting.customer_allowed?('swap_product')
+                - disable_swap = controller_name == 'dashboard' && !current_setting&.customer_allowed?('swap_product')
                 button.modal_btn class=('swap-subscription' + (disable_swap ? ' light' : '')) disabled=(disable_swap) type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#swap-#{line_item.id.split("gid://shopify/SubscriptionLine/")[1]}" #{@translation.edit_subscription_popup_swap_subscription.present? ? @translation.edit_subscription_popup_swap_subscription : 'SWAP SUBSCRIPTION'}
                 // button.downgrade-subscription.light type="button" DOWNGRADE SUBSCRIPTION
                 //button.ask-questions.light type="button" #{@translation.edit_subscription_popup_ask_a_question.present? ? @translation.edit_subscription_popup_ask_a_question : 'ASK A QUESTION'}

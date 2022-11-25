@@ -6,7 +6,7 @@
   .details
     .contact
       p = @setting.contact_box_content.present? ? @setting.contact_box_content&.html_safe : 'Questions? Call Us: +1 800 000 0000'
-      p = select_tag :theme, options_for_select(Setting::THEME_TYPE.map {|k, v| [k.to_s, v]}, current_setting.portal_theme), {class: 'form-control choose-theme',  prompt: 'Please Select Theme'}
+      p = select_tag :theme, options_for_select(Setting::THEME_TYPE.map {|k, v| [k.to_s, v]}, current_setting&.portal_theme), {class: 'form-control choose-theme',  prompt: 'Please Select Theme'}
       / p Monday - Friday 8:30 - 18:30
   .details
     - if @setting.show_promo_button.present?

@@ -1,3 +1,4 @@
+- all_contracts = all_contracts(params[:customer])
 .Polaris-Frame data-has-navigation="true" data-polaris-layer="true"
   div
     #AppFrameNav
@@ -9,37 +10,29 @@
       .Polaris-Page
         -if @payment_type == 'STRIPE'
           = render "stripe_payment_methods"
-        - elsif @active_subscriptions_count == 0
-          div.content-wrapper
-            div
-              .Polaris-Header-Title__TitleAndSubtitleWrapper
-                .Polaris-Header-Title
-                  h2.Polaris-DisplayText.main-heading
-                    - if @translation.billing_tab_billing_information.present?
-                      span.Polaris-TextStyle--variationStrong #{@translation.billing_tab_billing_information}
-                    - else
-                      span.Polaris-TextStyle--variationStrong MY&nbsp;
-                      span.Polaris-TextStyle--variationStrong style="color: #000000" BILLING
-                      span.Polaris-TextStyle--variationStrong &nbsp;INFORMATION
-            div.notification-banner
-              p.Polaris-Heading #{@translation.billing_tab_billing_no_subscriptions_found.present? ? @translation.billing_tab_billing_no_subscriptions_found : 'No subscription have been found for your account'}
         - else
-          - payment_method = @shopify_customer.payment_methods.edges.first&.node
-          - billing_address = @shopify_customer.payment_methods.edges.first&.node&.instrument&.billing_address
+          - payment_method = @payment_method&.customer_payment_method
+          - data = @payment_method&.customer_payment_method
+          - cardtype = data&.instrument&.__typename
+          - if cardtype == "CustomerShopPayAgreement"
+            - billing_address = @shopify_customer&.default_address
+          - else                      
+            - billing_address = @shopify_customer&.payment_methods&.edges&.first&.node&.instrument&.billing_address rescue @shopify_customer&.default_address
           div.content-wrapper
             div
               .Polaris-Header-Title__TitleAndSubtitleWrapper
                 .Polaris-Header-Title
                   h2.Polaris-DisplayText.main-heading
-                    - if @translation.billing_tab_billing_information.present?
-                      span.Polaris-TextStyle--variationStrong #{@translation.billing_tab_billing_information}
+                    - if @translation&.billing_tab_billing_information.present?
+                      span.Polaris-TextStyle--variationStrong #{@translation&.billing_tab_billing_information}
                     - else
                       span.Polaris-TextStyle--variationStrong MY&nbsp;
                       span.Polaris-TextStyle--variationStrong style="color: #000000" BILLING
                       span.Polaris-TextStyle--variationStrong &nbsp;INFORMATION
+            = select_tag(:change_subscription, options_for_select(all_contracts&.pluck(:subscription, :shopify_id), :selected=>params[:subscription_id]), {:class => 'change_subscription_billing_tab'})
             .billing-details-tile
               .card-information
-                h2.card-heading #{@translation.billing_tab_card_on_file.present? ? @translation.billing_tab_card_on_file : 'CARD ON FILE'}
+                h2.card-heading #{@translation&.billing_tab_card_on_file.present? ? @translation&.billing_tab_card_on_file : 'CARD ON FILE'}
                 .card-details
                   .img.payment-img
                     svg fill="none" height="31" viewbox=("0 0 50 31") width="50" xmlns="http://www.w3.org/2000/svg"
@@ -50,26 +43,27 @@
                   .details
                     p.card-text
                       span &#42;&#42;&#42;&#42; &#42;&#42;&#42;&#42; &#42;&#42;&#42;&#42;&nbsp;
-                      span 3214
-                    p.card-text Expires 3/2035
+                      span #{payment_method&.instrument&.last_digits}
+                    p.card-text Expires #{payment_method&.instrument&.expiry_month}/#{payment_method&.instrument&.expiry_year}
                 .btn-wrapper
-                  button.white.card-btn type="button" data-toggle="modal" data-target="#update-payment" #{@translation.billing_tab_update.present? ? @translation.billing_tab_update : 'UPDATE CARD'}
+                  button.btn-yellow.card-btn type="button" id="show_edit" data-show="#{(cardtype === "CustomerShopPayAgreement") ? "show_edit_shopify" : "update-payment"}" #{@translation&.billing_tab_update.present? ? @translation&.billing_tab_update : 'UPDATE CARD'}
+                  div#show_edit_shopify.hidden Login to your Shoppay account to edit card ending with #{payment_method&.instrument&.last_digits}
               .address-information
                 .header
-                  h2.card-heading = "#{@customer.first_name.present? ? @customer.first_name : '-'} #{@customer.last_name.present? ? @customer.last_name : '-'}"
+                  h2.card-heading = "#{@customer&.first_name.present? ? @customer&.first_name : '-'} #{@customer&.last_name.present? ? @customer&.last_name : '-'}"
                   / button.edit.card-btn  type="button" data-toggle="modal" data-target="#editAddressModal" #{@translation.billing_tab_edit.present? ? @translation.billing_tab_edit : 'Edit'}
                 .item
                   h3.card-heading #{@translation.billing_tab_phone.present? ? @translation.billing_tab_phone : 'PHONE'}
-                  p.card-text = @customer.phone.present? ? @customer.phone : '-'
+                  p.card-text = @customer&.phone.present? ? @customer&.phone : '-'
                 .item
                   h3card-heading #{@translation.billing_tab_company.present? ? @translation.billing_tab_company : 'COMPANY'}
-                  p.card-text = @customer.company.present? ? @customer.company : '-'
+                  p.card-text = @customer&.company.present? ? @customer&.company : '-'
                 .item
                   h3card-heading #{@translation.billing_tab_address.present? ? @translation.billing_tab_address : 'ADDRESS'}
                   p.card-text = billing_address.present? ? billing_address.address1 : '-'
 / = render 'edit_address_modal'
 - if @payment_type == 'SHOPIFY'
-  = render 'update_payment_modal', payment_method: payment_method, billing_address: billing_address
+  = render 'app_proxy/dashboard/update_payment_modal', payment_method: payment_method, billing_address: billing_address
 - elsif @stripe_customer.present?
   = render 'stripe_update_payment_modal', stripe_customer: @stripe_customer, stripe_card_info: @stripe_card_info
 
@@ -112,3 +106,16 @@
         /                                   p #{card.credit_card_company} ending in #{card.credit_card_number[/\d+/]}
         /                                   - if card.respond_to?(:credit_card_expiration_month)
         /                                     p Expires #{card.credit_card_expiration_month}/#{card.credit_card_expiration_year}
+
+javascript: 
+  $("#show_edit").on("click",function(){
+    $("#"+$(this).data("show")).css("display","block")
+  })
+
+  $(".change_subscription_billing_tab").on("change",function(){
+    $.ajax({
+      type: "get",
+      data: "subscription_id="+$(".change_subscription_billing_tab :selected").val()+"&customer=#{params[:customer]}",
+      url: "/a/chargezen/dashboard/get_subscription_payment"
+    })
+  })

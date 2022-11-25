@@ -7,10 +7,10 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   def current_setting
-    return @current_setting if @current_setting.present?
+    return @current_setting if @current_setting&.present?
     @current_setting = current_shop.setting
 
-    if @current_setting.nil?
+    if @current_setting&.nil?
       @current_setting = current_shop.create_setting( payment_retries: 3,
                                                       payment_delay_retries: 1,
                                                       cancel_enabled: true,
