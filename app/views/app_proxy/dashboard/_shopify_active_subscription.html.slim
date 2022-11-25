@@ -40,15 +40,15 @@
                 - when 'delivery_schedule'
                   - if @setting.customer_allowed?('navigation_delivery')
                     = link_to "/a/chargezen/dashboard/upcoming?customer=#{params[:customer]}&subscription_id=#{subscription.node.id}&line_id=#{edge.node.id}&active_subscriptions_count=#{@active_subscriptions.count}&token=#{params[:token]}", class: "btn_inside hide" do
-                      button.btn-yellow.action-btn.modal_btn #{@translation.home_tab_delivery_schedule_btn.present? ? @translation.home_tab_delivery_schedule_btn : 'DELIVERY SCHEDULE'}
+                      button.btn-yellow.action-btn.modal_btn #{@translation&.home_tab_delivery_schedule_btn.present? ? @translation&.home_tab_delivery_schedule_btn : 'DELIVERY SCHEDULE'}
                 - when 'swap_subscription'
                   - if @setting.customer_allowed?('swap_product')
                     button.btn-yellow.action-btn.modal_btn type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#swap-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" SWAP SUBSCRIPTION
                 - when 'edit_subscription'
-                  button.btn-yellow.action-btn.modal_btn data-toggle="modal" data-target="#editSubscriptionModal-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" #{@translation.home_tab_edit_subscription_btn.present? ? @translation.home_tab_edit_subscription_btn : 'Edit Subscription'}
+                  button.btn-yellow.action-btn.modal_btn data-toggle="modal" data-target="#editSubscriptionModal-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" #{@translation&.home_tab_edit_subscription_btn.present? ? @translation&.home_tab_edit_subscription_btn : 'Edit Subscription'}
                 - when 'delay_next_order'
                   - if @setting.customer_allowed?('frequency')
-                    button.delivery-schedule.btn-yellow.action-btn.modal_btn.hide data-toggle="modal" data-target="#delayOrderModal-#{subscription.node.id[/\d+/]}" #{@translation.home_tab_delay_next_order_btn.present? ? @translation.home_tab_delay_next_order_btn : 'DELAY NEXT ORDER'}
+                    button.delivery-schedule.btn-yellow.action-btn.modal_btn.hide data-toggle="modal" data-target="#delayOrderModal-#{subscription.node.id[/\d+/]}" #{@translation&.home_tab_delay_next_order_btn.present? ? @translation&.home_tab_delay_next_order_btn : 'DELAY NEXT ORDER'}
           - @customer = CustomerSubscriptionContract.find(local_id)
           div.change_delivery_day
             h4 Change Delivery Day:
@@ -66,7 +66,7 @@
           form action="#{action_subscription_contract_path(:update_quantity, subscription.node.id[/\d+/])}" method='post' data-remote=true enctype="multipart/form-data"
             .quantity-field
               div.hide
-                span.label.active-text #{@translation.home_tab_quantity.present? ? @translation.home_tab_quantity : 'Quantity'}:
+                span.label.active-text #{@translation&.home_tab_quantity.present? ? @translation&.home_tab_quantity : 'Quantity'}:
                 span.btn-wrapper
                   button.minus-quantity type="button"
                     svg fill="none" height="8" viewbox=("0 0 7 2") width="8" xmlns="http://www.w3.org/2000/svg"
@@ -90,42 +90,42 @@
           form action="" method='post' data-remote=true enctype="multipart/form-data"
             .quantity-field
               div.hide
-                span.label.active-text #{@translation.home_tab_quantity.present? ? @translation.home_tab_quantity : 'Quantity'}:
+                span.label.active-text #{@translation&.home_tab_quantity.present? ? @translation&.home_tab_quantity : 'Quantity'}:
                 span.label.active-text= edge.node.quantity
       .slide-down
         .item
-          p #{@translation.home_tab_start_date.present? ? @translation.home_tab_start_date : 'start date'}
+          p #{@translation&.home_tab_start_date.present? ? @translation&.home_tab_start_date : 'start date'}
           p
             = DateTime.parse(subscription.node.created_at).strftime("%a, %B %e")
         .item
-          p #{@translation.home_tab_est_next_delivery.present? ? @translation.home_tab_est_next_delivery : 'est. next delivery'}
+          p #{@translation&.home_tab_est_next_delivery.present? ? @translation&.home_tab_est_next_delivery : 'est. next delivery'}
           p
             = (expected_delivery_date(subscription&.node&.id[/\d+/], subscription&.node&.orders&.edges&.first&.node&.id[/\d+/] ))
         .item
-          p #{@translation.home_tab_last_card_charge.present? ? @translation.home_tab_last_card_charge : 'last card charge'}
+          p #{@translation&.home_tab_last_card_charge.present? ? @translation&.home_tab_last_card_charge : 'last card charge'}
           p -
         .item
-          p #{@translation.home_tab_quantity.present? ? @translation.home_tab_quantity : 'quantity'}
+          p #{@translation&.home_tab_quantity.present? ? @translation&.home_tab_quantity : 'quantity'}
           p
             = edge.node.quantity
     - if @setting.customer_allowed?('shiping_address')
       .delivery-address
         div
-          p.text.active-text #{@translation.home_tab_delivery_address.present? ? @translation.home_tab_delivery_address : 'DELIVERY ADDRESS'}
+          p.text.active-text #{@translation&.home_tab_delivery_address.present? ? @translation&.home_tab_delivery_address : 'DELIVERY ADDRESS'}
           h3.active-text
             = subscription.node.delivery_method.address.address1
           div.weekly-account
           a.add_weekly_box.promo-tag-II.hide href="#"
             - if @setting.promo_tagline2_content.present?
               span #{@setting.promo_tagline2_content}
-            - elsif @translation.home_tab_apply_discount.present?
-              span #{@translation.home_tab_apply_discount}
+            - elsif @translation&.home_tab_apply_discount.present?
+              span #{@translation&.home_tab_apply_discount}
             - else
               'Apply Discount'
             svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg"
               path d=("M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z") fill="black" /
         div
-          button.edit-address.btn-yellow data-toggle="modal" data-target="#deliveryEditModal" #{@translation.home_tab_edit_btn.present? ? @translation.home_tab_edit_btn : 'EDIT'}
+          button.edit-address.btn-yellow data-toggle="modal" data-target="#deliveryEditModal" #{@translation&.home_tab_edit_btn.present? ? @translation&.home_tab_edit_btn : 'EDIT'}
       = render 'edit_delivery_address_modal', subscription: subscription.node
   - line_products = subscription.node.lines.edges.map{|edge| edge.node.product_id[/\d+/]}
   - campaigns = UpsellCampaign.joins(:upsell_campaign_group).where(upsell_campaign_groups: {status: :publish}).where("rule_customer = 't' AND rule_customer_value ->> 'sellingPlanId' = ?", selling_plan_id).select("product_offer AS product_offer, offer_title, button_text_accept, show_offer_title")
@@ -140,8 +140,8 @@
         - if campaigns.first.show_offer_title
           - if campaigns.first.offer_title.present?
             = campaigns.first.offer_title
-          - elsif @translation.upsell_title.present?
-            = @translation.upsell_title
+          - elsif @translation&.upsell_title.present?
+            = @translation&.upsell_title
           - else
             'Hey there! There's is an offer for you!'
       .owl-carousel.owl-theme.account-carousel
@@ -166,7 +166,7 @@
                       input name="variant_id" type="radio" value="#{variant.id}"
                     = "#{variant.title} (#{number_to_currency variant.price})"
               .btn-wrapper
-                - btn_text = campaigns.first.button_text_accept.present? ? campaigns.first.button_text_accept : (@translation.home_tab_add_subscription.present? ? @translation.home_tab_add_subscription : 'Add')
+                - btn_text = campaigns.first.button_text_accept.present? ? campaigns.first.button_text_accept : (@translation&.home_tab_add_subscription.present? ? @translation&.home_tab_add_subscription : 'Add')
                 button.btn-variant type="button"
                   = btn_text
               .btn-wrapper

@@ -13,14 +13,14 @@
               .Polaris-Header-Title__TitleAndSubtitleWrapper
                 .Polaris-Header-Title
                   h2.Polaris-DisplayText.main-heading
-                    - if @translation.delivery_tab_my_next_order.present?
-                      span.Polaris-TextStyle--variationStrong #{@translation.delivery_tab_my_next_order}
+                    - if @translation&.delivery_tab_my_next_order.present?
+                      span.Polaris-TextStyle--variationStrong #{@translation&.delivery_tab_my_next_order}
                     - else
                       span.Polaris-TextStyle--variationStrong MY&nbsp;
                       span.Polaris-TextStyle--variationStrong style="color: #000000" NEXT
                       span.Polaris-TextStyle--variationStrong &nbsp;ORDER
             div.notification-banner
-              p.Polaris-Heading #{@translation.delivery_tab_no_subscriptions_found.present? ? @translation.delivery_tab_no_subscriptions_found : 'No subscription have been found for your account'}
+              p.Polaris-Heading #{@translation&.delivery_tab_no_subscriptions_found.present? ? @translation&.delivery_tab_no_subscriptions_found : 'No subscription have been found for your account'}
         - else
           - if params[:subscription_id].present?
             - @active_subscriptions = (@active_subscriptions.select{|subscription| subscription.node.id == params[:subscription_id] } rescue @active_subscriptions.select{|subscription| subscription.id == params[:subscription_id].to_i })
@@ -29,13 +29,13 @@
               .Polaris-Header-Title__TitleAndSubtitleWrapper
                 .Polaris-Header-Title
                   h2.Polaris-DisplayText
-                    - if @translation.delivery_tab_my_next_order.present?
-                      span.Polaris-TextStyle--variationStrong #{@translation.delivery_tab_my_next_order}
+                    - if @translation&.delivery_tab_my_next_order.present?
+                      span.Polaris-TextStyle--variationStrong #{@translation&.delivery_tab_my_next_order}
                     - else
                       span.Polaris-TextStyle--variationStrong MY&nbsp;
                       span.Polaris-TextStyle--variationStrong style="color: #000000" NEXT
                       span.Polaris-TextStyle--variationStrong &nbsp;ORDER
-            - @active_subscriptions.each do |subscription|
+            - @active_subscriptions&.each do |subscription|
               - if (subscription.api_source == 'stripe' rescue false)
                 - next_shiping_date = Time.at(subscription.api_data['billing_cycle_anchor'])
                 - while next_shiping_date < Time.now
@@ -46,23 +46,23 @@
                     h2.delivery-heading
                       = next_shiping_date.strftime("%a, %B %e")
                     p.delivery-text
-                      span #{@translation.delivery_tab_est_delivery.present? ? @translation.delivery_tab_est_delivery : 'EST DELIVERY'}&nbsp;
+                      span #{@translation&.delivery_tab_est_delivery.present? ? @translation&.delivery_tab_est_delivery : 'EST DELIVERY'}&nbsp;
                       span.blue
                         = (next_shiping_date.to_date + 4.days).strftime("%a, %B %e")
                   .grid
                     .item
-                      h2.delivery-heading #{@translation.delivery_tab_order_product.present? ? @translation.delivery_tab_order_product : 'ORDER PRODUCT'}
+                      h2.delivery-heading #{@translation&.delivery_tab_order_product.present? ? @translation&.delivery_tab_order_product : 'ORDER PRODUCT'}
                       p.delivery-text
                         = "#{subscription.import_data['product_title']} #{subscription.import_data['variant_title']}"
                     .item
-                      h2.delivery-heading #{@translation.delivery_tab_order_address.present? ? @translation.delivery_tab_order_address : 'ORDER ADDRESS'}
+                      h2.delivery-heading #{@translation&.delivery_tab_order_address.present? ? @translation&.delivery_tab_order_address : 'ORDER ADDRESS'}
                       p.delivery-text
                         = subscription.import_data['address1']
                     - if @setting.customer_allowed?('shipment')
                       .item
                         .btn-wrapper
                           = link_to action_subscription_contract_path(:skip_schedule, subscription.id, "billing_date=#{next_shiping_date}&billing_interval=#{subscription.api_data['items']['data'][0]['price']['recurring']['interval']}&billing_interval_count=#{subscription.api_data['items']['data'][0]['price']['recurring']['interval_count']}&token=#{params[:token]}"), class: 'btn-link', remote: true, method: :post do
-                            button type="button" #{@translation.delivery_tab_skip.present? ? @translation.delivery_tab_skip : 'SKIP'}
+                            button type="button" #{@translation&.delivery_tab_skip.present? ? @translation&.delivery_tab_skip : 'SKIP'}
               - else
                 - next_shiping_date = get_next_shipping_date(subscription.node, @current_shop)
                 - subscription_id = subscription.node.id[/\d+/]
@@ -74,35 +74,35 @@
                         h2.delivery-heading
                           = next_shiping_date.strftime("%a, %B %e")
                         p.delivery-text
-                          span #{@translation.delivery_tab_est_delivery.present? ? @translation.delivery_tab_est_delivery : 'EST DELIVERY'}&nbsp;
+                          span #{@translation&.delivery_tab_est_delivery.present? ? @translation&.delivery_tab_est_delivery : 'EST DELIVERY'}&nbsp;
                           span.blue
                             = (next_shiping_date.to_date + 4.days).strftime("%a, %B %e")
                       .grid
                         .item
-                          h2.delivery-heading #{@translation.delivery_tab_order_product.present? ? @translation.delivery_tab_order_product : 'ORDER PRODUCT'}
+                          h2.delivery-heading #{@translation&.delivery_tab_order_product.present? ? @translation&.delivery_tab_order_product : 'ORDER PRODUCT'}
                           p.delivery-text
                             = edge.node.title
                         .item
-                          h2.delivery-heading #{@translation.delivery_tab_order_address.present? ? @translation.delivery_tab_order_address : 'ORDER ADDRESS'}
+                          h2.delivery-heading #{@translation&.delivery_tab_order_address.present? ? @translation&.delivery_tab_order_address : 'ORDER ADDRESS'}
                           p.delivery-text
                             = subscription.node.delivery_method.address.address1
                         - if @setting.customer_allowed?('shipment')
                           .item
                             .btn-wrapper
                               = link_to action_subscription_contract_path(:skip_schedule, subscription.node.id[/\d+/], "billing_date=#{next_shiping_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}&token=#{params[:token]}"), class: 'btn-link', remote: true, method: :post do
-                                button type="button" #{@translation.delivery_tab_skip.present? ? @translation.delivery_tab_skip : 'SKIP'}
+                                button type="button" #{@translation&.delivery_tab_skip.present? ? @translation&.delivery_tab_skip : 'SKIP'}
             - if @active_subscriptions.present? && @active_subscriptions.any? {|sub| sub.node.lines.edges.count == 1 rescue false }
               div
                 .Polaris-Header-Title__TitleAndSubtitleWrapper
                   .Polaris-Header-Title
                     h2.delivery-heading.Polaris-DisplayText
-                      - if @translation.delivery_tab_my_scheduled_order.present?
-                        span.Polaris-TextStyle--variationStrong #{@translation.delivery_tab_my_scheduled_order}
+                      - if @translation&.delivery_tab_my_scheduled_order.present?
+                        span.Polaris-TextStyle--variationStrong #{@translation&.delivery_tab_my_scheduled_order}
                       - else
                         span.Polaris-TextStyle--variationStrong MY&nbsp;
                         span.Polaris-TextStyle--variationStrong style="color: #000000" SCHEDULED
                         span.Polaris-TextStyle--variationStrong &nbsp;ORDERS
-            - @active_subscriptions.each do |subscription|
+            - @active_subscriptions&.each do |subscription|
               - if (subscription.api_source == 'stripe' rescue false)
                 - next_shiping_date = Time.at(subscription.api_data['billing_cycle_anchor'])
                 - while next_shiping_date < Time.now
@@ -124,46 +124,47 @@
                           h2.delivery-heading
                             = upcoming_date.to_date.strftime("%a, %B %e")
                           p.delivery-text
-                            span #{@translation.delivery_tab_est_delivery.present? ? @translation.delivery_tab_est_delivery : 'EST DELIVERY'}&nbsp;
+                            span #{@translation&.delivery_tab_est_delivery.present? ? @translation&.delivery_tab_est_delivery : 'EST DELIVERY'}&nbsp;
                             span.blue
                               = upcoming_date.to_date.strftime("%a, %B %e")
                         .grid
                           .item
-                            h2.delivery-heading #{@translation.delivery_tab_order_product.present? ? @translation.delivery_tab_order_product : 'ORDER PRODUCT'}
+                            h2.delivery-heading #{@translation&.delivery_tab_order_product.present? ? @translation&.delivery_tab_order_product : 'ORDER PRODUCT'}
                             p.delivery-text
                               = product.title
                           .item
-                            h2.delivery-heading #{@translation.delivery_tab_order_address.present? ? @translation.delivery_tab_order_address : 'ORDER ADDRESS'}
+                            h2.delivery-heading #{@translation&.delivery_tab_order_address.present? ? @translation&.delivery_tab_order_address : 'ORDER ADDRESS'}
                             p.delivery-text
                               = subscription.node.delivery_method.address.address1
                           .item
                             .btn-wrapper
                               = link_to action_subscription_contract_path(:skip_schedule, subscription.node.id[/\d+/], "billing_date=#{upcoming_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}&token=#{params[:token]}&token=#{params[:token]}"), class: 'btn-link', remote: true, method: :post do
-                                button.delivery-btn type="button" #{@translation.delivery_tab_skip.present? ? @translation.delivery_tab_skip : 'SKIP'}
+                                button.delivery-btn type="button" #{@translation&.delivery_tab_skip.present? ? @translation&.delivery_tab_skip : 'SKIP'}
                   - else
+                    - abort("fsdfsd")
                     - (1..3).each do |index|
                       .delivery-details-tile
                         .date-details
                           h2.delivery-heading
                             = (next_shiping_date.to_date + (index * billing_policy.interval_count).send(billing_policy.interval.downcase)).strftime("%a, %B %e")
                           p.delivery-text
-                            span #{@translation.delivery_tab_est_delivery.present? ? @translation.delivery_tab_est_delivery : 'EST DELIVERY'}&nbsp;
+                            span #{@translation&.delivery_tab_est_delivery.present? ? @translation&.delivery_tab_est_delivery : 'EST DELIVERY'}&nbsp;
                             span.blue
                               - billing_date = next_shiping_date.to_date + (index * billing_policy.interval_count).send(billing_policy.interval.downcase)
                               = billing_date.strftime("%a, %B %e")
                         .grid
                           .item
-                            h2.delivery-heading #{@translation.delivery_tab_order_product.present? ? @translation.delivery_tab_order_product : 'ORDER PRODUCT'}
+                            h2.delivery-heading #{@translation&.delivery_tab_order_product.present? ? @translation&.delivery_tab_order_product : 'ORDER PRODUCT'}
                             p.delivery-text
                               = product.title
                           .item
-                            h2.delivery-heading #{@translation.delivery_tab_order_address.present? ? @translation.delivery_tab_order_address : 'ORDER ADDRESS'}
+                            h2.delivery-heading #{@translation&.delivery_tab_order_address.present? ? @translation&.delivery_tab_order_address : 'ORDER ADDRESS'}
                             p.delivery-text
                               = subscription.node.delivery_method.address.address1
                           .item
                             .btn-wrapper
                               = link_to action_subscription_contract_path(:skip_schedule, subscription.node.id[/\d+/], "billing_date=#{billing_date}&billing_interval=#{billing_policy.interval}&billing_interval_count=#{billing_policy.interval_count}&token=#{params[:token]}"), class: 'btn-link', remote: true, method: :post do
-                                button.delivery-btn type="button" #{@translation.delivery_tab_skip.present? ? @translation.delivery_tab_skip : 'SKIP'}
+                                button.delivery-btn type="button" #{@translation&.delivery_tab_skip.present? ? @translation&.delivery_tab_skip : 'SKIP'}
 
 javascript:
   $('.btn-link').click(function (event) {

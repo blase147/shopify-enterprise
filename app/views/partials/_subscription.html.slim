@@ -5,14 +5,14 @@
       div
         p.Polaris-DisplayText.Polaris-DisplayText--sizeMedium YOUR SUBSCRIPTION
       div.notification-banner
-        p.Polaris-Heading #{@translation.home_tab_no_subscriptions_found.present? ? @translation.home_tab_no_subscriptions_found : 'No subscription have been found for your account'}
+        p.Polaris-Heading #{@translation&.home_tab_no_subscriptions_found.present? ? @translation&.home_tab_no_subscriptions_found : 'No subscription have been found for your account'}
   - else
     div.content-wrapper
       - if !params[:status].present? || (params[:status].present? && params[:status] == 'active')
         div.display-text
           p
-            - if @translation.home_tab_active_subscriptions.present?
-              span #{@translation.home_tab_active_subscriptions}
+            - if @translation&.home_tab_active_subscriptions.present?
+              span #{@translation&.home_tab_active_subscriptions}
             - else
               span MY
               span.active ACTIVE
@@ -26,8 +26,8 @@
         - if ((@cancelled_subscriptions.count rescue 0 + @cancelled_line_items.count rescue 0) > 0) || params[:status] == 'cancelled'
           div.display-text.cancel-text
             p
-              - if @translation.cancelled_tab_cancelled_subscriptions.present?
-                span #{@translation.cancelled_tab_cancelled_subscriptions}
+              - if @translation&.cancelled_tab_cancelled_subscriptions.present?
+                span #{@translation&.cancelled_tab_cancelled_subscriptions}
               - else
                 span MY
                 span.canceled CANCELLED

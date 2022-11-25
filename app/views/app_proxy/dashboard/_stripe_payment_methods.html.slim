@@ -32,7 +32,7 @@ div.content-wrapper
         .header
           h2.card-heading = "#{@stripe_customer.name.present? ? @stripe_customer.name : '-'}"
         .item
-          h3.card-heading #{@translation.billing_tab_phone.present? ? @translation.billing_tab_phone : 'PHONE'}
+          h3.card-heading #{@translation&.billing_tab_phone.present? ? @translation&.billing_tab_phone : 'PHONE'}
           p.card-text = @stripe_customer.phone.present? ? @stripe_customer.phone : '-'
     - else
       .details

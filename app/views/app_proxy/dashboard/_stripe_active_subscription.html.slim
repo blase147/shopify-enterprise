@@ -35,15 +35,15 @@
             - when 'delivery_schedule'
               - if @setting.customer_allowed?('navigation_delivery')
                 = link_to "/a/chargezen/dashboard/upcoming?customer=#{params[:customer]}&subscription_id=#{subscription.id}&line_id=#{subscription.id}&active_subscriptions_count=#{@active_subscriptions.count}&token=#{params[:token]}" do
-                  button.white-btn.action-btn.modal_btn #{@translation.home_tab_delivery_schedule_btn.present? ? @translation.home_tab_delivery_schedule_btn : 'DELIVERY SCHEDULE'}
+                  button.white-btn.action-btn.modal_btn #{@translation&.home_tab_delivery_schedule_btn.present? ? @translation&.home_tab_delivery_schedule_btn : 'DELIVERY SCHEDULE'}
             - when 'swap_subscription'
               - if @setting.customer_allowed?('swap_product')
                 button.white-btn.action-btn.modal_btn type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#swap-#{subscription.id}" SWAP SUBSCRIPTION
             - when 'edit_subscription'
-              button.edit-subscription.white-btn.action-btn.modal_btn data-toggle="modal" data-target="#editSubscriptionModal-#{subscription.id}" #{@translation.home_tab_edit_subscription_btn.present? ? @translation.home_tab_edit_subscription_btn : 'Edit Subscription'}
+              button.edit-subscription.white-btn.action-btn.modal_btn data-toggle="modal" data-target="#editSubscriptionModal-#{subscription.id}" #{@translation&.home_tab_edit_subscription_btn.present? ? @translation&.home_tab_edit_subscription_btn : 'Edit Subscription'}
             - when 'delay_next_order'
               - if @setting.customer_allowed?('frequency')
-                button.delivery-schedule.white-btn.action-btn.modal_btn data-toggle="modal" data-target="#delayOrderModal-#{subscription.id}" #{@translation.home_tab_delay_next_order_btn.present? ? @translation.home_tab_delay_next_order_btn : 'DELAY NEXT ORDER'}
+                button.delivery-schedule.white-btn.action-btn.modal_btn data-toggle="modal" data-target="#delayOrderModal-#{subscription.id}" #{@translation&.home_tab_delay_next_order_btn.present? ? @translation&.home_tab_delay_next_order_btn : 'DELAY NEXT ORDER'}
         / = render 'delay_order_modal', subscription: subscription.node, next_billing_date: next_billing_date
         = render 'app_proxy/dashboard/stripe_edit_subscription_modal', subscription: subscription, product: product, setting: @setting
         - if @setting.customer_allowed?('swap_product')
@@ -56,7 +56,7 @@
         form action="#{action_subscription_contract_path(:update_quantity, subscription.id)}" method='post' data-remote=true enctype="multipart/form-data"
           .quantity-field
             div
-              span.label.active-text #{@translation.home_tab_quantity.present? ? @translation.home_tab_quantity : 'Quantity'}:
+              span.label.active-text #{@translation&.home_tab_quantity.present? ? @translation&.home_tab_quantity : 'Quantity'}:
               span.btn-wrapper
                 button.minus-quantity type="button"
                   svg fill="none" height="8" viewbox=("0 0 7 2") width="8" xmlns="http://www.w3.org/2000/svg"
@@ -80,40 +80,40 @@
         form action="" method='post' data-remote=true enctype="multipart/form-data"
           .quantity-field
             div
-              span.label.active-text #{@translation.home_tab_quantity.present? ? @translation.home_tab_quantity : 'Quantity'}:
+              span.label.active-text #{@translation&.home_tab_quantity.present? ? @translation&.home_tab_quantity : 'Quantity'}:
               span.label.active-text= subscription.import_data['quantity']
     .slide-down
       .item
-        p #{@translation.home_tab_start_date.present? ? @translation.home_tab_start_date : 'start date'}
+        p #{@translation&.home_tab_start_date.present? ? @translation&.home_tab_start_date : 'start date'}
         p
           = subscription.created_at.strftime("%a, %B %e")
       .item
-        p #{@translation.home_tab_est_next_delivery.present? ? @translation.home_tab_est_next_delivery : 'est. next delivery'}
+        p #{@translation&.home_tab_est_next_delivery.present? ? @translation&.home_tab_est_next_delivery : 'est. next delivery'}
         p
           = (Time.at(subscription.api_data['billing_cycle_anchor']) + 4.days).strftime("%a, %B %e")
       .item
-        p #{@translation.home_tab_last_card_charge.present? ? @translation.home_tab_last_card_charge : 'last card charge'}
+        p #{@translation&.home_tab_last_card_charge.present? ? @translation&.home_tab_last_card_charge : 'last card charge'}
         p -
       .item
-        p #{@translation.home_tab_quantity.present? ? @translation.home_tab_quantity : 'quantity'}
+        p #{@translation&.home_tab_quantity.present? ? @translation&.home_tab_quantity : 'quantity'}
         p
           = subscription.import_data['quantity']
     - if @setting.customer_allowed?('shiping_address')
       .delivery-address
         div
-          p.text.active-text #{@translation.home_tab_delivery_address.present? ? @translation.home_tab_delivery_address : 'DELIVERY ADDRESS'}
+          p.text.active-text #{@translation&.home_tab_delivery_address.present? ? @translation&.home_tab_delivery_address : 'DELIVERY ADDRESS'}
           h3.active-text
             = subscription.import_data['address1']
           div.weekly-account
           a.add_weekly_box.promo-tag-II href="#"
             - if @setting.promo_tagline2_content.present?
               span #{@setting.promo_tagline2_content}
-            - elsif @translation.home_tab_apply_discount.present?
-              span #{@translation.home_tab_apply_discount}
+            - elsif @translation&.home_tab_apply_discount.present?
+              span #{@translation&.home_tab_apply_discount}
             - else
               'Apply Discount'
             svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg"
               path d=("M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z") fill="black" /
         div
-          button.edit-address data-toggle="modal" data-target="#deliveryEditModal" #{@translation.home_tab_edit_btn.present? ? @translation.home_tab_edit_btn : 'EDIT'}
+          button.edit-address data-toggle="modal" data-target="#deliveryEditModal" #{@translation&.home_tab_edit_btn.present? ? @translation&.home_tab_edit_btn : 'EDIT'}
       / = render 'edit_delivery_address_modal', subscription: subscription.node
