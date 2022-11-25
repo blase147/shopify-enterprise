@@ -1,4 +1,4 @@
-.Polaris-Modal id=("cancel-#{line_item.id.split("gid://shopify/SubscriptionLine/")[1]}") style="display: #{action_by=="customer" ? "none" : ""}"
+.Polaris-Modal id=("cancel-#{line_item.id.split("gid://shopify/SubscriptionLine/")[1]}") style="display: #{current_setting&.portal_theme.present? ? "none" : ""}" class="#{current_setting&.portal_theme.present? ? "" : "hidden"}"
   .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"
     .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1"
       .Polaris-Modal-Dialog__Modal.Polaris-Modal-Dialog--sizeLarge.cancel-subscription-modal-outer
@@ -7,8 +7,8 @@
             .header
               div
                 h2
-                  - if @translation.cancelled_reasons_cancel_subscription.present?
-                    span #{@translation.cancelled_reasons_cancel_subscription.gsub('{Product}', line_item.title)}
+                  - if @translation&.cancelled_reasons_cancel_subscription.present?
+                    span #{@translation&.cancelled_reasons_cancel_subscription.gsub('{Product}', line_item.title)}
                   - else
                     span Cancel&nbsp;
                     span.blue
@@ -32,9 +32,9 @@
                       br
                 .btn-wrapper
                   button.btn-cancel type="submit"
-                    span.cancel-text #{@translation.cancelled_reasons_cancel.present? ? @translation.cancelled_reasons_cancel : 'CANCEL ANYWAY'}
+                    span.cancel-text #{@translation&.cancelled_reasons_cancel.present? ? @translation&.cancelled_reasons_cancel : 'CANCEL ANYWAY'}
                     span
-                    button.btn-keep type="button" aria-hidden="true" tabindex="-1" data-action='close' #{@translation.cancelled_reasons_keep_subscription.present? ? @translation.cancelled_reasons_keep_subscription : 'KEEP SUBSCRIPTION'}
+                    button.btn-keep type="button" aria-hidden="true" tabindex="-1" data-action='close' #{@translation&.cancelled_reasons_keep_subscription.present? ? @translation&.cancelled_reasons_keep_subscription : 'KEEP SUBSCRIPTION'}
                     svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg"
                       path d=("M14.5148 0.514648L13.6239 1.40555L17.5882 5.36991H0V6.62985H17.5882L13.6239 10.5942L14.5148 11.4851L20 5.99984L14.5148 0.514648Z") fill="white" /
 

@@ -1,4 +1,4 @@
-.Polaris-Modal id=("swap-#{subscription.id}") style="display: none"
+.Polaris-Modal id=("swap-#{subscription.id}") style="display: #{current_setting&.portal_theme.present? ? "none" : ""}" class="#{current_setting&.portal_theme.present? ? "" : "hidden"}"
   .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"
     .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1"
       .Polaris-Modal-Dialog__Modal.Polaris-Modal-Dialog--sizeLarge

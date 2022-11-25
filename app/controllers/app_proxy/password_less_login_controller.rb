@@ -1,6 +1,6 @@
 class AppProxy::PasswordLessLoginController < AppProxyController
     def index
-        render content_type: 'application/liquid', layout: "#{current_setting.portal_theme}liquid_app_proxy"
+        render content_type: 'application/liquid', layout: "#{current_setting&.portal_theme}liquid_app_proxy"
     end
 
     def send_otp_passwordless_login

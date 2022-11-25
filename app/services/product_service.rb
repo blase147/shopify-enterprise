@@ -46,6 +46,7 @@ class ProductService < GraphqlService
           node {
             id
             title
+            requiresSellingPlan
             sellingPlanGroupCount
             images (first: 1) {
               edges {

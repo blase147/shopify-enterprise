@@ -1,4 +1,4 @@
-.Polaris-Modal#deliveryEditModal style="display:none"
+.Polaris-Modal#deliveryEditModal style="display: #{current_setting&.portal_theme.present? ? "none" : ""}" class="#{current_setting&.portal_theme.present? ? "" : "hidden"}"
   .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"
     = simple_form_for :address, url: "#{action_subscription_contract_path(:update_shiping_detail, subscription.id[/\d+/])}", method: :post, remote: true do |f|
       .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1"
@@ -10,51 +10,51 @@
                 .modal-fields-wrapper
                   .group
                     p
-                      span #{@translation.add_address_popup_first_name.present? ? @translation.add_address_popup_first_name : 'FIRST NAME'}
+                      span #{@translation&.add_address_popup_first_name.present? ? @translation&.add_address_popup_first_name : 'FIRST NAME'}
                       span.red *
                     = f.input :firstName, input_html: { value: subscription.delivery_method.address.first_name  }, label: false, required: true
                   .group
                     p
-                      span #{@translation.add_address_popup_last_name.present? ? @translation.add_address_popup_last_name : 'LAST NAME'}
+                      span #{@translation&.add_address_popup_last_name.present? ? @translation&.add_address_popup_last_name : 'LAST NAME'}
                       span.red *
                     = f.input :lastName, input_html: { value: subscription.delivery_method.address.last_name  }, label: false, required: true
                   .group
                     p
-                      span #{@translation.add_address_popup_address1.present? ? @translation.add_address_popup_address1 : 'ADDRESS 1'}
+                      span #{@translation&.add_address_popup_address1.present? ? @translation&.add_address_popup_address1 : 'ADDRESS 1'}
                       span.red *
                     = f.input :address1, label: false, input_html: { value: subscription.delivery_method.address.address1 }, required: true
                   .group
-                    p #{@translation.add_address_popup_address2.present? ? @translation.add_address_popup_address2 : 'ADDRESS 2'}
+                    p #{@translation&.add_address_popup_address2.present? ? @translation&.add_address_popup_address2 : 'ADDRESS 2'}
                     = f.input :address2, input_html: { value: subscription.delivery_method.address.address2  }, label: false, required: false
                   .group
-                    p #{@translation.add_address_popup_company.present? ? @translation.add_address_popup_company : 'COMPANY'}
+                    p #{@translation&.add_address_popup_company.present? ? @translation&.add_address_popup_company : 'COMPANY'}
                     = f.input :company, input_html: { value: subscription.delivery_method.address.company  }, label: false, required: false
                   .group
                     p
-                      span #{@translation.add_address_popup_city.present? ? @translation.add_address_popup_city : 'CITY'}
+                      span #{@translation&.add_address_popup_city.present? ? @translation&.add_address_popup_city : 'CITY'}
                       span.red *
                     = f.input :city, label: false, input_html: { value: subscription.delivery_method.address.city  }, required: true
                   .group
                     p
-                      span #{@translation.add_address_popup_country.present? ? @translation.add_address_popup_country : 'COUNTRY'}
+                      span #{@translation&.add_address_popup_country.present? ? @translation&.add_address_popup_country : 'COUNTRY'}
                       span.red *
                     = f.input :country, as: :select, collection: [['United States', 'United States']], label: false, required: true, selected: subscription.delivery_method.address.country
                   .group
                     p
-                      span #{@translation.add_address_popup_zip.present? ? @translation.add_address_popup_zip : 'ZIP/POSTAL CODE'}
+                      span #{@translation&.add_address_popup_zip.present? ? @translation&.add_address_popup_zip : 'ZIP/POSTAL CODE'}
                       span.red *
                     = f.input :zip, label: false, input_html: { value: subscription.delivery_method.address.zip  }, required: true
                   .group
-                    p #{@translation.add_address_popup_state.present? ? @translation.add_address_popup_state : 'STATE/PROVINCE'}
+                    p #{@translation&.add_address_popup_state.present? ? @translation&.add_address_popup_state : 'STATE/PROVINCE'}
                     = f.input :province, input_html: { value: subscription.delivery_method.address.province  }, label: false, required: false
                   .group
-                    p #{@translation.add_address_popup_phone.present? ? @translation.add_address_popup_phone : 'PHONE'}
+                    p #{@translation&.add_address_popup_phone.present? ? @translation&.add_address_popup_phone : 'PHONE'}
                     = f.input :phone, input_html: { value: subscription.delivery_method.address.phone  }, label: false, required: false
 
           .Polaris-Modal-Footer
             button.Polaris-Button.mr-10[type="button" aria-hidden="true" tabindex="-1" data-action='close' data-dismiss="modal"]
               | Cancel
 
-            = p_button text: @translation.add_address_popup_update.present? ? @translation.add_address_popup_update : 'Update', type: 'submit'
+            = p_button text: @translation&.add_address_popup_update.present? ? @translation&.add_address_popup_update : 'Update', type: 'submit'
 
   .Polaris-Backdrop

@@ -1,3 +1,4 @@
+- all_contracts = all_contracts(params[:customer])
 div.content-wrapper
   div
     .Polaris-Header-Title__TitleAndSubtitleWrapper
@@ -6,6 +7,7 @@ div.content-wrapper
         span.Polaris-TextStyle--variationStrong MY&nbsp;
         span.Polaris-TextStyle--variationStrong style="color: #000000" BILLING
         span.Polaris-TextStyle--variationStrong &nbsp;INFORMATION
+  = select_tag(:change_subscription, options_for_select(all_contracts&.pluck(:subscription, :shopify_id), :selected=>params[:subscription_id]), {:class => 'change_subscription_billing_tab'})
   .billing-details-tile
     .card-information
       h2.card-heading #{'CARD ON FILE'}
@@ -39,3 +41,15 @@ div.content-wrapper
 
 
 script src="https://js.stripe.com/v3/"
+javascript: 
+  $("#show_edit").on("click",function(){
+    $("#"+$(this).data("show")).css("display","block")
+  })
+
+  $(".change_subscription_billing_tab").on("change",function(){
+    $.ajax({
+      type: "get",
+      data: "subscription_id="+$(".change_subscription_billing_tab :selected").val()+"&customer=#{params[:customer]}",
+      url: "/a/chargezen/dashboard/get_subscription_payment"
+    })
+  })

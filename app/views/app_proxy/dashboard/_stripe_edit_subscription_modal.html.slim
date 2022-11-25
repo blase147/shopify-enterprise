@@ -1,4 +1,4 @@
-.Polaris-Modal id=("editSubscriptionModal-#{subscription.id}") style="display: none"
+.Polaris-Modal id=("editSubscriptionModal-#{subscription.id}") style="display: #{current_setting&.portal_theme.present? ? "none" : ""}" class="#{current_setting&.portal_theme.present? ? "" : "hidden"}"
   .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"
     .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1"
       .Polaris-Modal-Dialog__Modal
@@ -33,7 +33,7 @@
                 - previous_interval = subscription.api_data['items']['data'][0]['price']['recurring']['interval']
                 - disable_upgrade = selling_plan_group.blank? || selling_plan_group.selling_plans.count < 1
                 button class=('upgrade-subscription' + (disable_upgrade ? ' light' : '')) disabled=(disable_upgrade) type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#upgrade-#{subscription.id}" #{@translation.edit_subscription_popup_upgrade_subscription.present? ? @translation.edit_subscription_popup_upgrade_subscription : 'UPGRADE SUBSCRIPTION'}
-                - disable_swap = controller_name == 'dashboard' && !current_setting.customer_allowed?('swap_product')
+                - disable_swap = controller_name == 'dashboard' && !current_setting&.customer_allowed?('swap_product')
                 button class=('swap-subscription' + (disable_swap ? ' light' : '')) disabled=(disable_swap) type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#swap-#{subscription.id}" #{@translation.edit_subscription_popup_swap_subscription.present? ? @translation.edit_subscription_popup_swap_subscription : 'SWAP SUBSCRIPTION'}
                 button.downgrade-subscription.light type="button" DOWNGRADE SUBSCRIPTION
                 button.ask-questions.light type="button" #{@translation.edit_subscription_popup_ask_a_question.present? ? @translation.edit_subscription_popup_ask_a_question : 'ASK A QUESTION'}

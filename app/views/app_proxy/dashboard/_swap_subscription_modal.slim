@@ -1,4 +1,4 @@
-.Polaris-Modal.modal id=("swap-#{line_item.id.split("gid://shopify/SubscriptionLine/")[1]}") style="display: #{action_by=="customer" ? "none" : ""}"
+.Polaris-Modal.modal id=("swap-#{line_item.id.split("gid://shopify/SubscriptionLine/")[1]}") style="display: #{current_setting&.portal_theme.present? ? "none" : ""}" class="#{current_setting&.portal_theme.present? ? "" : "hidden"}"
   .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"
     .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1"
       .Polaris-Modal-Dialog__Modal.Polaris-Modal-Dialog--sizeLarge
@@ -7,8 +7,8 @@
             .header
               div
                 h2
-                  - if @translation.swap_subscription_popup_swap_subscription_to.present?
-                    span #{@translation.swap_subscription_popup_swap_subscription_to.gsub('{Product}', line_item.title)}
+                  - if @translation&.swap_subscription_popup_swap_subscription_to.present?
+                    span #{@translation&.swap_subscription_popup_swap_subscription_to.gsub('{Product}', line_item.title)}
                   - else
                     span Swap&nbsp;
                     span.blue
@@ -47,7 +47,7 @@
                                   input name="variant_id#{index}_#{i}" type="hidden" value="#{variant.node.id}" id="input-#{index}"
                               .btn-wrapper
                                 button type="button" class="submit_swap_form" data-index="#{index}" data-productindex="#{i}" data-contract="-#{subscription.id[/\d+/]}"
-                                  | #{@translation.swap_subscription_popup_swap_subscription_button.present? ? @translation.swap_subscription_popup_swap_subscription_button : 'SWAP SUBSCRIPTION'}
+                                  | #{@translation&.swap_subscription_popup_swap_subscription_button.present? ? @translation&.swap_subscription_popup_swap_subscription_button : 'SWAP SUBSCRIPTION'}
             - else
               p.Polaris-Heading No other subscription products available
 
