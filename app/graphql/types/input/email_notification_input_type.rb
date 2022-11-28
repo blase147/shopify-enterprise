@@ -8,6 +8,7 @@ module Types
         argument :from_email, String, required: false
         argument :email_subject, String, required: false
         argument :email_message, String, required: false
+        argument :design_json, String, required: false
         argument :status, GraphQL::Types::Boolean, required: false
         argument :slug, String, required: false
         argument :__typename, String, required: false
