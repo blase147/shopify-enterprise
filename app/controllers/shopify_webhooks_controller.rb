@@ -114,7 +114,6 @@ class ShopifyWebhooksController < ApplicationController
 
   def customer_payment_method_update
     creating_params = JSON.parse(AddStripeCustomerMigration.find_by_customer_id(params[:customer_id])&.raw_data) rescue nil
-    p creating_params.to_json
     creating_params = creating_params&.deep_symbolize_keys
     if  creating_params.present?
       data = creating_params
@@ -129,7 +128,6 @@ class ShopifyWebhooksController < ApplicationController
   end
 
   private
-  Sidekiq.redis(&:flushdb)
   def get_box_product_ids(line_items)(line_items)
     line_items.each do |item|
       ids = item.properties.find{|p| p.name == "_box_product_ids"}
