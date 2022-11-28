@@ -97,6 +97,7 @@ class CustomerService < GraphqlService
   def get_customer(customer_id)
     id = "gid://shopify/Customer/#{customer_id}"
     result = client.query(client.parse(GET_QUERY), variables: { id: id} )
+    sleep CalculateShopifyWaitTime.calculate_wait_time(result&.extensions["cost"]) if result&.extensions.present?
     result.data.customer
   end
 
