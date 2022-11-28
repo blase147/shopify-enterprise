@@ -1,0 +1,2 @@
+class AddStripeCustomerMigration < ApplicationRecord
+end

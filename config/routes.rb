@@ -163,6 +163,7 @@ Rails.application.routes.draw do
       get :skip_next_billing_date
       post :customer_migration
       get :fetch_customers_from_shopify
+      post :import_customer_migrations
     end
 
     member do
