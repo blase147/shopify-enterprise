@@ -28,6 +28,7 @@ import EmailEditor from 'react-email-editor';
 
 const emailNotificationsDetails = (props) => {
   const emailEditorRef = useRef(null);
+  const [submitForm, setSubmitForm] = useState(false);
 
   const exportHtml = () => {
     emailEditorRef.current.editor.exportHtml((data) => {
@@ -42,6 +43,7 @@ const emailNotificationsDetails = (props) => {
       );
       console.log('exportHtml', html);
     });
+    setSubmitForm(true)
   };
   const onLoad = () => {
     // editor instance is created
@@ -57,6 +59,10 @@ const emailNotificationsDetails = (props) => {
       }
     }
   }
+
+  useEffect(() => {
+    onLoad();
+  }, [values])
 
   const onReady = () => {
     // editor is ready
@@ -130,6 +136,13 @@ const emailNotificationsDetails = (props) => {
     await handleSubmit();
     setSelectedIndex(null);
   };
+
+  useEffect(() => {
+    if (submitForm) {
+      submit();
+      setSubmitForm(false);
+    }
+  }, [submitForm])
   useEffect(() => {
     const contentBlock = htmlToDraft(
       values.emailNotifications[index]?.emailMessage || ''
@@ -278,9 +291,9 @@ const emailNotificationsDetails = (props) => {
                       <div className='email_editor' style={{ overflow: 'auto' }}>
                         <EmailEditor ref={emailEditorRef} onLoad={onLoad} onReady={onReady} />
                       </div>
-                      <div>
+                      {/* <div>
                         <button onClick={exportHtml}>Export HTML</button>
-                      </div>
+                      </div> */}
                       {/* <Editor
                         toolbar={config}
                         editorState={editorState}
@@ -340,7 +353,7 @@ const emailNotificationsDetails = (props) => {
                       <Button primary onClick={() => setSelectedIndex(null)}>
                         Cancel
                       </Button>
-                      <Button onClick={() => submit()}>Save Changes</Button>
+                      <Button onClick={() => exportHtml()}>Save Changes</Button>
                     </ButtonGroup>
                   </Stack.Item>
                 </Stack>
