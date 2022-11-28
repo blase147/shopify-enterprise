@@ -113,8 +113,11 @@ class ShopifyWebhooksController < ApplicationController
   end
 
   def customer_payment_method_update
-    if $creating_params.present? && $creating_params[:customer_id][/\d+/]&.to_i == params[:customer_id]&.to_i
-      data = $creating_params
+    creating_params = JSON.parse(AddStripeCustomerMigration.find_by_customer_id(params[:customer_id])&.raw_data) rescue nil
+    p creating_params.to_json
+    creating_params = creating_params&.deep_symbolize_keys
+    if  creating_params.present?
+      data = creating_params
       data[:data][:payment_method_id] = params[:admin_graphql_api_id] if data.present? && params[:admin_graphql_api_id].present?
       CreateContractWithPaymentMethodRemoteWorker.perform_async(shop_domain,data.to_json) if data.present?
     end
@@ -126,7 +129,7 @@ class ShopifyWebhooksController < ApplicationController
   end
 
   private
-
+  Sidekiq.redis(&:flushdb)
   def get_box_product_ids(line_items)(line_items)
     line_items.each do |item|
       ids = item.properties.find{|p| p.name == "_box_product_ids"}
