@@ -127,6 +127,7 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
           fromEmail
           emailSubject
           emailMessage
+          designJson
           slug
           description
         }
@@ -580,9 +581,8 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                   values,
                   { setSubmitting, setDirty, resetForm, touched }
                 ) => {
-                  delete values.recurringChargeStatus;
-                  delete values.chargeConfirmationLink;
-                  delete values.plan;
+
+                  console.log("values", values);
                   const newValues = {
                     ...values,
                     navigationDelivery:
@@ -603,6 +603,10 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                     pauseSubscription:
                       values.pauseSubscription || 'storeowner_and_customer',
                   };
+                  delete newValues?.recurringChargeStatus;
+                  delete newValues?.chargeConfirmationLink;
+                  delete newValues?.plan;
+                  console.log("newValues", newValues);
 
                   updateSetting({ variables: { input: { params: newValues } } })
                     .then((resp) => {

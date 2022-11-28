@@ -29,7 +29,7 @@ const EmailNotification = (props) => {
     (value) => setSelectedSetting(value),
     []
   );
-  const { values, touched, errors, setFieldValue, handleSubmit, handleBack, setUpdateSetting } =
+  const { values, touched, errors, setFieldValue, handleSubmit, handleBack, setUpdateSetting, setUpdateOneSetting } =
     props;
   const listAdditionalSetting = [
     {
