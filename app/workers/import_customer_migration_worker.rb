@@ -12,7 +12,7 @@ class ImportCustomerMigrationWorker
 
             customer_email = customer_migration[:customer_email]&.strip
 
-            customer = CustomerService.new({shop: Shop.last}).get_customer_email(customer_email) rescue nil
+            customer = CustomerService.new({shop: current_shop}).get_customer_email(customer_email) rescue nil
             @error_logs = "#{customer_email} doesn't exits" if customer.nil?
 
             contracts = CustomerSubscriptionContract.where(email: customer_email)&.pluck(:shopify_id) rescue nil
