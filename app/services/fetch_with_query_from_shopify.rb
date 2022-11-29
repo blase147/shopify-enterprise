@@ -62,11 +62,12 @@ class FetchWithQueryFromShopify < GraphqlService
         { error: ex.message }
     end
 
-    def fetch_sellingplans(id)
+    def fetch_sellingplans(id, selling_plan_id)
         result = client.query(client.parse(GET_SELLINGPLAN), variables: { id: id })
         errors = result.data.selling_plan_group.errors
         raise errors.first.message if errors.present?
-        @selling_plan = result.data.selling_plan_group.selling_plans.edges.first.node
+        @selling_plan = result.data.selling_plan_group.selling_plans.edges.find {|s| s&.node&.id == selling_plan_id&.strip}
+        @selling_plan = @selling_plan&.node
         return @selling_plan 
     rescue Exception => ex
         p ex.message

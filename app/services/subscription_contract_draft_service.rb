@@ -95,7 +95,7 @@ class SubscriptionContractDraftService < GraphqlService
     def initialize(data)
       @data = data["data"]
       @customer_id = data["customer_id"]
-      @selling_plan = FetchWithQueryFromShopify.new.fetch_sellingplans(data["sellingplan"])
+      @selling_plan = FetchWithQueryFromShopify.new.fetch_sellingplans(data["sellingplangroup"], data["sellingplan"])
       @payment_id = data["data"]["payment_method_id"]
     end
   

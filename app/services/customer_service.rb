@@ -90,6 +90,21 @@ class CustomerService < GraphqlService
     }
   GRAPHQL
 
+  GET_CUSTOMER_BY_EMAIL  = <<-GRAPHQL
+    query($email: String) {
+      customers(first: 1, query:$email){
+        edges{
+          node {
+            email
+            id
+            firstName
+            lastName
+          }
+        }
+      }
+    }
+  GRAPHQL
+
   def initialize params
     @shop = params[:shop]
   end
@@ -99,6 +114,13 @@ class CustomerService < GraphqlService
     result = client.query(client.parse(GET_QUERY), variables: { id: id} )
     sleep CalculateShopifyWaitTime.calculate_wait_time(result&.extensions["cost"]) if result&.extensions.present?
     result.data.customer
+  end
+
+  def get_customer_email(email)
+    email = "email:'#{email}'"
+    result = client.query(client.parse(GET_CUSTOMER_BY_EMAIL), variables: { email: email} )
+    sleep CalculateShopifyWaitTime.calculate_wait_time(result&.extensions["cost"]) if result&.extensions.present?
+    return result&.data&.customers&.edges&.first&.node
   end
 
   def update info

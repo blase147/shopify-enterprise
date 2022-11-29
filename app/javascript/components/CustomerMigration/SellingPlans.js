@@ -24,6 +24,7 @@ function SellingPlans({ setSelectedSellingPlan, selectedSellingPlan }) {
         sellingPlans {
           id
           name
+          shopifyId
           intervalType
           intervalCount
           trialIntervalType
@@ -42,12 +43,14 @@ function SellingPlans({ setSelectedSellingPlan, selectedSellingPlan }) {
     }
 
     data?.fetchPlanGroups?.map((planGroup) => {
-        rows.push(
-            [<div className={selectedSellingPlan == planGroup?.shopifyId ? "selected_row" : ''} onClick={() => handleRowClick(planGroup?.shopifyId)}>{planGroup.name}</div>,
-            <div className={selectedSellingPlan == planGroup?.shopifyId ? "selected_row" : ''} onClick={() => handleRowClick(planGroup?.shopifyId)}>{planGroup.billingPeriod}</div>,
-            <div className={selectedSellingPlan == planGroup?.shopifyId ? "selected_row" : ''} onClick={() => handleRowClick(planGroup?.shopifyId)}>{planGroup.price}</div>,
-            <div className={selectedSellingPlan == planGroup?.shopifyId ? "selected_row" : ''} onClick={() => handleRowClick(planGroup?.shopifyId)}>{planGroup.subscriptionModel}</div>,
-            <div className={selectedSellingPlan == planGroup?.shopifyId ? "selected_row" : ''} onClick={() => handleRowClick(planGroup?.shopifyId)}>{planGroup.trialPeriod}</div>])
+        planGroup?.sellingPlans?.map((sellingPlan) => {
+            rows.push(
+                [<div className={selectedSellingPlan == sellingPlan?.shopifyId ? "selected_row" : ''} onClick={() => handleRowClick(sellingPlan?.shopifyId)}>{sellingPlan.name}</div>,
+                <div className={selectedSellingPlan == sellingPlan?.shopifyId ? "selected_row" : ''} onClick={() => handleRowClick(sellingPlan?.shopifyId)}>{planGroup.billingPeriod}</div>,
+                <div className={selectedSellingPlan == sellingPlan?.shopifyId ? "selected_row" : ''} onClick={() => handleRowClick(sellingPlan?.shopifyId)}>{planGroup.price}</div>,
+                <div className={selectedSellingPlan == sellingPlan?.shopifyId ? "selected_row" : ''} onClick={() => handleRowClick(sellingPlan?.shopifyId)}>{planGroup.subscriptionModel}</div>,
+                <div className={selectedSellingPlan == sellingPlan?.shopifyId ? "selected_row" : ''} onClick={() => handleRowClick(sellingPlan?.shopifyId)}>{planGroup.trialPeriod}</div>])
+        })
     })
 
     return (
