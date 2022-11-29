@@ -216,85 +216,83 @@ const emailNotificationsDetails = (props) => {
 
 
   return (
-    <Layout>
-      <div className="noti-detail">
-        <Layout.Section>
-          <div className="container-left">
-            <PreviewEmail previewActive={previewActive} setPreviewActive={setPreviewActive} previewHtml={previewHtml} />
-            <Card>
-              <Card.Section>
-                <Stack vertical>
-                  <Stack.Item>
-                    <div
-                      className="back-btn-container"
-                      onClick={() => setSelectedIndex(null)}
-                    >
-                      <Icon source={CircleLeftMajor} color="base" />
-                      <p>Go Back</p>
-                    </div>
-                  </Stack.Item>
-                  <Stack.Item>
-                    <Heading>{values.emailNotifications[index]?.name}</Heading>
-                  </Stack.Item>
-                  <Stack.Item>
-                    <TextStyle variation="subdued">
-                      {values.emailNotifications[index]?.description}
-                    </TextStyle>
-                  </Stack.Item>
-                  <Stack.Item>
-                    <Heading h4>Email Content</Heading>
-                  </Stack.Item>
-                  <Stack.Item>
-                    <FormLayout>
-                      <TextField
-                        label="From Name"
-                        value={
-                          values.emailNotifications[index]?.fromName
-                            ? values.emailNotifications[index]?.fromName
-                            : ''
-                        }
-                        onChange={(e) =>
-                          setFieldValue(`emailNotifications[${index}].fromName`, e)
-                        }
-                        name="from_name"
-                      />
-                      <TextField
-                        label="From Email"
-                        value={
-                          values.emailNotifications[index]?.fromEmail
-                            ? values.emailNotifications[index]?.fromEmail
-                            : null
-                        }
-                        onChange={(e) =>
-                          setFieldValue(`emailNotifications[${index}].fromEmail`, e)
-                        }
-                        inputMode="email"
-                        name="from_email"
-                      />
-                      <TextField
-                        label="Email Subject"
-                        value={
-                          values.emailNotifications[index]?.emailSubject
-                            ? values.emailNotifications[index]?.emailSubject
-                            : null
-                        }
-                        onChange={(e) =>
-                          setFieldValue(
-                            `emailNotifications[${index}].emailSubject`,
-                            e
-                          )
-                        }
-                        name="email_subject"
-                      />
+    <>
+      <Layout.Section>
+        <PreviewEmail previewActive={previewActive} setPreviewActive={setPreviewActive} previewHtml={previewHtml} />
+        <Card>
+          <Card.Section>
+            <Stack vertical>
+              <Stack.Item>
+                <div
+                  className="back-btn-container"
+                  onClick={() => setSelectedIndex(null)}
+                >
+                  <Icon source={CircleLeftMajor} color="base" />
+                  <p>Go Back</p>
+                </div>
+              </Stack.Item>
+              <Stack.Item>
+                <Heading>{values.emailNotifications[index]?.name}</Heading>
+              </Stack.Item>
+              <Stack.Item>
+                <TextStyle variation="subdued">
+                  {values.emailNotifications[index]?.description}
+                </TextStyle>
+              </Stack.Item>
+              <Stack.Item>
+                <Heading h4>Email Content</Heading>
+              </Stack.Item>
+              <Stack.Item>
+                <FormLayout>
+                  <TextField
+                    label="From Name"
+                    value={
+                      values.emailNotifications[index]?.fromName
+                        ? values.emailNotifications[index]?.fromName
+                        : ''
+                    }
+                    onChange={(e) =>
+                      setFieldValue(`emailNotifications[${index}].fromName`, e)
+                    }
+                    name="from_name"
+                  />
+                  <TextField
+                    label="From Email"
+                    value={
+                      values.emailNotifications[index]?.fromEmail
+                        ? values.emailNotifications[index]?.fromEmail
+                        : null
+                    }
+                    onChange={(e) =>
+                      setFieldValue(`emailNotifications[${index}].fromEmail`, e)
+                    }
+                    inputMode="email"
+                    name="from_email"
+                  />
+                  <TextField
+                    label="Email Subject"
+                    value={
+                      values.emailNotifications[index]?.emailSubject
+                        ? values.emailNotifications[index]?.emailSubject
+                        : null
+                    }
+                    onChange={(e) =>
+                      setFieldValue(
+                        `emailNotifications[${index}].emailSubject`,
+                        e
+                      )
+                    }
+                    name="email_subject"
+                  />
 
-                      <label>Email Message</label>
-                      <div className='email_editor' style={{ overflow: 'auto' }}>
-                        <EmailEditor ref={emailEditorRef} onLoad={onLoad} onReady={onReady} />
-                      </div>
-                      {/* <div>
+                  <label>Email Message</label>
+                  <div className='email_editor' style={{ overflow: 'auto' }}>
+                    <EmailEditor ref={emailEditorRef} onLoad={onLoad} onReady={onReady} />
+                  </div>
+                  {/* <div>
                         <button onClick={exportHtml}>Export HTML</button>
                       </div> */}
-                      {/* <Editor
+                  {/* <Editor
                         toolbar={config}
                         editorState={editorState}
                         defaultContentState={
@@ -333,7 +331,7 @@ const emailNotificationsDetails = (props) => {
                         />
                       )} */}
 
-                      {/* <TextField
+                  {/* <TextField
                   label="Email Message"
                   placeholder={html_text}
                   value={values.emailNotifications[index]?.emailMessage}
@@ -346,96 +344,92 @@ const emailNotificationsDetails = (props) => {
                   multiline={15}
                   name="email_message"
                 /> */}
-                    </FormLayout>
-                  </Stack.Item>
-                  <Stack.Item>
-                    <ButtonGroup>
-                      <Button primary onClick={() => setSelectedIndex(null)}>
-                        Cancel
-                      </Button>
-                      <Button onClick={() => exportHtml()}>Save Changes</Button>
-                    </ButtonGroup>
-                  </Stack.Item>
-                </Stack>
-              </Card.Section>
-            </Card>
-          </div >
-        </Layout.Section>
-        <Layout.Section secondary>
-          <div className="container-right">
-            <Card>
-              <Card.Section>
-                <TextContainer>
-                  <Heading h4>Status</Heading>
-                  <Stack distribution="equalSpacing">
-                    {/* <Button primary>Enabled</Button> */}
-                    {values.emailNotifications[index]?.status ? (
-                      <Button primary onClick={() => { }}>
-                        Enabled
-                      </Button>
-                    ) : (
-                      <Button onClick={() => { }}>Disabled</Button>
-                    )}
-                    <Switch
-                      // onChange={setFieldValue(
-                      //   `emailNotifications[${values.emailNotifications[index]}].status`,
-                      //   !values.emailNotifications[index]?.status
-                      // )}
-                      checked={values.emailNotifications[index]?.status}
-                      onColor="#86d3ff"
-                      onHandleColor="#2693e6"
-                      handleDiameter={30}
-                      uncheckedIcon={false}
-                      checkedIcon={false}
-                      boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-                      activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
-                    />
-                  </Stack>
-                  <br />
-                  <TextStyle variation="subdued">
-                    This notification is enabled and will be sent to customers when
-                    conditions apply.
-                  </TextStyle>
-                </TextContainer>
-              </Card.Section>
-            </Card>
-
-            {process.env.APP_TYPE == 'public' && (
-              <Card>
-                <Card.Section>
-                  <TextContainer>
-                    <Heading h4>Need help with ChargeZen variables?</Heading>
-                    <br />
-                    <TextStyle variation="subdued">
-                      We’ve compiled a list of all available CharegeZen variables
-                      along with additional information and help. You can check out
-                      the guide here.
-                    </TextStyle>
-                  </TextContainer>
-                </Card.Section>
-              </Card>
-            )}
-            <Card>
-              <Card.Section>
-                <TextContainer>
-                  <Heading h4>Actions</Heading>
-                  <Button fullWidth>Send a test email</Button>
-                  <Button fullWidth
-                    onClick={() => {
-                      setPreviewHtml(values.emailNotifications[index]?.emailMessage)
-                      setPreviewActive(true)
-                    }
-                    }
-                  >
-                    Preview
+                </FormLayout>
+              </Stack.Item>
+              <Stack.Item>
+                <ButtonGroup>
+                  <Button primary onClick={() => setSelectedIndex(null)}>
+                    Cancel
                   </Button>
-                </TextContainer>
-              </Card.Section>
-            </Card>
-          </div>
-        </Layout.Section>
-      </div >
-    </Layout>
+                  <Button onClick={() => exportHtml()}>Save Changes</Button>
+                </ButtonGroup>
+              </Stack.Item>
+            </Stack>
+          </Card.Section>
+        </Card>
+      </Layout.Section>
+      <Layout.Section secondary>
+        <Card>
+          <Card.Section>
+            <TextContainer>
+              <Heading h4>Status</Heading>
+              <Stack distribution="equalSpacing">
+                {/* <Button primary>Enabled</Button> */}
+                {values.emailNotifications[index]?.status ? (
+                  <Button primary onClick={() => { }}>
+                    Enabled
+                  </Button>
+                ) : (
+                  <Button onClick={() => { }}>Disabled</Button>
+                )}
+                <Switch
+                  // onChange={setFieldValue(
+                  //   `emailNotifications[${values.emailNotifications[index]}].status`,
+                  //   !values.emailNotifications[index]?.status
+                  // )}
+                  checked={values.emailNotifications[index]?.status}
+                  onColor="#86d3ff"
+                  onHandleColor="#2693e6"
+                  handleDiameter={30}
+                  uncheckedIcon={false}
+                  checkedIcon={false}
+                  boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+                  activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+                />
+              </Stack>
+              <br />
+              <TextStyle variation="subdued">
+                This notification is enabled and will be sent to customers when
+                conditions apply.
+              </TextStyle>
+            </TextContainer>
+          </Card.Section>
+        </Card>
+
+        {process.env.APP_TYPE == 'public' && (
+          <Card>
+            <Card.Section>
+              <TextContainer>
+                <Heading h4>Need help with ChargeZen variables?</Heading>
+                <br />
+                <TextStyle variation="subdued">
+                  We’ve compiled a list of all available CharegeZen variables
+                  along with additional information and help. You can check out
+                  the guide here.
+                </TextStyle>
+              </TextContainer>
+            </Card.Section>
+          </Card>
+        )}
+        <Card>
+          <Card.Section>
+            <TextContainer>
+              <Heading h4>Actions</Heading>
+              <Button fullWidth>Send a test email</Button>
+              <Button fullWidth
+                onClick={() => {
+                  setPreviewHtml(values.emailNotifications[index]?.emailMessage)
+                  setPreviewActive(true)
+                }
+                }
+              >
+                Preview
+              </Button>
+            </TextContainer>
+          </Card.Section>
+        </Card>
+      </Layout.Section>
+    </>
   );
 };
 export default emailNotificationsDetails;
