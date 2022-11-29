@@ -103,8 +103,8 @@ const CustomerMigration = () => {
         tempData?.map((item) => {
             if (item[0]) {
                 rcs.push({
-                    customer_id: `gid://shopify/Customer/${item[0]}`,
-                    sellingplan: `gid://shopify/SellingPlanGroup/${item[8]}`,
+                    customer_email: item[0],
+                    sellingplan: `gid://shopify/SellingPlan/${item[8]}`,
                     data: {
                         customer_id: item[0],
                         payment_method: item[1],

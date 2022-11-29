@@ -230,6 +230,7 @@ class SubscriptionsController < AuthenticatedController
   end
 
   def customer_migration
+    params[:sellingplangroup] = SellingPlan.find_by_shopify_id(params[:sellingplan])&.selling_plan_group&.shopify_id
     if params[:data][:payment_method] == "stripe"
       customer = CustomerModal.find_by_shopify_id(params[:customer_id][/\d+/])
       @stripe_customer = Stripe::Customer.list({}, api_key: current_shop.stripe_api_key).data.filter{|c| c.email == customer.email}[0]
