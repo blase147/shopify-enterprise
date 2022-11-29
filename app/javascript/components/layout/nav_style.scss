@@ -379,9 +379,8 @@ body.chargezen {
 }
 
 .main_header {
-    padding: 25px;
-    border-bottom: 1px solid #DADADA;
-
+    padding: 8px 0px;
+    border: none !important;
 }
 
 .header_main_div .search_icon path {
@@ -419,4 +418,33 @@ body.chargezen {
 
 .navBar .logo img {
     margin: auto;
+}
+
+.avatar {
+    height: fit-content;
+    padding: -49px !important;
+    padding: 7px;
+}
+
+.avatar h2 {
+    padding: 0 !important;
+    font-size: 15px !important;
+    margin-bottom: -7px;
+}
+
+.notification {
+    border-right: 1px solid #DADADA;
+}
+
+.user_details:before {
+    display: none;
+}
+
+.header_serperator {
+    width: 103%;
+}
+
+.userDetailMain {
+    margin-right: -10px;
+    margin-left: 20px;
 }
