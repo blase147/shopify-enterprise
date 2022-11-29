@@ -7,7 +7,6 @@ class FetchRevenueTrendService < ApplicationService
     return JSON.parse(data) if data && refresh == false
 
     revenue_trend = ComputeRevenueTrendService.new.call(shop, start_date: start_date, end_date: end_date)
-    redis.set(data_key, revenue_trend.to_json, ex: 15.minutes)
 
     revenue_trend
   end

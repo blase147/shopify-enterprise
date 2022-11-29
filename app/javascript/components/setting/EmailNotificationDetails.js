@@ -135,12 +135,12 @@ const emailNotificationsDetails = (props) => {
   const submit = async () => {
     await handleSubmit();
     setSelectedIndex(null);
+    setSubmitForm(false);
   };
 
   useEffect(() => {
     if (submitForm) {
       submit();
-      setSubmitForm(false);
     }
   }, [submitForm])
   useEffect(() => {
@@ -418,7 +418,10 @@ const emailNotificationsDetails = (props) => {
               <Button fullWidth>Send a test email</Button>
               <Button fullWidth
                 onClick={() => {
-                  setPreviewHtml(values.emailNotifications[index]?.emailMessage)
+                  emailEditorRef.current.editor.exportHtml((data) => {
+                    const { design, html } = data;
+                    setPreviewHtml(html)
+                  });
                   setPreviewActive(true)
                 }
                 }

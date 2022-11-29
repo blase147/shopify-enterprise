@@ -20,7 +20,7 @@ class ReportDataService
 
 
   def get_subscriptions_count(subscriptions, status)
-    subscriptions.sum { |subscription| subscription.data.node.status == status ? subscription.data.node.lines.edges.count : 0 }
+    subscriptions.sum { |subscription| subscription.node.status == status ? subscription.node.lines.edges.count : 0 }
   end
 
   def get_churn_rate(subscriptions, range)
@@ -38,7 +38,7 @@ class ReportDataService
 
   def get_customer_lifetime_value(subscriptions)
     range = (Date.today - 1.day) - 1.month..Date.today - 1.day
-    customer_data = subscriptions.group_by { |subscription| subscription.data.node.customer.id }
+    customer_data = subscriptions.group_by { |subscription| subscription.node.customer.id }
     (mrr(subscriptions, range) / customer_data.size) * 100  rescue 0
   end
 
@@ -53,7 +53,7 @@ class ReportDataService
 
   def revenue_churn_by_date(range)
     subscriptions_in_period = in_period_subscriptions(@subscriptions, range)
-    cancelled_subscriptions_revenue = subscriptions_in_period.sum { |subscription| subscription.data.node.status == 'CANCELLED' ? get_orders_total_amount(subscription, range) : 0 }
+    cancelled_subscriptions_revenue = subscriptions_in_period.sum { |subscription| subscription.node.status == 'CANCELLED' ? get_orders_total_amount(subscription, range) : 0 }
     order_total = subscriptions_in_period.sum { |subscription| get_orders_total_amount(subscription, range) }
     churn_data = ((order_total - (order_total - cancelled_subscriptions_revenue)) / order_total) * 100 rescue 0
     { value: churn_data }
@@ -87,35 +87,35 @@ class ReportDataService
   end
 
   def get_orders_total_amount(subscription, range = nil)
-    subscription.data.node.orders.edges.sum { |order| range.nil? || (range.present? && range.cover?(order.node.created_at.to_date)) ? order.node.total_price_set.presentment_money.amount.to_f.round(2) : 0 }
+    subscription.node.orders.edges.sum { |order| range.nil? || (range.present? && range.cover?(order.node.created_at.to_date)) ? order.node.total_price_set.presentment_money.amount.to_f.round(2) : 0 }
   end
 
   def get_customers_by_date(range)
     current_month_subscriptions = in_period_subscriptions(@subscriptions, range, 'ACTIVE')
-    { value: current_month_subscriptions.group_by { |subscription| subscription.data.node.customer.id }.count }
+    { value: current_month_subscriptions.group_by { |subscription| subscription.node.customer.id }.count }
   end
 
   def renewal_data_by_date(range)
-    pending_for_renewal = @subscriptions.count { |subscription| subscription.data.node.next_billing_date.to_date.between?(range.first, range.last) }
-    renewed_subscriptions = @subscriptions.count { |subscription| subscription.data.node.orders.edges.count > 1 && (subscription_orders_in_range(subscription, range.first.to_date) >= 1)  }
+    pending_for_renewal = @subscriptions.count { |subscription| subscription.node.next_billing_date.to_date.between?(range.first, range.last) }
+    renewed_subscriptions = @subscriptions.count { |subscription| subscription.node.orders.edges.count > 1 && (subscription_orders_in_range(subscription, range.first.to_date) >= 1)  }
     renewal_data = (renewed_subscriptions / pending_for_renewal) * 100 rescue 0
     { value: renewal_data }
   end
 
   def in_period_subscriptions(subscriptions, range, status = nil)
-    subscriptions.select { |subscription| range.cover?(subscription.data.node.created_at.to_date) && (status ? subscription.data.node.status == status : true) }
+    subscriptions.select { |subscription| range.cover?(subscription.node.created_at.to_date) && (status ? subscription.node.status == status : true) }
   end
 
   def in_period_cancelled_subscriptions(subscriptions, range)
-    subscriptions.select { |subscription| range.cover?(@shop.customer_subscription_contracts.find_by(status: 'CANCELLED', shopify_id: subscription.data.node.id[/\d+/])&.cancelled_at) && subscription.data.node.status == 'CANCELLED' }
+    subscriptions.select { |subscription| range.cover?(@shop.customer_subscription_contracts.find_by(status: 'CANCELLED', shopify_id: subscription.node.id[/\d+/])&.cancelled_at) && subscription.node.status == 'CANCELLED' }
   end
 
   def in_period_hourly_subscriptions(subscriptions, range, status = nil)
-    subscriptions.select { |subscription| subscription.data.node.created_at.to_datetime.between?(range.first, range.last) && (status ? subscription.data.node.status == status : true) }
+    subscriptions.select { |subscription| subscription.node.created_at.to_datetime.between?(range.first, range.last) && (status ? subscription.node.status == status : true) }
   end
 
   def subscription_orders_in_range(subscription, date)
-    subscription.data.node.orders.edges.count { |order| order.node.created_at.to_date.between?(date.beginning_of_month, date.end_of_month) }
+    subscription.node.orders.edges.count { |order| order.node.created_at.to_date.between?(date.beginning_of_month, date.end_of_month) }
   end
 
   # Revenue Trends
@@ -138,7 +138,7 @@ class ReportDataService
 
   def orders_count(range = nil)
     # subscriptions = range.present? ? in_period_subscriptions(@subscriptions, range) : @subscriptions
-    @subscriptions.sum { |subscription| subscription.data.node.orders.edges.count { |order| range.cover?(order.node.created_at.to_date)} }
+    @subscriptions.sum { |subscription| subscription.node.orders.edges.count { |order| range.cover?(order.node.created_at.to_date)} }
   end
 
   def checkout_charge(range)
@@ -160,7 +160,7 @@ class ReportDataService
     orders = @orders.select { |order| order if range.cover?(order.created_at.to_date) }
     subscription_order_ids = []
     @subscriptions.each do |subscription|
-      subscription.data.node.orders.edges.each do |order|
+      subscription.node.orders.edges.each do |order|
         subscription_order_ids.push(order.node.id[/\d+/])
       end
     end
@@ -176,7 +176,7 @@ class ReportDataService
   end
 
   def new_customers
-    @subscriptions.group_by { |subscription| subscription.data.node.customer.id }.sum { |data| data[1].count == 1 ? 1 : 0 }
+    @subscriptions.group_by { |subscription| subscription.node.customer.id }.sum { |data| data[1].count == 1 ? 1 : 0 }
   end
 
   def graph_data_by_granularity(method)
@@ -207,12 +207,12 @@ class ReportDataService
 
   def active_customers(range)
     subscriptions = active_subscriptions(range)
-    subscriptions.group_by { |subscription| subscription.data.node.customer.id }.count
+    subscriptions.group_by { |subscription| subscription.node.customer.id }.count
   end
 
   def all_active_customers
-    subscriptions = @subscriptions.select { |subscription| subscription.data.node.status == 'ACTIVE' }
-    subscriptions.group_by { |subscription| subscription.data.node.customer.id }.count
+    subscriptions = @subscriptions.select { |subscription| subscription.node.status == 'ACTIVE' }
+    subscriptions.group_by { |subscription| subscription.node.customer.id }.count
   end
 
   def cancelled_customers(range)
@@ -253,15 +253,15 @@ class ReportDataService
   end
 
   def get_upcoming_revenue(day_count)
-    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.data.node.next_billing_date.to_date) ? get_orders_total_amount(subscription) : 0 }.to_f.round(2)
+    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.node.next_billing_date.to_date) ? get_orders_total_amount(subscription) : 0 }.to_f.round(2)
   end
 
   def get_upcoming_historical_revenue(day_count)
-    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.data.node.next_billing_date.to_date) ? subscription.data.node.orders.edges.sum { |order| order.node.original_total_price_set.presentment_money.amount.to_f } : 0 }.to_f.round(2)
+    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.node.next_billing_date.to_date) ? subscription.node.orders.edges.sum { |order| order.node.original_total_price_set.presentment_money.amount.to_f } : 0 }.to_f.round(2)
   end
 
   def get_upcoming_error_revenue(day_count)
-    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.data.node.next_billing_date.to_date) ? subscription.data.node.orders.edges.sum { |order| calculated_error_revenue(order) } : 0}.to_f.round(2)
+    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.node.next_billing_date.to_date) ? subscription.node.orders.edges.sum { |order| calculated_error_revenue(order) } : 0}.to_f.round(2)
   end
 
   def calculated_error_revenue(order)
@@ -269,7 +269,7 @@ class ReportDataService
   end
 
   def get_upcoming_charge(day_count)
-    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.data.node.next_billing_date.to_date) ? 1 : 0 }
+    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.node.next_billing_date.to_date) ? 1 : 0 }
   end
 
   def recurring_vs_checkout_data(range)
@@ -280,11 +280,11 @@ class ReportDataService
   end
 
   def get_upcoming_error_charges(day_count)
-    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.data.node.next_billing_date.to_date) ? error_transactions_count(subscription) : 0 }
+    @subscriptions.sum { |subscription| (Date.today..Date.today + day_count.days).cover?(subscription.node.next_billing_date.to_date) ? error_transactions_count(subscription) : 0 }
   end
 
   def error_transactions_count(subscription)
-    subscription.data.node.orders.edges.sum { |order| order.node.transactions.sum { |transaction| transaction.status == 'ERROR' ? 1 : 0 } }
+    subscription.node.orders.edges.sum { |order| order.node.transactions.sum { |transaction| transaction.status == 'ERROR' ? 1 : 0 } }
   end
 
   def same_day_cancelled
@@ -359,6 +359,6 @@ class ReportDataService
   end
 
   def subscriptions_by_order_period(subscriptions, range)
-    subscriptions.select { |subscription| subscription if subscription.data.node.orders.edges.count { |order| range.cover?(order.node.created_at.to_date) }.positive? }
+    subscriptions.select { |subscription| subscription if subscription.node.orders.edges.count { |order| range.cover?(order.node.created_at.to_date) }.positive? }
   end
 end

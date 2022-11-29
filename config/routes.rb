@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   post '/shopify_webhooks/customer_payment_method_create', to: 'shopify_webhooks#customer_payment_method_create'
   post '/shopify_webhooks/customer_payment_method_update', to: 'shopify_webhooks#customer_payment_method_update'
   post '/shopify_webhooks/customer_payment_method_revoke', to: 'shopify_webhooks#customer_payment_method_revoke'
+  post '/shopify_webhooks/bulk_operation_finish', to: 'shopify_webhooks#bulk_operation_finish'  
 
   post '/shipping_suites/sync_orders', to: 'shipping_suites#sync_orders'
 

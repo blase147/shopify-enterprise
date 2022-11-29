@@ -59,8 +59,8 @@ const RevenueTrends = () => {
 
   ///Graph Query...
   const fetchReport = gql`
-  query($startDate: String!, $endDate: String!, $refresh: Boolean!) {  
-    fetchRevenueTrend(startDate: $startDate, endDate: $endDate, refresh: $refresh) {
+  query($startDate: String!, $endDate: String!) {  
+    fetchRevenueTrend(startDate: $startDate, endDate: $endDate) {
         totalSales {
           value
           percent
@@ -734,7 +734,6 @@ const RevenueTrends = () => {
       variables: {
         startDate: filters.startDate,
         endDate: filters.endDate,
-        refresh: filters.refresh ? filters.refresh : false
       }
     })
   }, [filters, getReport])
@@ -1213,72 +1212,70 @@ const RevenueTrends = () => {
         </Card>
       ) :
         <FormLayout>
-          <div className="analytics-page-layout">
+          <Stack vertical spacing="extraLoose">
             <Layout>
-              <Stack vertical spacing="extraLoose">
-                <Layout>
-                  <Layout.Section>
-                    <Card title="">
-                      <Card.Section>
-                        <div className="rev-date-picker">
-                          <DateRangePicker
-                            start={filters.startDate}
-                            end={filters.endDate}
-                            span={filters.span}
-                            handleDates={handleFiltersDates}
-                            handleForceUpdates={handleForceUpdates}
-                          />
+              <Layout.Section>
+                <Card title="">
+                  <Card.Section>
+                    <div className="rev-date-picker">
+                      <DateRangePicker
+                        start={filters.startDate}
+                        end={filters.endDate}
+                        span={filters.span}
+                        handleDates={handleFiltersDates}
+                        handleForceUpdates={handleForceUpdates}
+                      />
 
-                        </div>
+                    </div>
 
-                      </Card.Section>
-                    </Card>
-                  </Layout.Section>
-                </Layout>
+                  </Card.Section>
+                </Card>
+              </Layout.Section>
+            </Layout>
 
-                <Layout>
-                  <Layout.Section>
-                    <DisplayText size="medium">Revenue</DisplayText>
+            <Layout>
+              <Layout.Section>
+                <DisplayText size="medium">Revenue</DisplayText>
 
-                    <Stack distribution="fill" wrap={false}>
-                      {sectionRevenueList?.map((item, i) => (
-                        <Stack.Item key={i}>
-                          <Card sectioned>
-                            <Stack>
-                              <Stack.Item fill>
-                                <TextStyle variation="strong">
-                                  {item.section}
-                                </TextStyle>
-                              </Stack.Item>
-                              <Stack.Item>
-                                <TextStyle
-                                  variation={cardData[item.key]?.up ? 'positive' : 'negative'}
-                                >
-                                  <Icon
-                                    source={cardData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
-                                    color={cardData[item.key]?.up ? 'green' : 'red'}
-                                  />
-                                  {Math.abs(cardData[item.key]?.percent) || 0}%
-                                </TextStyle>
-                              </Stack.Item>
-                            </Stack>
+                <Stack distribution="fill" wrap={false}>
+                  {sectionRevenueList?.map((item, i) => (
+                    <Stack.Item key={i}>
+                      <Card sectioned>
+                        <Stack>
+                          <Stack.Item fill>
+                            <TextStyle variation="strong">
+                              {item.section}
+                            </TextStyle>
+                          </Stack.Item>
+                          <Stack.Item>
+                            <TextStyle
+                              variation={cardData[item.key]?.up ? 'positive' : 'negative'}
+                            >
+                              <Icon
+                                source={cardData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                                color={cardData[item.key]?.up ? 'green' : 'red'}
+                              />
+                              {Math.abs(cardData[item.key]?.percent) || 0}%
+                            </TextStyle>
+                          </Stack.Item>
+                        </Stack>
 
-                            <Stack>
-                              <Stack.Item>
-                                <DisplayText size="medium">
-                                  <TextStyle variation="strong">
-                                    <CounterUp prefix={item.prefix || ''} suffix={item.suffix || ''} start={0} end={Number.parseFloat(cardData[item.key]?.value || 0).toFixed(2)} duration={1.5} decimals={2} />
-                                  </TextStyle>
-                                </DisplayText>
-                              </Stack.Item>
-                            </Stack>
-                          </Card>
-                        </Stack.Item>
-                      ))}
-                    </Stack>
-                  </Layout.Section>
-                </Layout>
-                {/* <Layout>
+                        <Stack>
+                          <Stack.Item>
+                            <DisplayText size="medium">
+                              <TextStyle variation="strong">
+                                <CounterUp prefix={item.prefix || ''} suffix={item.suffix || ''} start={0} end={Number.parseFloat(cardData[item.key]?.value || 0).toFixed(2)} duration={1.5} decimals={2} />
+                              </TextStyle>
+                            </DisplayText>
+                          </Stack.Item>
+                        </Stack>
+                      </Card>
+                    </Stack.Item>
+                  ))}
+                </Stack>
+              </Layout.Section>
+            </Layout>
+            {/* <Layout>
             <Layout.Section>
               <DisplayText size="medium">Summary</DisplayText>
 
@@ -1330,7 +1327,7 @@ const RevenueTrends = () => {
               </Stack>
             </Layout.Section>
           </Layout> */}
-                {/* <Layout>
+            {/* <Layout>
             <Layout.Section>
               <TextStyle variation="strong">
                 Metrics indicate changes of this month vs last month, on a
@@ -1384,78 +1381,78 @@ const RevenueTrends = () => {
               </Stack>
             </Layout.Section>
           </Layout> */}
-                <Layout>
-                  <Layout.Section>
-                    <Heading>{'  '}</Heading>
-                    <HighchartsReact highcharts={Highcharts} options={chartOptions.saleChart} />
-                  </Layout.Section>
-                </Layout>
+            <Layout>
+              <Layout.Section>
+                <Heading>{'  '}</Heading>
+                <HighchartsReact highcharts={Highcharts} options={chartOptions.saleChart} />
+              </Layout.Section>
+            </Layout>
 
-                <Layout>
-                  <div className="sales-section">
-                    <Layout.Section secondary>
-                      <Stack vertical distribution="equalSpacing">
-                        {sectionAvgList?.map((item, i) => (
-                          <Stack.Item key={i}>
-                            <Card sectioned>
-                              <Stack distribution="equalSpacing" spacing="extraTight">
-                                <Stack.Item>
-                                  <TextStyle variation="strong">
-                                    {item.section}
-                                  </TextStyle>
-                                </Stack.Item>
-                                <Stack.Item>
-                                  <TextStyle
-                                    variation={cardData[item.key]?.up ? 'positive' : 'negative'}
-                                  >
-                                    <Icon
-                                      source={cardData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
-                                      color={cardData[item.key]?.up ? 'green' : 'red'}
-                                    />
-                                    {Math.abs(cardData[item.key]?.percent) || 0}%
-                                  </TextStyle>
-                                </Stack.Item>
-                              </Stack>
-                              <Stack>
-                                <Stack.Item>
-                                  <DisplayText size="medium">
-                                    <TextStyle variation="strong">
-                                      <CounterUp prefix="$" start={0} end={Number.parseFloat(cardData[item.key]?.value || 0).toFixed(2)} duration={1.5} decimals={2} />
-                                    </TextStyle>
-                                  </DisplayText>
-                                </Stack.Item>
-                              </Stack>
-                            </Card>
-                          </Stack.Item>
-                        ))}
-                      </Stack>
-                    </Layout.Section>
-                  </div>
-                  <Layout.Section>
-                    <HighchartsReact
-                      highcharts={Highcharts}
-                      options={chartOptions.checkoutChart}
-                    />
-                  </Layout.Section>
-                </Layout>
-                <Layout>
-                  <Layout.Section>
-                    <Heading>{'  '}</Heading>
-                    <HighchartsReact highcharts={Highcharts} options={chartOptions.skuRevenueChart} />
-                  </Layout.Section>
-                </Layout>
-                <Layout>
-                  <Layout.Section>
-                    <Heading>{'  '}</Heading>
-                    <HighchartsReact highcharts={Highcharts} options={chartOptions.skuSubscriptionsChart} />
-                  </Layout.Section>
-                </Layout>
-                <Layout>
-                  <Layout.Section>
-                    {/* <div className="frequency-graph-revenue"> */}
-                    <Card>
-                      <Card.Section>
-                        {/* <div className="frequency-graph-parameters">
+            <Layout>
+              <div className="sales-section">
+                <Layout.Section secondary>
+                  <Stack vertical distribution="equalSpacing">
+                    {sectionAvgList?.map((item, i) => (
+                      <Stack.Item key={i}>
+                        <Card sectioned>
+                          <Stack distribution="equalSpacing" spacing="extraTight">
+                            <Stack.Item>
+                              <TextStyle variation="strong">
+                                {item.section}
+                              </TextStyle>
+                            </Stack.Item>
+                            <Stack.Item>
+                              <TextStyle
+                                variation={cardData[item.key]?.up ? 'positive' : 'negative'}
+                              >
+                                <Icon
+                                  source={cardData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                                  color={cardData[item.key]?.up ? 'green' : 'red'}
+                                />
+                                {Math.abs(cardData[item.key]?.percent) || 0}%
+                              </TextStyle>
+                            </Stack.Item>
+                          </Stack>
+                          <Stack>
+                            <Stack.Item>
+                              <DisplayText size="medium">
+                                <TextStyle variation="strong">
+                                  <CounterUp prefix="$" start={0} end={Number.parseFloat(cardData[item.key]?.value || 0).toFixed(2)} duration={1.5} decimals={2} />
+                                </TextStyle>
+                              </DisplayText>
+                            </Stack.Item>
+                          </Stack>
+                        </Card>
+                      </Stack.Item>
+                    ))}
+                  </Stack>
+                </Layout.Section>
+              </div>
+              <Layout.Section>
+                <HighchartsReact
+                  highcharts={Highcharts}
+                  options={chartOptions.checkoutChart}
+                />
+              </Layout.Section>
+            </Layout>
+            <Layout>
+              <Layout.Section>
+                <Heading>{'  '}</Heading>
+                <HighchartsReact highcharts={Highcharts} options={chartOptions.skuRevenueChart} />
+              </Layout.Section>
+            </Layout>
+            <Layout>
+              <Layout.Section>
+                <Heading>{'  '}</Heading>
+                <HighchartsReact highcharts={Highcharts} options={chartOptions.skuSubscriptionsChart} />
+              </Layout.Section>
+            </Layout>
+            <Layout>
+              <Layout.Section>
+                {/* <div className="frequency-graph-revenue"> */}
+                <Card>
+                  <Card.Section>
+                    {/* <div className="frequency-graph-parameters">
                   <div className="weeks">
                     <div className="cancel-color"></div>
                     <p>1 week</p>
@@ -1472,225 +1469,223 @@ const RevenueTrends = () => {
                   </div>
 
                 </div> */}
-                        <Heading>{'  '}</Heading>
-                        <HighchartsReact highcharts={Highcharts} options={chartOptions.insightChart} />
-                      </Card.Section>
-                    </Card>
-                    {/* </div> */}
-                  </Layout.Section>
-                </Layout>
-                <Layout>
-                  <Layout.Section>
-
                     <Heading>{'  '}</Heading>
+                    <HighchartsReact highcharts={Highcharts} options={chartOptions.insightChart} />
+                  </Card.Section>
+                </Card>
+                {/* </div> */}
+              </Layout.Section>
+            </Layout>
+            <Layout>
+              <Layout.Section>
 
-                    <HighchartsReact highcharts={Highcharts} options={chartOptions.refundChart} />
+                <Heading>{'  '}</Heading>
+
+                <HighchartsReact highcharts={Highcharts} options={chartOptions.refundChart} />
 
 
-                  </Layout.Section>
-                </Layout>
+              </Layout.Section>
+            </Layout>
 
-                <Layout>
-                  <Layout.Section>
-                    <DisplayText size="medium">Customers</DisplayText>
-                  </Layout.Section>
-                </Layout>
-                <Layout>
-                  <Layout.Section secondary>
-                    <Stack vertical distribution="equalSpacing">
-                      {sectionActiveCustomerList?.map((item, i) => (
-                        <Stack.Item key={i}>
-                          <Card sectioned>
-                            <Stack
-                              distribution="equalSpacing"
-                            // spacing="extraTight"
-                            >
-                              <Stack.Item>
-                                <TextStyle variation="strong">
-                                  {item.section}
-                                </TextStyle>
-                              </Stack.Item>
-                              <Stack.Item>
-                                <TextStyle
-                                  variation={cardData[item.key]?.up ? 'positive' : 'negative'}
-                                >
-                                  <Icon
-                                    source={cardData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
-                                    color={cardData[item.key]?.up ? 'green' : 'red'}
-                                  />
-                                  {Math.abs(cardData[item.key]?.percent) || 0}%
-                                </TextStyle>
-                              </Stack.Item>
-                            </Stack>
-                            <Stack>
-                              <Stack.Item>
-                                <DisplayText size="medium">
-                                  <TextStyle variation="strong">
-                                    <CounterUp prefix={item.type == "currency" ? "$" : ""} suffix={item.type == "percent" ? "%" : ""} start={0} end={Number.parseFloat(cardData[item.key]?.value || 0).toFixed(2)} duration={1.5} decimals={item.type == "currency" ? 2 : 0} />
-                                  </TextStyle>
-                                </DisplayText>
-                              </Stack.Item>
-                            </Stack>
-                          </Card>
-                        </Stack.Item>
-                      ))}
-                    </Stack>
-                  </Layout.Section>
-                  <Layout.Section>
-                    <HighchartsReact
-                      highcharts={Highcharts}
-                      options={chartOptions.activeCustomerChart}
-                    />
-                  </Layout.Section>
-                </Layout>
-                <Layout>
-                  <Layout.Section>
-                    <Heading>{'  '}</Heading>
-                    <HighchartsReact
-                      highcharts={Highcharts}
-                      options={chartOptions.activeChurnedCustomerChart}
-                    />
-                  </Layout.Section>
-                </Layout>
-                <Stack.Item>
-                  <Layout>
-                    <Layout.Section>
-                      <DisplayText size="medium">Revenue Forecast</DisplayText>
-                    </Layout.Section>
-                  </Layout>
-                  <br />
-                  <Layout>
-                    <Layout.Section secondary>
-                      <Stack vertical distribution="equalSpacing">
-                        {sectionSubscriptionList?.map((item, i) => (
-                          <Stack.Item key={i}>
-                            <Card sectioned>
-                              <Stack distribution="equalSpacing">
-                                <Stack.Item>
-                                  <TextStyle variation="strong">
-                                    {item.section}
-                                  </TextStyle>
-                                </Stack.Item>
-                                <Stack.Item>
-                                  <TextStyle
-                                    variation={cardData[item.key]?.up ? 'positive' : 'negative'}
-                                  >
-                                    <Icon
-                                      source={cardData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
-                                      color={cardData[item.key]?.up ? 'green' : 'red'}
-                                    />
-                                    {Math.abs(cardData[item.key]?.percent) || 0}%
-                                  </TextStyle>
-                                </Stack.Item>
-                              </Stack>
-                              <Stack>
-                                <Stack.Item>
-                                  <DisplayText size="medium">
-                                    <TextStyle variation="strong">
-                                      <CounterUp start={0} end={Number.parseFloat(cardData[item.key]?.value || 0.0).toFixed(2)} duration={1.5} />
-                                    </TextStyle>
-                                  </DisplayText>
-                                </Stack.Item>
-                              </Stack>
-                            </Card>
+            <Layout>
+              <Layout.Section>
+                <DisplayText size="medium">Customers</DisplayText>
+              </Layout.Section>
+            </Layout>
+            <Layout>
+              <Layout.Section secondary>
+                <Stack vertical distribution="equalSpacing">
+                  {sectionActiveCustomerList?.map((item, i) => (
+                    <Stack.Item key={i}>
+                      <Card sectioned>
+                        <Stack
+                          distribution="equalSpacing"
+                        // spacing="extraTight"
+                        >
+                          <Stack.Item>
+                            <TextStyle variation="strong">
+                              {item.section}
+                            </TextStyle>
                           </Stack.Item>
-                        ))}
-                      </Stack>
-                    </Layout.Section>
-                    <Layout.Section>
-                      <HighchartsReact
-                        highcharts={Highcharts}
-                        options={chartOptions.subscriptionsChart}
-                      />
-                    </Layout.Section>
-                  </Layout>
-                </Stack.Item>
-                {/* <Layout>
+                          <Stack.Item>
+                            <TextStyle
+                              variation={cardData[item.key]?.up ? 'positive' : 'negative'}
+                            >
+                              <Icon
+                                source={cardData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                                color={cardData[item.key]?.up ? 'green' : 'red'}
+                              />
+                              {Math.abs(cardData[item.key]?.percent) || 0}%
+                            </TextStyle>
+                          </Stack.Item>
+                        </Stack>
+                        <Stack>
+                          <Stack.Item>
+                            <DisplayText size="medium">
+                              <TextStyle variation="strong">
+                                <CounterUp prefix={item.type == "currency" ? "$" : ""} suffix={item.type == "percent" ? "%" : ""} start={0} end={Number.parseFloat(cardData[item.key]?.value || 0).toFixed(2)} duration={1.5} decimals={item.type == "currency" ? 2 : 0} />
+                              </TextStyle>
+                            </DisplayText>
+                          </Stack.Item>
+                        </Stack>
+                      </Card>
+                    </Stack.Item>
+                  ))}
+                </Stack>
+              </Layout.Section>
+              <Layout.Section>
+                <HighchartsReact
+                  highcharts={Highcharts}
+                  options={chartOptions.activeCustomerChart}
+                />
+              </Layout.Section>
+            </Layout>
+            <Layout>
+              <Layout.Section>
+                <Heading>{'  '}</Heading>
+                <HighchartsReact
+                  highcharts={Highcharts}
+                  options={chartOptions.activeChurnedCustomerChart}
+                />
+              </Layout.Section>
+            </Layout>
+            <Stack.Item>
+              <Layout>
+                <Layout.Section>
+                  <DisplayText size="medium">Revenue Forecast</DisplayText>
+                </Layout.Section>
+              </Layout>
+              <br />
+              <Layout>
+                <Layout.Section secondary>
+                  <Stack vertical distribution="equalSpacing">
+                    {sectionSubscriptionList?.map((item, i) => (
+                      <Stack.Item key={i}>
+                        <Card sectioned>
+                          <Stack distribution="equalSpacing">
+                            <Stack.Item>
+                              <TextStyle variation="strong">
+                                {item.section}
+                              </TextStyle>
+                            </Stack.Item>
+                            <Stack.Item>
+                              <TextStyle
+                                variation={cardData[item.key]?.up ? 'positive' : 'negative'}
+                              >
+                                <Icon
+                                  source={cardData[item.key]?.up ? CaretUpMinor : CaretDownMinor}
+                                  color={cardData[item.key]?.up ? 'green' : 'red'}
+                                />
+                                {Math.abs(cardData[item.key]?.percent) || 0}%
+                              </TextStyle>
+                            </Stack.Item>
+                          </Stack>
+                          <Stack>
+                            <Stack.Item>
+                              <DisplayText size="medium">
+                                <TextStyle variation="strong">
+                                  <CounterUp start={0} end={Number.parseFloat(cardData[item.key]?.value || 0.0).toFixed(2)} duration={1.5} />
+                                </TextStyle>
+                              </DisplayText>
+                            </Stack.Item>
+                          </Stack>
+                        </Card>
+                      </Stack.Item>
+                    ))}
+                  </Stack>
+                </Layout.Section>
+                <Layout.Section>
+                  <HighchartsReact
+                    highcharts={Highcharts}
+                    options={chartOptions.subscriptionsChart}
+                  />
+                </Layout.Section>
+              </Layout>
+            </Stack.Item>
+            {/* <Layout>
             <DisplayText size="medium">Total Sales (Inc. Refunds)</DisplayText>
             <Layout.Section>
               <HighchartsReact highcharts={Highcharts} options={RefundChart} />
             </Layout.Section>
           </Layout> */}
-                <Stack.Item>
-                  <Layout>
-                    <Layout.Section>
-                      <DisplayText size="medium">Future Revenue Planning</DisplayText>
-                      <br />
-                      <Heading>
-                        This section will not be controlled by the filters
-                      </Heading>
-                      <br />
-                    </Layout.Section>
-                  </Layout>
-                  <Layout>
-                    <Layout.Section secondary>
-                      <Stack vertical distribution="fill">
-                        {sectionFutureRevenuePlanningList?.map((item, i) => (
-                          <Stack.Item key={i}>
-                            <Card sectioned>
-                              <Stack distribution="equalSpacing">
-                                <Stack.Item>
-                                  <TextStyle variation="strong">
-                                    {item.section}
-                                  </TextStyle>
-                                </Stack.Item>
-                                <Stack.Item>
-                                  <TextStyle
-                                    variation={item.up ? 'positive' : 'negative'}
-                                  >
-                                    {item.percent} days
-                                  </TextStyle>
-                                </Stack.Item>
-                              </Stack>
-                              <Stack>
-                                <Stack.Item>
-                                  <DisplayText size="medium">
-                                    <TextStyle variation="strong">
-                                      <CounterUp prefix="$" start={0} end={Number.parseFloat(cardData[item.key] || 0.0).toFixed(2)} duration={1.5} decimals={2} />
-                                    </TextStyle>
-                                  </DisplayText>
-                                </Stack.Item>
-                              </Stack>
-                            </Card>
-                          </Stack.Item>
-                        ))}
-                      </Stack>
-                    </Layout.Section>
-                    <Layout.Section>
-                      <HighchartsReact
-                        highcharts={Highcharts}
-                        options={chartOptions.estimatedChart}
+            <Stack.Item>
+              <Layout>
+                <Layout.Section>
+                  <DisplayText size="medium">Future Revenue Planning</DisplayText>
+                  <br />
+                  <Heading>
+                    This section will not be controlled by the filters
+                  </Heading>
+                  <br />
+                </Layout.Section>
+              </Layout>
+              <Layout>
+                <Layout.Section secondary>
+                  <Stack vertical distribution="fill">
+                    {sectionFutureRevenuePlanningList?.map((item, i) => (
+                      <Stack.Item key={i}>
+                        <Card sectioned>
+                          <Stack distribution="equalSpacing">
+                            <Stack.Item>
+                              <TextStyle variation="strong">
+                                {item.section}
+                              </TextStyle>
+                            </Stack.Item>
+                            <Stack.Item>
+                              <TextStyle
+                                variation={item.up ? 'positive' : 'negative'}
+                              >
+                                {item.percent} days
+                              </TextStyle>
+                            </Stack.Item>
+                          </Stack>
+                          <Stack>
+                            <Stack.Item>
+                              <DisplayText size="medium">
+                                <TextStyle variation="strong">
+                                  <CounterUp prefix="$" start={0} end={Number.parseFloat(cardData[item.key] || 0.0).toFixed(2)} duration={1.5} decimals={2} />
+                                </TextStyle>
+                              </DisplayText>
+                            </Stack.Item>
+                          </Stack>
+                        </Card>
+                      </Stack.Item>
+                    ))}
+                  </Stack>
+                </Layout.Section>
+                <Layout.Section>
+                  <HighchartsReact
+                    highcharts={Highcharts}
+                    options={chartOptions.estimatedChart}
+                  />
+                </Layout.Section>
+              </Layout>
+            </Stack.Item>
+            <Layout>
+              <div className="data-tabels">
+                <Layout.Section>
+                  <Stack distribution="equalSpacing">
+                    <Card title="Estimated Recurring Revenue Table">
+                      <DataTable
+                        showTotalsInFooter
+                        columnContentTypes={['text', 'text', 'text', 'text']}
+                        headings={[' ', ' ', ' ', ' ']}
+                        rows={tableData.revenueTable}
                       />
-                    </Layout.Section>
-                  </Layout>
-                </Stack.Item>
-                <Layout>
-                  <div className="data-tabels">
-                    <Layout.Section>
-                      <Stack distribution="equalSpacing">
-                        <Card title="Estimated Recurring Revenue Table">
-                          <DataTable
-                            showTotalsInFooter
-                            columnContentTypes={['text', 'text', 'text', 'text']}
-                            headings={[' ', ' ', ' ', ' ']}
-                            rows={tableData.revenueTable}
-                          />
-                        </Card>
-                        <Card title="Estimated Recurring Charges Table">
-                          <DataTable
-                            showTotalsInFooter
-                            columnContentTypes={['text', 'text', 'text', 'text']}
-                            headings={[' ', ' ', ' ', ' ']}
-                            rows={tableData.chargesTable}
-                          />
-                        </Card>
-                      </Stack>
-                    </Layout.Section>
-                  </div>
-                </Layout>
-              </Stack>
+                    </Card>
+                    <Card title="Estimated Recurring Charges Table">
+                      <DataTable
+                        showTotalsInFooter
+                        columnContentTypes={['text', 'text', 'text', 'text']}
+                        headings={[' ', ' ', ' ', ' ']}
+                        rows={tableData.chargesTable}
+                      />
+                    </Card>
+                  </Stack>
+                </Layout.Section>
+              </div>
             </Layout>
-          </div>
+          </Stack>
         </FormLayout>
       }
     </>

@@ -61,7 +61,9 @@ const Analytics = () => {
             onSelect={handleTabChange}
           >
             {selectedTitleTab === 0 ? (
-              <RevenueTrends />
+              <div className="analytics-page-layout">
+                <RevenueTrends />
+              </div>
             ) : selectedTitleTab === 1 ? (
               <div className="customer-insight">
                 <CustomerInsights />
