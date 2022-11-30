@@ -111,6 +111,10 @@ module AppProxyHelper
     current_week_meals = []
     current_week_meals = WeeklyMenu.where(week: week_day).first&.collection_images&.first["products"] if WeeklyMenu.where(week: week_day).first&.collection_images&.first.present?
     current_week_meals = WeeklyMenu.where(week: week_day).first&.product_images if current_week_meals.blank?
+    
+     #master weekly menu
+     current_week_meals = WeeklyMenu.where(week: -1).first&.product_images if current_week_meals.blank?
+     
     return current_week_meals
   end
 

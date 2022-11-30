@@ -164,7 +164,7 @@ const Index = ({ handleForm, handleBack }) => {
       />,
       <div className="menus">
         <Link key={row.id} onClick={() => handleForm(row.id)} to='#'>
-          {row.displayName}
+          {row.displayName}{row?.week === '-1' && ' (master)'}
         </Link>
       </div>,
       `${_.startCase(row.location?.split('_').join(' '))}`,

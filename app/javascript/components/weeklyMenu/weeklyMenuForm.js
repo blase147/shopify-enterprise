@@ -202,7 +202,7 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
       selectedProducts &&
       formRef.current &&
       formRef.current?.values.productImages !=
-        selectedProducts
+      selectedProducts
     ) {
       formRef.current.setFieldValue(
         'productImages',
@@ -216,7 +216,7 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
       selectedCollections &&
       formRef.current &&
       formRef.current?.values.collectionImages !=
-        selectedCollections
+      selectedCollections
     ) {
       formRef.current.setFieldValue(
         'collectionImages',
@@ -265,8 +265,11 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
       setAllSelectedPlans(
         data.fetchWeeklyMenu.sellingPlans
       );
+      setMenuType(`${data?.fetchWeeklyMenu?.week}`)
     }
   }, [data]);
+
+  const [menuType, setMenuType] = useState("Week");
 
   return (
     <Frame>
@@ -308,21 +311,21 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                     input: { params: formData },
                   },
                 })
-                .then((resp) => {
-                  const data = resp.data;
-                  const errors = data.errors;
-                  if (errors) {
-                    setFormErrors(errors);
+                  .then((resp) => {
+                    const data = resp.data;
+                    const errors = data.errors;
+                    if (errors) {
+                      setFormErrors(errors);
+                      setSubmitting(false);
+                    } else {
+                      // setSaveSuccess(true);
+                      handleClose();
+                    }
+                  })
+                  .catch((error) => {
                     setSubmitting(false);
-                  } else {
-                    // setSaveSuccess(true);
-                    handleClose();
-                  }
-                })
-                .catch((error) => {
-                  setSubmitting(false);
-                  setFormErrors(error);
-                });
+                    setFormErrors(error);
+                  });
               } else {
                 createWeeklyMenu({
                   variables: { input: { params: formData } },
@@ -362,20 +365,20 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
               <Form onSubmit={handleSubmit}>
                 {(dirty || updated) && (
                   <>
-                  <ContextualSaveBar
-                    message="Unsaved changes"
-                    saveAction={{
-                      onAction: handleSubmit,
-                      loading: isSubmitting,
-                      disabled: false,
-                    }}
-                    discardAction={{
-                      onAction: () => {
-                        setUpdated((flag) => (flag = false));
-                        resetForm();
-                      },
-                    }}
-                  />
+                    <ContextualSaveBar
+                      message="Unsaved changes"
+                      saveAction={{
+                        onAction: handleSubmit,
+                        loading: isSubmitting,
+                        disabled: false,
+                      }}
+                      discardAction={{
+                        onAction: () => {
+                          setUpdated((flag) => (flag = false));
+                          resetForm();
+                        },
+                      }}
+                    />
                   </>
                 )}
 
@@ -437,36 +440,57 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                             </TextContainer>
                             <br />
 
-                            <div className="date-range-label">
-                              <TextContainer>
-                                <Subheading element="h3">
-                                  Menu Duration:
-                                </Subheading>
-                              </TextContainer>
-                            </div>
-
-                            <RangePickr
-                              cutoffLabel={'cutoffDate'}
-                              setFieldValue={setFieldValue}
-                              cutoff={values?.cutoffDate || ''}
+                            <Select
+                              options={["Week", "Master"]}
+                              label="Menu Type"
+                              value={menuType === `-1` ? 'Master' : `Week`}
+                              error={
+                                touched.triggers &&
+                                errors.triggers
+                              }
+                              onChange={(e) => {
+                                setMenuType(e)
+                                e === "Week" ? setFieldValue(`week`, ``) : setFieldValue(`week`, `-1`);
+                              }
+                              }
                             />
                             <br />
 
-                            <TextField
-                              value={values?.week && values?.week.toString()}
-                              label="Week Number"
-                              placeholder="Week Number(1,2,3,4...)"
-                              type="text"
-                              error={touched.week && errors.week}
-                              onChange={(e) => {
-                                setFieldValue(`week`, e);
-                              }}
-                              helpText={
-                                <span>
-                                  Week Number that will appear on weekly menu page.
-                                </span>
-                              }
-                            />
+                            {(menuType === "Week") &&
+                              <>
+                                <div className="date-range-label">
+                                  <TextContainer>
+                                    <Subheading element="h3">
+                                      Menu Duration:
+                                    </Subheading>
+                                  </TextContainer>
+                                </div>
+
+                                <RangePickr
+                                  cutoffLabel={'cutoffDate'}
+                                  setFieldValue={setFieldValue}
+                                  cutoff={values?.cutoffDate || ''}
+                                />
+                                <br />
+
+                                <TextField
+                                  value={values?.week && values?.week.toString()}
+                                  label="Week Number"
+                                  placeholder="Week Number(1,2,3,4...)"
+                                  type="text"
+                                  error={touched.week && errors.week}
+                                  onChange={(e) => {
+                                    setFieldValue(`week`, `${e}`);
+                                  }}
+                                  helpText={
+                                    <span>
+                                      Week Number that will appear on weekly menu page.
+                                    </span>
+                                  }
+                                />
+                              </>
+
+                            }
                           </div>
                           <br />
                         </FormLayout.Group>
@@ -507,7 +531,7 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                               options={[{ label: 'is any', value: 'is_any' }]}
                               label=""
                               value={'is_any'}
-                              onChange={() => {/* for future and avoid warning */}}
+                              onChange={() => {/* for future and avoid warning */ }
                             />
 
                             <div className="search">
@@ -590,106 +614,106 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                           <FormLayout.Group>
                             {values?.boxSubscriptionType ===
                               'collection' && (
-                              <div className="box-subscription-search">
-                                <TextContainer>Collection</TextContainer>
-                                <SearchCollection
-                                  selectedOptions={selectedCollectionOptions}
-                                  setSelectedOptions={
-                                    setSelectedCollectionOptions
-                                  }
-                                  selectedCollections={selectedCollections}
-                                  setSelectedCollections={
-                                    setSelectedCollections
-                                  }
-                                />
-                              </div>
-                            )}
+                                <div className="box-subscription-search">
+                                  <TextContainer>Collection</TextContainer>
+                                  <SearchCollection
+                                    selectedOptions={selectedCollectionOptions}
+                                    setSelectedOptions={
+                                      setSelectedCollectionOptions
+                                    }
+                                    selectedCollections={selectedCollections}
+                                    setSelectedCollections={
+                                      setSelectedCollections
+                                    }
+                                  />
+                                </div>
+                              )}
                             {values?.boxSubscriptionType ===
                               'products' && (
-                              <div className="box-subscription-search">
-                                <TextContainer>Product</TextContainer>
-                                <SearchProduct
-                                  selectedOptions={selectedProductOptions}
-                                  setSelectedOptions={setSelectedProductOptions}
-                                  selectedProducts={selectedProducts}
-                                  setSelectedProducts={setSelectedProducts}
-                                />
-                              </div>
-                            )}
+                                <div className="box-subscription-search">
+                                  <TextContainer>Product</TextContainer>
+                                  <SearchProduct
+                                    selectedOptions={selectedProductOptions}
+                                    setSelectedOptions={setSelectedProductOptions}
+                                    selectedProducts={selectedProducts}
+                                    setSelectedProducts={setSelectedProducts}
+                                  />
+                                </div>
+                              )}
                           </FormLayout.Group>
                           {values?.boxSubscriptionType ===
                             'collection' && (
-                            <div className="collection-stack">
-                              {selectedCollections?.map(
-                                (collection, i) =>
-                                  collection._destroy === false && (
-                                    <div
-                                      key={i}
-                                      className="building-box-collection"
-                                    >
-                                      <div>{collection?.collectionTitle}</div>
-                                      <Stack>
-                                        {collection.products?.map(
-                                          (product, j) =>
-                                            product._destroy === false && (
-                                              <div
-                                                key={j}
-                                                className="building-box-product"
-                                              >
-                                                <img
-                                                  className="product"
-                                                  src={product?.image}
-                                                />
-                                                <img
-                                                  className="removeIcon"
-                                                  onClick={() => {
-                                                    handleRemoveCollectionProduct(
-                                                      i,
-                                                      j
-                                                    );
-                                                  }}
-                                                  src={removeIcon}
-                                                />
-                                              </div>
-                                            )
-                                        )}
-                                      </Stack>
-                                    </div>
-                                  )
-                              )}
-                            </div>
-                          )}
-                          {values?.boxSubscriptionType ===
-                            'products' && (
-                            <div className="product-stack">
-                              <div>
-                                Selected products (subscription box options)
-                              </div>
-                              <Stack>
-                                {selectedProducts?.map(
-                                  (product, i) =>
-                                    product._destroy === false && (
+                              <div className="collection-stack">
+                                {selectedCollections?.map(
+                                  (collection, i) =>
+                                    collection._destroy === false && (
                                       <div
                                         key={i}
-                                        className="building-box-product"
+                                        className="building-box-collection"
                                       >
-                                        <img
-                                          className="product"
-                                          src={product?.image}
-                                        />
-                                        <img
-                                          onClick={() => {
-                                            handleRemoveProduct(i);
-                                          }}
-                                          className="removeIcon"
-                                          src={removeIcon}
-                                        />
+                                        <div>{collection?.collectionTitle}</div>
+                                        <Stack>
+                                          {collection.products?.map(
+                                            (product, j) =>
+                                              product._destroy === false && (
+                                                <div
+                                                  key={j}
+                                                  className="building-box-product"
+                                                >
+                                                  <img
+                                                    className="product"
+                                                    src={product?.image}
+                                                  />
+                                                  <img
+                                                    className="removeIcon"
+                                                    onClick={() => {
+                                                      handleRemoveCollectionProduct(
+                                                        i,
+                                                        j
+                                                      );
+                                                    }}
+                                                    src={removeIcon}
+                                                  />
+                                                </div>
+                                              )
+                                          )}
+                                        </Stack>
                                       </div>
                                     )
                                 )}
-                              </Stack>
-                            </div>
-                          )}
+                              </div>
+                            )}
+                          {values?.boxSubscriptionType ===
+                            'products' && (
+                              <div className="product-stack">
+                                <div>
+                                  Selected products (subscription box options)
+                                </div>
+                                <Stack>
+                                  {selectedProducts?.map(
+                                    (product, i) =>
+                                      product._destroy === false && (
+                                        <div
+                                          key={i}
+                                          className="building-box-product"
+                                        >
+                                          <img
+                                            className="product"
+                                            src={product?.image}
+                                          />
+                                          <img
+                                            onClick={() => {
+                                              handleRemoveProduct(i);
+                                            }}
+                                            className="removeIcon"
+                                            src={removeIcon}
+                                          />
+                                        </div>
+                                      )
+                                  )}
+                                </Stack>
+                              </div>
+                            )}
                         </div>
                       </FormLayout>
                     </Card.Section>
