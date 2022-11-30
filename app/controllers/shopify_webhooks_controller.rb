@@ -129,6 +129,7 @@ class ShopifyWebhooksController < ApplicationController
 
   def bulk_operation_finish
     shop = Shop.find_by(shopify_domain: shop_domain)
+    shop.connect
     ShpoifyBulkOperation.new.parse_bulk_operation(shop.id, params[:admin_graphql_api_id]) if params[:status]=="completed"
   end
 

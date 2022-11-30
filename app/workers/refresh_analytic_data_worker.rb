@@ -2,7 +2,9 @@ class RefreshAnalyticDataWorker
     include Sidekiq::Worker
     def perform
         end_date= Date.today
-        Shop.all&.each do |shop|
+        ############################################################################################
+        ########################################################chnage this
+        Shop.where(id: Shop.last.id)&.each do |shop|
             shop.connect
             #for one month
             start_date = Date.today - 1.month
@@ -21,7 +23,7 @@ class RefreshAnalyticDataWorker
 
             #for 12 month
             start_date = Date.today - 12.month
-            revenue_trend_twelve = ComputeRevenueTrendService.new.call(shop, start_date: start_date, end_date: end_date)&.to_json
+            revenue_trend_twelve = ComputeRevenueTrendService.new.call(shop, start_date: start_date, end_date: end_date)&.to_json rescue nil
             AnalyticsDatum.find_or_initialize_by(shop_id: shop.id, for_month: 12)&.update(calculated_analytics_data: revenue_trend_twelve) if revenue_trend_twelve.present?
         end
 

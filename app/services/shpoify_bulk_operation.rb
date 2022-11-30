@@ -99,7 +99,6 @@ class ShpoifyBulkOperation  < GraphqlService
                 query: """{
                     subscriptionContracts {
                         edges {
-                            cursor
                             node {
                               id
                               createdAt
@@ -184,40 +183,73 @@ class ShpoifyBulkOperation  < GraphqlService
 
     def parse_bulk_operation(shop_id, id)
         result = client.query(client.parse(GET_URL_FOR_DATA), variables: { id: id})
-        new_data = parsed_bulk_data(result&.data&.node&.url)
+        new_data = parsed_bulk_data(shop_id, result&.data&.node&.url)
     end
 
-    def get_orders_data(shop_id, id)
-        result = client.query(client.parse(GET_URL_FOR_DATA), variables: { id: id})
-        
-        new_data = parsed_bulk_data(result&.data&.node&.url)
+    def get_orders_data(shop_id, data)
+        orders=[]
+        skus={}
+
+        data&.each_line do |line|
+            parsed_data = JSON.parse(line)&.deep_transform_keys(&:underscore) rescue nil
+            break unless parsed_data["id"]&.include?("Order")
+            if parsed_data&.has_key?("__parent_id")
+                skus["#{parsed_data["__parent_id"]}"] = [] unless skus["#{parsed_data["__parent_id"]}"].present? 
+                skus["#{parsed_data["__parent_id"]}"].push({"node": parsed_data})
+            else
+                orders.push({"node": parsed_data}) if parsed_data.present?
+            end
+        end
+        orders&.each do |contract|
+            contract[:node]["lineItems"] = {} 
+            contract[:node]["lineItems"]["edges"] = skus["#{contract[:node]["id"]}"] 
+        end
        
-        # BulkOperationResponse.find_or_initialize_by(shop_id: shop_id, response_type: "all_orders")&.update(api_raw_data: new_data&.to_json)
+        BulkOperationResponse.find_or_initialize_by(shop_id: shop_id, response_type: "all_orders")&.update(api_raw_data: orders&.to_json) if orders.present?
 
     end
 
-    def get_subscriptions_data(shop_id, id)
-        result = client.query(client.parse(GET_SUBSCRIPTIONS_IN_BULK), variables: { id: id})
-        
-        new_data = parsed_bulk_data(result&.data&.node&.url)
+    def get_subscriptions_data(shop_id, data)
+        contracts=[]
+        edges={}
+        skus={}
+
+        data&.each_line do |line|
+            parsed_data = JSON.parse(line)&.deep_transform_keys(&:underscore) rescue nil
+            break unless parsed_data["id"]&.include?("SubscriptionContract")
+            if parsed_data&.has_key?("__parent_id")
+                if parsed_data["id"]&.include?("Order")
+                    edges["#{parsed_data["__parent_id"]}"] = [] unless edges["#{parsed_data["__parent_id"]}"].present? 
+                    edges["#{parsed_data["__parent_id"]}"].push({"node": parsed_data})
+                elsif parsed_data.has_key?("sku")
+                    skus["#{parsed_data["__parent_id"]}"] = [] unless skus["#{parsed_data["__parent_id"]}"].present? 
+                    skus["#{parsed_data["__parent_id"]}"].push({"node": parsed_data})
+                end
+            else
+                contracts.push({"node": parsed_data}) if parsed_data.present?
+            end
+        end
+        contracts&.each do |contract|
+            contract[:node]["orders"]={} 
+            contract[:node]["orders"]["edges"] = edges["#{contract[:node]["id"]}"] 
+            contract[:node]["lines"] = {} 
+            contract[:node]["lines"]["edges"] = skus["#{contract[:node]["id"]}"] 
+        end
        
-        BulkOperationResponse.find_or_initialize_by(shop_id: shop_id, response_type: "all_orders")&.update(api_raw_data: new_data&.to_json)
-
+        BulkOperationResponse.find_or_initialize_by(shop_id: shop_id, response_type: "subscriptions")&.update(api_raw_data: contracts&.to_json) if contracts.present?
     end
 
-    def parsed_bulk_data(url)
+
+
+
+    def parsed_bulk_data(shop_id, url)
         require 'open-uri'
         source = "#{url}"
         resp = Net::HTTP.get_response(URI.parse(source))
         data = resp&.body
-        new_data=[]
+        get_subscriptions_data(shop_id, data)
+        get_orders_data(shop_id, data)
 
-        data&.each_line do |line|
-            parsed_data = JSON.parse(line)&.deep_transform_keys(&:underscore) rescue nil
-            
-            new_data.push(parsed_data) if parsed_data.present?
-        end
-        return new_data
     end
 
 end 

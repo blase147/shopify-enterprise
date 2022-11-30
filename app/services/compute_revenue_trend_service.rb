@@ -1,7 +1,9 @@
 class ComputeRevenueTrendService < ApplicationService
   def call(shop, start_date:, end_date:)
     orders_service = OrdersService.new(shop)
-    subscriptions = ReportService.new.all_subscriptions
+    # subscriptions = ReportService.new.all_subscriptions
+    subscriptions = BulkOperationResponse.find_by(shop_id: shop.id, response_type: "subscriptions")&.api_raw_data
+    subscriptions = JSON.parse(subscriptions, object_class: OpenStruct)
     range = start_date.to_date..end_date.to_date
     orders = orders_service.orders_in_range(range.first, range.last, 'id,refunds,created_at,total_price,current_total_price_set,total_shipping_price_set,source_name')
     data_service = ReportDataService.new(subscriptions, shop, orders, range)
