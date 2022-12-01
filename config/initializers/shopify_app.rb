@@ -26,6 +26,7 @@ ShopifyApp.configure do |config|
     { topic: 'customer_payment_methods/create', address: "#{ENV['HOST']}shopify_webhooks/customer_payment_method_create" },
     { topic: 'customer_payment_methods/update', address: "#{ENV['HOST']}shopify_webhooks/customer_payment_method_update" },
     { topic: 'customer_payment_methods/revoke', address: "#{ENV['HOST']}shopify_webhooks/customer_payment_method_revoke" },
+    { topic: 'bulk_operations/finish', address: "#{ENV['HOST']}shopify_webhooks/bulk_operation_finish" },
   ]
 end
 
