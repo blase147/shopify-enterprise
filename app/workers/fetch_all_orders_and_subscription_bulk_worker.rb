@@ -1,6 +1,10 @@
 class FetchAllOrdersAndSubscriptionBulkWorker
-    def perform_async
-        ShpoifyBulkOperation.new.get_all_orders
-        ShpoifyBulkOperation.new.get_all_subscriptions
+    include Sidekiq::Worker
+    def perform
+        Shop.all&.each do |shop|
+            shop.connect rescue nil
+            ShpoifyBulkOperation.new.get_all_orders rescue nil
+            ShpoifyBulkOperation.new.get_all_subscriptions rescue nil
+        end
     end
 end

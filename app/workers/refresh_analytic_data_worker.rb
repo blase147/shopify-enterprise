@@ -2,8 +2,6 @@ class RefreshAnalyticDataWorker
     include Sidekiq::Worker
     def perform
         end_date= Date.today
-        ############################################################################################
-        ########################################################chnage this
         Shop.all&.each do |shop|
             shop.connect
             #for one month
