@@ -57,4 +57,9 @@ class UserShopsController < ApplicationController
     def verify_user
         redirect_to "/users/sign_in" unless current_user.present?
     end
+
+    def change_shop
+        session[:shop_domain]=params[:shop_domain]
+        render json:{status: :ok}
+    end 
 end

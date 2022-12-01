@@ -12,7 +12,7 @@ const AppHeader = (props) => {
     const handleSelectChange = useCallback((value) => {
         setSelectedShop(value)
         localStorage.setItem("selectedShop", value)
-        window.location.replace(`/?shopify_domain=${value}`)
+        changeShop(value)
     }, []);
     const [allShops, setAllShops] = useState();
     useEffect(() => {
@@ -26,6 +26,22 @@ const AppHeader = (props) => {
     useEffect(() => {
         setSelectedShop(localStorage.getItem("selectedShop"))
     }, [localStorage.getItem("selectedShop")])
+
+    const changeShop = (domain) => {
+        fetch(`/changeShop`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                shop_domain: domain
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                window.location.replace(`/?shopify_domain=${domain}`)
+            });
+    }
 
     const handleChange = useCallback((newValue) => setValue(newValue), []);
     return (
