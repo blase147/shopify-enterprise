@@ -231,22 +231,28 @@ class SubscriptionsController < AuthenticatedController
 
   def customer_migration
     params[:sellingplangroup] = SellingPlan.find_by_shopify_id(params[:sellingplan])&.selling_plan_group&.shopify_id
+    @error = nil
     if params[:data][:payment_method] == "stripe"
       customer = CustomerModal.find_by_shopify_id(params[:customer_id][/\d+/])
-      @stripe_customer = Stripe::Customer.list({}, api_key: current_shop.stripe_api_key).data.filter{|c| c.email == customer.email}[0]
+      @stripe_customer = Stripe::Customer.list({}, api_key: current_shop.stripe_api_key).data.filter{|c| c&.email == customer&.email}[0]
       if @stripe_customer.present?
         AddStripeCustomerMigration.create(raw_data: params.to_json, customer_id: params[:customer_id][/\d+/]&.to_i)
         CustomerService.new({shop: current_shop}).create_customer_payment_remote_method(@stripe_customer&.id, params[:customer_id])
       else
-        render json:{error: :true, response: "This customer doesn't have stripe account"}.to_json
+        @error ="This customer doesn't have stripe account"
       end
     else
       contract = SubscriptionContractDraftService.new(params).fetch_customer
     end
-    render json:{status: :ok, response: contract}.to_json
+    if @error.present?
+      render json:{error: :true, response: @error}.to_json
+    else
+      render json:{status: :ok, response: "Your request is beign processed. Reloading..."}.to_json
+    end
   end
 
   def import_customer_migrations
+    current_shop.connect
     ImportCustomerMigrationWorker.perform_async(current_shop&.id, params.to_json)
     render json:{status: :ok, response: "Migration started"}.to_json
   end

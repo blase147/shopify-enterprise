@@ -209,8 +209,10 @@ Rails.application.routes.draw do
       post :create_user_shop_child
     end
   end
+  post '/changeShop', to: 'user_shops#change_shop'
 
   get 'subscription/charge', to: 'callback#charge'
+
   resources :zip_codes, only: [:index, :create]
   delete 'zip_codes', to: 'zip_codes#destroy'
 

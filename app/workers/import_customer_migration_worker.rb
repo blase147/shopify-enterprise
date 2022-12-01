@@ -3,6 +3,7 @@ class ImportCustomerMigrationWorker
     sidekiq_options :retry => 3, :dead => false
     def perform(shop_id, customer_migrations)
         current_shop = Shop.find(shop_id)
+        p "=================================#{current_shop.to_json}"
         current_shop.connect
         customer_migrations = JSON.parse(customer_migrations) rescue nil        
         
@@ -21,6 +22,8 @@ class ImportCustomerMigrationWorker
             if @error_logs.present?
                 current_shop&.csv_imports&.create(date_of_import: Time.current, error_logs: @error_logs, shop_id: current_shop&.id)
             else
+                customer_migration[:customer_id] = customer&.id
+                customer_migration[:data][:customer_id] = customer&.id
                 customer_migration[:sellingplangroup] = SellingPlan.find_by_shopify_id(customer_migration[:sellingplan])&.selling_plan_group&.shopify_id
 
                 if customer_migration[:data][:payment_method] == "stripe"
