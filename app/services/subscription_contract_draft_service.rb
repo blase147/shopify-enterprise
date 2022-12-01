@@ -112,40 +112,44 @@ class SubscriptionContractDraftService < GraphqlService
         @payment_id = result.data.customer.payment_methods.edges.first.node.id
       end
     end
-  
-    def create
-      billing_policy = [{ day: @selling_plan&.billing_policy&.anchors&.first&.day, type: @selling_plan.billing_policy.anchors.first.type }] rescue []
-      delivery_policy = [{ day: @selling_plan&.delivery_policy&.anchors&.first&.day, type: @selling_plan.delivery_policy.anchors.first.type }] rescue []
-      input = {
-        customerId: @customer_id,
-        nextBillingDate: @data["next_billing_date"].to_date.strftime("%Y-%m-%d"),
-        currencyCode: "USD",
-        contract: {
-          status: "ACTIVE",
-          paymentMethodId: @payment_id,
-          billingPolicy: {
-            interval: @selling_plan.billing_policy.interval,
-                intervalCount:  @selling_plan.billing_policy.interval_count,
-            anchors: billing_policy
-          },
-          deliveryPolicy: {
-                interval: @selling_plan.delivery_policy.interval,
-                intervalCount:  @selling_plan.delivery_policy.interval_count,
-            anchors: delivery_policy
-          },
-          deliveryMethod: {
-            shipping: {
-              address: {
-                firstName: @customer_address["firstName"],
-                lastName: @customer_address["lastName"],
-                address1: @customer_address["address1"],
-                address2: @customer_address["address2"],
-                city: @customer_address["city"],
-                provinceCode: @customer_address["provinceCode"],
-                countryCode: @customer_address["countryCode"],
-                phone: @customer_address["phone"],
-                zip: @customer_address["zip"],
-              }
+    create 
+  rescue Exception => ex
+    p ex.message
+    { error: ex.message }
+  end
+
+  def create
+    billing_policy = [{ day: @selling_plan&.billing_policy&.anchors&.first&.day, type: @selling_plan.billing_policy.anchors.first.type }] rescue []
+    delivery_policy = [{ day: @selling_plan&.delivery_policy&.anchors&.first&.day, type: @selling_plan.delivery_policy.anchors.first.type }] rescue []
+    input = {
+      customerId: @customer_id,
+      nextBillingDate: @data["next_billing_date"].to_date.strftime("%Y-%m-%d"),
+      currencyCode: "USD",
+      contract: {
+        status: "ACTIVE",
+        paymentMethodId: @payment_id,
+        billingPolicy: {
+          interval: @selling_plan.billing_policy.interval,
+              intervalCount:  @selling_plan.billing_policy.interval_count,
+          anchors: billing_policy
+        },
+        deliveryPolicy: {
+              interval: @selling_plan.delivery_policy.interval,
+              intervalCount:  @selling_plan.delivery_policy.interval_count,
+          anchors: delivery_policy
+        },
+        deliveryMethod: {
+          shipping: {
+            address: {
+              firstName: @customer_address["firstName"],
+              lastName: @customer_address["lastName"],
+              address1: @customer_address["address1"],
+              address2: @customer_address["address2"],
+              city: @customer_address["city"],
+              provinceCode: @customer_address["provinceCode"],
+              countryCode: @customer_address["countryCode"],
+              phone: @customer_address["phone"],
+              zip: @customer_address["zip"],
             }
           }
         },
