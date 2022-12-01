@@ -114,7 +114,7 @@ const CustomerMigration = () => {
                         payment_method: item[1],
                         next_billing_date: item[2],
                         delivery_date: item[3],
-                        delivery_price: [4],
+                        delivery_price: `${[4]}`,
                         variant_id: item[5],
                         quantity: item[6],
                         current_price: item[7],
