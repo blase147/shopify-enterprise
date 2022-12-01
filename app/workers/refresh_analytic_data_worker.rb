@@ -4,7 +4,7 @@ class RefreshAnalyticDataWorker
         end_date= Date.today
         ############################################################################################
         ########################################################chnage this
-        Shop.where(id: Shop.last.id)&.each do |shop|
+        Shop.all&.each do |shop|
             shop.connect
             #for one month
             start_date = Date.today - 1.month

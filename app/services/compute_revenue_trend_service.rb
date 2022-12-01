@@ -5,19 +5,28 @@ class ComputeRevenueTrendService < ApplicationService
     subscriptions = BulkOperationResponse.find_by(shop_id: shop.id, response_type: "subscriptions")&.api_raw_data
     subscriptions = JSON.parse(subscriptions, object_class: OpenStruct)
     range = start_date.to_date..end_date.to_date
-    orders = orders_service.orders_in_range(range.first, range.last, 'id,refunds,created_at,total_price,current_total_price_set,total_shipping_price_set,source_name')
+    all_orders =  BulkOperationResponse.find_by(shop_id: shop.id, response_type: "all_orders")&.api_raw_data
+    all_orders = JSON.parse(all_orders, object_class: OpenStruct)
+    orders = all_orders.select {|order|  ((start_date.to_date)..end_date.to_date).include?(order.created_at.to_date)}
+    # orders = orders_service.orders_in_range(range.first, range.last, 'id,refunds,created_at,total_price,current_total_price_set,total_shipping_price_set,source_name')
     data_service = ReportDataService.new(subscriptions, shop, orders, range)
 
     in_period_subscriptions = data_service.in_period_subscriptions(subscriptions, range)
     range_data_service = ReportDataService.new(in_period_subscriptions, shop, orders, range)
 
     today_range = Time.current.beginning_of_year..Time.current - 1.hour
-    today_orders = orders_service.orders_in_range(today_range.first, today_range.last, 'id,refunds,created_at,total_price,current_total_price_set,total_shipping_price_set,source_name')
+
+    today_orders = all_orders.select {|order|  ((today_range.first.to_date)..today_range.last.to_date).include?(order.created_at.to_date)}
+
+    # today_orders = orders_service.orders_in_range(today_range.first, today_range.last, 'id,refunds,created_at,total_price,current_total_price_set,total_shipping_price_set,source_name')
     today_subscriptions = data_service.in_period_hourly_subscriptions(subscriptions, today_range)
     today_range_data_service = ReportDataService.new(today_subscriptions, shop, today_orders, today_range)
 
     yesterday_range = Time.current.beginning_of_year..Time.current - 24.hours
-    yesterday_orders = orders_service.orders_in_range(yesterday_range.first, yesterday_range.last, 'id,refunds,created_at,total_price,current_total_price_set,total_shipping_price_set,source_name')
+
+    yesterday_orders = all_orders.select {|order|  ((yesterday_range.first.to_date)..yesterday_range.last.to_date).include?(order.created_at.to_date)}
+
+    # yesterday_orders = orders_service.orders_in_range(yesterday_range.first, yesterday_range.last, 'id,refunds,created_at,total_price,current_total_price_set,total_shipping_price_set,source_name')
     yesterday_subscriptions = data_service.in_period_hourly_subscriptions(subscriptions, yesterday_range)
     yesterday_range_data_service = ReportDataService.new(yesterday_subscriptions, shop, yesterday_orders, yesterday_range)
 

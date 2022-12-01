@@ -4,7 +4,7 @@ class ShpoifyBulkOperation  < GraphqlService
             bulkOperationRunQuery(
                 query: """
                     {
-                    orders {
+                    orders(query: "status:any") {
                     edges {
                         node {
                         id
@@ -21,6 +21,26 @@ class ShpoifyBulkOperation  < GraphqlService
                             }
                         }
                         totalPrice
+                        currentTotalPriceSet{
+                            shopMoney{
+                                amount
+                                currencyCode
+                            }
+                            presentmentMoney{
+                                amount
+                                currencyCode
+                            }
+                        }
+                        totalShippingPriceSet {
+                            shopMoney{
+                                amount
+                                currencyCode
+                            }
+                            presentmentMoney{
+                                amount
+                                currencyCode
+                            }
+                        }
                         fulfillments {
                             id
                             order {
@@ -189,20 +209,20 @@ class ShpoifyBulkOperation  < GraphqlService
     def get_orders_data(shop_id, data)
         orders=[]
         skus={}
-
+        first_line = JSON.parse(data.each_line.first)
+        return unless first_line["id"]&.include?("Order")
         data&.each_line do |line|
             parsed_data = JSON.parse(line)&.deep_transform_keys(&:underscore) rescue nil
-            break unless parsed_data["id"]&.include?("Order")
             if parsed_data&.has_key?("__parent_id")
                 skus["#{parsed_data["__parent_id"]}"] = [] unless skus["#{parsed_data["__parent_id"]}"].present? 
                 skus["#{parsed_data["__parent_id"]}"].push({"node": parsed_data})
             else
-                orders.push({"node": parsed_data}) if parsed_data.present?
+                orders.push( parsed_data ) if parsed_data.present?
             end
         end
         orders&.each do |contract|
-            contract[:node]["lineItems"] = {} 
-            contract[:node]["lineItems"]["edges"] = skus["#{contract[:node]["id"]}"] 
+            contract["lineItems"] = {} 
+            contract["lineItems"]["edges"] = skus["#{contract["id"]}"] 
         end
        
         BulkOperationResponse.find_or_initialize_by(shop_id: shop_id, response_type: "all_orders")&.update(api_raw_data: orders&.to_json) if orders.present?
@@ -214,9 +234,10 @@ class ShpoifyBulkOperation  < GraphqlService
         edges={}
         skus={}
 
+        first_line = JSON.parse(data.each_line.first)
+        return unless first_line["id"]&.include?("SubscriptionContract")
         data&.each_line do |line|
             parsed_data = JSON.parse(line)&.deep_transform_keys(&:underscore) rescue nil
-            break unless parsed_data["id"]&.include?("SubscriptionContract")
             if parsed_data&.has_key?("__parent_id")
                 if parsed_data["id"]&.include?("Order")
                     edges["#{parsed_data["__parent_id"]}"] = [] unless edges["#{parsed_data["__parent_id"]}"].present? 
@@ -243,13 +264,13 @@ class ShpoifyBulkOperation  < GraphqlService
 
 
     def parsed_bulk_data(shop_id, url)
-        require 'open-uri'
+        require 'net/http'
         source = "#{url}"
         resp = Net::HTTP.get_response(URI.parse(source))
         data = resp&.body
         get_subscriptions_data(shop_id, data)
         get_orders_data(shop_id, data)
-
+        RefreshAnalyticDataWorker.perform_async
     end
 
 end 

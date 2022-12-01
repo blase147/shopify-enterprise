@@ -120,8 +120,8 @@ class ReportDataService
 
   # Revenue Trends
   def get_total_sales(range = nil)
-    orders = range.nil? ? @orders : @orders.select { |order| range.cover?(order.created_at.to_date) }
-    orders.sum { |order| order.total_price.to_f } - orders.sum { |order| order.refunds.sum { |refund| refund.transactions.sum {|t| t.amount.to_f} } }.round(2)
+    orders = range.nil? ? @orders : @orders.select { |order| range.cover?(order&.created_at&.to_date) }
+    orders&.sum { |order| order.total_price.to_f } - orders.sum { |order| order.refunds.sum { |refund| refund.transactions.sum {|t| t.amount.to_f} } }.round(2) if orders.present?
   end
 
   def charge_count(range)
@@ -164,7 +164,7 @@ class ReportDataService
         subscription_order_ids.push(order.node.id[/\d+/])
       end
     end
-    orders.delete_if { |order| subscription_order_ids.include?(order.id) || order.source_name == 'subscription_contract' }
+    orders.delete_if { |order| subscription_order_ids.include?(order.id) }
   end
 
   def orders_calculate_amount(orders)

@@ -1447,6 +1447,8 @@ GEM
       dry-schema (~> 1.5, >= 1.5.2)
     erubi (1.10.0)
     escape (0.0.4)
+    et-orbi (1.2.7)
+      tzinfo
     execjs (2.7.0)
     faraday (1.1.0)
       multipart-post (>= 1.2, < 3)
@@ -1454,6 +1456,9 @@ GEM
     ffi (1.13.1)
     font-awesome-rails (4.7.0.6)
       railties (>= 3.2, < 6.2)
+    fugit (1.7.2)
+      et-orbi (~> 1, >= 1.2.7)
+      raabro (~> 1.4)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     google-protobuf (3.21.9)
@@ -1559,6 +1564,7 @@ GEM
     public_suffix (4.0.6)
     puma (4.3.7)
       nio4r (~> 2.0)
+    raabro (1.4.0)
     rack (2.2.3)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
@@ -1646,6 +1652,9 @@ GEM
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
+    sidekiq-cron (1.8.0)
+      fugit (~> 1)
+      sidekiq (>= 4.2.1)
     sidekiq-unique-jobs (7.1.12)
       brpoplpush-redis_script (> 0.1.1, <= 2.0.0)
       concurrent-ruby (~> 1.0, >= 1.0.5)
@@ -1750,6 +1759,7 @@ DEPENDENCIES
   shopify_api_retry
   shopify_app
   sidekiq
+  sidekiq-cron (~> 1.8)
   sidekiq-unique-jobs (~> 7.1)
   simple_form
   slim
@@ -1764,4 +1774,4 @@ DEPENDENCIES
   whenever
 
 BUNDLED WITH
-   2.3.24
+   2.3.26

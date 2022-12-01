@@ -5,23 +5,13 @@ module Queries
     argument :end_date, String, required: true
 
     def resolve(start_date:, end_date:)
-      $redis = Redis.new
-      redis_subscriptions = $redis.get("subscriptions")
-      if redis_subscriptions.nil?
-        redis_subscriptions = ReportService.new.all_subscriptions.to_json
-        temp=[]
-        redis_subscriptions = JSON.parse(redis_subscriptions)
-        redis_subscriptions.each do |s|
-          temp << s.to_h.deep_transform_keys { |key| key.underscore }
-        end
-        $redis.set("subscriptions", temp.to_json)     
-      end
-      redis_subscriptions = JSON.parse(redis_subscriptions, object_class: OpenStruct)
-      subscriptions = redis_subscriptions
-      # subscriptions = ReportService.new.all_subscriptions
+      subscriptions = BulkOperationResponse.find_by(shop_id: current_shop.id, response_type: "subscriptions")&.api_raw_data
+      subscriptions = JSON.parse(subscriptions, object_class: OpenStruct)
       range = start_date.to_date..end_date.to_date
-      orders_service = OrdersService.new(current_shop)
-      orders = orders_service.orders_in_range(range.first, range.last, 'id,refunds,created_at,total_price')
+      all_orders =  BulkOperationResponse.find_by(shop_id: current_shop.id, response_type: "all_orders")&.api_raw_data
+      all_orders = JSON.parse(all_orders, object_class: OpenStruct)
+      orders = all_orders.select {|order|  ((start_date.to_date)..end_date.to_date).include?(order.created_at.to_date)}
+
       data_service = ReportDataService.new(subscriptions, current_shop, orders, range)
       #current_year_range = Time.current.beginning_of_year.to_date..Date.today
       last_hour_range = Time.current.beginning_of_year..Time.current - 1.hour
