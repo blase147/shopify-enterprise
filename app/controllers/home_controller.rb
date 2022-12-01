@@ -19,7 +19,11 @@ class HomeController < ApplicationController
   private
 
   def current_shop
-    @current_shop ||= Shop.find_by(shopify_domain: current_shopify_domain)
+    if session[:shop_domain].present?
+      @current_shop = Shop.find_by(shopify_domain: session[:shop_domain])
+    else
+      @current_shop ||= Shop.find_by(shopify_domain: current_shopify_domain)
+    end
   end
 
   def current_shopify_domain

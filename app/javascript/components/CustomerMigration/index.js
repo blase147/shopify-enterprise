@@ -25,6 +25,7 @@ const CustomerMigration = () => {
     }
     const [toastActive, setToastActive] = useState(false);
     const toggleToastActive = useCallback(() => setToastActive((toastActive) => !toastActive), []);
+    const [toastContent, setToastContent] = useState("");
     const submitForm = () => {
         fetch('/subscriptions/customer_migration', {
             method: "POST",
@@ -34,10 +35,13 @@ const CustomerMigration = () => {
             body: JSON.stringify({ "data": formField, "customer_id": selectedCustomers, "sellingplan": selectedSellingPlan })
         }).then(response => response.json())
             .then((data) => {
+                setToastContent(data?.response)
+                if (!data?.error) {
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000)
+                }
                 setToastActive(true)
-                setTimeout(() => {
-                    window.location.reload();
-                }, 3000)
             });
     }
 
@@ -106,7 +110,7 @@ const CustomerMigration = () => {
                     customer_email: item[0],
                     sellingplan: `gid://shopify/SellingPlan/${item[8]}`,
                     data: {
-                        customer_id: item[0],
+                        customer_email: item[0],
                         payment_method: item[1],
                         next_billing_date: item[2],
                         delivery_date: item[3],
@@ -140,7 +144,7 @@ const CustomerMigration = () => {
             <Frame>
                 {
                     toastActive && (
-                        <Toast content="Your request is beign processed. Reloading..." onDismiss={toggleToastActive} />
+                        <Toast content={toastContent} onDismiss={toggleToastActive} />
                     )
                 }
                 <Page primaryAction={
