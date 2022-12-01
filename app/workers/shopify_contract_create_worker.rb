@@ -47,12 +47,12 @@ class ShopifyContractCreateWorker
         order.save
 
         note_hash = JSON.parse(order&.note) rescue {}
-       unless delivery_date.present?
+      unless delivery_date.present?
         calculate_delivery_date = calculate_delivery_date(shop_id)
         delivery_date = calculate_delivery_date.to_date
         delivery_day = delivery_date.strftime("%A")
         SendEmailService.new.send_missing_delivery_date_email(contract.id, delivery_date)
-       end
+      end
         contract.delivery_day = delivery_day
         contract.delivery_date = delivery_date
         exclude = ["8 meals - medium", "6 meals - small", "4 meals - trial", "12 meals - large", "20 meals - family"]
