@@ -91,38 +91,38 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
   });
 
   const GET_WEEKLY_MENU = gql`
-    query ($id: ID!) {
-      fetchWeeklyMenu(id: $id) {
-        id
-        cutoffDate
-        week
-        displayName
-        boxSubscriptionType
-        triggers {
-          name
-        }
-        sellingPlans {
-          sellingPlanId
-          sellingPlanName
-        }
-        collectionImages {
-          collectionId
-          collectionTitle
-          _destroy
-          products {
+      query ($id: ID!) {
+        fetchWeeklyMenu(id: $id) {
+          id
+          cutoffDate
+          week
+          displayName
+          boxSubscriptionType
+          triggers {
+            name
+          }
+          sellingPlans {
+            sellingPlanId
+            sellingPlanName
+          }
+          collectionImages {
+            collectionId
+            collectionTitle
+            _destroy
+            products {
+              productId
+              image
+              _destroy
+            }
+          }
+          productImages {
             productId
             image
             _destroy
           }
         }
-        productImages {
-          productId
-          image
-          _destroy
-        }
       }
-    }
-  `;
+    `;
   // const { id } = useParams();
 
   const [getWeeklyMenu, { data, loading, error }] = useLazyQuery(
@@ -140,25 +140,25 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
   }, []);
 
   const UPDATE_WEEKLY_MENU = gql`
-    mutation ($input: UpdateWeeklyMenuInput!) {
-      updateWeeklyMenu(input: $input) {
-        menu {
-          id
+      mutation ($input: UpdateWeeklyMenuInput!) {
+        updateWeeklyMenu(input: $input) {
+          menu {
+            id
+          }
         }
       }
-    }
-  `;
+    `;
   const [updateWeeklyMenu] = useMutation(UPDATE_WEEKLY_MENU);
 
   const CREATE_WEEKLY_MENU = gql`
-    mutation ($input: AddWeeklyMenuInput!) {
-      addWeeklyMenu(input: $input) {
-        menu {
-          id
+      mutation ($input: AddWeeklyMenuInput!) {
+        addWeeklyMenu(input: $input) {
+          menu {
+            id
+          }
         }
       }
-    }
-  `;
+    `;
 
   const history = useHistory();
   const [createWeeklyMenu] = useMutation(CREATE_WEEKLY_MENU);
@@ -531,7 +531,7 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                               options={[{ label: 'is any', value: 'is_any' }]}
                               label=""
                               value={'is_any'}
-                              onChange={() => {/* for future and avoid warning */ }
+                              onChange={() => {/* for future and avoid warning */ }}
                             />
 
                             <div className="search">
