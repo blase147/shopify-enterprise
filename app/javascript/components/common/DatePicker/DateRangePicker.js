@@ -30,7 +30,7 @@ export default class DateRangePicker extends React.Component {
     switch (span) {
       case "30 days":
         {
-          let start = new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(2, "days")).subtract(30, 'days'))).format()))
+          let start = new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(1, "days")).subtract(30, 'days'))).format()))
           let end = new Date(Date.parse(dayjs(new Date()).subtract(1, "days").format()));
           this.setState({ selected: { start: start, end: end }, span: span })
         }

@@ -5,7 +5,9 @@ module Queries
     argument :end_date, String, required: true
 
     def resolve(start_date:, end_date:)
-      all_subscriptions = ReportService.new.all_subscriptions
+      all_subscriptions = BulkOperationResponse.find_by(shop_id: current_shop.id, response_type: "subscriptions")&.api_raw_data
+      all_subscriptions = JSON.parse(all_subscriptions, object_class: OpenStruct)
+      # all_subscriptions = ReportService.new.all_subscriptions
       range = start_date.to_date..end_date.to_date
       all_subscription_report = CustomerInsightReportService.new(current_shop, all_subscriptions, range)
       subscriptions = all_subscription_report.in_period_subscriptions(all_subscriptions, range)

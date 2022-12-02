@@ -14,6 +14,16 @@ class ShpoifyBulkOperation  < GraphqlService
                         name
                         refunds {
                             id
+                            totalRefundedSet{
+                                presentmentMoney{
+                                    amount
+                                    currencyCode
+                                }
+                                shopMoney{
+                                    amount
+                                    currencyCode
+                                }
+                            }
                         }
                         channel {
                             app {
@@ -264,7 +274,9 @@ class ShpoifyBulkOperation  < GraphqlService
 
 
     def parsed_bulk_data(shop_id, url)
-        require 'net/http'
+        require 'uri'
+		require 'net/http'
+		require 'openssl'
         source = "#{url}"
         resp = Net::HTTP.get_response(URI.parse(source))
         data = resp&.body

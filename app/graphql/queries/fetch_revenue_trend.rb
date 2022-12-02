@@ -1,8 +1,8 @@
 module Queries
   class FetchRevenueTrend < Queries::BaseQuery
     type Types::RevenueTrendType, null: false
-    argument :start_date, String, required: true
-    argument :end_date, String, required: true
+    argument :start_date, String, required: false
+    argument :end_date, String, required: false
 
     def resolve(start_date:, end_date: )
       end_date = end_date.to_date

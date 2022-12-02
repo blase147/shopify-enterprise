@@ -37,7 +37,7 @@ import LoadingScreen from '../LoadingScreen';
 const CustomerInsights = () => {
 
   const fetchReport = gql`
-  query($startDate: String!, $endDate: String!) {
+  query($startDate: String, $endDate: String) {
     fetchCustomerInsights(startDate: $startDate, endDate: $endDate) {
       activeCustomersPercentage
       cancelledCustomersPercentage
@@ -598,7 +598,7 @@ const CustomerInsights = () => {
 
   // const [filters,setFilters]=useContext(FilterContext)
   const [filters, setFilters] = useState({
-    startDate: new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(2, "days")).subtract(30, 'days'))).format())),
+    startDate: new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(1, "days")).subtract(30, 'days'))).format())),
     endDate: new Date(Date.parse(dayjs(new Date()).subtract(1, "days").format()))
   })
   const handleFiltersDates = (dates, span) => {

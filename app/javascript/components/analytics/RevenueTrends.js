@@ -33,7 +33,7 @@ const RevenueTrends = () => {
 
   // const [filters,setFilters,productCharts,setProductCharts]=useContext(FilterContext)
   const [filters, setFilters] = useState({
-    startDate: new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(2, "days")).subtract(30, 'days'))).format())),
+    startDate: new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(1, "days")).subtract(30, 'days'))).format())),
     endDate: new Date(Date.parse(dayjs(new Date()).subtract(1, "days").format())),
     reload: false
   })
@@ -59,7 +59,7 @@ const RevenueTrends = () => {
 
   ///Graph Query...
   const fetchReport = gql`
-  query($startDate: String!, $endDate: String!) {  
+  query($startDate: String, $endDate: String) {  
     fetchRevenueTrend(startDate: $startDate, endDate: $endDate) {
         totalSales {
           value

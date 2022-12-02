@@ -210,7 +210,7 @@ const SmartSms = () => {
   })
   // const [filters,setFilters]=useContext(FilterContext)
   const [filters, setFilters] = useState({
-    startDate: new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(2, "days")).subtract(30, 'days'))).format())),
+    startDate: new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(1, "days")).subtract(30, 'days'))).format())),
     endDate: new Date(Date.parse(dayjs(new Date()).subtract(1, "days").format()))
   })
   const handleFiltersDates = (dates, span) => {

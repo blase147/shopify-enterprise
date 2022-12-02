@@ -1,13 +1,13 @@
-import React,{useState,useEffect,useCallback} from 'react';
-import {Heading,TextStyle, Layout, DisplayText, Card, Select, Stack} from '@shopify/polaris';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Heading, TextStyle, Layout, DisplayText, Card, Select, Stack } from '@shopify/polaris';
 import './export.css';
 import ExportFilter from '../../../common/DatePicker/ExportFilter';
 import { gql, useLazyQuery } from '@apollo/client';
 import dayjs from 'dayjs';
 import { filter, isEmpty, keyBy } from 'lodash';
-import {CSVDownload} from  'react-csv';
+import { CSVDownload } from 'react-csv';
 
-const ExportForm = ({handleCloseForm}) => {
+const ExportForm = ({ handleCloseForm }) => {
 
   const fetchCustomerReport = gql`
   query($reportType: String!, $startDate: String!, $endDate: String!) {
@@ -71,7 +71,7 @@ const ExportForm = ({handleCloseForm}) => {
   `;
   //extra 3 apis to get Data
   const revenueReport = gql`
-  query($startDate: String!, $endDate: String!) {
+  query($startDate: String, $endDate: String) {
     fetchRevenueTrend(startDate: $startDate, endDate: $endDate) {
         totalSales {
           value
@@ -251,37 +251,37 @@ const ExportForm = ({handleCloseForm}) => {
     }
   }
 
-  const [getProductReport, { loading:productLoading, data:productReportData }] = useLazyQuery(fetchProductReport,{fetchPolicy:"network-only"});
-  const [getCustomerReport, { loading:customerLoading, data:customerReportData }] = useLazyQuery(fetchCustomerReport,{fetchPolicy:"network-only"});
+  const [getProductReport, { loading: productLoading, data: productReportData }] = useLazyQuery(fetchProductReport, { fetchPolicy: "network-only" });
+  const [getCustomerReport, { loading: customerLoading, data: customerReportData }] = useLazyQuery(fetchCustomerReport, { fetchPolicy: "network-only" });
 
-  const [getanalyticReport] = useLazyQuery(fetchAnalyticsReport,{fetchPolicy:"network-only"});
-  const [getRevenueReport, {loading:revenueLoading, data:revenueReportData }] = useLazyQuery(revenueReport,{fetchPolicy:"network-only"});
-  const [getInsightsReport, {loading:insightLoading, data:insightReportData }] = useLazyQuery(insightReport,{fetchPolicy:"network-only"});
-  const [getSmartyReport, {loading:smartyLoading, data:smartyReportData }] = useLazyQuery(smartyReport,{fetchPolicy:"network-only"});
+  const [getanalyticReport] = useLazyQuery(fetchAnalyticsReport, { fetchPolicy: "network-only" });
+  const [getRevenueReport, { loading: revenueLoading, data: revenueReportData }] = useLazyQuery(revenueReport, { fetchPolicy: "network-only" });
+  const [getInsightsReport, { loading: insightLoading, data: insightReportData }] = useLazyQuery(insightReport, { fetchPolicy: "network-only" });
+  const [getSmartyReport, { loading: smartyLoading, data: smartyReportData }] = useLazyQuery(smartyReport, { fetchPolicy: "network-only" });
 
-  useEffect(()=>{
-    if(!isEmpty(filters)){
-      if(filters?.reportType==="customer"){
+  useEffect(() => {
+    if (!isEmpty(filters)) {
+      if (filters?.reportType === "customer") {
         getCustomerReport({
-          variables:{
+          variables: {
             reportType: "customer",
             startDate: filters?.startDate,
             endDate: filters?.endDate
           }
         })
       }
-      else if(filters?.reportType==="product"){
+      else if (filters?.reportType === "product") {
         getProductReport({
-          variables:{
+          variables: {
             reportType: "product",
             startDate: filters?.startDate,
             endDate: filters?.endDate
           }
         })
       }
-      else if(filters?.reportType==="analytic"){
+      else if (filters?.reportType === "analytic") {
         getanalyticReport({
-          variables:{
+          variables: {
             reportType: "analytic",
             startDate: filters?.startDate,
             endDate: filters?.endDate
@@ -289,148 +289,147 @@ const ExportForm = ({handleCloseForm}) => {
         })
         //get required Data from Api's....
         getRevenueReport({
-          variables:{
+          variables: {
             startDate: filters?.startDate,
             endDate: filters?.endDate
           }
         })
         getInsightsReport({
-          variables:{
+          variables: {
             startDate: filters?.startDate,
             endDate: filters?.endDate
           }
         })
         getSmartyReport({
-          variables:{
+          variables: {
             startDate: filters?.startDate,
             endDate: filters?.endDate
           }
         })
       }
     }
-  },[filters])
+  }, [filters])
 
-  const [data,setData]=useState(null);
-  useEffect(()=>{
-      if(!isEmpty(productReportData?.fetchReport)){
-        setData(productReportData.fetchReport.products)
-      }
-  },[productReportData])
-
-  useEffect(()=>{
-    if(!isEmpty(customerReportData)){
-      setData(customerReportData.fetchReport.customers)
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    if (!isEmpty(productReportData?.fetchReport)) {
+      setData(productReportData.fetchReport.products)
     }
-},[customerReportData])
+  }, [productReportData])
 
   useEffect(() => {
-    if(!isEmpty(revenueReportData) && !isEmpty(insightReportData) && !isEmpty(smartyReportData)){
-      let first= !isEmpty(insightReportData?.fetchCustomerInsights)?insightReportData?.fetchCustomerInsights: {};
-      let second = !isEmpty(revenueReportData.fetchRevenueTrend) ?revenueReportData.fetchRevenueTrend: {};
-      let third =!isEmpty(smartyReportData.fetchSmsAnalytics) ?smartyReportData.fetchSmsAnalytics: {};
+    if (!isEmpty(customerReportData)) {
+      setData(customerReportData.fetchReport.customers)
+    }
+  }, [customerReportData])
 
-      let modified={};
+  useEffect(() => {
+    if (!isEmpty(revenueReportData) && !isEmpty(insightReportData) && !isEmpty(smartyReportData)) {
+      let first = !isEmpty(insightReportData?.fetchCustomerInsights) ? insightReportData?.fetchCustomerInsights : {};
+      let second = !isEmpty(revenueReportData.fetchRevenueTrend) ? revenueReportData.fetchRevenueTrend : {};
+      let third = !isEmpty(smartyReportData.fetchSmsAnalytics) ? smartyReportData.fetchSmsAnalytics : {};
 
-      if(!isEmpty(first)){
+      let modified = {};
+
+      if (!isEmpty(first)) {
         for (const [key, value] of Object.entries(first)) {
           modified[key] = value?.value || '0';
-       }
+        }
       }
-      if(!isEmpty(second)){
+      if (!isEmpty(second)) {
         for (const [key, value] of Object.entries(second)) {
           modified[key] = value?.value || '0';
         }
       }
-     if(!isEmpty(third)){
-      for (const [key, value] of Object.entries(third)) {
-        modified[key] = value?.value || '0';
+      if (!isEmpty(third)) {
+        for (const [key, value] of Object.entries(third)) {
+          modified[key] = value?.value || '0';
+        }
       }
-     }
 
       setData([modified]);
     }
   }, [revenueReportData, insightReportData, smartyReportData])
 
-    useEffect(()=>{
-      if(!isEmpty(data))
-      {
-        handleCloseForm(data,filters)
-      }
-    },[data])
+  useEffect(() => {
+    if (!isEmpty(data)) {
+      handleCloseForm(data, filters)
+    }
+  }, [data])
 
-    return (
-        <Layout >
-          {
-            !isEmpty(data) &&
-           <>
-           <CSVDownload data={data} />
-           </>
-          }
-        <div className='wrapper'>
-          <div className='bread-bar'>
-            <a>Export</a>
-            <span>{">"}</span>
-            <a>Export Builder</a>
-          </div>
-          <div className="input-section">
+  return (
+    <Layout >
+      {
+        !isEmpty(data) &&
+        <>
+          <CSVDownload data={data} />
+        </>
+      }
+      <div className='wrapper'>
+        <div className='bread-bar'>
+          <a>Export</a>
+          <span>{">"}</span>
+          <a>Export Builder</a>
+        </div>
+        <div className="input-section">
           {/* <DisplayText size='medium'><strong>Select Export Type</strong></DisplayText> */}
-            <ExportFilter
-              handleDates={handleFiltersDates}
-              loading={productLoading || customerLoading || revenueLoading || smartyLoading || insightLoading}
-            />
-            </div>
-          </div>
-          <div className ='faq-sms'>
-            <Card sectioned>
-              <h1>Frequently Asked Questions </h1>
-              <Stack vertical>
-                <Stack.Item>
-                  <Heading>
-                    SHOPIFY ONLY: Are tax rates in lorem ipsum synced with tax
-                    rates in Shopify?
-                  </Heading>
-                  <TextStyle variation='subdued'>
-                    {" "}
-                    When you first install lorem, our system will sync the
-                    province taxes to match the settings in Shopify once. Going
-                    forward, if this is edited in Shopify, it will not sync
-                    automatically with loreme, it must be updated independently
-                    through th
-                  </TextStyle>
-                </Stack.Item>
-                <Stack.Item>
-                  <Heading>
-                    SHOPIFY ONLY: Are tax rates in lorem ipsum synced with tax
-                    rates in Shopify?
-                  </Heading>
-                  <TextStyle variation="subdued">
-                    {" "}
-                    When you first install lorem, our system will sync the
-                    province taxes to match the settings in Shopify once. Going
-                    forward, if this is edited in Shopify, it will not sync
-                    automatically with loreme, it must be updated independently
-                    through th
-                  </TextStyle>
-                </Stack.Item>
-                <Stack.Item>
-                  <Heading>
-                    SHOPIFY ONLY: Are tax rates in lorem ipsum synced with tax
-                    rates in Shopify?
-                  </Heading>
-                  <TextStyle variation="subdued">
-                    {" "}
-                    When you first install lorem, our system will sync the
-                    province taxes to match the settings in Shopify once. Going
-                    forward, if this is edited in Shopify, it will not sync
-                    automatically with loreme, it must be updated independently
-                    through th
-                  </TextStyle>
-                </Stack.Item>
-              </Stack>
-            </Card>
-          </div>
-      </Layout>
-    )
+          <ExportFilter
+            handleDates={handleFiltersDates}
+            loading={productLoading || customerLoading || revenueLoading || smartyLoading || insightLoading}
+          />
+        </div>
+      </div>
+      <div className='faq-sms'>
+        <Card sectioned>
+          <h1>Frequently Asked Questions </h1>
+          <Stack vertical>
+            <Stack.Item>
+              <Heading>
+                SHOPIFY ONLY: Are tax rates in lorem ipsum synced with tax
+                rates in Shopify?
+              </Heading>
+              <TextStyle variation='subdued'>
+                {" "}
+                When you first install lorem, our system will sync the
+                province taxes to match the settings in Shopify once. Going
+                forward, if this is edited in Shopify, it will not sync
+                automatically with loreme, it must be updated independently
+                through th
+              </TextStyle>
+            </Stack.Item>
+            <Stack.Item>
+              <Heading>
+                SHOPIFY ONLY: Are tax rates in lorem ipsum synced with tax
+                rates in Shopify?
+              </Heading>
+              <TextStyle variation="subdued">
+                {" "}
+                When you first install lorem, our system will sync the
+                province taxes to match the settings in Shopify once. Going
+                forward, if this is edited in Shopify, it will not sync
+                automatically with loreme, it must be updated independently
+                through th
+              </TextStyle>
+            </Stack.Item>
+            <Stack.Item>
+              <Heading>
+                SHOPIFY ONLY: Are tax rates in lorem ipsum synced with tax
+                rates in Shopify?
+              </Heading>
+              <TextStyle variation="subdued">
+                {" "}
+                When you first install lorem, our system will sync the
+                province taxes to match the settings in Shopify once. Going
+                forward, if this is edited in Shopify, it will not sync
+                automatically with loreme, it must be updated independently
+                through th
+              </TextStyle>
+            </Stack.Item>
+          </Stack>
+        </Card>
+      </div>
+    </Layout>
+  )
 }
 
 export default ExportForm

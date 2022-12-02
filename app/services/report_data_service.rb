@@ -70,7 +70,7 @@ class ReportDataService
   end
 
   def refunded_amount(orders)
-    orders.sum { |order| order.refunds.sum { |refund| refund.transactions.sum {|t| t.amount.to_f} } }
+    orders.sum {|order| order.refunds.sum { | refund| refund.total_refunded_set.shop_money.amount.to_f}}
   end
 
   def arr_data_by_date(date, subscriptions)
@@ -121,7 +121,7 @@ class ReportDataService
   # Revenue Trends
   def get_total_sales(range = nil)
     orders = range.nil? ? @orders : @orders.select { |order| range.cover?(order&.created_at&.to_date) }
-    orders&.sum { |order| order.total_price.to_f } - orders.sum { |order| order.refunds.sum { |refund| refund.transactions.sum {|t| t.amount.to_f} } }.round(2) if orders.present?
+    orders&.sum { |order| order.total_price.to_f } - orders.sum {|order| order.refunds.sum { | refund| refund.total_refunded_set.shop_money.amount.to_f}}.round(2) if orders.present?
   end
 
   def charge_count(range)
@@ -168,7 +168,7 @@ class ReportDataService
   end
 
   def orders_calculate_amount(orders)
-    orders.sum { |order| order.total_price.to_f } - orders.sum { |order| order.refunds.sum { |refund| refund.transactions.sum {|t| t.amount.to_f} } }.round(2)
+    orders.sum {|order| order.refunds.sum { | refund| refund.total_refunded_set.shop_money.amount.to_f}}.round(2)
   end
 
   def average_recurring_charge
