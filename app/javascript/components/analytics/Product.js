@@ -25,7 +25,7 @@ const CustomerInsights = () => {
 
   ///Graph Query...
   const fetchReport = gql`
-  query($startDate: String!, $endDate: String!) {  
+  query($startDate: String, $endDate: String) {  
     fetchRevenueTrend(startDate: $startDate, endDate: $endDate) {
         skuBySubscriptions {
             sku
@@ -188,7 +188,7 @@ const CustomerInsights = () => {
 
   // const [filters,setFilters,productCharts,setProductCharts]=useContext(FilterContext)
   const [filters, setFilters] = useState({
-    startDate: new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(2, "days")).subtract(30, 'days'))).format())),
+    startDate: new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(1, "days")).subtract(30, 'days'))).format())),
     endDate: new Date(Date.parse(dayjs(new Date()).subtract(1, "days").format()))
   })
   const handleFiltersDates = (dates, span) => {
