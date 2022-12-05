@@ -55,7 +55,7 @@
                 div.with_show_reactvate
                   div.showOnReactivate.hide
                     label class="choose_billing_date_label" for="resume_cancel_date" Choose Date to resume billing your card on file
-                    input type ="date" class="billing_date_resume" id="resume_cancel_date" class="resume_subscription" min="#{(Date.today + 1.day)&.strftime("%Y-%m-%d")}"
+                    input type ="date" class="billing_date_resume#{subscription.node.id[/\d+/]}" id="resume_cancel_date" class="resume_subscription" min="#{(Date.today + 1.day)&.strftime("%Y-%m-%d")}"
                     button type='submit' class="submit_reactive_btn" data-subscription="#{subscription.node.id[/\d+/]}" Confirm
                     div.error_resume_message style="color: red;"
           .quantity-wrapper
@@ -126,11 +126,16 @@ javascript:
   $(".submit_reactive_btn").on("click",function(){
     $.ajax({
       type: 'post',
-      url: `subscriptions/${$(this).data("subscription")}/resume?customer=#{params[:customer]}&billing_date=${$(".billing_date_resume").val()}&token=#{params[:token]}`,
+      url: `subscriptions/${$(this).data("subscription")}/resume?customer=#{params[:customer]}&billing_date=${$(`.billing_date_resume${$(this).data("subscription")}`).val()}&token=#{params[:token]}`,
       success: function(){
         if(response?.error){
           $(".error_resume_message").html(`${response?.error}`)
         }else{
+          Swal.fire({
+            icon: 'success',
+            title: "Success! Reloading Page",
+            showConfirmButton: false
+          })
           location.reload();
         }
       }

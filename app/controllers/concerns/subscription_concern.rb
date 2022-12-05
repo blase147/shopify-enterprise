@@ -263,12 +263,12 @@ module SubscriptionConcern
         end
 
         if result[:error].present?
-          render js: "alert('#{result[:error]}');"
+          render json:{error: result[:error]}
         else
           ShopifyContractUpdateWorker.perform_async(csc&.shop_id, csc&.shopify_id)
           email_notification = csc.shop.setting.email_notifications.find_by_name "Resume Subscription"
           EmailService::Send.new(email_notification).send_email({customer: csc}) unless email_notification.nil?
-          render js: 'location.reload()'
+          render json:{success: :ok}
         end
       end
     end
