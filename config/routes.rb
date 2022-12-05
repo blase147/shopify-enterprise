@@ -209,6 +209,16 @@ Rails.application.routes.draw do
       post :create_user_shop_child
     end
   end
+  
+  get "/ssoLogin",to: "user_shop_password_less_login#index"
+  resources :user_shop_password_less_login, only: [] do
+    collection do
+      post :send_otp_passwordless_login
+      post :auth_with_otp
+      delete :log_out
+    end
+  end
+
   post '/changeShop', to: 'user_shops#change_shop'
 
   get 'subscription/charge', to: 'callback#charge'
@@ -218,4 +228,5 @@ Rails.application.routes.draw do
 
   get '*path' => 'home#index'
   post 'twilio/sms', 'twilio#sms'
+
 end

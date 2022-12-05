@@ -40,7 +40,7 @@ class HomeController < ApplicationController
   def redirection
     shop = Shop.all
     user = UserShop.all
-    unless current_user.present?
+    unless current_user.present? || request.url.to_s.include?("/ssoLogin")
         if shop.present? && !user.present? && !request.url.to_s.include?("/users/sign_up")
           redirect_to "/users/sign_up" 
         elsif shop.present? && user.present? && !request.url.to_s.include?("/users/sign_in")
