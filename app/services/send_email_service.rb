@@ -121,6 +121,19 @@ class SendEmailService
         return sent
     end
 
+    def send_otp_user_shop_passwordless_login(user, otp)
+        shop = Shop.find(user.shop_id)
+        email_notification = shop.setting.email_notifications.find_by_name "Passwordless Login OTP"
+        
+        sent= EmailService::Send.new(email_notification).send_email({customer: user,otp: otp}) if email_notification.present? && shop.setting.email_service.present?
+        if sent
+            SiteLog.create(log_type: SiteLog::TYPES[:email_success], message: "Passwordless Login OTP sent")
+        else
+            SiteLog.create(log_type: SiteLog::TYPES[:email_failure], params: {id: user.id, shopify_id: user.shopify_id })
+        end
+        return sent
+    end
+
     #-----------------------Contract Actions Emails----------------------
     def send_skip_meal(contract, begin_date, end_date)
         email_notification = contract.shop.setting.email_notifications.find_by_name "Skip Meal"
