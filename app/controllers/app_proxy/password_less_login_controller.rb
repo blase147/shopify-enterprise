@@ -49,11 +49,15 @@ class AppProxy::PasswordLessLoginController < AppProxyController
 
         if passwordless_otp.present? && (passwordless_otp.created_at >= 15.minutes.ago ) && ("#{passwordless_otp&.otp}"&.strip == "#{params[:otp]}"&.strip)
             # set auth code in redis which will expire in 30 minutes
-            auth_token = SecureRandom.urlsafe_base64(nil, false)
-            $redis.set("#{customer.email}_auth", auth_token, options = {ex: 1800})
-            redirect_to "/a/chargezen/dashboard?customer=#{customer&.shopify_id}&token=#{auth_token}"
+            @auth_token = SecureRandom.urlsafe_base64(nil, false)
+            $redis = Redis.new
+            $redis.set("#{customer.email}_auth", @auth_token, options = {ex: 1800})
+            @customer = customer
+            respond_to do |format|
+                format.js
+            end
         else
-            render json:{error: "You have entered wrong OTP"}
+            render json:{error: "You have entered wrong OTP", :status => :unprocessable_entity}
         end
     end 
 

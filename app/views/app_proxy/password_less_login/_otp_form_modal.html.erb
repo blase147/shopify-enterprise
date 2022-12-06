@@ -37,7 +37,7 @@
             type: "post",
             data: `email=<%= params[:email] %>&otp=${$("#otp_field").val()}`,
             url: "/a/chargezen/password_less_login/auth_with_otp",
-            success: function(response){
+            error: function(response){
                 console.log(response?.error)
                 if(response?.error){
                     $("#error_message").html(response?.error)

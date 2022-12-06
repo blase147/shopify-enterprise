@@ -36,7 +36,6 @@
             data: `email=<%= params[:email] %>&otp=${$("#otp_field").val()}`,
             url: "/user_shop_password_less_login/auth_with_otp",
             success: function(response){
-                console.log(response?.error)
                 if(response?.error){
                      $("#error_message").removeClass("hide")
                     $("#error_message").html(response?.error)

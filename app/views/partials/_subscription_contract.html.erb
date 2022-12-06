@@ -545,7 +545,7 @@
                           </button>
                           <%= render partial: "/partials/message_modal", locals:{header: "Already Paid", message: "You have already paid for this order. It cannot be skipped",message_modal_id: "already_paid_message_modal"}%>
                         <% else %>
-                          <button type="button" class="btn-yellow bold skip_week" style="float: right;" data-week="<%= week_day %>" data-contractId="<%= @customer&.id %>" >
+                          <button type="button" class="btn-yellow bold skip_week" style="float: right;" data-week="<%= week_day %>" data-contractId="<%= @customer&.id %>" data-contractshopifyid="<%= @customer&.shopify_id %>" >
                             <%= @customer&.skip_dates&.include?("#{week_day&.to_date&.cweek}") ? "Unskip" : "Skip" %>
                           </button>
                         <% end %>
@@ -831,7 +831,6 @@
     </div>
   </div>
 <script type="text/javascript">
-
   $('.skip-date').on('click', function(e){
     $(this).html("SKIP <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>");
     let params = {
@@ -909,11 +908,16 @@
       $(this).html('Unskip');
       $(this).parent().parent().parent().parent().addClass("grayed-out");
       $("#add_box_"+$(this)?.data("week")).addClass("hide");
+      mixpanelIdentify($(this)?.data("contractshopifyid"))
+      mixpanelTrack("Skipped", {week: $(this)?.data("week")})
+
     }else{
       data= "skip_date="+$(this)?.data("week")+"&method=unskip&id="+$(this)?.data("contractid")
       $(this).html('Skip')
       $(this).parent().parent().parent().parent().removeClass("grayed-out");
       $("#add_box_"+$(this)?.data("week")).removeClass("hide");
+      mixpanelIdentify($(this)?.data("contractshopifyid"))
+      mixpanelTrack("Unskipped", {week: $(this)?.data("week")})
     }
     $.ajax({
       type: "get",
