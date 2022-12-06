@@ -234,7 +234,7 @@ class SubscriptionsController < AuthenticatedController
     @error = nil
     if params[:data][:payment_method] == "stripe"
       customer = CustomerModal.find_by_shopify_id(params[:customer_id][/\d+/])
-      @stripe_customer = Stripe::Customer.list({}, api_key: current_shop.stripe_api_key).data.filter{|c| c&.email == customer&.email}[0]
+      @stripe_customer = Stripe::Customer.list({email: customer&.email}, api_key: current_shop.stripe_api_key).data[0] rescue nil
       if @stripe_customer.present?
         AddStripeCustomerMigration.create(raw_data: params.to_json, customer_id: params[:customer_id][/\d+/]&.to_i)
         CustomerService.new({shop: current_shop}).create_customer_payment_remote_method(@stripe_customer&.id, params[:customer_id])
