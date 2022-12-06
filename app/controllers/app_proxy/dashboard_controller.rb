@@ -62,7 +62,7 @@ class AppProxy::DashboardController < AppProxyController
     if @payment_methods.empty? && current_shop.stripe_api_key.present?
       @current_shop = current_shop
       @payment_type = :STRIPE.to_s
-      @stripe_customer = Stripe::Customer.list({}, api_key: current_shop.stripe_api_key).data.filter{|c| c.email == @shopify_customer.email}[0]
+      @stripe_customer = Stripe::Customer.list({email: @shopify_customer&.email}, api_key: current_shop.stripe_api_key).data[0] rescue nil
       @stripe_card_info = []
       unless @stripe_customer.nil?
         stripe_card = Stripe::Customer.retrieve_source(@stripe_customer.id, @stripe_customer.default_source, api_key: current_shop.stripe_api_key)
