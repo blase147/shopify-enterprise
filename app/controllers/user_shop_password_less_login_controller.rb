@@ -1,4 +1,5 @@
 class UserShopPasswordLessLoginController < ActionController::Base
+    skip_before_action :verify_authenticity_token
     layout "user_shop_passwordless_login"
     def index
     end
@@ -35,5 +36,18 @@ class UserShopPasswordLessLoginController < ActionController::Base
             render json:{error: "You have entered wrong OTP"}
         end
     end 
+
+    def registered_on_mixpanel
+        @user = current_user
+        respond_to do |format|
+            format.js
+        end
+    end
+
+    def save_mixpanel_id
+        user = User.find(params[:user_local_id])
+        user.update(mixpanel_id: params[:mixpanel_id])
+        redirect_to "/"
+    end
 
 end

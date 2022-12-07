@@ -1,0 +1,22 @@
+<% if @customer.mixpanel_id.present? %>
+    let user = mixpanelIdentify('<%= @customer.mixpanel_id %>');
+    mixpanelTrack("Sign in success", {$email: '<%= @customer.email %>'});
+    localStorage.setItem("distinct_id_chargezen", '<%= @customer.mixpanel_id %>');
+    window.location.replace("/a/chargezen/dashboard?customer=<%= @customer&.shopify_id %>&token=<%= @auth_token %>")
+<% else %>
+    mixpanelGetIdentify();
+    mixpanelTrack("Sign in success", {$email: '<%= @customer.email %>'});
+    setPeople();
+<% end %>
+
+async function setPeople(){
+    const response = await mixpanelPeopleSetOnce({$first_name: '<%= @customer.first_name %>', $last_name: '<%= @customer.last_name %>', $email: '<%= @customer.email %>', $shopify_id: '<%= @customer.shopify_id %>'})
+    localStorage.setItem("distinct_id_chargezen", response?.$distinct_id);
+    $.ajax({
+        type: 'post',
+        data: `customer_local_id=<%= @customer.id%>&mixpanel_id=${response?.$distinct_id}`,
+        url: '/a/chargezen/password_less_login/registered_on_mixpanel'
+    })
+}
+
+    

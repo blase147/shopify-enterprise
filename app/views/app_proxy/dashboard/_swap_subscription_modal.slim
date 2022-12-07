@@ -58,6 +58,8 @@ javascript:
   $(".submit_swap_form").on("click",function (){
     var formId = $(this).attr("data-index") + $(this).attr("data-contract");
     var form = document.getElementById(`form-${formId}`);
+    mixpanelIdentify('#{get_customer_modal(@customer&.shopify_customer_id)&.mixpanel_id }')
+    mixpanelTrack("Swapped Subscription", {contract_shopify_id: `${$(this).attr("data-contract")}`})
     $.ajax({
       type: "post",
       data: serialize(form)+"&index="+$(this).attr("data-index")+"&productindex="+$(this).attr("data-productindex")+"&action_by=#{action_by}&token=#{params[:token]}",

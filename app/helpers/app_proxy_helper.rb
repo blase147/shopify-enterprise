@@ -138,4 +138,7 @@ module AppProxyHelper
     return CustomerSubscriptionContract.where(shopify_customer_id: customer_id)
   end
   
+  def get_customer_modal shopify_id
+    return CustomerModal.find_by_shopify_id(shopify_id) rescue nil
+  end
 end
