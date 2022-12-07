@@ -74,4 +74,12 @@ class AppProxy::PasswordLessLoginController < AppProxyController
         $redis.del("#{params[:email]&.downcase&.strip}_auth")
         redirect_to "/a/chargezen/passwordlesslogin"
     end
+
+    def registered_on_mixpanel
+        customer = CustomerModal.find(params[:customer_local_id])
+        customer.update(mixpanel_id: params[:mixpanel_id])
+        $redis = Redis.new
+        auth_token = $redis.get("#{customer.email}_auth")
+        redirect_to "/a/chargezen/dashboard?customer=#{customer&.shopify_id}&token=#{auth_token}"
+    end
 end

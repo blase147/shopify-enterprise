@@ -124,6 +124,8 @@ javascript:
   })
 
   $(".submit_reactive_btn").on("click",function(){
+    mixpanelIdentify('#{get_customer_modal(params[:customer])&.mixpanel_id}')
+    mixpanelTrack("Reactivated Cancelled Subscription", {contract_shopify_id: `${$(this).data("subscription")}`})
     $.ajax({
       type: 'post',
       url: `subscriptions/${$(this).data("subscription")}/resume?customer=#{params[:customer]}&billing_date=${$(`.billing_date_resume${$(this).data("subscription")}`).val()}&token=#{params[:token]}`,

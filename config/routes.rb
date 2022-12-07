@@ -141,6 +141,7 @@ Rails.application.routes.draw do
         post :send_otp_passwordless_login
         post :auth_with_otp
         delete :log_out
+        post :registered_on_mixpanel
       end
     end
     root 'dashboard#index'
@@ -216,6 +217,8 @@ Rails.application.routes.draw do
       post :send_otp_passwordless_login
       post :auth_with_otp
       delete :log_out
+      get :registered_on_mixpanel
+      post :save_mixpanel_id
     end
   end
 

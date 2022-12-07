@@ -228,7 +228,7 @@
     e.preventDefault();
     $(this).prop('disabled', true);
     $(this).text('Processing..');
-    week_number = <%= params[:week_day]&.to_date&.strftime('%-V').to_i %>
+    let week_number = <%= params[:week_day]&.to_date&.strftime('%-V').to_i %>
     console.log("product_ids",product_ids);
     let params = {
       product_ids: product_ids,
@@ -236,7 +236,8 @@
       customer: <%= @customer&.shopify_customer_id %> ,
       shopify_contract_id: <%= @customer&.shopify_id %>
     }
-
+    mixpanelIdentify('<%= get_customer_modal(@customer&.shopify_customer_id)&.mixpanel_id %>')
+    mixpanelTrack("Added Meals", {contract_shopify_id: `<%= @customer&.shopify_id %>`, week: week_number})
     $.ajax({
       url: '/a/chargezen/dashboard/create_pre_order',
       type: 'POST',

@@ -7,6 +7,11 @@ console.log("mixpanel", mixpanel);
 window.mixpanelIdentify = function (id) {
     mixpanel.identify(id)
 }
+
+window.mixpanelGetIdentify = function () {
+    mixpanel.identify()
+}
+
 window.mixpanelTrack = function (name, props) {
     if (props) {
         mixpanel.track(name, props)
@@ -15,11 +20,11 @@ window.mixpanelTrack = function (name, props) {
     }
 }
 
-window.mixpanelPeopleSetOnce = function (props) {
-    console.log(props);
-    mixpanel.people.set_once(props)
+window.mixpanelPeopleSetOnce = async function (props) {
+    let response = await mixpanel.people.set_once(props);
+    return response;
 }
 
-window.mixpanelIdentify = function () {
-    mixpanel.identify();
+window.mixpanelAlias = function (value) {
+    mixpanel.alias(value)
 }
