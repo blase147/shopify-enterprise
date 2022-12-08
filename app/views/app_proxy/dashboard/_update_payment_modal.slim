@@ -1,3 +1,4 @@
+= javascript_pack_tag 'mixpanel', 'data-turbolinks-track': 'reload'
 .Polaris-Modal id=("update-payment") style="display: none"
   .Polaris-Modal-Dialog__Container data-polaris-layer="true" data-polaris-overlay="true"
     .Polaris-Modal-Dialog aria-labelledby="Polarismodal-header20" role="dialog" tabindex="-1"
@@ -113,6 +114,8 @@ javascript:
 javascript: 
   $("#update_card_details").on('click',function(e){
     e.preventDefault();
+    mixpanelIdentify('#{get_customer_modal(@customer&.shopify_customer_id)&.mixpanel_id}')
+    mixpanelTrack("Updated Payment Method")
     $.ajax({
       url: $("#card_detail_form").attr("action"),
       type: 'POST',
