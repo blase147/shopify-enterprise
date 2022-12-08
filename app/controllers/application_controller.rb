@@ -48,8 +48,8 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     user_shop = UserShop.find_or_create_by( user_id: current_user.id)
-    super(resource)
-    # "/user_shop_password_less_login/registered_on_mixpanel"
+    #register user on mixpanel
+    "/admin/id"
   end
 
   protected

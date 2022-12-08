@@ -17,6 +17,7 @@ import CustomerAutocomplete from './CustomerAutocomplete';
 import SellingPlans from './SellingPlans';
 import { NoteMinor } from '@shopify/polaris-icons';
 import Papa from 'papaparse';
+import mixpanel from 'mixpanel-browser';
 const CustomerMigration = () => {
     const initFormValues = { customer_id: '', next_billing_date: '', delivery_date: '', delivery_price: '', variant_id: '', quantity: '', current_price: '', billing_policy_interval: '', billing_policy_interval_count: '', delivery_policy_interval: '', delivery_policy_interval_count: '', payment_method: '' }
     const [formField, setFormField] = useState(initFormValues)
@@ -26,7 +27,13 @@ const CustomerMigration = () => {
     const [toastActive, setToastActive] = useState(false);
     const toggleToastActive = useCallback(() => setToastActive((toastActive) => !toastActive), []);
     const [toastContent, setToastContent] = useState("");
+    //Initialise Mixpanel
+    mixpanel.init("467d5df251a711e7b0ae20d18c8fb2e1", { debug: true });
+    const mixpanelId = localStorage.getItem("distinct_id_admin_chargezen");
+
     const submitForm = () => {
+        mixpanel.identify(mixpanelId);
+        mixpanel.track("Created Customer Migration", { customer_id: selectedCustomers });
         fetch('/subscriptions/customer_migration', {
             method: "POST",
             headers: {
@@ -122,7 +129,8 @@ const CustomerMigration = () => {
                 });
             }
         });
-
+        mixpanel.identify(mixpanelId);
+        mixpanel.track("Import Customer Migration", {});
         fetch('/subscriptions/import_customer_migrations', {
             method: "POST",
             headers: {
