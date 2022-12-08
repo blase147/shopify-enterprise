@@ -40,14 +40,14 @@ class UserShopPasswordLessLoginController < ActionController::Base
     def registered_on_mixpanel
         @user = current_user
         respond_to do |format|
-            format.js
+            format.html
         end
     end
 
     def save_mixpanel_id
         user = User.find(params[:user_local_id])
         user.update(mixpanel_id: params[:mixpanel_id])
-        redirect_to "/"
+        render js: "location.replace('/')"
     end
 
 end

@@ -212,12 +212,12 @@ Rails.application.routes.draw do
   end
   
   get "/ssoLogin",to: "user_shop_password_less_login#index"
+  get "/admin/id", to: "user_shop_password_less_login#registered_on_mixpanel"
   resources :user_shop_password_less_login, only: [] do
     collection do
       post :send_otp_passwordless_login
       post :auth_with_otp
       delete :log_out
-      get :registered_on_mixpanel
       post :save_mixpanel_id
     end
   end

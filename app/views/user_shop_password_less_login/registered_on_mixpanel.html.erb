@@ -1,8 +1,10 @@
+<%= javascript_pack_tag 'mixpanel', 'data-turbolinks-track': 'reload' %>
+<script>
 <% if @user.mixpanel_id.present? %>
     let user = mixpanelIdentify('<%= @user.mixpanel_id %>');
     mixpanelTrack("Sign in success", {$email: '<%= @user.email %>'});
     localStorage.setItem("distinct_id_admin_chargezen", '<%= @user.mixpanel_id %>');
-    window.location.replace("/a/chargezen/dashboard?customer=<%= @user&.shopify_id %>&token=<%= @auth_token %>")
+    location.replace("/")
 <% else %>
     mixpanelGetIdentify();
     mixpanelTrack("Sign in success", {$email: '<%= @user.email %>'});
@@ -18,5 +20,6 @@ async function setPeople(){
         url: '/user_shop_password_less_login/save_mixpanel_id'
     })
 }
-
+</script>
+    
     

@@ -39,12 +39,17 @@ import SearchCollection from '../plans/SearchCollection';
 import SearchProduct from '../plans/SearchProduct';
 import SearchPlan from '../upsell/SearchPlan';
 import RangePickr from './RangePickr';
+import mixpanel from 'mixpanel-browser';
 
 const WeeklyMenuForm = ({ id, handleClose }) => {
   const options = [...Array(99).keys()].map((foo) => (foo + 1).toString());
   const [canceledProducts, setCanceledProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
   const [updated, setUpdated] = useState(false);
+
+  //Initialise Mixpanel
+  mixpanel.init("467d5df251a711e7b0ae20d18c8fb2e1", { debug: true });
+  const mixpanelId = localStorage.getItem("distinct_id_admin_chargezen");
 
   const triggerOptions = [
     {
@@ -306,6 +311,8 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
               ]; // Manipulate later
 
               if (id) {
+                mixpanel.identify(mixpanelId);
+                mixpanel.track("Updated Weekly Menu", { week: formData?.week });
                 updateWeeklyMenu({
                   variables: {
                     input: { params: formData },
@@ -327,6 +334,8 @@ const WeeklyMenuForm = ({ id, handleClose }) => {
                     setFormErrors(error);
                   });
               } else {
+                mixpanel.identify(mixpanelId);
+                mixpanel.track("Created Weekly Menu", { week: formData?.week });
                 createWeeklyMenu({
                   variables: { input: { params: formData } },
                 })

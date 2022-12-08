@@ -72,6 +72,8 @@ javascript:
     variant_id = $(this).data('variant-id');
     url = "/subscriptions/"+id+"/remove_line?line_id="+line_id+"&lines_count=1&quantity=1&variant_id="+variant_id+"&action_by=admin&token=#{params[:token]}";
     $(this).text('Updating..');
+    mixpanelIdentify('#{current_user&.mixpanel_id}')
+    mixpanelTrack("Canceled Subscription", {contract_shopify_id: '#{contract&.shopify_id}'})
     $.ajax({
       url: url,
       type: 'POST',
@@ -104,6 +106,8 @@ javascript:
     var date = myDate.getDate() + '/' + ("0" + (myDate.getMonth() + 1)).slice(-2) + '/' + myDate.getFullYear();
     url = "/subscriptions/" + contract_id + action + "?billing_date=" + date+"&action_by=admin&token=#{params[:token]}"
     $(this).text('Updating..');
+    mixpanelIdentify('#{current_user&.mixpanel_id}')
+    mixpanelTrack("Paused Subscription", {contract_shopify_id: '#{contract&.shopify_id}'})
     $.ajax({
       url: url,
       type: 'POST',
@@ -137,6 +141,8 @@ javascript:
   $(".cancel_later_submit").on('click',function() { 
     let id = $(this).data("id");
     let contractId = $(this).data("contractid");
+    mixpanelIdentify('#{current_user&.mixpanel_id}')
+    mixpanelTrack("Cancel Later Subscription", {contract_shopify_id: '#{contract&.shopify_id}'})
     $.ajax({
       url: "/subscriptions/"+contractId+"/cancel",
       type: "POST",
@@ -172,6 +178,8 @@ javascript:
   $(".pause_later_submit").on('click',function() { 
     let id = $(this).data("id");
     let contractId = $(this).data("contractid");
+    mixpanelIdentify('#{current_user&.mixpanel_id}')
+    mixpanelTrack("Pause Later Subscription", {contract_shopify_id: '#{contract&.shopify_id}'})
     $.ajax({
       url: "/subscriptions/"+contractId+"/pause",
       type: "POST",

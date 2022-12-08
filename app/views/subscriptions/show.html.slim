@@ -509,6 +509,8 @@ javascript:
 
       $( "#resume-billing-btn" ).on('click', function(e){
         e.preventDefault();
+        mixpanelIdentify("#{current_user&.mixpanel_id}")
+        mixpanelTrack("Restared Subscription", {contract_shopify_id: '#{@subscription.id[/\d+/]}'})
         selectedDate = $( "#resume-datepicker" ).val();
         link = $(this).parent();
         url = $(link).attr('href');
@@ -621,7 +623,9 @@ javascript:
   })
   
   $("#create_billing_attempt").on("click",function(){
-     $("#confirm_billing_attempt_modal .Polaris-TextContainer").html("<p>Billing attempt is attempting…</p>");
+    $("#confirm_billing_attempt_modal .Polaris-TextContainer").html("<p>Billing attempt is attempting…</p>");
+    mixpanelIdentify("#{current_user&.mixpanel_id}")
+    mixpanelTrack("Created Billing Attempt", {contract_shopify_id: '#{@subscription.id[/\d+/]}'})
     $.ajax({
       type: 'post',
       data: "id=#{@customer.id}",
@@ -631,7 +635,7 @@ javascript:
           console.log(response?.error)   
           $("#confirm_billing_attempt_modal .Polaris-TextContainer").html("<p>Billing attempt was unsuccessful</p>");
         }else{
-           $("#confirm_billing_attempt_modal .Polaris-TextContainer").html("<p>Billing attempt was successful</p>");
+          $("#confirm_billing_attempt_modal .Polaris-TextContainer").html("<p>Billing attempt was successful</p>");
         }
         $(".billing_attempt_buttons").html("")
         setTimeout(function(){
