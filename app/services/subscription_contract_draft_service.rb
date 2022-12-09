@@ -101,6 +101,7 @@ class SubscriptionContractDraftService < GraphqlService
 
   def fetch_customer
     result = client.query(client.parse(CUSTOMER_QUERY), variables: { id: @customer_id })
+    sleep CalculateShopifyWaitTime.calculate_wait_time(result&.extensions["cost"]) if result&.extensions.present?
     errors = result.data.customer.errors
     raise errors.first.message if errors.present?
     
@@ -156,7 +157,9 @@ class SubscriptionContractDraftService < GraphqlService
         deliveryPrice: @data["delivery_price"].to_f
       }
     }
+    p @customer_id
     result = client.query(client.parse(CREATE_QUERY), variables: { input: input })
+    sleep CalculateShopifyWaitTime.calculate_wait_time(result&.extensions["cost"]) if result&.extensions.present?
     errors = result.data.subscription_contract_create.user_errors
     raise errors.first.message if errors.present?
     @subscriptioncontract_id = result.data.subscription_contract_create.draft.id
@@ -176,6 +179,7 @@ class SubscriptionContractDraftService < GraphqlService
       sellingPlanName: @selling_plan.name,
     }
     result = client.query(client.parse(ADD_LINE_QUERY), variables: { input: input , id: @subscriptioncontract_id})
+    sleep CalculateShopifyWaitTime.calculate_wait_time(result&.extensions["cost"]) if result&.extensions.present?
     errors = result.data.subscription_draft_line_add.user_errors
     raise errors.first.message if errors.present?
 
@@ -189,6 +193,7 @@ class SubscriptionContractDraftService < GraphqlService
 
   def complete
     result = client.query(client.parse(COMPLETE_QUERY), variables: { id: @subscriptioncontract_id })
+    sleep CalculateShopifyWaitTime.calculate_wait_time(result&.extensions["cost"]) if result&.extensions.present?
     @contract_id = result.data.subscription_draft_commit.contract.id
     errors = result.data.subscription_draft_commit.user_errors
     raise errors.first.message if errors.present?
