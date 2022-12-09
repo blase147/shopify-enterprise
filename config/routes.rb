@@ -229,6 +229,9 @@ Rails.application.routes.draw do
   resources :zip_codes, only: [:index, :create]
   delete 'zip_codes', to: 'zip_codes#destroy'
 
+  post "/set_admin_password", to: 'user_admin#set_admin_password'
+  get "/authenticateAdmin", to: 'user_admin#authenticate_admin'
+  
   get '*path' => 'home#index'
   post 'twilio/sms', 'twilio#sms'
 

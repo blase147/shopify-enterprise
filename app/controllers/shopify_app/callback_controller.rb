@@ -128,9 +128,12 @@ module ShopifyApp
         else
           session[:shop_id] = ShopifyApp::SessionRepository.store_shop_session(session_store)
           session[:user_id] = nil if user_session && user_session.domain != shop_name
+          response = SyncUserShopWithShop.new.get_current_shop_details(current_user&.id, session[:shop_id])
+          @redirect_link = response[:set_password_link] if response.present? && response[:set_password_link].present?
         end
         session[:shopify_domain] = shop_name
         session[:user_session] = auth_hash&.extra&.session
+        redirect_to @redirect_link if @redirect_link.present?
       end
   
       def install_webhooks

@@ -1,0 +1,40 @@
+<% if @error.present? %>
+    <%= content_tag :div, @error, :id => "flash_error" if @error.is_a?(String) %>
+<% else %>
+    <h2>Set Account Password</h2>
+    <form class="simple_form new_user" id="form_set_password">
+        <input type="hidden" name="id" value="<%= @user.id %>">
+        <div class="form-inputs">
+            <div class="input password optional user_password">
+                <input autocomplete="off" class="password optional" maxlength="128" minlength="6" placeholder="Password" size="128" type="password" name="set_password" id="set_password">
+            </div>
+            <div class="input password optional confirm_password">
+                <div id="error" style="color: red"></div>
+                <input autocomplete="off" class="password optional" maxlength="128" minlength="6" placeholder="ConfirmPassword" size="128" type="password" name="confirm_password" id="confirm_password">
+            </div>
+        
+        </div>
+
+        <div class="form-actions">
+            <input type="button" name="submit_form" value="Submit" class="button submit_form_button">
+        </div>
+    </form>
+
+    <div class="ssoLogin_link"><%= link_to  "SSO Login", "/ssoLogin" %></div>
+
+    <script>
+
+        $(".submit_form_button").on("click",function(){
+            if($('#set_password').val() && ($('#set_password').val() == $('#confirm_password').val())){
+                $("#error").html("");
+                $.ajax({
+                    type: 'post',
+                    data: $("form").serialize(),
+                    url: '/set_admin_password'
+                })
+            }else{
+                $("#error").html("Password and Confirm Password should be same")
+            }
+        })
+    </script>
+<% end %>

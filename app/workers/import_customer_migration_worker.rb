@@ -26,7 +26,7 @@ class ImportCustomerMigrationWorker
                 customer_migration[:data][:customer_id] = customer&.id
                 customer_migration[:sellingplangroup] = SellingPlan.find_by_shopify_id(customer_migration[:sellingplan])&.selling_plan_group&.shopify_id
 
-                if customer_migration[:data][:payment_method] == "stripe"
+                if customer_migration[:data][:payment_method]&.strip == "stripe"
                     @stripe_customer = Stripe::Customer.list({email: customer_email}, api_key: current_shop.stripe_api_key).data[0] rescue nil
                     if @stripe_customer.present?
                         AddStripeCustomerMigration.create(raw_data: customer_migration.to_json, customer_id: customer&.id[/\d+/]&.to_i)
