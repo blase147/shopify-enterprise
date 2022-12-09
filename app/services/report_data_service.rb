@@ -87,7 +87,7 @@ class ReportDataService
   end
 
   def get_orders_total_amount(subscription, range = nil)
-    subscription.node.orders.edges.sum { |order| range.nil? || (range.present? && range.cover?(order.node.created_at.to_date)) ? order.node.total_price_set.presentment_money.amount.to_f.round(2) : 0 }
+    subscription.node.orders.edges&.sum { |order| range.nil? || (range.present? && range.cover?(order.node.created_at.to_date)) ? order.node.total_price_set.presentment_money.amount.to_f.round(2) : 0 }
   end
 
   def get_customers_by_date(range)
