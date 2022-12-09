@@ -2,6 +2,8 @@ class EmailService::Base < ApplicationService
 
   def subject(object)
    case @email_notification.name
+    when "Set Admin Password"
+      "Set your password"
     when "Skip Meal"
       "You skipped meal"
     when "Un-Skip Meal"

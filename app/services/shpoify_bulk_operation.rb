@@ -166,6 +166,19 @@ class ShpoifyBulkOperation  < GraphqlService
                                         amount
                                       }
                                     }
+                                    refunds {
+                                        id
+                                        totalRefundedSet{
+                                            presentmentMoney{
+                                                amount
+                                                currencyCode
+                                            }
+                                            shopMoney{
+                                                amount
+                                                currencyCode
+                                            }
+                                        }
+                                    }
                                     originalTotalPriceSet {
                                       presentmentMoney {
                                         amount

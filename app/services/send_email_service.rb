@@ -194,4 +194,23 @@ class SendEmailService
         end
         return sent
     end
+
+    def send_set_password_email(object)
+        @sg = SendGrid::API.new(api_key: (integration.credentials['private_key'] rescue ENV['SENDGRID_API_KEY']))
+        subject_str = object[:subject]
+        context_hash = object[:email_body]
+        to = object[:customer]&.email
+        from = SendGrid::Email.new(email: 'notifications@chargezen.com', name: ("Chargezen"))
+        to = SendGrid::Email.new(email: to)
+        content = SendGrid::Content.new(type: 'text/html', value: context_hash)
+        mail = SendGrid::Mail.new(from, (subject_str), to, content)
+        mail.reply_to = SendGrid::Email.new(email: from.email, name: (from.name))    
+        response = @sg.client.mail._('send').post(request_body: mail.to_json)
+        respone_body = {}
+        respone_body = { status: response.status_code.to_i > 200 && response.status_code.to_i < 300, email_body: context_hash}
+        return respone_body
+      rescue => e
+        puts e
+        false
+    end
 end

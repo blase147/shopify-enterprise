@@ -12,7 +12,7 @@
 <% end %>
 
 async function setPeople(){
-    const response = await mixpanelPeopleSetOnce({$first_name: '<%= @user.first_name %>', $last_name: '<%= @user.last_name %>', $email: '<%= @user.email %>', $shopify_id: '<%= @user.shopify_id %>', $role: 'admin'})
+    const response = await mixpanelPeopleSetOnce({$first_name: '<%= @user.first_name %>', $last_name: '<%= @user.last_name %>', $email: '<%= @user.email %>', $role: 'admin'})
     localStorage.setItem("distinct_id_admin_chargezen", response?.$distinct_id);
     $.ajax({
         type: 'post',
