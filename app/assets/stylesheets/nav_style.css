@@ -416,3 +416,10 @@ body.chargezen {
 .navBar .logo img {
     margin: auto;
 }
+
+.navBar .logo img {
+    margin: auto;
+    width: 100%;
+    max-width: 220px;
+    margin-left: 1.6rem;
+}
