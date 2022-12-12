@@ -55,6 +55,7 @@ import EnableDebug from './EnableDebug';
 import StripeSettings from './StripeSettings';
 import DeliveryOption from "./DeliveryOption";
 import LoadingScreen from '../LoadingScreen';
+
 import "./settings.scss"
 
 const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
@@ -63,7 +64,6 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
   const [formErrors, setFormErrors] = useState([]);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
-
   const validationSchema = yup.object().shape({
     // internalName: yup.string().required().label('Internal name'),
   });
@@ -446,6 +446,12 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
       img: EmailImage,
       desc: 'Manage email notifications sent to you and your customers.',
     },
+    {
+      key: 'manage_staff',
+      title: 'Manage Staff',
+      img: SettingImage,
+      desc: 'Manage your staff.',
+    },
     ...(process.env.APP_TYPE == 'public'
       ? [
         {
@@ -748,18 +754,10 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                                       setUpdateSetting={setUpdateSetting}
                                     />
                                   </div>
-                                ) : selectedSetting === 'store_information' ? (
-                                  <StoreInfomation
-                                    values={values}
-                                    touched={touched}
-                                    errors={errors}
-                                    setFieldValue={setFieldValue}
-                                    handleSubmit={handleSubmit}
-                                    handleBack={handleBackSetting}
-                                  />
-                                ) : selectedSetting === 'product_extention' ? (
-                                  <div className="storeInfomation">
-                                    <ProductExtention
+                                ) : selectedSetting === 'manage_staff' ?
+                                  history.push("/manage-staff")
+                                  : selectedSetting === 'store_information' ? (
+                                    <StoreInfomation
                                       values={values}
                                       touched={touched}
                                       errors={errors}
@@ -767,67 +765,77 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                                       handleSubmit={handleSubmit}
                                       handleBack={handleBackSetting}
                                     />
-                                  </div>
-                                ) : selectedSetting === 'discount' ? (
-                                  <>
-                                    <MainDiscount
-                                      handleBack={handleBackSetting}
-                                    />
-                                  </>
-                                ) : selectedSetting === 'export' ? (
-                                  <>
-                                    <MainExport
-                                      handleBack={handleBackSetting}
-                                    />
-                                  </>
-                                ) : selectedSetting === 'zip_codes' ? (
-                                  <>
-                                    <ZipCodes handleBack={handleBackSetting} />
-                                  </>
-                                ) : selectedSetting === 'enable_debug_mode' ? (
-                                  <>
-                                    <EnableDebug handleBack={handleBackSetting} />
-                                  </>
-                                ) : selectedSetting === 'stripe_settings' ? (
-                                  <>
-                                    <StripeSettings handleBack={handleBackSetting} />
-                                  </>
-                                ) : selectedSetting === 'sms' ? (
-                                  <>
-                                    <Sms handleBack={handleBackSetting} />
-                                  </>
-                                ) : selectedSetting === 'legal' ? (
-                                  <>
-                                    <Legal handleBack={handleBackSetting} />
-                                  </>
-                                ) : selectedSetting === 'translation' ? (
-                                  <>
-                                    <Translation
-                                      handleBack={handleBackSetting}
-                                    />
-                                  </>
-                                ) : selectedSetting === 'password' ? (
-                                  <>
-                                    <Password
-                                      handleBack={handleBackSetting}
-                                      passwordProtected={passwordProtected}
-                                      setPasswordProtected={
-                                        setPasswordProtected
-                                      }
-                                    />
-                                  </>
-                                ) : selectedSetting === 'delivery_options' ? (
-                                  <>
-                                    <DeliveryOption
-                                      values={values}
-                                      touched={touched}
-                                      errors={errors}
-                                      setFieldValue={setFieldValue}
-                                      handleBack={handleBackSetting} />
-                                  </>
-                                ) : (
-                                  ''
-                                )}
+                                  ) : selectedSetting === 'product_extention' ? (
+                                    <div className="storeInfomation">
+                                      <ProductExtention
+                                        values={values}
+                                        touched={touched}
+                                        errors={errors}
+                                        setFieldValue={setFieldValue}
+                                        handleSubmit={handleSubmit}
+                                        handleBack={handleBackSetting}
+                                      />
+                                    </div>
+                                  ) : selectedSetting === 'discount' ? (
+                                    <>
+                                      <MainDiscount
+                                        handleBack={handleBackSetting}
+                                      />
+                                    </>
+                                  ) : selectedSetting === 'export' ? (
+                                    <>
+                                      <MainExport
+                                        handleBack={handleBackSetting}
+                                      />
+                                    </>
+                                  ) : selectedSetting === 'zip_codes' ? (
+                                    <>
+                                      <ZipCodes handleBack={handleBackSetting} />
+                                    </>
+                                  ) : selectedSetting === 'enable_debug_mode' ? (
+                                    <>
+                                      <EnableDebug handleBack={handleBackSetting} />
+                                    </>
+                                  ) : selectedSetting === 'stripe_settings' ? (
+                                    <>
+                                      <StripeSettings handleBack={handleBackSetting} />
+                                    </>
+                                  ) : selectedSetting === 'sms' ? (
+                                    <>
+                                      <Sms handleBack={handleBackSetting} />
+                                    </>
+                                  ) : selectedSetting === 'legal' ? (
+                                    <>
+                                      <Legal handleBack={handleBackSetting} />
+                                    </>
+                                  ) : selectedSetting === 'translation' ? (
+                                    <>
+                                      <Translation
+                                        handleBack={handleBackSetting}
+                                      />
+                                    </>
+                                  ) : selectedSetting === 'password' ? (
+                                    <>
+                                      <Password
+                                        handleBack={handleBackSetting}
+                                        passwordProtected={passwordProtected}
+                                        setPasswordProtected={
+                                          setPasswordProtected
+                                        }
+                                      />
+                                    </>
+                                  ) : selectedSetting === 'delivery_options' ? (
+                                    <>
+                                      <DeliveryOption
+                                        values={values}
+                                        touched={touched}
+                                        errors={errors}
+                                        setFieldValue={setFieldValue}
+                                        handleBack={handleBackSetting} />
+                                    </>
+                                  ) : (
+                                    ''
+                                  )}
                               </Layout.Section>
                             </Layout>
                           </>

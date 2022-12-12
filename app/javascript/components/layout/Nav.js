@@ -100,14 +100,6 @@ const Nav = (props) => {
         selected: true,
         disabled: true,
         subNavigationItems: [
-          accessTabs?.manage_staff ? (
-            {
-              label: "Manage Staff",
-              icon: ProfileMajor,
-              url: "/manage-staff",
-              onClick: () => setActiveTab("mplan"),
-              selected: window.location.pathname == "/manage-staff" ? true : false,
-            }) : {},
           accessTabs?.installation_access ? (
             {
               label: 'Installation',
