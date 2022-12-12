@@ -11,11 +11,14 @@ class SyncUserShopWithShop < GraphqlService
         }
     GRAPHQL
 
+    def initialize
+        $set_password_link ||= nil
+    end
+
     def get_current_shop_details current_user_id=nil, shop_id
         Shop.find(shop_id).connect
         result = client.query(client.parse(SHOP_DATA))
         user = check_user_exits(current_user_id, shop_id, result.data)
-        return user[:set_password_link] if user.present? && user[:set_password_link].present?
     end
 
     def check_user_exits current_user_id=nil, shop_id,data
@@ -31,17 +34,37 @@ class SyncUserShopWithShop < GraphqlService
                     first_name: shopify_customer.first_name,
                     last_name: shopify_customer.last_name,
                     token_without_password: auth_token
-                  )
+                )
             user.save(validate: false)
+            user_shop = UserShop.find_or_create_by( user_id: user.id)
+            shop.update(user_shop_id: user_shop.id)
+            p "shop ==============#{shop.to_json}"
             set_password_link = "#{ENV["HOST"]}authenticateAdmin?id=#{user.id}&token=#{auth_token}"
-            send_set_password_link(user, set_password_link)
+            send_set_password_link(user, $set_password_link)
             if current_user.present?
                 unless current_user.email == shop_data.email
-                    current_user.update(user_shop_child: true, user_id: user.id)
-                    send_set_password_link(user, auth_token)
+                    current_user.update(user_id: user.id)
+                    user_shop_child = UserShopChild.new(user_id: current_user.id, user_shop_id: user.user_shop.id)
+                    if user_shop_child.save
+                        UserShopChildSetting.create(
+                            shop_id: shop_id,
+                            user_shop_child_id: user_shop_child.id,
+                            dashboard_access: true,
+                            manage_plan_access: true,
+                            subscription_orders_access: true,
+                            analytics_access: true,
+                            installation_access: true,
+                            tiazen_access: true,
+                            toolbox_access: true,
+                            settings_access: true,
+                            ways_to_earn: true,
+                            customer_modal: true,
+                            manage_staff: false
+                        )
+                    end
+                else
+                    $set_password_link = set_password_link
                 end
-            else
-                return {set_password_link: set_password_link}
             end
         end
     end
