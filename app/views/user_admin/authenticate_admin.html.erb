@@ -30,7 +30,12 @@
                 $.ajax({
                     type: 'post',
                     data: $("form").serialize(),
-                    url: '/set_admin_password'
+                    url: '/set_admin_password',
+                    success: function(response){
+                        if(response?.error){
+                        $("#error").html(response?.error)
+                        }
+                    }
                 })
             }else{
                 $("#error").html("Password and Confirm Password should be same")

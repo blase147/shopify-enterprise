@@ -23,7 +23,7 @@ class UserAdminController  < ActionController::Base
             sign_in(user)
             render js:"location.replace('/')"
         else
-            flas[:notice] = user.errors.full_messages
+            render json:{error: user.errors.full_messages}.to_json
         end
     end
 end
