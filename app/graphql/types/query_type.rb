@@ -9,6 +9,7 @@
     field :fetch_customer, resolver: Queries::FetchCustomer
     field :fetch_staff_members, resolver: Queries::FetchStaffMembers
     field :fetch_ways_to_earn_point, resolver: Queries::FetchWaysToEarnPoint
+    field :fetch_timezone, resolver: Queries::FetchTimezone
 
     field :fetch_campaigns, resolver: Queries::FetchUpsellCampaignGroups
     field :fetch_campaign, resolver: Queries::FetchUpsellCampaignGroup

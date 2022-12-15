@@ -1061,6 +1061,8 @@ nav.top-nav {
         font-size: 18px;
         color: #212b36;
         font-weight: bold;
+        display: flex;
+        gap: 10px;
 
         >span.active {
             color: $primary;

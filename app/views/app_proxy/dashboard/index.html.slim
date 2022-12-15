@@ -21,7 +21,11 @@
               span MY
               span.active ACTIVE
               span #{@subscription_contracts.count > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION'}
-          a#logout-btn Logout
+          - if get_auth_token(@customer&.email)&.present? && params[:token].present? 
+            a href="/a/chargezen/password_less_login/log_out?email=#{@customer&.email}" data-method="delete"
+              | Log Out
+          - else
+            a#logout-btn Logout
           / a.add_weekly_box.promo-tag-I href="#"
           /   span #{@setting.promo_tagline1_content.present? ? @setting.promo_tagline1_content : 'Add one more weekly box'}
           /   svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg"

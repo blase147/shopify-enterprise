@@ -141,4 +141,8 @@ module AppProxyHelper
   def get_customer_modal shopify_id
     return CustomerModal.find_by_shopify_id(shopify_id) rescue nil
   end
+
+  def current_time_pst
+    return Time.current.in_time_zone(current_shop.setting.timezone)
+  end
 end
