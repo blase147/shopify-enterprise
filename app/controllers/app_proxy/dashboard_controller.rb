@@ -5,8 +5,8 @@ class AppProxy::DashboardController < AppProxyController
   before_action :load_customer, only: %w(index addresses payment_methods settings upcoming build_a_box track_order)
   before_action :current_setting
   def index
+    customer_email = CustomerSubscriptionContract.find_by_shopify_customer_id(params[:customer])&.email
     if current_setting&.portal_theme.present?
-      customer_email = CustomerSubscriptionContract.find_by_shopify_customer_id(params[:customer])&.email
       if params[:status].present?
         @subscription_contracts = CustomerSubscriptionContract.where(shopify_customer_id: params[:customer], status: params[:status]&.upcase)
       else

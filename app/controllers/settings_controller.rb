@@ -28,6 +28,13 @@ class SettingsController < AuthenticatedController
     render json: { status: :ok, options: DeliveryOption.find_by(shop_id: current_shop.id)&.api_response}
   end
 
+  def update_timezone
+    if params[:timezone].present?
+      current_shop.setting.update(timezone: params[:timezone])
+      render json:{status: :ok}
+    end
+  end
+
   private
   def stripe_key_params
     params.permit(:stripe_api_key, :stripe_publish_key)

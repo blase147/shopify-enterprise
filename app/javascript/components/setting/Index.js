@@ -55,6 +55,7 @@ import EnableDebug from './EnableDebug';
 import StripeSettings from './StripeSettings';
 import DeliveryOption from "./DeliveryOption";
 import LoadingScreen from '../LoadingScreen';
+import SetTimezone from './SetTimezone';
 
 import "./settings.scss"
 
@@ -447,6 +448,12 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
       desc: 'Manage email notifications sent to you and your customers.',
     },
     {
+      key: 'timezone',
+      title: 'Set Timezone',
+      img: SettingImage,
+      desc: 'Manage the timezone of the app.',
+    },
+    {
       key: 'manage_staff',
       title: 'Manage Staff',
       img: SettingImage,
@@ -745,6 +752,18 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                                 ) : selectedSetting === 'email_notification' ? (
                                   <div className="EmailNotification">
                                     <EmailNotification
+                                      values={values}
+                                      touched={touched}
+                                      errors={errors}
+                                      setFieldValue={setFieldValue}
+                                      handleSubmit={handleSubmit}
+                                      handleBack={handleBackSetting}
+                                      setUpdateSetting={setUpdateSetting}
+                                    />
+                                  </div>
+                                ) : selectedSetting === 'timezone' ? (
+                                  <div className="TimeZone">
+                                    <SetTimezone
                                       values={values}
                                       touched={touched}
                                       errors={errors}

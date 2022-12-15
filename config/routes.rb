@@ -193,6 +193,7 @@ Rails.application.routes.draw do
       post :update_stripe_settings
       post :delivery_options
       get  :delivery_options, to: 'settings#get_delivery_option'
+      post :update_timezone
     end
   end
 

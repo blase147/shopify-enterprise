@@ -113,3 +113,5 @@ gem 'aws-sdk'
 gem "aws-sdk-s3", require: false
 
 gem 'sidekiq-cron', '~> 1.8'
+
+gem 'roo'
