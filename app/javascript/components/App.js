@@ -39,6 +39,7 @@ import CustomerModal from './CustomerModal/Index';
 import InstallShop from './InstallShop';
 import ManageStaff from './ManageStaff';
 import DisabledNav from './layout/DisabledNav';
+import NewDashboard from './home/NewDashboard';
 
 
 
@@ -176,6 +177,11 @@ export default function App(props) {
                 exact
                 path="/mystery-box-subscription-plan"
                 component={MysteryBoxPlan}
+              />
+              <Route
+                exact
+                path="/newDash"
+                component={() => <NewDashboard />}
               />
             // integrations ##
               <Route exact path="/integrations" component={Integrations} />

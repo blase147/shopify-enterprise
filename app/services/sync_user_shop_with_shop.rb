@@ -28,42 +28,44 @@ class SyncUserShopWithShop < GraphqlService
         current_user = User.find(current_user_id) if current_user_id.present?
         unless user.present?
             shopify_customer = CustomerService.new({shop: shop}).get_customer_email(shop_data.email) rescue nil
-            auth_token = SecureRandom.urlsafe_base64(nil, false)
-            user = User.new(
-                    email: shopify_customer.email, 
-                    first_name: shopify_customer.first_name,
-                    last_name: shopify_customer.last_name,
-                    token_without_password: auth_token
-                )
-            user.save(validate: false)
-            user_shop = UserShop.find_or_create_by( user_id: user.id)
-            shop.update(user_shop_id: user_shop.id)
-            p "shop ==============#{shop.to_json}"
-            set_password_link = "#{ENV["HOST"]}authenticateAdmin?id=#{user.id}&token=#{auth_token}"
-            send_set_password_link(user, $set_password_link)
-            if current_user.present?
-                unless current_user.email == shop_data.email
-                    current_user.update(user_id: user.id)
-                    user_shop_child = UserShopChild.new(user_id: current_user.id, user_shop_id: user.user_shop.id)
-                    if user_shop_child.save
-                        UserShopChildSetting.create(
-                            shop_id: shop_id,
-                            user_shop_child_id: user_shop_child.id,
-                            dashboard_access: true,
-                            manage_plan_access: true,
-                            subscription_orders_access: true,
-                            analytics_access: true,
-                            installation_access: true,
-                            tiazen_access: true,
-                            toolbox_access: true,
-                            settings_access: true,
-                            ways_to_earn: true,
-                            customer_modal: true,
-                            manage_staff: false
-                        )
+            if shopify_customer.present?
+                auth_token = SecureRandom.urlsafe_base64(nil, false)
+                user = User.new(
+                        email: shopify_customer.email, 
+                        first_name: shopify_customer.first_name,
+                        last_name: shopify_customer.last_name,
+                        token_without_password: auth_token
+                    )
+                user.save(validate: false)
+                user_shop = UserShop.find_or_create_by( user_id: user.id)
+                shop.update(user_shop_id: user_shop.id)
+                p "shop ==============#{shop.to_json}"
+                set_password_link = "#{ENV["HOST"]}authenticateAdmin?id=#{user.id}&token=#{auth_token}"
+                send_set_password_link(user, $set_password_link)
+                if current_user.present?
+                    unless current_user.email == shop_data.email
+                        current_user.update(user_id: user.id)
+                        user_shop_child = UserShopChild.new(user_id: current_user.id, user_shop_id: user.user_shop.id)
+                        if user_shop_child.save
+                            UserShopChildSetting.create(
+                                shop_id: shop_id,
+                                user_shop_child_id: user_shop_child.id,
+                                dashboard_access: true,
+                                manage_plan_access: true,
+                                subscription_orders_access: true,
+                                analytics_access: true,
+                                installation_access: true,
+                                tiazen_access: true,
+                                toolbox_access: true,
+                                settings_access: true,
+                                ways_to_earn: true,
+                                customer_modal: true,
+                                manage_staff: false
+                            )
+                        end
+                    else
+                        $set_password_link = set_password_link
                     end
-                else
-                    $set_password_link = set_password_link
                 end
             end
         end
