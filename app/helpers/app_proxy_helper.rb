@@ -123,8 +123,8 @@ module AppProxyHelper
   end
 
   def get_auth_token(email)
-    $redis = Redis.new
-    @auth = $redis.get("#{email}_auth")
+    customer = CustomerModal.find_by_email(email)
+    @auth = customer.get_token
     return @auth
   end
 

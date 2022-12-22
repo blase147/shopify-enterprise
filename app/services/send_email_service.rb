@@ -116,7 +116,7 @@ class SendEmailService
         if sent
             SiteLog.create(log_type: SiteLog::TYPES[:email_success], message: "Passwordless Login OTP sent")
         else
-            SiteLog.create(log_type: SiteLog::TYPES[:email_failure], params: {id: contract.id, shopify_id: contract.shopify_customer_id })
+            SiteLog.create(log_type: SiteLog::TYPES[:email_failure], params: {id: contract.id, shopify_id: contract.shopify_id })
         end
         return sent
     end

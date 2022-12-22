@@ -5,9 +5,13 @@
     src: url('../../../assets/fonts/AvenirLTStd.ttf') format('truetype');
 }
 
-
+/* 
 .dashboard_left {
     padding: 20px 0 0 30px;
+} */
+.dashboard_main_div {
+    width: 100%;
+    padding: 20px;
 }
 
 .dashboard_left .dashboard_header .main_head {
@@ -40,6 +44,7 @@
     font-size: 24px;
     line-height: 33px;
     color: #1C1F37;
+    border-radius: 8px 8px 0 0;
 }
 
 .Polaris-Card .Polaris-Card__Header span {
@@ -51,7 +56,7 @@
     height: 42px;
     border-radius: 50%;
     margin-right: 12px;
-
+    padding: 0;
 }
 
 .top_section {
@@ -59,18 +64,18 @@
     width: 100%;
     flex-wrap: wrap;
     max-width: 100%;
-    gap: 15px;
+    gap: 22px;
     justify-content: space-between;
 }
 
 .top_section .revenue_overview_div {
-    flex: 0 0 75%;
-    max-width: 75%;
+    flex: 0 0 calc(100% - 410px);
+    max-width: calc(100% - 410px);
 }
 
 .top_section .customer_activity_main_div {
-    flex: 0 0 23%;
-    max-width: 23%;
+    flex: 0 0 384px;
+    max-width: 384px;
 }
 
 h2.Polaris-Heading {
@@ -104,11 +109,6 @@ h2.Polaris-Heading {
 
 }
 
-.customer_activity_div .body {
-    display: flex;
-    justify-content: space-between;
-}
-
 .customer_activity_div .body h6 {
     font-family: 'Avenir';
     font-style: normal;
@@ -135,29 +135,22 @@ h2.Polaris-Heading {
 
 .dashboard_right {
     display: flex;
-    justify-content: space-between;
 }
 
-.top_section .dashboard_right .graphs_main {
-    flex: 0 0 80%;
-    max-width: 80%;
-}
 
-.top_section .right_section {
-    flex: 0 0 20%;
-    max-width: 20%;
-}
 
 .right_section_sub {
     background: #F5F7FB;
     padding: 20px;
     border-radius: 6px;
+    max-width: 198px;
+    margin: 0 auto;
 }
 
 .mrr_first {
     font-family: 'Avenir';
     font-style: normal;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 40px;
     line-height: 55px;
     color: #1C1F37;
@@ -174,8 +167,8 @@ h2.Polaris-Heading {
 }
 
 
-.mrr_div {
-    border-bottom: 1px solid #0000002b;
+.right_section_sub .mrr_div:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     margin-bottom: 10px;
 }
 
@@ -348,4 +341,133 @@ h2.Polaris-Heading {
     height: 34px;
     left: 343px;
     top: 225px;
+}
+
+.highcharts-figure {
+    max-width: calc(100% - 250px);
+    width: 100%;
+    flex: calc(100% - 250px);
+    margin: 0;
+    padding: 40px 20px 30px;
+    border-right: 1px solid #dadada80;
+}
+
+.top_section .right_section {
+    flex: 0 0 250px;
+    max-width: 250px;
+    padding: 15px 24px 10px;
+}
+
+.revenue_overview_div .Polaris-Card>.Polaris-Card__Section {
+    padding: 0;
+}
+
+.Polaris-Card__Header {
+    border-bottom: 1px solid #dadada80;
+}
+
+.Polaris-Page__Content .Polaris-Card {
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.dashboard_main_div {
+    width: 100%;
+    padding: 20px;
+}
+
+.revenue_overview_div .Polaris-Stack>.Polaris-Stack__Item,
+.revenue_overview_div .Polaris-Stack--alignmentBaseline {
+    margin: 0;
+}
+
+.heading_title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.Polaris-Card .Polaris-Card__Header {
+    padding: 20px 20px 10px;
+}
+
+.dashboard_right .highcharts-figure svg {
+    max-width: 100%;
+}
+
+.chargezen .revenue_overview_div .Polaris-Card__Header .Polaris-Button:not(.Polaris-Button--plain) {
+    background: #F5F7FB;
+    color: #A9ABB0;
+    border: none;
+    margin: 0;
+}
+
+.chargezen .revenue_overview_div .Polaris-Card__Header .Polaris-Button:not(.Polaris-Button--plain) span {
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 25px;
+}
+
+.revenue_overview_div .Polaris-Stack>.Polaris-Stack__Item .Polaris-ButtonGroup,
+.chargezen .revenue_overview_div .Polaris-ButtonGroup__Item,
+.chargezen .Polaris-Card__Header .Polaris-Button,
+.chargezen .revenue_overview_div .Polaris-Card .Polaris-Card__Header span {
+    margin: 0;
+}
+
+.chargezen .revenue_overview_div span.Polaris-Button__Text .Polaris-ButtonGroup {
+    gap: 10px;
+    margin: 0;
+}
+
+.revenue_overview_div .Polaris-Stack.Polaris-Stack--alignmentBaseline {
+    align-items: center;
+}
+
+.customer_activity_right svg {
+    width: 14px;
+    fill: #51CBFF !important;
+}
+
+.customer_activity_div {
+    align-items: center;
+    padding: 10px;
+}
+
+.customer_activity_div .heading h3 {
+    font-weight: 800;
+    font-size: 12px;
+    line-height: 16px;
+    color: #1C1F37;
+}
+
+.customer_activity_div .customer_activity_right {
+    max-width: calc(100% - 42px);
+    flex: 100%;
+    padding-left: 15px;
+}
+
+.customer_activity_div .body {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.customer_activity_div .customer_activity_right .body span.Polaris-Icon {
+    margin: 0;
+}
+
+@media (max-width: 1365px) {
+    .top_section .customer_activity_main_div {
+        flex: 100%;
+        max-width: 100%;
+    }
+
+    figure.highcharts-figure>div {
+        overflow-x: auto !important;
+    }
+
+    .top_section .revenue_overview_div {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
 }
