@@ -10,8 +10,95 @@ import AppLayout from '../layout/Layout';
 import "./style.css";
 import dashboardSubIcon from "./../../images/dashboardSubIcon.png";
 import RevenueHighlight from "./RevenueHighlight";
+import { gql, useLazyQuery } from "@apollo/client";
 
 const NewDashboard = () => {
+    const getGraphDataQuery = gql`
+        query ($startDate: String!, $endDate: String!) {
+            fetchDashboardReport(startDate: $startDate, endDate: $endDate) {
+                mrr {
+                value
+                percent
+                up
+                }
+                activeSubscriptionsCount {
+                value
+                percent
+                up
+                }
+                churnRate {
+                value
+                percent
+                up
+                }
+                customerLifetimeValue {
+                value
+                percent
+                up
+                }
+                activeCustomers {
+                data {
+                    value
+                }
+                date
+                }
+                revenueChurn {
+                date
+                data {
+                    value
+                }
+                }
+                arrData {
+                date
+                data {
+                    value
+                }
+                }
+                mrrData {
+                date
+                data {
+                    value
+                }
+                }
+                refundData {
+                date
+                data {
+                    value
+                }
+                }
+                salesData {
+                date
+                data {
+                    value
+                }
+                }
+                renewalData {
+                date
+                data {
+                    value
+                }
+                }
+            }
+        }
+    `;
+
+    const [getReport, { loading, error, data }] = useLazyQuery(
+        getGraphDataQuery,
+        { fetchPolicy: 'network-only' }
+    );
+
+    const getReportData = useCallback(() => {
+        getReport({
+            variables: {
+                startDate: filters.startDate,
+                endDate: filters.endDate,
+            },
+        });
+    }, [filters, getReport]);
+
+    useEffect(() => {
+        getReportData();
+    }, [filters]);
     return (
         <AppLayout typePage="Dashboard" tabIndex="0">
             <Page>
@@ -45,9 +132,8 @@ const NewDashboard = () => {
                                             >
                                                 <Card.Section>
                                                     <div className="dashboard_right">
-                                                        <div className="graphs_main">
-                                                            <ContentSummaryGraph />
-                                                        </div>
+                                                        <ContentSummaryGraph />
+
                                                         <div className="right_section">
                                                             <div className="right_section_sub">
                                                                 <div className="mrr_div">

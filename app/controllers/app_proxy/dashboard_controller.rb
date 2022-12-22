@@ -5,7 +5,7 @@ class AppProxy::DashboardController < AppProxyController
   before_action :load_customer, only: %w(index addresses payment_methods settings upcoming build_a_box track_order)
   before_action :current_setting
   def index
-    customer_email = CustomerSubscriptionContract.find_by_shopify_customer_id(params[:customer])&.email
+    customer = CustomerModal.find_by_shopify_id(params[:customer])
     if current_setting&.portal_theme.present?
       if params[:status].present?
         @subscription_contracts = CustomerSubscriptionContract.where(shopify_customer_id: params[:customer], status: params[:status]&.upcase)
@@ -17,8 +17,7 @@ class AppProxy::DashboardController < AppProxyController
       @swap_products = products.is_a?(Hash) ? nil : products&.select { |p| p.node.requires_selling_plan == true }
       load_subscriptions(params[:customer])
     end
-    $redis = Redis.new
-    @auth = $redis.get("#{customer_email}_auth")
+    @auth = customer&.get_token
     render "#{current_setting&.portal_theme}index", content_type: 'application/liquid', layout: "#{current_setting&.portal_theme}liquid_app_proxy"
   end
 

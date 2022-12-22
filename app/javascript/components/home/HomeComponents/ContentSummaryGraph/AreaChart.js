@@ -10,7 +10,7 @@ const AreaChart = () => {
         chart: {
             zoomType: 'yx',
             reflow: true,
-            width: 686
+            width: 800,
         },
         title: {
             text: ''
@@ -18,7 +18,7 @@ const AreaChart = () => {
         xAxis: [{
             gridLineWidth: 16,
             gridLineColor: '#ffff',
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            categories: ['1-01-30', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             crosshair: true
         }],

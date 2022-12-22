@@ -50,8 +50,7 @@ class AppProxy::PasswordLessLoginController < AppProxyController
         if passwordless_otp.present? && (passwordless_otp.created_at >= 15.minutes.ago ) && ("#{passwordless_otp&.otp}"&.strip == "#{params[:otp]}"&.strip)
             # set auth code in redis which will expire in 30 minutes
             @auth_token = SecureRandom.urlsafe_base64(nil, false)
-            $redis = Redis.new
-            $redis.set("#{customer.email}_auth", @auth_token, options = {ex: 1800})
+            AuthToken.find_or_initialize_by(customer_modal_id: customer.id)&.update(token: @auth_token)
             @customer = customer
             respond_to do |format|
                 format.js
@@ -70,16 +69,15 @@ class AppProxy::PasswordLessLoginController < AppProxyController
     end
 
     def log_out
-        $redis = Redis.new
-        $redis.del("#{params[:email]&.downcase&.strip}_auth")
+        customer = CustomerModal.find_by_email(params[:email])
+        customer.auth_token&.destroy
         redirect_to "/a/chargezen/passwordlesslogin"
     end
 
     def registered_on_mixpanel
         customer = CustomerModal.find(params[:customer_local_id])
         customer.update(mixpanel_id: params[:mixpanel_id])
-        $redis = Redis.new
-        auth_token = $redis.get("#{customer.email}_auth")
+        auth_token = customer.get_token
         redirect_to "/a/chargezen/dashboard?customer=#{customer&.shopify_id}&token=#{auth_token}"
     end
 end
