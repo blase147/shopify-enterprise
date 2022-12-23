@@ -129,7 +129,7 @@ export default function App(props) {
               <Route
                 exact
                 path="/"
-                component={() => <Dashboard domain={props.domain} />}
+                component={() => <NewDashboard />}
               />
               <Route exact path="/customer-model" component={CustomerModal} />,
               <Route exact path="/subscription-plans" component={SellingPlans} />,
@@ -181,7 +181,7 @@ export default function App(props) {
               <Route
                 exact
                 path="/newDash"
-                component={() => <NewDashboard />}
+                component={() => <Dashboard domain={props.domain} />}
               />
             // integrations ##
               <Route exact path="/integrations" component={Integrations} />

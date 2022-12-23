@@ -1,5 +1,5 @@
 import { Button, ButtonGroup, Card, ProgressBar, Page, Layout, Icon } from "@shopify/polaris";
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ContentSummaryGraph from "./HomeComponents/ContentSummaryGraph";
 import PieChart from "./HomeComponents/ContentSummaryGraph/PieChart";
 import MultiColorProgressBar from "./HomeComponents/MultiColorProgressBar";
@@ -11,8 +11,26 @@ import "./style.css";
 import dashboardSubIcon from "./../../images/dashboardSubIcon.png";
 import RevenueHighlight from "./RevenueHighlight";
 import { gql, useLazyQuery } from "@apollo/client";
+import dayjs from "dayjs";
+import { isEmpty } from 'lodash';
 
 const NewDashboard = () => {
+    const [filters, setFilters] = useState({
+        startDate: new Date(
+            Date.parse(
+                dayjs(
+                    dayjs(
+                        dayjs(dayjs(new Date()).subtract(2, 'days')).subtract(30, 'days')
+                    )
+                ).format()
+            )
+        ),
+        endDate: new Date(
+            Date.parse(dayjs(new Date()).subtract(1, 'days').format())
+        ),
+    });
+
+    const [fetchDashboardReport, setFetchDashboardReport] = useState({})
     const getGraphDataQuery = gql`
         query ($startDate: String!, $endDate: String!) {
             fetchDashboardReport(startDate: $startDate, endDate: $endDate) {
@@ -98,7 +116,26 @@ const NewDashboard = () => {
 
     useEffect(() => {
         getReportData();
-    }, [filters]);
+    }, [filters, dateFilters]);
+
+    const handleFiltersDates = (dates, span) => {
+        console.log('hahah');
+        if (!isEmpty(dates)) {
+            const { start, end } = dates;
+            setFilters({
+                startDate: dayjs(start).format('YYYY-MM-DD'),
+                endDate: dayjs(end).format('YYYY-MM-DD'),
+                span: span,
+            });
+        }
+    };
+
+    useEffect(() => {
+        if (!isEmpty(data?.fetchDashboardReport)) {
+            setFetchDashboardReport(data?.fetchDashboardReport);
+        }
+    }, [data]);
+    const [dateFilters, setDateFilters] = useState({ startDate: '', endDate: '' });
     return (
         <AppLayout typePage="Dashboard" tabIndex="0">
             <Page>
@@ -124,24 +161,48 @@ const NewDashboard = () => {
                                                 actions={{
                                                     content:
                                                         <ButtonGroup>
-                                                            <Button>Daily</Button>
-                                                            <Button>Weekly</Button>
-                                                            <Button>Monthly</Button>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    setDateFilters({
+                                                                        ...dateFilters,
+                                                                        startDate: dayjs(dayjs(dayjs(dayjs(new Date()).subtract(1, "days")).subtract(30, 'days'))).format(),
+                                                                        endDate: dayjs(new Date()).subtract(1, "days").format()
+                                                                    })
+                                                                }}
+                                                            >Daily</Button>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    setDateFilters({
+                                                                        ...dateFilters,
+                                                                        startDate: new Date(Date.parse(dayjs(dayjs(dayjs(dayjs(new Date()).subtract(1, "days")).subtract(12, 'month'))).format())),
+                                                                        endDate: dayjs(new Date()).subtract(1, "days").format()
+                                                                    })
+                                                                }}
+                                                            >Weekly</Button>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    setDateFilters({
+                                                                        ...dateFilters,
+                                                                        startDate: dayjs(dayjs(dayjs(dayjs(new Date()).subtract(1, "days")).subtract(3, 'month'))).format(),
+                                                                        endDate: dayjs(new Date()).subtract(1, "days").format()
+                                                                    })
+                                                                }}
+                                                            >Monthly</Button>
                                                         </ButtonGroup>
                                                 }}
                                             >
                                                 <Card.Section>
                                                     <div className="dashboard_right">
-                                                        <ContentSummaryGraph />
+                                                        <ContentSummaryGraph fetchDashboardReport={fetchDashboardReport} />
 
                                                         <div className="right_section">
                                                             <div className="right_section_sub">
                                                                 <div className="mrr_div">
-                                                                    <div className="mrr_first">$33,000</div>
+                                                                    <div className="mrr_first">${fetchDashboardReport?.mrr?.value}</div>
                                                                     <div className="mrr_second">MRR</div>
                                                                 </div>
                                                                 <div className="mrr_div">
-                                                                    <div className="mrr_first">115k</div>
+                                                                    <div className="mrr_first">{fetchDashboardReport?.activeSubscriptionsCount?.value}</div>
                                                                     <div className="mrr_second">
                                                                         <span className="subs_icon" >
                                                                             Active Subscriptions
@@ -149,7 +210,7 @@ const NewDashboard = () => {
                                                                     </div>
                                                                 </div>
                                                                 <div className="mrr_div">
-                                                                    <div className="mrr_first">5.5%</div>
+                                                                    <div className="mrr_first">{fetchDashboardReport?.activeSubscriptionsCount?.percent}%</div>
                                                                     <div className="mrr_second">
                                                                         <span className="subs_icon pink" >
                                                                             Churn Rate

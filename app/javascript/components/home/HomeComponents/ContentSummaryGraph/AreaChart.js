@@ -1,25 +1,47 @@
 import * as React from "react";
 import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
+
+// import HighchartsReact from "highcharts-react-official";
 import HC_exporting from "highcharts/modules/exporting";
+const HighchartsReact = React.lazy(() => import('highcharts-react-official'))
 HC_exporting(Highcharts);
+
+
+
 import "./style.css"
 
-const AreaChart = () => {
+const AreaChart = ({ fetchDashboardReport }) => {
+    const [xAxisCategories, setXAxisCategories] = React.useState([])
+    const [activeCustomers, setActiveCustomers] = React.useState([]);
+    const [revenueChurn, setRevenueChurn] = React.useState([]);
+    React.useEffect(() => {
+        let customers = []
+        let dates = []
+        let churn = []
+        fetchDashboardReport?.activeCustomers?.map(
+            (val) => {
+                dates.push(val?.date)
+                customers.push(+val?.data?.value)
+            }
+        )
+        fetchDashboardReport?.revenueChurn?.map(
+            (val) => {
+                churn.push(+val?.data?.value)
+            }
+        )
+        setXAxisCategories(dates);
+        setActiveCustomers(customers);
+        setRevenueChurn(churn)
+    }, [fetchDashboardReport])
+
     let chartOptions = {
-        chart: {
-            zoomType: 'yx',
-            reflow: true,
-            width: 800,
-        },
         title: {
-            text: ''
+            text: 'Active Customers'
         },
         xAxis: [{
             gridLineWidth: 16,
             gridLineColor: '#ffff',
-            categories: ['1-01-30', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            categories: xAxisCategories,
             crosshair: true
         }],
         yAxis: [{ // Primary yAxis
@@ -58,7 +80,7 @@ const AreaChart = () => {
         series: [{
             name: '',
             type: 'area',
-            data: [3.1, 13.0, 14.5, 10.8, 5.8, 7.8, 9.5, 9.5, 10.4, 5.2, 3.2, 4.8],
+            data: activeCustomers,
             tooltip: {
                 valueSuffix: 'k'
             },
@@ -72,16 +94,20 @@ const AreaChart = () => {
             },
         },
         {
-            name: 'test',
+            name: 'Revenue Churn',
             type: 'line',
-            data: [4, 1.0, 5, 3, 7, 8.0, 5, 8, 2, 4, 3, 7],
+            data: revenueChurn,
             tooltip: {
                 valueSuffix: 'k'
             }
         }]
     };
 
-    return (<><HighchartsReact highcharts={Highcharts} options={chartOptions} /></>);
+    return (
+        <React.Suspense fallback={() => "loading...."}>
+            <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+        </React.Suspense>
+    );
 }
 
 export default AreaChart;
