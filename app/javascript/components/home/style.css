@@ -12,6 +12,7 @@
 .dashboard_main_div {
     width: 100%;
     padding: 20px;
+    background: #F8F9FF;
 }
 
 .dashboard_left .dashboard_header .main_head {
@@ -55,7 +56,7 @@
     max-width: 42px;
     height: 42px;
     border-radius: 50%;
-    margin-right: 12px;
+    margin-right: 0;
     padding: 0;
 }
 
@@ -228,6 +229,7 @@ h2.Polaris-Heading {
 .app-content .Polaris-Page {
     max-width: 100%;
     padding: 0;
+    margin-left: 28px;
 }
 
 .Polaris-Layout {
@@ -369,6 +371,7 @@ h2.Polaris-Heading {
 .Polaris-Page__Content .Polaris-Card {
     overflow: hidden;
     border-radius: 8px;
+    box-shadow: none;
 }
 
 .dashboard_main_div {
@@ -454,6 +457,178 @@ h2.Polaris-Heading {
 
 .customer_activity_div .customer_activity_right .body span.Polaris-Icon {
     margin: 0;
+}
+
+.top_section .Polaris-Stack.Polaris-Stack--alignmentBaseline>.Polaris-Stack__Item>.Polaris-ButtonGroup>.Polaris-ButtonGroup__Item.Polaris-ButtonGroup__Item--plain>button.Polaris-Button.Polaris-Button--plain {
+    padding: 0 !important;
+}
+
+.right_section .report span.Polaris-Icon {
+    display: inline-flex;
+    background: #E6F3FF;
+    padding: 6px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+}
+
+.right_section .report {
+    gap: 8px;
+}
+
+.module-navbar .app_content {
+    background: #F8F9FF;
+}
+
+
+/* 23-12-2022 */
+.module-navbar.dashboardArea.collapsedNav .app_content {
+    left: 100px;
+    max-width: calc(100% - 100px);
+}
+
+.Polaris-Navigation__Item .Polaris-Navigation__Text {
+    transition: 0.3s ease all;
+}
+
+
+
+.logo img {
+    transition: 0.3s ease all;
+}
+
+.module-navbar.dashboardArea.collapsedNav .logo img {
+    transform: translateX(85px) scale(1.8);
+}
+
+.module-navbar.dashboardArea.collapsedNav .navBar {
+    max-width: 100px;
+}
+
+
+.module-navbar.dashboardArea.collapsedNav .collapsible_button .Polaris-Button {
+    transform: scaleX(-1);
+}
+
+.module-navbar .Polaris-Button svg {
+    transform: translate(-1px, 2px);
+}
+
+.collapsible_button .Polaris-Button {
+    position: absolute;
+    left: calc(100% - 23px);
+    top: 10px;
+    border: 1px solid #DADADA;
+    background: #fff;
+    border-radius: 50% !important;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    padding: 0 !important;
+}
+
+.module-navbar.dashboardArea.collapsedNav .logo img {
+    transform: translate(130px, 30px) scale(4);
+}
+
+.navBar .logo img {
+    max-width: 180px;
+}
+
+.module-navbar.dashboardArea.collapsedNav .Polaris-Navigation__Section {
+    margin-top: 30px;
+}
+
+.navBar .sidBartabs nav.Polaris-Navigation {
+    min-width: 100%;
+    max-width: 100px;
+}
+
+.module-navbar.dashboardArea.collapsedNav .Polaris-Navigation__Item .Polaris-Navigation__Text {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+    position: absolute;
+    overflow: hidden;
+}
+
+.navBar {
+    z-index: 9;
+}
+
+.logo_main {
+    overflow: hidden;
+    height: 70px;
+}
+
+
+
+/* left sidebar */
+
+.module-navbar.dashboardArea.collapsedNav .Polaris-Navigation__SecondaryNavigation.Polaris-Navigation--isExpanded {
+    width: 30px;
+    margin: 0;
+}
+
+.module-navbar.dashboardArea.collapsedNav .Polaris-Navigation__SecondaryNavigation.Polaris-Navigation--isExpanded .Polaris-Collapsible {
+    max-width: 40px;
+    margin: 0 auto;
+}
+
+.module-navbar.dashboardArea.collapsedNav .Polaris-Navigation__Icon {
+    margin: auto;
+}
+
+.module-navbar.dashboardArea.collapsedNav .navBar .sidBartabs ul li a span {
+    margin: 0;
+}
+
+.module-navbar.dashboardArea.collapsedNav .navBar .sidBartabs ul li a {
+    text-align: center;
+    display: inline-block;
+    margin: 0 auto;
+}
+
+.module-navbar.dashboardArea.collapsedNav .navBar {
+    line-height: normal !important;
+}
+
+.module-navbar.dashboardArea.collapsedNav .navBar .sidBartabs ul li ul li {
+    margin: 10px auto;
+}
+
+
+.module-navbar.dashboardArea.collapsedNav .navBar .sidBartabs ul li a.Polaris-Navigation__Item .Polaris-Navigation__Icon {
+
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+}
+
+.module-navbar.dashboardArea.collapsedNav .navBar .sidBartabs ul li::before {
+    display: none;
+}
+
+.navBar .sidBartabs ul li a span.Polaris-Navigation__Text {
+    color: #fff !important;
+    font-weight: 600 !important;
+}
+
+.Polaris-Navigation__Item:hover {
+    background: #1B2B65 !important;
+    border-radius: 8px 0 0 8px !important;
+}
+
+.Polaris-Navigation__ItemWrapper,
+.Polaris-Navigation__ItemWrapper * {
+    opacity: 1 !important;
+}
+
+.navBar .sidBartabs ul li .Polaris-Navigation--subNavigationActive .Polaris-Navigation__Text {
+    color: #51CBFF !important;
 }
 
 @media (max-width: 1365px) {

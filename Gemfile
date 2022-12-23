@@ -84,6 +84,14 @@ group :test do
   gem 'webdrivers'
 end
 
+group :production do
+  gem 'appsignal'
+
+  gem "bugsnag", "~> 6.24"
+
+  gem 'newrelic_rpm'
+end
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'carrierwave'
@@ -98,12 +106,6 @@ gem "sidekiq-unique-jobs", "~> 7.1"
 gem 'httparty'
 
 gem "stripe", "~> 5.41"
-
-gem 'appsignal'
-
-gem "bugsnag", "~> 6.24"
-
-gem 'newrelic_rpm'
 
 gem 'sprockets'
 

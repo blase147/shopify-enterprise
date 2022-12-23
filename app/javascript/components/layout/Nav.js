@@ -1,4 +1,5 @@
 import {
+  Button,
   Frame,
   Icon,
   Navigation,
@@ -11,9 +12,15 @@ import "./nav_style.scss";
 import { HomeMajor, SettingsMinor, AnalyticsMajor, HintMajor, ProfileMajor, InstallMinor, CustomersMajor } from "@shopify/polaris-icons";
 import { MangeIcon, SubscriptionIcon, ToolboxIcon } from './CustomIcon';
 import ChargeZenLogo from "./../../images/ChargeZenLogo.svg";
+import CircleChevronMinor from "./../../images/VectorIcon";
 
 
 const Nav = (props) => {
+  const {
+    navCollapse,
+    setNavCollapse,
+    selected
+  } = props;
   const history = useHistory();
 
   const [navigations, setNavigations] = useState([]);
@@ -145,8 +152,31 @@ const Nav = (props) => {
 
   return (
     <div className='navBar'>
-      <div className='logo'>
-        <img src={ChargeZenLogo} />
+      <div className='logo_main'>
+        <div className='logo'>
+          <img src={ChargeZenLogo} />
+        </div>
+        <div className='collapsible_button'>
+          <Button onClick={() => {
+            setNavCollapse(!navCollapse)
+          }
+          }>
+            {
+              navCollapse ?
+                <div className='arrow-icon-right'>
+                  <svg width="11" height="16" viewBox="0 0 11 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.93891 0.938995L0.878906 8L7.93891 15.061L10.0609 12.939L5.12091 8L10.0609 3.061L7.93891 0.938995Z" fill="#445BFF" />
+                  </svg>
+                </div>
+                :
+                <div className='arrow-icon-left'>
+                  <svg width="11" height="16" viewBox="0 0 11 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.93891 0.938995L0.878906 8L7.93891 15.061L10.0609 12.939L5.12091 8L10.0609 3.061L7.93891 0.938995Z" fill="#445BFF" />
+                  </svg>
+                </div>
+            }
+          </Button>
+        </div>
       </div>
       {
         navigations.length > 0 ?
@@ -154,7 +184,7 @@ const Nav = (props) => {
             <Navigation location='\'>
               <Navigation.Section
                 items={navigations ? navigations : []}
-                selected={props.selected}
+                selected={selected}
               />
             </Navigation>
           </div> : <div />

@@ -617,6 +617,7 @@ const Dashboard = (props) => {
     () => setGetStartedModal(!getStartedModal),
     [getStartedModal]
   );
+  console.log("chartOptions", chartOptions);
   return (
     <AppLayout typePage="Dashboard" tabIndex="0">
       <Page>
