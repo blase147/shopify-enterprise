@@ -61,22 +61,12 @@
 }
 
 .top_section {
-    display: flex;
     width: 100%;
-    flex-wrap: wrap;
     max-width: 100%;
-    gap: 22px;
-    justify-content: space-between;
 }
 
 .top_section .revenue_overview_div {
-    flex: 0 0 calc(100% - 410px);
-    max-width: calc(100% - 410px);
-}
-
-.top_section .customer_activity_main_div {
-    flex: 0 0 384px;
-    max-width: 384px;
+    max-width: 100%;
 }
 
 h2.Polaris-Heading {
@@ -355,7 +345,6 @@ h2.Polaris-Heading {
 }
 
 .top_section .right_section {
-    flex: 0 0 250px;
     max-width: 250px;
     padding: 15px 24px 10px;
 }
@@ -632,11 +621,6 @@ h2.Polaris-Heading {
 }
 
 @media (max-width: 1700px) {
-    .top_section .customer_activity_main_div {
-        flex: 100%;
-        max-width: 100%;
-    }
-
     figure.highcharts-figure>div {
         overflow-x: auto !important;
     }
