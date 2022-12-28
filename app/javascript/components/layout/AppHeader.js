@@ -1,4 +1,4 @@
-import { Icon, Select } from "@shopify/polaris";
+import { Button, Icon, Select } from "@shopify/polaris";
 import { TextField } from "@shopify/polaris";
 import React, { useCallback, useEffect, useState } from "react";
 import {
@@ -6,9 +6,11 @@ import {
     SearchMajor
 } from '@shopify/polaris-icons';
 import "./nav_style.scss"
+import Notifications from "./Notifications";
 
 const AppHeader = (props) => {
     const [selectedShop, setSelectedShop] = useState(props?.domain);
+    const [activeNotification, setActiveNotification] = useState(false);
     const handleSelectChange = useCallback((value) => {
         setSelectedShop(value)
         localStorage.setItem("selectedShop", value)
@@ -61,7 +63,17 @@ const AppHeader = (props) => {
                     </div>
                     <div className="second_div">
                         <div className="status"><span className="online_symbol" />Online</div>
-                        <div className="notification"><Icon source={NotificationMajor} color="base" /></div>
+                        <div className="notification">
+                            <Button
+                                className="admin_notification_button"
+                                onClick={() =>  setActiveNotification(activeNotification => !activeNotification)}
+                            >
+                                <Icon source={NotificationMajor} color="base" />
+                            </Button>
+                            <div className={`customer_notificaions ${activeNotification ? "" : "hidden"}`}>
+                                <Notifications />
+                            </div>
+                        </div>
                         <div className="userDetailMain">
                             <div className="user_details">
                                 <div className="avatar">

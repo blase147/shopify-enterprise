@@ -1,12 +1,7 @@
 import * as React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-// const HighchartsReact = React.lazy(() => import('highcharts-react-official'))
-
-
-
-import "./style.css"
-import { Card, Layout, Page } from "@shopify/polaris";
+import "./style.css";
 
 const AreaChart = ({ fetchDashboardReport }) => {
     const [xAxisCategories, setXAxisCategories] = React.useState([])
@@ -33,15 +28,19 @@ const AreaChart = ({ fetchDashboardReport }) => {
         setActiveCustomers(customers);
         setRevenueChurn(churn)
 
+    }, [fetchDashboardReport])
+    React.useEffect(() => {
+
         let chartData = {
             chart: {
                 type: 'column',
                 events: {
-                    load: function () {
+                    render() {
+                        console.log("test", this);
                         setTimeout(() => {
                             this.reflow.bind(this)
                             this.reflow()
-                        }, 2000);
+                        }, 500);
                     },
                 }
             },
@@ -113,21 +112,11 @@ const AreaChart = ({ fetchDashboardReport }) => {
             }]
         };
         setChartOptions(chartData);
-    }, [fetchDashboardReport])
-
+    }, [revenueChurn, activeCustomers, xAxisCategories])
+    console.log("chartOptions", chartOptions);
 
     return (
-        <Page>
-            <Layout>
-                <Layout.Section>
-                    <Card>
-                        <Card.Section>
-                            <HighchartsReact highcharts={Highcharts} options={chartOptions} />
-                        </Card.Section>
-                    </Card>
-                </Layout.Section>
-            </Layout >
-        </Page>
+        <HighchartsReact highcharts={Highcharts} options={chartOptions} />
     );
 }
 

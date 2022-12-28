@@ -11,7 +11,7 @@
     align-items: center;
     background: black !important;
     color: white;
-    font-family: 'Gilroy';
+    font-family: 'Avenir';
     font-style: normal;
     font-weight: 900;
     font-size: 14px;
@@ -448,4 +448,48 @@ body.chargezen {
 .userDetailMain {
     margin-right: -10px;
     margin-left: 20px;
+}
+
+.customer_notificaions {
+    position: absolute;
+    width: 384px;
+    z-index: 1500;
+    margin-top: 30px;
+}
+
+.customer_activity_main_div {
+    margin-top: -7px;
+}
+
+.chargezen .main_header .second_div .notification .Polaris-Button {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+}
+
+.tabButtons .Polaris-ButtonGroup .Polaris-ButtonGroup__Item .Polaris-Button__Text {
+    font-size: 18px;
+    font-weight: 500;
+    color: #A9ABB0;
+    margin: 0;
+}
+
+.tabButtons .Polaris-ButtonGroup .Polaris-ButtonGroup__Item .Polaris-Button {
+    border: 0;
+    outline: none;
+    box-shadow: none;
+}
+
+.tabButtons .Polaris-ButtonGroup .Polaris-ButtonGroup__Item .Polaris-Button.Polaris-Button--primary {
+    background: #F5F7FB;
+}
+
+.tabButtons .Polaris-ButtonGroup .Polaris-ButtonGroup__Item .Polaris-Button.Polaris-Button--primary .Polaris-Button__Text {
+    font-weight: 800;
+    color: #017EFA;
+}
+
+.tabButtons .Polaris-ButtonGroup .Polaris-ButtonGroup__Item .Polaris-Button .Polaris-Button__Content {
+    margin: 0;
+    text-align: center;
 }
