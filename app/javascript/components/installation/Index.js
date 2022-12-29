@@ -69,7 +69,7 @@ const Installation = ({ shopifyDomain, passwordProtected }) => {
 
   useEffect(() => {
     if (data) {
-      const themesData = data.fetchThemes.map((item) => (
+      const themesData = data?.fetchThemes.map((item) => (
         {
           label: `${item.name}(${item.role})`,
           value: item.id

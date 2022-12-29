@@ -18,36 +18,40 @@ import {
 } from '@shopify/polaris-icons';
 import './shippingSuit.css';
 import LoadingScreen from '../LoadingScreen';
+import HeaderButtons from '../HeaderButtons/HeaderButtons';
+import PixelIcon from '../../images/PixelIcon';
 
 const index = ({ handleBack }) => {
   // Start Tabs
   const [selectedTab, setSelectedTab] = useState(0);
 
-  const handleTabChange = useCallback(
-    (selectedTabIndex) => setSelectedTab(selectedTabIndex),
-    []
-  );
+  const [headerButton, setHeaderButton] = useState(0)
 
-  const tabs = [
+  useEffect(() => {
+    setSelectedTab(headerButton)
+  },
+    [headerButton]
+  );
+  const headerButtons = [
     {
-      id: 'all',
-      content: 'All',
+      val: 0,
+      name: 'All',
     },
     {
-      id: 'new',
-      content: 'Due Today',
+      val: 1,
+      name: 'Due Today',
     },
     {
-      id: 'returning',
-      content: 'Returning',
+      val: 2,
+      name: 'Returning',
     },
     {
-      id: 'active',
-      content: 'Unfulfiled',
+      val: 3,
+      name: 'Unfulfiled',
     },
     {
-      id: 'expired',
-      content: 'Fulfiled',
+      val: 4,
+      name: 'Fulfiled',
     },
   ];
   // End tabs
@@ -398,14 +402,19 @@ const index = ({ handleBack }) => {
           </div>
         </div>
 
-        <Card>
-          <div className="tabs">
-            <Tabs
-              tabs={tabs}
-              selected={selectedTab}
-              onSelect={handleTabChange}
-            />
-          </div>
+        <Card
+          title={
+            <div className="heading_title">
+              <PixelIcon />
+              Shipping Suite
+            </div>}
+          actions={{
+            content:
+              <div className='tabButtons'>
+                <HeaderButtons headerButtons={headerButtons} setHeaderButton={setHeaderButton} headerButton={headerButton} />
+              </div>
+          }}
+        >
           <Card.Section>
             <div className="filter">
               <Filters

@@ -22,6 +22,8 @@ import moment from 'moment';
 import { Pagination } from "@shopify/polaris";
 import LoadingScreen from '../LoadingScreen';
 import "./customerModal.css";
+import HeaderButtons from '../HeaderButtons/HeaderButtons';
+import PixelIcon from '../../images/PixelIcon';
 
 
 // import json2csv from 'json2csv';
@@ -84,55 +86,41 @@ const ButtonRemove = (props) => {
 const CustomerModal = ({ shopifyDomain }) => {
   const history = useHistory();
   // Start Tabs
-  const [selectedTab, setSelectedTab] = useState(0);
+  const [headerButton, setHeaderButton] = useState("active")
 
-  const handleTabChange = useCallback(
-    (selectedTabIndex) => {
-      setSelectedTab(selectedTabIndex)
-      if (selectedTabIndex == 1) {
-        setStatus('all')
-      } else if (selectedTabIndex == 3) {
-        setStatus("returning")
-      } else if (selectedTabIndex == 0) {
-        setStatus("active")
-      } else if (selectedTabIndex == 4) {
-        setStatus("expired")
-      } else if (selectedTabIndex == 5) {
-        setStatus("all")
-      }
-      setPage("1")
-    },
-    [],
+  useEffect(() => {
+    setPage(1)
+    setStatus(headerButton)
+  },
+    [headerButton]
   );
-
-  const tabs = [
+  const headerButtons = [
     {
-      id: 'active',
-      content: 'Active',
+      val: 'active',
+      name: 'Active',
     },
     {
-      id: 'new',
-      content: 'New',
+      val: 'new',
+      name: 'New',
     },
     {
-      id: 'returning',
-      content: 'Returning',
+      val: 'returning',
+      name: 'Returning',
     },
     {
-      id: 'paused',
-      content: 'Paused',
+      val: 'paused',
+      name: 'Paused',
     },
     {
-      id: 'expired',
-      content: 'Canceled',
+      val: 'expired',
+      name: 'Canceled',
     },
     {
-      id: 'all',
-      content: 'All',
+      val: 'all',
+      name: 'All',
     },
   ];
   // End tabs
-  console.log(selectedTab);
   const [sortOrder, setSortOrder] = useState(0);
 
   const [moneySpent, setMoneySpent] = useState(null);
@@ -371,25 +359,6 @@ const CustomerModal = ({ shopifyDomain }) => {
   const [customers, setCustomers] = useState([]);
   const [filterCustomers, setFilterCustomers] = useState([]);
 
-  const filterCustomersValue = () => {
-    const rowsData = customers.filter((item) => {
-      return (
-        (item.subscription === subscriptions[selectedTab] || (subscriptions[selectedTab] === 'paused') ||
-          (subscriptions[selectedTab] === 'active') || (subscriptions[selectedTab] === 'returning') || (subscriptions[selectedTab] === 'cancelled') || (subscriptions[selectedTab] === 'new') || (subscriptions[selectedTab] === 'all')) &&
-        (item.name?.toLowerCase()?.includes(queryValue?.toLowerCase()) ||
-          !queryValue) &&
-        (item.subscription?.toLowerCase()?.includes(taggedWith) || !taggedWith)
-      );
-    });
-
-    setFilterCustomers(rowsData);
-  };
-  useEffect(() => {
-    if (customers) {
-      filterCustomersValue();
-    }
-    // console.log('searchvalue: ', queryValue);
-  }, [queryValue, taggedWith, customers]);
 
   // useEffect(() => {
   //   filterCustomersValue();
@@ -717,14 +686,17 @@ const CustomerModal = ({ shopifyDomain }) => {
             </ButtonGroup>
           }
         >
-          <Card>
-            <div className="tabs">
-              <Tabs
-                tabs={tabs}
-                selected={selectedTab}
-                onSelect={handleTabChange}
-              />
-            </div>
+          <Card
+            title={<div className="heading_title">
+              <PixelIcon />
+              Subscription Customers</div>}
+            actions={{
+              content:
+                <div className='tabButtons'>
+                  <HeaderButtons headerButtons={headerButtons} setHeaderButton={setHeaderButton} headerButton={headerButton} />
+                </div>
+            }}
+          >
             <Card.Section>
               <div className="filter">
                 <Filters
@@ -761,7 +733,7 @@ const CustomerModal = ({ shopifyDomain }) => {
                   </Button>
                 </div>
               </div>
-              <div className={"table customer-subscription-tbl" + " " + selectedTab}>
+              <div className={"table customer-subscription-tbl" + " "}>
                 <DataTable
                   columnContentTypes={[
                     'text',

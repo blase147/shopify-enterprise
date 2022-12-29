@@ -28,6 +28,8 @@ import integrations from '../../lib/integrations';
 import { groupBy } from '../common/utils/utils';
 import LoadingScreen from '../LoadingScreen';
 import IntegrationDetail from "../integration/Detail"
+import PixelIcon from '../../images/PixelIcon';
+import HeaderButtons from '../HeaderButtons/HeaderButtons';
 
 const Integrations = ({ handleBack, handleForm }) => {
 
@@ -63,21 +65,26 @@ const Integrations = ({ handleBack, handleForm }) => {
       }
 }`
 
-  let tabs = integrations.map((item, index) => ({
-    content: item.title,
+
+  const [headerButton, setHeaderButton] = useState(0)
+
+  let headerButtons = integrations.map((item, index) => ({
+    name: item.title,
     id: item.id,
+    val: index
   }));
-  tabs = [
-    ...(process.env.APP_TYPE == "public" ? [{ content: 'All', id: 'all' }] : [])
-  ].concat(tabs);
+
+  headerButtons = [
+    ...(process.env.APP_TYPE == "public" ? [{ content: 'All', id: 'all', val: 0 }] : [])
+  ].concat(headerButtons);
 
   const [selected, setSelected] = useState(0);
-  const [category, setCategory] = useState(tabs[selected].id || 'all');
+  const [category, setCategory] = useState(headerButtons[selected].id || 'all');
 
-  const handleTabChange = useCallback((selectedTabIndex) => {
-    setSelected(selectedTabIndex);
-    setCategory(tabs[selectedTabIndex].id);
-  }, []);
+  useEffect(() => {
+    setSelected(headerButton);
+    setCategory(headerButtons[headerButton].id);
+  }, [headerButton]);
 
   const [fetchIntegrations, { data: integerations, loading }] = useLazyQuery(IntegerationsQuery, { fetchPolicy: "network-only" })
 
@@ -120,12 +127,19 @@ const Integrations = ({ handleBack, handleForm }) => {
                 </Button>
               </Layout.Section>
               <Layout.Section>
-                <Card>
-                  <Tabs
-                    tabs={tabs}
-                    selected={selected}
-                    onSelect={handleTabChange}
-                  ></Tabs>
+                <Card
+                  title={
+                    <div className="heading_title">
+                      <PixelIcon />
+                      Integrations
+                    </div>}
+                  actions={{
+                    content:
+                      <div className='tabButtons'>
+                        <HeaderButtons headerButtons={headerButtons} setHeaderButton={setHeaderButton} headerButton={headerButton} />
+                      </div>
+                  }}
+                >
                 </Card>
               </Layout.Section>
               {/* Data from API's */}

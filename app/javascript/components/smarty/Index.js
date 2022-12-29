@@ -1,4 +1,4 @@
-import { Frame, Page, Tabs, Layout, Icon } from '@shopify/polaris';
+import { Frame, Page, Tabs, Layout, Icon, Card } from '@shopify/polaris';
 import React, { useCallback, useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import AppLayout from '../layout/Layout';
@@ -16,6 +16,8 @@ import FlowIndex from './Flow';
 import FlowForm from './Flow/NewForm';
 import NewFlowForm from './Flow/NewForm';
 import UpdateFlowForm from './Flow/UpdateForm';
+import PixelIcon from '../../images/PixelIcon';
+import HeaderButtons from '../HeaderButtons/HeaderButtons';
 
 const Smarty = ({ handleBack }) => {
   const location = useLocation();
@@ -31,38 +33,46 @@ const Smarty = ({ handleBack }) => {
       setSelectedTitleTab(location.state.tabIndex);
     }
   }, [location?.state]);
-  const handleTabChange = useCallback((selectedTabIndex) => {
-    setSelectedTitleTab(selectedTabIndex);
-  }, []);
+  // const handleTabChange = useCallback((selectedTabIndex) => {
+  //   setSelectedTitleTab(selectedTabIndex);
+  // }, []);
 
-  const tabs = [
+
+  const [headerButton, setHeaderButton] = useState("active")
+
+  useEffect(() => {
+    setSelectedTitleTab(headerButton)
+  },
+    [headerButton]
+  );
+  const headerButtons = [
     {
-      id: 'tab-messages',
-      content: 'Messages',
+      val: 0,
+      name: 'Messages',
     },
     ...(process.env.APP_TYPE == 'public'
       ? [
-          {
-            id: 'tab-custom-messages',
-            content: 'Custom Messages',
-          },
-          {
-            id: 'tab-custom-keywords',
-            content: 'Custom Keywords',
-          },
-        ]
+        {
+          val: 1,
+          name: 'Custom Messages',
+        },
+        {
+          val: 2,
+          name: 'Custom Keywords',
+        },
+      ]
       : []),
     {
-      id: 'cancellation-reasons',
-      content: 'Cancellation Reasons',
+      val: 3,
+      name: 'Cancellation Reasons',
     },
     {
-      id: 'collect-subscribers',
-      content: 'Collect Subscribers',
+      val: 4,
+      name: 'Collect Subscribers',
     },
     {
-      id: 'flow',
-      content: 'Flow',
+      val: 5,
+      name: 'Flow',
     },
   ];
 
@@ -97,76 +107,90 @@ const Smarty = ({ handleBack }) => {
           </div>
         </Layout.Section>
       </Layout>
-      <Tabs tabs={tabs} selected={selectedTitleTab} onSelect={handleTabChange}>
-        <div className="tizen-page">
-          {selectedTitleTab === 0 && (
-            <>
-              {showEditPage ? (
-                <EditSmartyMessage
-                  id={editId}
-                  handleClose={handleCloseEditPage}
-                />
-              ) : (
-                <SmartyMessage handleEditSmartyMessage={handleEditPage} />
-              )}
-            </>
-          )}
-          {selectedTitleTab === (process.env.APP_TYPE == 'public' && 1 ) && (
-            <>
-              {showEditPage ? (
-                <EditSmartyMessage
-                  id={editId}
-                  handleClose={handleCloseEditPage}
-                />
-              ) : (
-                <CustomMessage handleEditSmartyMessage={handleEditPage} />
-              )}
-            </>
-          )}
-          {selectedTitleTab === (process.env.APP_TYPE == 'public' && 2 ) && (
-            <>
-              {showEditPage ? (
-                <CustomKeywordsForm
-                  id={editId}
-                  handleClose={handleCloseEditPage}
-                />
-              ) : (
-                <CustomKeywords handleEditCustomKewords={handleEditPage} />
-              )}
-            </>
-          )}
-          {selectedTitleTab === (process.env.APP_TYPE == 'public' ? 3 : 1) && (
-            <>
-              {showEditPage && (
-                <CancellationReasonForm
-                  id={editId}
-                  handleClose={handleCloseEditPage}
-                />
-              )}
-              <CancellationReasons handleEditCancellation={handleEditPage} />
-            </>
-          )}
-          {selectedTitleTab === (process.env.APP_TYPE == 'public' ? 4 : 2) && (
-            <CollectSubscribers />
-          )}
-          {selectedTitleTab === (process.env.APP_TYPE == 'public' ? 5 : 3) && (
-            <>
-              {showEditPage ? (
-                editId ? (
-                  <UpdateFlowForm
+      <Card
+        title={
+          <div className="heading_title">
+            <PixelIcon />
+            Analytics
+          </div>}
+        actions={{
+          content:
+            <div className='tabButtons'>
+              <HeaderButtons headerButtons={headerButtons} setHeaderButton={setHeaderButton} headerButton={headerButton} />
+            </div>
+        }}
+      >
+        <Card.Section subdued>
+          <div className="tizen-page">
+            {selectedTitleTab === 0 && (
+              <>
+                {showEditPage ? (
+                  <EditSmartyMessage
                     id={editId}
                     handleClose={handleCloseEditPage}
                   />
                 ) : (
-                  <NewFlowForm handleEditFlow={handleEditPage} handleClose={handleCloseEditPage} />
-                )
-              ) : (
-                <FlowIndex handleEditFlow={handleEditPage} />
-              )}
-            </>
-          )}
-        </div>
-      </Tabs>
+                  <SmartyMessage handleEditSmartyMessage={handleEditPage} />
+                )}
+              </>
+            )}
+            {selectedTitleTab === (process.env.APP_TYPE == 'public' && 1) && (
+              <>
+                {showEditPage ? (
+                  <EditSmartyMessage
+                    id={editId}
+                    handleClose={handleCloseEditPage}
+                  />
+                ) : (
+                  <CustomMessage handleEditSmartyMessage={handleEditPage} />
+                )}
+              </>
+            )}
+            {selectedTitleTab === (process.env.APP_TYPE == 'public' && 2) && (
+              <>
+                {showEditPage ? (
+                  <CustomKeywordsForm
+                    id={editId}
+                    handleClose={handleCloseEditPage}
+                  />
+                ) : (
+                  <CustomKeywords handleEditCustomKewords={handleEditPage} />
+                )}
+              </>
+            )}
+            {selectedTitleTab === (process.env.APP_TYPE == 'public' ? 3 : 1) && (
+              <>
+                {showEditPage && (
+                  <CancellationReasonForm
+                    id={editId}
+                    handleClose={handleCloseEditPage}
+                  />
+                )}
+                <CancellationReasons handleEditCancellation={handleEditPage} />
+              </>
+            )}
+            {selectedTitleTab === (process.env.APP_TYPE == 'public' ? 4 : 2) && (
+              <CollectSubscribers />
+            )}
+            {selectedTitleTab === (process.env.APP_TYPE == 'public' ? 5 : 3) && (
+              <>
+                {showEditPage ? (
+                  editId ? (
+                    <UpdateFlowForm
+                      id={editId}
+                      handleClose={handleCloseEditPage}
+                    />
+                  ) : (
+                    <NewFlowForm handleEditFlow={handleEditPage} handleClose={handleCloseEditPage} />
+                  )
+                ) : (
+                  <FlowIndex handleEditFlow={handleEditPage} />
+                )}
+              </>
+            )}
+          </div>
+        </Card.Section>
+      </Card>
     </Frame>
   );
 };

@@ -7,12 +7,13 @@ import {
   Tabs
 } from '@shopify/polaris';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import "./nav_style.scss";
 import { HomeMajor, SettingsMinor, AnalyticsMajor, HintMajor, ProfileMajor, InstallMinor, CustomersMajor } from "@shopify/polaris-icons";
 import { MangeIcon, SubscriptionIcon, ToolboxIcon } from './CustomIcon';
 import ChargeZenLogo from "./../../images/ChargeZenLogo.svg";
 import CircleChevronMinor from "./../../images/VectorIcon";
+import useRouter from '../useRouterHook';
 
 
 const Nav = (props) => {
@@ -22,7 +23,7 @@ const Nav = (props) => {
     selected
   } = props;
   const history = useHistory();
-
+  const router = useRouter();
   const [navigations, setNavigations] = useState([]);
   const [activeTab, setActiveTab] = useState("dash");
   useEffect(() => {
@@ -148,7 +149,6 @@ const Nav = (props) => {
     }
     setNavigations(navigation);
   }
-  console.log(navigations);
 
   return (
     <div className='navBar'>
@@ -181,7 +181,7 @@ const Nav = (props) => {
       {
         navigations.length > 0 ?
           <div className="sidBartabs">
-            <Navigation location='\'>
+            <Navigation location={router.pathname}>
               <Navigation.Section
                 items={navigations ? navigations : []}
                 selected={selected}
