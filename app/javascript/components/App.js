@@ -10,7 +10,7 @@ import {
 } from '@shopify/polaris';
 import enTranslations from '@shopify/polaris/locales/en.json';
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
 import Analytics from './analytics/Index';
 import BuildBox from './build-a-box/BuildBox';
 import CreateBuildBox from './build-a-box/CreateBuildBox';
@@ -40,6 +40,7 @@ import InstallShop from './InstallShop';
 import ManageStaff from './ManageStaff';
 import DisabledNav from './layout/DisabledNav';
 import NewDashboard from './home/NewDashboard';
+import Notifications from './layout/Notifications';
 
 
 
@@ -120,11 +121,17 @@ export default function App(props) {
       localStorage.setItem("allShops", JSON.stringify(props?.allShops));
     }, [])
 
+
+    function AdapterLink({ url, ...rest }) {
+      return <Link to={url} {...rest} />
+    }
+
     return (
       <BrowserRouter>
-        <AppProvider i18n={enTranslations} theme={{}}>
+        <AppProvider i18n={enTranslations} theme={{}} linkComponent={AdapterLink}>
           <ApolloProvider client={client}>
             <Switch>
+              <Route exact path="/notifications" component={Notifications} />
               <Route exact path="/manage-staff" component={ManageStaff} />
               <Route
                 exact

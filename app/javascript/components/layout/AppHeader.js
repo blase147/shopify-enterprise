@@ -7,8 +7,10 @@ import {
 } from '@shopify/polaris-icons';
 import "./nav_style.scss"
 import Notifications from "./Notifications";
+import { useHistory } from "react-router";
 
 const AppHeader = (props) => {
+    const history = useHistory();
     const [selectedShop, setSelectedShop] = useState(props?.domain);
     const [activeNotification, setActiveNotification] = useState(false);
     const handleSelectChange = useCallback((value) => {
@@ -66,13 +68,10 @@ const AppHeader = (props) => {
                         <div className="notification">
                             <Button
                                 className="admin_notification_button"
-                                onClick={() =>  setActiveNotification(activeNotification => !activeNotification)}
+                                onClick={() => history.push("/notifications")}
                             >
                                 <Icon source={NotificationMajor} color="base" />
                             </Button>
-                            <div className={`customer_notificaions ${activeNotification ? "" : "hidden"}`}>
-                                <Notifications />
-                            </div>
                         </div>
                         <div className="userDetailMain">
                             <div className="user_details">

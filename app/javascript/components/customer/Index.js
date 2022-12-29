@@ -21,6 +21,8 @@ import AppLayout from '../layout/Layout';
 import moment from 'moment';
 import { Pagination } from "@shopify/polaris";
 import LoadingScreen from '../LoadingScreen';
+import HeaderButtons from '../HeaderButtons/HeaderButtons';
+import PixelIcon from '../../images/PixelIcon';
 
 
 // import json2csv from 'json2csv';
@@ -85,51 +87,6 @@ const Customers = ({ shopifyDomain }) => {
   // Start Tabs
   const [selectedTab, setSelectedTab] = useState(0);
 
-  const handleTabChange = useCallback(
-    (selectedTabIndex) => {
-      setSelectedTab(selectedTabIndex)
-      if (selectedTabIndex == 1) {
-        setStatus('all')
-      } else if (selectedTabIndex == 3) {
-        setStatus("returning")
-      } else if (selectedTabIndex == 0) {
-        setStatus("active")
-      } else if (selectedTabIndex == 4) {
-        setStatus("expired")
-      } else if (selectedTabIndex == 5) {
-        setStatus("all")
-      }
-      setPage("1")
-    },
-    [],
-  );
-
-  const tabs = [
-    {
-      id: 'active',
-      content: 'Active',
-    },
-    {
-      id: 'new',
-      content: 'New',
-    },
-    {
-      id: 'returning',
-      content: 'Returning',
-    },
-    {
-      id: 'paused',
-      content: 'Paused',
-    },
-    {
-      id: 'expired',
-      content: 'Canceled',
-    },
-    {
-      id: 'all',
-      content: 'All',
-    },
-  ];
   // End tabs
   console.log(selectedTab);
   const [sortOrder, setSortOrder] = useState(0);
@@ -240,6 +197,40 @@ const Customers = ({ shopifyDomain }) => {
   const [hasPrevious, setHasPrevious] = useState(false);
   const [status, setStatus] = useState("active");
   const [searchQuery, setSearchQuery] = useState();
+  const [headerButton, setHeaderButton] = useState("active")
+
+  useEffect(() => {
+    setPage(1)
+    setStatus(headerButton)
+  },
+    [headerButton]
+  );
+  const headerButtons = [
+    {
+      val: 'active',
+      name: 'Active',
+    },
+    {
+      val: 'new',
+      name: 'New',
+    },
+    {
+      val: 'returning',
+      name: 'Returning',
+    },
+    {
+      val: 'paused',
+      name: 'Paused',
+    },
+    {
+      val: 'expired',
+      name: 'Canceled',
+    },
+    {
+      val: 'all',
+      name: 'All',
+    },
+  ];
   // -------------------
   const GET_CUSTOMERS = gql`
     query($sortColumn: String, $sortDirection: String, $page: String, $status: String, $searchquery: String) {
@@ -785,14 +776,17 @@ const Customers = ({ shopifyDomain }) => {
             </ButtonGroup>
           }
         >
-          <Card>
-            <div className="tabs">
-              <Tabs
-                tabs={tabs}
-                selected={selectedTab}
-                onSelect={handleTabChange}
-              />
-            </div>
+          <Card
+            title={<div className="heading_title">
+              <PixelIcon />
+              Subscriptions Orders</div>}
+            actions={{
+              content:
+                <div className='tabButtons'>
+                  <HeaderButtons headerButtons={headerButtons} setHeaderButton={setHeaderButton} headerButton={headerButton} />
+                </div>
+            }}
+          >
             <Card.Section>
               <div className="filter">
                 <Filters
@@ -854,7 +848,7 @@ const Customers = ({ shopifyDomain }) => {
                     '',
                     ''
                   ]}
-                  rows={formatRows(filterCustomers)}
+                  rows={filterCustomers ? formatRows(filterCustomers) : []}
                 />
               </div>
               {loading && (
