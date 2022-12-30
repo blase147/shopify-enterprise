@@ -13,7 +13,7 @@ class ZipCodesController < AuthenticatedController
       zip_code.shop = current_shop
       zip_code.save
       begin
-        ShopifyAPI::Metafield.create({ key: 'zip_codes', value: current_shop.zip_codes.pluck(:codes).flatten.join(','), namespace: 'chargezen', value_type: 'string' })
+        ShopifyAPI::Metafield.create({ key: 'zip_codes', value: current_shop.zip_codes.pluck(:codes).flatten.join(','), namespace: 'chargezen', type: 'multi_line_text_field' })
         render json: { status: response['status'], zip_code: zip_code }
       rescue => e
         render json: { status: false, error: e }
@@ -26,7 +26,7 @@ class ZipCodesController < AuthenticatedController
   def destroy
     begin
       ZipCode.where(id: params[:ids]).destroy_all
-      ShopifyAPI::Metafield.create({ key: 'zip_codes', value: current_shop.zip_codes.pluck(:codes).flatten.join(','), namespace: 'chargezen', value_type: 'string' })
+      ShopifyAPI::Metafield.create({ key: 'zip_codes', value: current_shop.zip_codes.pluck(:codes).flatten.join(','), namespace: 'chargezen', type: 'multi_line_text_field' })
 
       render json: { status: true }
     rescue => e
