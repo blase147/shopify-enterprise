@@ -287,6 +287,27 @@ const CustomerModal = ({ shopifyDomain }) => {
     }
   }, [data]);
 
+
+  const filterCustomersValue = () => {
+    const rowsData = customers.filter((item) => {
+      return (
+        (item.subscription === headerButton || (headerButton === 'paused') ||
+          (headerButton === 'active') || (headerButton === 'returning') || (headerButton === 'cancelled') || (headerButton === 'new') || (headerButton === 'all')) &&
+        (item.name?.toLowerCase()?.includes(queryValue?.toLowerCase()) ||
+          !queryValue) &&
+        (item.subscription?.toLowerCase()?.includes(taggedWith) || !taggedWith)
+      );
+    });
+
+    setFilterCustomers(rowsData);
+  };
+  useEffect(() => {
+    if (customers) {
+      filterCustomersValue();
+    }
+    // console.log('searchvalue: ', queryValue);
+  }, [queryValue, taggedWith, customers]);
+
   const [formErrors, setFormErrors] = useState([]);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const hideSaveSuccess = useCallback(() => setSaveSuccess(false), []);
@@ -747,7 +768,7 @@ const CustomerModal = ({ shopifyDomain }) => {
                     'Email',
                     'Contracts'
                   ]}
-                  rows={formatRows(filterCustomers)}
+                  rows={formatRows(customers)}
                 />
               </div>
               {loading && (
