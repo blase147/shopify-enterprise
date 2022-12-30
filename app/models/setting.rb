@@ -33,7 +33,7 @@ class Setting < ApplicationRecord
         eligible_weekdays_for_delivery: self.eligible_weekdays_for_delivery
       }.to_json,
       namespace: 'chargezen',
-      value_type: 'json_string'
+      type: 'json'
     )
   end
   def style_content
@@ -51,12 +51,12 @@ class Setting < ApplicationRecord
   def set_design_metafield
     shop.connect
     shop = ShopifyAPI::Shop.current
-    shop.add_metafield(ShopifyAPI::Metafield.new({ key: 'plan_selector_type', value: "design_type_#{design_type}", namespace: 'extension', value_type: 'string' }))
+    shop.add_metafield(ShopifyAPI::Metafield.new({ key: 'plan_selector_type', value: "design_type_#{design_type}", namespace: 'extension', type: 'multi_line_text_field' }))
   end
 
   def update_account_portal_option_metafield
     shop.connect
-    ShopifyAPI::Metafield.create({ key: 'account_portal_option', value: account_portal_option, namespace: 'extension', value_type: 'string' })
+    ShopifyAPI::Metafield.create({ key: 'account_portal_option', value: account_portal_option, namespace: 'extension', type: 'multi_line_text_field' })
   end
 
   private ##
