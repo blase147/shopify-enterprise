@@ -215,10 +215,6 @@ const Customers = ({ shopifyDomain }) => {
       name: 'New',
     },
     {
-      val: 'returning',
-      name: 'Returning',
-    },
-    {
       val: 'paused',
       name: 'Paused',
     },

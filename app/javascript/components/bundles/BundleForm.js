@@ -25,6 +25,7 @@ import toPath from 'lodash/toPath';
 import { Formik, setIn } from 'formik';
 import * as yup from 'yup';
 import LoadingScreen from '../LoadingScreen';
+import PixelIcon from '../../images/PixelIcon';
 
 const BundleForm = ({ id, handleClose }) => {
   const [bundleGroup, setBundleGroup] = useState(null);
@@ -169,7 +170,11 @@ const BundleForm = ({ id, handleClose }) => {
           {({ values, handleSubmit, setFieldValue, isSubmitting }) => (
             <Form onSubmit={handleSubmit}>
               <div className="build-a-box-create">
-                <Card title="Box campaign group" sectioned>
+                <Card title={
+                  <div className="heading_title">
+                    <PixelIcon />
+                    Box campaign group
+                  </div>} sectioned>
                   <FormLayout>
                     <FormLayout.Group>
                       <TextField

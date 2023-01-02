@@ -38,7 +38,7 @@ const Smarty = ({ handleBack }) => {
   // }, []);
 
 
-  const [headerButton, setHeaderButton] = useState("active")
+  const [headerButton, setHeaderButton] = useState("0")
 
   useEffect(() => {
     setSelectedTitleTab(headerButton)

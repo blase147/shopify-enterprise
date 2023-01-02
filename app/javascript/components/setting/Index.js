@@ -58,6 +58,7 @@ import LoadingScreen from '../LoadingScreen';
 import SetTimezone from './SetTimezone';
 
 import "./settings.scss"
+import PlanBilling from '../PlanBilling';
 
 const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
   // form data ########################################################
@@ -553,6 +554,12 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
       title: 'Delivery Options',
       img: DebugImage,
       desc: 'Set Delivery Options.',
+    },
+    {
+      key: 'plan_billing',
+      title: 'Plan Billing',
+      img: SettingImage,
+      desc: 'Manage your plan billing',
     }
   ];
 
@@ -852,6 +859,12 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                                         setFieldValue={setFieldValue}
                                         handleBack={handleBackSetting} />
                                     </>
+
+                                  ) : selectedSetting === 'plan_billing' ? (
+                                    <>
+                                      <PlanBilling />
+                                    </>
+
                                   ) : (
                                     ''
                                   )}
