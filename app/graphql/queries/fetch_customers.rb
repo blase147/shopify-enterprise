@@ -22,7 +22,7 @@ module Queries
       when 'all' then ''
       when 'new'
         "shopify_at::date = '#{Date.today}'"
-      when 'returning'
+      when 'paused'
         "status='PAUSED'"
       when 'active'
         "status='ACTIVE'"

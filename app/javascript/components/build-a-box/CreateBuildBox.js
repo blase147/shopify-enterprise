@@ -40,6 +40,7 @@ import SearchProduct from '../plans/SearchProduct';
 import SearchPlan from '../upsell/SearchPlan';
 import RangePickr from './RangePickr';
 import LoadingScreen from '../LoadingScreen';
+import PixelIcon from '../../images/PixelIcon';
 
 const CreateBuildBox = ({ id, handleClose }) => {
   const options = [...Array(99).keys()].map((foo) => (foo + 1).toString());
@@ -446,7 +447,11 @@ const CreateBuildBox = ({ id, handleClose }) => {
                   </>
                 )}
                 <div className="build-a-box-create">
-                  <Card title="Box campaign group" sectioned>
+                  <Card title={
+                    <div className="heading_title">
+                      <PixelIcon />
+                      Box campaign group
+                    </div>} sectioned>
                     <FormLayout>
                       <FormLayout.Group>
                         <TextField

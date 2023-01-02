@@ -37,7 +37,7 @@ class Shop < ActiveRecord::Base
   after_create :build_setting
   after_create :setup_default_lock_password
   after_create :populate_store_data
-  # after_create :set_recurring_charge_id
+  after_create :set_recurring_charge_id
   after_save :email_confirmation_link, if: -> { saved_change_to_charge_confirmation_link? }
 
   def setup_default_lock_password

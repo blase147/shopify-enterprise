@@ -1,0 +1,70 @@
+.plan_billing_main .card_body {
+    display: flex;
+    justify-content: space-between;
+}
+
+.plan_billing_main .left-section {
+    display: flex;
+    gap: 16px;
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.plan_billing_main .plan_price {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 150%;
+}
+
+.plan_billing_main .plan_validity {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 100%;
+    color: #6D7175;
+}
+
+.plan_billing_main .all_plans {
+    display: flex;
+    justify-content: space-between;
+}
+
+.plan_billing_main .Polaris-Button {
+    border-radius: 5px !important;
+    background: #007EFF !important;
+    color: #fff;
+    font-size: 14px;
+    font-family: 'Avenir';
+    font-weight: 400;
+}
+
+.plan_billing_main {
+    font-family: 'Avenir';
+}
+
+.plan_billing_main .Polaris-Icon--colorBase svg {
+    fill: #007EFF;
+    width: 14.4px;
+}
+
+.plan_billing_main .all_plans .body-text {
+    margin-bottom: 18px;
+}
+
+.plan_billing_main .list_items {
+    display: flex;
+    justify-content: start;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 13px 0;
+}
+
+.plan_billing_main .all_plans .plan-title {
+    margin-bottom: 12px;
+}
