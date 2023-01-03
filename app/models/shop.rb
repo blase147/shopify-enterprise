@@ -8,6 +8,8 @@ class Shop < ActiveRecord::Base
   end
   belongs_to :user_shop, optional: true
   has_many :analytics_data, dependent: :destroy
+  has_many :usage_charges, dependent: :destroy
+  has_many :pending_recurring_charges, dependent: :destroy
   has_many :bulk_operation_responses, dependent: :destroy
   has_many :csv_imports, dependent: :destroy
   has_many :selling_plan_groups, dependent: :destroy
@@ -117,7 +119,7 @@ class Shop < ActiveRecord::Base
   end
 
   def set_recurring_charge_id
-    StoreChargeService.new(self).create_recurring_charge if ENV['APP_TYPE'] == 'public'
+    StoreChargeService.new(self).create_recurring_charge("freemium") if ENV['APP_TYPE'] == 'public'
   end
 
   def email_confirmation_link

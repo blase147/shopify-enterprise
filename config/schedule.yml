@@ -1,3 +1,7 @@
 my_first_job:
   cron: "0 */6 * * *" 
   class: "FetchAllOrdersAndSubscriptionBulkWorker"
+
+my_second_job:
+  cron: "0 1 * * *" 
+  class: "UpdateUsageChargesWorker"
