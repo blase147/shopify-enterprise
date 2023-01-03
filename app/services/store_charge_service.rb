@@ -15,6 +15,7 @@ class StoreChargeService
     recurring_application_charge.test = Rails.env.development?
     recurring_application_charge.return_url = "#{ENV['HOST']}subscription/charge"
     recurring_application_charge.save
+    @shop.pending_recurring_charges.find_or_initialize_by(charge_id: recurring_application_charge.id&.to_i)&.save
     recurring_application_charge
   end
 
