@@ -226,7 +226,12 @@ class ShpoifyBulkOperation  < GraphqlService
 
     def parse_bulk_operation(shop_id, id)
         result = client.query(client.parse(GET_URL_FOR_DATA), variables: { id: id})
-        new_data = parsed_bulk_data(shop_id, result&.data&.node&.url)
+        url = result&.data&.node&.url
+        if url.include?("https://") || url.include?("http://")
+            new_data = parsed_bulk_data(shop_id, url)
+        else
+            File.write("bulk_operation_log.txt", "url:- #{url}", mode: "a")
+        end
     end
 
     def get_orders_data(shop_id, data)
@@ -290,8 +295,8 @@ class ShpoifyBulkOperation  < GraphqlService
         require 'uri'
 		require 'net/http'
 		require 'openssl'
-        source = "#{url}"
-        resp = Net::HTTP.get_response(URI.parse(source))
+        url = URI("#{url}")
+        resp = Net::HTTP.get_response(url)
         data = resp&.body
         get_subscriptions_data(shop_id, data)
         get_orders_data(shop_id, data)
