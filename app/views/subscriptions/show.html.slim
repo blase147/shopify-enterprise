@@ -512,11 +512,13 @@ javascript:
         mixpanelIdentify("#{current_user&.mixpanel_id}")
         mixpanelTrack("Restared Subscription", {contract_shopify_id: '#{@subscription.id[/\d+/]}'})
         selectedDate = $( "#resume-datepicker" ).val();
-        link = $(this).parent();
-        url = $(link).attr('href');
-        new_url = url + "billing_date="+selectedDate+"&action_by=admin"
-        $(link).attr("href", new_url);
-        link.click();
+        if($( "#resume-datepicker" ).val() && $( "#resume-datepicker" ).val() != ''){
+          link = $(this).parent();
+          url = $(link).attr('href');
+          new_url = url + "billing_date="+selectedDate+"&action_by=admin"
+          $(link).attr("href", new_url);
+          link.click();
+        }
       });
 
       $( "#save-next-billing-date-btn" ).on('click', function(){
