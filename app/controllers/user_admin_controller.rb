@@ -6,8 +6,12 @@ class UserAdminController  < ActionController::Base
         if @user.token_without_password.present?
             unless params[:token]&.strip ==  @user.token_without_password
                 @error = "You are not authorize to perform this action"
+            else
+                if current_user.nil? || current_user.email != @user.email
+                    @error = "Please check #{@user.email} email to set your account password."
+                end 
             end
-        else
+        else 
             @error = "Your account is already registered with password"
         end
         respond_to do |format|

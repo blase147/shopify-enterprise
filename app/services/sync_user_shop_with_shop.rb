@@ -1,74 +1,58 @@
 class SyncUserShopWithShop < GraphqlService
-    SHOP_DATA = <<-GRAPHQL
-        query {
-            shop {
-                email
-                name
-                currencyCode
-                checkoutApiSupported
-                taxesIncluded
-            }
-        }
-    GRAPHQL
 
     def initialize
         $set_password_link ||= nil
     end
 
     def get_current_shop_details current_user_id=nil, shop_id
-        Shop.find(shop_id).connect
-        result = client.query(client.parse(SHOP_DATA))
-        user = check_user_exits(current_user_id, shop_id, result.data)
+        shop = Shop.find(shop_id)
+        shop.connect
+        shop_data = ShopifyAPI::Shop.current
+        shop_owner = check_user_exits(current_user_id, shop, shop_data)
     end
 
-    def check_user_exits current_user_id=nil, shop_id,data
-        shop = Shop.find(shop_id)
-        shop_data = data&.shop
-        user = User.find_by_email(shop_data.email) rescue nil
-        current_user = User.find(current_user_id) if current_user_id.present?
-        unless user.present?
-            shopify_customer = CustomerService.new({shop: shop}).get_customer_email(shop_data.email) rescue nil
-            if shopify_customer.present?
-                auth_token = SecureRandom.urlsafe_base64(nil, false)
-                user = User.new(
-                        email: shopify_customer.email, 
-                        first_name: shopify_customer.first_name,
-                        last_name: shopify_customer.last_name,
-                        token_without_password: auth_token
-                    )
-                user.save(validate: false)
-                user_shop = UserShop.find_or_create_by( user_id: user.id)
-                shop.update(user_shop_id: user_shop.id)
-                p "shop ==============#{shop.to_json}"
-                set_password_link = "#{ENV["HOST"]}authenticateAdmin?id=#{user.id}&token=#{auth_token}"
-                send_set_password_link(user, $set_password_link)
-                if current_user.present?
-                    unless current_user.email == shop_data.email
-                        current_user.update(user_id: user.id)
-                        user_shop_child = UserShopChild.new(user_id: current_user.id, user_shop_id: user.user_shop.id)
-                        if user_shop_child.save
-                            UserShopChildSetting.create(
-                                shop_id: shop_id,
-                                user_shop_child_id: user_shop_child.id,
-                                dashboard_access: true,
-                                manage_plan_access: true,
-                                subscription_orders_access: true,
-                                analytics_access: true,
-                                installation_access: true,
-                                tiazen_access: true,
-                                toolbox_access: true,
-                                settings_access: true,
-                                ways_to_earn: true,
-                                customer_modal: true,
-                                manage_staff: false
-                            )
-                        end
-                    else
-                        $set_password_link = set_password_link
-                    end
-                end
-            end
+    def check_user_exits current_user_id=nil, shop, shop_data
+        shop_owner = User.find_by_email(shop_data.customer_email) rescue nil
+        current_user = User.find(current_user_id) rescue nil
+        unless shop_owner.present?
+            auth_token = SecureRandom.urlsafe_base64(nil, false)
+            user_name = shop_data&.shop_owner&.split(" ")
+            shop_owner = User.new(email: shop_data.customer_email, first_name: user_name.first, last_name: user_name.last,token_without_password: auth_token)
+            shop_owner.save(validate: false)
+            show_owner = User.find_by_email(shop_data.customer_email)
+            user_shop = UserShop.find_or_create_by( user_id: shop_owner.id)
+            set_password_link = "#{ENV["HOST"]}authenticateAdmin?id=#{shop_owner.id}&token=#{auth_token}"
+            shop.update(user_shop_id: user_shop.id)
+            send_set_password_link(shop_owner, $set_password_link)
         end
+        
+        if current_user.present?
+            unless current_user&.id == shop_owner&.id
+                current_user.update(user_id: shop_owner.id)
+                user_shop_child = UserShopChild.find_or_initialize_by(user_id: current_user.id)
+                user_shop_child.update(user_shop_id: shop_owner.user_shop.id)
+                user_shop_child_setting = UserShopChildSetting.find_or_initialize_by(
+                                            shop_id: shop.id,
+                                            user_shop_child_id: user_shop_child.id
+                                            )
+                user_shop_child_setting.update(   
+                    dashboard_access: true,
+                    manage_plan_access: true,
+                    subscription_orders_access: true,
+                    analytics_access: true,
+                    installation_access: true,
+                    tiazen_access: true,
+                    toolbox_access: true,
+                    settings_access: true,
+                    ways_to_earn: true,
+                    customer_modal: true,
+                    manage_staff: false
+                )
+            end
+        else
+            $set_password_link = set_password_link
+        end
+        
     end
 
     def send_set_password_link(user, password_link)
@@ -90,6 +74,9 @@ class SyncUserShopWithShop < GraphqlService
                                 <td style='height:80px;'>&nbsp;</td>
                             </tr>
                             <tr>
+
+
+                            
                                 <td style='height:20px;'>&nbsp;</td>
                             </tr>
                             <tr>
