@@ -196,7 +196,7 @@ class SendEmailService
     end
 
     def send_set_password_email(object)
-        @sg = SendGrid::API.new(api_key: (integration.credentials['private_key'] rescue ENV['SENDGRID_API_KEY']))
+        @sg = SendGrid::API.new(api_key: ENV['SENDGRID_API_KEY'])
         subject_str = object[:subject]
         context_hash = object[:email_body]
         to = object[:customer]&.email
