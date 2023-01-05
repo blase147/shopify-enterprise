@@ -227,10 +227,10 @@ class ShpoifyBulkOperation  < GraphqlService
     def parse_bulk_operation(shop_id, id)
         result = client.query(client.parse(GET_URL_FOR_DATA), variables: { id: id})
         url = result&.data&.node&.url
-        if url.include?("https://") || url.include?("http://")
+        if url.present? && (url.include?("https://") || url.include?("http://"))
             new_data = parsed_bulk_data(shop_id, url)
         else
-            File.write("bulk_operation_log.txt", "url:- #{url}", mode: "a")
+            File.write("bulk_operation_log.txt", "url:- #{url} , result:- #{result.data.to_json}", mode: "a")
         end
     end
 
