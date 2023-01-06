@@ -3,7 +3,6 @@
 class HomeController < ApplicationController
   before_action :check_shop_known 
   before_action :redirection
-  before_action :install_shop
   def index
     unless session[:shop_id] # ensure cookie session as well
       session[:shop_id] = Shop.find_by(shopify_domain: current_shopify_domain)&.id
@@ -17,6 +16,7 @@ class HomeController < ApplicationController
         user_shop = UserShop.find(current_user.user_shop_child.user_shop_id)
         @all_shops = (user_shop&.shops.map{|shop| shop&.shopify_domain} || [] )
       else
+        install_shop
         @all_shops = (current_user&.user_shop&.shops.map{|shop| shop&.shopify_domain} || [] ) if current_user&.user_shop&.shops.present?
       end
     # end

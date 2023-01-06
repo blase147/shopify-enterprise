@@ -22,13 +22,13 @@ class SyncUserShopWithShop < GraphqlService
             show_owner = User.find_by_email(shop_data.customer_email)
             user_shop = UserShop.find_or_create_by( user_id: shop_owner.id)
             set_password_link = "#{ENV["HOST"]}authenticateAdmin?id=#{shop_owner.id}&token=#{auth_token}"
-            shop.update(user_shop_id: user_shop.id)
             send_set_password_link(shop_owner, $set_password_link)
         end
-        
+        shop_owner = User.find_by_email(shop_data.customer_email)
+        user_shop = shop_owner.user_shop
+        shop.update(user_shop_id: user_shop.id)
         if current_user.present?
             unless current_user&.id == shop_owner&.id
-                current_user.update(user_id: shop_owner.id)
                 user_shop_child = UserShopChild.find_or_initialize_by(user_id: current_user.id)
                 user_shop_child.update(user_shop_id: shop_owner.user_shop.id)
                 user_shop_child_setting = UserShopChildSetting.find_or_initialize_by(
@@ -76,7 +76,7 @@ class SyncUserShopWithShop < GraphqlService
                             <tr>
 
 
-                            
+
                                 <td style='height:20px;'>&nbsp;</td>
                             </tr>
                             <tr>

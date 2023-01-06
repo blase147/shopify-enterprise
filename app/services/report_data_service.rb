@@ -13,7 +13,7 @@ class ReportDataService
 
   def mrr(subscriptions, _range)
     previous_month_range = (Date.today - 1.month).beginning_of_month..(Date.today - 1.month).end_of_month
-    previous_month_revenue = subscriptions.sum { |subscription| get_orders_total_amount(subscription, previous_month_range)}
+    previous_month_revenue = subscriptions&.sum { |subscription| get_orders_total_amount(subscription, previous_month_range)}
     current_month_revenue = subscriptions.sum { |subscription| get_orders_total_amount(subscription, Date.today.beginning_of_month..Date.today) }
     previous_month_revenue + current_month_revenue
   end
@@ -87,7 +87,7 @@ class ReportDataService
   end
 
   def get_orders_total_amount(subscription, range = nil)
-    subscription.node.orders.edges&.sum { |order| range.nil? || (range.present? && range.cover?(order.node.created_at.to_date)) ? order.node.total_price_set.presentment_money.amount.to_f.round(2) : 0 }
+    subscription.node&.orders&.edges&.sum { |order| range.nil? || (range.present? && range&.cover?(order&.node&.created_at&.to_date)) ? order&.node&.total_price_set&.presentment_money&.amount&.to_f&.round(2) : 0 }
   end
 
   def get_customers_by_date(range)
