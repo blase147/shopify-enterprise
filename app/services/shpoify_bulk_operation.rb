@@ -141,14 +141,14 @@ class ShpoifyBulkOperation  < GraphqlService
                               customer {
                                 id
                               }
-                              lines(first: 5) {
+                              lines {
                                 edges {
                                   node {
                                     sku
                                   }
                                 }
                               }
-                              orders(first: 15, reverse: true) {
+                              orders {
                                 edges {
                                   node {
                                     id

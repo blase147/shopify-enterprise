@@ -51,7 +51,8 @@ import Notifications from './layout/Notifications';
 
 export default function App(props) {
   const domain = localStorage.getItem("currentShopDomain") ? localStorage.getItem("currentShopDomain") : props?.domain
-  if (domain) {
+  const allShops = props?.allShops
+  if ((domain && (allShops?.length > 0)) && allShops?.includes(domain)) {
     let shopifyLink;
     let mainLink;
     if (window.top == window.self) {
@@ -225,7 +226,10 @@ export default function App(props) {
       </BrowserRouter>
     );
   } else {
+    //remove previous ShopDomain from localStora
+    localStorage.removeItem("currentShopDomain")
     return (
+
       <AppProvider i18n={enTranslations} theme={{}}>
         <DisabledNav />
         <InstallShop />

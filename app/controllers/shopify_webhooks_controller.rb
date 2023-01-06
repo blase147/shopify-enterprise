@@ -5,12 +5,13 @@ class ShopifyWebhooksController < ApplicationController
 
   def app_uninstalled
     if ENV['APP_TYPE'] == 'public'
-      shop = Shop.where(shopify_domain: params[:domain]).last
+      shop = Shop.where(shopify_domain: params[:domain])&.last rescue nil
       if shop.present?
         shop.selling_plan_groups.each do |selling_plan_group|
           selling_plan_group.selling_plans.delete_all
           selling_plan_group.delete
         end
+        shop.pending_recurring_charges.destroy_all
         shop.destroy
       end
     end
