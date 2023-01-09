@@ -12,8 +12,12 @@ class HomeController < ApplicationController
     #else
       @shop_origin = current_shopify_domain
       @enable_password = current_shop&.setting&.enable_password
-      if current_user.present?
-        @all_shops = ShopUser.where(user_id: current_user.id).order(created_at: :asc)&.joins(:shop).pluck(:shopify_domain) rescue nil
+      if current_user.user_shop_child.present?
+        user_shop = UserShop.find(current_user.user_shop_child.user_shop_id)
+        @all_shops = (user_shop&.shops.map{|shop| shop&.shopify_domain} || [] )
+      else
+        install_shop
+        @all_shops = (current_user&.user_shop&.shops.map{|shop| shop&.shopify_domain} || [] ) if current_user&.user_shop&.shops.present?
       end
     # end
   end
@@ -25,18 +29,28 @@ class HomeController < ApplicationController
       @shopify_domain ||= ShopifyApp::Utils.sanitize_shop_domain(params[:shop])
       redirect_to(ShopifyApp.configuration.login_url) unless @shopify_domain
     else
-      if current_user.present?
-        if session[:shop_domain].present?
-          @shopify_domain ||= session[:shop_domain]
-        else
-          @shopify_domain ||= ShopUser.where(user_id: current_user.id).order(created_at: :asc).first.shop.shopify_domain
-        end
+      if current_user.user_shop_child.present?
+        user_shop = UserShop.find(current_user.user_shop_child.user_shop_id)
+        @shopify_domain ||= (user_shop&.shops&.first&.shopify_domain if current_user.present?)
+      else
+        @shopify_domain ||= (current_user.user_shop&.shops&.first&.shopify_domain if current_user.present?)
       end
     end
   end
 
   def current_shop
+    if session[:shop_domain].present?
+      @current_shop = Shop.find_by(shopify_domain: session[:shop_domain])
+    else
       @current_shop ||= Shop.find_by(shopify_domain: current_shopify_domain)
+    end
+  end
+
+  def install_shop
+    if current_user.present? && params[:shop].present? || params[:hmac].nil?
+      shop = Shop.find_by_shopify_domain(params[:shop]) rescue nil
+      shop&.update(user_shop_id: current_user&.user_shop&.id) 
+    end
   end
 
   def redirection
@@ -71,10 +85,6 @@ class HomeController < ApplicationController
     )
 
     url.to_s
-  end
-
-  def current_shop
-    @current_shop ||= Shop.find_by(shopify_domain: current_shopify_domain)
   end
 
 end

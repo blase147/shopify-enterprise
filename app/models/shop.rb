@@ -6,9 +6,7 @@ class Shop < ActiveRecord::Base
   def api_version
     ShopifyApp.configuration.api_version
   end
-  has_many :shop_users, dependent: :destroy
   belongs_to :user_shop, optional: true
-  has_many :user_shop_children
   has_many :analytics_data, dependent: :destroy
   has_many :usage_charges, dependent: :destroy
   has_many :pending_recurring_charges, dependent: :destroy
