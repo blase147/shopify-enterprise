@@ -4,7 +4,7 @@ class GdprWebhooksController < ApplicationController
 
   def shop_redact
     params.permit!
-    shop = Shop.where(shop_domain: params['shop_domain'])
+    shop = Shop.where(shopify_domain: params['shop_domain'])
     if shop.present?
       shop.destroy
     end
