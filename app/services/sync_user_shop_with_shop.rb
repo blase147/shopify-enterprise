@@ -26,11 +26,12 @@ class SyncUserShopWithShop < GraphqlService
         end
         shop_owner = User.find_by_email(shop_data.customer_email)
         user_shop = shop_owner.user_shop
+        ShopUser.find_or_initialize_by(user_id: shop_owner.id, shop_id: shop.id)&.update(role: "admin")
         shop.update(user_shop_id: user_shop.id)
         if current_user.present?
             unless current_user&.id == shop_owner&.id
-                user_shop_child = UserShopChild.find_or_initialize_by(user_id: current_user.id)
-                user_shop_child.update(user_shop_id: shop_owner.user_shop.id)
+                user_shop_child = ShopUser.find_or_initialize_by(user_id: current_user.id, shop_id: shop.id)
+                user_shop_child.update(role: "staff")
                 user_shop_child_setting = UserShopChildSetting.find_or_initialize_by(
                                             shop_id: shop.id,
                                             user_shop_child_id: user_shop_child.id
