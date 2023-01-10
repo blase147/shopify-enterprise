@@ -13,25 +13,17 @@ const AppHeader = (props) => {
     const history = useHistory();
     const [selectedShop, setSelectedShop] = useState(props?.domain);
     const [activeNotification, setActiveNotification] = useState(false);
-
-    const [allShops, setAllShops] = useState();
-    const [currentUser, setCurrentUser] = useState();
-
     const handleSelectChange = useCallback((value) => {
         setSelectedShop(value)
         localStorage.setItem("selectedShop", value)
         changeShop(value)
     }, []);
-
+    const [allShops, setAllShops] = useState();
     useEffect(() => {
         const shopsArray = (localStorage.getItem("allShops") ? JSON.parse(localStorage.getItem("allShops")) : '')
         setAllShops(shopsArray)
 
     }, [localStorage.getItem("allShops")])
-
-    useEffect(() => {
-        setCurrentUser(localStorage.getItem("currentuser"))
-    }, [localStorage.getItem("currentuser")])
 
     const [value, setValue] = useState('');
 
@@ -84,7 +76,7 @@ const AppHeader = (props) => {
                         <div className="userDetailMain">
                             <div className="user_details">
                                 <div className="avatar">
-                                    <h2>{currentUser}</h2>
+                                    <h2>{localStorage.getItem("currentuser")}</h2>
                                 </div>
                                 <div className="left_section">
                                     <p className='changeStoreDiv'>

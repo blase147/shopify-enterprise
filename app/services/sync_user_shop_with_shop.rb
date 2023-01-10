@@ -1,5 +1,9 @@
 class SyncUserShopWithShop < GraphqlService
 
+    def initialize
+        $set_password_link ||= nil
+    end
+
     def get_current_shop_details current_user_id=nil, shop_id
         shop = Shop.find(shop_id)
         shop.connect
@@ -16,10 +20,39 @@ class SyncUserShopWithShop < GraphqlService
             shop_owner = User.new(email: shop_data.customer_email, first_name: user_name.first, last_name: user_name.last,token_without_password: auth_token)
             shop_owner.save(validate: false)
             show_owner = User.find_by_email(shop_data.customer_email)
+            user_shop = UserShop.find_or_create_by( user_id: shop_owner.id)
             set_password_link = "#{ENV["HOST"]}authenticateAdmin?id=#{shop_owner.id}&token=#{auth_token}"
-            send_set_password_link(shop_owner, set_password_link)
+            send_set_password_link(shop_owner, $set_password_link)
         end
-        user_shop = UserShop.find_or_create_by( user_id: shop_owner.id, shop_id: shop.id, role: "admin")
+        shop_owner = User.find_by_email(shop_data.customer_email)
+        user_shop = shop_owner.user_shop
+        ShopUser.find_or_initialize_by(user_id: shop_owner.id, shop_id: shop.id)&.update(role: "admin")
+        shop.update(user_shop_id: user_shop.id)
+        if current_user.present?
+            unless current_user&.id == shop_owner&.id
+                user_shop_child = ShopUser.find_or_initialize_by(user_id: current_user.id, shop_id: shop.id)
+                user_shop_child.update(role: "staff")
+                user_shop_child_setting = UserShopChildSetting.find_or_initialize_by(
+                                            shop_id: shop.id,
+                                            user_shop_child_id: user_shop_child.id
+                                            )
+                user_shop_child_setting.update(   
+                    dashboard_access: true,
+                    manage_plan_access: true,
+                    subscription_orders_access: true,
+                    analytics_access: true,
+                    installation_access: true,
+                    tiazen_access: true,
+                    toolbox_access: true,
+                    settings_access: true,
+                    ways_to_earn: true,
+                    customer_modal: true,
+                    manage_staff: false
+                )
+            end
+        else
+            $set_password_link = set_password_link
+        end
         
     end
 

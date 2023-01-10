@@ -8,12 +8,11 @@ class User < ApplicationRecord
     devise :database_authenticatable, :registerable,
             :recoverable, :rememberable, :validatable
 
-    has_many :user_shops, dependent: :destroy
+    has_one :user_shop
     has_one :user_shop_child
-    validates :email, uniqueness: true
+    has_many :shop_users, dependent: :destroy
     scope :search, -> (query) { where("lower(first_name) like :s OR lower(last_name) like :s OR lower(first_name) || ' ' || lower(last_name) like :s OR lower(email) like :s", :s=> "#{query&.downcase}%")&.limit(20) }
     def full_name
         "#{first_name} #{last_name}"
     end
-
 end
