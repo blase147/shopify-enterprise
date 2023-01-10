@@ -25,13 +25,7 @@ module ShopifyApp
         if jwt_request?
           head(:ok)
         else
-          if $set_password_link.present?
-            redirect_link = $set_password_link rescue nil
-            $set_password_link = nil
-            redirect_to redirect_link if redirect_link.present?
-          else
-            redirect_to("/")
-          end
+          redirect_to("/")
         end
       end
   
