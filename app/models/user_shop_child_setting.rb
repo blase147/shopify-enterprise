@@ -1,3 +1,3 @@
 class UserShopChildSetting < ApplicationRecord
-    belongs_to :shop_user
+    belongs_to :user_shop_child
 end
