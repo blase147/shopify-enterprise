@@ -435,6 +435,9 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
     (selectedTabIndex) => setSelectedTitleTab(selectedTabIndex),
     []
   );
+
+  const accessSettings = JSON.parse(localStorage.getItem("accessSettings"))
+
   const settings = [
     {
       key: 'product_extention',
@@ -454,12 +457,15 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
       img: SettingImage,
       desc: 'Manage the timezone of the app.',
     },
-    {
-      key: 'manage_staff',
-      title: 'Manage Staff',
-      img: SettingImage,
-      desc: 'Manage your staff.',
-    },
+    ...(accessSettings?.manage_staff ? [
+      {
+        key: 'manage_staff',
+        title: 'Manage Staff',
+        img: SettingImage,
+        desc: 'Manage your staff.',
+      }
+    ] : [])
+    ,
     ...(process.env.APP_TYPE == 'public'
       ? [
         {
