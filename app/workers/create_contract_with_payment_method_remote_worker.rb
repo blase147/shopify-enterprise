@@ -14,5 +14,3 @@ class CreateContractWithPaymentMethodRemoteWorker
         end
     end
 end
-
-#trigger rebuild
