@@ -3,8 +3,7 @@ class UserShopsController < ApplicationController
     before_action :verify_user
     def authorize_user_shop
         redirect_to "/users/sign_in" unless current_user.present?
-        shop_user = ShopUser.find_by(user_id: current_user.id, shop_id: current_shop(params[:shop_domain]).id)
-        user_shop_child = shop_user
+        user_shop_child = current_user&.user_shop_child
         shop_settings = user_shop_child&.user_shop_child_setting
         access_settings = { dashboard_access: user_shop_child.present? ? shop_settings&.dashboard_access : true,
                             manage_plan_access: user_shop_child.present? ? shop_settings&.manage_plan_access : true,
@@ -15,27 +14,22 @@ class UserShopsController < ApplicationController
                             toolbox_access: user_shop_child.present? ? shop_settings&.toolbox_access : true, 
                             settings_access: user_shop_child.present? ? shop_settings&.settings_access : true,
                             ways_to_earn: user_shop_child.present? ? shop_settings&.ways_to_earn : true,
-                            customer_modal: user_shop_child.present? ? shop_settings&.customer_modal : true,
-                            manage_staff: user_shop_child.present? ? shop_settings&.manage_staff : true }
+                            customer_modal: user_shop_child.present? ? shop_settings&.customer_modal : true }
         render json: {accessSettings: access_settings&.to_json}
     end
 
     def create_user_shop_child
         user_data=params[:user_data]
         settings=params[:settings]
-        user = User.find_by_email(user_data[:email]&.strip&.downcase) 
-        if user.nil?
-            user = User.new(first_name: user_data[:firstName],last_name: user_data[:lastName],email: user_data[:email]&.downcase,password: user_data[:password],password_confirmation: user_data[:confirmPassword])
-            user.save
-        end
+        user = User.new(first_name: user_data[:firstName],last_name: user_data[:lastName],email: user_data[:email],password: user_data[:password],password_confirmation: user_data[:confirmPassword])
         error=nil
-        unless user&.errors&.messages.present?
-            user_shop_child = ShopUser.new(user_id: user.id, shop_id: current_shop(params[:shop_domain]).id, role: "staff")
+        if user.save
+            user_shop_child = UserShopChild.new(user_id: user.id, user_shop_id: current_user.user_shop.id)
             if user_shop_child.save
-                shop_id = current_shop(params[:shop_domain]).id
+                shop_id = Shop.find_by_shopify_domain(params[:shop_domain])&.id || current_user.user_shop.shops.first
                 UserShopChildSetting.create(
                     shop_id: shop_id,
-                    shop_user_id: user_shop_child.id,
+                    user_shop_child_id: user_shop_child.id,
                     dashboard_access: (settings.include?("dashboard_access") ? true : false),
                     manage_plan_access: (settings.include?("manage_plan_access") ? true : false),
                     subscription_orders_access: (settings.include?("subscription_orders_access") ? true : false),
@@ -68,9 +62,4 @@ class UserShopsController < ApplicationController
         session[:shop_domain]=params[:shop_domain]
         render json:{status: :ok}
     end 
-
-    private
-    def current_shop shopify_domain
-        return Shop.find_by_shopify_domain(shopify_domain)
-    end
 end
