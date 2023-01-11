@@ -42,6 +42,13 @@ import DisabledNav from './layout/DisabledNav';
 import NewDashboard from './home/NewDashboard';
 import Notifications from './layout/Notifications';
 
+
+
+
+
+
+
+
 export default function App(props) {
   const domain = localStorage.getItem("currentShopDomain") ? localStorage.getItem("currentShopDomain") : props?.domain
   const allShops = props?.allShops
@@ -49,9 +56,8 @@ export default function App(props) {
     let shopifyLink;
     let mainLink;
     if (window.top == window.self) {
-      console.log("testing", domain);
       // Not in an iframe
-      origin = `https://${domain}`;
+      origin = window.location.host;
       mainLink = new HttpLink({
         uri: '/graphql',
         credentials: 'include',
@@ -72,7 +78,7 @@ export default function App(props) {
         credentials: 'same-origin',
         fetch: authenticatedFetch(window.app),
         uri: '/graphql',
-        origin: window.location.host
+        origin: domain
       });
       shopifyLink = new HttpLink({
         credentials: 'same-origin',
