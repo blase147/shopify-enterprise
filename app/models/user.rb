@@ -9,7 +9,6 @@ class User < ApplicationRecord
             :recoverable, :rememberable, :validatable
 
     has_many :user_shops, dependent: :destroy
-    has_one :user_shop_child
     validates :email, uniqueness: true
     scope :search, -> (query) { where("lower(first_name) like :s OR lower(last_name) like :s OR lower(first_name) || ' ' || lower(last_name) like :s OR lower(email) like :s", :s=> "#{query&.downcase}%")&.limit(20) }
     def full_name

@@ -36,28 +36,28 @@ module Types
       end
   
       def dashboard_access
-        object.user_shop_child_setting.dashboard_access
+        object.access_settings["dashboard_access"]
       end
       def mange_plan_access
-        object.user_shop_child_setting.manage_plan_access
+        object.access_settings["manage_plan_access"]
       end
       def subscriptions_orders_access
-        object.user_shop_child_setting.subscription_orders_access
+        object.access_settings["subscription_orders_access"]
       end
       def analytics_access
-        object.user_shop_child_setting.analytics_access
+        object.access_settings["analytics_access"]
       end
       def installation_access
-        object.user_shop_child_setting.installation_access
+        object.access_settings["installation_access"]
       end
       def tiazens_access
-        object.user_shop_child_setting.tiazen_access
+        object.access_settings["tiazen_access"]
       end
       def toolbox_access
-        object.user_shop_child_setting.toolbox_access
+        object.access_settings["toolbox_access"]
       end
       def settings_access
-        object.user_shop_child_setting.settings_access
+        object.access_settings["settings_access"]
       end
     end
 end
