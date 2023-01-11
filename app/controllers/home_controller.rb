@@ -17,7 +17,7 @@ class HomeController < ApplicationController
       if current_user.present?
           from_shop = ShopifyAPI::Shop.current rescue nil
           if from_shop.present?
-            @all_shops = [from_shop.domain]
+            @all_shops = [from_shop.myshopify_domain]
           else
             @all_shops = current_user.user_shops.order(created_at: :asc).joins(:shop).pluck(:shopify_domain) rescue []
           end
@@ -35,7 +35,7 @@ class HomeController < ApplicationController
       if current_user.present?
         from_shop = ShopifyAPI::Shop.current rescue nil
         if from_shop.present?
-          @shopify_domain ||= from_shop.domain
+          @shopify_domain ||= from_shop.myshopify_domain
         elsif session[:shop_domain].present?
           @shopify_domain ||= session[:shop_domain]
         else
@@ -91,10 +91,9 @@ class HomeController < ApplicationController
   def check_shopify_backend
     from_shop = ShopifyAPI::Shop.current rescue nil
     if from_shop.present?
-      admin = User.find_by_email(from_shop.customer_email.strip)
+      admin = User.find_by_email(from_shop&.customer_email&.strip)
       token = SecureRandom.urlsafe_base64(nil, false)
-      shop = Shop.find_by_shopify_domain(from_shop.domain)
-      
+      shop = Shop.find_by_shopify_domain(from_shop&.myshopify_domain)
       admin.user_shops.find_by_shop_id(shop.id)&.update(sign_out_after: (Time.current + 30.minutes))
       sign_in(admin)
     else
