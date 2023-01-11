@@ -30,7 +30,8 @@ class UserShopsController < ApplicationController
         end
         error=nil
         unless user&.errors&.messages.present?
-            user_shop = UserShop.new(user_id: user.id, shop_id: current_shop(params[:shop_domain]).id, role: "staff")
+            user_shop = UserShop.find_or_initialize_by(user_id: user.id, shop_id: current_shop(params[:shop_domain]).id)
+            user_shop.update( role: "staff")
             if user_shop.save
                 user_shop.update(
                     access_settings: {
@@ -48,7 +49,7 @@ class UserShopsController < ApplicationController
                     }
                 )
             else
-                error = user_shop_child.errors.messages
+                error = user_shop.errors.messages
             end
         else
             error = user.errors.messages

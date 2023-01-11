@@ -151,6 +151,10 @@ const NewStaff = ({ setFormErrors, setSaveSuccess, refetch, setAddStaff }) => {
                                         <input type='checkbox' className='settings' value="customer_modal" onChange={(e) => handleChange(e)} />
                                         Customer Modal
                                     </label>
+                                    <label>
+                                        <input type='checkbox' className='settings' value="manage_staff" onChange={(e) => handleChange(e)} />
+                                        Manage Staff
+                                    </label>
                                 </div>
                                 <div className='submit'>
                                     <Button onClick={() => submitForm()}>Save Changes</Button>
