@@ -8,6 +8,6 @@ class CustomerModal < ApplicationRecord
     end
 
     def get_token
-        self.auth_token.updated_at + 30.minutes >= Time.current ? self.auth_token.token : nil 
+        (self.auth_token.present? && (self.auth_token.updated_at + 30.minutes >= Time.current)) ? self.auth_token.token : nil 
     end
 end
