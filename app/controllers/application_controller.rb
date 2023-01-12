@@ -52,6 +52,16 @@ class ApplicationController < ActionController::Base
     "/admin/id"
   end
 
+  helper_method :current_shop
+
+  def current_shop
+    if session[:shop_domain].present?
+      @current_shop = Shop.find_by(shopify_domain: session[:shop_domain])
+    else
+      @current_shop ||= Shop.find_by(shopify_domain: current_shopify_session.domain)
+    end
+  end
+
   protected
 
   def configure_permitted_parameters
