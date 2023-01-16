@@ -218,8 +218,12 @@ const FixedPlan = () => {
         setSelectedPlan(data.fetchPlanGroup?.sellingPlans[0]?.deliveryIntervalType);
         changeCutoffOptions(data.fetchPlanGroup?.sellingPlans[0]?.deliveryIntervalType)
       }
-      if (JSON.parse(data.fetchPlanGroup?.sellingPlans[0]?.shippingDates[0])?.day != 0) {
-        setShhowAdvanceSettings(true);
+      try {
+        if (JSON.parse(data.fetchPlanGroup?.sellingPlans[0]?.shippingDates[0])?.day != 0) {
+          setShhowAdvanceSettings(true);
+        }
+      } catch (e) {
+        setShhowAdvanceSettings(false);
       }
       // let products=[];
       // let variants=[];
