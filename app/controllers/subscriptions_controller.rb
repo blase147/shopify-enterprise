@@ -225,6 +225,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def fetch_customers_from_shopify
+    current_shop.connect
     @customers = FetchWithQueryFromShopify.new.fetch_customers(params[:query])
     render json:{ status: :ok, customers: @customers}.to_json
   end

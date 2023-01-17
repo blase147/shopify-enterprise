@@ -57,8 +57,6 @@ class ApplicationController < ActionController::Base
   def current_shop
     if session[:shop_domain].present?
       @current_shop = Shop.find_by(shopify_domain: session[:shop_domain])
-    else
-      @current_shop ||= Shop.find_by(shopify_domain: current_shopify_session.domain)
     end
   end
 
