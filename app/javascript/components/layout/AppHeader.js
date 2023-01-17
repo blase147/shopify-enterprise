@@ -55,6 +55,21 @@ const AppHeader = (props) => {
             });
     }
 
+    useEffect(() => {
+        fetch(`/changeShop`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                shop_domain: selectedShop
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+            });
+    }, [selectedShop])
+
     const handleChange = useCallback((newValue) => setValue(newValue), []);
     return (
         <>

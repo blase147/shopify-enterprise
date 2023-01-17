@@ -39,7 +39,7 @@ class HomeController < ApplicationController
         elsif session[:shop_domain].present?
           @shopify_domain ||= session[:shop_domain]
         else
-          @shopify_domain ||= current_user.user_shops.order(created_at: :asc).joins(:shop).first.shop.shopify_domain rescue nil
+          @shopify_domain ||= current_user.user_shops.order(created_at: :asc).joins(:shop).pluck(:shopify_domain).first rescue nil
         end
       end
     end
