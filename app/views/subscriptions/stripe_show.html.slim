@@ -1,5 +1,7 @@
 - setting = current_shop.setting
 - api_order = nil
+- @customer.shop.connect
+- shopify_customer = ShopifyAPI::Customer.find(@customer.shopify_customer_id) rescue nil
 - anchor = (Time.at(@customer.api_data['billing_cycle_anchor']).to_date rescue nil) || (Date.parse( @customer.import_data['purchase_date']) rescue nil) rescue Date.yesterday
 - today = Date.today
 - interval = @customer.import_data['interval_number'].to_i.public_send(@customer.import_data['interval_type'].downcase)
@@ -132,7 +134,7 @@
                 i TOTAL SPEND TO DATE:
                 br
                 |$
-                = api_order.customer.total_spent
+                = shopify_customer&.total_spent rescue ''
 
   .Polaris-Card
     .Polaris-Card__Section
