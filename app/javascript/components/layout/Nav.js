@@ -9,7 +9,7 @@ import {
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import "./nav_style.scss";
-import { HomeMajor, SettingsMinor, AnalyticsMajor, HintMajor, ProfileMajor, InstallMinor, CustomersMajor } from "@shopify/polaris-icons";
+import { HomeMajor, SettingsMinor, AnalyticsMajor, HintMajor, ProfileMajor, InstallMinor, CustomersMajor, GiftCardMajor } from "@shopify/polaris-icons";
 import { MangeIcon, SubscriptionIcon, ToolboxIcon } from './CustomIcon';
 import ChargeZenLogo from "./../../images/ChargeZenLogo.svg";
 import CircleChevronMinor from "./../../images/VectorIcon";
@@ -26,17 +26,30 @@ const Nav = (props) => {
   const router = useRouter();
   const [navigations, setNavigations] = useState([]);
   const [activeTab, setActiveTab] = useState("dash");
+  const [loyality, setLoyality] = useState(false);
+  console.log("loyality", loyality);
   useEffect(() => {
     const accessSettings = JSON.parse(localStorage.getItem("accessSettings"))
     console.log('window.location.pathname', window.location.pathname)
     setNavigation(accessSettings)
+  }, [loyality])
+
+  useEffect(() => {
+    // setLoyality(false)
+  }, [activeTab])
+
+  const handleLoyality = useCallback(() => {
+    alert("hdjhsjdh")
+    setLoyality(true)
   }, [])
+
+
   const setNavigation = (accessTabs) => {
     let navigation = [];
     if (accessTabs?.dashboard_access || accessTabs?.manage_plan_access) {
       navigation.push({
         url: "",
-        label: 'Main Menu',
+        label: 'RevenueOS',
         disabled: true,
         selected: true,
         subNavigationItems: [
@@ -57,7 +70,28 @@ const Nav = (props) => {
               onClick: () => setActiveTab("mplan"),
               selected: window.location.pathname == "/subscription-plans" ? true : false,
             }
-          ) : {}
+          ) : {},
+          {
+            icon: HomeMajor,
+            label: 'Re-order flows',
+            url: '/',
+            onClick: () => setActiveTab("dash"),
+            selected: window.location.pathname == "/" ? true : false,
+          },
+          {
+            icon: HomeMajor,
+            label: 'Pre-orders',
+            url: '/',
+            onClick: () => setActiveTab("dash"),
+            selected: window.location.pathname == "/" ? true : false,
+          },
+          {
+            icon: HomeMajor,
+            label: 'Try-before-you-buy',
+            url: '/',
+            onClick: () => setActiveTab("dash"),
+            selected: window.location.pathname == "/" ? true : false,
+          }
         ]
       })
     }
@@ -72,7 +106,7 @@ const Nav = (props) => {
         subNavigationItems: [
           accessTabs?.subscription_orders_access ? (
             {
-              label: 'Subscription Orders',
+              label: 'Subscription Contracts',
               icon: () => <SubscriptionIcon />,
               url: '/customers',
               onClick: () => setActiveTab("suborder"),
@@ -96,7 +130,27 @@ const Nav = (props) => {
               onClick: () => setActiveTab("customerModal"),
               selected: window.location.pathname == "/customer-model" ? true : false,
             }
-          ) : {}
+          ) : {},
+          {
+            label: 'Loyalty/Rewards',
+            icon: GiftCardMajor,
+            url: window.location.pathname,
+            selected: true,
+            subNavigationItems: [
+              {
+                url: "/waysToEarn",
+                disabled: false,
+                selected: window.location.pathname == "/waysToEarn" ? true : false,
+                label: "Ways to Earn"
+              },
+              {
+                url: "/rewardsPage",
+                disabled: false,
+                label: "Rewards Page",
+                selected: window.location.pathname == "//rewardsPage" ? true : false,
+              }
+            ]
+          }
         ]
       })
     }

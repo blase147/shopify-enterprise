@@ -1,0 +1,16 @@
+.flex {
+    display: flex;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.bold_uppercase_heading {
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.6rem;
+    text-transform: uppercase;
+    color: #212b36;
+    font-family: -apple-system, BlinkMacSystemFont, San Francisco, Roboto, Segoe UI, Helvetica Neue, sans-serif;
+}

@@ -1,6 +1,6 @@
 import { gql, useMutation } from '@apollo/client';
 import { Card, Toast, ChoiceList, Page, PageActions, TextField, Layout, Banner, List, Frame, Select } from '@shopify/polaris';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 const EditWaysToEarn = ({ formData, setFormData, setEditForm, refetch, formErrors, setFormErrors, saveSuccess, setSaveSuccess, titleOptions }) => {
     const [icon, setIcon] = useState();
@@ -41,6 +41,16 @@ const EditWaysToEarn = ({ formData, setFormData, setEditForm, refetch, formError
                 setFormErrors(error);
             });
     }
+    const [summaryText, setSummaryText] = useState();
+    useEffect(() => {
+        let summary = formData?.title == "Place an Order" ? `Customer earn ${formData?.pointsAwarded} points for every $1 spent` :
+            formData?.title == "Signup" ? `${formData?.pointsAwarded} points for completing action` :
+                formData?.title == "Celebrate a birthday" ? `${formData?.pointsAwarded} points awarded on birthday` : `${formData?.pointsAwarded} Points awarded`
+        setSummaryText(summary);
+        setFormData({ ...formData, summary: summary })
+    }, [formData?.title, formData?.pointsAwarded])
+
+    console.log("formData?.pointsAwarded", formData?.pointsAwarded);
     return (
         <Frame>
             <Page
@@ -60,21 +70,21 @@ const EditWaysToEarn = ({ formData, setFormData, setEditForm, refetch, formError
                                     label={
                                         (formData?.title == "Place an Order") ? (
                                             <div className='order_summary'>
-                                                Customers earn {formData?.pointsAwarded} points for every $1 spent
+                                                Points earned for every $1 spent.
                                             </div>
                                         )
                                             :
                                             "Points awarded"
                                     }
                                     type="number"
-                                    value={formData?.pointsAwarded}
+                                    value={`${formData?.pointsAwarded}`}
                                     onChange={(e) => {
-                                        if (e.length > 0 && e <= 0) {
+                                        if (e.length > 0 && +e <= 0) {
                                             setFieldError({ ...fieldError, pointsAwarded: "Points amount must be greater than 0" })
-                                            setFormData({ ...formData, pointsAwarded: 1 })
+                                            setFormData({ ...formData, pointsAwarded: "1" })
                                         } else {
                                             setFieldError({ ...fieldError, pointsAwarded: '' })
-                                            setFormData({ ...formData, pointsAwarded: e })
+                                            setFormData({ ...formData, pointsAwarded: `${e}` })
                                         }
                                     }}
                                     error={fieldError?.pointsAwarded}
@@ -86,12 +96,17 @@ const EditWaysToEarn = ({ formData, setFormData, setEditForm, refetch, formError
                     <Layout.Section secondary>
                         <Card title="Summary">
                             <Card.Section>
-                                <TextField
+                                {/* <TextField
                                     multiline={2}
                                     value={formData?.summary}
                                     onChange={(e) => setFormData({ ...formData, summary: e })}
                                     autoComplete="off"
-                                />
+                                /> */}
+                                <List type="bullet">
+                                    <List.Item>
+                                        {summaryText}
+                                    </List.Item>
+                                </List>
                             </Card.Section>
                             <Card.Section subdued title="STATUS">
                                 <ChoiceList

@@ -41,6 +41,9 @@ import ManageStaff from './ManageStaff';
 import DisabledNav from './layout/DisabledNav';
 import NewDashboard from './home/NewDashboard';
 import Notifications from './layout/Notifications';
+import WaysToEarnPoint from './WaysToEarnPoint';
+import LoyaltyRewards from './loyalty-rewards/Index';
+import Referrals from './Referrals';
 
 
 
@@ -132,7 +135,10 @@ export default function App(props) {
         <AppProvider i18n={enTranslations} theme={{}} linkComponent={AdapterLink}>
           <ApolloProvider client={client}>
             <Switch>
+              <Route exact path="/referrals" component={Referrals} />
+              <Route exact path="/waysToEarn" component={WaysToEarnPoint} />
               <Route exact path="/notifications" component={Notifications} />
+              <Route exact path="/rewardsPage" component={LoyaltyRewards} />
               <Route exact path="/manage-staff" component={ManageStaff} />
               <Route
                 exact
