@@ -72,21 +72,21 @@ const Nav = (props) => {
             }
           ) : {},
           {
-            icon: HomeMajor,
-            label: 'Re-order flows',
+            icon: MangeIcon,
+            label: 'Rebuy cart',
             url: '/',
             onClick: () => setActiveTab("dash"),
             selected: window.location.pathname == "/" ? true : false,
           },
           {
-            icon: HomeMajor,
+            icon: MangeIcon,
             label: 'Pre-orders',
             url: '/',
             onClick: () => setActiveTab("dash"),
             selected: window.location.pathname == "/" ? true : false,
           },
           {
-            icon: HomeMajor,
+            icon: MangeIcon,
             label: 'Try-before-you-buy',
             url: '/',
             onClick: () => setActiveTab("dash"),
