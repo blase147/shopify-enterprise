@@ -182,7 +182,7 @@ const NewUpSellV1 = () => {
   const [createSellingPlan] = useMutation(CREATE_SELLING_PLAN);
 
   return (
-    <AppLayout typePage="newUpsell" tabIndex="4">
+    <>
       <Frame>
         <Page
           title="Create Upsell Campaign"
@@ -546,7 +546,7 @@ const NewUpSellV1 = () => {
           </Formik>
         </Page>
       </Frame>
-    </AppLayout>
+    </>
   );
 };
 

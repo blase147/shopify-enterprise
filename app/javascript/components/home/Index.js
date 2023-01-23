@@ -618,7 +618,7 @@ const Dashboard = (props) => {
     [getStartedModal]
   );
   return (
-    <AppLayout typePage="Dashboard" tabIndex="0">
+    <>
       <div className='home_main_div'>
         <Page>
           <Layout>
@@ -887,7 +887,7 @@ const Dashboard = (props) => {
           </Layout>
         </Page >
       </div>
-    </AppLayout >
+    </ >
   );
 };
 export default Dashboard;

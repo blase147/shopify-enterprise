@@ -388,7 +388,7 @@ const PowerView = () => {
     </Button>
   );
   return (
-    <AppLayout tabIndex={1}>
+    <>
       <Frame>
         <Page
           title="Power View"
@@ -820,7 +820,7 @@ const PowerView = () => {
           )}
         </Page>
       </Frame>
-    </AppLayout>
+    </>
   );
 };
 

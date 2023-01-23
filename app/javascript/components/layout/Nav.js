@@ -32,7 +32,7 @@ const Nav = (props) => {
     const accessSettings = JSON.parse(localStorage.getItem("accessSettings"))
     console.log('window.location.pathname', window.location.pathname)
     setNavigation(accessSettings)
-  }, [loyality])
+  }, [loyality, window.location.pathname])
 
   useEffect(() => {
     // setLoyality(false)

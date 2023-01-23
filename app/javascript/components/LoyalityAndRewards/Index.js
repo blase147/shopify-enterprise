@@ -74,7 +74,7 @@ const LoyalityAndRewards = () => {
   ];
 
   return (
-    <AppLayout typePage="tiazen" tabIndex="6">
+    <>
       <Page
         title={
           selectedSetting
@@ -177,7 +177,7 @@ const LoyalityAndRewards = () => {
           )}
         </div>
       </Page>
-    </AppLayout>
+    </>
   );
 };
 

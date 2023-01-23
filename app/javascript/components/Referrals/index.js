@@ -6,7 +6,7 @@ import previewImage from "../../images/previewImage.svg"
 
 const Referrals = () => {
     return (
-        <AppLayout>
+        <>
             <Frame>
                 <Page>
                     <Layout>
@@ -116,7 +116,7 @@ const Referrals = () => {
                 </Page>
             </Frame>
 
-        </AppLayout>
+        </>
     )
 }
 

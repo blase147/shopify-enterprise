@@ -63,7 +63,7 @@ const WaysToEarnPoint = () => {
     }, [waysToEarn])
 
     return (
-        <AppLayout typePage="waysToEarn" tabIndex="6">
+        <>
             <Frame>
                 {saveSuccess && (
                     <Toast
@@ -168,7 +168,7 @@ const WaysToEarnPoint = () => {
                             </Page>
                 }
             </Frame>
-        </AppLayout>
+        </>
     )
 }
 

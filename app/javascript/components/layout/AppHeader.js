@@ -11,6 +11,7 @@ import { useHistory } from "react-router";
 
 const AppHeader = (props) => {
     const history = useHistory();
+    console.log("appHeader Shop", props?.domain);
     const [selectedShop, setSelectedShop] = useState(props?.domain);
     const [activeNotification, setActiveNotification] = useState(false);
 
@@ -19,7 +20,7 @@ const AppHeader = (props) => {
 
     const handleSelectChange = useCallback((value) => {
         setSelectedShop(value)
-        localStorage.setItem("selectedShop", value)
+        // localStorage.setItem("selectedShop", value)
         changeShop(value)
     }, []);
 
@@ -35,9 +36,9 @@ const AppHeader = (props) => {
 
     const [value, setValue] = useState('');
 
-    useEffect(() => {
-        setSelectedShop(localStorage.getItem("selectedShop"))
-    }, [localStorage.getItem("selectedShop")])
+    // useEffect(() => {
+    //     setSelectedShop(localStorage.getItem("selectedShop"))
+    // }, [localStorage.getItem("selectedShop")])
 
     const changeShop = (domain) => {
         fetch(`/changeShop`, {

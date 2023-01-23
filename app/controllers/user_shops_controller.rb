@@ -67,6 +67,7 @@ class UserShopsController < ApplicationController
 
     def change_shop
         session[:shop_domain]=params[:shop_domain]
+        Shop.find_by_shopify_domain(params[:shop_domain])&.connect
         render json:{status: :ok}
     end 
 

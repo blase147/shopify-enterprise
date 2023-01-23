@@ -83,7 +83,7 @@ const Index = () => {
     ]
 
   return (
-    <AppLayout typePage="integrations" tabIndex="7">
+    <>
       <Page title={selectedSetting ? settings.find(s => s.key === selectedSetting).title : "Tiazen"}>
         <div className="settings-container">
           {!selectedSetting && (
@@ -147,7 +147,7 @@ const Index = () => {
           )}
         </div>
       </Page>
-    </AppLayout>
+    </>
   )
 }
 

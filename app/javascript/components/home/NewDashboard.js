@@ -138,7 +138,7 @@ const NewDashboard = () => {
     }, [data]);
     const [dateFilters, setDateFilters] = useState({ startDate: '', endDate: '' });
     return (
-        <AppLayout typePage="Dashboard" tabIndex="0">
+        <>
             <Page>
                 <Layout>
                     <Layout.Section></Layout.Section>
@@ -253,7 +253,7 @@ const NewDashboard = () => {
                     </div >
                 </Layout>
             </Page>
-        </AppLayout>
+        </>
     )
 }
 

@@ -141,7 +141,7 @@ const Installation = ({ shopifyDomain, passwordProtected }) => {
   }, [confirmPasswordRes])
 
   return (
-    <AppLayout typePage="Installation" tabIndex='5'>
+    <>
       <Frame>
         {passwordConfirmed
           ? (
@@ -317,7 +317,7 @@ const Installation = ({ shopifyDomain, passwordProtected }) => {
           )
         }
       </Frame>
-    </AppLayout>
+    </>
   );
 };
 export default Installation;

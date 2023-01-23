@@ -8,7 +8,7 @@ import PixelIcon from "../../images/PixelIcon";
 
 const Notifications = () => {
     return (
-        <AppLayout typePage="settings" tabIndex="8">
+        <>
             <Frame>
                 <Page>
                     <Layout>
@@ -94,7 +94,7 @@ const Notifications = () => {
                     </Layout>
                 </Page>
             </Frame>
-        </AppLayout>
+        </>
     )
 }
 

@@ -353,7 +353,7 @@ const FixedPlan = () => {
   }
   console.log("planData", planData)
   return (
-    <AppLayout typePage="sellingPlanForm" tabIndex={1}>
+    <>
       <Frame>
         <Page
           title={id ? 'Update selling plan' : 'Create selling plan'}
@@ -1188,7 +1188,7 @@ const FixedPlan = () => {
           )}
         </Page>
       </Frame>
-    </AppLayout>
+    </>
   );
 };
 

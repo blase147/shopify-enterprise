@@ -2,7 +2,7 @@
     font-family: 'Gilroy';
     font-style: normal;
     font-weight: normal;
-    src: url('./../fonts/Gilroy-Regular.ttf') format('truetype');
+    src: url('/fonts/Gilroy-Regular.ttf') format('truetype');
 }
 
 .navBar {

@@ -121,7 +121,7 @@ const ManageStaff = () => {
 
     return (
         <>
-            <AppLayout typePage="ManageStaff" tabIndex="10">
+            <>
                 <Frame>
                     {saveSuccess && (
                         <Toast
@@ -217,7 +217,7 @@ const ManageStaff = () => {
                             </Page>
                     }
                 </Frame>
-            </AppLayout>
+            </>
         </>
     )
 }
