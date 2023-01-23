@@ -57,7 +57,7 @@ const Analytics = () => {
     }
   ];
   return (
-    <AppLayout typePage="Analytics" tabIndex="4">
+    <>
       <Page title="Analytics">
         <FilterContextProvider>
           <Card
@@ -103,7 +103,7 @@ const Analytics = () => {
           </Card>
         </FilterContextProvider>
       </Page>
-    </AppLayout>
+    </>
   );
 };
 export default Analytics;

@@ -4,7 +4,7 @@ import AppLayout from '../layout/Layout';
 
 const ProductPlans = () => {
     return (
-        <AppLayout typePage="customers" tabIndex="2">
+        <>
             <Frame>
                 <Page title='Products'>
                     <Card>
@@ -66,7 +66,7 @@ const ProductPlans = () => {
                     </Card>
                 </Page>
             </Frame>
-        </AppLayout>
+        </>
     )
 }
 

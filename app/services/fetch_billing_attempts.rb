@@ -36,6 +36,7 @@ class FetchBillingAttempts < GraphqlService
     end
 
     result = ShopifyAPIRetry::GraphQL.retry { client.query(client.parse(GET_QUERY), variables: { id: id} ) }
+    sleep CalculateShopifyWaitTime.calculate_wait_time(result&.extensions["cost"]) if result&.extensions.present?
     result.data.subscription_contract.billing_attempts
   rescue Exception => ex
     p ex.message

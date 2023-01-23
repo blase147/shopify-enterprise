@@ -59,7 +59,7 @@ const LoyaltyRewards = ({ handleBack }) => {
     ];
 
     return (
-        <AppLayout typePage="rewards" tabIndex="6">
+        <>
             <Frame>
                 <Page>
                     <div className="back-button pointer" onClick={handleBack}>
@@ -108,7 +108,7 @@ const LoyaltyRewards = ({ handleBack }) => {
                     </FilterContextProvider>
                 </Page>
             </Frame>
-        </AppLayout>
+        </>
     );
 }
 export default LoyaltyRewards;

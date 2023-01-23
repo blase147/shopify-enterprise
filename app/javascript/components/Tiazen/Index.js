@@ -65,16 +65,16 @@ const Index = () => {
       img: InformationImage,
       desc: 'Allow your customers to build bundles.',
     },
-    {
-      key: 'waysToEarnPoint',
-      title: 'Ways To Earn Points ',
-      img: InformationImage,
-      desc: 'Create or update ways to earn points.',
-    }
+    // {
+    //   key: 'waysToEarnPoint',
+    //   title: 'Ways To Earn Points ',
+    //   img: InformationImage,
+    //   desc: 'Create or update ways to earn points.',
+    // }
   ];
 
   return (
-    <AppLayout typePage="tiazen" tabIndex="6">
+    <>
       <Page
         title={
           selectedSetting
@@ -164,11 +164,12 @@ const Index = () => {
                         />
                       )}
                     </>
-                  ) : selectedSetting == "waysToEarnPoint" ? (
-                    <>
-                      <WaysToEarnPoint />
-                    </>
                   ) :
+                    // selectedSetting == "waysToEarnPoint" ? (
+                    //   <>
+                    //     <WaysToEarnPoint />
+                    //   </>
+                    // ) :
                     (
                       ''
                     )}
@@ -178,7 +179,7 @@ const Index = () => {
           )}
         </div>
       </Page>
-    </AppLayout>
+    </>
   );
 };
 

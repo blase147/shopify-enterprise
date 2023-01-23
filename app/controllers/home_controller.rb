@@ -2,7 +2,7 @@
 
 class HomeController < ApplicationController
   before_action :check_shop_known 
-  before_action :check_shopify_backend, only: [:index]
+  before_action :log_out_admin
   before_action :redirection
 
   def index
@@ -15,12 +15,7 @@ class HomeController < ApplicationController
       @shop_origin = current_shopify_domain
       @enable_password = current_shop&.setting&.enable_password
       if current_user.present?
-          from_shop = ShopifyAPI::Shop.current rescue nil
-          if from_shop.present?
-            @all_shops = [from_shop.myshopify_domain]
-          else
-            @all_shops = current_user.user_shops.order(created_at: :asc).joins(:shop).pluck(:shopify_domain) rescue []
-          end
+        @all_shops = current_user.user_shops.order(created_at: :asc).joins(:shop).pluck(:shopify_domain) rescue []
       end
     # end
   end
@@ -35,18 +30,14 @@ class HomeController < ApplicationController
       if current_user.present?
         from_shop = ShopifyAPI::Shop.current rescue nil
         if from_shop.present?
-          @shopify_domain ||= from_shop.myshopify_domain
+          @shopify_domain = from_shop.myshopify_domain
         elsif session[:shop_domain].present?
-          @shopify_domain ||= session[:shop_domain]
+          @shopify_domain = session[:shop_domain]
         else
           @shopify_domain ||= current_user.user_shops.order(created_at: :asc).joins(:shop).pluck(:shopify_domain).first rescue nil
         end
       end
     end
-  end
-
-  def current_shop
-      @current_shop ||= Shop.find_by(shopify_domain: current_shopify_domain)
   end
 
   def redirection
@@ -87,22 +78,8 @@ class HomeController < ApplicationController
     @current_shop ||= Shop.find_by(shopify_domain: current_shopify_domain)
   end
 
-  ### Check if user is trying to access the app from shopify_backend ###
-  def check_shopify_backend
-    from_shop = ShopifyAPI::Shop.current rescue nil
-    if from_shop.present?
-      admin = User.find_by_email(from_shop&.customer_email&.strip)
-      token = SecureRandom.urlsafe_base64(nil, false)
-      shop = Shop.find_by_shopify_domain(from_shop&.myshopify_domain)
-      admin.user_shops.find_by_shop_id(shop.id)&.update(sign_out_after: (Time.current + 30.minutes))
-      sign_in(admin)
-    else
-      log_out_admin
-    end
-  end
-
-  ### Check if admin logged in time exceeds it will log_out ###
-  def log_out_admin
+   ### Check if admin logged in time exceeds it will log_out ###
+   def log_out_admin
     shop = Shop.find_by_shopify_domain(current_shop.shopify_domain) rescue nil
     user_shop = current_user.user_shops.find_by_shop_id(shop.id) rescue nil
     logged = Time.current > user_shop&.sign_out_after rescue true

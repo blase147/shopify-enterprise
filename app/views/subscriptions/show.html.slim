@@ -328,7 +328,7 @@
                       th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header aria-sort="none" data-polaris-header-cell="true" scope="col"  style="color: #FFFFFF" Error Code
                       th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--header aria-sort="none" data-polaris-header-cell="true" scope="col"  style="color: #FFFFFF" Error Message
                   tbody
-                    - @billing_attempts.each do |billing_attempt|
+                    - @billing_attempts&.each do |billing_attempt|
                       - billing_attempt = billing_attempt["node"]
                       tr.Polaris-DataTable__TableRow
                         th.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--firstColumn scope="row"= billing_attempt["created_at"].to_datetime.strftime("%e %B, %Y")

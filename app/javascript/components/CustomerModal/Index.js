@@ -613,7 +613,7 @@ const CustomerModal = ({ shopifyDomain }) => {
   }
 
   return (
-    <AppLayout typePage="customers" tabIndex="3">
+    <>
       <Frame>
         {saveSuccess && (
           <Toast
@@ -833,7 +833,7 @@ const CustomerModal = ({ shopifyDomain }) => {
           </Stack>
         </Modal.Section>
       </Modal>
-    </AppLayout>
+    </>
   );
 };
 

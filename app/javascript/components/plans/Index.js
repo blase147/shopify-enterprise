@@ -255,7 +255,7 @@ const SellingPlans = () => {
   }, [selectedPlansForRemove]);
 
   return (
-    <AppLayout typePage="sellingPlansList" tabIndex="1">
+    <>
       <Frame>
         <Page title={<div className='pageTitle'>Subscription Plans</div>}>
           <Layout>
@@ -416,7 +416,7 @@ const SellingPlans = () => {
           setActive={setGetStartedModal}
         />
       </Frame>
-    </AppLayout >
+    </ >
   );
 };
 

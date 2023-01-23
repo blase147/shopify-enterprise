@@ -337,7 +337,7 @@ const CreateCustomer = () => {
   `;
   const [updateCustomer] = useMutation(UPDATE_CUSTOMER);
   return (
-    <AppLayout typePage="createCustomer" tabIndex="2">
+    <>
       <Frame>
         <Page
           title={id ? 'Update a Customer' : 'Create a Customer'}
@@ -947,7 +947,7 @@ const CreateCustomer = () => {
           )}
         </Page>
       </Frame>
-    </AppLayout>
+    </>
   );
 };
 
