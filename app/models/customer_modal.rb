@@ -3,6 +3,8 @@ class CustomerModal < ApplicationRecord
     validates :email, uniqueness: true
     belongs_to :shop
     has_one :auth_token, dependent: :destroy
+    has_many :reward_codes, dependent: :destroy
+    
     def name
         self.first_name.to_s + " " + self.last_name.to_s
     end

@@ -14,3 +14,22 @@
     color: #212b36;
     font-family: -apple-system, BlinkMacSystemFont, San Francisco, Roboto, Segoe UI, Helvetica Neue, sans-serif;
 }
+
+.chargezen .Polaris-CalloutCard__Image {
+    min-width: 10rem;
+}
+
+.addReferralRewardTitle {
+    font-size: 2rem;
+    line-height: 2.8rem;
+}
+
+.SelectRewardTypeModal.rewards_list .Polaris-ResourceItem__Container,
+.SelectRewardTypeModal.points_reward .Polaris-ResourceItem__Container {
+    padding: 2rem 0px;
+}
+
+.SelectRewardTypeModal.rewards_list,
+.SelectRewardTypeModal.points_reward {
+    margin-bottom: -20px;
+}
