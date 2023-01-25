@@ -54,7 +54,7 @@ const EditWaysToEarn = ({ formData, setFormData, setEditForm, refetch, formError
     return (
         <Frame>
             <Page
-                title="Edit"
+                title={formData?.id ? "Edit" : "Add"}
             >
                 <Layout>
                     <Layout.Section>

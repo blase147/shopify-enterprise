@@ -199,7 +199,6 @@ export default function App(props) {
                   path="/newDash"
                   component={() => <Dashboard domain={props.domain} />}
                 />
-            // integrations ##
                 <Route exact path="/integrations" component={Integrations} />
                 <Route
                   exact
