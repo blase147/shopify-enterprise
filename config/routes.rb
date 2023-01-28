@@ -144,6 +144,14 @@ Rails.application.routes.draw do
         post :registered_on_mixpanel
       end
     end
+    
+    resources :rebuy, only: :index do
+      collection do
+         get :rebuy_items
+         get :upsells
+      end
+    end
+
     root 'dashboard#index'
   end
 
