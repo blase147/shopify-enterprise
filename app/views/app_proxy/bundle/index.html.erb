@@ -1,1 +1,239 @@
-<h1>https://motion-demo.myshopify.com/a/chargezen/bundle</h1> 
+<div class="custom-bundle" id="bundleCustomization">
+  <section class="section header">  
+    <div class="section-wrapper">
+      <div class="container">
+        <div class="content-box content-box--medium content-box--text-center content-box--center text-container">        
+          <h3 class="heading h3">Build Your Own Bundle</h3> 
+          <span class="bundle-desc">
+            Create your custom kit and stack free goods as you build your perfect bathroom.</span>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="content-box content-box--medium content-box--text-center content-box--center text-container sec_design">
+         <h3 class="heading h6">ONE TIME</h3>
+          <div class="btn">
+            <label class="switch-button">
+              <input type="checkbox" class="slide_round"> 
+              <span class="slider round"></span> 
+            </label>
+          </div>
+          <h3 class="heading h6">SUBSCRIBE &amp; SAVE</h3>
+        </div>
+        <div class="bundle-sub"> 
+          <h3 class="h6">
+            SUBSCRIBE &amp; SAVE 15% ON EVERY ORDER. SHIPS EVERY 45 DAYS, RESCHEDULE ANY TIME.
+          </h3> 
+        </div>          
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<style>
+  .Polaris-Page {
+    max-width: 100% !important;
+  }
+
+  .Polaris-Page {
+    background: white !important;
+  }
+
+  .custom-bundle {
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+
+  .section {
+    display: block;
+  }
+
+  section.section.header {
+    display: block;
+    background: rgb(var(--header-background));
+    color: rgb(var(--header-text-color));
+    transition: background .2s ease-in-out,color .2s ease-in-out,box-shadow .2s ease-in-out;
+    background: white;
+  }
+
+  .section-bundle {
+    display: flow-root;
+  }
+
+  .container{
+    width: 100%;
+    max-width: var(--container-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--container-gutter);
+    padding-right: var(--container-gutter);
+  }
+
+  .heading,
+  .rte h1, .rte h2,
+  .rte h3, .rte h4,
+  .rte h5, .rte h6 {
+    display: block;
+    font-family: var(--heading-font-family);
+    font-weight: var(--heading-font-weight);
+    font-style: var(--heading-font-style);
+    color: rgb(var(--heading-color));
+    text-transform: var(--heading-text-transform);
+  }
+
+  .heading.h3 {
+    color: #19327D;
+    font-size: 39px;
+    font-weight: 900;
+  }
+
+  .content-box--medium {
+    margin-left: 24%;
+    margin-right: 24%;
+  }
+
+  .content-box--text-center {
+    text-align: center;
+  }
+
+  .bundle-sub {
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .bundle-sub h3 {
+    font-size: 16px;
+    text-align: center;
+    margin: 0 auto;
+    padding-top: 15px;
+    text-transform: uppercase;
+  }
+
+  .bundle-sub {
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .bundle-sub h3 {
+    font-size: 16px;
+    text-align: center;
+    margin: 0 auto;
+    padding-top: 15px;
+    text-transform: uppercase;
+    color: #19327d;
+    font-weight: 900;
+    font-family: Platform Bold,helvetica!important;
+  }
+
+  .bundle-desc {
+    font-size: 19px;
+    color: #19327dd1;;
+  }
+
+  .sec_design {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    text-align: center;
+    justify-content: center;
+    padding-top: 30px;
+  }
+
+  .sec_design h3{
+    margin:0 !important;
+  }
+
+  .sec_design .btn{
+    padding-left:10px !important;
+    padding-right:10px !Important;
+  }
+
+  .sub_head span{
+    font-size:18px;
+    text-align:center;
+    margin:0 auto;
+    padding-top:15px;
+    text-transform:uppercase
+  }
+
+  .sub_head{
+    text-align:center;
+    margin-top:10px;
+  }
+
+  .progres_bar{
+    background: #19327D !important;
+  }
+
+  h3.heading.h6 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #19327d;
+  }
+
+  .switch-button {
+    position: relative;
+    display: inline-block;
+    width: 98px;
+    height: 48px;
+  }
+
+  .switch-button input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #d9d9d9;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 39px;
+    width: 39px;
+    left: 4px;
+    bottom: 4px;
+    background-color: #19327d;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(49px);
+    -ms-transform: translateX(49px);
+    transform: translateX(49px);
+  }
+
+  .btn input:checked + .slider {
+    background-color: #d9d9d9;
+  }
+
+  .btn input:focus + .slider {
+    box-shadow: 0 0 1px #ccc;
+  }
+
+  .btn input:checked + .slider:before {
+    -webkit-transform: translateX(151px);
+    -ms-transform: translateX(151px);
+    transform: translateX(49px);
+  }
+</style>
