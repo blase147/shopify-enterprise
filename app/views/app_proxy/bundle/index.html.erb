@@ -28,10 +28,437 @@
       </div>
     </div>
   </section>
+
+  <section class="section section--flush section_fixed bundles-header">
+    <div class="section__color-wrapper vertical-breather vertical-breather--tight progres_bar pdb20">
+      <div class="">
+        <div class="new_tab">           
+          <div class="progress-container">                    
+            <div class="progress-bar" style="background: rgb(234, 40, 41); width: 0%;">
+            </div>
+            <ul class="first_list">
+              <li style="visibility:hidden;">SPEND:</li>
+              <li class="progress_right progress_right1">$40 </li>         
+              <li class="progress_right progress_right2">$50</li>
+              <li class="progress_right progress_right3">$75</li>
+            </ul>
+            <ul class="sec_list">
+              <li>
+                <span>UNLOCK:</span>
+              </li>
+              <li>
+                <span>FREE SHIPPING</span>
+              </li>
+              <li>
+                <span>FREE PRODUCT</span>
+              </li>
+              <li>
+                <span>FREE DOPP KIT</span>
+              </li>
+            </ul>
+          </div>
+          <div class="button-wrapper"> 
+            <a href="javascript:void(0)" class="button button--primary add_bundle_cart">
+              Checkout: <span class="cart_price">$0.00</span>
+            </a>
+            <span class="loader-button__loader">
+              <div class="spinner">
+                <svg focusable="false" width="24" height="24" class="icon icon--spinner" viewBox="25 25 50 50">
+                <circle cx="50" cy="50" r="20" fill="none" stroke="currentColor" stroke-width="5"></circle>
+                </svg>
+              </div>
+            </span> 
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--flush">
+  <div class="section__color-wrapper vertical-breather vertical-breather--tight progres_bar pdt0">
+    <div class="container">
+      <div class="img_section">
+        <div class="prodcut-list-inner bundleproducts">
+          <div class="product_box_1">
+            <div class="container">                             
+            </div>
+          </div>
+          <div class="product_box_1">
+            <div class="container">                             
+            </div>
+          </div>
+          <div class="product_box_1">
+            <div class="container">
+                            
+            </div>
+          </div>
+          <div class="product_box_1 hidemobile">
+            <div class="container">                             
+            </div>
+          </div>
+          <div class="product_box_1 hidemobile">
+            <div class="container">                             
+            </div>
+          </div>
+          <div class="product_box_1 hidemobile">
+            <div class="container">                             
+            </div>
+          </div>
+        </div>
+        <div class="without_img_text"> 
+          <span>Begin Adding Item below to create your bundle</span> 
+        </div>
+      </div>
+    </div>
+  </div>
+  </section>
+
 </div>
 
 
 <style>
+/*------ BEGIN ADDING ITEM BELOW TO CREATE YOUR BUNDLE  ---------*/
+  .pdt0{
+    padding-top:0px !important;
+  }
+
+  .img_section {
+    margin-top: 40px;
+    position: relative
+  }
+
+  .img_section .prodcut-list-inner {
+    width: 100%
+  }
+
+  .img_section .prodcut-list-inner {
+    display: grid;
+    width: 100%;
+    grid-gap: 1%;
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .img_section .product_box_1 {
+    width: 100%;
+    display: block;
+    align-items: center;
+    color: #fff;
+  }
+
+  .img_section .product_box_1 .container {
+    width: 100%;
+    border: 1px dashed #ccc;
+    aspect-ratio: 1/ 1;
+  }
+
+  .without_img_text {
+    position: absolute;
+    position: absolute;
+    top: 39%;
+    display: block;
+    width: 100%;
+    margin-left: 0px;
+    margin-right: 0px;
+    text-align: center;
+  }
+
+  .without_img_text span {
+    font-size: 14px;
+    text-transform: uppercase;
+    text-align: center;
+    color: #fff;
+  }
+
+  .section__color-wrapper {
+    display: flow-root;
+  }
+
+  .vertical-breather--tight {
+    padding-bottom: 48px;
+  }
+
+ /*------ Process Bar Css ---------*/
+
+  .section_fixed{
+    position: sticky;
+    top: 77px;
+    font-size: 20px;
+    overflow: unset;
+    z-index: 111;
+  }
+
+  .bundles-header {
+    top: 0!important;
+    z-index: 10;
+  }
+
+  .pdb20{
+    padding-bottom:20px;
+  }
+
+  .section_fixed .section__color-wrapper {
+    padding-top: 15px!important;
+  }
+
+  .section--flush {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .new_tab {
+    display: flex;
+  }
+
+  .progress-container {
+    position: relative;
+    margin: 50px 50px 50px 50px;
+    padding: 4px 0 0;
+    width: 70%;
+    height: 6px;
+    background: #fff;
+    -moz-box-shadow: inset 0 0 2px #666;
+    -webkit-box-shadow: inset 0 0 2px #666;
+    box-shadow: inset 0 0 2px #666;
+  }
+
+  .progress-container ul.first_list li:nth-child(1) {
+    position: absolute;
+    top: -50px;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    display: inline-table;
+    background: transparent !important;
+    border-radius: 0px !important;
+    color: #ffff;
+    font-size: 15px;
+    font-weight: 400;
+  }
+
+    
+  .progress-container ul.first_list li {
+    position: absolute;
+    top: -22px;
+    left: 0;
+    margin: 0;
+    font-weight: 600;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    line-height: 26px;
+    justify-content: center;
+    padding: 10px;
+    border: 3px solid transparent;
+  }
+
+  .progress-container ul.sec_list li {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    display: inline-table;
+    padding:8px !important;
+    font-weight:500;font-size:14px;
+  }
+
+  .progress-container ul.sec_list li:nth-child(1) {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    display: inline-table;
+    background:transparent !important;
+    border-radius:0px !important;color:#ffff;font-size:14px;font-weight:500;
+  }
+      
+  .progress-container ul.first_list li:nth-child(2) {
+    margin-left: 33%;
+  }
+
+  .progress-container ul.first_list li:nth-child(3) {
+    margin-left: 66%;
+  }
+
+  .progress-container ul.first_list li:last-child {
+    margin-left: 100%;
+  }
+  .progress-container ul.sec_list li:nth-child(2) {
+    margin-left: 29%;
+  }
+
+  .progress-container ul.sec_list li:nth-child(3) {
+    margin-left: 62%;
+  }
+
+  .progress-container ul.sec_list li:last-child {
+    margin-left: 96%;
+    width:20%
+  }
+
+  .progress-container ul.first_list li {
+    width: 50px;
+    height: 50px;
+  }
+
+  .progress-container ul li span {
+    display: block;
+    top: 50px;
+    background: transparent !important;
+    color: #fff !important;
+  }
+
+  .new_tab .button-wrapper {
+    align-content: center;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding-left: 25px;
+  }
+
+  .new_tab .button-wrapper a {
+    padding-left: 50px;
+    padding-right: 50px;
+    border-radius: 40px;
+    box-shadow: 0 0 #19327d;
+    left: 0;
+    top: 0;
+    text-transform: uppercase;
+  }
+
+  .button {
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease; }
+  .button.button--primary {
+    background: #fff;
+    padding: 13px 25px;
+    border: 2px solid #19327d;
+    font-family: Platform Bold,helvetica;
+    text-transform: uppercase;
+    color: #ea2829;
+    font-size: 20px;
+    line-height: 1.05em;
+    letter-spacing: .025em;
+    font-size: 18px;
+    color: #19327d;
+    text-transform: none;
+    position: relative;
+    box-shadow: 5px 5px 0 #19327d;
+    left: -5px;
+    top: -5px; }
+    .button.button--primary:hover {
+      box-shadow: 0 0 0 #19327d;
+      left: 0;
+      top: 0; }
+
+    .loader-button__loader {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      opacity: 0;
+    }
+
+  .spinner svg {
+    margin: auto;
+    animation: spinnerRotate 2s linear infinite;
+    transform-origin: center center;
+  }
+
+  .icon {
+    display: block;
+    vertical-align: middle;
+    background: none;
+    pointer-events: none;
+    overflow: visible;
+  }    
+
+@media(min-width:768px) {
+  .new_tab {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .progress-container {
+    width: 75%
+  }
+
+  .new_tab .button-wrapper {
+    width: 25%;
+  }
+
+  .new_tab .button-wrapper a {
+    width: 100%
+  }
+
+  .new_tab .button-wrapper a {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+
+@media screen and (min-width: 1200px) {
+  .section_fixed .section__color-wrapper {
+    padding-top: 15px !important;
+  }
+}
+
+@media screen and (min-width: 540px) and (max-width: 820px) {
+  .img_section {
+    margin-top: 20px;
+  }
+
+  .section_fixed .section__color-wrapper {
+    padding-top: 20px !important;
+  }
+}
+
+@media screen and (min-width: 821px) and (max-width: 1199px) {
+  .img_section {
+    margin-top: 70px;
+  }
+
+  .section_fixed .section__color-wrapper {
+    padding-top: 20px !important;
+  }
+
+}
+
+@media screen and (min-width: 943px) and (max-width: 1199px) {
+  .progress-container ul.sec_list li:last-child {
+    width: 24%;
+    margin-left: 92%;
+  }
+
+  .progress-container ul.sec_list li:nth-child(2) {
+    margin-left: 28%;
+  }
+
+  .progress-container ul.sec_list li:nth-child(3) {
+    margin-left: 51%;
+    width: 40%;
+  }
+
+  .new_tab .button-wrapper a {
+    padding-left: 30px;
+    padding-right: 30px;
+    font-size: 15px;
+  }
+
+  .without_img_text {
+    top: 39%;
+  }
+
+  .section_fixed .section__color-wrapper {
+    padding-right: 20px;
+  }
+}
+
+ /*------ Build your Own Bundle Css ---------*/
+
   .Polaris-Page {
     max-width: 100% !important;
   }
@@ -66,8 +493,8 @@
     max-width: var(--container-max-width);
     margin-left: auto;
     margin-right: auto;
-    padding-left: var(--container-gutter);
-    padding-right: var(--container-gutter);
+    padding-left: 40px;
+    padding-right: 40px;
   }
 
   .heading,
