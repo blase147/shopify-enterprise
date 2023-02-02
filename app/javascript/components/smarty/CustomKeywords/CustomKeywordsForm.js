@@ -17,7 +17,7 @@ import { isEmpty } from 'lodash';
 
 const CustomKeywordsForm = ({ id, handleClose }) => {
   const fetchQuery = gql`
-    query ($id: String!, $shopDomain: String) {
+    query ($id: String!) {
       fetchCustomKeyword(id: $id) {
         id
         response

@@ -3,11 +3,8 @@ module Queries
     type Types::SmsAnalyticType, null: false
     argument :start_date, String, required: true
     argument :end_date, String, required: true
-    argument :shop_domain, String, required: false
 
-    def resolve(start_date:, end_date:, shop_domain:)
-      current_shop = Shop.find_by_shopify_domain(shop_domain) rescue current_shop
-
+    def resolve(start_date:, end_date:)
       range = start_date.to_date..end_date.to_date
       past_day_range = Date.today - 1.day..Date.today - 1.day
       current_day_range = Date.today..Date.today

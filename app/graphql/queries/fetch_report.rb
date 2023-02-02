@@ -4,10 +4,8 @@ module Queries
     argument :report_type, String, required: true
     argument :start_date, String, required: true
     argument :end_date, String, required: true
-    argument :shop_domain, String, required: false
 
-    def resolve(report_type:, start_date:, end_date:,shop_domain:)
-      current_shop = Shop.find_by_shopify_domain(shop_domain) rescue current_shop
+    def resolve(report_type:, start_date:, end_date:)
       arr_data = []
       range = start_date.to_date..end_date.to_date
       case report_type.downcase

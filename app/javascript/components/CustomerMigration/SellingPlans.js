@@ -1,20 +1,17 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useState, useCallback } from "react";
 import { Page, Card, DataTable, Spinner } from "@shopify/polaris";
 import { SearchMinor } from "@shopify/polaris-icons";
 
 import { gql, useMutation, useQuery } from '@apollo/client';
-import { DomainContext } from '../domain-context';
 
 
 
 function SellingPlans({ setSelectedSellingPlan, selectedSellingPlan }) {
 
-    const { domain } = useContext(DomainContext)
-
     const GET_SELLING_PLANS = gql`
-    query($shopDomain: String) {
-      fetchPlanGroups(shopDomain: $shopDomain) {
+    query {
+      fetchPlanGroups {
         id
         name
         subscriptionModel
@@ -38,9 +35,6 @@ function SellingPlans({ setSelectedSellingPlan, selectedSellingPlan }) {
   `;
     const { data, loading, error } = useQuery(GET_SELLING_PLANS, {
         fetchPolicy: 'no-cache',
-        variables: {
-            shopDomain: domain
-        }
     });
     const rows = [];
 

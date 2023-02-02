@@ -6,10 +6,8 @@ module Queries
     argument :sort_direction, String, required: false
     argument :custom, String, required: false
     argument :offset_attributes, Types::Input::OffsetAttributes, required: false
-    argument :shop_domain, String, required: false
 
     def resolve(**args)
-      current_shop = Shop.find_by_shopify_domain(args[:shop_domain]) rescue current_shop
       offset_params = args[:offset_attributes].to_h
       smarty_messages = current_shop.smarty_messages.where(where_data(args)).order(order_by(args)).limit(offset_params[:limit]).offset(offset_params[:offset])
       { smarty_messages: smarty_messages, total_count: current_shop.smarty_messages.where(where_data(args)).count }

@@ -13,7 +13,7 @@ import {
 } from '@shopify/polaris';
 import { DeleteMajor, NoteMinor } from '@shopify/polaris-icons';
 import Papa from 'papaparse';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { CSVLink } from 'react-csv';
 import { useHistory } from 'react-router-dom';
 import swapIcon from '../../../assets/images/icons/swap.svg';
@@ -23,7 +23,6 @@ import { Pagination } from "@shopify/polaris";
 import LoadingScreen from '../LoadingScreen';
 import HeaderButtons from '../HeaderButtons/HeaderButtons';
 import PixelIcon from '../../images/PixelIcon';
-import { DomainContext } from '../domain-context';
 
 
 // import json2csv from 'json2csv';
@@ -84,7 +83,6 @@ const ButtonRemove = (props) => {
 };
 
 const Customers = ({ shopifyDomain }) => {
-  const { domain } = useContext(DomainContext);
   const history = useHistory();
   // Start Tabs
   const [selectedTab, setSelectedTab] = useState(0);
@@ -231,8 +229,8 @@ const Customers = ({ shopifyDomain }) => {
   ];
   // -------------------
   const GET_CUSTOMERS = gql`
-    query($sortColumn: String, $sortDirection: String, $page: String, $status: String, $searchquery: String, $shopDomain: String) {
-      fetchCustomers(sortColumn: $sortColumn, sortDirection: $sortDirection, page: $page,status: $status, searchquery: $searchquery, shopDomain: $shopDomain) {
+    query($sortColumn: String, $sortDirection: String, $page: String, $status: String, $searchquery: String) {
+      fetchCustomers(sortColumn: $sortColumn, sortDirection: $sortDirection, page: $page,status: $status, searchquery: $searchquery) {
         customerSubscriptions{
           id
           shopifyId
@@ -285,7 +283,6 @@ const Customers = ({ shopifyDomain }) => {
   const { data, loading, error, refetch } = useQuery(GET_CUSTOMERS, {
     fetchPolicy: 'no-cache',
     variables: {
-      shopDomain: domain,
       page: page.toString(),
       searchquery: searchQuery,
       status: status,
@@ -912,7 +909,7 @@ const Customers = ({ shopifyDomain }) => {
           </Stack>
         </Modal.Section>
       </Modal>
-    </>
+  </>
   );
 };
 

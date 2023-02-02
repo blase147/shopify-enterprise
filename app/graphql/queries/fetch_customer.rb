@@ -2,11 +2,9 @@ module Queries
   class FetchCustomer < Queries::BaseQuery
     type Types::CustomerSubscriptionType, null: false
     argument :id, ID, required: true
-    argument :shop_domain, String, required: false
 
-    def resolve(**args)
-      current_shop = Shop.find_by_shopify_domain(args[:shop_domain]) rescue current_shop
-      current_shop.customer_subscription_contracts.find(args[:id])
+    def resolve(id:)
+      current_shop.customer_subscription_contracts.find(id)
     end
   end
 end
