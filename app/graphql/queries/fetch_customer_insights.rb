@@ -4,7 +4,9 @@ module Queries
     argument :start_date, String, required: true
     argument :end_date, String, required: true
 
-    def resolve(start_date:, end_date:)
+    def resolve(start_date:, end_date:, shop_domain:)
+      current_shop = Shop.find_by_shopify_domain(shop_domain) rescue current_shop
+
       all_subscriptions = BulkOperationResponse.find_by(shop_id: current_shop.id, response_type: "subscriptions")&.api_raw_data
       all_subscriptions = JSON.parse(all_subscriptions, object_class: OpenStruct)
       # all_subscriptions = ReportService.new.all_subscriptions

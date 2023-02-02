@@ -3,8 +3,10 @@ module Queries
     type Types::RevenueTrendType, null: false
     argument :start_date, String, required: false
     argument :end_date, String, required: false
+    argument :shop_domain, String, required: false
 
-    def resolve(start_date:, end_date: )
+    def resolve(start_date:, end_date:, shop_domain: )
+      current_shop = Shop.find_by_shopify_domain(shop_domain) rescue current_shop
       end_date = end_date.to_date
       start_date = start_date.to_date
       month = (end_date.year*12 + end_date.month) - (start_date.year*12 + start_date.month)

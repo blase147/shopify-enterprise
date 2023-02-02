@@ -9,19 +9,22 @@ import {
   Spinner,
 } from '@shopify/polaris';
 import DeleteSVG from '../../../assets/images/delete.svg'
+import { DomainContext } from '../domain-context';
 const SearchPlan = (props) => {
-  const { value, setFieldValue, fieldName, error, disabled, allSelectedPlans,setAllSelectedPlans } = props;
+
+  const { domain } = React.useContext(DomainContext);
+  const { value, setFieldValue, fieldName, error, disabled, allSelectedPlans, setAllSelectedPlans } = props;
 
   // Search product to add
   const GET_SELLING_PLAN = gql`
-    query($name: String!) {
-      fetchSellingPlanByName(name: $name) {
+    query($name: String!, $shopDomain: String) {
+      fetchSellingPlanByName(name: $name, shopDomain: $shopDomain) {
         id
         name
         shopifyId
       }
     }
-  `; 
+  `;
 
   const [sellingPlanList, setSellingPlanList] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -57,7 +60,7 @@ const SearchPlan = (props) => {
     (value) => {
       setFieldValue(fieldName, { sellingPlanId: '', sellingPlanName: value });
       if (value) {
-        GetPlans({ variables: { name: value } });
+        GetPlans({ variables: { name: value, shopDomain: domain } });
       }
     },
     [value]
@@ -73,7 +76,7 @@ const SearchPlan = (props) => {
         });
         setSelectedOptions(selected);
 
-        if(Array.isArray(allSelectedPlans)){
+        if (Array.isArray(allSelectedPlans)) {
           let flag = true;
           for (let i = 0; allSelectedPlans?.length > i; i++) {
             if (allSelectedPlans[i].sellingPlanName == plan.value) {
@@ -82,12 +85,12 @@ const SearchPlan = (props) => {
             } else {
               flag = true;
             }
-          }  
-  
-          let selecteds=null;  
+          }
+
+          let selecteds = null;
           if (flag) {
-            console.log("updating",allSelectedPlans,plan)
-            selecteds=allSelectedPlans || [];
+            console.log("updating", allSelectedPlans, plan)
+            selecteds = allSelectedPlans || [];
             selecteds.push({
               sellingPlanName: plan.label,
               sellingPlanId: plan.value,
@@ -96,7 +99,7 @@ const SearchPlan = (props) => {
             setAllSelectedPlans && setAllSelectedPlans(selecteds);
           }
         }
-       
+
       }
     },
     [sellingPlanList, value]

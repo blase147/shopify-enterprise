@@ -2,8 +2,10 @@ module Queries
   class FetchPowerPlanGroup < Queries::BaseQuery
     type Types::SellingPlanGroupType, null: false
     argument :id, ID, required: true
+    argument :shop_domain, String, required: false
 
-    def resolve(id:)
+    def resolve(id:, shop_domain: )
+      current_shop = Shop.find_by_shopify_domain(shop_domain) rescue current_shop
       selling_plan_group = if id.include?('gid://shopify')
         current_shop.selling_plan_groups.find_by_shopify_id(id)
       else
