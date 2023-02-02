@@ -7,8 +7,11 @@ module Queries
     argument :sort_direction, String, required: false
     argument :page, String, required: false
     argument :searchquery, String, required: false
+    argument :shop_domain, String, required: false
 
     def resolve(**args)
+      current_shop = Shop.find_by_shopify_domain(args[:shop_domain]) rescue current_shop
+
       if args[:searchquery].present?
         customer_subscriptions = current_shop.customer_subscription_contracts.where(where_data(args[:status] || 'all')).search(args[:searchquery]).page(args[:page]).includes(:shop, :additional_contacts, :billing_address).order(order_by(args))
       else

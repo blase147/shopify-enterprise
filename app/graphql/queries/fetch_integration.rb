@@ -2,9 +2,11 @@ module Queries
   class FetchIntegration < Queries::BaseQuery
     argument :id, String, required: true
     type Types::IntegrationType, null: false
+    argument :shop_domain, String, required: false
 
-    def resolve(id:)
-      current_shop.integrations.find(id)
+    def resolve(**args)
+      current_shop = Shop.find_by_shopify_domain(args[:shop_domain]) rescue current_shop
+      current_shop.integrations.find(args[:id])
     end
   end
 end

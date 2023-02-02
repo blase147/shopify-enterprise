@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef, useContext } from 'react';
 import { Formik } from 'formik';
 import _ from 'lodash';
 import * as yup from 'yup';
@@ -41,8 +41,10 @@ import SearchPlan from '../upsell/SearchPlan';
 import RangePickr from './RangePickr';
 import LoadingScreen from '../LoadingScreen';
 import PixelIcon from '../../images/PixelIcon';
+import { DomainContext } from '../domain-context';
 
 const CreateBuildBox = ({ id, handleClose }) => {
+  const { domain } = React.useContext(DomainContext)
   const options = [...Array(99).keys()].map((foo) => (foo + 1).toString());
   const [canceledProducts, setCanceledProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
@@ -123,8 +125,8 @@ const CreateBuildBox = ({ id, handleClose }) => {
   });
 
   const GET_UPSELL_CAMPAIGN = gql`
-    query ($id: ID!) {
-      fetchBuildABoxCampaignGroup(id: $id) {
+    query ($id: ID!, $shopDomain: String) {
+      fetchBuildABoxCampaignGroup(id: $id, shopDomain: $shopDomain) {
         id
         internalName
         location
@@ -166,7 +168,7 @@ const CreateBuildBox = ({ id, handleClose }) => {
   const [getUpsell, { data, loading, error }] = useLazyQuery(
     GET_UPSELL_CAMPAIGN,
     {
-      variables: { id: id },
+      variables: { id: id, shopDomain: domain },
       fetchPolicy: 'no-cache',
     }
   );

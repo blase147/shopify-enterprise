@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { gql, useLazyQuery } from '@apollo/client';
 import { useHistory } from 'react-router';
 import {
@@ -11,13 +11,16 @@ import {
 import dayjs from 'dayjs';
 import Pagination from '../../common/Pagination';
 import TableSkeleton from '../../common/TableSkeleton';
+import { DomainContext } from '../../domain-context';
 
 const CustomKeywords = ({ handleEditCustomKewords }) => {
+  const { domain } = useContext(DomainContext);
   const fetchQuery = gql`
-    query ($offsetAttributes: OffsetAttributes!, $searchKey: String) {
+    query ($offsetAttributes: OffsetAttributes!, $searchKey: String, $shopDomain: String) {
       fetchCustomKeywords(
         offsetAttributes: $offsetAttributes
         searchKey: $searchKey
+        shopDomain: $shopDomain
       ) {
         totalCount
         customKeywords {
@@ -47,6 +50,7 @@ const CustomKeywords = ({ handleEditCustomKewords }) => {
       variables: {
         offsetAttributes: { limit: filters.limit, offset: filters.offset },
         searchKey: filters.searchValue,
+        shopDomain: domain
       },
     });
   }, [filters]);
@@ -124,9 +128,8 @@ const CustomKeywords = ({ handleEditCustomKewords }) => {
                       <td>{keyword.response}</td>
                       <td>
                         <button
-                          className={`${
-                            keyword.status === 'active' ? 'active' : 'inactive'
-                          }-status-btn`}
+                          className={`${keyword.status === 'active' ? 'active' : 'inactive'
+                            }-status-btn`}
                         >
                           {keyword.status}
                         </button>
