@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import AppLayout from '../layout/Layout';
 
@@ -32,7 +32,6 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 import Modals from './Modals';
 import LoadingScreen from '../LoadingScreen';
 import PixelIcon from '../../images/PixelIcon';
-import { DomainContext } from '../domain-context';
 
 const ButtonRemove = (props) => {
   const {
@@ -108,12 +107,11 @@ const ButtonRemove = (props) => {
 };
 
 const SellingPlans = () => {
-  const { domain } = useContext(DomainContext)
   const history = useHistory();
 
   const GET_SELLING_PLANS = gql`
-    query($shopDomain: String) {
-      fetchPlanGroups(shopDomain: $shopDomain) {
+    query {
+      fetchPlanGroups {
         id
         name
         subscriptionModel
@@ -175,9 +173,6 @@ const SellingPlans = () => {
   const [getStartedModal, setGetStartedModal] = useState(false);
   const { data, loading, error } = useQuery(GET_SELLING_PLANS, {
     fetchPolicy: 'no-cache',
-    variables: {
-      shopDomain: domain
-    }
   });
 
   useEffect(() => {

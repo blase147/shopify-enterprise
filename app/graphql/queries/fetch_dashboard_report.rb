@@ -3,11 +3,8 @@ module Queries
     type Types::DashboardReportType, null: false
     argument :start_date, String, required: true
     argument :end_date, String, required: true
-    argument :shop_domain, String, required: false
 
-    def resolve(start_date:, end_date:, shop_domain:)
-      current_shop = Shop.find_by_shopify_domain(shop_domain) rescue current_shop
-
+    def resolve(start_date:, end_date:)
       subscriptions = BulkOperationResponse.find_by(shop_id: current_shop.id, response_type: "subscriptions")&.api_raw_data
       subscriptions = JSON.parse(subscriptions, object_class: OpenStruct)
       range = start_date.to_date..end_date.to_date

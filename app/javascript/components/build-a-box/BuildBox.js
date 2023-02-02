@@ -117,11 +117,10 @@ const ButtonRemove = (props) => {
 
 const BuildBox = ({ handleForm, handleBack }) => {
   const history = useHistory();
-  const { domain } = React.useContext(DomainContext);
 
   const GET_UPSELL_CAMPAIGNS = gql`
-    query($shopDomain: String) {
-      fetchBuildABoxCampaignGroups(shopDomain: $shopDomain) {
+    query {
+      fetchBuildABoxCampaignGroups {
         id
         internalName
         location
@@ -190,7 +189,6 @@ const BuildBox = ({ handleForm, handleBack }) => {
 
   const { data, loading, error, refetch } = useQuery(GET_UPSELL_CAMPAIGNS, {
     fetchPolicy: 'no-cache',
-    variables: { shopDomain: domain }
   });
 
   useEffect(() => {
