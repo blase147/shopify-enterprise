@@ -36,6 +36,7 @@ class Shop < ActiveRecord::Base
   has_many :customer_modals
   has_one :lock_password
   has_one :translation, dependent: :destroy
+  has_many :bundle_menus, dependent: :destroy
   after_create :build_setting
   after_create :setup_default_lock_password
   after_create :populate_store_data
