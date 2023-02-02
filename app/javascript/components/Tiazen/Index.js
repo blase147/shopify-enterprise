@@ -65,6 +65,12 @@ const Index = () => {
       img: InformationImage,
       desc: 'Allow your customers to build bundles.',
     },
+    {
+      key: 'bundle',
+      title: 'Bundle',
+      img: InformationImage,
+      desc: 'Allow your customers to build bundle.',
+    },
     // {
     //   key: 'waysToEarnPoint',
     //   title: 'Ways To Earn Points ',
@@ -151,6 +157,21 @@ const Index = () => {
                       )}
                     </>
                   ) : selectedSetting === 'bundles' ? (
+                    <>
+                      {showEditPage ? (
+                        <BundleForm
+                          id={editId}
+                          handleClose={handleCloseEditPage}
+                        />
+                      ) : (
+                        <Bundles
+                          handleBack={handleBackSetting}
+                          handleForm={handleEditPage}
+                        />
+                      )}
+                    </>
+                  ) :
+                    selectedSetting === 'bundle' ? (
                     <>
                       {showEditPage ? (
                         <BundleForm

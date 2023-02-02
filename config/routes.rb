@@ -152,6 +152,13 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :bundle, only: :index do
+      collection do
+        post :add_product
+        get :get_build_a_box
+      end
+    end
+
     root 'dashboard#index'
   end
 
