@@ -63,7 +63,7 @@ export default function App(props) {
       // Not in an iframe
       origin = window.location.host;
       mainLink = new HttpLink({
-        uri: '/graphql',
+        uri: `/${domain?.replace('.myshopify.com', '')}/graphql`,
         credentials: 'include',
         headers: {
           'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').getAttribute('content'),
@@ -81,7 +81,7 @@ export default function App(props) {
       mainLink = new HttpLink({
         credentials: 'same-origin',
         fetch: authenticatedFetch(window.app),
-        uri: '/graphql',
+        uri: `/${domain?.replace('.myshopify.com', '')}/graphql`,
         origin: domain
       });
       shopifyLink = new HttpLink({
@@ -132,7 +132,7 @@ export default function App(props) {
     }
 
     return (
-      <BrowserRouter>
+      <BrowserRouter basename={`/${domain?.replace('.myshopify.com', '')}`} >
         <AppProvider i18n={enTranslations} theme={{}} linkComponent={AdapterLink}>
           <ApolloProvider client={client}>
             <Switch>

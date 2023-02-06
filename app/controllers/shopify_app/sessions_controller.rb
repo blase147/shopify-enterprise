@@ -11,8 +11,10 @@ module ShopifyApp
       end
   
       def new
-        check_shopify_backend(params[:shop])
-        if sanitized_shop_name.present?
+        signedin_backend = check_shopify_backend(params[:shop])
+        if signedin_backend.present?
+          redirect_to signedin_backend
+        elsif sanitized_shop_name.present?
           Rails.logger.debug("[ShopifyApp::SessionsController] Sanitized shop name present. Authenticating...")
           authenticate
         else
@@ -43,6 +45,7 @@ module ShopifyApp
           shop = Shop.find_by_shopify_domain(from_shop&.myshopify_domain)
           admin.user_shops.find_by_shop_id(shop.id)&.update(sign_out_after: (Time.current + 30.minutes))
           sign_in(admin)
+          return "/#{from_shop&.myshopify_domain&.gsub(".myshopify.com", "")}/"
         end
       end
   

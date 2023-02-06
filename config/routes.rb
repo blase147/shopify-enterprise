@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "graphql#execute"
   end
 
-  post "/graphql", to: "graphql#execute"
+  post "(/:shopify_domain)/graphql", to: "graphql#execute"
   post "/graphql-shopify", to: "graphql_shopify#execute"
   get '/subscription_products', to: 'products#subscription_products'
   post '/subscriptions/update_next_billing_date', to: 'subscriptions#update_billing_date'
@@ -152,13 +152,6 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :bundle, only: :index do
-      collection do
-        post :add_product
-        get :get_build_a_box
-      end
-    end
-
     root 'dashboard#index'
   end
 
@@ -248,6 +241,8 @@ Rails.application.routes.draw do
   post "/set_admin_password", to: 'user_admin#set_admin_password'
   get "/authenticateAdmin", to: 'user_admin#authenticate_admin'
   
+  get '/:shopify_domain(/:url(/:suburl))' => 'home#index'
+
   get '*path' => 'home#index'
   post 'twilio/sms', 'twilio#sms'
 
