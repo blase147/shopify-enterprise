@@ -241,7 +241,11 @@ Rails.application.routes.draw do
   post "/set_admin_password", to: 'user_admin#set_admin_password'
   get "/authenticateAdmin", to: 'user_admin#authenticate_admin'
   
+  get "fetchStripeCustomers/:shopify_domain/", to: "stripe_contracts#fetch_stripe_customers"
+  post "/createStripeContract", to: "stripe_contracts#create_stripe_contract"
+  
   get '/:shopify_domain(/:url(/:suburl))' => 'home#index'
+
 
   get '*path' => 'home#index'
   post 'twilio/sms', 'twilio#sms'
