@@ -845,7 +845,7 @@ const FixedPlan = () => {
                               }
                             />
                             <TextField
-                              disabled={plan.adjustmentType == ''}
+                              disabled={false}
                               type="number"
                               label="Adjustment value"
                               value={plan.adjustmentValue}
@@ -980,7 +980,7 @@ const FixedPlan = () => {
                               }
                             />
                             <TextField
-                              disabled={plan.trialIntervalCount == ''}
+                              disabled={false}
                               type="number"
                               label="Adjustment value"
                               value={plan.trialAdjustmentValue}
