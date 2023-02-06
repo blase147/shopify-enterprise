@@ -43,6 +43,7 @@ const Nav = (props) => {
     setLoyality(true)
   }, [])
 
+  const urlDomain = `/${props?.domain?.replace('.myshopify.com', '')}`;
 
   const setNavigation = (accessTabs) => {
     let navigation = [];
@@ -59,7 +60,7 @@ const Nav = (props) => {
               label: 'Dashboard',
               url: '/',
               onClick: () => setActiveTab("dash"),
-              selected: window.location.pathname == "/" ? true : false,
+              selected: window.location.pathname == `${urlDomain}/` ? true : false,
             }
           ) : {},
           accessTabs?.manage_plan_access ? (
@@ -68,7 +69,7 @@ const Nav = (props) => {
               icon: () => <MangeIcon />,
               url: '/subscription-plans',
               onClick: () => setActiveTab("mplan"),
-              selected: window.location.pathname == "/subscription-plans" ? true : false,
+              selected: window.location.pathname == `${urlDomain}/subscription-plans` ? true : false,
             }
           ) : {},
           {
@@ -90,7 +91,7 @@ const Nav = (props) => {
             label: 'Try-before-you-buy',
             url: '/',
             onClick: () => setActiveTab("dash"),
-            selected: window.location.pathname == "/" ? true : false,
+            selected: window.location.pathname == `${urlDomain}/` ? true : false,
           }
         ]
       })
@@ -110,7 +111,7 @@ const Nav = (props) => {
               icon: () => <SubscriptionIcon />,
               url: '/customers',
               onClick: () => setActiveTab("suborder"),
-              selected: window.location.pathname == "/customers" ? true : false,
+              selected: window.location.pathname == `${urlDomain}/customers` ? true : false,
             }
           ) : {},
           accessTabs?.analytics_access ? (
@@ -119,7 +120,7 @@ const Nav = (props) => {
               icon: AnalyticsMajor,
               url: '/analytics',
               onClick: () => setActiveTab("analytics"),
-              selected: window.location.pathname == "/analytics" ? true : false,
+              selected: window.location.pathname == `${urlDomain}/analytics` ? true : false,
             }
           ) : {},
           accessTabs?.customer_modal ? (
@@ -128,7 +129,7 @@ const Nav = (props) => {
               icon: CustomersMajor,
               url: '/customer-model',
               onClick: () => setActiveTab("customerModal"),
-              selected: window.location.pathname == "/customer-model" ? true : false,
+              selected: window.location.pathname == `${urlDomain}/customer-model` ? true : false,
             }
           ) : {},
           {
@@ -140,14 +141,14 @@ const Nav = (props) => {
               {
                 url: "/waysToEarn",
                 disabled: false,
-                selected: window.location.pathname == "/waysToEarn" ? true : false,
+                selected: window.location.pathname == `${urlDomain}/waysToEarn` ? true : false,
                 label: "Ways to Earn"
               },
               {
                 url: "/rewardsPage",
                 disabled: false,
                 label: "Rewards Page",
-                selected: window.location.pathname == "//rewardsPage" ? true : false,
+                selected: window.location.pathname == `${urlDomain}/rewardsPage` ? true : false,
               }
             ]
           }
@@ -168,7 +169,7 @@ const Nav = (props) => {
               icon: InstallMinor,
               url: '/installation',
               onClick: () => setActiveTab("inst"),
-              selected: window.location.pathname == "/installation" ? true : false,
+              selected: window.location.pathname == `${urlDomain}/installation` ? true : false,
             }
           ) : {},
           accessTabs?.tiazen_access ? (
@@ -177,7 +178,7 @@ const Nav = (props) => {
               icon: HintMajor,
               url: '/tiazen',
               onClick: () => setActiveTab("tiazen"),
-              selected: window.location.pathname == "/tiazen" ? true : false,
+              selected: window.location.pathname == `${urlDomain}/tiazen` ? true : false,
             }
           ) : {},
           accessTabs?.toolbox_access ? (
@@ -186,7 +187,7 @@ const Nav = (props) => {
               icon: () => <ToolboxIcon />,
               url: '/toolbox',
               onClick: () => setActiveTab("tool"),
-              selected: window.location.pathname == "/toolbox" ? true : false,
+              selected: window.location.pathname == `${urlDomain}/toolbox` ? true : false,
             }
           ) : {},
           accessTabs?.settings_access ? (
@@ -195,7 +196,7 @@ const Nav = (props) => {
               icon: SettingsMinor,
               url: '/app-settings',
               onClick: () => setActiveTab("settings"),
-              selected: window.location.pathname == "/app-settings" ? true : false,
+              selected: window.location.pathname == `${urlDomain}/app-settings` ? true : false,
             }
           ) : {}
         ]
@@ -247,7 +248,7 @@ const Nav = (props) => {
         {
           localStorage.getItem("currentuser") &&
           <>
-            <a href={`${window?.location?.origin}/users/sign_out`} className="adminLogoutLink" data-method="delete">Log Out</a>
+            <a href={`${window?.location?.origin} / users / sign_out`} className="adminLogoutLink" data-method="delete">Log Out</a>
           </>
         }
       </div>

@@ -27,7 +27,11 @@ class HomeController < ApplicationController
       @shopify_domain ||= ShopifyApp::Utils.sanitize_shop_domain(params[:shop])
       redirect_to(ShopifyApp.configuration.login_url) unless @shopify_domain
     else
-      if current_user.present?
+      if params[:shopify_domain].present?
+        shop = current_user.user_shops.joins(:shop).where("shops.shopify_domain = '#{params[:shopify_domain]}.myshopify.com' OR shops.shopify_domain = '#{params[:shopify_domain]}'")&.first&.shop
+        current_shop = shop
+        @shopify_domain = shop&.shopify_domain
+      elsif current_user.present?
         from_shop = ShopifyAPI::Shop.current rescue nil
         if from_shop.present?
           @shopify_domain = from_shop.myshopify_domain

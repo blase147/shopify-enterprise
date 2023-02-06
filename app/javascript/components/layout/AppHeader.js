@@ -52,24 +52,9 @@ const AppHeader = (props) => {
         })
             .then((response) => response.json())
             .then((data) => {
-                window.location.replace(`/?shopify_domain=${domain}`)
+                window.location.replace(`/${domain?.replace('.myshopify.com', '')}`)
             });
     }
-
-    useEffect(() => {
-        fetch(`/changeShop`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                shop_domain: selectedShop
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-            });
-    }, [selectedShop])
 
     const handleChange = useCallback((newValue) => setValue(newValue), []);
     return (
