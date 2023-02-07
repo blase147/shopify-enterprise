@@ -1,5 +1,5 @@
 class CustomerModal < ApplicationRecord
-    validates :shopify_id, uniqueness: true
+    validates :shopify_id, uniqueness: true, allow_nil: true
     validates :email, uniqueness: true
     belongs_to :shop
     has_one :auth_token, dependent: :destroy

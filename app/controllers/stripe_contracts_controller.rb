@@ -20,7 +20,7 @@ class StripeContractsController < ActionController::Base
     end
     customer = CustomerModal.find_by("lower(email) = '#{params[:data]["email"].downcase}'")
     unless customer.present?
-      customer = CustomerModal.create(email: params[:data]["email"].downcase,shop_id: current_shop.id )
+      customer = CustomerModal.create(email: params[:data]["email"].downcase, shop_id: current_shop.id )
     end
     auth_token = SecureRandom.urlsafe_base64(nil, false)
     
@@ -32,6 +32,8 @@ class StripeContractsController < ActionController::Base
       stripe_contract.update(stripe_contract_pdf_id: stipe_contract_pdf.id)
     end
 
+    #send email to user
+    sent = SendEmailService.new.send_stripe_contract_email(customer, auth_token, current_shop.id)
     render json:{status: :ok, response: "Successfuly Created"}
   end
 
