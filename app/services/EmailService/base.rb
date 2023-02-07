@@ -2,6 +2,8 @@ class EmailService::Base < ApplicationService
 
   def subject(object)
    case @email_notification.name
+   when "Stripe Contract"
+    "Send email with app_proxy link"
     when "Set Admin Password"
       "Set your password"
     when "Skip Meal"
@@ -64,6 +66,12 @@ class EmailService::Base < ApplicationService
     shop_email = @shopify_shop.email
     myshopify_url = "https://"+@shopify_shop.myshopify_domain
    case @email_notification.name
+   when "Stripe Contract"
+    {
+      storename: storename,
+      url: object[:url],
+      customer_first_name: object[:customer].first_name&.humanize,
+    }
     when "Fill PreOrder"
       {
         storename: storename,

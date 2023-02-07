@@ -7,6 +7,7 @@ module Queries
       @setting = current_shop.setting || current_shop.create_setting
       if @setting.email_notifications.blank?
         email_notifications = [
+          {name: "Stripe Contract",description: 'Send email with app_proxy link', status: true, slug: "customer" },
           {name: "Skip Meal",description: 'Sent to customer when a meal is skipped', status: true, slug: "customer" },
           {name: "Un-Skip Meal",description: 'Sent to customer when a meal is un-skipped', status: true, slug: "customer" },
           {name: "Paused Subscription",description: 'Sent to customer when subscription is paused', status: true, slug: "customer" },
