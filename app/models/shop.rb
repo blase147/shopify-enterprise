@@ -6,6 +6,7 @@ class Shop < ActiveRecord::Base
   def api_version
     ShopifyApp.configuration.api_version
   end
+  has_many :stripe_contracts, dependent: :destroy
   has_one :referral, dependent: :destroy
   has_many :user_shop, dependent: :destroy
   has_many :analytics_data, dependent: :destroy

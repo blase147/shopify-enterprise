@@ -4,6 +4,8 @@ class CustomerModal < ApplicationRecord
     belongs_to :shop
     has_one :auth_token, dependent: :destroy
     has_many :reward_codes, dependent: :destroy
+    has_many :stripe_contracts, dependent: :destroy
+    has_one :stripe_auth_token, dependent: :destroy
     
     def name
         self.first_name.to_s + " " + self.last_name.to_s

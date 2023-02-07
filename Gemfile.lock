@@ -1676,7 +1676,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    stripe (5.42.0)
+    stripe (8.2.0)
     temple (0.8.2)
     thor (1.0.1)
     thread_safe (0.3.6)
@@ -1768,7 +1768,7 @@ DEPENDENCIES
   simple_form
   slim
   sprockets
-  stripe (~> 5.41)
+  stripe (~> 8.2.0)
   turbolinks (~> 5)
   twilio-ruby (~> 5.52.0)
   tzinfo-data
@@ -1778,4 +1778,4 @@ DEPENDENCIES
   whenever
 
 BUNDLED WITH
-   2.3.26
+   2.4.6

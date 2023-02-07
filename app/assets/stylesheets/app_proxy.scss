@@ -2993,3 +2993,26 @@ span.cancel-text {
     -webkit-appearance: none;
     margin: 0;
 }
+
+// .stripe_contracts_main_div .stripe_contract_table {
+//     width: 100%;
+//     margin: auto;
+// }
+
+.stripe_contracts_main_div .stripe_contract_pdf {
+    height: 400px;
+}
+
+.stripe_contracts_main_div .label_div .label {
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.stripe_contracts_main_div button.checkout_button {
+    padding: 5px 20px;
+    border: none;
+    background: black;
+    border-radius: 5px;
+    color: #fff;
+    margin-top: 15px;
+}
