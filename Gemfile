@@ -105,7 +105,7 @@ gem "marcel"
 gem "sidekiq-unique-jobs", "~> 7.1"
 gem 'httparty'
 
-gem "stripe", "~> 5.41"
+gem "stripe", "~> 8.2.0"
 
 gem 'sprockets'
 

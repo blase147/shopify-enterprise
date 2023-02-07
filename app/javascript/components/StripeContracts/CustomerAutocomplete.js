@@ -1,12 +1,7 @@
 import React, { useEffect } from 'react';
 import { useState, useCallback } from "react";
-import { Autocomplete, Icon } from "@shopify/polaris";
+import { Autocomplete, Icon, TextContainer } from "@shopify/polaris";
 import { SearchMinor } from "@shopify/polaris-icons";
-
-
-
-
-
 
 function CustomerAutocomplete({ fetchCustomers, deselectedOptions, setSelectedCustomers, setFormField, formField }) {
 
@@ -52,12 +47,22 @@ function CustomerAutocomplete({ fetchCustomers, deselectedOptions, setSelectedCu
         />
     );
 
+    const emptyState = (
+        <React.Fragment>
+            <Icon source={SearchMinor} />
+            <div style={{ textAlign: 'center' }}>
+                <TextContainer>Could not find any results</TextContainer>
+            </div>
+        </React.Fragment>
+    );
+
     return (
         <div>
             <Autocomplete
                 options={deselectedOptions}
                 selected={selectedOptions}
                 onSelect={updateSelection}
+                emptyState={emptyState}
                 textField={textField}
             />
         </div>

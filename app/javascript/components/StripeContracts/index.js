@@ -14,15 +14,15 @@ import {
 } from '@shopify/polaris';
 import "./style.css";
 import CustomerAutocomplete from './CustomerAutocomplete';
-import SellingPlans from './SellingPlans';
 import { NoteMinor } from '@shopify/polaris-icons';
 import Papa from 'papaparse';
 import mixpanel from 'mixpanel-browser';
 import { DomainContext } from '../domain-context';
+import StripeProducts from './StripeProducts';
 
 const StripeContract = () => {
     const { domain } = useContext(DomainContext)
-    const initFormValues = { email: '', sellingPlan: '' }
+    const initFormValues = { email: null, stripe_product: null, stripe_product_name: null }
     const [formField, setFormField] = useState(initFormValues)
     const handleChange = (e) => {
         setFormField({ ...formField, [e.target.name]: e.target.value })
@@ -31,33 +31,48 @@ const StripeContract = () => {
     const toggleToastActive = useCallback(() => setToastActive((toastActive) => !toastActive), []);
     const [toastContent, setToastContent] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);
+    const [allFilled, setAllFilled] = useState(true);
     //Initialise Mixpanel
     mixpanel.init("467d5df251a711e7b0ae20d18c8fb2e1", { debug: true });
     const mixpanelId = localStorage.getItem("distinct_id_admin_chargezen");
 
     const submitForm = () => {
-        mixpanel.identify(mixpanelId);
-        mixpanel.track("Created Stripe Contract", { customer_id: selectedCustomers });
-        const formData = new FormData();
-        formData.append("formData", formField);
-        formData.append("shopify_domain", domain);
-        formData.append("file", selectedFile);
-        fetch('/createStripeContract', {
-            method: "POST",
-            body: formData
-        }).then(response => response.json())
-            .then((data) => {
-                setToastContent(data?.response)
-                if (!data?.error) {
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 3000)
-                }
-                setToastActive(true)
-            });
+        if (validateForm()) {
+            mixpanel.identify(mixpanelId);
+            mixpanel.track("Created Stripe Contract", { customer_id: selectedCustomers });
+            const formData = new FormData();
+            formData.append("formData", JSON.stringify(formField));
+            formData.append("shopify_domain", domain);
+            formData.append("file", selectedFile);
+            fetch('/createStripeContract', {
+                method: "POST",
+                body: formData
+            }).then(response => response.json())
+                .then((data) => {
+                    setToastContent(data?.response)
+                    if (!data?.error) {
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 3000)
+                    }
+                    setToastActive(true)
+                });
+        }
     }
 
-    const [selectedSellingPlan, setSelectedSellingPlan] = useState('');
+    const validateForm = () => {
+        // validate form
+        if (formField?.email, formField?.stripe_product, selectedFile) {
+            setAllFilled(true);
+            return true;
+        }
+        else {
+            setAllFilled(false);
+            return false;
+        }
+    }
+
+    const [selectedStripeProduct, setSelectedStripeProduct] = useState('');
     const [selectedCustomers, setSelectedCustomers] = useState();
 
     const [deselectedOptions, setDeselectedOptions] = useState([]);
@@ -126,6 +141,15 @@ const StripeContract = () => {
                 }
                 <Page>
                     <Form>
+                        {
+                            !allFilled && (
+                                <FormLayout>
+                                    <div className='compulsory_message'>
+                                        All fields are compulsory
+                                    </div>
+                                </FormLayout>
+                            )
+                        }
                         <FormLayout>
                             <FormLayout.Group>
                                 <label>
@@ -145,14 +169,16 @@ const StripeContract = () => {
                             <FormLayout.Group>
                                 <label>
                                     Select or upload file: {"\n"}
-                                    <input type="file" className="form-control" name="file" onChange={(e) => UploadFile(e)} />
+                                    <input type="file" className="form-control" name="file" onChange={(e) => UploadFile(e)}
+                                        accept="application/pdf,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                    />
                                 </label>
                             </FormLayout.Group>
                         </FormLayout>
                         <FormLayout>
                             <FormLayout.Group>
                                 <label>
-                                    <SellingPlans setSelectedSellingPlan={setSelectedSellingPlan} selectedSellingPlan={selectedSellingPlan} />
+                                    <StripeProducts setSelectedStripeProduct={setSelectedStripeProduct} selectedStripeProduct={selectedStripeProduct} setFormField={setFormField} formField={formField} />
                                 </label>
                             </FormLayout.Group>
                         </FormLayout>

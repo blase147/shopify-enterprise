@@ -15,6 +15,7 @@ import WeeklyMealsList from '../weeklyMeals/index';
 import WeeklyMenuList from '../weeklyMenu/index';
 import WeeklyMenu from '../weeklyMenu/weeklyMenuForm';
 import CustomerMigration from '../CustomerMigration';
+import StripeContracts from '../StripeContracts';
 
 const Index = () => {
 
@@ -74,6 +75,12 @@ const Index = () => {
         img: EmailImage,
         desc: "Manage upsell settings and customization for you and your customers."
       },
+      {
+        key: "stripeContract",
+        title: "Stripe Contract",
+        img: EmailImage,
+        desc: "Create Stripe contracts for your customers."
+      }
       // {
       //     key: "",
       //     title: "Products",
@@ -140,7 +147,13 @@ const Index = () => {
                               {
                                 <CustomerMigration handleBack={handleBackSetting} handleForm={handleEditPage} />
                               }
-                            </> : ''
+                            </>
+                            : selectedSetting === 'stripeContract' ?
+                              <>
+                                {
+                                  <StripeContracts handleBack={handleBackSetting} handleForm={handleEditPage} />
+                                }
+                              </> : ''
                 }
               </Layout.Section>
             </Layout>

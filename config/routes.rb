@@ -153,6 +153,8 @@ Rails.application.routes.draw do
     end
 
     root 'dashboard#index'
+    get "/contract/:token", to: "stripe_contracts#index"
+    post "/stripeContractCheckout", to: "stripe_contracts#stripe_checkout"
   end
 
   resources :script_tags do
@@ -241,7 +243,9 @@ Rails.application.routes.draw do
   post "/set_admin_password", to: 'user_admin#set_admin_password'
   get "/authenticateAdmin", to: 'user_admin#authenticate_admin'
   
-  get "fetchStripeCustomers/:shopify_domain/", to: "stripe_contracts#fetch_stripe_customers"
+  # Stripe Contracts
+  get "/fetchStripeCustomers/:shopify_domain/", to: "stripe_contracts#fetch_stripe_customers"
+  get "/getStripeProducts", to: "stripe_contracts#get_stripe_products"
   post "/createStripeContract", to: "stripe_contracts#create_stripe_contract"
   
   get '/:shopify_domain(/:url(/:suburl))' => 'home#index'
