@@ -47,6 +47,7 @@ import Referrals from './Referrals';
 import AppLayout from './layout/Layout';
 import StripeContract from './StripeContracts';
 import { DomainContext } from './domain-context';
+import StripeContractsList from './StripeContracts/StripeContractsList';
 
 
 
@@ -140,7 +141,8 @@ export default function App(props) {
             <ApolloProvider client={client}>
               <Switch>
                 <AppLayout typePage="createCustomer" tabIndex="2" domain={props?.domain}>
-                  <Route exact path="/stripeContracts" component={StripeContract} />
+                  <Route exact path="/stripeContractsList" component={StripeContractsList} />
+                  <Route exact path="/createStripeContract" component={StripeContract} />
                   <Route exact path="/referrals" component={Referrals} />
                   <Route exact path="/waysToEarn" component={WaysToEarnPoint} />
                   <Route exact path="/notifications" component={Notifications} />

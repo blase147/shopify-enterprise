@@ -15,7 +15,7 @@ import WeeklyMealsList from '../weeklyMeals/index';
 import WeeklyMenuList from '../weeklyMenu/index';
 import WeeklyMenu from '../weeklyMenu/weeklyMenuForm';
 import CustomerMigration from '../CustomerMigration';
-import StripeContracts from '../StripeContracts';
+import StripeContractsList from '../StripeContracts/StripeContractsList';
 
 const Index = () => {
 
@@ -151,7 +151,7 @@ const Index = () => {
                             : selectedSetting === 'stripeContract' ?
                               <>
                                 {
-                                  <StripeContracts handleBack={handleBackSetting} handleForm={handleEditPage} />
+                                  <StripeContractsList handleBack={handleBackSetting} handleForm={handleEditPage} />
                                 }
                               </> : ''
                 }
