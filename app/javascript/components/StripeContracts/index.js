@@ -19,14 +19,16 @@ import Papa from 'papaparse';
 import mixpanel from 'mixpanel-browser';
 import { DomainContext } from '../domain-context';
 import StripeProducts from './StripeProducts';
+import BankDetail from './BankDetail';
 
 const StripeContract = () => {
     const { domain } = useContext(DomainContext)
-    const initFormValues = { email: null, stripe_product: null, stripe_product_name: null }
+    const initFormValues = { email: null, stripe_product: null, stripe_product_name: null, phone: '', city: '', address1: '', zip_code: '', country: '', state: '', bank_detail: '' }
     const [formField, setFormField] = useState(initFormValues)
     const handleChange = (e) => {
         setFormField({ ...formField, [e.target.name]: e.target.value })
     }
+
     const [toastActive, setToastActive] = useState(false);
     const toggleToastActive = useCallback(() => setToastActive((toastActive) => !toastActive), []);
     const [toastContent, setToastContent] = useState("");
@@ -62,7 +64,16 @@ const StripeContract = () => {
 
     const validateForm = () => {
         // validate form
-        if (formField?.email, formField?.stripe_product, selectedFile) {
+        if (formField?.email,
+            formField?.stripe_product,
+            formField?.phone,
+            formField?.address1,
+            formField?.state,
+            formField?.country,
+            formField?.city,
+            formField?.bank_detail,
+            selectedFile
+        ) {
             setAllFilled(true);
             return true;
         }
@@ -145,7 +156,7 @@ const StripeContract = () => {
                             !allFilled && (
                                 <FormLayout>
                                     <div className='compulsory_message'>
-                                        All fields are compulsory
+                                        Please fill all compulsory fields
                                     </div>
                                 </FormLayout>
                             )
@@ -160,15 +171,70 @@ const StripeContract = () => {
                         <FormLayout>
                             <FormLayout.Group>
                                 <label>
-                                    Email: {"\n"}
+                                    Email<span className='compulsary_mark'>*</span>: {"\n"}
                                     <input type="text" className="form-control" onChange={(e) => handleChange(e)} name="email" value={formField?.email} />
+                                </label>
+                            </FormLayout.Group>
+                        </FormLayout>
+
+                        {/* Optional fields */}
+                        <FormLayout>
+                            <FormLayout.Group>
+                                <label>
+                                    Customer Phone<span className='compulsary_mark'>*</span>: {"\n"}
+                                    <input type="tel" className="form-control" onChange={(e) => handleChange(e)} name="phone" value={formField?.phone} />
                                 </label>
                             </FormLayout.Group>
                         </FormLayout>
                         <FormLayout>
                             <FormLayout.Group>
                                 <label>
-                                    Select or upload file: {"\n"}
+                                    Country<span className='compulsary_mark'>*</span>: {"\n"}
+                                    <input type="text" className="form-control" onChange={(e) => handleChange(e)} name="country" value={formField?.country} />
+                                </label>
+                                <label>
+                                    State<span className='compulsary_mark'>*</span>: {"\n"}
+                                    <input type="text" className="form-control" onChange={(e) => handleChange(e)} name="state" value={formField?.state} />
+                                </label>
+                            </FormLayout.Group>
+                        </FormLayout>
+                        <FormLayout>
+                            <FormLayout.Group>
+                                <label>
+                                    City<span className='compulsary_mark'>*</span>: {"\n"}
+                                    <input type="text" className="form-control" onChange={(e) => handleChange(e)} name="city" value={formField?.city} />
+                                </label>
+                                <label>
+                                    Postal Code<span className='compulsary_mark'>*</span>: {"\n"}
+                                    <input type="number" className="form-control" onChange={(e) => handleChange(e)} name="zip_code" value={formField?.zip_code} />
+                                </label>
+
+                            </FormLayout.Group>
+                        </FormLayout>
+                        <FormLayout>
+                            <FormLayout.Group>
+                                <label>
+                                    Address<span className='compulsary_mark'>*</span>: {"\n"}
+                                    <input type="text" className="form-control" onChange={(e) => handleChange(e)} name="address1" value={formField?.address1} />
+                                </label>
+                            </FormLayout.Group>
+                        </FormLayout>
+
+                        <FormLayout>
+                            <FormLayout.Group>
+                                <label>
+                                    Bank Details<span className='compulsary_mark'>*</span>: {"\n"}
+                                    <BankDetail setFormField={setFormField} formField={formField} />
+                                </label>
+                            </FormLayout.Group>
+                        </FormLayout>
+
+
+
+                        <FormLayout>
+                            <FormLayout.Group>
+                                <label>
+                                    Select or upload file<span className='compulsary_mark'>*</span>: {"\n"}
                                     <input type="file" className="form-control" name="file" onChange={(e) => UploadFile(e)}
                                         accept="application/pdf,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                                     />

@@ -30,7 +30,7 @@ const emailNotificationsDetails = (props) => {
   const emailEditorRef = useRef(null);
   const [submitForm, setSubmitForm] = useState(false);
 
-  const exportHtml = () => {
+  const exportHtml = async () => {
     emailEditorRef.current.editor.exportHtml((data) => {
       const { design, html } = data;
       setFieldValue(
@@ -41,9 +41,8 @@ const emailNotificationsDetails = (props) => {
         `emailNotifications[${index}].designJson`,
         JSON.stringify(design)
       );
-      console.log('exportHtml', html);
+      setSubmitForm(true)
     });
-    setSubmitForm(true)
   };
   const onLoad = () => {
     // editor instance is created
