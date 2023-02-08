@@ -7,16 +7,18 @@ class SmsService::MessageGenerateService
     @custom_data = custom_data
   end
 
-  def content(title,otp=nil)
+  def content(title,otp=nil, stripe_app_proxy_url=nil)
     message = @shop.smarty_messages.where(title: title).where.not(body: nil).order(updated_at: :desc).first
     message.present? ? variables_mapping(message.body,otp) : 'Thanks for your response, we will get back to you.'
   end
 
-  def variables_mapping(message,otp=nil)
+  def variables_mapping(message,otp=nil, stripe_app_proxy_url = nil)
     @shop.smarty_variables.each do |variable|
       case variable.name
       when 'shop_name'
         message = message.gsub("{{#{variable.name}}}", @shopify_shop.name) if @shopify_shop.present?
+      when 'stripe_app_proxy_url'
+        message = message.gsub("{{#{variable.name}}}", "#{stripe_app_proxy_url}") if @shopify_shop.present?
       when 'otp'
         message = message.gsub("{{#{variable.name}}}", "#{otp}") if @shopify_shop.present?
       when 'subscription_title'

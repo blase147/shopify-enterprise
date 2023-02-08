@@ -1,11 +1,14 @@
 import React, { useContext, useEffect } from 'react';
 import { useState, useCallback } from "react";
-import { Page, Card, DataTable, Spinner } from "@shopify/polaris";
+import { Page, Card, DataTable, Spinner, Icon } from "@shopify/polaris";
 import { SearchMinor } from "@shopify/polaris-icons";
 
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { Pagination } from '@shopify/polaris';
 import { DomainContext } from '../domain-context';
+import {
+    MobileBackArrowMajor,
+} from '@shopify/polaris-icons';
 
 
 

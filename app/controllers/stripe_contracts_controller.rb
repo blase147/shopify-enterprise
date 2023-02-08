@@ -70,6 +70,10 @@ class StripeContractsController < ActionController::Base
 
     #send email to user
     sent = SendEmailService.new.send_stripe_contract_email(customer, auth_token, current_shop.id)
+    #send message to user
+    url = "https://#{current_shop&.shopify_domain}/a/chargezen/contract/#{auth_token}"
+    sms_app_proxy_link(customer,url, current_shop.id)
+
     render json:{status: :ok, response: "Successfuly Created"}
   end
 
@@ -120,6 +124,14 @@ class StripeContractsController < ActionController::Base
   #to initialize stripe
   def init_stripe
     Stripe.api_key = current_shop&.stripe_api_key
+  end
+
+  def sms_app_proxy_link(customer,url, shop_id)
+    shop = Shop.find(shop_id)
+    message_service = SmsService::MessageGenerateService.new(shop, customer)
+    phone = customer.phone
+    message = message_service.content("Stripe Contract",nil,url)
+    sent = TwilioServices::SendSms.call(from: shop.phone, to: phone, message: message) rescue nil
   end
 
 end
