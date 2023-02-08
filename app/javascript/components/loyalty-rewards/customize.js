@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
   Card,
   Select,
@@ -24,8 +24,10 @@ import Icon8 from "../../images/icons/icon8.png";
 import { DeleteMajor } from '@shopify/polaris-icons';
 import UserImage from "../../images/account.svg";
 import "./loyalty.css";
+import { DomainContext } from '../domain-context';
 
 const Customize = () => {
+  const { domain } = useContext(DomainContext);
   const [active, setActive] = useState(false);
   const [statusActive, setStatusActive] = useState(false);
   const toggleActive = useCallback(() => setActive((active) => !active), []);
@@ -139,7 +141,7 @@ const Customize = () => {
   console.log("pointsToReferred", pointsToReferred);
   const getReferCampaign = () => {
     setShowReferCampaign(true);
-    fetch('/loyalty_campaign?name=refer_a_friend', {
+    fetch(`/loyalty_campaign?name=refer_a_friend&shopify_domain=${domain}`, {
       method: 'GET'
     })
       .then((response) => response.json())
@@ -182,7 +184,7 @@ const Customize = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: 'refer_a_friend', referrer_reward: referrerReward, referrer_points: referrerPoints, referrer_fixed_points: referrerFixedPoints, points_to_referrer: pointsToReferrer, selected_reward: selectedReward, selected_coupon: selectedCoupon, apply_coupon: applyCoupon,
+        shopify_domain: domain, name: 'refer_a_friend', referrer_reward: referrerReward, referrer_points: referrerPoints, referrer_fixed_points: referrerFixedPoints, points_to_referrer: pointsToReferrer, selected_reward: selectedReward, selected_coupon: selectedCoupon, apply_coupon: applyCoupon,
         campaign_name: campaignName, reward_text: rewardText, description: description, icon: icon, call_to_action_text: callToActionText, landing_url: landingURL, landing_url_query_params: landingURLQueryParams,
         default_twitter_msg: defaultTwitterMsg, header_for_fb_msg: headerForFbMsg, description_for_fb_msg: descriptionForFbMsg, default_sms_msg: defaultSmsMsg, reward_referrer: rewardReferrer, coupon_referrer_get: couponReferrerGet, points_referrer_earns: pointsReferrerEarns,
         percent_points_referrer: percentPointsReferrer, map_products_points: mapProductsPoints, points_to_referred: pointsToReferred
@@ -209,7 +211,7 @@ const Customize = () => {
 
   const getAccountCampaign = () => {
     setShowAccountCampaign(true);
-    fetch('/loyalty_campaign?name=create_account', {
+    fetch(`/loyalty_campaign?name=create_account&shopify_domain=${domain}`, {
       method: 'GET'
     })
       .then((response) => response.json())
@@ -235,7 +237,7 @@ const Customize = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name: 'create_account', selected_reward: selectedReward, points_to_referrer: pointsToReferrer, campaign_name: campaignName, reward_text: rewardText, description_text: descText, icon: icon, completed_msg: completedMsg, max_times_completion: maxTimesCompletion })
+      body: JSON.stringify({ name: 'create_account', selected_reward: selectedReward, points_to_referrer: pointsToReferrer, campaign_name: campaignName, reward_text: rewardText, description_text: descText, icon: icon, completed_msg: completedMsg, max_times_completion: maxTimesCompletion, shopify_domain: domain })
     })
       .then((response) => response.json())
       .then((data) => {
@@ -254,7 +256,7 @@ const Customize = () => {
 
   const getBirthdayCampaign = () => {
     setShowBirthdayCampaign(true);
-    fetch('/loyalty_campaign?name=happy_birthday', {
+    fetch(`/loyalty_campaign?name=happy_birthday&shopify_domain=${domain}`, {
       method: 'GET'
     })
       .then((response) => response.json())
@@ -282,7 +284,7 @@ const Customize = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name: 'happy_birthday', selected_reward: selectedReward, points_to_referrer: pointsToReferrer, campaign_name: campaignName, reward_text: rewardText, description_text: descText, default_sms_msg: defaultSmsMsg, description: description, apply_coupon: applyCoupon, icon: icon, call_to_action_text: callToActionText })
+      body: JSON.stringify({ name: 'happy_birthday', selected_reward: selectedReward, points_to_referrer: pointsToReferrer, campaign_name: campaignName, reward_text: rewardText, description_text: descText, default_sms_msg: defaultSmsMsg, description: description, apply_coupon: applyCoupon, icon: icon, call_to_action_text: callToActionText, shopify_domain: domain })
     })
       .then((response) => response.json())
       .then((data) => {
@@ -315,7 +317,7 @@ const Customize = () => {
 
   const getPurchaseCampaign = () => {
     setShowPurchaseCampaign(true);
-    fetch('/loyalty_campaign?name=make_a_purchase', {
+    fetch(`/loyalty_campaign?name=make_a_purchase&shopify_domain=${domain}`, {
       method: 'GET'
     })
       .then((response) => response.json())
@@ -351,7 +353,7 @@ const Customize = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: 'make_a_purchase', customer_fixed_points: customerFixedPoints, points_to_referrer: pointsToReferrer, campaign_name: campaignName, reward_text: rewardText, description_text: descText, required_product: requiredProduct, required_product_reward: requireProdReward,
+        shopify_domain: domain, name: 'make_a_purchase', customer_fixed_points: customerFixedPoints, points_to_referrer: pointsToReferrer, campaign_name: campaignName, reward_text: rewardText, description_text: descText, required_product: requiredProduct, required_product_reward: requireProdReward,
         customer_tag: customerTag, customer_tag_list: customerTagList, order_tag: orderTag, order_tag_list: orderTagList, limit: limit, orders: orders, max_times_completion: maxTimesCompletion, max_times_per_user: maxTimesPerUser, time_between: timeBetween, countdown_message: countdownMessage
       })
     })
@@ -390,7 +392,7 @@ const Customize = () => {
   const getCustomizeCoupon = (value) => {
     setCouponValue(value);
     setShowCustomizeCoupon(true);
-    fetch('/loyalty_coupon?name=' + value + '-off', {
+    fetch('/loyalty_coupon?name=' + value + '-off&shopify_domain=' + domain, {
       method: 'GET'
     })
       .then((response) => response.json())
@@ -426,7 +428,7 @@ const Customize = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: couponValue + '-off', reward_customers: rewardCustomers, coupon_type: couponType, discount_amount: discountAmount, coupon_name: couponName, description: description, coupon_points: couponPoints,
+        shopify_domain: domain, name: couponValue + '-off', reward_customers: rewardCustomers, coupon_type: couponType, discount_amount: discountAmount, coupon_name: couponName, description: description, coupon_points: couponPoints,
         coupon_text: couponText, apply_discount: applyDiscount, cart_amount: cartAmount, customer_list: customerList, apply_discount_per: applyDiscountPer, discount_code_usage: discountCodeUsage, coupon_code_expire: couponCodeExpire,
         coupon_restriction: couponRestriction, code_prefix: codePrefix, code_length: codeLength, success_msg: defaultSmsMsg, icon: icon, coupon_code_intro: couponCodeIntro
       })
@@ -441,7 +443,7 @@ const Customize = () => {
 
   // Loyalty Settings
   useEffect(() => {
-    fetch('/loyalty', {
+    fetch(`/loyalty?shopify_domain=${domain}`, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -456,7 +458,7 @@ const Customize = () => {
         }
       })
 
-    fetch('/loyalty_campaign/campaign_statuses', {
+    fetch(`/loyalty_campaign/campaign_statuses?shopify_domain=${domain}`, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -491,7 +493,7 @@ const Customize = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: programName.trim(), location: location.trim(), primary_theme_color: primaryThemeClr.trim(), secondary_theme_color: secondaryThemeClr.trim(), primary_text_color: primaryTextClr.trim(), secondary_text_color: secondaryTextClr.trim() })
+        body: JSON.stringify({ name: programName.trim(), location: location.trim(), primary_theme_color: primaryThemeClr.trim(), secondary_theme_color: secondaryThemeClr.trim(), primary_text_color: primaryTextClr.trim(), secondary_text_color: secondaryTextClr.trim(), shopify_domain: domain })
       })
         .then((response) => response.json())
         .then((data) => {
@@ -507,7 +509,7 @@ const Customize = () => {
 
   // Loyalty Points Settings
   const fetchEarnPointsSettings = () => {
-    fetch('/loyalty_rules', {
+    fetch(`/loyalty_rules?shopify_domain=${domain}`, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -532,7 +534,7 @@ const Customize = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ loyalty_id: loyaltyId, purchase: purchase, account: account, social_media_like: socialMediaLike, social_media_follow: socialMediaFollow, buy_upsell: upsell, signup_smarty_sms: smartySms, refer_friend: referFriend, signup_mailing_list: mailingList, custom_rule: customRule })
+      body: JSON.stringify({ loyalty_id: loyaltyId, purchase: purchase, account: account, social_media_like: socialMediaLike, social_media_follow: socialMediaFollow, buy_upsell: upsell, signup_smarty_sms: smartySms, refer_friend: referFriend, signup_mailing_list: mailingList, custom_rule: customRule, shopify_domain: domain })
     })
       .then((response) => response.json())
       .then((data) => {
@@ -545,7 +547,7 @@ const Customize = () => {
 
   // Loyalty Redeem Points Settings
   const fetchRedeemPointsSettings = () => {
-    fetch('/loyalty_redeem_points', {
+    fetch(`/loyalty_redeem_points?shopify_domain=${domain}`, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -565,7 +567,7 @@ const Customize = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ loyalty_id: loyaltyId, discount: discount, point: point, starting_date: startingDate, ending_date: endingDate })
+      body: JSON.stringify({ loyalty_id: loyaltyId, discount: discount, point: point, starting_date: startingDate, ending_date: endingDate, shopify_domain: domain })
     })
       .then((response) => response.json())
       .then((data) => {
@@ -573,14 +575,14 @@ const Customize = () => {
       })
   }
 
-  // Update Campaign Status
+  // Update Campaign Status 
   const updateCampaignStatus = (name, status) => {
     fetch('/loyalty_campaign/update_status', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name: name, status: !status })
+      body: JSON.stringify({ name: name, status: !status, shopify_domain: domain })
     })
       .then((response) => response.json())
       .then((data) => {

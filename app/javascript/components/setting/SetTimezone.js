@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useContext } from 'react';
 
 import {
     Card,
@@ -14,8 +14,9 @@ import {
 } from '@shopify/polaris';
 import { MobileBackArrowMajor } from '@shopify/polaris-icons';
 import { gql, useQuery } from '@apollo/client';
+import { DomainContext } from '../domain-context';
 const SetTimezone = ({ handleBack }) => {
-
+    const { domain } = useContext(DomainContext);
     const [timezones, setTimezones] = useState([]);
     const [selectTimezone, setSelectTimezone] = useState();
     const [toastActive, setToastActive] = useState(false);
@@ -52,7 +53,7 @@ const SetTimezone = ({ handleBack }) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ timezone: selectTimezone }),
+            body: JSON.stringify({ timezone: selectTimezone, shopify_domain: domain }),
         }).then((response) => response.json())
             .then(() => {
                 setToastActive(true)

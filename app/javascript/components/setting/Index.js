@@ -18,7 +18,7 @@ import {
 } from '@shopify/polaris';
 import { Formik } from 'formik';
 import { isEmpty } from 'lodash';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import AppLayout from '../layout/Layout';
@@ -56,6 +56,7 @@ import StripeSettings from './StripeSettings';
 import DeliveryOption from "./DeliveryOption";
 import LoadingScreen from '../LoadingScreen';
 import SetTimezone from './SetTimezone';
+import EmailEditor from 'react-email-editor';
 
 import "./settings.scss"
 import PlanBilling from '../PlanBilling';
@@ -576,6 +577,33 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
     }
   }, [selectedTitleTab]);
 
+  const submitForm = async () => {
+    try {
+      //to save message body when on emailnotification detail page.
+      await exportHtml();
+    } catch (e) {
+      console.log("Not saving email notification");
+    }
+    handleSubmit();
+  }
+
+  const emailEditorRef = useRef(null);
+
+  const exportHtml = async () => {
+    emailEditorRef.current.editor.exportHtml((data) => {
+      const { design, html } = data;
+      setFieldValue(
+        `emailNotifications[${index}].emailMessage`,
+        html
+      );
+      setFieldValue(
+        `emailNotifications[${index}].designJson`,
+        JSON.stringify(design)
+      );
+      setSubmitForm(true)
+    });
+  };
+
   return (
     <>
       <Frame>
@@ -679,7 +707,7 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                         alignContentFlush={true}
                         message="Unsaved changes"
                         saveAction={{
-                          onAction: () => handleSubmit(),
+                          onAction: () => submitForm(),
                           loading: isSubmitting,
                           disabled: false,
                         }}

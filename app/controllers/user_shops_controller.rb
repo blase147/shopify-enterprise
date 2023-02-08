@@ -3,7 +3,7 @@ class UserShopsController < ApplicationController
     before_action :verify_user
     def authorize_user_shop
         redirect_to "/users/sign_in" unless current_user.present?
-        shop_id = Shop.find_by_shopify_domain(params[:shop_domain]).id
+        shop_id = Shop.find_by_shopify_domain(params[:shopify_domain]).id
         user_shop = current_user.user_shops.find_by_shop_id(shop_id)
         settings = user_shop&.access_settings
         access_settings = { dashboard_access: user_shop.role == "staff" ? settings["dashboard_access"].present? ? settings["dashboard_access"] : false  : true,
@@ -30,7 +30,7 @@ class UserShopsController < ApplicationController
         end
         error=nil
         unless user&.errors&.messages.present?
-            user_shop = UserShop.find_or_initialize_by(user_id: user.id, shop_id: current_shop(params[:shop_domain]).id)
+            user_shop = UserShop.find_or_initialize_by(user_id: user.id, shop_id: current_shop(params[:shopify_domain]).id)
             user_shop.update( role: "staff")
             if user_shop.save
                 user_shop.update(
@@ -66,8 +66,8 @@ class UserShopsController < ApplicationController
     end
 
     def change_shop
-        session[:shop_domain]=params[:shop_domain]
-        Shop.find_by_shopify_domain(params[:shop_domain])&.connect
+        session[:shopify_domain]=params[:shopify_domain]
+        Shop.find_by_shopify_domain(params[:shopify_domain])&.connect
         render json:{status: :ok}
     end 
 

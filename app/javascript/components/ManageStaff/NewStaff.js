@@ -1,9 +1,11 @@
 import { Button, Card, FormLayout, Layout, Page, TextField } from '@shopify/polaris';
 import { method } from 'lodash';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { DomainContext } from '../domain-context';
 import AppLayout from '../layout/Layout';
 
 const NewStaff = ({ setFormErrors, setSaveSuccess, refetch, setAddStaff }) => {
+    const { domain } = useContext(DomainContext);
     const [checkedSettings, setCheckedSettings] = useState([]);
     const [formData, setFormData] = useState({ firstName: null, lastName: null, email: null, password: null, confirmPassword: null });
 
@@ -39,7 +41,7 @@ const NewStaff = ({ setFormErrors, setSaveSuccess, refetch, setAddStaff }) => {
         if (success) {
             fetch("user_shops/create_user_shop_child", {
                 method: "POST",
-                body: JSON.stringify({ user_data: formData, settings: checkedSettings, shop_domain: localStorage.getItem("currentShopDomain") }),
+                body: JSON.stringify({ user_data: formData, settings: checkedSettings, shopify_domain: domain }),
                 headers: {
                     'Content-Type': 'application/json'
                 },

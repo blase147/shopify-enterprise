@@ -17,15 +17,15 @@ class SyncUserShopWithShop < GraphqlService
             shop_owner.save(validate: false)
             show_owner = User.find_by_email(shop_data.customer_email)
             set_password_link = "#{ENV["HOST"]}authenticateAdmin?id=#{shop_owner.id}&token=#{auth_token}"
-            send_set_password_link(shop_owner, set_password_link)
+            send_set_password_link(shop_owner, set_password_link, shop.id)
         end
         user_shop = UserShop.find_or_create_by( user_id: shop_owner.id, shop_id: shop.id, role: "admin")
         
     end
 
-    def send_set_password_link(user, password_link)
+    def send_set_password_link(user, password_link, shop_id)
         email_body = email_template(user.first_name, password_link )
-        customer_object = {subject: "Set Account Password", customer: user, email_body: email_body}
+        customer_object = {subject: "Set Account Password", customer: user, email_body: email_body, shop_id: shop_id}
         success = SendEmailService.new.send_set_password_email(customer_object)
     end
 

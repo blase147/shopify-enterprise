@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useContext } from 'react';
 import { gql, useLazyQuery } from '@apollo/client';
 import {
   Card,
@@ -17,8 +17,10 @@ import ToggleButton from 'react-toggle-button';
 import { useHistory } from 'react-router';
 import TableSkeleton from '../../common/TableSkeleton';
 import LoadingScreen from '../../LoadingScreen';
+import { DomainContext } from '../../domain-context';
 
 const SmartyMessage = ({ handleEditSmartyMessage }) => {
+  const { domain } = useContext(DomainContext);
   const fetchQuery = gql`
     query (
       $offsetAttributes: OffsetAttributes!
@@ -96,7 +98,7 @@ const SmartyMessage = ({ handleEditSmartyMessage }) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id: mssgId, status: status })
+      body: JSON.stringify({ id: mssgId, status: status, shopify_domain: domain })
     })
       .then((response) => refetch())
   }

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
     Card,
     FormLayout,
@@ -9,42 +9,44 @@ import {
     Button,
     TextField
 } from '@shopify/polaris';
+import { DomainContext } from '../domain-context';
 
 const EmailTriggers = () => {
+    const { domain } = useContext(DomainContext);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [notification, setNotification] = useState(0);
     const [referral, setReferral] = useState(0);
 
-    useEffect(()=>{
-        fetch('/loyalty_email_settings',{
+    useEffect(() => {
+        fetch(`/loyalty_email_settings?shopify_domain=${domain}`, {
             method: 'GET',
         })
-        .then((response) => response.json())
-        .then((data) => {
-            if(data.status){
-                setName(data.settings?.name);
-                setEmail(data.settings?.email);
-                setNotification(data.settings?.notification.toString());
-                setReferral(data.settings?.referral.toString());
-            }
-        })
-    },[])
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status) {
+                    setName(data.settings?.name);
+                    setEmail(data.settings?.email);
+                    setNotification(data.settings?.notification.toString());
+                    setReferral(data.settings?.referral.toString());
+                }
+            })
+    }, [])
 
     const saveEmailSettings = () => {
-        fetch('/loyalty_email_settings' ,{
+        fetch('/loyalty_email_settings', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({name : name, email: email, notification: notification, referral: referral})
+            body: JSON.stringify({ name: name, email: email, notification: notification, referral: referral, shopify_domain: domain })
         })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log(data);
-            // if(data.status){
-            // }
-        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                // if(data.status){
+                // }
+            })
     }
 
     return (
@@ -127,10 +129,10 @@ const EmailTriggers = () => {
                             <div className='card-footer button-holder'>
                                 <Stack>
                                     <Stack.Item>
-                                    <Button primary outline size="slim">Customize Email</Button>
+                                        <Button primary outline size="slim">Customize Email</Button>
                                     </Stack.Item>
                                     <Stack.Item>
-                                    <Button id="success-outline" outline size="slim">Send Preview Email</Button>
+                                        <Button id="success-outline" outline size="slim">Send Preview Email</Button>
                                     </Stack.Item>
                                 </Stack>
                             </div>
@@ -159,74 +161,10 @@ const EmailTriggers = () => {
                             <div className='card-footer button-holder'>
                                 <Stack>
                                     <Stack.Item>
-                                    <Button primary outline size="slim">Customize Email</Button>
+                                        <Button primary outline size="slim">Customize Email</Button>
                                     </Stack.Item>
                                     <Stack.Item>
-                                    <Button id="success-outline" outline size="slim">Send Preview Email</Button>
-                                    </Stack.Item>
-                                </Stack>
-                            </div>
-                        </Card>
-                        <Card sectioned>
-                            <div className='card-header' id='not-activated'>
-                                <Heading element="h2">Points Used (Merchant)</Heading>
-                                <div className='button-holder'>
-                                    <Button primary outline size="slim">Enable Notification</Button>
-                                </div>
-                            </div>
-                            <div className='card-body'>
-                                <p>Receive an email each time one of your customers redeems their points for a coupon</p>
-                                <Stack distribution="fill">
-                                    <Stack.Item>
-                                        <p><strong>0</strong> Emails Sent</p>
-                                    </Stack.Item>
-                                    <Stack.Item>
-                                        <p><strong>0</strong> Emails Opened</p>
-                                    </Stack.Item>
-                                    <Stack.Item>
-                                        <p><strong>0</strong> Emails Clicked</p>
-                                    </Stack.Item>
-                                </Stack>
-                            </div>
-                            <div className='card-footer button-holder'>
-                                <Stack>
-                                    <Stack.Item>
-                                    <Button primary outline size="slim">Customize Email</Button>
-                                    </Stack.Item>
-                                    <Stack.Item>
-                                    <Button id="success-outline" outline size="slim">Send Preview Email</Button>
-                                    </Stack.Item>
-                                </Stack>
-                            </div>
-                        </Card>
-                        <Card sectioned>
-                            <div className='card-header' id='not-activated'>
-                                <Heading element="h2">Points Reminder (Customer)</Heading>
-                                <div className='button-holder'>
-                                    <Button primary outline size="slim">Enable Notification</Button>
-                                </div>
-                            </div>
-                            <div className='card-body'>
-                                <p>Send your customers an email when they reach a new tier.</p>
-                                <Stack distribution="fill">
-                                    <Stack.Item>
-                                        <p><strong>0</strong> Emails Sent</p>
-                                    </Stack.Item>
-                                    <Stack.Item>
-                                        <p><strong>0</strong> Emails Opened</p>
-                                    </Stack.Item>
-                                    <Stack.Item>
-                                        <p><strong>0</strong> Emails Clicked</p>
-                                    </Stack.Item>
-                                </Stack>
-                            </div>
-                            <div className='card-footer button-holder'>
-                                <Stack>
-                                    <Stack.Item>
-                                    <Button primary outline size="slim">Customize Email</Button>
-                                    </Stack.Item>
-                                    <Stack.Item>
-                                    <Button id="success-outline" outline size="slim">Send Preview Email</Button>
+                                        <Button id="success-outline" outline size="slim">Send Preview Email</Button>
                                     </Stack.Item>
                                 </Stack>
                             </div>
@@ -255,10 +193,10 @@ const EmailTriggers = () => {
                             <div className='card-footer button-holder'>
                                 <Stack>
                                     <Stack.Item>
-                                    <Button primary outline size="slim">Customize Email</Button>
+                                        <Button primary outline size="slim">Customize Email</Button>
                                     </Stack.Item>
                                     <Stack.Item>
-                                    <Button id="success-outline" outline size="slim">Send Preview Email</Button>
+                                        <Button id="success-outline" outline size="slim">Send Preview Email</Button>
                                     </Stack.Item>
                                 </Stack>
                             </div>
@@ -287,10 +225,74 @@ const EmailTriggers = () => {
                             <div className='card-footer button-holder'>
                                 <Stack>
                                     <Stack.Item>
-                                    <Button primary outline size="slim">Customize Email</Button>
+                                        <Button primary outline size="slim">Customize Email</Button>
                                     </Stack.Item>
                                     <Stack.Item>
-                                    <Button id="success-outline" outline size="slim">Send Preview Email</Button>
+                                        <Button id="success-outline" outline size="slim">Send Preview Email</Button>
+                                    </Stack.Item>
+                                </Stack>
+                            </div>
+                        </Card>
+                        <Card sectioned>
+                            <div className='card-header' id='not-activated'>
+                                <Heading element="h2">Points Used (Merchant)</Heading>
+                                <div className='button-holder'>
+                                    <Button primary outline size="slim">Enable Notification</Button>
+                                </div>
+                            </div>
+                            <div className='card-body'>
+                                <p>Receive an email each time one of your customers redeems their points for a coupon</p>
+                                <Stack distribution="fill">
+                                    <Stack.Item>
+                                        <p><strong>0</strong> Emails Sent</p>
+                                    </Stack.Item>
+                                    <Stack.Item>
+                                        <p><strong>0</strong> Emails Opened</p>
+                                    </Stack.Item>
+                                    <Stack.Item>
+                                        <p><strong>0</strong> Emails Clicked</p>
+                                    </Stack.Item>
+                                </Stack>
+                            </div>
+                            <div className='card-footer button-holder'>
+                                <Stack>
+                                    <Stack.Item>
+                                        <Button primary outline size="slim">Customize Email</Button>
+                                    </Stack.Item>
+                                    <Stack.Item>
+                                        <Button id="success-outline" outline size="slim">Send Preview Email</Button>
+                                    </Stack.Item>
+                                </Stack>
+                            </div>
+                        </Card>
+                        <Card sectioned>
+                            <div className='card-header' id='not-activated'>
+                                <Heading element="h2">Points Reminder (Customer)</Heading>
+                                <div className='button-holder'>
+                                    <Button primary outline size="slim">Enable Notification</Button>
+                                </div>
+                            </div>
+                            <div className='card-body'>
+                                <p>Send your customers an email when they reach a new tier.</p>
+                                <Stack distribution="fill">
+                                    <Stack.Item>
+                                        <p><strong>0</strong> Emails Sent</p>
+                                    </Stack.Item>
+                                    <Stack.Item>
+                                        <p><strong>0</strong> Emails Opened</p>
+                                    </Stack.Item>
+                                    <Stack.Item>
+                                        <p><strong>0</strong> Emails Clicked</p>
+                                    </Stack.Item>
+                                </Stack>
+                            </div>
+                            <div className='card-footer button-holder'>
+                                <Stack>
+                                    <Stack.Item>
+                                        <Button primary outline size="slim">Customize Email</Button>
+                                    </Stack.Item>
+                                    <Stack.Item>
+                                        <Button id="success-outline" outline size="slim">Send Preview Email</Button>
                                     </Stack.Item>
                                 </Stack>
                             </div>
@@ -319,42 +321,10 @@ const EmailTriggers = () => {
                             <div className='card-footer button-holder'>
                                 <Stack>
                                     <Stack.Item>
-                                    <Button primary outline size="slim">Customize Email</Button>
+                                        <Button primary outline size="slim">Customize Email</Button>
                                     </Stack.Item>
                                     <Stack.Item>
-                                    <Button id="success-outline" outline size="slim">Send Preview Email</Button>
-                                    </Stack.Item>
-                                </Stack>
-                            </div>
-                        </Card>
-                        <Card sectioned>
-                            <div className='card-header' id='not-activated'>
-                                <Heading element="h2">Referrer Thank You</Heading>
-                                <div className='button-holder'>
-                                    <Button primary outline size="slim">Enable Notification</Button>
-                                </div>
-                            </div>
-                            <div className='card-body'>
-                                <p>Send your customers a thank you email when they refer someone to your store.</p>
-                                <Stack distribution="fill">
-                                    <Stack.Item>
-                                        <p><strong>0</strong> Emails Sent</p>
-                                    </Stack.Item>
-                                    <Stack.Item>
-                                        <p><strong>0</strong> Emails Opened</p>
-                                    </Stack.Item>
-                                    <Stack.Item>
-                                        <p><strong>0</strong> Emails Clicked</p>
-                                    </Stack.Item>
-                                </Stack>
-                            </div>
-                            <div className='card-footer button-holder'>
-                                <Stack>
-                                    <Stack.Item>
-                                    <Button primary outline size="slim">Customize Email</Button>
-                                    </Stack.Item>
-                                    <Stack.Item>
-                                    <Button id="success-outline" outline size="slim">Send Preview Email</Button>
+                                        <Button id="success-outline" outline size="slim">Send Preview Email</Button>
                                     </Stack.Item>
                                 </Stack>
                             </div>
@@ -383,10 +353,42 @@ const EmailTriggers = () => {
                             <div className='card-footer button-holder'>
                                 <Stack>
                                     <Stack.Item>
-                                    <Button primary outline size="slim">Customize Email</Button>
+                                        <Button primary outline size="slim">Customize Email</Button>
                                     </Stack.Item>
                                     <Stack.Item>
-                                    <Button id="success-outline" outline size="slim">Send Preview Email</Button>
+                                        <Button id="success-outline" outline size="slim">Send Preview Email</Button>
+                                    </Stack.Item>
+                                </Stack>
+                            </div>
+                        </Card>
+                        <Card sectioned>
+                            <div className='card-header' id='not-activated'>
+                                <Heading element="h2">Referrer Thank You</Heading>
+                                <div className='button-holder'>
+                                    <Button primary outline size="slim">Enable Notification</Button>
+                                </div>
+                            </div>
+                            <div className='card-body'>
+                                <p>Send your customers a thank you email when they refer someone to your store.</p>
+                                <Stack distribution="fill">
+                                    <Stack.Item>
+                                        <p><strong>0</strong> Emails Sent</p>
+                                    </Stack.Item>
+                                    <Stack.Item>
+                                        <p><strong>0</strong> Emails Opened</p>
+                                    </Stack.Item>
+                                    <Stack.Item>
+                                        <p><strong>0</strong> Emails Clicked</p>
+                                    </Stack.Item>
+                                </Stack>
+                            </div>
+                            <div className='card-footer button-holder'>
+                                <Stack>
+                                    <Stack.Item>
+                                        <Button primary outline size="slim">Customize Email</Button>
+                                    </Stack.Item>
+                                    <Stack.Item>
+                                        <Button id="success-outline" outline size="slim">Send Preview Email</Button>
                                     </Stack.Item>
                                 </Stack>
                             </div>
@@ -415,10 +417,10 @@ const EmailTriggers = () => {
                             <div className='card-footer button-holder'>
                                 <Stack>
                                     <Stack.Item>
-                                    <Button primary outline size="slim">Customize Email</Button>
+                                        <Button primary outline size="slim">Customize Email</Button>
                                     </Stack.Item>
                                     <Stack.Item>
-                                    <Button id="success-outline" outline size="slim">Send Preview Email</Button>
+                                        <Button id="success-outline" outline size="slim">Send Preview Email</Button>
                                     </Stack.Item>
                                 </Stack>
                             </div>
@@ -447,10 +449,10 @@ const EmailTriggers = () => {
                             <div className='card-footer button-holder'>
                                 <Stack>
                                     <Stack.Item>
-                                    <Button primary outline size="slim">Customize Email</Button>
+                                        <Button primary outline size="slim">Customize Email</Button>
                                     </Stack.Item>
                                     <Stack.Item>
-                                    <Button id="success-outline" outline size="slim">Send Preview Email</Button>
+                                        <Button id="success-outline" outline size="slim">Send Preview Email</Button>
                                     </Stack.Item>
                                 </Stack>
                             </div>
@@ -479,10 +481,10 @@ const EmailTriggers = () => {
                             <div className='card-footer button-holder'>
                                 <Stack>
                                     <Stack.Item>
-                                    <Button primary outline size="slim">Customize Email</Button>
+                                        <Button primary outline size="slim">Customize Email</Button>
                                     </Stack.Item>
                                     <Stack.Item>
-                                    <Button id="success-outline" outline size="slim">Send Preview Email</Button>
+                                        <Button id="success-outline" outline size="slim">Send Preview Email</Button>
                                     </Stack.Item>
                                 </Stack>
                             </div>
@@ -511,10 +513,10 @@ const EmailTriggers = () => {
                             <div className='card-footer button-holder'>
                                 <Stack>
                                     <Stack.Item>
-                                    <Button primary outline size="slim">Customize Email</Button>
+                                        <Button primary outline size="slim">Customize Email</Button>
                                     </Stack.Item>
                                     <Stack.Item>
-                                    <Button id="success-outline" outline size="slim">Send Preview Email</Button>
+                                        <Button id="success-outline" outline size="slim">Send Preview Email</Button>
                                     </Stack.Item>
                                 </Stack>
                             </div>

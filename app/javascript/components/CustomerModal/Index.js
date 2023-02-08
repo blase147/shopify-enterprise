@@ -13,7 +13,7 @@ import {
 } from '@shopify/polaris';
 import { DeleteMajor, NoteMinor } from '@shopify/polaris-icons';
 import Papa from 'papaparse';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { CSVLink } from 'react-csv';
 import { useHistory } from 'react-router-dom';
 import swapIcon from '../../../assets/images/icons/swap.svg';
@@ -24,6 +24,7 @@ import LoadingScreen from '../LoadingScreen';
 import "./customerModal.css";
 import HeaderButtons from '../HeaderButtons/HeaderButtons';
 import PixelIcon from '../../images/PixelIcon';
+import { DomainContext } from '../domain-context';
 
 
 // import json2csv from 'json2csv';
@@ -84,6 +85,7 @@ const ButtonRemove = (props) => {
 };
 
 const CustomerModal = ({ shopifyDomain }) => {
+  const { domain } = useContext(DomainContext);
   const history = useHistory();
   // Start Tabs
   const [headerButton, setHeaderButton] = useState("active")
@@ -657,7 +659,7 @@ const CustomerModal = ({ shopifyDomain }) => {
               </Button>
               {shopifyDomain == "bagamour.myshopify.com" &&
                 <Button onClick={() => {
-                  fetch(`/subscriptions/sync_stripe`, {
+                  fetch(`/subscriptions/sync_stripe?shopify_domain=${domain}`, {
                     headers: {
                       'Content-Type': 'application/json',
                       Accept: 'application/json',
