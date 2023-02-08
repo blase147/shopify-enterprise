@@ -82,3 +82,23 @@
     max-width: 220px;
     margin-left: 1.6rem;
 }
+
+.compulsory_message {
+    width: 100%;
+    background: #ff00001a;
+    padding: 15px;
+    font-size: 15px;
+    font-family: Avenir;
+}
+
+.compulsary_mark {
+    color: red;
+}
+
+.bank_detail_main_div .editor.draftEditorWrapper.rdw-editor-main {
+    background: white;
+}
+
+.bank_detail_main_div {
+    margin-top: 10px;
+}

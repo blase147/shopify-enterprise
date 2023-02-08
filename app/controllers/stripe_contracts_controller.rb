@@ -1,6 +1,5 @@
 class StripeContractsController < ActionController::Base
   skip_before_action :verify_authenticity_token
-
   # to search stripe customers
   def fetch_stripe_customers
     init_stripe
@@ -11,17 +10,54 @@ class StripeContractsController < ActionController::Base
   # to save stripe contracts in db
   def create_stripe_contract
     params[:data] = JSON.parse(params[:formData]) rescue nil
+
     init_stripe
     stripe_customer = Stripe::Customer.list({email: params[:data]["email"]})&.data&.first
+
     unless stripe_customer.present?
       Stripe::Customer.create({
         email:  params[:data]["email"],
+        phone: params[:data]["phone"],
+        address: {
+          country: params[:data]["country"],
+          line1: params[:data]["address1"],
+          postal_code: params[:data]["zip_code"],
+          state: params[:data]["state"],
+          city: params[:data]["city"]
+        }
       })
+    else
+      Stripe::Customer.update(
+        stripe_customer&.id ,
+        {
+          email:  params[:data]["email"],
+          phone: params[:data]["phone"],
+          address: {
+            country: params[:data]["country"],
+            line1: params[:data]["address1"],
+            postal_code: params[:data]["zip_code"],
+            state: params[:data]["state"],
+            city: params[:data]["city"]
+          }
+      })
+
     end
+
     customer = CustomerModal.find_by("lower(email) = '#{params[:data]["email"].downcase}'")
     unless customer.present?
       customer = CustomerModal.create(email: params[:data]["email"].downcase, shop_id: current_shop.id )
     end
+
+    #update customer fields
+    customer.phone = params[:data]["phone"] if params[:data]["phone"].present?
+    customer.city = params[:data]["city"] if params[:data]["city"].present?
+    customer.address1 = params[:data]["address1"] if params[:data]["address1"].present?
+    customer.country = params[:data]["country"] if params[:data]["country"].present?
+    customer.state = params[:data]["state"] if params[:data]["state"].present?
+    customer.zip_code = params[:data]["zip_code"] if params[:data]["zip_code"].present?
+    customer.bank_detail = params[:data]["bank_detail"] if params[:data]["bank_detail"].present?
+    customer.save
+
     auth_token = SecureRandom.urlsafe_base64(nil, false)
     
     StripeAuthToken.find_or_initialize_by(customer_modal_id: customer.id)&.update(token: auth_token)
