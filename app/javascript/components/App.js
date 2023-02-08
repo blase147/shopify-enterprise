@@ -116,7 +116,7 @@ export default function App(props) {
     // });
 
     useEffect(() => {
-      fetch(`/user_shops/authorize_user_shop?shop_domain=${localStorage.getItem("currentShopDomain")}`, {
+      fetch(`/user_shops/authorize_user_shop?shopify_domain=${domain}`, {
         method: 'POST',
       })
         .then((response) => response.json())
