@@ -129,6 +129,7 @@ module SubscriptionPlan
               edges {
                 node {
                   id
+                  category
                 }
               }
             }
@@ -248,7 +249,7 @@ module SubscriptionPlan
         name: self.public_name,
         merchantCode: self.internal_name,
         options: [self.plan_selector_title],
-        sellingPlansToCreate: create_selling_plans
+        sellingPlansToCreate: create_selling_plans,
       }
 
       self.resources = {
@@ -256,7 +257,8 @@ module SubscriptionPlan
         productVariantIds: self.variant_ids.present? ? self.variant_ids.map { |p| p['variant_id'] } : []
       }
       result = client.query(client.parse(CREATE_QUERY), variables: { input: input, resources: (self.resources ||  [])})
-      puts '#####'
+
+      puts '##############################################################################'
       p result
 
       error = result.errors.messages["data"][0]rescue nil
@@ -377,7 +379,8 @@ module SubscriptionPlan
             cutoff: selling_plan.shipping_cut_off
           }
         },
-        pricingPolicies: pricing_policies
+        pricingPolicies: pricing_policies,
+        category: selling_plan.category
       }
 
       id.nil? ? info : info.merge(id: id)

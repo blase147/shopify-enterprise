@@ -41,6 +41,7 @@ module Types
 
       argument :__typename, String, required: false
       argument :_destroy, GraphQL::Types::Boolean, required: false
+      argument :category, String, required: false
     end
   end
 end

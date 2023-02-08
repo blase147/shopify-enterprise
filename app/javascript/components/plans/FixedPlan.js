@@ -159,6 +159,7 @@ const FixedPlan = () => {
     firstDelivery: 'ASAP',
     shippingCutOff: 1,
     _destroy: false,
+    category: "SUBSCRIPTION"
   };
 
   const [formErrors, setFormErrors] = useState([]);
