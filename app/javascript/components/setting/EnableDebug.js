@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useContext } from 'react';
 import { MobileBackArrowMajor } from '@shopify/polaris-icons';
 import {
   Card,
@@ -17,11 +17,13 @@ import {
   SettingToggle
 } from '@shopify/polaris';
 import { post } from 'jquery';
+import { DomainContext } from '../domain-context';
 
 const EnableDebug = ({ handleBack }) => {
+  const { domain } = useContext(DomainContext);
   const [active, setActive] = useState(false);
   const handleToggle = () => {
-    fetch('/debug_mode?status=' + (!active), {
+    fetch('/debug_mode?status=' + (!active) + "&shopify_domain=" + domain, {
       method: 'POST',
     })
       .then((response) => response.json())
@@ -31,7 +33,7 @@ const EnableDebug = ({ handleBack }) => {
   }
 
   useEffect(() => {
-    fetch('/debug_mode', {
+    fetch(`/debug_mode?shopify_domain=${domain}`, {
       method: 'GET',
     })
       .then((response) => response.json())

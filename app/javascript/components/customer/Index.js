@@ -13,7 +13,7 @@ import {
 } from '@shopify/polaris';
 import { DeleteMajor, NoteMinor } from '@shopify/polaris-icons';
 import Papa from 'papaparse';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { CSVLink } from 'react-csv';
 import { useHistory } from 'react-router-dom';
 import swapIcon from '../../../assets/images/icons/swap.svg';
@@ -23,6 +23,7 @@ import { Pagination } from "@shopify/polaris";
 import LoadingScreen from '../LoadingScreen';
 import HeaderButtons from '../HeaderButtons/HeaderButtons';
 import PixelIcon from '../../images/PixelIcon';
+import { DomainContext } from '../domain-context';
 
 
 // import json2csv from 'json2csv';
@@ -83,6 +84,7 @@ const ButtonRemove = (props) => {
 };
 
 const Customers = ({ shopifyDomain }) => {
+  const { domain } = useContext(DomainContext);
   const history = useHistory();
   // Start Tabs
   const [selectedTab, setSelectedTab] = useState(0);
@@ -416,7 +418,7 @@ const Customers = ({ shopifyDomain }) => {
                 Accept: 'application/json',
               },
               credentials: 'same-origin',
-              body: JSON.stringify({ id: row.id, date: e.target.value })
+              body: JSON.stringify({ id: row.id, date: e.target.value, shopify_domain: domain })
             })
               .then((response) => response.json())
           }} />
@@ -722,7 +724,7 @@ const Customers = ({ shopifyDomain }) => {
               </Button>
               {shopifyDomain == "bagamour.myshopify.com" &&
                 <Button onClick={() => {
-                  fetch(`/subscriptions/sync_stripe`, {
+                  fetch(`/subscriptions/sync_stripe?shopify_domain=${domain}`, {
                     headers: {
                       'Content-Type': 'application/json',
                       Accept: 'application/json',
@@ -909,7 +911,7 @@ const Customers = ({ shopifyDomain }) => {
           </Stack>
         </Modal.Section>
       </Modal>
-  </>
+    </>
   );
 };
 

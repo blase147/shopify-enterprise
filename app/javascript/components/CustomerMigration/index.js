@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import {
     Form,
     FormLayout,
@@ -18,7 +18,9 @@ import SellingPlans from './SellingPlans';
 import { NoteMinor } from '@shopify/polaris-icons';
 import Papa from 'papaparse';
 import mixpanel from 'mixpanel-browser';
+import { DomainContext } from '../domain-context';
 const CustomerMigration = () => {
+    const { domain } = useContext(DomainContext);
     const initFormValues = { customer_id: '', next_billing_date: '', delivery_date: '', delivery_price: '', variant_id: '', quantity: '', current_price: '', billing_policy_interval: '', billing_policy_interval_count: '', delivery_policy_interval: '', delivery_policy_interval_count: '', payment_method: '' }
     const [formField, setFormField] = useState(initFormValues)
     const handleChange = (e) => {
@@ -39,7 +41,7 @@ const CustomerMigration = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ "data": formField, "customer_id": selectedCustomers, "sellingplan": selectedSellingPlan })
+            body: JSON.stringify({ "data": formField, "customer_id": selectedCustomers, "sellingplan": selectedSellingPlan, shopify_domain: domain })
         }).then(response => response.json())
             .then((data) => {
                 setToastContent(data?.response)
@@ -89,7 +91,7 @@ const CustomerMigration = () => {
     );
 
     const fetchCustomers = (value) => {
-        fetch(`/subscriptions/fetch_customers_from_shopify?query=${value}`, {
+        fetch(`/subscriptions/fetch_customers_from_shopify?query=${value}&shopify_domain=${domain}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -136,7 +138,7 @@ const CustomerMigration = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ "data": rcs })
+            body: JSON.stringify({ "data": rcs, shopify_domain: domain })
         }).then(response => response.json())
             .then((data) => {
                 setToastActive(true)

@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useContext } from 'react';
 import { MobileBackArrowMajor } from '@shopify/polaris-icons';
 import {
   Card,
@@ -15,8 +15,10 @@ import {
   ResourceItem,
   ResourceList,
 } from '@shopify/polaris';
+import { DomainContext } from '../domain-context';
 
 const ZipCodes = ({ handleBack }) => {
+  const { domain } = useContext(DomainContext);
   const [zipCodes, setZipCodes] = useState(null);
   const [city, setCity] = useState('');
   const [stateName, setStateName] = useState('AL');
@@ -28,7 +30,7 @@ const ZipCodes = ({ handleBack }) => {
   const handleSelectChange = useCallback((value) => setStateName(value), []);
 
   const fetchAll = () => {
-    fetch(`/zip_codes`, {
+    fetch(`/zip_codes?shopify_domain=${domain}`, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -52,7 +54,7 @@ const ZipCodes = ({ handleBack }) => {
   }, []);
 
   const handleGoRequest = () => {
-    fetch(`/zip_codes?city=${city}&state=${stateName}`, {
+    fetch(`/zip_codes?city=${city}&state=${stateName}&shopify_domain=${domain}`, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -330,7 +332,7 @@ const ZipCodes = ({ handleBack }) => {
             Accept: 'application/json',
           },
           method: 'DELETE',
-          body: JSON.stringify({ ids: selectedItems }),
+          body: JSON.stringify({ ids: selectedItems, shopify_domain: domain }),
           credentials: 'same-origin',
         })
           .then((response) => response.json())

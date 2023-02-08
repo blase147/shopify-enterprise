@@ -28,7 +28,7 @@ import ClipboardSVG from '../../../assets/images/clipboard.svg';
 import TotalRevenueSVG from '../../../assets/images/total_revenue.svg';
 import BillingFrequencySVG from '../../../assets/images/billing_frequency.svg';
 import DeliveryScheduleSVG from '../../../assets/images/delivery_schedule.svg';
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useContext } from 'react';
 import { Formik } from 'formik';
 import _, { isEmpty } from 'lodash';
 import * as yup from 'yup';
@@ -44,8 +44,11 @@ import SearchProduct from '../upsell/SearchProduct';
 import Preview from './Preview';
 import SearchVariants from './SearchVariants';
 import LoadingScreen from '../LoadingScreen';
+import { DomainContext } from '../domain-context';
 
 const PowerView = () => {
+  const { domain } = useContext(DomainContext);
+
   const GET_SELLING_PLAN = gql`
     query ($id: ID!) {
       fetchPowerPlanGroup(id: $id) {
@@ -360,6 +363,7 @@ const PowerView = () => {
                 body: JSON.stringify({
                   original_product: selectedProducts[sellingPlanIndex],
                   swap_with: selection[0].variants[0].id,
+                  shopify_domain: domain
                 }),
               })
                 .then((response) => response.json())
@@ -586,7 +590,7 @@ const PowerView = () => {
                               primaryAction={{
                                 content: 'Continue',
                                 onAction: () => {
-                                  fetch(`/power_plans/${plan.id}/swap`, {
+                                  fetch(`/power_plans/${plan.id}/swap?shopify_domain=${domain}`, {
                                     method: 'POST',
                                   })
                                     .then((response) => response.json())
@@ -628,7 +632,7 @@ const PowerView = () => {
                               primaryAction={{
                                 content: 'Continue',
                                 onAction: () => {
-                                  fetch(`/power_plans/${plan.id}/cancel`, {
+                                  fetch(`/power_plans/${plan.id}/cancel?shopify_domain=${domain}`, {
                                     method: 'POST',
                                   })
                                     .then((response) => response.json())
@@ -663,7 +667,7 @@ const PowerView = () => {
                             </Modal>
                             {/* <Button
                               onClick={(e) => {
-                                fetch(`/power_plans/${plan.id}/cancel`, {
+                                fetch(`/power_plans/${plan.id}/cancel?shopify_domain=${domain}`, {
                                   method: 'POST',
                                 })
                                   .then((response) => response.json())
@@ -689,7 +693,7 @@ const PowerView = () => {
                               primaryAction={{
                                 content: 'Continue',
                                 onAction: () => {
-                                  fetch(`/power_plans/${plan.id}/pause`, {
+                                  fetch(`/power_plans/${plan.id}/pause?shopify_domain=${domain}`, {
                                     method: 'POST',
                                   })
                                     .then((response) => response.json())

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import {
   Button,
@@ -12,13 +12,15 @@ import {
 } from '@shopify/polaris';
 import { MobileBackArrowMajor } from '@shopify/polaris-icons';
 import LoadingScreen from '../LoadingScreen';
+import { DomainContext } from '../domain-context';
 
 const Bundles = ({ handleForm, handleBack }) => {
+  const { domain } = useContext(DomainContext);
   const [bundles, setBundles] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/bundle_groups', {
+    fetch(`/bundle_groups?shopify_domain=${domain}`, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -33,7 +35,7 @@ const Bundles = ({ handleForm, handleBack }) => {
   }, []);
 
   const removeBundleGroup = (id) => {
-    fetch(`/bundle_groups/${id}`, {
+    fetch(`/bundle_groups/${id}?shopify_domain=${domain}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

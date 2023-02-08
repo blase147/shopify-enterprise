@@ -40,7 +40,8 @@ class GdprWebhooksController < ApplicationController
           mail = Mail.new(from: from, to: to, subject: subject, body: '')
           mail.attachments['customer_data.csv'] = File.read(save_path)
 
-          sg = SendGrid::API.new(api_key: integration.credentials[:private_key])
+          api_key = integration.credentials[:private_key] rescue ENV['SENDGRID_API_KEY']
+          sg = SendGrid::API.new(api_key: api_key)
           sg.client.mail._('send').post(request_body: mail.to_json)
         end
       end

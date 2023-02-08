@@ -47,7 +47,7 @@ const AppHeader = (props) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                shop_domain: domain
+                shopify_domain: domain
             }),
         })
             .then((response) => response.json())

@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useContext } from 'react';
 import { MobileBackArrowMajor } from '@shopify/polaris-icons';
 import {
   Card,
@@ -18,8 +18,11 @@ import {
 } from '@shopify/polaris';
 import { post } from 'jquery';
 import { Text } from "html-react-parser";
+import { DomainContext } from '../domain-context';
 
 const DeliveryOption = ({ handleBack }) => {
+  const { domain } = useContext(DomainContext);
+
   const [monday, setMonday] = useState(false);
   const [mondayTime, setMondayTime] = useState('00:00');
   const [mondayProd, setMondayProd] = useState('');
@@ -178,7 +181,7 @@ const DeliveryOption = ({ handleBack }) => {
 
     console.log('Setting: ', delivery_sets);
 
-    fetch('/settings/delivery_options', {
+    fetch(`/settings/delivery_options?shopify_domain=${domain}`, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -197,7 +200,7 @@ const DeliveryOption = ({ handleBack }) => {
   }
 
   useEffect(() => {
-    fetch('/settings/delivery_options', {
+    fetch(`/settings/delivery_options?shopify_domain=${domain}`, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',

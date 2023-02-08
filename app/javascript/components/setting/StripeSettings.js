@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useContext } from 'react';
 import { MobileBackArrowMajor } from '@shopify/polaris-icons';
 import {
   Card,
@@ -11,8 +11,10 @@ import {
   TextStyle,
   Checkbox
 } from '@shopify/polaris';
+import { DomainContext } from '../domain-context';
 
 const StripeSettings = ({ handleBack }) => {
+  const { domain } = useContext(DomainContext);
   const [publishableKey, setPublishableKey] = useState('');
   const [secretKey, setSecretKey] = useState('');
   const [checked, setChecked] = useState(false);
@@ -23,7 +25,7 @@ const StripeSettings = ({ handleBack }) => {
   const handleChange = useCallback((newChecked) => setChecked(newChecked), []);
 
   useEffect(() => {
-    fetch('/settings/stripe_settings', {
+    fetch(`/settings/stripe_settings?shopify_domain=${domain}`, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -39,7 +41,7 @@ const StripeSettings = ({ handleBack }) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ stripe_publish_key: publishableKey, stripe_api_key: secretKey }),
+      body: JSON.stringify({ stripe_publish_key: publishableKey, stripe_api_key: secretKey, shopify_domain: domain }),
     })
       .then((response) => response.json())
       .then((data) => {

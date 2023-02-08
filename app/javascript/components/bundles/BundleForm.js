@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef, useContext } from 'react';
 import {
   Card,
   Form,
@@ -26,8 +26,10 @@ import { Formik, setIn } from 'formik';
 import * as yup from 'yup';
 import LoadingScreen from '../LoadingScreen';
 import PixelIcon from '../../images/PixelIcon';
+import { DomainContext } from '../domain-context';
 
 const BundleForm = ({ id, handleClose }) => {
+  const { domain } = useContext(DomainContext);
   const [bundleGroup, setBundleGroup] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedProductOptions, setSelectedProductOptions] = useState([]);
@@ -42,7 +44,7 @@ const BundleForm = ({ id, handleClose }) => {
 
   useEffect(() => {
     if (id) {
-      fetch(`/bundle_groups/${id}`, {
+      fetch(`/bundle_groups/${id}?shopify_domain=${domain}`, {
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
@@ -125,7 +127,7 @@ const BundleForm = ({ id, handleClose }) => {
                 headers: {
                   'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ bundle_group: formData }),
+                body: JSON.stringify({ bundle_group: formData, shopify_domain: domain }),
               })
                 .then((response) => response.json())
                 .then(() => {
@@ -147,7 +149,7 @@ const BundleForm = ({ id, handleClose }) => {
                 headers: {
                   'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ bundle_group: formData }),
+                body: JSON.stringify({ bundle_group: formData, shopify_domain: domain }),
               })
                 .then((response) => response.json())
                 //Then with the data from the response in JSON...
@@ -490,7 +492,7 @@ const BundleForm = ({ id, handleClose }) => {
                             destructive
                             onClick={() => {
                               if (bundle.id) {
-                                fetch(`/bundles/${bundle.id}`, {
+                                fetch(`/bundles/${bundle.id}?shopify_domain=${domain}`, {
                                   method: 'DELETE',
                                   headers: {
                                     'Content-Type': 'application/json',

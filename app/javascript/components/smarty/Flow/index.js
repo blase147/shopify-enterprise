@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Card,
   Spinner,
@@ -10,12 +10,14 @@ import {
 } from '@shopify/polaris';
 import ToggleButton from 'react-toggle-button';
 import LoadingScreen from '../../LoadingScreen';
+import { DomainContext } from '../../domain-context';
 
 const FlowIndex = ({ handleEditFlow }) => {
+  const { domain } = useContext(DomainContext);
   const [flows, setFlows] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    fetch('/sms_flows', {
+    fetch(`/sms_flows?shopify_domain=${domain}`, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -78,7 +80,7 @@ const FlowIndex = ({ handleEditFlow }) => {
                     value={flow.status}
                     onToggle={(value) => {
                       console.log('toggle');
-                      const newFlow = { ...flow };
+                      const newFlow = { ...flow, shopify_domain: domain };
                       newFlow.status = !value;
                       fetch(`/sms_flows/${flow.id}`, {
                         method: 'PUT',

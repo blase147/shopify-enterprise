@@ -23,6 +23,7 @@ import {
 import LayoutFlow, { getLayoutedElements } from './layout/Layout';
 import ModalComp from './FlowComponents/modal';
 import '@yaireo/tagify/dist/tagify.css';
+import { DomainContext } from '../../domain-context';
 
 const edgeType = 'smoothstep';
 const customNodeStyles1 = {
@@ -144,6 +145,7 @@ const flowStatusOptions = [
 ];
 
 const FlowTree = ({ id }) => {
+  const { domain } = useContext(DomainContext);
   const [displayTrigger, setDisplayTrigger] = useState(null);
   const [displayDelay, setDisplayDelay] = useState(false);
   const [modificationId, setModificationId] = useState(false);
@@ -158,7 +160,7 @@ const FlowTree = ({ id }) => {
 
   useEffect(() => {
     if (id && id > 0) {
-      fetch(`/sms_flows/${id}/edit`, {
+      fetch(`/sms_flows/${id}/edit?shopify_domain=${domain}`, {
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
@@ -436,18 +438,18 @@ const FlowTree = ({ id }) => {
                           return (
                             <>
                               {andItem &&
-                              andItem.length > 0 &&
-                              andItem.map((finalItem) => {
-                                return (
-                                  <>
-                                    <h5>
-                                      {finalItem &&
-                                      finalItem.conditionTitle != '' &&
-                                      `${finalItem.conditionTitle},`}
-                                    </h5>
-                                  </>
-                                );
-                              })}
+                                andItem.length > 0 &&
+                                andItem.map((finalItem) => {
+                                  return (
+                                    <>
+                                      <h5>
+                                        {finalItem &&
+                                          finalItem.conditionTitle != '' &&
+                                          `${finalItem.conditionTitle},`}
+                                      </h5>
+                                    </>
+                                  );
+                                })}
                               {andItem && andItem.length > 0 && (
                                 <h3 style={{ fontWeight: 'bolder' }}>
                                   of Value: {andItem[0].value}
@@ -1446,6 +1448,7 @@ const FlowTree = ({ id }) => {
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify({
+                    shopify_domain: domain,
                     basicElements: outputElements,
                     flowName,
                     flowStatus,

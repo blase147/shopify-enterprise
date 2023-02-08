@@ -746,7 +746,7 @@ const BuildABoxPlan = () => {
                               }
                             />
                             <TextField
-                              disabled={plan.adjustmentType == ''}
+                              disabled={false}
                               type="number"
                               label="Adjustment value"
                               value={plan.adjustmentValue}
