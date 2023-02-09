@@ -1,7 +1,8 @@
 class SmsService::MessageGenerateService
   def initialize(shop, customer, subscription=nil, custom_data = nil)
-    @shopify_shop = ShopifyAPIRetry::REST.retry { ShopifyAPI::Shop.current }
     @shop = shop
+    @shop.connect
+    @shopify_shop = ShopifyAPIRetry::REST.retry { ShopifyAPI::Shop.current }
     @customer = customer
     @subscription = subscription
     @custom_data = custom_data
@@ -9,7 +10,7 @@ class SmsService::MessageGenerateService
 
   def content(title,otp=nil, stripe_app_proxy_url=nil)
     message = @shop.smarty_messages.where(title: title).where.not(body: nil).order(updated_at: :desc).first
-    message.present? ? variables_mapping(message.body,otp) : 'Thanks for your response, we will get back to you.'
+    message.present? ? variables_mapping(message.body,otp,stripe_app_proxy_url) : 'Thanks for your response, we will get back to you.'
   end
 
   def variables_mapping(message,otp=nil, stripe_app_proxy_url = nil)
@@ -34,7 +35,7 @@ class SmsService::MessageGenerateService
       when 'delay_weeks'
         message = message.gsub("{{#{variable.name}}}", @custom_data[:delay_weeks].to_s) if @custom_data.present?
       when 'first_name'
-        message = message.gsub("{{#{variable.name}}}", @customer.first_name) if @customer.present? && @customer.first_name.present?
+        message = message.gsub("{{#{variable.name}}}", "#{@customer.first_name}") if @customer.present?
       when 'old_charge_date'
         message = message.gsub("{{#{variable.name}}}", @custom_data[:old_charge_date].to_s) if @custom_data.present?
       when 'line_item_qty'

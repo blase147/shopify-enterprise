@@ -61,7 +61,7 @@ class PopulateShopData
 
     @shop.smarty_messages.create(title: 'Charge - Reminder', body: "Hey {{first_name}}! We are preparing to ship your order of {{subscription_title}}. To manage your future orders via SMS, save this number and reply with 'HEY' at any time")
     @shop.smarty_messages.create(title: 'Login - OTP', body: "Hi {{first_name}},Your OTP to login Ethey Meals is {{otp}}.It is valid for 15 minutes only.")
-    @shop.smarty_messages.create(title: 'Stripe Contract', body: "Hi {{first_name}}, Please check your electricity contracts at {{stripe_app_proxy_url}}.")
+    @shop.smarty_messages.create(title: 'Stripe Contract', body: "Hi {{first_name}}, Please check your electricity contracts at {{stripe_app_proxy_url}} .")
 
     #meal_selection
     @shop.smarty_messages.create(title: 'Meal selction', body: "Hi {{first_name}}!, You have successfully selected meals for {{begin_date}} - {{end_date}} week.")
@@ -129,6 +129,7 @@ class PopulateShopData
 
     #OTP
     @shop.smarty_variables.create(name: 'otp')
+    @shop.smarty_variables.create(name: 'stripe_app_proxy_url')
 
 
     #integrations

@@ -55,9 +55,8 @@ class ApplicationController < ActionController::Base
   helper_method :current_shop
 
   def current_shop
-    if session[:shop_domain].present?
-      @current_shop = Shop.find_by(shopify_domain: session[:shop_domain])
-    end
+    shopify_domain = params[:shopify_domain] || params[:shop_domain] || params[:shop] || session[:shopify_domain]
+    @current_shop = Shop.where("shops.shopify_domain = '#{shopify_domain}.myshopify.com' OR shops.shopify_domain = '#{shopify_domain}'")&.first rescue nil
   end
 
   protected

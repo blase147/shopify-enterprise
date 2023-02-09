@@ -27,16 +27,14 @@ const Nav = (props) => {
   const [navigations, setNavigations] = useState([]);
   const [activeTab, setActiveTab] = useState("dash");
   const [loyality, setLoyality] = useState(false);
-  console.log("loyality", loyality);
-  useEffect(() => {
-    const accessSettings = JSON.parse(localStorage.getItem("accessSettings"))
-    console.log('window.location.pathname', window.location.pathname)
-    setNavigation(accessSettings)
-  }, [loyality, window.location.pathname])
+  const [toogleMenu, setToogleMenu] = useState({ revenueChannels: false })
 
   useEffect(() => {
-    // setLoyality(false)
-  }, [activeTab])
+    const accessSettings = JSON.parse(localStorage.getItem("accessSettings"))
+    setNavigation(accessSettings)
+    console.log("toogleMenu", toogleMenu);
+  }, [])
+
 
   const handleLoyality = useCallback(() => {
     alert("hdjhsjdh")
@@ -47,7 +45,7 @@ const Nav = (props) => {
 
   const setNavigation = (accessTabs) => {
     let navigation = [];
-    if (accessTabs?.dashboard_access || accessTabs?.manage_plan_access) {
+    if (accessTabs?.dashboard_access) {
       navigation.push({
         url: "",
         label: 'RevenueOS',
@@ -63,6 +61,17 @@ const Nav = (props) => {
               selected: window.location.pathname == `${urlDomain}/` ? true : false,
             }
           ) : {},
+        ]
+      })
+    }
+
+    if (accessTabs?.manage_plan_access) {
+      navigation.push({
+        url: "",
+        label: 'Revenue Channels',
+        selected: false,
+        onClick: () => setToogleMenu({ ...toogleMenu, revenueChannels: !toogleMenu?.revenueChannels }),
+        subNavigationItems: [
           accessTabs?.manage_plan_access ? (
             {
               label: 'Subscription Plans',
@@ -92,6 +101,13 @@ const Nav = (props) => {
             url: '/',
             onClick: () => setActiveTab("dash"),
             selected: window.location.pathname == `${urlDomain}/` ? true : false,
+          },
+          {
+            icon: MangeIcon,
+            label: 'Contracts & Invoices',
+            url: '/stripeContractsList',
+            onClick: () => setActiveTab("dash"),
+            selected: window.location.pathname == `${urlDomain}/stripeContractsList` ? true : false,
           }
         ]
       })

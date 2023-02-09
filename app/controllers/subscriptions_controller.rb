@@ -1,4 +1,4 @@
-class SubscriptionsController < ApplicationController
+class SubscriptionsController < AuthenticatedController
   skip_before_action :verify_authenticity_token
   layout 'subscriptions'
   include SubscriptionConcern
