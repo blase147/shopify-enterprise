@@ -1,6 +1,7 @@
 class StripeContractsController < ActionController::Base
   skip_before_action :verify_authenticity_token
   include ShopConcern
+  include StripeContractConcern
   # to search stripe customers
   def fetch_stripe_customers
     init_stripe
@@ -61,9 +62,7 @@ class StripeContractsController < ActionController::Base
 
     auth_token = SecureRandom.urlsafe_base64(nil, false)
     
-    StripeAuthToken.find_or_initialize_by(customer_modal_id: customer.id)&.update(token: auth_token)
-    
-    stripe_contract = StripeContract.create(shop_id: current_shop&.id,customer_modal_id: customer.id, stripe_product_id: params[:data]["stripe_product"], stripe_product_name: params[:data]["stripe_product_name"] )
+    stripe_contract = StripeContract.create(shop_id: current_shop&.id,customer_modal_id: customer.id, stripe_product_id: params[:data]["stripe_product"], stripe_product_name: params[:data]["stripe_product_name"], token: auth_token, payment_by: params[:data]["payment_by"] )
     if params[:file].present?
       stipe_contract_pdf = StripeContractPdf.create(shop_id: current_shop&.id, contract_pdf: params[:file])
       stripe_contract.update(stripe_contract_pdf_id: stipe_contract_pdf.id)
@@ -79,16 +78,16 @@ class StripeContractsController < ActionController::Base
   end
 
   # to get current_shop
-  def current_shop
-    if params[:shopify_domain].present? && current_user.present?
-      shop = current_user.user_shops.joins(:shop).where("shops.shopify_domain = '#{params[:shopify_domain]}.myshopify.com' OR shops.shopify_domain = '#{params[:shopify_domain]}'")&.first&.shop
-      @current_shop = shop
-    else
-      @current_shop ||= Shop.find_by(shopify_domain: current_shopify_session.domain)
-    end
-    @current_shop&.connect
-    @current_shop
-  end
+  # def current_shop
+  #   if params[:shopify_domain].present? && current_user.present?
+  #     shop = current_user.user_shops.joins(:shop).where("shops.shopify_domain = '#{params[:shopify_domain]}.myshopify.com' OR shops.shopify_domain = '#{params[:shopify_domain]}'")&.first&.shop
+  #     @current_shop = shop
+  #   else
+  #     @current_shop ||= Shop.find_by(shopify_domain: current_shopify_session.domain)
+  #   end
+  #   @current_shop&.connect
+  #   @current_shop
+  # end
 
   # to get all products from stripe with pagination
   def get_stripe_products

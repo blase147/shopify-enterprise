@@ -231,7 +231,7 @@ const StripeContract = () => {
                                 <FormLayout>
                                     <FormLayout.Group>
                                         <label>
-                                            Address<span className='compulsary_mark'>*</span>: {"\n"}
+                                            Address: {"\n"}
                                             <input type="text" className="form-control" onChange={(e) => handleChange(e)} name="address1" value={formField?.address1} />
                                         </label>
                                     </FormLayout.Group>
@@ -240,7 +240,7 @@ const StripeContract = () => {
                                 <FormLayout>
                                     <FormLayout.Group>
                                         <label>
-                                            Bank Details<span className='compulsary_mark'>*</span>: {"\n"}
+                                            Bank Details: {"\n"}
                                             <BankDetail setFormField={setFormField} formField={formField} />
                                         </label>
                                     </FormLayout.Group>

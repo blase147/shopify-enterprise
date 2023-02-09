@@ -242,6 +242,7 @@ const StripeContractsList = () => {
           createdAt
           stripeProductName
           checkedOut
+          token
         }
         totalPages
         totalCount
@@ -344,12 +345,26 @@ const StripeContractsList = () => {
           row.customerEmail,
           row?.stripeProductName,
           row?.checkedOut ?
-            <Button>Check Out</Button>
-            :
             "Already CheckedOut"
+            :
+            <Button onClick={() => stripeCheckout(row)}>Check Out</Button>
         ] : []
     });
   };
+
+  const stripeCheckout = (row) => {
+    fetch(`/stripeContractCheckout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ shopify_domain: domain, contract_id: row?.id, customer_email: row?.customerEmail, token: row?.token, redirect_url: window.location.href })
+    }).then(response => response.json())
+      .then((data) => {
+        window.location.replace(data?.checkout_url)
+      });
+  }
+
   const [contracts, setContracts] = useState([]);
   const [filterCustomers, setFilterCustomers] = useState([]);
 
