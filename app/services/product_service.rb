@@ -166,4 +166,29 @@ class ProductService < GraphqlService
     p ex.message
     { error: ex.message }
   end
+
+  def get_most_popular_products(shop_id)
+    shop = Shop.find(shop_id).includes(:bulk_operation_responses)
+    bulk_orders = shop.bulk_operation_responses.find_by_response_type("all_orders")&.api_raw_data
+    all_orders = JSON.parse(bulk_orders, object_class: OpenStruct)
+    
+    products_order_count = get_products_with_quantity(all_orders)
+    most_popular_products = products_order_count&.sort_by {|k,v| v}&.reverse    
+    most_popular_products.first(5)
+  end
+
+  def get_products_with_quantity all_orders
+    products_order_count = {}
+    all_orders&.each do |order|
+      order.lineItems.edges.each do |line_item|
+        product = line_item.node.product.id
+        if products_order_count["#{product}"].present?
+          products_order_count["#{product}"] += line_item.node.quantity
+        else
+          products_order_count["#{product}"] = line_item.node.quantity
+        end
+      end
+    end
+    products_order_count
+  end
 end
