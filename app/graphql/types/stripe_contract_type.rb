@@ -6,6 +6,7 @@ module Types
     field :stripe_product_name, String, null: true
     field :checked_out, Boolean, null: true
     field :created_at, String, null: true
+    field :token, String, null: true
 
     def created_at
       object.created_at&.strftime('%b %d %Y, %I:%M %p')

@@ -245,6 +245,7 @@ Rails.application.routes.draw do
   
   # Stripe Contracts
   get "/fetchStripeCustomers/:shopify_domain/", to: "stripe_contracts#fetch_stripe_customers"
+  post "/stripeContractCheckout", to: "stripe_contracts#stripe_checkout"
   get "/getStripeProducts", to: "stripe_contracts#get_stripe_products"
   post "/createStripeContract", to: "stripe_contracts#create_stripe_contract"
   
