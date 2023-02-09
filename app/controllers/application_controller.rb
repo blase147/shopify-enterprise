@@ -57,6 +57,8 @@ class ApplicationController < ActionController::Base
   def current_shop
     shopify_domain = params[:shopify_domain] || params[:shop_domain] || params[:shop] || session[:shopify_domain]
     @current_shop = Shop.where("shops.shopify_domain = '#{shopify_domain}.myshopify.com' OR shops.shopify_domain = '#{shopify_domain}'")&.first rescue nil
+    @current_shop&.connect
+    return @current_shop
   end
 
   protected

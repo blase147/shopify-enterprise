@@ -80,6 +80,8 @@ class HomeController < ApplicationController
 
   def current_shop
     @current_shop ||= Shop.find_by(shopify_domain: current_shopify_domain)
+    @current_shop&.connect
+    @current_shop
   end
 
    ### Check if admin logged in time exceeds it will log_out ###

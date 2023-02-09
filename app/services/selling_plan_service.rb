@@ -14,6 +14,23 @@ class SellingPlanService < GraphqlService
     }
   GRAPHQL
 
+  GET_SELLINGPLAN = <<-GRAPHQL
+    query($id: ID!){
+      sellingPlanGroup(id: $id) {
+        id
+        sellingPlans(first: 10){
+          edges{
+            node{
+          
+              id
+              name
+            }
+          }
+        }
+      }
+    }
+  GRAPHQL
+
   REMOVE_QUERY = <<-GRAPHQL
     mutation($id: ID!, $productIds: [ID!]!, $variantIds: [ID!]!) {  
       sellingPlanGroupRemoveProducts(id: $id, productIds: $productIds) {    

@@ -1,5 +1,6 @@
 class StripeContractsController < ActionController::Base
   skip_before_action :verify_authenticity_token
+  include ShopConcern
   # to search stripe customers
   def fetch_stripe_customers
     init_stripe
@@ -85,6 +86,8 @@ class StripeContractsController < ActionController::Base
     else
       @current_shop ||= Shop.find_by(shopify_domain: current_shopify_session.domain)
     end
+    @current_shop&.connect
+    @current_shop
   end
 
   # to get all products from stripe with pagination

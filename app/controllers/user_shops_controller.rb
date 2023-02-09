@@ -73,6 +73,8 @@ class UserShopsController < ApplicationController
 
     private
     def current_shop shopify_domain
-        return Shop.find_by_shopify_domain(shopify_domain)
+        @current_shop = Shop.find_by_shopify_domain(shopify_domain)
+        @current_shop&.connect
+        return @current_shop
     end
 end
