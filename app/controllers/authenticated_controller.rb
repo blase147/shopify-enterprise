@@ -12,5 +12,7 @@ class AuthenticatedController < ApplicationController
     else
       @current_shop ||= Shop.find_by(shopify_domain: current_shopify_session.domain)
     end
+    @current_shop&.connect
+    return @current_shop
   end
 end

@@ -9,6 +9,8 @@ class AppProxyController < ApplicationController
     return @current_shop if @current_shop.present?
 
     @current_shop = Shop.find_by(shopify_domain: params[:shop])
+    @current_shop&.connect
+    return @current_shop
   end
 
   def customer_id
