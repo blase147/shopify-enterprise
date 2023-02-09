@@ -35,8 +35,8 @@ class HomeController < ApplicationController
         from_shop = ShopifyAPI::Shop.current rescue nil
         if from_shop.present?
           @shopify_domain = from_shop.myshopify_domain
-        elsif session[:shop_domain].present?
-          @shopify_domain = session[:shop_domain]
+        elsif session[:shopify_domain].present?
+          @shopify_domain = session[:shopify_domain]
         else
           @shopify_domain ||= current_user.user_shops.order(created_at: :asc).joins(:shop).pluck(:shopify_domain).first rescue nil
         end

@@ -1,8 +1,9 @@
 class ProductsController < ActionController::Base
+  include ShopConcern
   skip_before_action :verify_authenticity_token
 
   def subscription_products
-    shop = Shop.find_by(shopify_domain: params[:shop_domain])
+    shop = current_shop
     data = shop.with_shopify_session do
       ProductService.new.list_subscribable(params[:cursor])
     end
