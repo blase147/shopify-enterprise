@@ -169,26 +169,59 @@ class ProductService < GraphqlService
 
   def get_most_popular_products(shop_id)
     shop = Shop.find(shop_id).includes(:bulk_operation_responses)
-    bulk_orders = shop.bulk_operation_responses.find_by_response_type("all_orders")&.api_raw_data
-    all_orders = JSON.parse(bulk_orders, object_class: OpenStruct)
+    all_orders = JSON.parse( shop.bulk_operation_responses.find_by_response_type("all_orders")&.api_raw_data, object_class: OpenStruct)
     
     products_order_count = get_products_with_quantity(all_orders)
-    most_popular_products = products_order_count&.sort_by {|k,v| v}&.reverse    
-    most_popular_products.first(5)
+    most_popular_products  = products_order_count&.sort_by {|k,v| v}&.reverse    
+    most_popular_products = most_popular_products.first(5)&.map(&:first)
   end
 
   def get_products_with_quantity all_orders
     products_order_count = {}
     all_orders&.each do |order|
-      order.lineItems.edges.each do |line_item|
-        product = line_item.node.product.id
-        if products_order_count["#{product}"].present?
-          products_order_count["#{product}"] += line_item.node.quantity
-        else
-          products_order_count["#{product}"] = line_item.node.quantity
+      order&.lineItems&.edges.each do |line_item|
+        variant = line_item&.node&.variant&.id
+        if variant.present?
+          if products_order_count["#{variant}"].present?
+            products_order_count["#{variant}"] += line_item&.node&.quantity
+          else
+            products_order_count["#{variant}"] = line_item&.node&.quantity
+          end
         end
       end
     end
     products_order_count
   end
+
+  def get_all_customers_of_most_popular_products all_orders, most_popular_products
+    customers_with_products = {}
+    all_orders.each do |order| 
+      order.lineItems.edges.each do |line_item|
+        if most_popular_products.include?(line_item&.node&.variant&.id)
+          if customers_with_products["#{order.email}"].present?
+            customers_with_products["#{order.email}"] << {product: line_item&.node&.variant&.id, variant: line_item.node.variant.id}
+          else
+            customers_with_products["#{order.email}"] = [{product: line_item&.node&.variant&.id, variant: line_item.node.variant.id}]
+          end
+        end 
+      end 
+    end
+    customers_with_products
+  end
+
+  def create_rebuy(shop_id, most_popular_products)
+    shop = Shop.find(shop_id)
+    customers_with_products&.map{|customer_email, product|
+      customer = CustomerModal.find_by("lower(email) = #{customer_email.downcase}")
+      token = SecureRandom.urlsafe_base64(nil, false)
+      other_products = most_popular_products - product
+      shop.rebuys.create(
+        token: token,
+        purchased_variants: product,
+        other_variants: other_products,
+        customer_modal_id: customer.id
+      )
+    }
+  end
+
 end
