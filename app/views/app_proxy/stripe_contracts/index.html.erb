@@ -1,3 +1,5 @@
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.4/dist/signature_pad.umd.min.js"></script>
+
 <div class="stripe_contracts_main_div">
     <div class="stripe_contract_table">
         <div class="stripe-contracts_list">
@@ -53,6 +55,12 @@
             <% end %>
         </div>
     </div>
+
+    <%= text_field_tag("signature", "", :id => "signature") %>
+    <div class="sigPad signed">
+      <canvas class="pad" width="400" height="140" style="background: white"></canvas>    
+    </div>
+    <%# <button type="button" onclick="svg()">svg</button> %>
 </div>
 
 <script>
@@ -66,4 +74,14 @@
             }
         })
     })
+
+    // Signature Pad
+        const canvas = document.querySelector("canvas");
+
+        const signaturePad = new SignaturePad(canvas);
+            function svg(){
+            console.log("signaturePad",signaturePad);
+            console.log("svg",signaturePad.toSVG());
+        }
+
 </script>
