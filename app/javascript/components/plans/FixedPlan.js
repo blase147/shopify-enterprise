@@ -34,6 +34,8 @@ import Preview from './Preview';
 import SearchVariants from './SearchVariants';
 
 const FixedPlan = () => {
+  const category = "SUBSCRIPTION";
+
   const GET_SELLING_PLAN = gql`
     query ($id: ID!) {
       fetchPlanGroup(id: $id) {
@@ -159,7 +161,7 @@ const FixedPlan = () => {
     firstDelivery: 'ASAP',
     shippingCutOff: 1,
     _destroy: false,
-    category: "SUBSCRIPTION"
+    category: category
   };
 
   const [formErrors, setFormErrors] = useState([]);
@@ -402,6 +404,9 @@ const FixedPlan = () => {
                   if (!plan.firstDelivery && plan.shippingDates && plan.shippingDates.length > 0) {
                     values.sellingPlans[index].firstDelivery = initialValues.firstDelivery;
                   }
+                  //Add category to plan
+                  values.sellingPlans[index].category = category
+
                   if (values.sellingPlans[index].shippingDates && values.sellingPlans[index].shippingDates.length > 0) {
                     // console.log("===========month===",values.sellingPlans[index])
                     if (values.sellingPlans[index].deliveryIntervalType == 'WEEK' || (values.sellingPlans[index].deliveryIntervalType == "MONTH")) {
