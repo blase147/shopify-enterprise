@@ -3016,3 +3016,35 @@ span.cancel-text {
     color: #fff;
     margin-top: 15px;
 }
+
+// rebuy css
+
+#items-list {
+    --tw-shadow: 0px 4px 18px rgba(132, 171, 209, .15);
+    --tw-shadow-colored: 0px 4px 18px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    background: white;
+    border-radius: 8px;
+}
+
+.item_list_sub {
+    padding: 1rem;
+    display: flex;
+    gap: 2rem;
+}
+
+.box-item-img {
+    width: 6rem;
+}
+
+.box-item-img img {
+    width: inherit;
+}
+
+.box-item-information {
+    flex: 1 1 0%;
+}
+
+.products_list {
+    list-style: none;
+}
