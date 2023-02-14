@@ -152,6 +152,8 @@ Rails.application.routes.draw do
       end
     end
 
+    get "bundle/:title", to: "bundle#index"
+
     root 'dashboard#index'
     get "/contract/:token", to: "stripe_contracts#index"
     post "/stripeContractCheckout", to: "stripe_contracts#stripe_checkout"

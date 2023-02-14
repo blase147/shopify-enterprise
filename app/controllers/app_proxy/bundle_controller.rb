@@ -4,21 +4,7 @@ class AppProxy::BundleController < AppProxyController
   before_action :update_contracts, only: :add_product
 
   def index
-    products = nil
-    if params[:build_a_box_id].present?
-      @box_campaign = BuildABoxCampaign.joins(:build_a_box_campaign_group).where(
-        build_a_box_campaign_groups: { shop_id: @shop.id, location: 'product_page' }
-      ).find_by(id: params[:build_a_box_id])
-      @selling_plan = SellingPlan.find_by(shopify_id: "gid://shopify/SellingPlan/#{@box_campaign.selling_plans.first['sellingPlanId']}")
-      case @box_campaign&.box_subscription_type
-      when 'collection'
-        products = @box_campaign.collection_images[0]['products']
-      when 'products'
-        products = @box_campaign.product_images
-      end
-      fetch_products(products) if products.present?
-    end
-    @skip_auth = true
+    
     render 'index', content_type: 'application/liquid', layout: 'rebuy_liquid_app_proxy'
   end
 
