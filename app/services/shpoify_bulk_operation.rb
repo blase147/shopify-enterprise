@@ -12,6 +12,8 @@ class ShpoifyBulkOperation  < GraphqlService
                         createdAt
                         cancelledAt
                         name
+                        email
+                        displayFinancialStatus
                         refunds {
                             id
                             totalRefundedSet{

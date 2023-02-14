@@ -145,12 +145,14 @@ Rails.application.routes.draw do
       end
     end
     
-    resources :rebuy, only: :index do
+    resources :rebuy, only: :[] do
       collection do
          get :rebuy_items
          get :upsells
       end
     end
+
+    get "/rebuy(/:token)", to: "rebuy#index"
 
     root 'dashboard#index'
     get "/contract/:token", to: "stripe_contracts#index"
