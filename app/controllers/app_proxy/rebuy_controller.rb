@@ -10,9 +10,9 @@ class AppProxy::RebuyController < AppProxyController
     @customer = @rebuy&.customer_modal
     shop = @rebuy.shop
     shop.connect
-    all_product_ids = (@rebuy.purchased_products +  @rebuy.other_products)&.map{|m| JSON.parse(m)["product"][/\d+/]}
+    all_product_ids = (@rebuy.purchased_products +  @rebuy.other_products)&.uniq&.map{|m| JSON.parse(m)["product"][/\d+/]}
 
-    all_products = ShopifyAPI::Product.where(id: all_product_ids,  fields: 'id,title,images,variants')
+    all_products = ShopifyAPI::Product.where(id: all_product_ids,  fields: 'id,title,images,body_html,variants')
   
     @all_products = []
     all_db_products = @rebuy.purchased_products + @rebuy.other_products
@@ -26,12 +26,14 @@ class AppProxy::RebuyController < AppProxyController
         "title": current_product.title,
         "image": current_product&.images&.first&.src,
         "price": current_variant.price,
-        "variant_id": variant
+        "variant_id": variant,
+        "description": current_product.body_html,
+        "inventory_quantity": current_variant.inventory_quantity
       }
       @all_products << new_hash
     end
 
-    @purchased_products = @all_products.select{|product| @rebuy.purchased_products.map{|p| JSON.parse(p)["product"][/\d+/]}.include?("#{product[:id]}")}
+    @purchased_products = @all_products.select{ |product| @rebuy.purchased_products.map{|p| JSON.parse(p)["product"][/\d+/]}.include?("#{product[:id]}") }
     @other_products = @all_products.select{|product| @rebuy.other_products.map{|p| JSON.parse(p)["product"][/\d+/]}.include?("#{product[:id]}")}
 
     render content_type: 'application/liquid', layout: "rebuy_liquid_app_proxy"

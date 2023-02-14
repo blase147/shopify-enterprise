@@ -81,8 +81,10 @@ class RebuyService
         customer.customer_orders&.each do |customer_order|
             order = JSON.parse(customer_order&.api_data) rescue nil
             order["line_items"]["edges"]&.each do |v| 
-                if  products.include?({product: v["node"]["product"]["id"], variant:v["node"]["variant"]["id"]}) 
-                    purchased_products << {product: v["node"]["product"]["id"], variant: v["node"]["variant"]["id"]} 
+                product = v["node"]["product"]["id"] rescue nil
+                variant = v["node"]["variant"]["id"] rescue nil
+                if  products.include?({product: product, variant: variant}) 
+                    purchased_products << {product: product, variant:variant} 
                 # else  
                 #     other_products << {product: v["node"]["product"]["id"], variant: v["node"]["variant"]["id"]}
                 end 
