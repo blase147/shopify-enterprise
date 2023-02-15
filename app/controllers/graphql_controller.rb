@@ -6,6 +6,7 @@ class GraphqlController < AuthenticatedController
   protect_from_forgery with: :null_session
 
   def execute
+    current_shop
     variables = prepare_variables(params[:variables])
     query = params[:query]
 

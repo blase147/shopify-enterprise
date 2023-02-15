@@ -6,7 +6,7 @@ module Mutations
     def resolve(params:)
       bundle_menu_params = Hash params
       begin
-        bundle_menu = current_shop.bundle_menu.create!(bundle_menu_params)
+        bundle_menu = current_shop.bundle_menus.create!(bundle_menu_params)
         { bundle_menu: bundle_menu }
       rescue ActiveRecord::RecordInvalid => e
         GraphQL::ExecutionError.new("Invalid attributes for #{e.record.class}:"\

@@ -78,7 +78,7 @@ export default function App(props) {
         headers: {
           'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').getAttribute('content'),
         },
-        uri: '/graphql-shopify',
+        uri: `/${domain?.replace('.myshopify.com', '')}/graphql-shopify`,
       });
     } else {
       // Inside the iframe
@@ -91,7 +91,7 @@ export default function App(props) {
       shopifyLink = new HttpLink({
         credentials: 'same-origin',
         fetch: authenticatedFetch(window.app),
-        uri: '/graphql-shopify',
+        uri: `/${domain?.replace('.myshopify.com', '')}/graphql-shopify`,
         origin: domain
       });
     }

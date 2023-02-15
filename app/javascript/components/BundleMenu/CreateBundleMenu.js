@@ -67,26 +67,16 @@ const CreateBundleMenu = () => {
     subheadingI: '',
     subheadingIi: '',
     subheadingIii: '',
-    sellingPlans: '',
+    sellingPlans: [],
     sellingPlanIds: '',
-    productImages: '',
-    collectionImages: '',
+    productImages: [],
+    collectionImages: [],
     breakPointPriceI: '',
     breakPointPriceIi: '',
     breakPointPriceIii: '',
     numberOfOptions: '',
-    freeProductCollections: '',
-    freeProductsImages: '',
-    buildABoxCampaign: {
-      startDate: '',
-      endDate: '',
-      boxQuantityLimit: 0,
-      boxSubscriptionType: '',
-      triggers: 'customer_is_subscribed_to_subscription_plan',
-      sellingPlans: [],
-      collectionImages: [],
-      productImages: [],
-    },
+    freeProductCollections: [],
+    freeProductsImages: [],
   };
 
   const [formErrors, setFormErrors] = useState([]);
@@ -207,17 +197,25 @@ const CreateBundleMenu = () => {
   `;
 
   const history = useHistory();
-  const [createUpsellCampaign] = useMutation(CREATE_BUNDLE_MENU);
+  const [createBundleMenuGQL] = useMutation(CREATE_BUNDLE_MENU);
 
   const formRef = useRef(null);
 
   const [selectedProductOptions, setSelectedProductOptions] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
 
+  const [selectedFreeProductOptions, setSelectedFreeProductOptions] = useState([]);
+  const [selectedFreeProducts, setSelectedFreeProducts] = useState([]);
+
   const [selectedCollectionOptions, setSelectedCollectionOptions] = useState(
     []
   );
+  const [selectedFreeCollectionOptions, setSelectedFreeCollectionOptions] = useState(
+    []
+  );
+
   const [selectedCollections, setSelectedCollections] = useState([]);
+  const [selectedFreeCollections, setSelectedFreeCollections] = useState([]);
 
   const handleRemoveProduct = (index) => {
     setUpdated(true);
@@ -247,11 +245,11 @@ const CreateBundleMenu = () => {
     if (
       selectedProducts &&
       formRef.current &&
-      formRef.current?.values.buildABoxCampaign.productImages !=
+      formRef.current?.values.productImages !=
       selectedProducts
     ) {
       formRef.current.setFieldValue(
-        'buildABoxCampaign.productImages',
+        'productImages',
         selectedProducts
       );
     }
@@ -261,11 +259,11 @@ const CreateBundleMenu = () => {
     if (
       selectedCollections &&
       formRef.current &&
-      formRef.current?.values.buildABoxCampaign.collectionImages !=
+      formRef.current?.values.collectionImages !=
       selectedCollections
     ) {
       formRef.current.setFieldValue(
-        'buildABoxCampaign.collectionImages',
+        'collectionImages',
         selectedCollections
       );
     }
@@ -281,42 +279,45 @@ const CreateBundleMenu = () => {
     );
   };
 
-  useEffect(() => {
-    if (data && data?.fetchBuildABoxCampaignGroup) {
-      data.fetchBuildABoxCampaignGroup.buildABoxCampaign.triggers =
-        data.fetchBuildABoxCampaignGroup.buildABoxCampaign.triggers[0]?.name; //Manipulate later
-      data.fetchBuildABoxCampaignGroup.buildABoxCampaign.endDate =
-        data.fetchBuildABoxCampaignGroup.buildABoxCampaign.endDate || '';
-      data.fetchBuildABoxCampaignGroup.buildABoxCampaign.startDate =
-        data.fetchBuildABoxCampaignGroup.buildABoxCampaign.startDate || '';
-      setCampaignData(data.fetchBuildABoxCampaignGroup);
-      setSelectedProducts(
-        data.fetchBuildABoxCampaignGroup.buildABoxCampaign.productImages
-      );
-      setSelectedProductOptions(() => {
-        const defaultOption = [];
-        data.fetchBuildABoxCampaignGroup.buildABoxCampaign.productImages?.map(
-          (image) =>
-            image._destroy == false && defaultOption.push(image.productId)
-        );
-        return defaultOption;
-      });
-      setSelectedCollections(
-        data.fetchBuildABoxCampaignGroup.buildABoxCampaign.collectionImages
-      );
-      setSelectedCollectionOptions(() => {
-        const defaultOption = [];
-        data.fetchBuildABoxCampaignGroup.buildABoxCampaign.collectionImages?.map(
-          (image) =>
-            image._destroy == false && defaultOption.push(image.collectionId)
-        );
-        return defaultOption;
-      });
-      setAllSelectedPlans(
-        data.fetchBuildABoxCampaignGroup.buildABoxCampaign.sellingPlans
-      );
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data && data?.fetchBuildABoxCampaignGroup) {
+  //     data.fetchBuildABoxCampaignGroup.buildABoxCampaign.triggers =
+  //       data.fetchBuildABoxCampaignGroup.buildABoxCampaign.triggers[0]?.name; //Manipulate later
+  //     data.fetchBuildABoxCampaignGroup.buildABoxCampaign.endDate =
+  //       data.fetchBuildABoxCampaignGroup.buildABoxCampaign.endDate || '';
+  //     data.fetchBuildABoxCampaignGroup.buildABoxCampaign.startDate =
+  //       data.fetchBuildABoxCampaignGroup.buildABoxCampaign.startDate || '';
+  //     setCampaignData(data.fetchBuildABoxCampaignGroup);
+  //     setSelectedProducts(
+  //       data.fetchBuildABoxCampaignGroup.buildABoxCampaign.productImages
+  //     );
+  //     setSelectedProductOptions(() => {
+  //       const defaultOption = [];
+  //       data.fetchBuildABoxCampaignGroup.buildABoxCampaign.productImages?.map(
+  //         (image) =>
+  //           image._destroy == false && defaultOption.push(image.productId)
+  //       );
+  //       return defaultOption;
+  //     });
+  //     setSelectedCollections(
+  //       data.fetchBuildABoxCampaignGroup.buildABoxCampaign.collectionImages
+  //     );
+  //     setSelectedCollectionOptions(() => {
+  //       const defaultOption = [];
+  //       data.fetchBuildABoxCampaignGroup.buildABoxCampaign.collectionImages?.map(
+  //         (image) =>
+  //           image._destroy == false && defaultOption.push(image.collectionId)
+  //       );
+  //       return defaultOption;
+  //     });
+  //     setAllSelectedPlans(
+  //       data.fetchBuildABoxCampaignGroup.sellingPlans
+  //     );
+  //   }
+  // }, [data]);
+
+  const [boxSubscriptionType, setBoxSubscriptionType] = useState("")
+  const [freeBoxSubscriptionType, setFreeBoxSubscriptionType] = useState("")
 
   return (
     <Frame>
@@ -341,6 +342,8 @@ const CreateBundleMenu = () => {
               const formData = { ...values };
               formData.collectionImages = selectedCollections;
               formData.productImages = selectedProducts;
+              formData.freeProductCollections = selectedFreeCollections;
+              formData.freeProductsImages = selectedFreeProducts;
               formData.sellingPlans = allSelectedPlans;
               // Manipulate later
               // formData.upsellCampaigns[0].productOffer = allProducts;
@@ -367,7 +370,7 @@ const CreateBundleMenu = () => {
                   });
               } else {
                 //const variables = formatUpsellCampaignGroup(values);
-                createUpsellCampaign({
+                createBundleMenuGQL({
                   variables: { input: { params: formData } },
                 })
                   .then((resp) => {
@@ -377,9 +380,12 @@ const CreateBundleMenu = () => {
                       setFormErrors(errors);
                       setSubmitting(false);
                     } else {
-                      // setSaveSuccess(true);
+                      setSaveSuccess(true);
                       handleClose();
                     }
+                    setTimeout(() => {
+                      location.reload();
+                    }, 500)
                   })
                   .catch((error) => {
                     setSubmitting(false);
@@ -428,7 +434,7 @@ const CreateBundleMenu = () => {
 
                 {saveSuccess && (
                   <Toast
-                    content="Upsell campaign group is saved"
+                    content="Bundle Menu is saved"
                     onDismiss={hideSaveSuccess}
                   />
                 )}
@@ -436,7 +442,7 @@ const CreateBundleMenu = () => {
                 {formErrors.length > 0 && (
                   <>
                     <Banner
-                      title="Upsell campaign group could not be saved"
+                      title="Bundle Menu group could not be saved"
                       status="critical"
                     >
                       <List type="bullet">
@@ -532,6 +538,65 @@ const CreateBundleMenu = () => {
                             />
                           </div>
                         </FormLayout.Group>
+
+                        <FormLayout.Group>
+                          <div>
+                            <TextField
+                              value={values?.breakPointPriceI}
+                              label="BreakPointPrice I"
+                              placeholder="BreakPointPrice I"
+                              type="text"
+                              error={touched.breakPointPriceI && errors.breakPointPriceI}
+                              onChange={(e) => {
+                                setFieldValue(`breakPointPriceI`, e);
+                              }}
+                              helpText={
+                                <span>
+                                  BreakPointPrice I of the bundle menu
+                                </span>
+                              }
+                            />
+                          </div>
+                        </FormLayout.Group>
+                        <FormLayout.Group>
+                          <div>
+                            <TextField
+                              value={values?.breakPointPriceIi}
+                              label="BreakPointPrice II"
+                              placeholder="BreakPointPrice II"
+                              type="text"
+                              error={touched.breakPointPriceIi && errors.breakPointPriceIi}
+                              onChange={(e) => {
+                                setFieldValue(`breakPointPriceIi`, e);
+                              }}
+                              helpText={
+                                <span>
+                                  BreakPointPrice II of the bundle menu
+                                </span>
+                              }
+                            />
+                          </div>
+                        </FormLayout.Group>
+                        <FormLayout.Group>
+                          <div>
+                            <TextField
+                              value={values?.breakPointPriceIii}
+                              label="BreakPointPrice III"
+                              placeholder="BreakPointPrice III"
+                              type="text"
+                              error={touched.breakPointPriceIii && errors.breakPointPriceIii}
+                              onChange={(e) => {
+                                setFieldValue(`breakPointPriceIii`, e);
+                              }}
+                              helpText={
+                                <span>
+                                  BreakPointPrice III of the bundle menu
+                                </span>
+                              }
+                            />
+                          </div>
+                        </FormLayout.Group>
+
                         <FormLayout>
                           <FormLayout.Group>
                             <Select
@@ -618,7 +683,7 @@ const CreateBundleMenu = () => {
                             <div className="search">
                               <SearchPlan
                                 idForTextField={`serchPlan-${Math.random()}`}
-                                value={values.buildABoxCampaign?.sellingPlans}
+                                value={values.sellingPlans}
                                 setFieldValue={setFieldValue}
                                 fieldName={`sellingPlans`}
                                 allSelectedPlans={allSelectedPlans || []}
@@ -682,17 +747,10 @@ const CreateBundleMenu = () => {
                             <Checkbox
                               label="Sort box choices by collection"
                               checked={
-                                values?.buildABoxCampaign
-                                  ?.boxSubscriptionType === 'collection'
-                              }
-                              error={
-                                touched.buildABoxCampaign
-                                  ?.boxSubscriptionType &&
-                                errors.buildABoxCampaign?.boxSubscriptionType
+                                boxSubscriptionType === 'collection'
                               }
                               onChange={(e) => {
-                                setFieldValue(
-                                  `buildABoxCampaign.boxSubscriptionType`,
+                                setBoxSubscriptionType(
                                   e === true ? 'collection' : ''
                                 );
                               }}
@@ -700,24 +758,17 @@ const CreateBundleMenu = () => {
                             <Checkbox
                               label="Display box choices by products"
                               checked={
-                                values?.buildABoxCampaign
-                                  ?.boxSubscriptionType === 'products'
-                              }
-                              error={
-                                touched.buildABoxCampaign
-                                  ?.boxSubscriptionType &&
-                                errors.buildABoxCampaign?.boxSubscriptionType
+                                boxSubscriptionType === 'products'
                               }
                               onChange={(e) => {
-                                setFieldValue(
-                                  `buildABoxCampaign.boxSubscriptionType`,
+                                setBoxSubscriptionType(
                                   e === true ? 'products' : ''
                                 );
                               }}
                             />
                           </FormLayout.Group>
                           <FormLayout.Group>
-                            {values?.buildABoxCampaign?.boxSubscriptionType ===
+                            {boxSubscriptionType ===
                               'collection' && (
                                 <div className="box-subscription-search">
                                   <TextContainer>Collection</TextContainer>
@@ -733,7 +784,7 @@ const CreateBundleMenu = () => {
                                   />
                                 </div>
                               )}
-                            {values?.buildABoxCampaign?.boxSubscriptionType ===
+                            {boxSubscriptionType ===
                               'products' && (
                                 <div className="box-subscription-search">
                                   <TextContainer>Product</TextContainer>
@@ -746,7 +797,7 @@ const CreateBundleMenu = () => {
                                 </div>
                               )}
                           </FormLayout.Group>
-                          {values?.buildABoxCampaign?.boxSubscriptionType ===
+                          {boxSubscriptionType ===
                             'collection' && (
                               <div className="collection-stack">
                                 {selectedCollections?.map(
@@ -788,7 +839,7 @@ const CreateBundleMenu = () => {
                                 )}
                               </div>
                             )}
-                          {values?.buildABoxCampaign?.boxSubscriptionType ===
+                          {boxSubscriptionType ===
                             'products' && (
                               <div className="product-stack">
                                 <div>
@@ -821,6 +872,160 @@ const CreateBundleMenu = () => {
                             )}
                         </div>
                       </FormLayout>
+
+
+                      <TextContainer>
+                        <Subheading>Free Products/Collections</Subheading>
+                      </TextContainer>
+                      <div className="limit-section">
+                        {/* <FormLayout.Group>
+                            <div className="box-subscription-detail">
+                              <TextField
+                                label="Limit Options"
+                                value={values.buildABoxCampaign.boxQuantityLimit.toString()}
+                                error={
+                                  touched.buildABoxCampaign?.boxQuantityLimit &&
+                                  errors.buildABoxCampaign?.boxQuantityLimit
+                                }
+                                type="number"
+                                onChange={(e) => {
+                                  setFieldValue(
+                                    `buildABoxCampaign.boxQuantityLimit`,
+                                    parseInt(e)
+                                  );
+                                }}
+                              // placeholder="1"
+                              />
+                            </div>
+                          </FormLayout.Group> */}
+                        <FormLayout.Group>
+                          <Checkbox
+                            label="Sort box choices by collection"
+                            checked={
+                              freeBoxSubscriptionType === 'collection'
+                            }
+                            onChange={(e) => {
+                              setFreeBoxSubscriptionType(
+                                e === true ? 'collection' : ''
+                              );
+                            }}
+                          />
+                          <Checkbox
+                            label="Display box choices by products"
+                            checked={
+                              freeBoxSubscriptionType === 'products'
+                            }
+                            onChange={(e) => {
+                              setFreeBoxSubscriptionType(
+                                e === true ? 'products' : ''
+                              );
+                            }}
+                          />
+                        </FormLayout.Group>
+                        <FormLayout.Group>
+                          {freeBoxSubscriptionType ===
+                            'collection' && (
+                              <div className="box-subscription-search">
+                                <TextContainer>Collection</TextContainer>
+                                <SearchCollection
+                                  selectedOptions={selectedFreeCollectionOptions}
+                                  setSelectedOptions={
+                                    setSelectedFreeCollectionOptions
+                                  }
+                                  selectedCollections={selectedFreeCollections}
+                                  setSelectedCollections={
+                                    setSelectedFreeCollections
+                                  }
+                                />
+                              </div>
+                            )}
+                          {freeBoxSubscriptionType ===
+                            'products' && (
+                              <div className="box-subscription-search">
+                                <TextContainer>Product</TextContainer>
+                                <SearchProduct
+                                  selectedOptions={selectedFreeProductOptions}
+                                  setSelectedOptions={setSelectedFreeProductOptions}
+                                  selectedProducts={selectedFreeProducts}
+                                  setSelectedProducts={setSelectedFreeProducts}
+                                />
+                              </div>
+                            )}
+                        </FormLayout.Group>
+                        {freeBoxSubscriptionType ===
+                          'collection' && (
+                            <div className="collection-stack">
+                              {selectedFreeCollections?.map(
+                                (collection, i) =>
+                                  collection._destroy === false && (
+                                    <div
+                                      key={i}
+                                      className="building-box-collection"
+                                    >
+                                      <div>{collection?.collectionTitle}</div>
+                                      <Stack>
+                                        {collection.products?.map(
+                                          (product, j) =>
+                                            product._destroy === false && (
+                                              <div
+                                                key={j}
+                                                className="building-box-product"
+                                              >
+                                                <img
+                                                  className="product"
+                                                  src={product?.image}
+                                                />
+                                                <img
+                                                  className="removeIcon"
+                                                  onClick={() => {
+                                                    handleRemoveCollectionProduct(
+                                                      i,
+                                                      j
+                                                    );
+                                                  }}
+                                                  src={removeIcon}
+                                                />
+                                              </div>
+                                            )
+                                        )}
+                                      </Stack>
+                                    </div>
+                                  )
+                              )}
+                            </div>
+                          )}
+                        {freeBoxSubscriptionType ===
+                          'products' && (
+                            <div className="product-stack">
+                              <div>
+                                Selected products (subscription box options)
+                              </div>
+                              <Stack>
+                                {selectedFreeProducts?.map(
+                                  (product, i) =>
+                                    product._destroy === false && (
+                                      <div
+                                        key={i}
+                                        className="building-box-product"
+                                      >
+                                        <img
+                                          className="product"
+                                          src={product?.image}
+                                        />
+                                        <img
+                                          onClick={() => {
+                                            handleRemoveProduct(i);
+                                          }}
+                                          className="removeIcon"
+                                          src={removeIcon}
+                                        />
+                                      </div>
+                                    )
+                                )}
+                              </Stack>
+                            </div>
+                          )}
+                      </div>
                     </Card.Section>
                   </Card>
 
