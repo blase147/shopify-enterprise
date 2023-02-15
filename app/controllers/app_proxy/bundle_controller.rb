@@ -50,6 +50,9 @@ class AppProxy::BundleController < AppProxyController
     end
   end
 
+  def curvos_bundle
+    render 'curvos_bundle', content_type: 'application/liquid', layout: 'rebuy_liquid_app_proxy'
+  end
   private
 
   def fetch_products(products)
