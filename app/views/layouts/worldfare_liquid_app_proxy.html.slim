@@ -10,7 +10,7 @@ html
   link[rel="stylesheet" href="https://unpkg.com/@shopify/polaris@5.8.4/dist/styles.css"]
   = javascript_pack_tag 'app_proxy', 'data-turbolinks-track': 'reload'
   = javascript_pack_tag 'mixpanel', 'data-turbolinks-track': 'reload'
-
+  
   div.chargezen-proxy
     - unless @skip_auth
       | {% if customer.id ==
