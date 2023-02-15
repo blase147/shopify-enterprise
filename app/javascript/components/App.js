@@ -48,6 +48,7 @@ import AppLayout from './layout/Layout';
 import StripeContract from './StripeContracts';
 import { DomainContext } from './domain-context';
 import StripeContractsList from './StripeContracts/StripeContractsList';
+import CreateBundleMenu from './BundleMenu/CreateBundleMenu';
 
 
 
@@ -77,7 +78,7 @@ export default function App(props) {
         headers: {
           'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').getAttribute('content'),
         },
-        uri: '/graphql-shopify',
+        uri: `/${domain?.replace('.myshopify.com', '')}/graphql-shopify`,
       });
     } else {
       // Inside the iframe
@@ -90,7 +91,7 @@ export default function App(props) {
       shopifyLink = new HttpLink({
         credentials: 'same-origin',
         fetch: authenticatedFetch(window.app),
-        uri: '/graphql-shopify',
+        uri: `/${domain?.replace('.myshopify.com', '')}/graphql-shopify`,
         origin: domain
       });
     }
@@ -141,6 +142,7 @@ export default function App(props) {
             <ApolloProvider client={client}>
               <Switch>
                 <AppLayout typePage="createCustomer" tabIndex="2" domain={props?.domain}>
+                  <Route exact path="/createBundleMenu" component={CreateBundleMenu} />
                   <Route exact path="/stripeContractsList" component={StripeContractsList} />
                   <Route exact path="/createStripeContract" component={StripeContract} />
                   <Route exact path="/referrals" component={Referrals} />

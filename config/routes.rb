@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   end
 
   post "(/:shopify_domain)/graphql", to: "graphql#execute"
-  post "/graphql-shopify", to: "graphql_shopify#execute"
+  post "(/:shopify_domain)/graphql-shopify", to: "graphql_shopify#execute"
   get '/subscription_products', to: 'products#subscription_products'
   post '/subscriptions/update_next_billing_date', to: 'subscriptions#update_billing_date'
 
@@ -152,6 +152,7 @@ Rails.application.routes.draw do
       end
     end
 
+    get "bundle(/:title)", to: "bundle#index"
     get "/rebuy(/:token)", to: "rebuy#index"
 
     root 'dashboard#index'

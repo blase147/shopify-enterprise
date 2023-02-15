@@ -12,6 +12,7 @@ class GraphqlShopifyController < AuthenticatedController
   }
   GRAPHQL
   def execute
+    current_shop
     variables = prepare_variables(params[:variables])
     
     resultQuery = client.query(client.parse(params[:query]), variables: variables)
