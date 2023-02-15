@@ -183,6 +183,7 @@ h6 {
   -ms-transform: translateX(151px);
   transform: translateX(49px);
 }
+
 /*-- end section */
 
 
@@ -427,6 +428,7 @@ h6 {
 .checkout-section .progress-container ul.sec_list li {
   text-align: center;
 }
+
 /* ------- end section  */
 
 
@@ -617,7 +619,7 @@ h6 {
     width: 100%;
   }
 
-/* ---------------- check out section  */
+  /* ---------------- check out section  */
 
   .new_tab {
     padding-left: 0;
@@ -936,7 +938,7 @@ h6 {
   }
 
   .checkout-section .progress-container span {
-    font-size: 10px !Important;
+    font-size: 10px !important;
   }
 
   .checkout-section .progress-container ul.sec_list li:nth-child(2) {
