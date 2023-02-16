@@ -27,12 +27,33 @@ $(document).ready(function () {
     window.top.location = '/account/logout';
   });
 
-  $('.owl-carousel').owlCarousel(
-    {
-      dots: true,
-      margin: 30
+  // $('.owl-carousel').owlCarousel(
+  //   {
+  //     dots: true,
+  //     margin: 30
+  //   }
+  // );
+
+
+  $('.owl-carousel').owlCarousel({
+    loop: true,
+    margin: 10,
+    nav: true,
+    dot: false,
+    navText: ['<div class="crousel_prev_button"><svg focusable="false" width="17" height="14" class="icon icon--nav-arrow-left  icon--direction-aware " viewBox="0 0 17 14"><path d="M17 7H2M8 1L2 7l6 6" stroke ="currentColor" stroke-width="2" fill = "none" ></path ></svg ></div>', "<div class='crousel_next_button'><svg focusable='false' width='17' height='14' class='icon icon--nav-arrow-right  icon--direction-aware ' viewBox='0 0 17 14'><path d='M0 7h15M9 1l6 6-6 6' stroke='currentColor' stroke-width='2' fill='none'></path></svg></div>"],
+    responsiveClass: true,
+    responsive: {
+      0: {
+        items: 1,
+      },
+      600: {
+        items: 4,
+      },
+      1000: {
+        items: 4,
+      }
     }
-  );
+  })
 
   $(document).on('click', 'a.btn-discount', function () {
     if ($('.btn-discount').data().redirect_url != 'undefined' || $('.btn-discount').data().redirect_url != '') {
