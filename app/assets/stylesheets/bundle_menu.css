@@ -225,10 +225,10 @@ h6 {
   display: block;
   position: relative;
   height: 2px;
-  background: rgba(var(--text-color), .15);
+  /* background: rgba(var(--text-color), .15); */
 }
 
-.checkout-section .progress-bar:before {
+/* .checkout-section .progress-bar:before {
   content: "";
   position: absolute;
   top: 0;
@@ -238,7 +238,7 @@ h6 {
   transform: translate(calc(var(--transform-logical-flip) * var(--transform, 0%) * (var(--divider) - 1)));
   transform-origin: var(--transform-origin-start);
   background: rgb(var(--text-color));
-}
+} */
 
 .checkout-section .section_fixed {
   position: sticky;
@@ -407,7 +407,7 @@ h6 {
   /* --width: 50vw; */
   /* display: grid; */
   /* grid-template-columns: repeat(var(--items), 1fr); */
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: var(--grid-column4);
   padding-top: 50px;
 }
 
@@ -425,7 +425,7 @@ h6 {
 
 .checkout-section .col-box-inr {
   width: 100%;
-  border: 1px dashed #ccc;
+  border: 1px dashed var(--white);
   aspect-ratio: 1/ 1;
   padding: 0px !important;
   overflow: hidden;
@@ -974,7 +974,8 @@ h6 {
 
   .checkout-section .column-box-sec {
     padding-top: 20px;
-    grid-template-columns: repeat(3, 1fr) !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-gap: 3%;
   }
 
   .checkout-section .progress-container ul.sec_list li:last-child {
