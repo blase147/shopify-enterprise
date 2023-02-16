@@ -4,23 +4,7 @@ class AppProxy::BundleController < AppProxyController
   before_action :update_contracts, only: :add_product
 
   def index
-    if params[:title].present?
-      @bundle_menu = BundleMenu.find_by("lower(title) = '#{params[:title].downcase}'")
-      shop = @bundle_menu.shop
-      shop.connect
-      products = (@bundle_menu.collection_images&.map{|c| c["products"]}.first + @bundle_menu.product_images)&.map{|p| p["product_id"][/\d+/]}
-      free_products = (@bundle_menu.free_product_collections&.map{|c| c["products"]}.first + @bundle_menu.free_products_images)&.map{|p| p["product_id"][/\d+/]}
-      all_product_ids = products + free_products
-      @all_products = ShopifyAPI::Product.where(ids: all_product_ids.join(","),  fields: 'id,title,images,body_html,variants') 
-      
-      image_ids = @all_products.map{|p| p.variants&.map{|v| v.image_id}}&.join(",")
-
-      @images = ShopifyAPI::Image.where(ids: image_ids, product_id: all_product_ids.join(","))
-
-      @products = @all_products.select{ |product| products.include?("#{product&.id}") }
-      @free_products = @all_products.select{|product| free_products.include?("#{product&.id}")}
-    end
-
+    get_bundle_products
     render 'index', content_type: 'application/liquid', layout: 'rebuy_liquid_app_proxy'
   end
 
@@ -51,6 +35,7 @@ class AppProxy::BundleController < AppProxyController
   end
 
   def curvos_bundle
+    get_bundle_products
     render 'curvos_bundle', content_type: 'application/liquid', layout: 'rebuy_liquid_app_proxy'
   end
   private
@@ -66,6 +51,22 @@ class AppProxy::BundleController < AppProxyController
 
   def set_shop
     @shop = Shop.find_by(shopify_domain: params[:shop])
+  end
+
+  def get_bundle_products
+    if params[:title].present?
+      @bundle_menu = BundleMenu.find_by("lower(title) = '#{params[:title].downcase}'")
+      # abort(@bundle_menu.shop.to_json)
+      shop = @bundle_menu.shop
+      shop.connect
+      products = (@bundle_menu.collection_images&.map{|c| c["products"]}.first + @bundle_menu.product_images)&.map{|p| p["product_id"][/\d+/]} rescue []
+      free_products = (@bundle_menu.free_product_collections&.map{|c| c["products"]}.first + @bundle_menu.free_products_images)&.map{|p| p["product_id"][/\d+/]} rescue []
+      all_product_ids = products + free_products
+      @all_products = ShopifyAPI::Product.where(ids: all_product_ids.join(","),  fields: 'id,title,images,body_html,variants') 
+      gon.all_products = @all_products
+      @products = @all_products.select{ |product| products.include?("#{product&.id}") }
+      @free_products = @all_products.select{|product| free_products.include?("#{product&.id}")}
+    end
   end
 end
 
