@@ -64,7 +64,7 @@
               </ul>
             </div>
             <div class="button-wrapper">
-              <a href="javascript:void(0)" class="button button--primary add_bundle_cart">Checkout: <span class="cart_price">$0.00</span></a>
+              <button class="button button--primary add_bundle_cart" disabled onclick="check_out_button()">Checkout: <span class="cart_total_price">$0.00</span></button>
               <span class="loader-button__loader">
                 <div class="spinner">
                   <svg focusable="false" width="24" height="24" class="icon icon--spinner" viewBox="25 25 50 50">
@@ -108,50 +108,71 @@
                   <img src="<%= (product&.images&.find{|img| img.id = product.variants.first.id })&.src.present? ?  (product.images.find{|img| img.id = product.variants.first.id })&.src : product&.images&.first&.src %>" alt="sell-img">
                 </div>
                 <div class="seller-box-bottom">
-                  <div class="box-title" product_id="<%= product.id %>">
-                    <h5><%= product.title %></h5>
-                  </div>
-                  <button is="loader-button" type="button" class="button button--outline button--text button--full AddToCart" product_id="1254865235421">
-                    <span class="loader-button__text">
-                    Add <span class="dash">-</span> 
-                    <span class="span_sub_price" product_id="1254865235421">
-                    <ins>$<%= product.variants.first.price %></ins>
-                    </span>
-                    </span>
-                    <span class="loader-button__loader" hidden="">
-                      <div class="spinner">
-                        <svg focusable="false" width="24" height="24" class="icon icon--spinner" viewBox="25 25 50 50">
-                          <circle cx="50" cy="50" r="20" fill="none" stroke="currentColor" stroke-width="5"></circle>
-                        </svg>
-                      </div>
-                    </span>
-                  </button>
-                  <ul class="product-card__swatches">
-                    <%
-                      variant_option1 = product.variants&.map{|v| v.option1 }&.uniq
-                      variant_option2 = product.variants&.map{|v| v.option2 }&.uniq
-                      variant_option1 = variant_option1.include?("S") ? variant_option2 : variant_option1
-                       variant_option2 = variant_option2 == variant_option1 ? product.variants&.map{|v| v.option1 }&.uniq : variant_option2
-                    %>
-                    <% variant_option1&.each do |option1| %>
-                      <li class="product-card__swatch select_color" data-product="<%= product.id %>" data-color="<%= option1 %>">
-                        <button class="color-swatch no-focus has-swatch-image boost-listings__product-card__product-card-color-swatch select_color_<%= product.id %>" data-color="Tie Dye">
-                          <span class="color-swatch__tooltip body-2"><%= option1 %></span>
-                          <span class="color-swatch__swatch no-focus">
-                            <span class="color-swatch__swatch-inner">
-                              <img alt="Tie Dye" src="https://cdn.shopify.com/s/files/1/0607/1844/8811/files/swatch_tie-dye.jpg" onload="this.style.display = 'block'" style="display: block;">
+                  <% if  product.variants.count > 1%>
+                  <div class="product_title_div">
+                    <div class="box-title" product_id="<%= product.id %>">
+                      <h5><%= product.title %></h5>
+                    </div>
+                    <button is="loader-button" type="button" class="button button--outline button--text button--full AddToCart" product_id="1254865235421">
+                      <span class="loader-button__text add_cart_button" id="add_product_<%= product.id %>">
+                        Add
+                      </span>
+                      <span class="loader-button__loader" hidden="">
+                        <div class="spinner">
+                          <svg focusable="false" width="24" height="24" class="icon icon--spinner" viewBox="25 25 50 50">
+                            <circle cx="50" cy="50" r="20" fill="none" stroke="currentColor" stroke-width="5"></circle>
+                          </svg>
+                        </div>
+                      </span>
+                    </button>
+                  </div>                  
+                  <div class="product_desc">
+                    <ul class="product-card__swatches">
+                      <%
+                        variant_option1 = product.variants&.map{|v| v.option1 }&.uniq
+                        variant_option2 = product.variants&.map{|v| v.option2 }&.uniq
+                        variant_option1 = variant_option1.include?("S") ? variant_option2 : variant_option1
+                        variant_option2 = variant_option2 == variant_option1 ? product.variants&.map{|v| v.option1 }&.uniq : variant_option2
+                      %>
+                      <% variant_option1&.each do |option1| %>
+                        <li class="product-card__swatch select_color" data-product="<%= product.id %>" data-color="<%= option1 %>">
+                          <button class="color-swatch no-focus has-swatch-image boost-listings__product-card__product-card-color-swatch select_color_<%= product.id %>" data-color="Tie Dye">
+                            <span class="color-swatch__tooltip body-2"><%= option1 %></span>
+                            <span class="color-swatch__swatch no-focus">
+                              <span class="color-swatch__swatch-inner">
+                                <img alt="Tie Dye" src="https://cdn.shopify.com/s/files/1/0607/1844/8811/files/swatch_tie-dye.jpg" onload="this.style.display = 'block'" style="display: block;">
+                              </span>
                             </span>
-                          </span>
-                        </button>
-                      </li>
-                    <% end %>
-                  </ul>
-                  <div class="grid__item radio-wrapper product-form__item">
-                    <label class="single-option-radio__label" for="ProductSelect-option-1" data-option-name="Størrelse">Størrelse: <span class="variant-label-option-value show_selected_size<%= product.id %>"></span></label><fieldset class="single-option-radio inline-list" id="ProductSelect-option-1"><input type="radio" checked="checked" value="S" data-index="option2" name="option2" class="single-option-selector__radio js-single-option-selector" id="ProductSelect-option-template--16618485776635__main-storrelse-S">
-                    <% variant_option2&.each do |option2| %>
-                      <label class="select_size select_size_for_<%= product.id %>" data-product="<%= product.id %>" data-size="<%= option2 %>" ><%= option2 %></label>
-                    <%end %>                  
+                          </button>
+                        </li>
+                      <% end %>
+                    </ul>
+                    <div class="grid__item radio-wrapper product-form__item">
+                      <label class="single-option-radio__label" for="ProductSelect-option-1" data-option-name="Størrelse">Størrelse: <span class="variant-label-option-value show_selected_size<%= product.id %>"></span></label><fieldset class="single-option-radio inline-list" id="ProductSelect-option-1"><input type="radio" checked="checked" value="S" data-index="option2" name="option2" class="single-option-selector__radio js-single-option-selector" id="ProductSelect-option-template--16618485776635__main-storrelse-S">
+                      <% variant_option2&.each do |option2| %>
+                        <label class="select_size select_size_for_<%= product.id %>" data-product="<%= product.id %>" data-size="<%= option2 %>" ><%= option2 %></label>
+                      <%end %>                  
+                    </div>
                   </div>
+                  <% else %>
+                    <div class="product_title_div">
+                      <div class="box-title" product_id="<%= product.id %>">
+                        <h5><%= product.title %></h5>
+                      </div>
+                      <button is="loader-button" type="button" class="button button--outline button--text button--full AddToCart direct_add_to_cart" data-product="<%= product.id %>" data-variant="<%= product.variants.first.id %>" data-price="<%= product.variants.first.price %>" data-image="<%= product&.images&.first&.src %>">
+                        <span class="loader-button__text" id="add_product_<%= product.id %>">
+                          Add
+                        </span>
+                        <span class="loader-button__loader" hidden="">
+                          <div class="spinner">
+                            <svg focusable="false" width="24" height="24" class="icon icon--spinner" viewBox="25 25 50 50">
+                              <circle cx="50" cy="50" r="20" fill="none" stroke="currentColor" stroke-width="5"></circle>
+                            </svg>
+                          </div>
+                        </span>
+                      </button>
+                    </div>   
+                  <% end %>
                 </div>
               </div>
             </div>
@@ -164,21 +185,38 @@
 <!----------  end-section ------------>
 
 <script>
+
+function check_out_button(){
+      let url = `https://<%= @bundle_menu.shop.shopify_domain %>/cart/${selectedProducts[0]?.variant}:1`;
+      mixpanelIdentify('<%= get_customer_modal(@customer&.shopify_customer_id)&.mixpanel_id %>')
+      mixpanelTrack("Added Meals", {contract_shopify_id: `<%= @customer&.shopify_id %>`, week: week_number})
+      window.location.href = url;
+  }
+
   var allProducts = gon.all_products
-  console.log("allProducts", allProducts);
   var selectedProducts = [];
+  var totalPrice=0;
   var selectedProperty = null;
 
-  // const paymentForm  = new BundleProduct();
-
-  // $(".product_main_card").click(function(){
-  //   if($(this).data("variant")){
-  //     selectedProperty?.color =  $(this).data("variant");
-  //     selectVariants();
-  //   }else{
-  //     product.push({product: $(this).data("product"), variant: $(this).data("variant")})
-  //   }
-  // })
+  //progress bar
+  function setPercentage() {
+    var percentage;
+    if(selectedProducts.length == 1){
+      percentage = 0;
+    }else if(selectedProducts.length == 2){
+      percentage = 33.3
+    }else if(selectedProducts.length == 3){
+      percentage = 66.6
+    }else if(selectedProducts.length == 4){
+       percentage = 100
+    }  
+ 
+    const progressEl =  $(".progress");
+    const percentageEl = $(".percentage");
+    
+    progressEl.css("width",percentage+"%");
+    percentageEl.css("left",percentage+"%");
+  }
 
   $(".select_color").click(function(e){
     e.preventDefault();
@@ -212,297 +250,69 @@
     $(this).addClass("selected_size")
   })
 
+   $(".direct_add_to_cart").click(function(){
+      let index = selectedProducts.findIndex((p ) => p.product === $(this).data("product"));
+      let obj = {product: $(this).data("product"), variant: $(this).data("variant"), price: $(this).data("price")}
+      if (index === -1) {
+        selectedProducts.push(obj);
+      } else {
+          selectedProducts[index] = obj;
+      }
+
+
+      $(".progress_right"+selectedProducts.length).html("$"+$(this).data("price"))
+      $(".cart_box_products:eq("+(selectedProducts.length - 1) +")").html("<img src="+$(this).data("image")+">")
+      selectedProducts.map((p)=>{
+        totalPrice += +p.price
+      })
+      totalPrice += +$(this).data("price")
+      $(".cart_total_price").html("$"+totalPrice.toFixed(2));
+      setPercentage()
+    })
+
   function selectVariants(){
     let variant;
     let img;
+    let price;
     allProducts.filter((p)=>{
       p?.variants.find((v)=>{
         if(p.id == selectedProperty.product ){
           if(v.option1 == selectedProperty.color && v.option2 == selectedProperty?.size || v.option2 == selectedProperty.color && v.option1 == selectedProperty?.size){
             variant = v.id
             img = p?.images[0]?.src
+            price = v.price
+            $("#add_product_"+p.id).html("Add - "+price)
           }
         }
       }
       )
     })
     selectedProperty["variant"] = variant
+    selectedProperty["price"] = price
     index = selectedProducts.findIndex((p ) => p.product === selectedProperty?.product);
     if (index === -1) {
       selectedProducts.push(selectedProperty);
     } else {
         selectedProducts[index] = selectedProperty;
     }
+    $(".progress_right"+selectedProducts.length).html("$"+price)
     selectedProperty = null;
     $(".cart_box_products:eq("+ (selectedProducts.length - 1) +")").html("<img src="+img+">")
+    selectedProducts.map((p)=>{
+      totalPrice += +p.price
+    })
+    $(".cart_total_price").html("$"+totalPrice.toFixed(2))
+    $(".add_bundle_cart").removeAttr("disabled");   
+    setPercentage()
   }
 
-  $(document).ready(function(){
-    //progress bar
-    function setPercentage() {
-      const percentage = $("#progress_bar_main").data("percentage");    
-      const progressEl =  $(".progress");
-      const percentageEl = $(".percentage");
-      
-      progressEl.css("width",percentage);
-      percentageEl.css("left",percentage);
-    }
 
-    setPercentage();
-
-    $('.seller-box-sec').slick({
-      dots: false,
-      infinite: false,
-      speed: 300,
-      slidesToShow: 5,
-      slidesToScroll: 5,
-      responsive: [
-        {
-            breakpoint: 1280,
-            settings: {
-            slidesToShow: 4,
-            slidesToScroll: 4,
-            infinite: true,
-            }
-        },
-        {
-            breakpoint: 1080,
-            settings: {
-            slidesToShow: 2,
-            slidesToScroll: 2
-            }
-        },
-        {
-            breakpoint: 767,
-            settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1
-            }
-        }
-      ]
-    });
-  })
 
 </script>
-<style>
-.owl-prev {
-    width: 15px;
-    height: 100px;
-    position: absolute;
-    top: 40%;
-    margin-left: -20px;
-    display: block !important;
-    border:0px solid black;
-}
 
-.owl-next {
-    width: 15px;
-    height: 100px;
-    position: absolute;
-    top: 40%;
-    right: -25px;
-    display: block !important;
-    border:0px solid black;
-}
-.owl-prev i, .owl-next i {transform : scale(1,6); color: #ccc;}
-
-:root{
-  
-    --primary: #f6abab;
-    --primary-dark :#dd7474;
-    --white:#fff;
-    --grid-column4:repeat(4, 1fr);
-}
-
-
-.crousel_next_button,
-.crousel_prev_button {
-	position: absolute;
-	top: -60px;
-	bottom: auto;
-	left: 38px;
-	opacity: 1;
-	visibility: visible;
-	width: 56px;
-	height: 56px;
-	transform: scale(1);
-	background: #fff;
-	border-radius: 50px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	transition: opacity .15s ease-in-out,visibility .15s ease-in-out,transform .15s ease-in-out;
-	z-index: 1;
-  transform: scale(1);
-}
-.crousel_next_button{
-  left:auto;
-  right:38px;
-}
-
-
-.crousel_next_button:hover,
-.crousel_prev_button:hover {
-  opacity: 1;
-  visibility: visible;
-  transform: scale(1);
-}
-
-
-.seller-box #ProductSelect-option-1 {
-  display: flex;
-}
-.seller-box .single-option-radio__label {
-  display: flex;
-  margin-bottom: 4px;
-  cursor: pointer;
-}
-.seller-box .inline-list {
-  list-style: none;
-  margin-left: 0;
-  margin-right: -8px;
-  margin-bottom: -8px;
-  border: 0;
-  padding-top: 0;
-  position: relative;
-  margin: 0;
-  padding: 0;
-}
-.seller-box .single-option-radio input {
-  clip: rect(0,0,0,0);
-  overflow: hidden;
-  position: absolute;
-  height: 1px;
-  width: 1px;
-}
-.seller-box input[type=checkbox], .seller-box input[type=radio] {
-  margin: 0 10px 0 0;
-  padding: 0;
-  width: auto;
-}
-.seller-box input[type=radio] {
-  cursor: pointer;
-}
-.seller-box .inline-list>* {
-  display: inline-block;
-  vertical-align: middle;
-}
-.seller-box input {
-  border: 1px solid #e5e5e5;
-  border-radius: 11px;
-  padding: 16px 24px;
-  font-size: 17px;
-  line-height: 1.5;
-  display: inline-block;
-  background-color: #f3f3f3;
-  border-color: #f3f3f3;
-  color: #515151;
-  max-width: 100%;
-}
-.seller-box .single-option-radio .selected_size {
-  background-color: #000 !important;
-  border-color: #000 !important;
-  color: #fff !important;
-}
-.seller-box .single-option-radio .selected_size {
-  background-color: #000 !important;
-  border-color: #000 !important;
-  color: #fff !important;
-}
-.seller-box .single-option-radio .selected_size {
-  background-color: #f29d9d;
-  border-color: #f29d9d;
-  color: #fff;
-}
-.seller-box .single-option-radio label {
-  border: 1px solid #e5e5e5;
-  border-radius: 11px;
-  font-size: 17px;
-  line-height: 1.5;
-  display: inline-block;
-  font-family: DIN Next,sans-serif;
-  font-weight: 700;
-  font-style: normal;
-  text-transform: initial;
-  letter-spacing: .5px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-  -o-appearance: none;
-  appearance: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -o-user-select: none;
-  user-select: none;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  vertical-align: middle;
-  white-space: normal;
-  text-transform: uppercase;
-  padding: 6px 10px;
-  min-width: 39px;
-  background: #fff;
-}
-.seller-box .inline-list>* {
-  margin-right: 8px;
-  margin-bottom: 8px;
-}
-.seller-box .variant-label-option-value {
-  text-transform: uppercase;
-  font-size: 13px;
-  font-weight: 700;
-}
-.seller-box .single-option-radio__label:hover {
-  opacity: .6;
-}
-
-/* progess bar */
-.progress-container {
-  box-shadow: 0 4px 5px rgb(0, 0, 0, 0.1)
-}
-
-.progress-container, .progress {
-  background-color: #eee;
-  border-radius: 5px;
-  position: relative;
-  height: 7px;
-  width: 300px;
-}
-
-.progress {
-  background-color: #6F39B0;
-  width: 0;
-  transition: width 0.4s linear;
-}
-
-.percentage {
-  background-color: #6F39B0;
-  border-radius: 5px;
-  box-shadow: 0 4px 5px rgb(0, 0, 0, 0.2);
-  color: #fff;
-  font-size: 12px;
-  padding: 4px;
-  position: absolute;
-  top: 20px;
-  left: 0;
-  transform: translateX(-50%);
-  width: 40px;
-  text-align: center;
-  transition: left 0.4s linear;
-}
-
-.percentage::after {
-  background-color: #6F39B0;
-  content: '';
-  position: absolute;
-  top: -5px;
-  left: 50%;
-  transform: translateX(-50%) rotate(45deg);
-  height: 10px;
-  width: 10px;
-  z-index: -1;
-}
-
-</style>
+<%= javascript_pack_tag 'mixpanel', 'data-turbolinks-track': 'reload' %>
+<script>
+  let mixpanelId = mixpanelGetIdentify();
+  console.log("mixpanel", mixpanelId);
+</script>
+    

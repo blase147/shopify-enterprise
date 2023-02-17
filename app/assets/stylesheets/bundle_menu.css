@@ -372,7 +372,7 @@ h6 {
   padding-left: 25px;
 }
 
-.checkout-section .new_tab .button-wrapper a {
+.checkout-section .new_tab .button-wrapper button {
   width: 100%;
   text-align: center;
   background-color: #fff;
@@ -464,6 +464,8 @@ h6 {
   text-align: center;
   padding-left: 15px;
   padding-right: 15px;
+  position: relative;
+
 }
 
 .seller-section .box-title h5 {
@@ -986,7 +988,7 @@ h6 {
     width: 100%;
   }
 
-  .checkout-section .new_tab .button-wrapper a {
+  .checkout-section .new_tab .button-wrapper button {
     padding: 10px 25px;
     font-size: 16px;
     line-height: 1.06;
@@ -1395,4 +1397,29 @@ h6 {
   height: 10px;
   width: 10px;
   z-index: -1;
+}
+
+
+.seller-box .seller-box-inr .sell-box {
+  width: 100%;
+  max-width: 100%;
+  height: 375px;
+}
+
+.seller-box .seller-box-inr .sell-box img {
+  max-width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  min-height: 375px;
+}
+
+.seller-section .seller-box-bottom .box-title {
+  padding-bottom: 30px;
+}
+
+.seller-section .box-title h5 {
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 700;
 }
