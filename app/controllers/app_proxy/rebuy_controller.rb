@@ -12,7 +12,7 @@ class AppProxy::RebuyController < AppProxyController
     shop.connect
     all_product_ids = (@rebuy.purchased_products +  @rebuy.other_products)&.uniq&.map{|m| JSON.parse(m)["product"][/\d+/]}
 
-    all_products = ShopifyAPI::Product.where(ids: all_product_ids.join(","),  fields: 'id,title,images,body_html,variants')
+    all_products = ShopifyAPI::Product.where(ids: all_product_ids.join(","),  fields: 'id,title,images,variants, product_type')
   
     @all_products = []
     all_db_products = @rebuy.purchased_products + @rebuy.other_products
@@ -27,7 +27,7 @@ class AppProxy::RebuyController < AppProxyController
         "image": current_product&.images&.first&.src,
         "price": current_variant.price,
         "variant_id": variant,
-        "description": current_product.body_html,
+        "variant_name": current_variant.title,
         "inventory_quantity": current_variant.inventory_quantity
       }
       @all_products << new_hash

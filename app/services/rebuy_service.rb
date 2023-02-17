@@ -93,4 +93,17 @@ class RebuyService
         return purchased_products
     end
 
+    def send_email_and_sms(customer_id, token, shop_id)
+        url = "https://#{shop&.shopify_domain}/a/chargezen/rebuy/#{token}"
+        customer = CustomerModal.find(customer_id)
+        shop = Shop.find(shop_id)
+        message_service = SmsService::MessageGenerateService.new(shop, customer)
+        phone = customer.phone
+        if phone.present?
+            message = message_service.content("Rebuy",nil,url)
+            sent = TwilioServices::SendSms.call(from: shop.phone, to: phone, message: message) rescue nil
+        end
+        sent = SendEmailService.new.send_rebuy_email(customer, auth_token, current_shop.id)
+    end
+
 end
