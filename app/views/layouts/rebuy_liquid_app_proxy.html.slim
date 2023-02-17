@@ -6,6 +6,7 @@ html
     = csrf_meta_tags
     = csp_meta_tag
     = stylesheet_link_tag 'app_proxy', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_pack_tag 'bundle_menu', 'data-turbolinks-track': 'reload'
     = javascript_pack_tag 'app_proxy', 'data-turbolinks-track': 'reload'
     = stylesheet_link_tag "bundle_menu", :media => "all", 'data-turbolinks-track': 'reload'
     link[rel="stylesheet" href="https://unpkg.com/@shopify/polaris@5.8.4/dist/styles.css"]

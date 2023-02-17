@@ -152,8 +152,8 @@ Rails.application.routes.draw do
       end
     end
 
-    get "bundle(/:title)", to: "bundle#index"
-    get "curvoBundle", to: "bundle#curvos_bundle"
+    get "/bundle(/:title)", to: "bundle#index"
+    get "/curvoBundle(/:title)", to: "bundle#curvos_bundle"
     get "/rebuy(/:token)", to: "rebuy#index"
 
     root 'dashboard#index'

@@ -34,11 +34,11 @@ $(document).ready(function () {
   //   }
   // );
 
-
   $('.owl-carousel').owlCarousel({
-    loop: true,
+    loop: false,
     margin: 10,
     nav: true,
+    infinite: false,
     dot: false,
     navText: ['<div class="crousel_prev_button"><svg focusable="false" width="17" height="14" class="icon icon--nav-arrow-left  icon--direction-aware " viewBox="0 0 17 14"><path d="M17 7H2M8 1L2 7l6 6" stroke ="currentColor" stroke-width="2" fill = "none" ></path ></svg ></div>', "<div class='crousel_next_button'><svg focusable='false' width='17' height='14' class='icon icon--nav-arrow-right  icon--direction-aware ' viewBox='0 0 17 14'><path d='M0 7h15M9 1l6 6-6 6' stroke='currentColor' stroke-width='2' fill='none'></path></svg></div>"],
     responsiveClass: true,

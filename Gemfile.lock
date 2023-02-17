@@ -1461,6 +1461,11 @@ GEM
       raabro (~> 1.4)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    gon (6.4.0)
+      actionpack (>= 3.0.20)
+      i18n (>= 0.7)
+      multi_json
+      request_store (>= 1.0)
     google-protobuf (3.21.9)
     graphiql-rails (1.7.0)
       railties
@@ -1565,6 +1570,10 @@ GEM
     puma (4.3.7)
       nio4r (~> 2.0)
     raabro (1.4.0)
+    rabl-rails (0.6.2)
+      activesupport (>= 4.2)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      railties (>= 4.2)
     rack (2.2.3)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
@@ -1612,6 +1621,8 @@ GEM
       activemodel
     redis (4.2.5)
     regexp_parser (1.8.2)
+    request_store (1.5.1)
+      rack (>= 1.4)
     responders (3.0.1)
       actionpack (>= 5.0)
       railties (>= 5.0)
@@ -1735,6 +1746,7 @@ DEPENDENCIES
   dotenv-rails
   faraday
   font-awesome-rails
+  gon
   graphiql-rails
   graphql
   httparty
@@ -1752,6 +1764,7 @@ DEPENDENCIES
   pghero
   pry-rails
   puma (~> 4.1)
+  rabl-rails
   rack-cors
   rails (~> 6.0.2, >= 6.0.2.1)
   react-rails
@@ -1778,4 +1791,4 @@ DEPENDENCIES
   whenever
 
 BUNDLED WITH
-   2.4.6
+   2.4.7
