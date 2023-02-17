@@ -3132,6 +3132,7 @@ span.cancel-text {
     max-width: max-content;
     display: flex;
     align-content: center;
+    float: left;
 
 
     &>button {
@@ -3139,7 +3140,7 @@ span.cancel-text {
         background: 0 0;
         padding: 0 5px;
         min-width: 43px;
-        height: 45px;
+        height: 41px;
         border: 1px solid rgba(129, 129, 129, .2);
         background: #f9f9f9;
         cursor: pointer;
@@ -3297,4 +3298,132 @@ span.cancel-text {
 
 .cart_svg_div svg {
     width: 20px;
+}
+
+.right_section .manage_quantit_main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+}
+
+.right_section .product_info span.quantity_under_btn.quantity_33124367728726 {
+    padding: 10px;
+    font-weight: 600;
+}
+
+.right_section .manage_quantit_main button.minus-value,
+.right_section .manage_quantit_main button.add_meal_btn.plusValue.add_products {
+    border-radius: 50px;
+    border: 0;
+    width: 25px;
+    height: 25px;
+    font-size: 15px;
+    line-height: 15px;
+    cursor: pointer;
+}
+
+
+.right_section .product_card_sub_body button.btn.btn-cstm.remove_variant_button {
+    background: transparent;
+    border: none;
+    color: #000;
+    font-weight: 700;
+    padding: 0;
+}
+
+.right_section .product_card_sub_body button.btn.btn-cstm.remove_variant_button:hover {
+    background: transparent;
+}
+
+.checkout_sub_div {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 16px;
+    align-items: center;
+    height: 64px;
+    border-bottom: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+
+.checkout_sub_div .cart_icon_main {
+    position: relative;
+}
+
+.checkout_sub_div .cart_icon_main .number_of_item {
+    background: #000;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 13px;
+    position: absolute;
+    top: -5px;
+    width: 100%;
+    right: -16px;
+}
+
+.total_price_main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 16px;
+}
+
+
+
+.total_price_main span.sub_price_tax {
+    color: #7e7676;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.total_price_main .total_price_sub p {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.checkout_sub_div button.checkout_button {
+    background: #000;
+    border: 0;
+    color: #fff;
+    padding: 16px 25px;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.rebuy_main_div .right_section {
+    height: fit-content;
+}
+
+.right_section span.selected_products_number.your_cart_items {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+    background: #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    font-weight: 700;
+    margin-left: 10px;
+}
+
+.rebuy_main_div .right_section h2 {
+    color: #000;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.rebuy_main_div .products_list {
+    padding: 0;
+    margin-top: 0px;
+}
+
+.rebuy_main_div {
+    font-family: system-ui;
 }

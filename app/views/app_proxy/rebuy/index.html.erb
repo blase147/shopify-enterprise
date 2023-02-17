@@ -10,10 +10,10 @@
    </div>
 </div>
   <h1 class="welcome_message">Welcome back <%= @customer.name %></h1>
+  <h2 class="reorder_heading">Re-Order Products</h2>
 <div class="rebuy_main_div">
   <div class="left_section">
     <div class="reorder_div">
-      <h2 class="reorder_heading">Re-Order Products</h2>
       <ul class="products_list">
          <% @purchased_products&.each do |product| %>
             <li class="box-item-grid product_card" id="<%= product[:variant_id] %>">
@@ -27,7 +27,7 @@
                         <div class="box-item-information">
                             <div class="left">
                               <h5><%= product[:title] %></h5>
-                              <span><%= truncate(product[:description], :length => 50) %></span>
+                              <span style="font-family: system-ui;"><%= product[:variant_name]&.humanize %></span>
                             </div>
                             <div class="price_div">
                               $<%= product[:price] %>
@@ -35,11 +35,11 @@
                         </div>
                         <div class="add_to_week">
                           <% if product[:inventory_quantity] > 0 %>
-                            <button class="minus-value" data-id="<%= product[:variant_id] %>" data-quantityid="quantity_<%= product[:variant_id] %>" type="button" onclick="decrement_quantity(event)">
+                            <button class="minus-value" data-id="<%= product[:variant_id] %>" data-quantityid="quantity_<%= product[:variant_id] %>" data-price="<%= product[:price] %>" type="button" onclick="decrement_quantity(event)">
                               -
                             </button>
                             <span class="quantity_under_btn quantity_<%= product[:variant_id] %>">0</span>
-                            <button class="add_meal_btn plusValue add_products" data-quantityid="quantity_<%= product[:variant_id] %>" onclick="incrementQuantityWithEvent(event)" data-producttitle="<%=product[:title]%>"  data-id="<%= product[:variant_id] %>" data-imgurl="<%= product[:image].present? ?  product[:image] : asset_path( 'No-image-found.jpg' )  %>" data-price="<%= product[:price] %>">
+                            <button class="add_meal_btn plusValue add_products" data-quantityid="quantity_<%= product[:variant_id] %>" data-producttitle="<%=product[:title]%>"  data-id="<%= product[:variant_id] %>" data-imgurl="<%= product[:image].present? ?  product[:image] : asset_path( 'No-image-found.jpg' )  %>" data-price="<%= product[:price] %>">
                             +
                             </button>
                           <% else %>
@@ -48,7 +48,7 @@
                         </div>
                         <% if product[:inventory_quantity] > 0 %>
                           <div class="main-bx-button">
-                          <button class="btn btn-cstm add_meal_btn_2 plusValue add_products" data-quantityid="quantity_<%= product[:variant_id] %>" data-producttitle="<%=product[:title]%>"  data-id="<%= product[:variant_id] %>" data-imgurl="<%= product[:image].present? ?  product[:image] : asset_path( 'No-image-found.jpg' )  %>" >Add to box</button>
+                            <button class="btn btn-cstm add_meal_btn_2 plusValue add_products" data-quantityid="quantity_<%= product[:variant_id] %>" data-producttitle="<%=product[:title]%>"  data-id="<%= product[:variant_id] %>" data-imgurl="<%= product[:image].present? ?  product[:image] : asset_path( 'No-image-found.jpg' )  %>" data-price="<%= product[:price] %>"  >Add to box</button>
                           </div>
                         <% end %>
                       </div>
@@ -63,7 +63,7 @@
   <div class="right_section">
     <header>
       <h2>Your Cart</h2>
-      <span class="selected_products_number">0</span>
+      <span class="selected_products_number your_cart_items">0</span>
     </header>
     <div class="cart-items cart_body_main">
       
@@ -83,7 +83,7 @@
         </div>
         <div class="total_price_main">
           <div class="total_price_sub">
-            <p>$48.00</p>
+            <p>$00.00</p>
             <span class="sub_price_tax">Plus tax &amp; shipping</span>
           </div>
           <button type="button" class="checkout_button">
@@ -102,29 +102,26 @@
     var totalProducts;
     var leftMeals;
     let product_ids = [];
-    let variant_ids = []
-    changeRemaingMeals();
+    let variant_ids = [];
+    let totalPrice=0;
 
-  function incrementQuantityWithEvent(e){
-    let variantId = e.target.getAttribute("data-id");
-    let quantity_div = e.target.getAttribute("data-quantityid")
-    increment_quantity(variantId, quantity_div )
-  }
   //increment quantity
-  function increment_quantity(variantId, quantity_div){
+  function increment_quantity(variantId, quantity_div, price){
     // if(+$(".selected_products_number").html() < totalProducts){
       variant_ids.push(variantId)
       $(`.${quantity_div}`)?.html(+$(`.${quantity_div}`).html()+1)
       $(`.${quantity_div}`)?.val(+$(`.${quantity_div}`).html())
       $(".selected_products_number").html( +$(".selected_products_number").html() + 1)
-      changeRemaingMeals();
+      totalPrice += +price
+      $(".total_price_sub").html("<p>"+totalPrice?.toFixed(2)+"</p>")
     // }
   }
 
   //decrement quantity
   //increment quantity
   function decrement_quantity(e){
-    let id = e.target.getAttribute("data-id");
+    var id = e.target.getAttribute("data-id");
+    var price = e.target.getAttribute("data-price");
     if(+$(".selected_products_number").html() >= 1){
       index = variant_ids.indexOf(id);
       variant_ids.splice(index, 1);
@@ -132,37 +129,32 @@
       $(`.${quantity_div}`)?.html(+$(`.${quantity_div}`).html()-1)
       $(`.${quantity_div}`)?.val(+$(`.${quantity_div}`).html())
       $(".selected_products_number").html( +$(".selected_products_number").html() - 1)
-      changeRemaingMeals();
+      totalPrice -= +price
+      $(".total_price_sub").html("<p>"+totalPrice?.toFixed(2)+"</p>")
     }
-    
     if(+$(".quantity_"+id).val() === 0){
-      let dishDiv= "#dish_"+id
-      $(dishDiv).remove()
+      $(".product_card_"+id).remove();
     }
   }
 
-  //change remaing meals
-  function changeRemaingMeals(){
-     leftMeals = totalProducts - +$(".selected_products_number").html();
-     console.log("leftmeals",leftMeals,totalProducts)
-     if(leftMeals == 0){
-        $(".remaining_box").html("Your box is full, checkout now!");
-        $(".meals_full_mssg").removeClass("hide");
-        $(".confirm-current-week-sub-btn").removeClass("disabled_button");
-        $(".confirm-current-week-sub-btn").removeAttr("disabled")
-     }
-      else{
-        $(".remaining_box").html(`Add ${+leftMeals} More Meals`);
-        $(".meals_full_mssg").addClass("hide");
-        $(".confirm-current-week-sub-btn").addClass("disabled_button");
-        $(".confirm-current-week-sub-btn").attr("disabled", "disabled")
-      }
-   }
+  function removeVariant(id,price){
+    let quantity = $(`.${"quantity_"+id}`)?.html();
+    totalPrice = totalPrice - (+price * +quantity)
+    if(!totalPrice){
+      totalPrice = 0;
+    }
+    $(".total_price_sub").html("<p>"+totalPrice?.toFixed(2)+"</p>")
+    $(`.${"quantity_"+id}`)?.html("0");
+    let index = variant_ids.indexOf(id);
+    variant_ids.splice(index, 1);
+    $(".product_card_"+id).remove();
+  } 
+
   $(".add_products")?.on('click', function(){
-    
-      let quantity_div = "quantity_"+$(this).data("id");
+      var variantId = $(this).attr("data-id");
+      var quantity_div ="quantity_"+$(this).data("id");
       if($(`.${quantity_div}`)?.html() == 0){
-        $(".cart-items").append("<div class='product_card'> \
+        $(".cart-items").append("<div class='product_card product_card_"+$(this).data("id")+"'> \
                                     <div class='product_card_sub_main'> \
                                       <div class='product_card_sub'> \
                                         <div class='product_card_sub_body'> \
@@ -192,17 +184,17 @@
                                                 <div class='manage_quantit_sub'> \
                                                   <div class='manage_quantit_sub_body'> \
                                                     <div class='cart_quantity_picker'> \
-                                                      <button class='minus-value' data-id='"+$(this).data("id")+"' data-quantityid='quantity_"+$(this).data("id")+"' type='button' onclick='decrement_quantity(event)'> \
+                                                      <button class='minus-value' data-id='"+$(this).data("id")+"' data-quantityid='quantity_"+$(this).data("id")+"' data-price='"+$(this).data("price")+"' type='button' onclick='decrement_quantity(event)'> \
                                                           - \
                                                       </button> \
                                                       <span class='quantity_under_btn quantity_"+$(this).data("id")+"'>1</span> \
-                                                      <button class='add_meal_btn plusValue add_products' data-quantityid='quantity_"+$(this).data("id")+"' onclick='incrementQuantityWithEvent(event)' data-producttitle='"+$(this).data("producttitle")+"'  data-id='"+$(this).data("id")+"' data-imgurl='"+$(this).data("imageurl")+"' data-price='"+$(this).data("price")+"'>+ \
+                                                      <button class='add_meal_btn plusValue add_products' onclick=increment_quantity("+variantId+",'"+`${quantity_div}`+"',"+$(this).data("price")+") data-quantityid='quantity_"+$(this).data("id")+"' data-producttitle='"+$(this).data("producttitle")+"'  data-id='"+$(this).data("id")+"' data-imgurl='"+$(this).data("imageurl")+"' data-price='"+$(this).data("price")+"'>+ \
                                                       </button> \
                                                   </div> \
                                                 </div> \
                                               </div> \
                                             </div> \
-                                            <button aria-label='Remove Variant from Cart' class='btn btn-cstm remove_variant_button' data-id=' '>Remove</button> \
+                                            <button aria-label='Remove Variant from Cart' class='btn btn-cstm remove_variant_button' onclick='removeVariant("+$(this).data("id")+","+$(this).data("price")+")' data-id='"+$(this).data("id")+"'>Remove</button> \
                                           </div> \
                                         </div> \
                                       </div> \
@@ -210,16 +202,13 @@
                                   </div> \
                                 "); 
       }
-    variantId = $(this).attr("data-id");
-    quantity_div = $(this).attr("data-quantityid")
-    increment_quantity(variantId, quantity_div )
+    increment_quantity(variantId, quantity_div, $(this).data("price") )
   });
 
   $(".clear_all_meals").on("click",function(){
     $(".cart-items").html("");
     $(".quantity_under_btn").html(0);
     $(".selected_products_number").html(0);
-    changeRemaingMeals();
     variant_ids = [];
   })
 

@@ -64,12 +64,12 @@ img {
 }
 
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+.curvo_bundle_main h1,
+.curvo_bundle_main h2,
+.curvo_bundle_main h3,
+.curvo_bundle_main h4,
+.curvo_bundle_main h5,
+.curvo_bundle_main h6 {
   margin: 0;
   padding: 0;
   color: var(--primary-dark);

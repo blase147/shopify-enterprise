@@ -149,6 +149,19 @@ class SendEmailService
         return sent
     end
 
+    def send_rebuy_email(user, url, shop_id)
+        shop = Shop.find(shop_id)
+        email_notification = shop.setting.email_notifications.find_by_name "Rebuy"
+        
+        sent= EmailService::Send.new(email_notification).send_email({customer: user,url: url}) if email_notification.present? && shop.setting.email_service.present?
+        if sent
+            SiteLog.create(log_type: SiteLog::TYPES[:email_success], message: "Rebuy email sent successfully")
+        else
+            SiteLog.create(log_type: SiteLog::TYPES[:email_failure], params: {id: user.id, shopify_id: user.shopify_id })
+        end
+        return sent
+    end
+
     #-----------------------Contract Actions Emails----------------------
     def send_skip_meal(contract, begin_date, end_date)
         email_notification = contract.shop.setting.email_notifications.find_by_name "Skip Meal"
