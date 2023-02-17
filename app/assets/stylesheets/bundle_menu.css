@@ -1353,7 +1353,7 @@ img {
 
 /* progess bar */
 .progress-container {
-  box-shadow: 0 4px 5px rgb(0, 0, 0, 0.1)
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1)
 }
 
 .progress-container,
