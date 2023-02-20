@@ -1,6 +1,6 @@
 class AppProxy::BundleController < AppProxyController
   layout 'application'
-  before_action :set_shop
+  before_action :set_shop, except: %i[update_curvos_bundle]
   before_action :update_contracts, only: :add_product
 
   def index
@@ -38,6 +38,13 @@ class AppProxy::BundleController < AppProxyController
     get_bundle_products
     render 'curvos_bundle', content_type: 'application/liquid', layout: 'rebuy_liquid_app_proxy'
   end
+
+  def update_curvos_bundle
+    variants = params[:variants]&.split(",")
+    CurvosModel.find_or_initialize_by(mix_panel_id: params[:mix_panel_id]).update(variants: variants)
+    render json:{status: :ok}
+  end
+
   private
 
   def fetch_products(products)
@@ -59,8 +66,10 @@ class AppProxy::BundleController < AppProxyController
       # abort(@bundle_menu.shop.to_json)
       shop = @bundle_menu.shop
       shop.connect
-      products = (@bundle_menu.collection_images&.map{|c| c["products"]}.first + @bundle_menu.product_images)&.map{|p| p["product_id"][/\d+/]} rescue []
-      free_products = (@bundle_menu.free_product_collections&.map{|c| c["products"]}.first + @bundle_menu.free_products_images)&.map{|p| p["product_id"][/\d+/]} rescue []
+      products = @bundle_menu.collection_images&.map{|c| c["products"]}.first || @bundle_menu.product_images 
+      products = products&.map{|p| p["product_id"][/\d+/]} rescue []
+      free_products = @bundle_menu.free_product_collections&.map{|c| c["products"]}.first || @bundle_menu.free_products_images
+      free_products = free_products&.map{|p| p["product_id"][/\d+/]} rescue []
       all_product_ids = products + free_products
       @all_products = ShopifyAPI::Product.where(ids: all_product_ids.join(","),  fields: 'id,title,images,body_html,variants') 
       gon.all_products = @all_products

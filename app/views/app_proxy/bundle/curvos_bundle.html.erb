@@ -186,13 +186,20 @@
 </div>
 <!----------  end-section ------------>
 
+<%= javascript_pack_tag 'mixpanel', 'data-turbolinks-track': 'reload' %>
+
 <script>
 
 function check_out_button(){
-      let url = `https://<%= @bundle_menu.shop.shopify_domain %>/cart/${selectedProducts[0]?.variant}:1`;
-      mixpanelIdentify('<%= get_customer_modal(@customer&.shopify_customer_id)&.mixpanel_id %>')
-      mixpanelTrack("Added Meals", {contract_shopify_id: `<%= @customer&.shopify_id %>`, week: week_number})
+      let variants = []
+      selectedProducts?.map((val, i)=>{
+        variants.push(`variant_${i+1}: ${val.variant}`)
+      })
+      let order_note = ""+`${variants.join(",")}, mixpanel_id: ${gloabalMixpanelId}`+"" 
+      let url = `https://<%= @bundle_menu.shop.shopify_domain %>/cart/${selectedProducts[0]?.variant}:1?note=${order_note}`;
       window.location.href = url;
+      // mixpanelIdentify('<%= get_customer_modal(@customer&.shopify_customer_id)&.mixpanel_id %>')
+      // mixpanelTrack("Added Meals", {contract_shopify_id: `<%= @customer&.shopify_id %>`, week: week_number})
   }
 
   var allProducts = gon.all_products
@@ -306,15 +313,22 @@ function check_out_button(){
     $(".cart_total_price").html("$"+totalPrice.toFixed(2))
     $(".add_bundle_cart").removeAttr("disabled");   
     setPercentage()
+
+    //update_curvos_bundle
+    let variants = []
+    selectedProducts?.map((val, i)=>{
+      variants.push(val.variant)
+    })
+    $.ajax({
+      type: "get",
+      data: "variants="+variants.join(",")+"&mix_panel_id="+gloabalMixpanelId,
+      url: "/a/chargezen/updateCurvosBundle"
+    })
   }
 
 
 
 </script>
 
-<%= javascript_pack_tag 'mixpanel', 'data-turbolinks-track': 'reload' %>
-<script>
-  let mixpanelId = mixpanelGetIdentify();
-  console.log("mixpanel", mixpanelId);
-</script>
+
     
