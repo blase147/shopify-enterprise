@@ -186,12 +186,19 @@
 </div>
 <!----------  end-section ------------>
 
+<%= javascript_pack_tag 'mixpanel', 'data-turbolinks-track': 'reload' %>
+
 <script>
 
 function check_out_button(){
-      let url = `https://<%= @bundle_menu.shop.shopify_domain %>/cart/${selectedProducts[0]?.variant}:1`;
-      mixpanelIdentify('<%= get_customer_modal(@customer&.shopify_customer_id)&.mixpanel_id %>')
-      mixpanelTrack("Added Meals", {contract_shopify_id: `<%= @customer&.shopify_id %>`, week: week_number})
+      let variants = []
+      selectedProducts?.map((val, i)=>{
+        variants.push(`variant_${i+1}: ${val.variant}`)
+      })
+      let order_note = ""+`${variants.join(",")}, mixpanel_id: ${gloabalMixpanelId}`+"" 
+      let url = `https://<%= @bundle_menu.shop.shopify_domain %>/cart/clear?return_to=/cart/add?items[][id]=${selectedProducts[0]?.variant}%26items[][quantity]=1%26items[][selling_plan]=<%= @bundle_menu.selling_plans.first["sellingPlanId"][/\d+/]%>%26return_to=/checkout`;
+      mixpanelIdentify(gloabalMixpanelId)
+      mixpanelTrack("Curvos Bundle", {variants: `${variants.join(",")}`, selingPlan: <%= @bundle_menu.selling_plans.first["sellingPlanId"][/\d+/ ]%>})
       window.location.href = url;
   }
 
@@ -263,6 +270,7 @@ function check_out_button(){
 
 
       $(".progress_right"+selectedProducts.length).html("$"+$(this).data("price"))
+      $(".progress_right"+selectedProducts.length).attr("data-variant"+selectedProducts.length, $(this).data("variant"))
       $(".cart_box_products:eq("+(selectedProducts.length - 1) +")").html("<img src="+$(this).data("image")+">")
       selectedProducts.map((p)=>{
         totalPrice += +p.price
@@ -298,6 +306,7 @@ function check_out_button(){
         selectedProducts[index] = selectedProperty;
     }
     $(".progress_right"+selectedProducts.length).html("$"+price)
+    $(".progress_right"+selectedProducts.length).attr("data-variant"+selectedProducts.length, variant)
     selectedProperty = null;
     $(".cart_box_products:eq("+ (selectedProducts.length - 1) +")").html("<img src="+img+">")
     selectedProducts.map((p)=>{
@@ -306,15 +315,26 @@ function check_out_button(){
     $(".cart_total_price").html("$"+totalPrice.toFixed(2))
     $(".add_bundle_cart").removeAttr("disabled");   
     setPercentage()
+
+    //update_curvos_bundle
+    let variants = {}
+    let a = [1,2,3,4]
+    a.map((i)=>{
+      variants["variant"+i] = $(".progress_right"+i).data("variant"+i);
+    })
+    // selectedProducts?.map((val, i)=>{
+    //   variants.push(val.variant)
+    // })
+    $.ajax({
+      type: "get",
+      data: "variants="+JSON.stringify(variants)+"&mix_panel_id="+gloabalMixpanelId,
+      url: "/a/chargezen/updateCurvosBundle"
+    })
   }
 
 
 
 </script>
 
-<%= javascript_pack_tag 'mixpanel', 'data-turbolinks-track': 'reload' %>
-<script>
-  let mixpanelId = mixpanelGetIdentify();
-  console.log("mixpanel", mixpanelId);
-</script>
+
     

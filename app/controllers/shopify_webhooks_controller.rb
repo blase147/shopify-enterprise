@@ -31,6 +31,9 @@ class ShopifyWebhooksController < ApplicationController
         generate_and_send_account_activation_email
       end
       UpdateLoyalityPointsService.update_order_loyality_points(shop, params[:id])
+      if shop.shopify_domain.include?("curvos")
+        CurvosBundleService.new.update_shopify_id(shop.id,params[:id])
+      end
     rescue => e
       p e
     end

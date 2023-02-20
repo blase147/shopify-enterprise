@@ -1,0 +1,2 @@
+class CurvosModel < ApplicationRecord
+end

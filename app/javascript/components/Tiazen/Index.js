@@ -11,6 +11,7 @@ import BuildBox from '../build-a-box/BuildBox';
 import CreateBuildBox from '../build-a-box/CreateBuildBox';
 import Bundles from '../bundles';
 import BundleForm from '../bundles/BundleForm';
+import CreateBundleMenu from "../BundleMenu/CreateBundleMenu"
 import WaysToEarnPoint from '../WaysToEarnPoint';
 
 const Index = () => {
@@ -68,6 +69,12 @@ const Index = () => {
     {
       key: 'bundle',
       title: 'Bundle',
+      img: InformationImage,
+      desc: 'Allow your customers to build bundle.',
+    },
+    {
+      key: 'bundleMenu',
+      title: 'Bundle Menu',
       img: InformationImage,
       desc: 'Allow your customers to build bundle.',
     },
@@ -168,32 +175,42 @@ const Index = () => {
                           handleBack={handleBackSetting}
                           handleForm={handleEditPage}
                         />
-                      )}
+                      )
+                      }
                     </>
                   ) :
                     selectedSetting === 'bundle' ? (
-                    <>
-                      {showEditPage ? (
-                        <BundleForm
-                          id={editId}
-                          handleClose={handleCloseEditPage}
-                        />
-                      ) : (
-                        <Bundles
+                      <>
+                        {showEditPage ? (
+                          <BundleForm
+                            id={editId}
+                            handleClose={handleCloseEditPage}
+                          />
+                        ) : (
+                          <Bundles
+                            handleBack={handleBackSetting}
+                            handleForm={handleEditPage}
+                          />
+                        )}
+                      </>
+                    ) : selectedSetting === 'bundleMenu' ? (
+                      <>
+                        (
+                        <CreateBundleMenu
                           handleBack={handleBackSetting}
                           handleForm={handleEditPage}
                         />
+                        )
+                      </>
+                    ) :
+                      // selectedSetting == "waysToEarnPoint" ? (
+                      //   <>
+                      //     <WaysToEarnPoint />
+                      //   </>
+                      // ) :
+                      (
+                        ''
                       )}
-                    </>
-                  ) :
-                    // selectedSetting == "waysToEarnPoint" ? (
-                    //   <>
-                    //     <WaysToEarnPoint />
-                    //   </>
-                    // ) :
-                    (
-                      ''
-                    )}
                 </Layout.Section>
               </Layout>
             </>
