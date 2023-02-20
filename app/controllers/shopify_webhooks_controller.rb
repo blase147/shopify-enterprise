@@ -32,7 +32,7 @@ class ShopifyWebhooksController < ApplicationController
       end
       UpdateLoyalityPointsService.update_order_loyality_points(shop, params[:id])
       if shop.shopify_domain.include?("curvos")
-        CurvosBundleService.new.update_shopify_id(shop.id,order.id)
+        CurvosBundleService.new.update_shopify_id(shop.id,params[:id])
       end
     rescue => e
       p e

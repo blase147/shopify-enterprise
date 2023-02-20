@@ -50,7 +50,7 @@ const CreateBundleMenu = () => {
   const [updated, setUpdated] = useState(false);
 
   const locationOptions = [
-    { label: 'Customer Portal', value: 'customer_portal' },
+    { label: 'Curvos', value: 'curvos' },
     { label: 'Huron', value: 'huron' },
   ];
 

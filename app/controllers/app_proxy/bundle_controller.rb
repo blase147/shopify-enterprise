@@ -40,8 +40,7 @@ class AppProxy::BundleController < AppProxyController
   end
 
   def update_curvos_bundle
-    variants = params[:variants]&.split(",")
-    CurvosModel.find_or_initialize_by(mix_panel_id: params[:mix_panel_id]).update(variants: variants)
+    CurvosModel.find_or_initialize_by(mix_panel_id: params[:mix_panel_id]).update(variants: params[:variants])
     render json:{status: :ok}
   end
 
