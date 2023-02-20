@@ -327,7 +327,7 @@ function check_out_button(){
     // })
     $.ajax({
       type: "get",
-      data: "variants="+JSON.stringify(variants)+"&mix_panel_id="+gloabalMixpanelId,
+      data: "variants="+JSON.stringify(variants)+"&mix_panel_id="+gloabalMixpanelId+"&selling_plan=<%= @bundle_menu.selling_plans.first["sellingPlanId"][/\d+/ ]%>",
       url: "/a/chargezen/updateCurvosBundle"
     })
   }
