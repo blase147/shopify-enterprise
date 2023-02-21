@@ -1,1 +1,41 @@
-CustomerSubscriptionContract.create({first_name: "chargezen", last_name: "testing", email: "alaw3813@gmail.com", phone: nil, address_1: nil, address_2: nil, gender: nil, communication: "1 Month Pack", avatar: nil, birthday: nil, shopify_id: "10655039790", shop_id: 111, created_at: "2023-02-21 12:21:22", updated_at: "2023-02-21 12:21:22", status: "ACTIVE", subscription: "Shaperly™ Premium Bra", language: "$34.99 / MONTHs", auto_collection: nil, pack: nil, frequency: nil, shopify_at: "2023-02-21 05:00:00", country: nil, city: nil, province: nil, zip: nil, company: nil, shopify_updated_at: "2023-02-21 05:00:00", opt_in_sent: false, opt_in_reminder_at: nil, failed_at: nil, retry_count: 0, reasons_cancel_id: nil, cancelled_at: nil, billing_interval: nil, shopify_customer_id: "6791037813038", box_items: nil, campaign_date: nil, api_source: "shopify", api_data: {"id"=>"gid://shopify/SubscriptionContract/10655039790", "created_at"=>"2023-02-21T12:21:19Z", "updated_at"=>"2023-02-21T12:21:19Z", "status"=>"ACTIVE", "next_billing_date"=>"2023-03-21T11:00:00Z", "app_admin_url"=>"https://shopapp.chargezen.co/subscriptions?customer_id=6791037813038&hmac=866732201d3d6a5266bd68216e112f26237c7957957dde23cc0a36e3c4d2638f&host=Y3Vydm9zLWNoYXJnZXplbi5teXNob3BpZnkuY29tL2FkbWlu&id=10655039790&shop=curvos-chargezen.myshopify.com&timestamp=1676982082", "lines"=>{"edges"=>[{"node"=>{"title"=>"Shaperly™ Premium Bra", "id"=>"gid://shopify/SubscriptionLine/226ba909-c1f6-4d66-a5ab-5063ffb98b94", "quantity"=>1, "product_id"=>"gid://shopify/Product/8130464710958", "selling_plan_id"=>"gid://shopify/SellingPlan/688802070830", "pricing_policy"=>{"__typename"=>"SubscriptionPricingPolicy"}, "selling_plan_name"=>"Curvos Plan", "variant_id"=>"gid://shopify/ProductVariant/44532427522350", "current_price"=>{"amount"=>"34.99"}}}]}, "orders"=>{"edges"=>[{"node"=>{"id"=>"gid://shopify/Order/5271680090414", "name"=>"#1026", "created_at"=>"2023-02-21T12:21:17Z", "net_payment_set"=>{"__typename"=>"MoneyBag"}, "note"=>nil, "total_received_set"=>{"presentment_money"=>{"amount"=>"39.89"}}, "events"=>{"page_info"=>{"__typename"=>"PageInfo"}, "edges"=>[{"node"=>{"__typename"=>"BasicEvent", "id"=>"gid://shopify/BasicEvent/103737523405102", "created_at"=>"2023-02-21T12:21:21Z", "message"=>"$38.03 USD will be added to your Feb 23, 2023 payout."}}, {"node"=>{"__typename"=>"BasicEvent", "id"=>"gid://shopify/BasicEvent/103737523241262", "created_at"=>"2023-02-21T12:21:20Z", "message"=>"$39.89 USD was captured using a Visa ending in 4242."}}, {"node"=>{"__typename"=>"BasicEvent", "id"=>"gid://shopify/BasicEvent/103737522815278", "created_at"=>"2023-02-21T12:21:20Z", "message"=>"Order confirmation email was sent to chargezen testing (alaw3813@gmail.com)."}}, {"node"=>{"__typename"=>"BasicEvent", "id"=>"gid://shopify/BasicEvent/103737522684206", "created_at"=>"2023-02-21T12:21:20Z", "message"=>"Received new order <a href=\"https://curvos-chargezen.myshopify.com/admin/orders/5271680090414\">#1026</a> by chargezen testing."}}, {"node"=>{"__typename"=>"BasicEvent", "id"=>"gid://shopify/BasicEvent/103737521963310", "created_at"=>"2023-02-21T12:21:18Z", "message"=>"$39.89 USD was authorized using a Visa ending in 4242."}}, {"node"=>{"__typename"=>"BasicEvent", "id"=>"gid://shopify/BasicEvent/103737521504558", "created_at"=>"2023-02-21T12:21:17Z", "message"=>"Confirmation #5CXJRDJ18 was generated for this order."}}, {"node"=>{"__typename"=>"BasicEvent", "id"=>"gid://shopify/BasicEvent/103737521471790", "created_at"=>"2023-02-21T12:21:17Z", "message"=>"chargezen testing placed this order on Online Store (checkout #36566560964910)."}}]}}}]}, "customer"=>{"id"=>"gid://shopify/Customer/6791037813038", "display_name"=>"chargezen testing", "first_name"=>"chargezen", "last_name"=>"testing", "email"=>"alaw3813@gmail.com", "phone"=>nil, "payment_methods"=>{"edges"=>[{"node"=>{"id"=>"gid://shopify/CustomerPaymentMethod/b292137dca40634f35356ac41337099d", "instrument"=>{}}}, {"node"=>{"id"=>"gid://shopify/CustomerPaymentMethod/2b754bdc3ff9b99d564872757eb72270", "instrument"=>{}}}, {"node"=>{"id"=>"gid://shopify/CustomerPaymentMethod/ac375b6844be40c3e6021124db231512", "instrument"=>{}}}, {"node"=>{"id"=>"gid://shopify/CustomerPaymentMethod/5d2f15df41dab02c42478069ce80237b", "instrument"=>{}}}, {"node"=>{"id"=>"gid://shopify/CustomerPaymentMethod/f333c6ceae7df485248bd3d53e5ad69e", "instrument"=>{}}}]}, "default_address"=>{"id"=>"gid://shopify/MailingAddress/9041724375342?model_name=CustomerAddress", "formatted"=>["600 California Street", "San Francisco CA 94108", "United States"], "address1"=>"600 California Street", "address2"=>nil, "phone"=>nil, "zip"=>"94108", "province"=>"California", "country"=>"United States", "city"=>"San Francisco"}}, "origin_order"=>{"id"=>"gid://shopify/Order/5271680090414", "shipping_address"=>{"formatted"=>["600 California Street", "San Francisco AL 35013", "United States"]}, "line_items"=>{"edges"=>[{"node"=>{"id"=>"gid://shopify/LineItem/13740235325742", "quantity"=>1, "custom_attributes"=>[], "selling_plan"=>{"name"=>"Curvos Plan"}, "product"=>{"id"=>"gid://shopify/Product/8130464710958", "title"=>"Shaperly™ Premium Bra", "images"=>{"edges"=>[{"node"=>{"original_src"=>"https://cdn.shopify.com/s/files/1/0724/7046/2766/products/Shaperbra1_1.webp?v=1676467847"}}]}}}}]}}, "customer_payment_method"=>{"id"=>"gid://shopify/CustomerPaymentMethod/f333c6ceae7df485248bd3d53e5ad69e"}, "delivery_method"=>{}, "delivery_policy"=>{"interval"=>"MONTH", "interval_count"=>1}, "billing_policy"=>{"interval"=>"MONTH", "interval_count"=>1}}, api_resource_id: nil, import_data: nil, import_type: nil, selling_plan_id: "13", billing_attempts: nil, skip_dates: [], delivery_day: nil, delivery_date: nil, origin_order_meals: nil, pause_later: nil, cancel_later: nil})
+class PopulateCustomerOrderWorker
+    include Sidekiq::Worker
+    def perform
+        shops = Shop.all
+        shops&.each do |shop|
+            shop = Shop.find(shop_id).includes(:bulk_operation_responses)
+            all_orders = JSON.parse( shop.bulk_operation_responses.find_by_response_type("all_orders")&.api_raw_data)&.map{ |object| object.deep_transform_keys(&:underscore)} rescue nil
+            if all_orders.present?
+                customers_with_orders = get_all_customers_of_most_popular_products(all_orders)
+                customers_with_orders&.each do |customer_with_order|
+                    customer = CustomerModal.find_by("lower(email) = '#{customer_with_order.first.downcase}' ") rescue nil
+                    if customer.present?
+                        orders = customer_with_order.second
+                        orders.each do |order|
+                            order_object = JSON.parse(order)
+                            order_id = order_object["id"]
+
+                            status = order_object["cancelled_at"].present? ? "canceled" : order_object["display_financial_status"].downcase
+                            customer_order = CustomerOrder.find_or_initialize_by(order_id: order_id)
+                            customer_order.update(shop_id: shop.id, customer_modal_id: customer.id, api_data: order, status: status)
+                        end
+                    end
+                end
+            end        
+        end
+    end
+
+    def get_all_customers_of_most_popular_products all_orders
+        customers_with_orders = {}
+        all_orders.each do |order| 
+            order["line_items"]["edges"].each do |line_item|
+                if customers_with_orders["#{order["email"]}"].present?
+                customers_with_orders["#{order["email"]}"] << order.to_json
+                else
+                customers_with_orders["#{order["email"]}"] = [order.to_json]
+                end 
+            end 
+        end
+        customers_with_orders
+    end
+end
