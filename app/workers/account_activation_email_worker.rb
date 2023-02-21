@@ -3,15 +3,17 @@ class AccountActivationEmailWorker
 
   def perform(customer_id)
     csc = CustomerSubscriptionContract.find_by(shopify_customer_id: customer_id)
-    shop = csc.shop
-    shop.connect
-    activation_url = GenerateAccountActivationUrl.new(customer_id).generate
-    if activation_url.present?
-      response = SendEmailService.new.send_account_activation_url_email(csc, activation_url)
-      if response[:status]
-        SiteLog.create(log_type: SiteLog::TYPES[:email_success], message: response[:email_body])
-      else
-        SiteLog.create(log_type: SiteLog::TYPES[:email_failure], params: {email_body: response[:email_body], id: csc.id, emaill: csc.email, shopify_id: csc.shopify_customer_id })
+    if csc.present?
+      shop = csc.shop
+      shop.connect
+      activation_url = GenerateAccountActivationUrl.new(customer_id).generate
+      if activation_url.present?
+        response = SendEmailService.new.send_account_activation_url_email(csc, activation_url)
+        if response[:status]
+          SiteLog.create(log_type: SiteLog::TYPES[:email_success], message: response[:email_body])
+        else
+          SiteLog.create(log_type: SiteLog::TYPES[:email_failure], params: {email_body: response[:email_body], id: csc.id, emaill: csc.email, shopify_id: csc.shopify_customer_id })
+        end
       end
     end
   rescue => e

@@ -35,7 +35,7 @@ class SubscriptionsController < AuthenticatedController
     end
 
     @subscription = JSON.parse(@customer.api_data.to_json, object_class: OpenStruct)
-    @customer&.shop.connect
+    current_shop.connect
     @payment_method = SubscriptionContractService.new(@customer.shopify_id).get_subscription_payment_method
     products = ProductService.new.list
     @swap_products = products.is_a?(Hash) ? nil : products&.select{ |p| p.node.selling_plan_group_count > 0 }

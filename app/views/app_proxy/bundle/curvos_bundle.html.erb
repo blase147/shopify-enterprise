@@ -197,6 +197,7 @@ function check_out_button(){
       })
       let order_note = ""+`${variants.join(",")}, mixpanel_id: ${gloabalMixpanelId}`+"" 
       let url = `https://<%= @bundle_menu.shop.shopify_domain %>/cart/clear?return_to=/cart/add?items[][id]=${selectedProducts[0]?.variant}%26items[][quantity]=1%26items[][selling_plan]=<%= @bundle_menu.selling_plans.first["sellingPlanId"][/\d+/]%>%26return_to=/checkout`;
+        console.log("url",url);
       mixpanelIdentify(gloabalMixpanelId)
       mixpanelTrack("Curvos Bundle", {variants: `${variants.join(",")}`, selingPlan: <%= @bundle_menu.selling_plans.first["sellingPlanId"][/\d+/ ]%>})
       window.location.href = url;
@@ -278,6 +279,7 @@ function check_out_button(){
       totalPrice += +$(this).data("price")
       $(".cart_total_price").html("$"+totalPrice.toFixed(2));
       setPercentage()
+      updateCurvosModal()
     })
 
   function selectVariants(){
@@ -315,7 +317,11 @@ function check_out_button(){
     $(".cart_total_price").html("$"+totalPrice.toFixed(2))
     $(".add_bundle_cart").removeAttr("disabled");   
     setPercentage()
+    updateCurvosModal()
+    
+  }
 
+  function updateCurvosModal(){
     //update_curvos_bundle
     let variants = {}
     let a = [1,2,3,4]
@@ -331,7 +337,6 @@ function check_out_button(){
       url: "/a/chargezen/updateCurvosBundle"
     })
   }
-
 
 
 </script>

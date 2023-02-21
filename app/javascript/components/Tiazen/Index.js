@@ -13,6 +13,7 @@ import Bundles from '../bundles';
 import BundleForm from '../bundles/BundleForm';
 import CreateBundleMenu from "../BundleMenu/CreateBundleMenu"
 import WaysToEarnPoint from '../WaysToEarnPoint';
+import BundleMenus from '../BundleMenu/Index';
 
 const Index = () => {
   const [selectedSetting, setSelectedSetting] = useState('');
@@ -195,12 +196,12 @@ const Index = () => {
                       </>
                     ) : selectedSetting === 'bundleMenu' ? (
                       <>
-                        (
-                        <CreateBundleMenu
+
+                        <BundleMenus
                           handleBack={handleBackSetting}
                           handleForm={handleEditPage}
                         />
-                        )
+
                       </>
                     ) :
                       // selectedSetting == "waysToEarnPoint" ? (
