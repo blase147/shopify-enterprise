@@ -10,6 +10,7 @@ class CustomerSubscriptionContract < ApplicationRecord
   belongs_to :shop, foreign_key: :shop_id
   belongs_to :reasons_cancel, optional: true
   mount_uploader :avatar, AvatarUploader
+  has_many :curvos_models, dependent: :destroy
   has_many :additional_contacts, foreign_key: 'customer_id', dependent: :destroy
   has_one :billing_address, foreign_key: 'customer_id', dependent: :destroy
   has_many :sms_conversations, foreign_key: 'customer_id', dependent: :destroy

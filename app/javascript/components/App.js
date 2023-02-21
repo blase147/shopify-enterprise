@@ -49,6 +49,7 @@ import StripeContract from './StripeContracts';
 import { DomainContext } from './domain-context';
 import StripeContractsList from './StripeContracts/StripeContractsList';
 import CreateBundleMenu from './BundleMenu/CreateBundleMenu';
+import BundleMenus from './BundleMenu/Index';
 
 
 
@@ -142,6 +143,7 @@ export default function App(props) {
             <ApolloProvider client={client}>
               <Switch>
                 <AppLayout typePage="createCustomer" tabIndex="2" domain={props?.domain}>
+                  <Route exact path="/bundles" component={BundleMenus} />
                   <Route exact path="/createBundleMenu" component={CreateBundleMenu} />
                   <Route exact path="/stripeContractsList" component={StripeContractsList} />
                   <Route exact path="/createStripeContract" component={StripeContract} />

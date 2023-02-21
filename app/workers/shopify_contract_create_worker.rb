@@ -42,6 +42,15 @@ class ShopifyContractCreateWorker
             delivery_day = note&.value
           end
         end
+        curvos = CurvosModel.find_by_order_id(order.id) rescue nil
+        if curvos.present?
+          curvos.update(customer_subscription_contract_id: contract.shopify_id)
+          variants = JSON.parse(curvos.variants) rescue nil
+          variants&.keys&.each do |k|
+            variant = variants[k]
+            SubscriptionContractDraftService.new({"variant_id": variant}).get_draft_billing_cycle(contract.shopify_id, k[/\d+/])
+          end
+        end
         
         order.tags << "#{ delivery_date }, #{ delivery_day }"
         order.save

@@ -1,2 +1,3 @@
-class CurvosModel < ApplicationRecord
-end
+    class CurvosModel < ApplicationRecord
+        belongs_to :customer_subscription_contract
+    end

@@ -49,6 +49,55 @@ class SubscriptionContractDraftService < GraphqlService
     }
   GRAPHQL
 
+  GET_BILLING_CYCLE    = <<-GRAPHQL
+    mutation($contractId: ID!, $index: Int) {
+      subscriptionBillingCycleContractEdit(billingCycleInput: {
+        contractId: $contractId,
+        selector: { index: $index }
+      }){
+        draft {
+          id
+          lines(first:10) {
+            edges {
+              node {
+                id
+              }
+            }
+          }
+          billingCycle {
+            cycleIndex
+            cycleStartAt
+            cycleEndAt
+          }
+        }
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  GRAPHQL
+
+  REMOVE_LINE_ITEM    = <<-GRAPHQL
+    mutation($draftId: ID!, $lineId: ID!) {
+      subscriptionDraftLineRemove(
+        draftId: $draftId
+        lineId: $lineId
+      ) {
+        draft {
+          id
+        }
+        lineRemoved {
+          id
+        }
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  GRAPHQL
+
   COMPLETE_QUERY = <<-GRAPHQL
     mutation($id: ID!) {
       subscriptionDraftCommit(draftId: $id) {
@@ -93,10 +142,11 @@ class SubscriptionContractDraftService < GraphqlService
   GRAPHQL
 
   def initialize(data)
-    @data = data["data"]
-    @customer_id = data["customer_id"]
-    @selling_plan = FetchWithQueryFromShopify.new.fetch_sellingplans(data["sellingplangroup"], data["sellingplan"])
-    @payment_id = data["data"]["payment_method_id"]
+    @data = data["data"] rescue nil
+    @customer_id = data["customer_id"] rescue nil
+    @selling_plan = FetchWithQueryFromShopify.new.fetch_sellingplans(data["sellingplangroup"], data["sellingplan"]) rescue nil
+    @payment_id = data["data"]["payment_method_id"] rescue nil
+    @variant_id = data["variant_id"] rescue nil
   end
 
   def fetch_customer
@@ -203,4 +253,62 @@ class SubscriptionContractDraftService < GraphqlService
     p ex.message
     { error: ex.message }
   end
+
+  def get_draft_billing_cycle id, billing_index
+    id = if id.is_a?(String) && id.include?('SubscriptionContract')
+      id
+    else
+      "gid://shopify/SubscriptionContract/#{id}"
+    end
+    result = client.query(client.parse(GET_BILLING_CYCLE), variables: { contractId: id, index: billing_index} )
+    sleep CalculateShopifyWaitTime.calculate_wait_time(result&.extensions["cost"]) if result&.extensions.present?
+    errors = result.data.subscription_draft_line_add.user_errors
+    raise errors.first.message if errors.present?
+
+    draft_id = result.data.subscription_billing_cycle_contract_edit.draft.id
+    first_line_item_id = result.data.subscription_billing_cycle_contract_edit.draft.lines.edges.first.node.id
+
+    #remove Line item
+    remove_line(draft_id, first_line_item_id)
+
+    #AddLineItem
+    variant = ShopifyAPI::Variant.find(@variant_id)
+    result = add_line_product(draft_id, @variant_id, 1, variant.price)
+
+
+
+  rescue Exception => ex
+    p ex.message
+    { error: ex.message }
+  end
+
+  def remove_line draft_id, first_line_item_id
+    result = client.query(client.parse(REMOVE_LINE_ITEM), variables: { draftId: draft_id, lineId: first_line_item_id} )
+    sleep CalculateShopifyWaitTime.calculate_wait_time(result&.extensions["cost"]) if result&.extensions.present?
+    errors = result.data.subscription_draft_line_remove.user_errors
+    raise errors.first.message if errors.present?
+  rescue Exception => ex
+    p ex.message
+    { error: ex.message }
+  end
+
+  def add_line_product draft_id, variant_id, quantity, price
+    input = {
+      productVariantId: "gid://shopify/ProductVariant/#{variant_id}",
+      quantity: quantity.to_i,
+      currentPrice: price.to_f,
+    }
+    result = client.query(client.parse(ADD_LINE_QUERY), variables: { input: input , id: draft_id})
+    sleep CalculateShopifyWaitTime.calculate_wait_time(result&.extensions["cost"]) if result&.extensions.present?
+    errors = result.data.subscription_draft_line_add.user_errors
+    raise errors.first.message if errors.present?
+
+    @draft_line_add_id = result.data.subscription_draft_line_add.line_added.id
+
+    complete unless @draft_line_add_id.nil?
+  rescue Exception => ex
+    p ex.message
+    { error: ex.message }
+  end
+
 end

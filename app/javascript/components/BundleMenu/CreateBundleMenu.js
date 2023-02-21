@@ -325,8 +325,8 @@ const CreateBundleMenu = () => {
         title="Create Bundle Menu"
         breadcrumbs={[
           {
-            content: 'Build a box Campaigns',
-            onAction: () => handleClose(),
+            content: 'Bundles',
+            onAction: () => history.push("/bundles"),
           },
         ]}
       >
