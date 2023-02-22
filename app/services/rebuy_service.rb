@@ -1,9 +1,10 @@
 class RebuyService
-    def init
+    def init(shop_id)
+        @shop_id = shop_id        
     end
 
-    def get_most_popular_products(shop_id)
-        shop = Shop.find(shop_id)
+    def get_most_popular_products
+        shop = Shop.find(@shop_id)
         all_orders = JSON.parse( shop.bulk_operation_responses.find_by_response_type("all_orders")&.api_raw_data, object_class: OpenStruct)        
         products_order_count = get_products_with_quantity(all_orders)
         most_popular_products  = products_order_count&.compact&.sort_by {|p| p[:quantity]}&.reverse    
@@ -46,24 +47,25 @@ class RebuyService
     #     customers_with_products
     # end
     
-    def create_rebuy(shop_id, customer_modal_id)
-        shop = Shop.find(shop_id)   
-        most_popular_products = get_most_popular_products(shop_id)   
-        purchased_products = filter_product_from_order_history(most_popular_products, shop_id, customer_modal_id)
-
-        other_products = most_popular_products - purchased_products
-        customer = CustomerModal.find(customer_modal_id)
-        token = SecureRandom.urlsafe_base64(nil, false)
-        shop.rebuys.create(
-            token: token,
-            purchased_products: purchased_products&.map{|v| v.to_json},
-            other_products: other_products&.map{|v| v.to_json},
-            customer_modal_id: customer.id
-        )
+    def create_rebuy
+        shop = Shop.find(@shop_id)   
+        most_popular_products = get_most_popular_products
+        shop.customer_modals&.each do |customer|
+            purchased_products = filter_product_from_order_history(most_popular_products, customer.id)
+            other_products = most_popular_products - purchased_products
+            token = SecureRandom.urlsafe_base64(nil, false)
+            shop.rebuys.create(
+                token: token,
+                purchased_products: purchased_products&.map{|v| v.to_json},
+                other_products: other_products&.map{|v| v.to_json},
+                customer_modal_id: customer.id
+            )
+            sent = send_email_and_sms(customer.id, token) rescue nil
+        end
     end
 
-    def populate_data(shop_id)
-        shop = Shop.find(shop_id).includes(:bulk_operation_responses)
+    def populate_data
+        shop = Shop.find(@shop_id).includes(:bulk_operation_responses)
         all_orders = JSON.parse( shop.bulk_operation_responses.find_by_response_type("all_orders")&.api_raw_data, object_class: OpenStruct)
         
         products_order_count = get_products_with_quantity(all_orders)
@@ -71,8 +73,8 @@ class RebuyService
         most_popular_products = most_popular_products.first(5)&.map(&:first)
     end
 
-    def filter_product_from_order_history(products, shop_id, customer_modal_id)
-        shop = Shop.find(shop_id)
+    def filter_product_from_order_history(products, customer_modal_id)
+        shop = Shop.find(@shop_id)
         all_orders = JSON.parse( shop.bulk_operation_responses.find_by_response_type("all_orders")&.api_raw_data, object_class: OpenStruct)
         customer = CustomerModal.find(customer_modal_id)
         customer_orders = customer.customer_orders
@@ -93,10 +95,10 @@ class RebuyService
         return purchased_products
     end
 
-    def send_email_and_sms(customer_id, token, shop_id)
+    def send_email_and_sms(customer_id, token)
         url = "https://#{shop&.shopify_domain}/a/chargezen/rebuy/#{token}"
         customer = CustomerModal.find(customer_id)
-        shop = Shop.find(shop_id)
+        shop = Shop.find(@shop_id)
         message_service = SmsService::MessageGenerateService.new(shop, customer)
         phone = customer.phone
         if phone.present?
