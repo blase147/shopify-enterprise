@@ -1,4 +1,5 @@
-<div class="rewards-timeline__interactive__accordion interactive__accordion interactive__accordion_no-border accordion">
+<% variants = JSON.parse(curvo_choice.variants) rescue {} %>
+<div class="rewards-timeline__interactive__accordion interactive__accordion interactive__accordion_no-border accordion time_line_for_<%= subscription_id %>">
     <div class="interactive__accordion__item accordion__item accordion__item_active">
       <div class="interactive__accordion__item__header-wrapper position-relative"> 
         <div class="d-inline-flex d-md-flex align-items-center">
@@ -14,187 +15,39 @@
       </span>
     </div>
     <div class="interactive__accordion__content accordion__content" data-height="230" style="height: 230px;">
-      <div class="rewards-timeline">
+        <div class="rewards-timeline">
         
-        <div class="rewards-timeline__item __unclaimable __active">
-          <div class="rewards-timeline__period-text">
-            Month 1
-          </div>
-          <div class="rewards-timeline__marker "></div>
-          <div class="rewards-timeline__progress-line"></div>
-          
-        </div>
-        <div class="rewards-timeline__item  __unclaimable">
-          <div class="rewards-timeline__period-text">
-            Month 2
-          </div>
-          <div class="rewards-timeline__marker "></div>
-          <div class="rewards-timeline__progress-line"></div>
-          
-        </div>
-        <div class="rewards-timeline__item  __unclaimable" data-product-title="Vitamin Container" data-product-handle="feel-vitamin-jar">
-          <div class="rewards-timeline__period-text">
-            Month 3
-          </div>
-          <div class="rewards-timeline__marker rewards-timeline__marker_reward"></div>
-          <div class="rewards-timeline__progress-line"></div>
-                    
-          <div class="rewards-timeline__reward-wrapper">
-            
-            <img class="img" src="https://cdn.shopify.com/s/files/1/0024/7123/1534/files/jar.png?v=1654788640" srcset="https://cdn.shopify.com/s/files/1/0024/7123/1534/files/jar_2x_7a0cd8ee-c5b3-4480-8dd1-bae240038d89.png?v=1654788640 2x">
-            
-            <div class="rewards-timeline__reward-title">
-              
-              	Free Vitamin Container
-              
-              <br>
-              <span class="rewards-timeline__reward-title__status" style="color: #e17074;" data-claim-status="-1">
-                not ready
-              </span>
-              <span class="rewards-timeline__reward-title__status" style="color: #de8802;" data-claim-status="0">
-                ready
-              </span>
-              <span class="rewards-timeline__reward-title__status" style="color: #08c608;" data-claim-status="1">
-                claimed
-              </span>
+            <div class="rewards-timeline__item  __unclaimable" data-product-title="Vitamin Container" data-product-handle="feel-vitamin-jar">
+                <% variants.keys.each do |k| %>
+                    <div class="rewards-timeline__period-text">
+                        Month 1
+                    </div>
+                    <div class="rewards-timeline__marker rewards-timeline__marker_reward"></div>
+                        lass="rewards-timeline__progress-line"></div>
+                                
+                        <div class="rewards-timeline__reward-wrapper">
+                            
+                            <img class="img" src="<%= variants[k]["image"] %>">
+                            
+                            <div class="rewards-timeline__reward-title">
+                            
+                                <%= variants[k]["product_title"] %>
+                            
+                            <br>
+                            <span class="rewards-timeline__reward-title__status" style="color: #e17074;" data-claim-status="-1">
+                                not ready
+                            </span>
+                            <span class="rewards-timeline__reward-title__status" style="color: #de8802;" data-claim-status="0">
+                                ready
+                            </span>
+                            <span class="rewards-timeline__reward-title__status" style="color: #08c608;" data-claim-status="1">
+                                claimed
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>        
             </div>
-          </div>
-          
         </div>
-        <div class="rewards-timeline__item  __unclaimable">
-          <div class="rewards-timeline__period-text">
-            Month 4
-          </div>
-          <div class="rewards-timeline__marker "></div>
-          <div class="rewards-timeline__progress-line"></div>
-          
-        </div>
-        
-        
-          	
-             
-        <div class="rewards-timeline__item  __unclaimable" data-product-title="Eco Water Bottle" data-product-handle="feel-eco-water-bottle">
-          <div class="rewards-timeline__period-text">
-            Month 5
-          </div>
-          <div class="rewards-timeline__marker rewards-timeline__marker_reward"></div>
-          <div class="rewards-timeline__progress-line"></div>
-                    
-          <div class="rewards-timeline__reward-wrapper">
-            
-            <img class="img" src="https://cdn.shopify.com/s/files/1/0024/7123/1534/files/water_bottle.png?v=1649859967" srcset="https://cdn.shopify.com/s/files/1/0024/7123/1534/files/water_bottle_2x_5bb9eac0-f118-4961-89a4-fec681b4f6af.png?v=1649859968 2x">
-            
-            <div class="rewards-timeline__reward-title">
-              
-              	Free Eco Water Bottle
-              
-              <br>
-              <span class="rewards-timeline__reward-title__status" style="color: #e17074;" data-claim-status="-1">
-                not ready
-              </span>
-              <span class="rewards-timeline__reward-title__status" style="color: #de8802;" data-claim-status="0">
-                ready
-              </span>
-              <span class="rewards-timeline__reward-title__status" style="color: #08c608;" data-claim-status="1">
-                claimed
-              </span>
-            </div>
-          </div>
-          
-        </div>
-        
-        
-          	
-             
-        <div class="rewards-timeline__item  __unclaimable">
-          <div class="rewards-timeline__period-text">
-            Month 6
-          </div>
-          <div class="rewards-timeline__marker "></div>
-          <div class="rewards-timeline__progress-line"></div>
-          
-        </div>
-        
-        
-          	
-             
-        <div class="rewards-timeline__item  __unclaimable" data-product-title="Deluxe Steel Shaker" data-product-handle="feel-deluxe-steel-shaker">
-          <div class="rewards-timeline__period-text">
-            Month 7
-          </div>
-          <div class="rewards-timeline__marker rewards-timeline__marker_reward"></div>
-          <div class="rewards-timeline__progress-line"></div>
-                    
-          <div class="rewards-timeline__reward-wrapper">
-            
-            <img class="img" src="https://cdn.shopify.com/s/files/1/0024/7123/1534/files/shaker_647bc3dd-0955-4cc1-a92c-e18b29ba1edf.png?v=1661522783" srcset="https://cdn.shopify.com/s/files/1/0024/7123/1534/files/shaker_2x_f6ac6f5f-45ce-481d-a8b1-00a45b10c643.png?v=1661522784 2x">
-            
-            <div class="rewards-timeline__reward-title">
-              
-              	Free Deluxe Steel Shaker
-              
-              <br>
-              <span class="rewards-timeline__reward-title__status" style="color: #e17074;" data-claim-status="-1">
-                not ready
-              </span>
-              <span class="rewards-timeline__reward-title__status" style="color: #de8802;" data-claim-status="0">
-                ready
-              </span>
-              <span class="rewards-timeline__reward-title__status" style="color: #08c608;" data-claim-status="1">
-                claimed
-              </span>
-            </div>
-          </div>
-          
-        </div>
-        
-        
-          	
-             
-        <div class="rewards-timeline__item  __unclaimable">
-          <div class="rewards-timeline__period-text">
-            Month 8
-          </div>
-          <div class="rewards-timeline__marker "></div>
-          <div class="rewards-timeline__progress-line"></div>
-          
-        </div>
-        
-        
-        
-        
-          	
-             
-        <div class="rewards-timeline__item  __unclaimable" data-product-title="Mystery Product" data-product-handle="feel-sleep">
-          <div class="rewards-timeline__period-text">
-            Month 9
-          </div>
-          <div class="rewards-timeline__marker rewards-timeline__marker_reward"></div>
-          <div class="rewards-timeline__progress-line"></div>
-                    
-          <div class="rewards-timeline__reward-wrapper">
-            
-            <img class="img" src="https://cdn.shopify.com/s/files/1/0024/7123/1534/files/rewards-timeline__mystery-product.png?v=1666100417" srcset="https://cdn.shopify.com/s/files/1/0024/7123/1534/files/rewards-timeline__mystery-product_retina.png?v=1666100417 2x">
-            
-            <div class="rewards-timeline__reward-title">
-              
-              	Free Mystery Product
-              
-              <br>
-              <span class="rewards-timeline__reward-title__status" style="color: #e17074;" data-claim-status="-1">
-                not ready
-              </span>
-              <span class="rewards-timeline__reward-title__status" style="color: #de8802;" data-claim-status="0">
-                ready
-              </span>
-              <span class="rewards-timeline__reward-title__status" style="color: #08c608;" data-claim-status="1">
-                claimed
-              </span>
-            </div>
-          </div>
-          
-        </div>
-        
-      </div>
     </div>
   </div>

@@ -58,10 +58,15 @@ class ShopifyWebhooksController < ApplicationController
   end
 
   def order_updated
+    shop = Shop.find_by(shopify_domain: shop_domain)
     if params[:financial_status] == "refunded"
       preorder = WorldfarePreOrder.find_by(order_id: params[:id])
       preorder&.update(status: "refunded")
       UpdateLoyalityPointsService.update_order_loyality_points(shop, params[:id])
+    else
+      if shop.shopify_domain.include?("curvos")
+        CurvosBundleService.new.update_shopify_id(shop.id,params[:id])
+      end
     end
     head :no_content
   end

@@ -1,4 +1,5 @@
 - contract = CustomerSubscriptionContract.find_by(shopify_id: subscription.node.id[/\d+/]) rescue nil
+- curvo_choices = contract.curvos_models rescue []
 - local_subscription = JSON.parse(contract.api_data.to_json, object_class: OpenStruct) rescue nil
 - billing_policy = subscription.node.billing_policy
 -# selling_plan_ids = subscription.node.lines.edges.map{|edge| edge.node.selling_plan_id}
@@ -30,24 +31,12 @@
           p.text.right.active-text
             = number_to_currency (edge.node.current_price.amount.to_f * edge.node.quantity)
         .grid-item
-          - (@setting.active_subscription_btn_seq || ['update_choices', 'delivery_schedule', 'swap_subscription', 'delay_next_order', 'edit_subscription']).each do |btn|
-            - case btn
-              - when 'update_choices'
-                - if box_campaign.present? && box_campaign_display(box_campaign, selling_plan_id)
-                  = link_to "/a/chargezen_production/dashboard/build_a_box?&build_a_box_campaign_id=#{box_campaign.id}&customer_id=#{params[:customer_id]}&subscription_id=#{subscription.node.id[/\d+/]}&active_subscriptions_count=#{@active_subscriptions.count}&selling_plan_id=#{selling_plan_id[/\d+/]}" do
-                    button.action-btn style="font-size: 13px" UPDATE CHOICES
-              - when 'delivery_schedule'
-                - if @setting.customer_allowed?('navigation_delivery')
-                  = link_to "/a/chargezen_production/dashboard/upcoming?customer_id=#{params[:customer_id]}&subscription_id=#{subscription.node.id}&line_id=#{edge.node.id}&active_subscriptions_count=#{@active_subscriptions.count}" do
-                    button.action-btn style="font-size: 13px" #{@translation&.home_tab_delivery_schedule_btn.present? ? @translation&.home_tab_delivery_schedule_btn : 'DELIVERY SCHEDULE'}
-              - when 'swap_subscription'
-                - if @setting.customer_allowed?('swap_product')
-                  button.action-btn style="font-size: 13px" type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#swap-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" SWAP SUBSCRIPTION
-              - when 'edit_subscription'
-                button.edit-subscription.action-btn style="font-size: 13px" data-toggle="modal" data-target="#editSubscriptionModal-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" #{@translation&.home_tab_edit_subscription_btn.present? ? @translation&.home_tab_edit_subscription_btn : 'Edit Subscription'}
-              - when 'delay_next_order'
-                - if @setting.customer_allowed?('frequency')
-                  button.delivery-schedule.action-btn style="font-size: 13px" data-toggle="modal" data-target="#delayOrderModal-#{subscription.node.id[/\d+/]}" #{@translation&.home_tab_delay_next_order_btn.present? ? @translation&.home_tab_delay_next_order_btn : 'DELAY NEXT ORDER'}
+          button.edit-subscription.action-btn style="font-size: 13px" class="showTimeLineButton" data-id="#{subscription.node.id[/\d+/]}" 'Choice'
+          button.edit-subscription.action-btn style="font-size: 13px" data-toggle="modal" data-target="#editSubscriptionModal-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" 'Delivery Schedule'
+          button.edit-subscription.action-btn style="font-size: 13px" data-toggle="modal" data-target="#editSubscriptionModal-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" 'Edit Subscription'
+          - if curvo_choices.present?
+            - curvo_choices&.each do |curvo_choice|              
+              = render "partials/timeline", subscription_id: subscription.node.id[/\d+/], curvo_choice: curvo_choice
           = render 'delay_order_modal', subscription: subscription.node, next_billing_date: next_billing_date, action_by: "customer"
           = render partial: 'edit_subscription_modal',locals: { subscription: subscription.node, line_item: edge.node, product_image: product.images.first&.src, product_id: product.id, setting: @setting, selling_plan_id: edge.node.selling_plan_id, selling_plan: selling_plan , contract_id: contract.id, contract: contract, action_by: "customer"}
           - if @setting.customer_allowed?('swap_product')
@@ -165,3 +154,9 @@
               .btn-wrapper
                 button type="submit" style=("display: none;")
                   = btn_text
+
+javascript:
+  $(".showTimeLineButton").click(function(){
+    alert( ".time_line_for_"+$(this).data("id"))
+    $(".time_line_for_"+$(this).data("id")).removeClass("hidden")
+  })

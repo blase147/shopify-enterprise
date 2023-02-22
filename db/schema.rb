@@ -10,17 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_21_131657) do
+ActiveRecord::Schema.define(version: 2022_03_14_210430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "add_stripe_customer_migrations", force: :cascade do |t|
-    t.json "raw_data"
-    t.bigint "customer_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
 
   create_table "additional_contacts", force: :cascade do |t|
     t.integer "customer_id"
@@ -31,23 +24,6 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.string "phone"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "analytics_data", force: :cascade do |t|
-    t.text "calculated_analytics_data"
-    t.integer "for_month"
-    t.bigint "shop_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["shop_id"], name: "index_analytics_data_on_shop_id"
-  end
-
-  create_table "auth_tokens", force: :cascade do |t|
-    t.string "token"
-    t.bigint "customer_modal_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["customer_modal_id"], name: "index_auth_tokens_on_customer_modal_id"
   end
 
   create_table "billing_addresses", force: :cascade do |t|
@@ -93,15 +69,6 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.index ["selling_plan_ids"], name: "index_build_a_box_campaigns_on_selling_plan_ids", using: :gin
   end
 
-  create_table "bulk_operation_responses", force: :cascade do |t|
-    t.string "response_type"
-    t.string "api_raw_data"
-    t.bigint "shop_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["shop_id"], name: "index_bulk_operation_responses_on_shop_id"
-  end
-
   create_table "bundle_groups", force: :cascade do |t|
     t.bigint "shop_id", null: false
     t.string "internal_name"
@@ -120,28 +87,6 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.index ["shop_id"], name: "index_bundle_groups_on_shop_id"
   end
 
-  create_table "bundle_menus", force: :cascade do |t|
-    t.bigint "shop_id", null: false
-    t.string "title"
-    t.string "subheading_i"
-    t.string "subheading_ii"
-    t.string "subheading_iii"
-    t.string "bundle_style"
-    t.json "selling_plans"
-    t.json "selling_plan_ids"
-    t.json "product_images"
-    t.json "collection_images"
-    t.integer "break_point_price_i"
-    t.integer "break_point_price_ii"
-    t.integer "break_point_price_iii"
-    t.integer "number_of_options"
-    t.json "free_product_collections"
-    t.json "free_products_images"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["shop_id"], name: "index_bundle_menus_on_shop_id"
-  end
-
   create_table "bundles", force: :cascade do |t|
     t.bigint "bundle_group_id", null: false
     t.integer "quantity_limit"
@@ -154,27 +99,47 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.index ["bundle_group_id"], name: "index_bundles_on_bundle_group_id"
   end
 
-  create_table "csv_imports", force: :cascade do |t|
-    t.datetime "date_of_import"
-    t.text "error_logs"
-    t.bigint "shop_id", null: false
+  create_table "campaigns", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.string "name", null: false
+    t.boolean "status", default: false
+    t.integer "referrer_reward"
+    t.integer "referrer_points"
+    t.integer "referrer_fixed_points"
+    t.integer "points_to_referrer"
+    t.string "selected_reward"
+    t.string "selected_coupon"
+    t.integer "apply_coupon"
+    t.string "title"
+    t.string "reward_text"
+    t.string "description"
+    t.string "icon"
+    t.string "call_to_action_text"
+    t.string "landing_url"
+    t.string "landing_url_query_params"
+    t.string "default_twitter_msg"
+    t.string "header_for_fb_msg"
+    t.string "description_for_fb_msg"
+    t.string "default_sms_msg"
+    t.string "campaign_name"
+    t.string "description_text"
+    t.string "completed_msg"
+    t.string "max_times_completion"
+    t.integer "customer_fixed_points"
+    t.integer "reward_amount"
+    t.string "required_product"
+    t.string "required_product_reward"
+    t.string "customer_tag"
+    t.string "customer_tag_list"
+    t.string "order_tag"
+    t.string "order_tag_list"
+    t.string "limit"
+    t.integer "orders"
+    t.string "max_times_per_user"
+    t.string "time_between"
+    t.string "countdown_message"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["shop_id"], name: "index_csv_imports_on_shop_id"
-  end
-
-  create_table "curvos_models", force: :cascade do |t|
-    t.string "mix_panel_id"
-    t.string "customer_shopify_id"
-    t.string "status"
-    t.string "selling_plan"
-    t.string "variants"
-    t.string "json"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "order_id"
-    t.bigint "customer_subscription_contract_id"
-    t.index ["customer_subscription_contract_id"], name: "index_curvos_models_on_customer_subscription_contract_id"
   end
 
   create_table "custom_keywords", force: :cascade do |t|
@@ -185,43 +150,6 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["shop_id"], name: "index_custom_keywords_on_shop_id"
-  end
-
-  create_table "customer_modals", force: :cascade do |t|
-    t.bigint "shopify_id"
-    t.string "email"
-    t.string "first_name"
-    t.string "last_name"
-    t.text "contracts", default: [], array: true
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "phone"
-    t.json "api_data"
-    t.string "country"
-    t.string "zip_code"
-    t.string "city"
-    t.string "address_phone_number"
-    t.string "state"
-    t.bigint "shop_id"
-    t.float "loyalty_points"
-    t.string "mixpanel_id"
-    t.string "referral_code"
-    t.text "bank_detail"
-    t.text "address1"
-    t.text "address2"
-    t.index ["shop_id"], name: "index_customer_modals_on_shop_id"
-  end
-
-  create_table "customer_orders", force: :cascade do |t|
-    t.string "order_id"
-    t.string "status"
-    t.bigint "customer_modal_id", null: false
-    t.bigint "shop_id", null: false
-    t.text "api_data"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["customer_modal_id"], name: "index_customer_orders_on_customer_modal_id"
-    t.index ["shop_id"], name: "index_customer_orders_on_shop_id"
   end
 
   create_table "customer_subscription_contracts", force: :cascade do |t|
@@ -268,13 +196,7 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.json "import_data"
     t.string "import_type"
     t.string "selling_plan_id"
-    t.json "billing_attempts"
-    t.text "skip_dates", default: [], array: true
-    t.string "delivery_day"
-    t.date "delivery_date"
-    t.json "origin_order_meals"
-    t.date "pause_later"
-    t.date "cancel_later"
+    t.integer "migration"
     t.index ["reasons_cancel_id"], name: "index_customer_subscription_contracts_on_reasons_cancel_id"
     t.index ["selling_plan_id"], name: "index_customer_subscription_contracts_on_selling_plan_id"
   end
@@ -301,7 +223,6 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.string "slug"
     t.string "template_identity"
     t.text "hypertext"
-    t.text "design_json"
   end
 
   create_table "integrations", force: :cascade do |t|
@@ -326,19 +247,162 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
   end
 
-  create_table "passwordless_otps", force: :cascade do |t|
-    t.string "email"
-    t.integer "otp"
+  create_table "loyalties", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.string "name", null: false
+    t.string "location", null: false
+    t.string "primary_theme_color"
+    t.string "secondary_theme_color"
+    t.string "primary_text_color"
+    t.string "secondary_text_color"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "pending_recurring_charges", force: :cascade do |t|
-    t.bigint "shop_id", null: false
-    t.bigint "charge_id"
+  create_table "loyalty_campaigns", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.string "name", null: false
+    t.boolean "status", default: false
+    t.integer "referrer_reward"
+    t.integer "referrer_points"
+    t.integer "referrer_fixed_points"
+    t.integer "points_to_referrer"
+    t.string "selected_reward"
+    t.string "selected_coupon"
+    t.integer "apply_coupon"
+    t.string "reward_text"
+    t.string "description"
+    t.string "icon"
+    t.string "call_to_action_text"
+    t.string "landing_url"
+    t.string "landing_url_query_params"
+    t.string "default_twitter_msg"
+    t.string "header_for_fb_msg"
+    t.string "description_for_fb_msg"
+    t.string "default_sms_msg"
+    t.string "campaign_name"
+    t.string "description_text"
+    t.string "completed_msg"
+    t.string "max_times_completion"
+    t.integer "customer_fixed_points"
+    t.string "required_product"
+    t.string "required_product_reward"
+    t.string "customer_tag"
+    t.string "customer_tag_list"
+    t.string "order_tag"
+    t.string "order_tag_list"
+    t.string "limit"
+    t.integer "orders"
+    t.string "max_times_per_user"
+    t.string "time_between"
+    t.string "countdown_message"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["shop_id"], name: "index_pending_recurring_charges_on_shop_id"
+  end
+
+  create_table "loyalty_coupons", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.string "name", null: false
+    t.boolean "status", default: false
+    t.string "reward_customers"
+    t.string "coupon_type"
+    t.integer "discount_amount"
+    t.string "coupon_name"
+    t.string "description"
+    t.string "coupon_points"
+    t.string "coupon_text"
+    t.string "apply_discount"
+    t.integer "cart_amount"
+    t.string "customer_list"
+    t.string "apply_discount_per"
+    t.string "discount_code_usage"
+    t.string "coupon_code_expire"
+    t.string "coupon_restriction"
+    t.string "code_prefix"
+    t.integer "code_length"
+    t.string "success_msg"
+    t.string "icon"
+    t.string "coupon_code_intro"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "loyalty_email_settings", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.string "name", null: false
+    t.string "email", null: false
+    t.integer "notification"
+    t.integer "referral"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "loyalty_points", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.integer "purchase"
+    t.integer "account"
+    t.integer "social_media_like"
+    t.integer "social_media_follow"
+    t.integer "buy_upsell"
+    t.integer "signup_smarty_sms"
+    t.integer "refer_friend"
+    t.integer "signup_mailing_list"
+    t.integer "custom_rule"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "loyalty_redeem_points", force: :cascade do |t|
+    t.bigint "loyalty_id", null: false
+    t.integer "discount"
+    t.integer "point"
+    t.date "starting_date"
+    t.date "ending_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["loyalty_id"], name: "index_loyalty_redeem_points_on_loyalty_id"
+  end
+
+  create_table "loyalty_references", force: :cascade do |t|
+    t.string "referrer_id"
+    t.string "referred_id"
+    t.boolean "refer_a_friend", default: false
+    t.boolean "create_account", default: false
+    t.boolean "happy_birthday", default: false
+    t.boolean "make_a_purchase", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "loyalty_referrals", force: :cascade do |t|
+    t.string "referrer_id"
+    t.string "referral_code"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "loyalty_rules", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.integer "purchase"
+    t.integer "account"
+    t.integer "social_media_like"
+    t.integer "social_media_follow"
+    t.integer "buy_upsell"
+    t.integer "signup_smarty_sms"
+    t.integer "refer_friend"
+    t.integer "signup_mailing_list"
+    t.integer "custom_rule"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "migration_statuses", force: :cascade do |t|
+    t.string "email"
+    t.string "subgql"
+    t.string "shopify_customer"
+    t.string "stripe_customer"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "reasons_cancels", force: :cascade do |t|
@@ -347,44 +411,6 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.integer "setting_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "rebuys", force: :cascade do |t|
-    t.bigint "shop_id", null: false
-    t.string "token"
-    t.text "purchased_products", default: [], array: true
-    t.text "other_products", default: [], array: true
-    t.bigint "customer_modal_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["customer_modal_id"], name: "index_rebuys_on_customer_modal_id"
-    t.index ["shop_id"], name: "index_rebuys_on_shop_id"
-  end
-
-  create_table "referral_rewards", force: :cascade do |t|
-    t.text "reward_type"
-    t.float "reward_value"
-    t.string "applies_to_collection"
-    t.float "minimum_purchased_amount"
-    t.string "discount_code_prefix"
-    t.date "reward_expiry"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "referrals", force: :cascade do |t|
-    t.boolean "active"
-    t.text "guest_nudge"
-    t.text "tweet_message"
-    t.text "facebook_message"
-    t.bigint "shop_id", null: false
-    t.bigint "referring_reward_id"
-    t.bigint "referred_reward_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["referred_reward_id"], name: "referred_reward_id"
-    t.index ["referring_reward_id"], name: "referring_reward_id"
-    t.index ["shop_id"], name: "index_referrals_on_shop_id"
   end
 
   create_table "removed_subscription_lines", force: :cascade do |t|
@@ -400,17 +426,6 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.date "end_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "reward_codes", force: :cascade do |t|
-    t.string "code"
-    t.bigint "customer_modal_id", null: false
-    t.boolean "used"
-    t.bigint "referral_reward_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["customer_modal_id"], name: "index_reward_codes_on_customer_modal_id"
-    t.index ["referral_reward_id"], name: "index_reward_codes_on_referral_reward_id"
   end
 
   create_table "selling_plan_groups", force: :cascade do |t|
@@ -462,7 +477,6 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.text "shipping_dates", default: [], array: true
     t.integer "shipping_cut_off"
     t.string "first_delivery"
-    t.string "category"
   end
 
   create_table "settings", force: :cascade do |t|
@@ -555,9 +569,6 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.string "day_of_production"
     t.string "delivery_interval_after_production"
     t.string "eligible_weekdays_for_delivery"
-    t.string "pause_later"
-    t.string "cancel_later"
-    t.string "timezone"
     t.index ["shop_id"], name: "index_settings_on_shop_id", unique: true
   end
 
@@ -606,16 +617,6 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.index ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true
   end
 
-  create_table "site_logs", force: :cascade do |t|
-    t.string "log_type"
-    t.string "action"
-    t.string "controller"
-    t.json "params", default: "{}"
-    t.text "message"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "smarty_cancellation_reasons", force: :cascade do |t|
     t.string "name"
     t.integer "winback", default: 0
@@ -634,7 +635,6 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.integer "usage_count", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.boolean "status", default: true
     t.index ["shop_id"], name: "index_smarty_messages_on_shop_id"
   end
 
@@ -725,29 +725,6 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.index ["shop_id"], name: "index_sms_settings_on_shop_id"
   end
 
-  create_table "stripe_contract_pdfs", force: :cascade do |t|
-    t.bigint "shop_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["shop_id"], name: "index_stripe_contract_pdfs_on_shop_id"
-  end
-
-  create_table "stripe_contracts", force: :cascade do |t|
-    t.bigint "shop_id", null: false
-    t.bigint "customer_modal_id", null: false
-    t.string "stripe_product_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.bigint "stripe_contract_pdf_id"
-    t.string "stripe_product_name"
-    t.boolean "checked_out"
-    t.string "token"
-    t.string "payment_by"
-    t.index ["customer_modal_id"], name: "index_stripe_contracts_on_customer_modal_id"
-    t.index ["shop_id"], name: "index_stripe_contracts_on_shop_id"
-    t.index ["stripe_contract_pdf_id"], name: "index_stripe_contracts_on_stripe_contract_pdf_id"
-  end
-
   create_table "subscription_contracts", force: :cascade do |t|
     t.string "shopify_id"
     t.string "first_name"
@@ -783,7 +760,6 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.string "amount"
     t.string "product_name"
     t.string "note"
-    t.string "action_by"
     t.index ["customer_id"], name: "index_subscription_logs_on_customer_id"
     t.index ["shop_id"], name: "index_subscription_logs_on_shop_id"
   end
@@ -967,58 +943,19 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.index ["selling_plan_ids"], name: "index_upsell_campaigns_on_selling_plan_ids", using: :gin
   end
 
-  create_table "usage_charges", force: :cascade do |t|
-    t.bigint "shopify_id"
-    t.string "description"
-    t.string "price"
-    t.datetime "billing_on"
-    t.string "balance_used"
-    t.string "balance_remaining"
-    t.string "risk_level"
-    t.bigint "shop_id", null: false
-    t.bigint "reccuring_charge_id"
+  create_table "weekly_menus", force: :cascade do |t|
+    t.integer "box_subscription_type"
+    t.json "collection_images"
+    t.json "product_images"
+    t.json "triggers"
+    t.json "selling_plans"
+    t.string "selling_plan_ids"
+    t.string "display_name"
+    t.integer "week"
+    t.date "cutoff_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["shop_id"], name: "index_usage_charges_on_shop_id"
-  end
-
-  create_table "user_shops", force: :cascade do |t|
-    t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.bigint "shop_id"
-    t.string "role"
-    t.json "access_settings"
-    t.datetime "sign_out_after"
-    t.index ["shop_id"], name: "index_user_shops_on_shop_id"
-    t.index ["user_id"], name: "index_user_shops_on_user_id"
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "first_name"
-    t.string "last_name"
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "mixpanel_id"
-    t.string "token_without_password"
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-  end
-
-  create_table "ways_to_earn_points", force: :cascade do |t|
-    t.string "title"
-    t.float "points_awarded"
-    t.boolean "status"
-    t.text "summary"
-    t.bigint "shop_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["shop_id"], name: "index_ways_to_earn_points_on_shop_id"
+    t.integer "shop_id"
   end
 
   create_table "weekly_menus", force: :cascade do |t|
@@ -1041,15 +978,8 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.string "customer_id"
     t.string "week"
     t.string "products"
-    t.datetime "created_at", precision: 6, default: -> { "now()" }, null: false
-    t.datetime "updated_at", precision: 6, default: -> { "now()" }, null: false
-    t.string "shopify_contract_id"
-    t.string "created_by"
-    t.date "expected_delivery_date"
-    t.string "order_id"
-    t.string "status"
-    t.string "skip_state"
-    t.index ["order_id"], name: "index_worldfare_pre_orders_on_order_id", unique: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "zip_codes", force: :cascade do |t|
@@ -1062,34 +992,10 @@ ActiveRecord::Schema.define(version: 2023_02_21_131657) do
     t.index ["shop_id"], name: "index_zip_codes_on_shop_id"
   end
 
-  add_foreign_key "analytics_data", "shops"
-  add_foreign_key "auth_tokens", "customer_modals"
-  add_foreign_key "bulk_operation_responses", "shops"
   add_foreign_key "bundle_groups", "shops"
-  add_foreign_key "bundle_menus", "shops"
   add_foreign_key "bundles", "bundle_groups"
-  add_foreign_key "csv_imports", "shops"
-  add_foreign_key "curvos_models", "customer_subscription_contracts"
-  add_foreign_key "customer_modals", "shops"
-  add_foreign_key "customer_orders", "customer_modals"
-  add_foreign_key "customer_orders", "shops"
   add_foreign_key "customer_subscription_contracts", "reasons_cancels"
-  add_foreign_key "pending_recurring_charges", "shops"
-  add_foreign_key "rebuys", "customer_modals"
-  add_foreign_key "rebuys", "shops"
-  add_foreign_key "referrals", "referral_rewards", column: "referred_reward_id"
-  add_foreign_key "referrals", "referral_rewards", column: "referring_reward_id"
-  add_foreign_key "referrals", "shops"
-  add_foreign_key "reward_codes", "customer_modals"
-  add_foreign_key "reward_codes", "referral_rewards"
+  add_foreign_key "loyalty_redeem_points", "loyalties"
   add_foreign_key "sms_flows", "shops"
-  add_foreign_key "stripe_contract_pdfs", "shops"
-  add_foreign_key "stripe_contracts", "customer_modals"
-  add_foreign_key "stripe_contracts", "shops"
-  add_foreign_key "stripe_contracts", "stripe_contract_pdfs"
-  add_foreign_key "usage_charges", "shops"
-  add_foreign_key "user_shops", "shops"
-  add_foreign_key "user_shops", "users"
-  add_foreign_key "ways_to_earn_points", "shops"
   add_foreign_key "zip_codes", "shops"
 end
