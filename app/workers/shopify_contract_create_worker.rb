@@ -44,7 +44,7 @@ class ShopifyContractCreateWorker
         end
         curvos = CurvosModel.find_by_order_id(order.id) rescue nil
         if curvos.present?
-          curvos.update(customer_subscription_contract_id: contract.shopify_id)
+          curvos.update(customer_subscription_contract_id: contract.id)
           variants = JSON.parse(curvos.variants) rescue nil
           variants&.keys&.each do |k|
             variant = variants[k]
