@@ -1,59 +1,31 @@
 version: "3.3"
 
 services:
-  app:
+  aroma:
     tty: true
     stdin_open: true
     build:
       context: .
-      target: development
+      dockerfile: Dockerfile.development
     ports:
-      - 3000:3000
-    env_file:
-      - .env.docker
+      - "3000:3000"
+    environment:
+      - RAILS_ENV=development
+      - REDIS_URL=redis://redis:6379
     volumes:
-      - ./:/app
-      - node_modules:/app/node_modules
-      - bundle:/usr/local/bundle
-    tmpfs:
-      - /app/tmp/pids
-      - /app/tmp/cache
+      - ./:/workspace
+      - ./docker/database.yml:/workspace/config/database.yml
     links:
       - db
     depends_on:
       - db
-    command: bundle exec puma -C config/puma.rb
-
-  sidekiq:
-    tty: true
-    stdin_open: true
-    build:
-      context: .
-      target: development
-    env_file:
-      - .env.docker
-    volumes:
-      - ./:/app
-      - node_modules:/app/node_modules
-      - bundle:/usr/local/bundle
-    tmpfs:
-      - /app/tmp/pids
-      - /app/tmp/cache
-    links:
-      - db
-    depends_on:
-      - db
-    command: bundle exec sidekiq -C config/sidekiq.yml
-
   db:
     image: postgres:11.6
     environment:
       POSTGRES_USER: "aroma"
       POSTGRES_PASSWORD: "aroma"
-      POSTGRES_DB: "aroma"
+      POSTGRES_DB: "aroma_main"
     ports:
-      - "5432:5432"
-
-volumes:
-  node_modules:
-  bundle:
+      - "5433:5433"
+  redis:
+    image: redis:latest
