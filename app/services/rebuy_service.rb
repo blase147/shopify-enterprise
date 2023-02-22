@@ -1,5 +1,5 @@
 class RebuyService
-    def init(shop_id)
+    def initialize(shop_id)
         @shop_id = shop_id        
     end
 
