@@ -221,7 +221,7 @@
       variantOrderNote.push(`variant_${i+1}:${p}`)
     })
     
-    let order_note = ""+`${variantOrderNote.join(",")},mixpanel_id: ${gloabalMixpanelId}`+"" 
+    let order_note = ""+`${variantOrderNote.join(",")},mixpanel_id: ${gloabalMixpanelId}`+", rebuy_token: <%= @rebuy.token %>" 
 
     url = `https://<%= @rebuy.shop.shopify_domain %>/cart/${urlParams}?note=${order_note}`
     mixpanelIdentify(gloabalMixpanelId)
