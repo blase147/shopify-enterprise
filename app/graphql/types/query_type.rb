@@ -11,7 +11,8 @@
     field :fetch_ways_to_earn_point, resolver: Queries::FetchWaysToEarnPoint
     field :fetch_timezone, resolver: Queries::FetchTimezone
     field :fetch_stripe_contracts, resolver: Queries::FetchStripeContracts
-    field :fetch_bundles, resolver: Queries::FetchBundles    
+    field :fetch_bundles, resolver: Queries::FetchBundles 
+    field :fetch_rebuys, resolver: Queries::FetchRebuys
 
     field :fetch_campaigns, resolver: Queries::FetchUpsellCampaignGroups
     field :fetch_campaign, resolver: Queries::FetchUpsellCampaignGroup
