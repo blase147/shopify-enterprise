@@ -256,17 +256,17 @@
         .Polaris-Card
           .Polaris-Card__Section#history-tabs
             ul.payment-tabs
-              li.active data-target="#history" Logs
-              li data-target="#payment-history" Payment History
-              li data-target="#pre-orders" Weekly Menu
-              li data-target="#billing-attempts" Billing Attempts
+              li.active.toogle_tabs data-target="#history" Logs
+              li.toogle_tabs data-target="#payment-history" Payment History
+              li.toogle_tabs  data-target="#pre-orders" Weekly Menu
+              li.toogle_tabs  data-target="#billing-attempts" Billing Attempts
               - if @box_products.present?
-                li data-target="#box-products" Box Products
-              li data-target="#contract-actions" Contract History
+                li.toogle_tabs data-target="#box-products" Box Products
+              li.toogle_tabs data-target="#contract-actions" Contract History
 
 
 
-            .Polaris-DataTable.tab#history style="margin: 1rem"
+            .Polaris-DataTable.tab.child_tab#history style="margin: 1rem"
               p style="margin: 1rem 0;" All timestamps are in Eastern Time (US)
               .Polaris-DataTable__ScrollContainer
                 table.Polaris-DataTable__Table#historytable
@@ -285,7 +285,7 @@
                           td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop = raw event.node.message
                           td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop = DateTime.parse(event.node.created_at).strftime("%a, %B %e %T")
 
-            .Polaris-DataTable.hidden.tab#payment-history style="margin: 1rem"
+            .Polaris-DataTable.hidden.tab.child_tab#payment-history style="margin: 1rem"
               p style="margin: 1rem 0;" All timestamps are in EST Time 
               .Polaris-DataTable__ScrollContainer
                 table.Polaris-DataTable__Table
@@ -301,7 +301,7 @@
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= order.node.name
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop.Polaris-DataTable__Cell--numeric $#{order.node.total_received_set.presentment_money.amount}
 
-            .Polaris-DataTable.hidden.tab#pre-orders style="margin: 1rem"
+            .Polaris-DataTable.hidden.tab.child_tab#pre-orders style="margin: 1rem"
               p style="margin: 1rem 0;" Pre orders for this customer
               .Polaris-DataTable__ScrollContainer
                 table.Polaris-DataTable__Table
@@ -318,7 +318,7 @@
                             - @pre_order_products[pre_order.id].each do |product|
                               li = "#{product[:title]} x#{product[:quantity]}"
 
-            .Polaris-DataTable.hidden.tab#billing-attempts style="margin: 1rem"
+            .Polaris-DataTable.hidden.tab.child_tab#billing-attempts style="margin: 1rem"
               .Polaris-DataTable__ScrollContainer
                 table.Polaris-DataTable__Table
                   thead
@@ -337,7 +337,7 @@
                         td.Polaris-DataTable__Cell.Polaris-DataTable__Cell--verticalAlignTop= billing_attempt["error_message"] || "N/A"
 
             - if @box_products.present?
-              .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing.hidden.tab#box-products
+              .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing.hidden.tab.child_tab#box-products
                 h2.Polaris-Heading.Polaris-TextStyle--variationStrong BUILD-A-BOX CHOICES
                 div.box-items
                   - if @customer.campaign_date.present?
@@ -356,7 +356,7 @@
                         = link_to action_subscription_contract_path(:remove_box_item, @subscription.id[/\d+/], "product_id=#{product.id}"), remote: true, method: :post do
                           = image_pack_tag "media/subscriptionsPlans/removeProduct.svg", class: 'removeIcon'
 
-            .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing.hidden.tab#contract-actions
+            .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing.hidden.tab.child_tab#contract-actions
                 = render "subscriptions/subscription_logs", subscription: @customer
 
         / .Polaris-TextContainer.Polaris-TextContainer--spacingTight.payments-spacing
@@ -667,4 +667,11 @@ javascript:
 
   $("#open_billing_confirm").on("click",function(){
     $("#confirm_billing_attempt_modal").removeClass("hide");
+  })
+
+  $(".toogle_tabs").click(function(){
+    $(".toogle_tabs").removeClass("active");
+    $(".child_tab").addClass("hidden");
+    $(this).addClass("active");
+    $($(this).data("target")).removeClass("hidden")
   })
