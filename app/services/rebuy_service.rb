@@ -47,25 +47,35 @@ class RebuyService
     #     customers_with_products
     # end
     
-    def create_rebuy
+    def create_rebuy(rebuy_menu_id)
         shop = Shop.find(@shop_id)   
-        most_popular_products = get_most_popular_products
+        rebuy_menu = RebuyMenu.find(rebuy_menu_id)
         shop.customer_modals&.each do |customer|
-            purchased_products = filter_product_from_order_history(most_popular_products, customer.id)
-            other_products = most_popular_products - purchased_products
+            if rebuy_menu.rebuy_type&.downcase == "auto"
+                most_popular_products = get_most_popular_products
+                purchased_products = filter_product_from_order_history(most_popular_products, customer.id)
+                other_products = most_popular_products - purchased_products
+            elsif rebuy_menu.rebuy_type&.downcase == "collection"
+                collection_products = rebuy_menu.collection_images.map{|item| {product: "gid://shopify/Product/#{item["product_id"]}", variant: "gid://shopify/ProductVariant/#{item["variant_id"]}"}}
+                purchased_products = get_collection_products(rebuy_menu_id, customer.id)
+                other_products = collection_products - purchased_products
+
+            end
+            
             token = SecureRandom.urlsafe_base64(nil, false)
             shop.rebuys.create(
                 token: token,
                 purchased_products: purchased_products&.map{|v| v.to_json},
                 other_products: other_products&.map{|v| v.to_json},
-                customer_modal_id: customer.id
+                customer_modal_id: customer.id,
+                rebuy_menu_id: rebuy_menu.id
             )
             sent = send_email_and_sms(customer.id, token) rescue nil
         end
     end
 
     def populate_data
-        shop = Shop.find(@shop_id).includes(:bulk_operation_responses)
+        shop = Shop.find(@shop_id)
         all_orders = JSON.parse( shop.bulk_operation_responses.find_by_response_type("all_orders")&.api_raw_data, object_class: OpenStruct)
         
         products_order_count = get_products_with_quantity(all_orders)
@@ -121,4 +131,18 @@ class RebuyService
             puts e
         end
     end
-end
+
+    def get_collection_products(rebuy_menu_id, customer_id)
+        shop = Shop.find @shop_id
+        rebuy_menu = RebuyMenu.find(rebuy_menu_id)
+        customer = CustomerModal.find(customer_id)
+        collection_products_ids = rebuy_menu.collection_images.map{|p| p["product_id"][/\d+/]&.to_i}
+        data = []
+        customer.customer_orders.each do |order|
+            order = JSON.parse(order.api_data)
+            data << order["line_items"].map{|item| {product: "gid://shopify/Product/#{item["product_id"]}", variant: "gid://shopify/ProductVariant/#{item["variant_id"]}"} if collection_products_ids.include?(item["product_id"].to_i)}
+        end
+        return data
+    end
+end 
+
