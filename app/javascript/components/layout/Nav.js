@@ -84,7 +84,7 @@ const Nav = (props) => {
           {
             icon: MangeIcon,
             label: 'Rebuy cart',
-            url: '/',
+            url: '/rebuy',
             onClick: () => setActiveTab("dash"),
             selected: window.location.pathname == "/" ? true : false,
           },

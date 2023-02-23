@@ -193,11 +193,12 @@
 function check_out_button(){
       let variants = []
       selectedProducts?.map((val, i)=>{
-        variants.push(`variant_${i+1}:${val.variant}`)
+        variants.push("variant_"+(i+1)+":"+val.variant)
       })
-      let order_note = ""+`${variants.join(",")},mixpanel_id: ${gloabalMixpanelId}`+"" 
+      let order_note = variants.join(",")+",mixpanel_id:"+gloabalMixpanelId
+      console.log("order_note",order_note);
       // let url = `https://<%= @bundle_menu.shop.shopify_domain %>/cart/${selectedProducts[0]?.variant}:1?note=${order_note}&selling_plan=<%= @bundle_menu.selling_plans.first["sellingPlanId"][/\d+/]%>`;
-       let url = `https://<%= @bundle_menu.shop.shopify_domain %>/cart/clear?return_to=/cart/add?note=${encodeURI(order_note)}%26items[][id]=${selectedProducts[0]?.variant}%26items[][quantity]=1%26items[][selling_plan]=<%= @bundle_menu.selling_plans.first["sellingPlanId"][/\d+/]%>%26return_to=/checkout`;
+       let url = `https://<%= @bundle_menu.shop.shopify_domain %>/cart/clear?return_to=/cart/add?note=${order_note}%26items[][id]=${selectedProducts[0]?.variant}%26items[][quantity]=1%26items[][selling_plan]=<%= @bundle_menu.selling_plans.first["sellingPlanId"][/\d+/]%>%26return_to=/checkout`;
         console.log("url",url);
         alert(url)
       mixpanelIdentify(gloabalMixpanelId)

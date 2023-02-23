@@ -34,6 +34,7 @@ class ShopifyWebhooksController < ApplicationController
       if shop.shopify_domain.include?("curvos")
         CurvosBundleService.new.update_shopify_id(shop.id,params[:id])
       end
+      RebuyService.new(shop.id).update_customer_order(params[:id])
     rescue => e
       p e
     end
@@ -47,12 +48,14 @@ class ShopifyWebhooksController < ApplicationController
     shop = Shop.find_by(shopify_domain: shop_domain)
     ShopifyOrderCancelWorker.perform_async(shop.id, params[:id])
     UpdateLoyalityPointsService.update_order_loyality_points(shop, params[:id])
+    RebuyService.new(shop.id).update_customer_order(params[:id])
     head :no_content
   end
 
   def order_fulfilled
     preorder = WorldfarePreOrder.find_by(order_id: params[:id].to_s)
     preorder&.update(status: "fulfilled")
+    RebuyService.new(shop.id).update_customer_order(params[:id])
     SendEmailService.new.send_order_fulfiled_email(preorder&.shopify_contract_id)
     head :no_content
   end

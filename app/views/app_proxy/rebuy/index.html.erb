@@ -1,3 +1,4 @@
+<%= javascript_pack_tag 'mixpanel', 'data-turbolinks-track': 'reload' %>
 <div class="top_meals">
 
 <div class="header_links">
@@ -214,10 +215,17 @@
 
   $(".checkout_button").click(function(){
     var urlParams;
-    variant_ids?.map((p)=>{
+    let variantOrderNote = []
+    variant_ids?.map((p, i )=>{
       urlParams = urlParams ? urlParams+`,${p}:${$(".quantity_"+p).html()}` : `${p}:${$(".quantity_"+p).html()}`
+      variantOrderNote.push(`variant_${i+1}:${p}`)
     })
-    url = `https://<%= @rebuy.shop.shopify_domain %>/cart/${urlParams}`
+    
+    let order_note = ""+`${variantOrderNote.join(",")},mixpanel_id: ${gloabalMixpanelId}`+"" 
+
+    url = `https://<%= @rebuy.shop.shopify_domain %>/cart/${urlParams}?note=${order_note}`
+    mixpanelIdentify(gloabalMixpanelId)
+    mixpanelTrack("Rebuy", {variants: `${variantOrderNote.join(",")}`})
     window.location.href = url;
   })
 

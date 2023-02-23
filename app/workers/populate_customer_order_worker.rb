@@ -3,7 +3,7 @@ class PopulateCustomerOrderWorker
     def perform
         shops = Shop.all
         shops&.each do |shop|
-            shop = Shop.find(shop_id).includes(:bulk_operation_responses)
+            shop = Shop.find(shop.id)
             all_orders = JSON.parse( shop.bulk_operation_responses.find_by_response_type("all_orders")&.api_raw_data)&.map{ |object| object.deep_transform_keys(&:underscore)} rescue nil
             if all_orders.present?
                 customers_with_orders = get_all_customers_of_most_popular_products(all_orders)

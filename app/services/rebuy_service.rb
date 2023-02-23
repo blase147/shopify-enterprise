@@ -108,4 +108,17 @@ class RebuyService
         sent = SendEmailService.new.send_rebuy_email(customer, auth_token, current_shop.id)
     end
 
+    def update_customer_order(order_id)
+        begin
+            shop = Shop.find(@shop_id)
+            shop.connect
+            order = ShopifyAPI::Order.find(order_id) rescue nil
+            customer = CustomerModal.find_by("lower(email) = '#{order.email.downcase}' ") rescue nil
+            customer_order = CustomerOrder.find_or_initialize_by(order_id: order_id)
+            status = order.cancelled_at.present? ? "canceled" : order.financial_status.downcase
+            customer_order.update(shop_id: shop.id, customer_modal_id: customer.id, api_data: order.to_json, status: status)
+        rescue => e
+            puts e
+        end
+    end
 end
