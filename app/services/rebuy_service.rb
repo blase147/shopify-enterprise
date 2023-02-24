@@ -48,29 +48,43 @@ class RebuyService
     # end
     
     def create_rebuy(rebuy_menu_id)
-        shop = Shop.find(@shop_id)   
+        shop = Shop.find(45)   
+        shop.connect
         rebuy_menu = RebuyMenu.find(rebuy_menu_id)
         shop.customer_modals&.each do |customer|
             if rebuy_menu.rebuy_type&.downcase == "auto"
                 most_popular_products = get_most_popular_products
-                purchased_products = filter_product_from_order_history(most_popular_products, customer.id)
+                qualified_products = filter_product_from_order_history(rebuy_menu.interval_count, rebuy.interval_type, most_popular_products, customer.id)
+                qualified_products = qualified_products.map { |hash| hash.except(:created_at) }
+                purchased_products = [qualified_products.first]
                 other_products = most_popular_products - purchased_products
             elsif rebuy_menu.rebuy_type&.downcase == "collection"
-                collection_products = rebuy_menu.collection_images.map{|item| {product: "gid://shopify/Product/#{item["product_id"]}", variant: "gid://shopify/ProductVariant/#{item["variant_id"]}"}}
-                purchased_products = get_collection_products(rebuy_menu_id, customer.id)
-                other_products = collection_products - purchased_products
-
+                collection_products = rebuy_menu.collection_images.map{|p| p["products"][]}.first
+                collection_products_ids = collection_products.map{|item| item["product_id"][/\d+/]}
+                all_products = ShopifyAPI::Product.where(ids: collection_products_ids.join(","),  fields: 'id,variants')
+                collection_products_with_vairants = []
+                all_products.each do |p|
+                    p.variants.each do |v|
+                        collection_products_with_vairants << {product: "gid://shopify/Product/#{p.id}",variant: "gid://shopify/ProductVariant/#{v.id}"}
+                    end
+                end
+                
+                qualified_products = get_collection_products(rebuy_menu_id, customer.id,collection_products_with_vairants )
+                qualified_products = qualified_products.map { |hash| hash.except(:created_at) }
+                purchased_products = [qualified_products&.first]
+                other_products = collection_products_with_vairants - purchased_products rescue []
             end
-            
-            token = SecureRandom.urlsafe_base64(nil, false)
-            shop.rebuys.create(
-                token: token,
-                purchased_products: purchased_products&.map{|v| v.to_json},
-                other_products: other_products&.map{|v| v.to_json},
-                customer_modal_id: customer.id,
-                rebuy_menu_id: rebuy_menu.id
-            )
-            sent = send_email_and_sms(customer.id, token) rescue nil
+            if qualified_products.present?
+                token = SecureRandom.urlsafe_base64(nil, false)
+                shop.rebuys.create(
+                    token: token,
+                    purchased_products: purchased_products&.map{|v| v.to_json},
+                    other_products: other_products&.map{|v| v.to_json},
+                    customer_modal_id: customer.id,
+                    rebuy_menu_id: rebuy_menu.id
+                )
+                sent = send_email_and_sms(customer.id, token) rescue nil
+            end
         end
     end
 
@@ -83,26 +97,31 @@ class RebuyService
         most_popular_products = most_popular_products.first(5)&.map(&:first)
     end
 
-    def filter_product_from_order_history(products, customer_modal_id)
+    def filter_product_from_order_history(interval_count, interval_type, products, customer_modal_id)
         shop = Shop.find(@shop_id)
         all_orders = JSON.parse( shop.bulk_operation_responses.find_by_response_type("all_orders")&.api_raw_data, object_class: OpenStruct)
         customer = CustomerModal.find(customer_modal_id)
         customer_orders = customer.customer_orders
-        purchased_products = []
-        other_products = []
+       
+        qualified_products = []
         customer.customer_orders&.each do |customer_order|
             order = JSON.parse(customer_order&.api_data) rescue nil
-            order["line_items"]["edges"]&.each do |v| 
-                product = v["node"]["product"]["id"] rescue nil
-                variant = v["node"]["variant"]["id"] rescue nil
-                if  products.include?({product: product, variant: variant}) 
-                    purchased_products << {product: product, variant:variant} 
-                # else  
-                #     other_products << {product: v["node"]["product"]["id"], variant: v["node"]["variant"]["id"]}
-                end 
+            if order.present?
+                qualifying_date = order["created_at"].to_date.advance("#{interval_type.downcase}s": interval_count.to_i)
+                qualifed = qualifying_date >= Date.today ? true : false
+                if qualifed
+                    order["line_items"]["edges"]&.each do |v| 
+                        product = v["node"]["product"]["id"] rescue nil
+                        variant = v["node"]["variant"]["id"] rescue nil
+                        if  products.include?({product: product, variant: variant}) 
+                            qualified_products << {product: product, variant: variant, created_at: order["created_at"].to_time} 
+                        end 
+                    end
+                end
             end
         end
-        return purchased_products
+        qualified_products  = qualified_products&.compact&.sort_by {|p| p[:created_at]}&.reverse 
+        return qualified_products
     end
 
     def send_email_and_sms(customer_id, token)
@@ -132,17 +151,24 @@ class RebuyService
         end
     end
 
-    def get_collection_products(rebuy_menu_id, customer_id)
-        shop = Shop.find @shop_id
+    def get_collection_products(rebuy_menu_id, customer_id, collection_products)
+        shop = Shop.find 3
         rebuy_menu = RebuyMenu.find(rebuy_menu_id)
+        interval_count = rebuy_menu.interval_count
+        interval_type = rebuy_menu.interval_type
+
         customer = CustomerModal.find(customer_id)
-        collection_products_ids = rebuy_menu.collection_images.map{|p| p["product_id"][/\d+/]&.to_i}
-        data = []
+        collection_products_ids = collection_products.map{|p| p["product_id"][/\d+/]&.to_i}
+        qualified_products = []
         customer.customer_orders.each do |order|
             order = JSON.parse(order.api_data)
-            data << order["line_items"].map{|item| {product: "gid://shopify/Product/#{item["product_id"]}", variant: "gid://shopify/ProductVariant/#{item["variant_id"]}"} if collection_products_ids.include?(item["product_id"].to_i)}
+            qualifying_date = order["created_at"].to_date.advance("#{interval_type.downcase}s": interval_count.to_i)
+            qualifed = qualifying_date >= Date.today ? true : false
+            if qualifed
+                qualified_products << order["line_items"].map{|item| {product: "gid://shopify/Product/#{item["product_id"]}", variant: "gid://shopify/ProductVariant/#{item["variant_id"]}"} if collection_products.any?{|p| p[:variant] = "gid://shopify/ProductVariant/#{item["variant_id"]}"}}.first rescue qualified_products << order["line_items"]["edges"].map{|item| {product: "#{item["node"]["product"]["id"]}", variant: "#{item["node"]["variant"]["id"]}", created_at: order["created_at"].to_time} if collection_products.any?{|p| p[:variant] = "#{item["variant_id"]}"}}.first
+            end
         end
-        return data
+        qualified_products  = qualified_products&.compact&.sort_by {|p| p[:created_at]}&.reverse 
+        return qualified_products
     end
-end 
-
+end

@@ -87,7 +87,7 @@ const Rebuy = ({ shopifyDomain }) => {
   const { domain } = useContext(DomainContext);
   const history = useHistory();
   // Start Tabs
-  const [headerButton, setHeaderButton] = useState("auto")
+  const [headerButton, setHeaderButton] = useState("active")
 
   useEffect(() => {
     setPage(1)
@@ -97,21 +97,29 @@ const Rebuy = ({ shopifyDomain }) => {
   );
   const headerButtons = [
     {
-      val: 'Auto',
-      name: 'Auto',
+      val: 'active',
+      name: 'Active',
     },
     {
-      val: 'All products',
-      name: 'All products',
+      val: 'new',
+      name: 'New',
     },
     {
-      val: 'Collection',
-      name: 'Collection',
+      val: 'returning',
+      name: 'Returning',
     },
     {
-      val: 'Product',
-      name: 'Product',
-    }
+      val: 'paused',
+      name: 'Paused',
+    },
+    {
+      val: 'expired',
+      name: 'Canceled',
+    },
+    {
+      val: 'all',
+      name: 'All',
+    },
   ];
   // End tabs
   const [sortOrder, setSortOrder] = useState(0);
@@ -225,16 +233,12 @@ const Rebuy = ({ shopifyDomain }) => {
   // -------------------
   const GETBUNDLES = gql`
     query($page: String) {
-      fetchRebuyMenus(page: $page) {
-        rebuyMenus{
+      fetchRebuys(page: $page) {
+        rebuys{
           id
+          customerName
+          url
           createdAt
-          status
-          rebuyType
-          intervalType
-          intervalCount
-          rebuyOffersGenerated
-          rebuyOffersConversion
         }
         totalPages
         totalCount
@@ -269,7 +273,7 @@ const Rebuy = ({ shopifyDomain }) => {
   }
 
   useEffect(() => {
-    setTotalPages(data?.fetchRebuyMenus?.rebuyMenus)
+    setTotalPages(data?.fetchRebuys?.rebuys)
     if (+page < +totalPages) {
       setHasMore(true);
     }
@@ -332,13 +336,10 @@ const Rebuy = ({ shopifyDomain }) => {
     return rows?.map((row) => {
       return row?.id !== null ?
         [
+          row.id,
+          row.customerName,
+          <a href={row.url} target="_blank">Preview</a>,
           row.createdAt,
-          <div className='frequency'>
-            {`${row?.intervalCount} ${row.intervalType}`}
-          </div>,
-          row.status,
-          row.rebuyOffersGenerated,
-          row.rebuyOffersConversion,
         ] : []
     });
   };
@@ -351,9 +352,9 @@ const Rebuy = ({ shopifyDomain }) => {
   // }, [selectedCustomers]);
 
   useEffect(() => {
-    if (data && data.fetchRebuyMenus) {
-      let rowsData = formatRows(data.fetchRebuyMenus?.rebuyMenus);
-      setCustomers(data.fetchRebuyMenus?.rebuyMenus);
+    if (data && data.fetchRebuys) {
+      let rowsData = formatRows(data.fetchRebuys?.rebuys);
+      setCustomers(data.fetchRebuys?.rebuys);
       // console.log('data: ', data);
     }
   }, [data]);
@@ -563,11 +564,11 @@ const Rebuy = ({ shopifyDomain }) => {
   };
   const CREATE_CUSTOMER = gql`
     mutation($input: AddCustomersInput!) {
-              addCustomers(input: $input) {
-              result
-            }
+      addCustomers(input: $input) {
+        result
+      }
     }
-            `;
+  `;
   const [createCustomer] = useMutation(CREATE_CUSTOMER);
 
   const isToday = (someDate) => {
@@ -608,9 +609,6 @@ const Rebuy = ({ shopifyDomain }) => {
           title="Rebuy"
           primaryAction={
             <ButtonGroup>
-              <Button onClick={() => history.push("/createRebuy")}>
-                Create Rebuy
-              </Button>
               {/*<Button
                 onClick={() => {
                   toggleActive();
@@ -684,11 +682,10 @@ const Rebuy = ({ shopifyDomain }) => {
                     'text'
                   ]}
                   headings={[
-                    'Date of creation',
-                    'Frequency',
-                    'Status',
-                    'Rebuy offers generated',
-                    'Rebuy offers conversions'
+                    'Id',
+                    'Customer Name',
+                    'URL',
+                    'Created At',
                   ]}
 
                   rows={formatRows(customers)}
