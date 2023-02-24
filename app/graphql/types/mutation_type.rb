@@ -35,7 +35,7 @@ module Types
     field :delete_smarty_message, mutation: Mutations::DeleteSmartyMessage
     field :update_password, mutation: Mutations::UpdatePassword
     field :add_bundle_menu, mutation: Mutations::AddBundleMenu
-
+    field :add_rebuy_menu, mutation: Mutations::AddRebuyMenu
 
     field :update_integration, mutation: Mutations::UpdateIntegration
     field :update_translation, mutation: Mutations::UpdateTranslation

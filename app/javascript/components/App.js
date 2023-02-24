@@ -51,6 +51,7 @@ import StripeContractsList from './StripeContracts/StripeContractsList';
 import CreateBundleMenu from './BundleMenu/CreateBundleMenu';
 import BundleMenus from './BundleMenu/Index';
 import Rebuy from './Rebuy/Index';
+import CreateRebuy from './Rebuy/CreateRebuy';
 
 
 
@@ -144,6 +145,7 @@ export default function App(props) {
             <ApolloProvider client={client}>
               <Switch>
                 <AppLayout typePage="createCustomer" tabIndex="2" domain={props?.domain}>
+                  <Route exact path="/createRebuy" component={CreateRebuy} />
                   <Route exact path="/rebuy" component={Rebuy} />
                   <Route exact path="/bundles" component={BundleMenus} />
                   <Route exact path="/createBundleMenu" component={CreateBundleMenu} />
