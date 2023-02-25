@@ -510,7 +510,7 @@ const CreateRebuy = () => {
                                         <Card.Section>
                                             <FormLayout>
                                                 <TextContainer>
-                                                    <Subheading>Choose Rebuy Type</Subheading>
+                                                    <Subheading>Choose Rebuy Offer Mode</Subheading>
                                                 </TextContainer>
                                                 <div className="limit-section">
                                                     <FormLayout.Group>
@@ -537,7 +537,7 @@ const CreateRebuy = () => {
                                                             }}
                                                         />
                                                         <Checkbox
-                                                            label="Sort box choices by collection"
+                                                            label="Create Rebuy Offer from Shopify Collection"
                                                             checked={
                                                                 rebuyType === 'Collection'
                                                             }
@@ -548,7 +548,7 @@ const CreateRebuy = () => {
                                                             }}
                                                         />
                                                         <Checkbox
-                                                            label="Display box choices by products"
+                                                            label="Create Rebuy Offer from Shopify Products"
                                                             checked={
                                                                 rebuyType === 'Product'
                                                             }

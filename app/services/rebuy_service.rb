@@ -48,7 +48,7 @@ class RebuyService
     # end
     
     def create_rebuy(rebuy_menu_id)
-        shop = Shop.find(45)   
+        shop = Shop.find(@shop_id)   
         shop.connect
         rebuy_menu = RebuyMenu.find(rebuy_menu_id)
         shop.customer_modals&.each do |customer|
