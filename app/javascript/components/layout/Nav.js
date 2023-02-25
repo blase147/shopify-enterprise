@@ -91,16 +91,16 @@ const Nav = (props) => {
           {
             icon: MangeIcon,
             label: 'Pre-orders',
-            url: '/',
+            url: '/subscription-plans',
             onClick: () => setActiveTab("dash"),
-            selected: window.location.pathname == "/" ? true : false,
+            selected: window.location.pathname == `${urlDomain}/subscription-plans` ? true : false,
           },
           {
             icon: MangeIcon,
             label: 'Try-before-you-buy',
-            url: '/',
+            url: '/subscription-plans',
             onClick: () => setActiveTab("dash"),
-            selected: window.location.pathname == `${urlDomain}/` ? true : false,
+            selected: window.location.pathname == `${urlDomain}/subscription-plans` ? true : false,
           },
           {
             icon: MangeIcon,
