@@ -246,7 +246,7 @@ const NewDashboard = () => {
                                         <div className="left_section">
                                             <div className="main_head">Revenue Highlights</div>
                                             <div className="body">
-                                                <RevenueHighlight title={"Customer lifetime value"} value={data?.fetchDashboardReport?.customerLifetimeValue?.value} percent={data?.fetchDashboardReport?.customerLifetimeValue?.percent} />
+                                                <RevenueHighlight title={"Customer Lifetime value"} value={data?.fetchDashboardReport?.customerLifetimeValue?.value} percent={data?.fetchDashboardReport?.customerLifetimeValue?.percent} />
                                                 <RevenueHighlight title={"Sales"} value={calculateValue(data?.fetchDashboardReport?.salesData)} percent={null} />
                                                 <RevenueHighlight title={"Refunds"} value={calculateValue(data?.fetchDashboardReport?.refundData)} percent={null} />
                                                 <RevenueHighlight title={"Renewal Rate"} value={calculateValue(data?.fetchDashboardReport?.renewalData)} percent={null} />
