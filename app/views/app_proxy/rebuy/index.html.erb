@@ -1,232 +1,450 @@
 <%= javascript_pack_tag 'mixpanel', 'data-turbolinks-track': 'reload' %>
 <div class="top_meals">
-
-<div class="header_links">
-<div class="header_inner">
- 
-
-  <div class="filter_section">
-    
-  </div>
+   <div class="header_links">
+      <div class="header_inner">
+         <div class="filter_section">
+         </div>
+      </div>
+   </div>
+   <h1 class="welcome_message">Welcome back <%= @customer.name %></h1>
+   <div class="rebuy_main_div">
+      <div class="left_section">
+        <div class="due_for_reorder_with_heading">
+          <h2 class="reorder_heading">Due for Re-Order</h2>
+          <div class="due_for_reorder_main">
+            <div class="reorder_div">
+                <ul class="products_list due_for_reorder_product_list ">
+                  <% @purchased_products&.each do |product| %>
+                  <li class="box-item-grid product_card" id="<%= product[:variant_id] %>">
+                      <div id="items-list" class="innerImageBlock">
+                        <div class="item_list_sub">
+                            <div class="item_list_body">
+                              <div class="box-item-img">
+                                  <img src=<%= product[:image] || asset_path( 'No-image-found.jpg' ) %>>
+                              </div>
+                              <div class="box-item-body">
+                                  <div class="box-item-information">
+                                    <div class="left">
+                                        <h5><%= product[:title] %></h5>
+                                        <span style="font-family: system-ui;"><%= product[:variant_name]&.humanize %></span>
+                                    </div>
+                                    <div class="price_div">
+                                        $<%= product[:price] %>
+                                    </div>
+                                  </div>
+                                  <div class="add_to_week">
+                                    <% if product[:inventory_quantity] > 0 %>
+                                    <button class="minus-value" data-id="<%= product[:variant_id] %>" data-quantityid="quantity_<%= product[:variant_id] %>" data-price="<%= product[:price] %>" type="button" onclick="decrement_quantity(event)">
+                                    -
+                                    </button>
+                                    <span class="quantity_under_btn quantity_<%= product[:variant_id] %>">0</span>
+                                    <button class="add_meal_btn plusValue add_products" data-quantityid="quantity_<%= product[:variant_id] %>" data-producttitle="<%=product[:title]%>"  data-id="<%= product[:variant_id] %>" data-imgurl="<%= product[:image].present? ?  product[:image] : asset_path( 'No-image-found.jpg' )  %>" data-price="<%= product[:price] %>">
+                                    +
+                                    </button>
+                                    <% else %>
+                                    <div class="unavailable">Unavailable</div>
+                                    <% end %>
+                                  </div>
+                                  <% if product[:inventory_quantity] > 0 %>
+                                  <div class="main-bx-button">
+                                    <button class="btn btn-cstm add_meal_btn_2 plusValue add_products" data-quantityid="quantity_<%= product[:variant_id] %>" data-producttitle="<%=product[:title]%>"  data-id="<%= product[:variant_id] %>" data-imgurl="<%= product[:image].present? ?  product[:image] : asset_path( 'No-image-found.jpg' )  %>" data-price="<%= product[:price] %>"  >Add to box</button>
+                                  </div>
+                                  <% end %>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                  </li>
+                  <% end %>
+                </ul>
+            </div>
+            <div class="more_options_button">
+                <button class="see_more_options">See More Options</button>
+            </div>
+            <div class="more_options_main_div hidden">
+                <h2 class="reorder_heading"></h2>
+                <ul class="products_list">
+                  <% @other_products&.each do |product| %>
+                  <li class="box-item-grid product_card" id="<%= product[:variant_id] %>">
+                      <div id="items-list" class="innerImageBlock">
+                        <div class="item_list_sub">
+                            <div class="item_list_body">
+                              <div class="box-item-img">
+                                  <img src=<%= product[:image] || asset_path( 'No-image-found.jpg' ) %>>
+                              </div>
+                              <div class="box-item-body">
+                                  <div class="box-item-information">
+                                    <div class="left">
+                                        <h5><%= product[:title] %></h5>
+                                        <span style="font-family: system-ui;"><%= product[:variant_name]&.humanize %></span>
+                                    </div>
+                                    <div class="price_div">
+                                        $<%= product[:price] %>
+                                    </div>
+                                  </div>
+                                  <div class="add_to_week">
+                                    <% if product[:inventory_quantity] > 0 %>
+                                    <button class="minus-value" data-id="<%= product[:variant_id] %>" data-quantityid="quantity_<%= product[:variant_id] %>" data-price="<%= product[:price] %>" type="button" onclick="decrement_quantity(event)">
+                                    -
+                                    </button>
+                                    <span class="quantity_under_btn quantity_<%= product[:variant_id] %>">0</span>
+                                    <button class="add_meal_btn plusValue add_products" data-quantityid="quantity_<%= product[:variant_id] %>" data-producttitle="<%=product[:title]%>"  data-id="<%= product[:variant_id] %>" data-imgurl="<%= product[:image].present? ?  product[:image] : asset_path( 'No-image-found.jpg' )  %>" data-price="<%= product[:price] %>">
+                                    +
+                                    </button>
+                                    <% else %>
+                                    <div class="unavailable">Unavailable</div>
+                                    <% end %>
+                                  </div>
+                                  <% if product[:inventory_quantity] > 0 %>
+                                  <div class="main-bx-button">
+                                    <button class="btn btn-cstm add_meal_btn_2 plusValue add_products" data-quantityid="quantity_<%= product[:variant_id] %>" data-producttitle="<%=product[:title]%>"  data-id="<%= product[:variant_id] %>" data-imgurl="<%= product[:image].present? ?  product[:image] : asset_path( 'No-image-found.jpg' )  %>" data-price="<%= product[:price] %>"  >Add to box</button>
+                                  </div>
+                                  <% end %>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                  </li>
+                  <% end %>
+                </ul>
+            </div>
+          </div>
+        </div>
+        <div class="previously_purchased_heading">
+          <h2 class="reorder_heading">PREVIOUSLY PURCHASED</h2>
+          <div class="previously_purchased">
+                <ul class="owl-carousel">
+                  <% @previously_purchased&.each do |product| %>
+                  <li class="box-item-grid product_card" id="<%= product[:variant_id] %>">
+                      <div id="items-list" class="innerImageBlock">
+                        <div class="item_list_sub">
+                            <div class="item_list_body">
+                              <div class="box-item-img">
+                                  <img src=<%= product[:image] || asset_path( 'No-image-found.jpg' ) %>>
+                              </div>
+                              <div class="box-item-body">
+                                  <div class="box-item-information">
+                                    <div class="left">
+                                        <h5><%= product[:title] %></h5>
+                                        <span style="font-family: system-ui;"><%= product[:variant_name]&.humanize %></span>
+                                    </div>
+                                    <div class="price_div">
+                                        $<%= product[:price] %>
+                                    </div>
+                                  </div>
+                                  <div class="add_to_week">
+                                    <% if product[:inventory_quantity] > 0 %>
+                                    <button class="minus-value" data-id="<%= product[:variant_id] %>" data-quantityid="quantity_<%= product[:variant_id] %>" data-price="<%= product[:price] %>" type="button" onclick="decrement_quantity(event)">
+                                    -
+                                    </button>
+                                    <span class="quantity_under_btn quantity_<%= product[:variant_id] %>">0</span>
+                                    <button class="add_meal_btn plusValue add_products" data-quantityid="quantity_<%= product[:variant_id] %>" data-producttitle="<%=product[:title]%>"  data-id="<%= product[:variant_id] %>" data-imgurl="<%= product[:image].present? ?  product[:image] : asset_path( 'No-image-found.jpg' )  %>" data-price="<%= product[:price] %>">
+                                    +
+                                    </button>
+                                    <% else %>
+                                    <div class="unavailable">Unavailable</div>
+                                    <% end %>
+                                  </div>
+                                  <% if product[:inventory_quantity] > 0 %>
+                                  <div class="main-bx-button">
+                                    <button class="btn btn-cstm add_meal_btn_2 plusValue add_products" data-quantityid="quantity_<%= product[:variant_id] %>" data-producttitle="<%=product[:title]%>"  data-id="<%= product[:variant_id] %>" data-imgurl="<%= product[:image].present? ?  product[:image] : asset_path( 'No-image-found.jpg' )  %>" data-price="<%= product[:price] %>"  >Add to box</button>
+                                  </div>
+                                  <% end %>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                  </li>
+                  <% end %>
+                </ul>
+          </div>
+        </div>
+      </div>
+      <div class="right_section">
+         <header>
+            <h2>Your Cart</h2>
+            <span class="selected_products_number your_cart_items">0</span>
+         </header>
+         <div class="cart-items cart_body_main">
+         </div>
+         <div class="checkout_main_div">
+            <div class="checkout_sub_div">
+               <div aria-label="Cart Icon" class="cart_icon_main" tabindex="0">
+                  <div class="cart_svg_div">
+                     <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M1 1c0-.552.45-1 1.004-1h1.505c.831 0 1.505.672 1.505 1.5v.56l12.574.908c.877.055 1.52.843 1.397 1.71l-.866 6.034A1.504 1.504 0 0116.63 12H5.014v2h10.043a3.005 3.005 0 013.011 3c0 1.657-1.348 3-3.01 3a3.005 3.005 0 01-2.84-4H6.85a3.005 3.005 0 01-2.84 4A3.005 3.005 0 011 17c0-1.306.838-2.418 2.007-2.83V3.01 2H2.004A1.002 1.002 0 011 1zm4.014 3.064V10h11.18l.727-5.07-11.907-.866zM14.054 17c0-.552.449-1 1.003-1 .554 0 1.004.448 1.004 1s-.45 1-1.004 1a1.002 1.002 0 01-1.003-1zM3.007 17c0-.552.45-1 1.004-1s1.003.448 1.003 1-.449 1-1.003 1a1.002 1.002 0 01-1.004-1z" fill="#5C5F62"></path>
+                     </svg>
+                  </div>
+                  <div class="number_of_item">
+                     <span class="selected_products_number">0</span>
+                  </div>
+               </div>
+               <div class="total_price_main">
+                  <div class="total_price_sub">
+                     <p>$00.00</p>
+                     <span class="sub_price_tax">Plus tax &amp; shipping</span>
+                  </div>
+                  <button type="button" class="checkout_button">
+                  <span>Check Out</span>
+                  </button>
+               </div>
+            </div>
+         </div>
+      </div>
    </div>
 </div>
-  <h1 class="welcome_message">Welcome back <%= @customer.name %></h1>
-  <h2 class="reorder_heading">Re-Order Products</h2>
-<div class="rebuy_main_div">
-  <div class="left_section">
-    <div class="reorder_div">
-      <ul class="products_list">
-         <% @purchased_products&.each do |product| %>
-            <li class="box-item-grid product_card" id="<%= product[:variant_id] %>">
-                <div id="items-list" class="innerImageBlock">
-                  <div class="item_list_sub">
-                    <div class="item_list_body">
-                      <div class="box-item-img">
-                          <img src=<%= product[:image] || asset_path( 'No-image-found.jpg' ) %>>
-                      </div>
-                      <div class="box-item-body">
-                        <div class="box-item-information">
-                            <div class="left">
-                              <h5><%= product[:title] %></h5>
-                              <span style="font-family: system-ui;"><%= product[:variant_name]&.humanize %></span>
-                            </div>
-                            <div class="price_div">
-                              $<%= product[:price] %>
-                            </div>
-                        </div>
-                        <div class="add_to_week">
-                          <% if product[:inventory_quantity] > 0 %>
-                            <button class="minus-value" data-id="<%= product[:variant_id] %>" data-quantityid="quantity_<%= product[:variant_id] %>" data-price="<%= product[:price] %>" type="button" onclick="decrement_quantity(event)">
-                              -
-                            </button>
-                            <span class="quantity_under_btn quantity_<%= product[:variant_id] %>">0</span>
-                            <button class="add_meal_btn plusValue add_products" data-quantityid="quantity_<%= product[:variant_id] %>" data-producttitle="<%=product[:title]%>"  data-id="<%= product[:variant_id] %>" data-imgurl="<%= product[:image].present? ?  product[:image] : asset_path( 'No-image-found.jpg' )  %>" data-price="<%= product[:price] %>">
-                            +
-                            </button>
-                          <% else %>
-                            <div class="unavailable">Unavailable</div> 
-                          <% end %>
-                        </div>
-                        <% if product[:inventory_quantity] > 0 %>
-                          <div class="main-bx-button">
-                            <button class="btn btn-cstm add_meal_btn_2 plusValue add_products" data-quantityid="quantity_<%= product[:variant_id] %>" data-producttitle="<%=product[:title]%>"  data-id="<%= product[:variant_id] %>" data-imgurl="<%= product[:image].present? ?  product[:image] : asset_path( 'No-image-found.jpg' )  %>" data-price="<%= product[:price] %>"  >Add to box</button>
-                          </div>
-                        <% end %>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-            </li>
-         <% end %>
-      </ul>
-    </div>
-  </div>
-  <div class="right_section">
-    <header>
-      <h2>Your Cart</h2>
-      <span class="selected_products_number your_cart_items">0</span>
-    </header>
-    <div class="cart-items cart_body_main">
-      
-        
-    </div>
-    <div class="checkout_main_div">
-      <div class="checkout_sub_div">
-        <div aria-label="Cart Icon" class="cart_icon_main" tabindex="0">
-          <div class="cart_svg_div">
-            <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" d="M1 1c0-.552.45-1 1.004-1h1.505c.831 0 1.505.672 1.505 1.5v.56l12.574.908c.877.055 1.52.843 1.397 1.71l-.866 6.034A1.504 1.504 0 0116.63 12H5.014v2h10.043a3.005 3.005 0 013.011 3c0 1.657-1.348 3-3.01 3a3.005 3.005 0 01-2.84-4H6.85a3.005 3.005 0 01-2.84 4A3.005 3.005 0 011 17c0-1.306.838-2.418 2.007-2.83V3.01 2H2.004A1.002 1.002 0 011 1zm4.014 3.064V10h11.18l.727-5.07-11.907-.866zM14.054 17c0-.552.449-1 1.003-1 .554 0 1.004.448 1.004 1s-.45 1-1.004 1a1.002 1.002 0 01-1.003-1zM3.007 17c0-.552.45-1 1.004-1s1.003.448 1.003 1-.449 1-1.003 1a1.002 1.002 0 01-1.004-1z" fill="#5C5F62"></path>
-            </svg>
-          </div>
-          <div class="number_of_item">
-            <span class="selected_products_number">0</span>
-          </div>
-        </div>
-        <div class="total_price_main">
-          <div class="total_price_sub">
-            <p>$00.00</p>
-            <span class="sub_price_tax">Plus tax &amp; shipping</span>
-          </div>
-          <button type="button" class="checkout_button">
-            <span>Check Out</span>
-          </button>
-        </div>
-      </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
-  $("body").addClass("rebuy_body");
-  // JS Global Variables   
-    var totalProducts;
-    var leftMeals;
-    let product_ids = [];
-    let variant_ids = [];
-    let totalPrice=0;
-
-  //increment quantity
-  function increment_quantity(variantId, quantity_div, price){
-    // if(+$(".selected_products_number").html() < totalProducts){
-      variant_ids.push(variantId)
-      $(`.${quantity_div}`)?.html(+$(`.${quantity_div}`).html()+1)
-      $(`.${quantity_div}`)?.val(+$(`.${quantity_div}`).html())
-      $(".selected_products_number").html( +$(".selected_products_number").html() + 1)
-      totalPrice += +price
-      $(".total_price_sub").html("<p>"+totalPrice?.toFixed(2)+"</p>")
-    // }
-  }
-
-  //decrement quantity
-  //increment quantity
-  function decrement_quantity(e){
-    var id = e.target.getAttribute("data-id");
-    var price = e.target.getAttribute("data-price");
-    if(+$(".selected_products_number").html() >= 1){
-      index = variant_ids.indexOf(id);
-      variant_ids.splice(index, 1);
-      let quantity_div = e.target.getAttribute("data-quantityid")
-      $(`.${quantity_div}`)?.html(+$(`.${quantity_div}`).html()-1)
-      $(`.${quantity_div}`)?.val(+$(`.${quantity_div}`).html())
-      $(".selected_products_number").html( +$(".selected_products_number").html() - 1)
-      totalPrice -= +price
-      $(".total_price_sub").html("<p>"+totalPrice?.toFixed(2)+"</p>")
-    }
-    if(+$(".quantity_"+id).val() === 0){
-      $(".product_card_"+id).remove();
-    }
-  }
-
-  function removeVariant(id,price){
-    let quantity = $(`.${"quantity_"+id}`)?.html();
-    totalPrice = totalPrice - (+price * +quantity)
-    if(!totalPrice){
-      totalPrice = 0;
-    }
-    $(".total_price_sub").html("<p>"+totalPrice?.toFixed(2)+"</p>")
-    $(`.${"quantity_"+id}`)?.html("0");
-    let index = variant_ids.indexOf(id);
-    variant_ids.splice(index, 1);
-    $(".product_card_"+id).remove();
-  } 
-
-  $(".add_products")?.on('click', function(){
-      var variantId = $(this).attr("data-id");
-      var quantity_div ="quantity_"+$(this).data("id");
-      if($(`.${quantity_div}`)?.html() == 0){
-        $(".cart-items").append("<div class='product_card product_card_"+$(this).data("id")+"'> \
-                                    <div class='product_card_sub_main'> \
-                                      <div class='product_card_sub'> \
-                                        <div class='product_card_sub_body'> \
-                                          <div> \
-                                            <button aria-label='View Product Details' class='product_details_button'> \
-                                              <div class='product_image'> \
-                                                <div class='product_image_sub'> \
-                                                  <img height='100%' src='"+$(this).data("imgurl")+"' alt='Photo of The Hand Cream' class='card-product-image hover:opacity-80 transition-opacity duration-200 h-full'> \
-                                                </div> \
-                                              </div> \
-                                            </button> \
-                                          </div> \
-                                          <div class='product_info'> \
-                                            <div class='product_desc_main'> \
-                                              <div class='product_desc_sub'> \
-                                                <div class='product_desc_sub_body'> \
-                                                  <h3 class='product_title'>The Hand Cream</h3> \
-                                                  <h4 class='product_desc'>Fragrance-Free / 65 ml</h4> \
-                                                </div> \
-                                                <div class='product_price'> \
-                                                  <span>$20.00</span> \
-                                                </div> \
-                                              </div> \
-                                            </div> \
-                                            <div class='manage_quantit_main'> \
-                                              <div> \
-                                                <div class='manage_quantit_sub'> \
-                                                  <div class='manage_quantit_sub_body'> \
-                                                    <div class='cart_quantity_picker'> \
-                                                      <button class='minus-value' data-id='"+$(this).data("id")+"' data-quantityid='quantity_"+$(this).data("id")+"' data-price='"+$(this).data("price")+"' type='button' onclick='decrement_quantity(event)'> \
-                                                          - \
-                                                      </button> \
-                                                      <span class='quantity_under_btn quantity_"+$(this).data("id")+"'>1</span> \
-                                                      <button class='add_meal_btn plusValue add_products' onclick=increment_quantity("+variantId+",'"+`${quantity_div}`+"',"+$(this).data("price")+") data-quantityid='quantity_"+$(this).data("id")+"' data-producttitle='"+$(this).data("producttitle")+"'  data-id='"+$(this).data("id")+"' data-imgurl='"+$(this).data("imageurl")+"' data-price='"+$(this).data("price")+"'>+ \
-                                                      </button> \
-                                                  </div> \
-                                                </div> \
-                                              </div> \
-                                            </div> \
-                                            <button aria-label='Remove Variant from Cart' class='btn btn-cstm remove_variant_button' onclick='removeVariant("+$(this).data("id")+","+$(this).data("price")+")' data-id='"+$(this).data("id")+"'>Remove</button> \
-                                          </div> \
-                                        </div> \
-                                      </div> \
-                                    </div> \
-                                  </div> \
-                                "); 
-      }
-    increment_quantity(variantId, quantity_div, $(this).data("price") )
-  });
-
-  $(".clear_all_meals").on("click",function(){
-    $(".cart-items").html("");
-    $(".quantity_under_btn").html(0);
-    $(".selected_products_number").html(0);
-    variant_ids = [];
+   $("body").addClass("rebuy_body");
+   // JS Global Variables   
+     var totalProducts;
+     var leftMeals;
+     let product_ids = [];
+     let variant_ids = [];
+     let totalPrice=0;
+   
+   //increment quantity
+   function increment_quantity(variantId, quantity_div, price){
+     // if(+$(".selected_products_number").html() < totalProducts){
+       variant_ids.push(variantId)
+       $(`.${quantity_div}`)?.html(+$(`.${quantity_div}`).html()+1)
+       $(`.${quantity_div}`)?.val(+$(`.${quantity_div}`).html())
+       $(".selected_products_number").html( +$(".selected_products_number").html() + 1)
+       totalPrice += +price
+       $(".total_price_sub").html("<p>"+totalPrice?.toFixed(2)+"</p>")
+     // }
+   }
+   
+   //decrement quantity
+   //increment quantity
+   function decrement_quantity(e){
+     var id = e.target.getAttribute("data-id");
+     var price = e.target.getAttribute("data-price");
+     if(+$(".selected_products_number").html() >= 1){
+       index = variant_ids.indexOf(id);
+       variant_ids.splice(index, 1);
+       let quantity_div = e.target.getAttribute("data-quantityid")
+       $(`.${quantity_div}`)?.html(+$(`.${quantity_div}`).html()-1)
+       $(`.${quantity_div}`)?.val(+$(`.${quantity_div}`).html())
+       $(".selected_products_number").html( +$(".selected_products_number").html() - 1)
+       totalPrice -= +price
+       $(".total_price_sub").html("<p>"+totalPrice?.toFixed(2)+"</p>")
+     }
+     if(+$(".quantity_"+id).val() === 0){
+       $(".product_card_"+id).remove();
+     }
+   }
+   
+   function removeVariant(id,price){
+     let quantity = $(`.${"quantity_"+id}`)?.html();
+     totalPrice = totalPrice - (+price * +quantity)
+     if(!totalPrice){
+       totalPrice = 0;
+     }
+     $(".total_price_sub").html("<p>"+totalPrice?.toFixed(2)+"</p>")
+     $(`.${"quantity_"+id}`)?.html("0");
+     let index = variant_ids.indexOf(id);
+     variant_ids.splice(index, 1);
+     $(".product_card_"+id).remove();
+   } 
+   
+   $(".add_products")?.on('click', function(){
+       var variantId = $(this).attr("data-id");
+       var quantity_div ="quantity_"+$(this).data("id");
+       if($(`.${quantity_div}`)?.html() == 0){
+         $(".cart-items").append("<div class='product_card product_card_"+$(this).data("id")+"'> \
+                                     <div class='product_card_sub_main'> \
+                                       <div class='product_card_sub'> \
+                                         <div class='product_card_sub_body'> \
+                                           <div> \
+                                             <button aria-label='View Product Details' class='product_details_button'> \
+                                               <div class='product_image'> \
+                                                 <div class='product_image_sub'> \
+                                                   <img height='100%' src='"+$(this).data("imgurl")+"' alt='Photo of The Hand Cream' class='card-product-image hover:opacity-80 transition-opacity duration-200 h-full'> \
+                                                 </div> \
+                                               </div> \
+                                             </button> \
+                                           </div> \
+                                           <div class='product_info'> \
+                                             <div class='product_desc_main'> \
+                                               <div class='product_desc_sub'> \
+                                                 <div class='product_desc_sub_body'> \
+                                                   <h3 class='product_title'>The Hand Cream</h3> \
+                                                   <h4 class='product_desc'>Fragrance-Free / 65 ml</h4> \
+                                                 </div> \
+                                                 <div class='product_price'> \
+                                                   <span>$20.00</span> \
+                                                 </div> \
+                                               </div> \
+                                             </div> \
+                                             <div class='manage_quantit_main'> \
+                                               <div> \
+                                                 <div class='manage_quantit_sub'> \
+                                                   <div class='manage_quantit_sub_body'> \
+                                                     <div class='cart_quantity_picker'> \
+                                                       <button class='minus-value' data-id='"+$(this).data("id")+"' data-quantityid='quantity_"+$(this).data("id")+"' data-price='"+$(this).data("price")+"' type='button' onclick='decrement_quantity(event)'> \
+                                                           - \
+                                                       </button> \
+                                                       <span class='quantity_under_btn quantity_"+$(this).data("id")+"'>1</span> \
+                                                       <button class='add_meal_btn plusValue add_products' onclick=increment_quantity("+variantId+",'"+`${quantity_div}`+"',"+$(this).data("price")+") data-quantityid='quantity_"+$(this).data("id")+"' data-producttitle='"+$(this).data("producttitle")+"'  data-id='"+$(this).data("id")+"' data-imgurl='"+$(this).data("imageurl")+"' data-price='"+$(this).data("price")+"'>+ \
+                                                       </button> \
+                                                   </div> \
+                                                 </div> \
+                                               </div> \
+                                             </div> \
+                                             <button aria-label='Remove Variant from Cart' class='btn btn-cstm remove_variant_button' onclick='removeVariant("+$(this).data("id")+","+$(this).data("price")+")' data-id='"+$(this).data("id")+"'>Remove</button> \
+                                           </div> \
+                                         </div> \
+                                       </div> \
+                                     </div> \
+                                   </div> \
+                                 "); 
+       }
+     increment_quantity(variantId, quantity_div, $(this).data("price") )
+   });
+   
+   $(".clear_all_meals").on("click",function(){
+     $(".cart-items").html("");
+     $(".quantity_under_btn").html(0);
+     $(".selected_products_number").html(0);
+     variant_ids = [];
+   })
+   
+   $(".checkout_button").click(function(){
+     var urlParams;
+     let variantOrderNote = []
+     variant_ids?.map((p, i )=>{
+       urlParams = urlParams ? urlParams+`,${p}:${$(".quantity_"+p).html()}` : `${p}:${$(".quantity_"+p).html()}`
+       variantOrderNote.push(`variant_${i+1}:${p}`)
+     })
+     
+     let order_note = ""+`${variantOrderNote.join(",")},mixpanel_id: ${gloabalMixpanelId}`+", rebuy_token: <%= @rebuy.token %>" 
+   
+     url = `https://<%= @rebuy.shop.shopify_domain %>/cart/${urlParams}?note=${order_note}`
+     mixpanelIdentify(gloabalMixpanelId)
+     mixpanelTrack("Rebuy", {variants: `${variantOrderNote.join(",")}`})
+     window.location.href = url;
+   })
+   
+  $(".see_more_options").click(function(){
+      $(".more_options_main_div").toggleClass("hidden")
   })
 
-  $(".checkout_button").click(function(){
-    var urlParams;
-    let variantOrderNote = []
-    variant_ids?.map((p, i )=>{
-      urlParams = urlParams ? urlParams+`,${p}:${$(".quantity_"+p).html()}` : `${p}:${$(".quantity_"+p).html()}`
-      variantOrderNote.push(`variant_${i+1}:${p}`)
-    })
-    
-    let order_note = ""+`${variantOrderNote.join(",")},mixpanel_id: ${gloabalMixpanelId}`+", rebuy_token: <%= @rebuy.token %>" 
-
-    url = `https://<%= @rebuy.shop.shopify_domain %>/cart/${urlParams}?note=${order_note}`
-    mixpanelIdentify(gloabalMixpanelId)
-    mixpanelTrack("Rebuy", {variants: `${variantOrderNote.join(",")}`})
-    window.location.href = url;
+  $('.owl-carousel').owlCarousel({
+    loop:false,
+    margin:10,
+    padding: 0,
+    nav:false,
+    dots: true,
+    responsiveClass: true,
+    responsive:{
+        0:{
+            items:1
+        },
+        600:{
+            items:2
+        },
+        1000:{
+            items:2
+        }
+    }
   })
 
 </script>
+<style>
+  .more_options_main_div{
+    overflow: auto;
+    max-height: 300px;
+  }
+
+  button.see_more_options {
+    background: none;
+    border: none;
+    text-decoration: underline;
+    font-size: 14px;
+    line-height: 1.25rem;
+    cursor: pointer;
+  }
+
+  .more_options_button {
+    padding: 8px;
+  }
+  .rebuy_main_div .due_for_reorder_product_list {
+    padding: 0;
+    margin-top: 0;
+    border-bottom: 1px solid #a3a1a129;
+    margin-bottom: 0;
+  }
+  
+  .due_for_reorder_main {
+    background: #fff;
+  } 
+
+  .due_for_reorder_product_list #items-list{
+    box-shadow: none;
+  }
+
+  h1.welcome_message {
+    font-size: 18px;
+    font-weight: 700;
+    color: #000000a8;
+  }
+
+  .owl-dots {
+    text-align: center;
+    padding-top: 3px;
+  }
+  .owl-dots button.owl-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 100%;
+    display: inline-block;
+    background: #ccc;
+    margin: 0 2px;
+  }
+  .owl-dots button.owl-dot.active {
+    background-color: #000;
+  }
+  .owl-dots button.owl-dot:focus {
+    outline: none;
+  }
+
+
+  li ::marker {
+      display: none;
+  }
+
+  .owl-item li::marker {
+      display: none!important;
+      color: transparent;
+  }
+  .owl-carousel .owl-stage{display: flex;}
+  .previously_purchased_heading li {
+      display: flex;
+      flex: 1 0 auto;
+      height: 100%;
+  }
+
+  .owl-carousel.owl-loaded {
+    padding: 0;
+  }
+
+  @media(max-width: 1370px){
+    .main-bx-button {
+      padding: -4px;
+    }
+
+    button.btn.btn-cstm.add_meal_btn_2.plusValue.add_products {
+        padding: 5px 8px;
+        font-size: 12px;
+    }
+
+    button.minus-value, .add_to_week>button {
+        min-width: 20px!important;
+        padding: 0;
+        max-height: 22px;
+    }
+  }
+
+</style>
+
+

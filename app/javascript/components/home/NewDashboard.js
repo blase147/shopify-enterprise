@@ -137,6 +137,14 @@ const NewDashboard = () => {
         }
     }, [data]);
     const [dateFilters, setDateFilters] = useState({ startDate: '', endDate: '' });
+
+    const calculateValue = (arr) => {
+        let value = 0;
+        arr?.map((val) => {
+            value += +val?.data?.value
+        })
+        return value
+    }
     return (
         <>
             <Page>
@@ -167,7 +175,7 @@ const NewDashboard = () => {
                                                                         endDate: dayjs(new Date()).subtract(1, "days").format()
                                                                     })
                                                                 }}
-                                                            >Daily</Button>
+                                                            >Subscriptions</Button>
                                                             <Button
                                                                 onClick={() => {
                                                                     setDateFilters({
@@ -176,7 +184,7 @@ const NewDashboard = () => {
                                                                         endDate: dayjs(new Date()).subtract(1, "days").format()
                                                                     })
                                                                 }}
-                                                            >Weekly</Button>
+                                                            >Rebuy</Button>
                                                             <Button
                                                                 onClick={() => {
                                                                     setDateFilters({
@@ -185,7 +193,7 @@ const NewDashboard = () => {
                                                                         endDate: dayjs(new Date()).subtract(1, "days").format()
                                                                     })
                                                                 }}
-                                                            >Monthly</Button>
+                                                            >PreOrders</Button>
                                                         </ButtonGroup>
                                                 }}
                                             >
@@ -238,12 +246,11 @@ const NewDashboard = () => {
                                         <div className="left_section">
                                             <div className="main_head">Revenue Highlights</div>
                                             <div className="body">
-                                                {
-                                                    [1, 2, 3, 4].map(() => {
-                                                        return <RevenueHighlight />
-                                                    }
-                                                    )
-                                                }
+                                                <RevenueHighlight title={"Customer lifetime value"} value={data?.fetchDashboardReport?.customerLifetimeValue?.value} percent={data?.fetchDashboardReport?.customerLifetimeValue?.percent} />
+                                                <RevenueHighlight title={"Sales"} value={calculateValue(data?.fetchDashboardReport?.salesData)} percent={null} />
+                                                <RevenueHighlight title={"Refunds"} value={calculateValue(data?.fetchDashboardReport?.refundData)} percent={null} />
+                                                <RevenueHighlight title={"Renewal Rate"} value={calculateValue(data?.fetchDashboardReport?.renewalData)} percent={null} />
+                                                <RevenueHighlight title={"ARR"} value={calculateValue(data?.fetchDashboardReport?.arrData)} percent={null} />
                                             </div>
                                         </div>
                                     </div>

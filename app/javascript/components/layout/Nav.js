@@ -33,7 +33,7 @@ const Nav = (props) => {
     const accessSettings = JSON.parse(localStorage.getItem("accessSettings"))
     setNavigation(accessSettings)
     console.log("toogleMenu", toogleMenu);
-  }, [])
+  }, [window.location.pathname])
 
 
   const handleLoyality = useCallback(() => {
@@ -69,7 +69,8 @@ const Nav = (props) => {
       navigation.push({
         url: "",
         label: 'Revenue Channels',
-        selected: false,
+        disabled: true,
+        selected: true,
         onClick: () => setToogleMenu({ ...toogleMenu, revenueChannels: !toogleMenu?.revenueChannels }),
         subNavigationItems: [
           accessTabs?.manage_plan_access ? (
@@ -91,16 +92,14 @@ const Nav = (props) => {
           {
             icon: MangeIcon,
             label: 'Pre-orders',
-            url: '/',
-            onClick: () => setActiveTab("dash"),
-            selected: window.location.pathname == "/" ? true : false,
+            url: '/preOrders',
+            selected: window.location.pathname == `${urlDomain}/preOrders` ? true : false,
           },
           {
             icon: MangeIcon,
             label: 'Try-before-you-buy',
-            url: '/',
-            onClick: () => setActiveTab("dash"),
-            selected: window.location.pathname == `${urlDomain}/` ? true : false,
+            url: '/tryBeforeYouBuy',
+            selected: window.location.pathname == `${urlDomain}/tryBeforeYouBuy` ? true : false,
           },
           {
             icon: MangeIcon,
