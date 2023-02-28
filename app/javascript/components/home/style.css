@@ -202,8 +202,8 @@
 }
 
 .bottom_section .left_section {
-    flex: 0 0 70%;
-    max-width: 70%;
+    flex: 0 0 95%;
+    max-width: 95%;
 }
 
 .bottom_section .graph_main .left_section .highcharts-container,
