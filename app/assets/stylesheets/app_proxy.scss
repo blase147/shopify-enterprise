@@ -3056,12 +3056,14 @@ span.cancel-text {
 }
 
 .reorder_heading {
-    font-size: 12px;
+    font-size: 15px;
     line-height: 1rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: #c566916e;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 
@@ -3397,6 +3399,7 @@ span.cancel-text {
 
 .rebuy_main_div .right_section {
     height: fit-content;
+    margin-top: 30px;
 }
 
 .right_section span.selected_products_number.your_cart_items {
