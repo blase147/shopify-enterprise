@@ -42,6 +42,15 @@ module Types
       argument :__typename, String, required: false
       argument :_destroy, GraphQL::Types::Boolean, required: false
       argument :category, String, required: false
+
+      argument :checkout_charge_type, String, required: false
+      argument :checkout_charge_value, String, required: false
+      argument :remaing_balance_charge_trigger, String, required: false
+      argument :fulfillment_trigger, String, required: false
+      argument :reserve, String, required: false
+      argument :remaining_balance_charge_time, String, required: false
+      argument :remaing_balance_charge_exact_time, String, required: false
+
     end
   end
 end

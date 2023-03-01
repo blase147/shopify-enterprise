@@ -301,7 +301,7 @@ const TryBeforeYouBuy = () => {
                                         <Button
                                             primary
                                             icon={MobilePlusMajor}
-                                            onClick={() => history.push('/mystery-box-subscription-plan')}
+                                            onClick={() => history.push('/createTryBeforeYouBuy')}
                                         >
                                             Create
                                         </Button>

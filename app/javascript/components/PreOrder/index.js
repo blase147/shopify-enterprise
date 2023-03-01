@@ -301,7 +301,7 @@ const PreOrders = () => {
                                         <Button
                                             primary
                                             icon={MobilePlusMajor}
-                                            onClick={() => history.push('/trial-subscription-plan')}
+                                            onClick={() => history.push('/createPreorder')}
                                         >
                                             Create PreOrder
                                         </Button>

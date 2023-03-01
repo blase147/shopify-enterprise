@@ -245,6 +245,7 @@
      let index = variant_ids.indexOf(id);
      variant_ids.splice(index, 1);
      $(".product_card_"+id).remove();
+     $(".selected_products_number").html( +$(".selected_products_number").html() - +quantity)
    } 
    
    $(".add_products")?.on('click', function(){
