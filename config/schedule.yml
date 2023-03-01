@@ -5,3 +5,7 @@ my_first_job:
 my_second_job:
   cron: "0 1 * * *" 
   class: "UpdateUsageChargesWorker"
+
+my_third_job:
+  cron: "0 0 * * *"
+  class: "CreateRebuyForAllCustomersWorker"

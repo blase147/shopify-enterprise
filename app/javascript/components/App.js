@@ -54,6 +54,8 @@ import Rebuy from './Rebuy/Index';
 import CreateRebuy from './Rebuy/CreateRebuy';
 import PreOrders from './PreOrder';
 import TryBeforeYouBuy from './TryBeforeYouBuy';
+import CreatePreorder from './PreOrder/CreatePreorder';
+import CreateTryBeforeYouBuy from './TryBeforeYouBuy/CreateTryBeforeYouBuy';
 
 
 
@@ -148,6 +150,8 @@ export default function App(props) {
               <Switch>
                 <AppLayout typePage="createCustomer" tabIndex="2" domain={props?.domain}>
                   <Route exact path="/preOrders" component={PreOrders} />
+                  <Route exact path="/createTryBeforeYouBuy" component={CreateTryBeforeYouBuy} />
+                  <Route exact path="/createPreorder" component={CreatePreorder} />
                   <Route exact path="/tryBeforeYouBuy" component={TryBeforeYouBuy} />
                   <Route exact path="/createRebuy" component={CreateRebuy} />
                   <Route exact path="/rebuy" component={Rebuy} />
