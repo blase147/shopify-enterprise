@@ -288,24 +288,6 @@ function check_out_button(){
     })
   })
 
-  $(".select_size").click(function(e){
-     e.stopPropagation();
-     e.preventDefault();
-     $(".select_size_for_"+$(this).data("product")).removeClass("selected_size")
-    if(selectedProperty){
-      selectedProperty["size"] = $(this).data("size")
-      selectVariants();
-      $(".size_select_message").html("")
-      $(".color_select_message").html("")
-    }else{
-      $(".color_select_message").html("Please select a color.")
-      selectedProperty = {product: $(this).data("product"), size: $(this).data("size")}
-    }
-    $(".show_selected_size"+$(this).data("product")).html($(this).data("size"));
-
-    $(this).addClass("selected_size")
-  })
-
   function selectSize(event){
      event.stopPropagation();
      event.preventDefault();
