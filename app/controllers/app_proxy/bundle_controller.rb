@@ -70,7 +70,7 @@ class AppProxy::BundleController < AppProxyController
       free_products = @bundle_menu.free_product_collections&.map{|c| c["products"]}.first || @bundle_menu.free_products_images
       free_products = free_products&.map{|p| p["product_id"][/\d+/]} rescue []
       all_product_ids = products + free_products
-      @all_products = ShopifyAPI::Product.where(ids: all_product_ids.join(","),  fields: 'id,title,images,body_html,variants') 
+      @all_products = ShopifyAPI::Product.where(ids: all_product_ids.join(","),  fields: 'id,title,images,body_html,variants, options') 
       gon.all_products = @all_products
       @products = @all_products.select{ |product| products.include?("#{product&.id}") }
       @free_products = @all_products.select{|product| free_products.include?("#{product&.id}")}

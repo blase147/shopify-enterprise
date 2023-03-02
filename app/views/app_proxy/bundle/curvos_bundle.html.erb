@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="container-s">
-        <div class="content-box-s">
+        <div class="content-box-s hidden">
           <h3 class="heading-s">ONE TIME</h3>
           <div class="btn-s">
             <label class="switch-button-s">
@@ -130,18 +130,16 @@
                   <div class="product_desc">
                     <ul class="product-card__swatches">
                       <%
-                        variant_option1 = product.variants&.map{|v| v.option1 }&.uniq
-                        variant_option2 = product.variants&.map{|v| v.option2 }&.uniq
-                        variant_option1 = variant_option1.include?("S") ? variant_option2 : variant_option1
-                        variant_option2 = variant_option2 == variant_option1 ? product.variants&.map{|v| v.option1 }&.uniq : variant_option2
+                        variant_option1 = product.options&.map{|v|  v.values if v.name.downcase == "color" }&.compact&.join(",")&.split(",")&.uniq
+                        variant_option2 = product.options&.map{|v| v.values if v.name.downcase == "size" }&.compact&.join(",")&.split(",")&.uniq
                       %>
                       <% variant_option1&.each do |option1| %>
                         <li class="product-card__swatch select_color" data-product="<%= product.id %>" data-color="<%= option1 %>">
-                          <button class="color-swatch no-focus has-swatch-image boost-listings__product-card__product-card-color-swatch select_color_<%= product.id %>" data-color="Tie Dye">
-                            <span class="color-swatch__tooltip body-2"><%= option1 %></span>
-                            <span class="color-swatch__swatch no-focus">
-                              <span class="color-swatch__swatch-inner">
-                                <img alt="Tie Dye" src="https://cdn.shopify.com/s/files/1/0607/1844/8811/files/swatch_tie-dye.jpg" onload="this.style.display = 'block'" style="display: block;">
+                          <button class="color-swatch no-focus has-swatch-image boost-listings__product-card__product-card-color-swatch select_color_<%= product.id %>"  data-product="<%= product.id %>" data-color="<%= option1 %>">
+                            <span class="color-swatch__tooltip body-2"  data-product="<%= product.id %>" data-color="<%= option1 %>"><%= option1 %></span>
+                            <span class="color-swatch__swatch no-focus"  data-product="<%= product.id %>" data-color="<%= option1 %>">
+                              <span class="color-swatch__swatch-inner"  data-product="<%= product.id %>" data-color="<%= option1 %>">
+                                <img alt="Tie Dye" src="https://cdn.shopify.com/s/files/1/0607/1844/8811/files/swatch_tie-dye.jpg" style="display: block;"  data-product="<%= product.id %>" data-color="<%= option1 %>">
                               </span>
                             </span>
                           </button>
@@ -151,7 +149,7 @@
                     <div class="grid__item radio-wrapper product-form__item">
                       <label class="single-option-radio__label" for="ProductSelect-option-1" data-option-name="Størrelse">Størrelse: <span class="variant-label-option-value show_selected_size<%= product.id %>"></span></label><fieldset class="single-option-radio inline-list" id="ProductSelect-option-1"><input type="radio" checked="checked" value="S" data-index="option2" name="option2" class="single-option-selector__radio js-single-option-selector" id="ProductSelect-option-template--16618485776635__main-storrelse-S">
                       <% variant_option2&.each do |option2| %>
-                        <label class="select_size select_size_for_<%= product.id %>" data-product="<%= product.id %>" data-size="<%= option2 %>" ><%= option2 %></label>
+                        <label class="select_size select_size_for_<%= product.id %> disabled" data-product="<%= product.id %>" data-size="<%= option2 %>" ><%= option2 %></label>
                       <%end %>                  
                     </div>
                   </div>
@@ -210,6 +208,38 @@ function check_out_button(){
   var selectedProducts = [];
   var totalPrice=0;
   var selectedProperty = null;
+  var productSizesCollection={};
+
+  filterColorWithSizes();
+
+  function compact(array) {
+    return array.filter(Boolean);
+  }
+
+  function filterColorWithSizes(){
+    allProducts.map((p)=>{
+        let colors = compact(p.options.map((opt)=>{ if(opt?.name === "Color"){return opt?.values}}))
+        let sizes = compact(p.options.map((opt)=>{ if(opt?.name === "Size"){return opt?.values}}))
+        let obj = {}
+        var newObj = p.variants.map((v,i)=>{
+            let color = colors[0]?.includes(v.option1) ? v.option1 : v.option2;
+            let size = sizes[0]?.includes(v.option1) ? v.option1 : v.option2;
+            if(obj && obj[color])
+            {  
+              obj[color].push(size);
+            }
+            else{
+                obj[color] = [size];
+            }
+        
+            return obj;
+        
+        })
+        if(!productSizesCollection[p.id]){ 
+          productSizesCollection[p.id] = newObj[0]
+        }; 
+    })
+  }
 
   //progress bar
   function setPercentage() {
@@ -244,24 +274,42 @@ function check_out_button(){
       $(".size_select_message").html("Please select a size.")
       selectedProperty = {product: $(this).data("product"), color: $(this).data("color")}
     }
+
+    let sizes = productSizesCollection[`${$(this).data("product")}`.trim()][`${$(this).data("color")}`.trim()]
+    $(".select_size_for_"+$(this).data("product")).addClass("disabled")
+    console.log("$(this).data(product) _____________ $(this).data(color)",$(this).data("product"), $(this).data("color"));
+    sizes.map((size)=>{
+      $(".select_size_for_"+$(this).data("product")).each(function(){
+        if(sizes.join(",").includes($(this).data("size"))){
+          $(this).removeClass("disabled");
+          $(this).attr("onClick", "selectSize(event)")
+        }
+      })
+    })
   })
 
-   $(".select_size").click(function(e){
-     e.preventDefault();
-     $(".select_size_for_"+$(this).data("product")).removeClass("selected_size")
+  function selectSize(event){
+     event.stopPropagation();
+     event.preventDefault();
+     let dataProduct = event.target.getAttribute("data-product")
+     let dataSize = event.target.getAttribute("data-size")
+     $(".select_size_for_"+dataProduct).removeClass("selected_size")
     if(selectedProperty){
-      selectedProperty["size"] = $(this).data("size")
+      selectedProperty["size"] = dataSize
       selectVariants();
       $(".size_select_message").html("")
       $(".color_select_message").html("")
     }else{
       $(".color_select_message").html("Please select a color.")
-      selectedProperty = {product: $(this).data("product"), size: $(this).data("size")}
+      selectedProperty = {product: dataProduct, size: dataSize}
     }
-    $(".show_selected_size"+$(this).data("product")).html($(this).data("size"));
+    $(".show_selected_size"+dataProduct).html(dataSize);
 
-    $(this).addClass("selected_size")
-  })
+    $(".select_size_for_"+dataProduct).removeClass("selected_size")
+    
+    event.currentTarget.className += " selected_size"; 
+    
+  }
 
    $(".direct_add_to_cart").click(function(){
       let index = selectedProducts.findIndex((p ) => p.product === $(this).data("product"));
