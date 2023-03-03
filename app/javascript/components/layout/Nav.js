@@ -107,6 +107,13 @@ const Nav = (props) => {
             url: '/stripeContractsList',
             onClick: () => setActiveTab("dash"),
             selected: window.location.pathname == `${urlDomain}/stripeContractsList` ? true : false,
+          },
+          {
+            icon: MangeIcon,
+            label: 'Memberships',
+            url: '/memberships',
+            onClick: () => setActiveTab("memberships"),
+            selected: window.location.pathname == `${urlDomain}/memberships` ? true : false,
           }
         ]
       })

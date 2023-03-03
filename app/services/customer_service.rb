@@ -205,4 +205,20 @@ class CustomerService < GraphqlService
     result = client.query(client.parse(CUSTOMER_PAYMENT_CREATE), variables: { customerId: shopify_customer_id, remoteReference: { stripePaymentMethod:{customerId: stripe_customer_id}}} )
     p result.to_json
   end
+
+  def add_tag_to_customer(customer_id , tag)
+    customer = ShopifyAPI::Customer.find(customer_id)
+    tags = customer.tags.split(",")
+    tags << tag
+    customer.tags = tags&.uniq&.join(",")
+    customer.save
+  end 
+
+  def remove_tag_to_customer(customer_id , tag)
+    customer = ShopifyAPI::Customer.find(customer_id)
+    tags = customer.tags.split(",")
+    tags.delete(tag)
+    customer.tags = tags.join(",")
+    customer.save
+  end 
 end

@@ -52,6 +52,14 @@ class ShopifyContractUpdateWorker
 
       selling_plan = SellingPlan.find_by(shopify_id: data.lines.edges.first&.node&.selling_plan_id)
       contract.selling_plan_id = selling_plan&.id
+
+      if selling_plan.membership.present? && selling_plan.membership.status == "active"
+        if contract.status == "ACTIVE"
+          CustomerService.new({shop: shop}).add_tag_to_customer(contract.shopify_customer_id , selling_plan.membership.tag)
+        elsif contract.status == "CANCELLED"
+          CustomerService.new({shop: shop}).remove_tag_to_customer(contract.shopify_customer_id , selling_plan.membership.tag)
+        end
+      end
     end
     contract.save
   end

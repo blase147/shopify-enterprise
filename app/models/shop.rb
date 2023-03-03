@@ -6,6 +6,7 @@ class Shop < ActiveRecord::Base
   def api_version
     ShopifyApp.configuration.api_version
   end
+  has_many :memberships, dependent: :destroy
   has_many :rebuy_menus, dependent: :destroy
   has_many :customer_orders, dependent: :destroy
   has_many :rebuys, dependent: :destroy

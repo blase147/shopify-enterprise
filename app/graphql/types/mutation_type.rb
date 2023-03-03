@@ -36,6 +36,7 @@ module Types
     field :update_password, mutation: Mutations::UpdatePassword
     field :add_bundle_menu, mutation: Mutations::AddBundleMenu
     field :add_rebuy_menu, mutation: Mutations::AddRebuyMenu
+    field :add_membership, mutation: Mutations::AddMembership
 
     field :update_integration, mutation: Mutations::UpdateIntegration
     field :update_translation, mutation: Mutations::UpdateTranslation
