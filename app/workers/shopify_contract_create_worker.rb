@@ -29,6 +29,16 @@ class ShopifyContractCreateWorker
       contract.save
       customer_modal_contract = {"subscription": contract.subscription, "status": contract.status}
       CreateCustomerModalService.create(shop.id, data.customer,customer_modal_contract)
+      
+      # add tag to customer if selling_plan is membership
+      if selling_plan.membership.present? && selling_plan.membership.status == "active"
+        if contract.status == "ACTIVE"
+          CustomerService.new({shop: shop}).add_tag_to_customer(contract.shopify_customer_id , selling_plan.membership.tag)
+        elsif contract.status == "CANCELLED"
+          CustomerService.new({shop: shop}).remove_tag_to_customer(contract.shopify_customer_id , selling_plan.membership.tag)
+        end
+      end
+
       if contract.api_data.present? && contract.api_data["origin_order"].present?
         orderid = contract.api_data["origin_order"]["id"].split("/").last
         order = ShopifyAPI::Order.find(orderid)
