@@ -225,21 +225,20 @@ const Memberships = ({ shopifyDomain }) => {
     // -------------------
     const GETBUNDLES = gql`
     query($page: String) {
-      fetchRebuyMenus(page: $page) {
-        rebuyMenus{
-          id
-          createdAt
-          status
-          rebuyType
-          intervalType
-          intervalCount
-          rebuyOffersGenerated
-          rebuyOffersConversion
+        fetchMemberships(page: $page) {
+            memberships{
+                id
+                name
+                status
+                tag
+                sellingPlan            
+                createdAt
+                activeMembers
+            }
+            totalPages
+            totalCount
+            pageNumber
         }
-        totalPages
-        totalCount
-        pageNumber
-      }
     }
   `;
     const { data, loading, error, refetch } = useQuery(GETBUNDLES, {
@@ -332,13 +331,12 @@ const Memberships = ({ shopifyDomain }) => {
         return rows?.map((row) => {
             return row?.id !== null ?
                 [
-                    row.createdAt,
-                    <div className='frequency'>
-                        {`${row?.intervalCount} ${row.intervalType}`}
-                    </div>,
-                    row.status,
-                    row.rebuyOffersGenerated,
-                    row.rebuyOffersConversion,
+                    row?.name,
+                    row?.createdAt,
+                    row?.status,
+                    row?.sellingPlanName,
+                    row?.tag,
+                    row?.activeMembers,
                 ] : []
         });
     };
@@ -686,11 +684,11 @@ const Memberships = ({ shopifyDomain }) => {
                                         'text'
                                     ]}
                                     headings={[
+                                        'Name',
                                         'Date of creation',
-                                        'Frequency',
                                         'Status',
-                                        'Memberships offers generated',
-                                        'Memberships offers conversions'
+                                        'Associated SellingPlan',
+                                        'Active Customers'
                                     ]}
 
                                     rows={formatRows(customers)}

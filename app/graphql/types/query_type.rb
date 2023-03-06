@@ -14,6 +14,7 @@
     field :fetch_bundles, resolver: Queries::FetchBundles 
     field :fetch_rebuys, resolver: Queries::FetchRebuys
     field :fetch_rebuy_menus, resolver: Queries::FetchRebuyMenus
+    field :fetch_memberships, resolver: Queries::FetchMemberships
 
     field :fetch_campaigns, resolver: Queries::FetchUpsellCampaignGroups
     field :fetch_campaign, resolver: Queries::FetchUpsellCampaignGroup

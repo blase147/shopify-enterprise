@@ -35,6 +35,10 @@ import {
 import SearchPlan from '../upsell/SearchPlan';
 import LoadingScreen from '../LoadingScreen';
 import PixelIcon from '../../images/PixelIcon';
+import SearchVariants from '../plans/SearchVariants';
+import SearchProduct from '../upsell/SearchProduct';
+import Preview from '../plans/Preview';
+
 
 const CreateMembership = () => {
     var id;
@@ -79,6 +83,8 @@ const CreateMembership = () => {
 
         return campaigns;
     });
+
+    const [membershipType, setMembershipType] = useState("selling_plan")
 
     const validationSchema = yup.object().shape({
         sellingPlan: yup.array().required().label("Please select a SellingPlan.")
@@ -272,6 +278,11 @@ const CreateMembership = () => {
 
     const [updated, setUpdated] = useState(false);
 
+    const [allProducts, setAllProducts] = useState([]);
+    const [allVarients, setAllVarients] = useState([]);
+
+    console.log("allVarients", allVarients);
+    console.log("allProducts", allProducts);
     return (
         <Frame>
             <Page
@@ -292,6 +303,9 @@ const CreateMembership = () => {
                         initialValues={campaignData || initialValues}
                         innerRef={formRef}
                         onSubmit={(values, { setSubmitting }) => {
+                            values.productImages = allProducts || [];
+                            values.variantImages = allVarients || [];
+                            values?.membershipType = membershipType
                             const formData = { ...values };
                             formData.sellingPlan = allSelectedPlans;
                             // Manipulate later
@@ -441,36 +455,129 @@ const CreateMembership = () => {
                                                         />
                                                     </div>
                                                 </FormLayout.Group>
-                                                <FormLayout.Group>
-                                                    <div className="build-box-search">
-                                                        <TextContainer>
-                                                            <Subheading>Subscription Plan</Subheading>
-                                                        </TextContainer>
-                                                        <Select
-                                                            options={[{ label: 'is any', value: 'is_any' }]}
-                                                            label=""
-                                                            value={'is_any'}
-                                                        />
 
-                                                        <div className="search">
-                                                            <SearchPlan
-                                                                idForTextField={`serchPlan-${Math.random()}`}
-                                                                value={values.sellingPlan}
-                                                                setFieldValue={setFieldValue}
-                                                                fieldName={`sellingPlan`}
-                                                                allSelectedPlans={allSelectedPlans || []}
-                                                                setAllSelectedPlans={setAllSelectedPlans}
-                                                                error={
-                                                                    values?.sellingPlan &&
-                                                                    touched?.sellingPlan
-                                                                        ?.sellingPlanId &&
-                                                                    errors?.sellingPlan
-                                                                        ?.sellingPlanId
-                                                                }
-                                                            />
-                                                        </div>
-                                                    </div>
+                                                <FormLayout.Group>
+                                                    <Checkbox
+                                                        label="SellingPlan"
+                                                        checked={
+                                                            membershipType === 'selling_plan'
+                                                        }
+                                                        onChange={(e) => {
+                                                            setMembershipType(
+                                                                'selling_plan'
+                                                            );
+                                                        }}
+                                                    />
+                                                    <Checkbox
+                                                        label="Products"
+                                                        checked={
+                                                            membershipType === 'products'
+                                                        }
+                                                        onChange={(e) => {
+                                                            setMembershipType(
+                                                                'products'
+                                                            );
+                                                        }}
+                                                    />
+                                                    <Checkbox
+                                                        label="SellingPlan"
+                                                        checked={
+                                                            membershipType === 'variants'
+                                                        }
+                                                        onChange={(e) => {
+                                                            setMembershipType(
+                                                                'variants'
+                                                            );
+                                                        }}
+                                                    />
                                                 </FormLayout.Group>
+                                                {
+                                                    membershipType === 'selling_plan' ? (
+                                                        <>
+                                                            <FormLayout.Group>
+                                                                <div className="build-box-search">
+                                                                    <TextContainer>
+                                                                        <Subheading>Subscription Plan</Subheading>
+                                                                    </TextContainer>
+                                                                    <Select
+                                                                        options={[{ label: 'is any', value: 'is_any' }]}
+                                                                        label=""
+                                                                        value={'is_any'}
+                                                                    />
+
+                                                                    <div className="search">
+                                                                        <SearchPlan
+                                                                            idForTextField={`serchPlan-${Math.random()}`}
+                                                                            value={values.sellingPlan}
+                                                                            setFieldValue={setFieldValue}
+                                                                            fieldName={`sellingPlan`}
+                                                                            allSelectedPlans={allSelectedPlans || []}
+                                                                            setAllSelectedPlans={setAllSelectedPlans}
+                                                                            error={
+                                                                                values?.sellingPlan &&
+                                                                                touched?.sellingPlan
+                                                                                    ?.sellingPlanId &&
+                                                                                errors?.sellingPlan
+                                                                                    ?.sellingPlanId
+                                                                            }
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            </FormLayout.Group>
+                                                        </>
+                                                    )
+                                                        : membershipType === 'variants' ?
+                                                            (
+                                                                <>
+                                                                    < FormLayout.Group >
+                                                                        <div className="product-search">
+                                                                            <SearchVariants
+                                                                                value={values.variantImages || [[]]}
+                                                                                setFieldValue={setFieldValue}
+                                                                                fieldName={`variantImages`}
+                                                                                allVariants={allVarients || [[]]}
+                                                                                setAllVarients={setAllVarients}
+                                                                                error={
+                                                                                    touched.variantImages?.variantId &&
+                                                                                    errors.variantImages?.variantId
+                                                                                }
+                                                                            />
+                                                                        </div>
+                                                                    </FormLayout.Group>
+                                                                    <Preview
+                                                                        isUpdate={false}
+                                                                        allProducts={allVarients || [[]]}
+                                                                        setAllProducts={setAllVarients}
+                                                                        setUpdated={setUpdated}
+                                                                    />
+                                                                </>
+                                                            )
+                                                            : membershipType === 'products' ?
+                                                                <>
+                                                                    <FormLayout.Group>
+                                                                        <div className="product-search">
+                                                                            <SearchProduct
+                                                                                value={values.productImages || [[]]}
+                                                                                setFieldValue={setFieldValue}
+                                                                                fieldName={`productImages`}
+                                                                                allProducts={allProducts || [[]]}
+                                                                                setAllProducts={setAllProducts}
+                                                                                error={
+                                                                                    touched.productImages?.productId &&
+                                                                                    errors.productImages?.productId
+                                                                                }
+                                                                            />
+                                                                        </div>
+                                                                    </FormLayout.Group>
+                                                                    <Preview
+                                                                        isUpdate={false}
+                                                                        allProducts={allProducts || [[]]}
+                                                                        setAllProducts={setAllProducts}
+                                                                        setUpdated={setUpdated}
+                                                                    />
+                                                                </>
+                                                                : ""
+                                                }
                                                 <FormLayout.Group>
                                                     <Select
                                                         options={statusOptions}
@@ -490,7 +597,7 @@ const CreateMembership = () => {
                     </Formik>
                 )}
             </Page>
-        </Frame>
+        </Frame >
     );
 };
 
