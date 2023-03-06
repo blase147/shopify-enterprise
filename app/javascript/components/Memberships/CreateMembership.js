@@ -308,8 +308,8 @@ const CreateMembership = () => {
                             values?.membershipType = membershipType
                             const formData = { ...values };
                             formData.sellingPlan = allSelectedPlans;
-                            // Manipulate later
-                            // formData.upsellCampaigns[0].productOffer = allProducts;
+                           
+                            // formData.upsellCampaigns[0].productOffer = allProducts;  Manipulate later
                             if (id) {
                                 updateBoxCampaign({
                                     variables: {
