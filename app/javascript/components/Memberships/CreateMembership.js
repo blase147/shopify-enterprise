@@ -395,7 +395,10 @@ const CreateMembership = () => {
                                 {saveSuccess && (
                                     <Toast
                                         content="Bundle Menu is saved"
-                                        onDismiss={hideSaveSuccess}
+                                        onDismiss={() => {
+                                            hideSaveSuccess;
+                                            location.reload();
+                                        }}
                                     />
                                 )}
 

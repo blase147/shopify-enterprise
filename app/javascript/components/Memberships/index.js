@@ -231,7 +231,7 @@ const Memberships = ({ shopifyDomain }) => {
                 name
                 status
                 tag
-                sellingPlan            
+                associatedItems            
                 createdAt
                 activeMembers
             }
@@ -268,7 +268,7 @@ const Memberships = ({ shopifyDomain }) => {
     }
 
     useEffect(() => {
-        setTotalPages(data?.fetchRebuyMenus?.rebuyMenus)
+        setTotalPages(data?.fetchMemberships?.memberships)
         if (+page < +totalPages) {
             setHasMore(true);
         }
@@ -334,7 +334,7 @@ const Memberships = ({ shopifyDomain }) => {
                     row?.name,
                     row?.createdAt,
                     row?.status,
-                    row?.sellingPlanName,
+                    row?.associatedItems,
                     row?.tag,
                     row?.activeMembers,
                 ] : []
@@ -349,9 +349,9 @@ const Memberships = ({ shopifyDomain }) => {
     // }, [selectedCustomers]);
 
     useEffect(() => {
-        if (data && data.fetchRebuyMenus) {
-            let rowsData = formatRows(data.fetchRebuyMenus?.rebuyMenus);
-            setCustomers(data.fetchRebuyMenus?.rebuyMenus);
+        if (data && data.fetchMemberships) {
+            let rowsData = formatRows(data.fetchMemberships?.memberships);
+            setCustomers(data.fetchMemberships?.memberships);
             // console.log('data: ', data);
         }
     }, [data]);
@@ -687,7 +687,7 @@ const Memberships = ({ shopifyDomain }) => {
                                         'Name',
                                         'Date of creation',
                                         'Status',
-                                        'Associated SellingPlan',
+                                        'Associated SellingPlan/Product/Variant',
                                         'Active Customers'
                                     ]}
 

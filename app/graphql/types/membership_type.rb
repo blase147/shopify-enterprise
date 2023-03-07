@@ -4,7 +4,7 @@ module Types
       field :name, String, null: true
       field :status, String, null: true
       field :tag, String, null: true
-      field :selling_plan, [Types::RuleCustomerValueType], null: true
+      field :associated_items, String, null: true
   
       field :created_at, String, null: true
       field :updated_at, String, null: true
@@ -25,6 +25,22 @@ module Types
 
       def selling_plan_name
         object&.selling_plan&.name
+      end
+
+      def associated_items
+        name = []
+        if object.membership_type == "selling_plan"
+          name << object.selling_plan.name
+        elsif object.membership_type == "products"
+          object.product_images&.each do |p|
+            name << p["title"]
+          end
+        elsif object.membership_type == "variants"
+          object.variant_images&.each do |p|
+            name << p["title"]
+          end
+        end
+        return name.join(", ")
       end
     end
 end
