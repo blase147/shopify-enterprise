@@ -481,7 +481,7 @@ const CreateMembership = () => {
                                                         }}
                                                     />
                                                     <Checkbox
-                                                        label="SellingPlan"
+                                                        label="Variants"
                                                         checked={
                                                             values?.membershipType === 'variants'
                                                         }
