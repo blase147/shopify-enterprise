@@ -6,10 +6,12 @@ module Mutations
       def resolve(params:)
         membership_params = Hash params
         begin
-          selling_pan = JSON.parse(membership_params[:selling_plan].to_json)
-          selling_plan = SellingPlan.find_by_shopify_id(selling_pan.first["sellingPlanId"])
+          if membership_params[:selling_plan].present?
+            selling_pan = JSON.parse(membership_params[:selling_plan].to_json)
+            selling_plan = SellingPlan.find_by_shopify_id(selling_pan.first["sellingPlanId"])
+            membership_params[:selling_plan_id] = selling_plan.id
+          end
           membership_params.delete(:selling_plan)
-          membership_params[:selling_plan_id] = selling_plan.id
           membership = current_shop.memberships.create!(membership_params)
   
           membership.save

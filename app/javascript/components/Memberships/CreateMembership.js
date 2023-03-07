@@ -395,7 +395,10 @@ const CreateMembership = () => {
                                 {saveSuccess && (
                                     <Toast
                                         content="Bundle Menu is saved"
-                                        onDismiss={hideSaveSuccess}
+                                        onDismiss={() => {
+                                            hideSaveSuccess;
+                                            location.reload();
+                                        }}
                                     />
                                 )}
 
@@ -481,7 +484,7 @@ const CreateMembership = () => {
                                                         }}
                                                     />
                                                     <Checkbox
-                                                        label="SellingPlan"
+                                                        label="Variants"
                                                         checked={
                                                             values?.membershipType === 'variants'
                                                         }
