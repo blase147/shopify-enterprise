@@ -223,7 +223,7 @@ const Memberships = ({ shopifyDomain }) => {
     const [status, setStatus] = useState("active");
     const [searchQuery, setSearchQuery] = useState();
     // -------------------
-    const GETBUNDLES = gql`
+    const GET_MEMBERSHIPS = gql`
     query($page: String) {
         fetchMemberships(page: $page) {
             memberships{
@@ -241,7 +241,7 @@ const Memberships = ({ shopifyDomain }) => {
         }
     }
   `;
-    const { data, loading, error, refetch } = useQuery(GETBUNDLES, {
+    const { data, loading, error, refetch } = useQuery(GET_MEMBERSHIPS, {
         fetchPolicy: 'no-cache',
         variables: {
             page: page.toString(),

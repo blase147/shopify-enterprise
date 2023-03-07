@@ -291,7 +291,7 @@ const CreateMembership = () => {
                 breadcrumbs={[
                     {
                         content: 'Memberships',
-                        onAction: () => history.push("/bundles"),
+                        onAction: () => history.push("/memberships"),
                     },
                 ]}
             >
