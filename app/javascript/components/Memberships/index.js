@@ -606,7 +606,7 @@ const Memberships = ({ shopifyDomain }) => {
                     title="Memberships"
                     primaryAction={
                         <ButtonGroup>
-                            <Button onClick={() => history.push("/createRebuy")}>
+                            <Button onClick={() => history.push("/createMemberships")}>
                                 Create Membership
                             </Button>
                             {/*<Button

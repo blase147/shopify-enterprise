@@ -221,4 +221,28 @@ class CustomerService < GraphqlService
     customer.tags = tags.join(",")
     customer.save
   end 
+
+  def check_order_for_associated_membership order_id
+    order = ShopifyAPI::Order.find(order_id)
+    if order.present?
+      membership_tags = []
+      order&.line_items&.each do |line_item| 
+          tags = Membership.where("variant_images @> ?", '[{"variant_id": "gid://shopify/ProductVariant/'+"#{line_item.variant_id}"+'"}]').pluck(:tag) rescue nil
+          membership_tags << tags if tags.present?
+
+          tags = Membership.where("product_images @> ?", '[{"product_id": "gid://shopify/Product/'+"#{line_item.product_id}"+'"}]').pluck(:tag) rescue nil
+
+          membership_tags << tags if tags.present?        
+      end 
+
+      membership_tags = membership_tags.join(",").split(",")
+
+      if membership_tags.present?
+        customer = CustomerModal.find_by_shopify_id(order.customer.id)
+        customer&.update(membership_tags: membership_tags)
+        add_tag_to_customer(order.customer.id, membership_tags.join(","))
+      end
+    end
+  end
+
 end
