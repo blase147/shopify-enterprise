@@ -394,7 +394,7 @@ const CreateMembership = () => {
 
                                 {saveSuccess && (
                                     <Toast
-                                        content="Bundle Menu is saved"
+                                        content="Membership is saved"
                                         onDismiss={() => {
                                             hideSaveSuccess;
                                             location.reload();
@@ -405,7 +405,7 @@ const CreateMembership = () => {
                                 {formErrors.length > 0 && (
                                     <>
                                         <Banner
-                                            title="Bundle Menu group could not be saved"
+                                            title="Membership could not be created"
                                             status="critical"
                                         >
                                             <List type="bullet">
