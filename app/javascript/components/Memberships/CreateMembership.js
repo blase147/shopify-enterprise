@@ -61,7 +61,10 @@ const CreateMembership = () => {
         name: '',
         tag: '',
         status: 'active',
+        membershipType: 'selling_plan',
         sellingPlan: [],
+        productImages: [],
+        variantImages: []
     };
 
     const [formErrors, setFormErrors] = useState([]);
@@ -83,8 +86,6 @@ const CreateMembership = () => {
 
         return campaigns;
     });
-
-    const [membershipType, setMembershipType] = useState("selling_plan")
 
     const validationSchema = yup.object().shape({
         sellingPlan: yup.array().required().label("Please select a SellingPlan.")
@@ -305,7 +306,6 @@ const CreateMembership = () => {
                         onSubmit={(values, { setSubmitting }) => {
                             values.productImages = allProducts || [];
                             values.variantImages = allVarients || [];
-                            values?.membershipType = membershipType
                             const formData = { ...values };
                             formData.sellingPlan = allSelectedPlans;
                            
@@ -460,39 +460,40 @@ const CreateMembership = () => {
                                                     <Checkbox
                                                         label="SellingPlan"
                                                         checked={
-                                                            membershipType === 'selling_plan'
+                                                            values?.membershipType === 'selling_plan'
                                                         }
                                                         onChange={(e) => {
-                                                            setMembershipType(
-                                                                'selling_plan'
+                                                            setFieldValue(
+                                                                'membershipType', 'selling_plan'
                                                             );
                                                         }}
                                                     />
                                                     <Checkbox
                                                         label="Products"
                                                         checked={
-                                                            membershipType === 'products'
+                                                            values?.membershipType === 'products'
                                                         }
                                                         onChange={(e) => {
-                                                            setMembershipType(
-                                                                'products'
+                                                            setFieldValue(
+                                                                'membershipType', 'products'
                                                             );
+
                                                         }}
                                                     />
                                                     <Checkbox
                                                         label="SellingPlan"
                                                         checked={
-                                                            membershipType === 'variants'
+                                                            values?.membershipType === 'variants'
                                                         }
                                                         onChange={(e) => {
-                                                            setMembershipType(
-                                                                'variants'
+                                                            setFieldValue(
+                                                                'membershipType', 'variants'
                                                             );
                                                         }}
                                                     />
                                                 </FormLayout.Group>
                                                 {
-                                                    membershipType === 'selling_plan' ? (
+                                                    values?.membershipType === 'selling_plan' ? (
                                                         <>
                                                             <FormLayout.Group>
                                                                 <div className="build-box-search">
@@ -526,7 +527,7 @@ const CreateMembership = () => {
                                                             </FormLayout.Group>
                                                         </>
                                                     )
-                                                        : membershipType === 'variants' ?
+                                                        : values?.membershipType === 'variants' ?
                                                             (
                                                                 <>
                                                                     < FormLayout.Group >
@@ -552,7 +553,7 @@ const CreateMembership = () => {
                                                                     />
                                                                 </>
                                                             )
-                                                            : membershipType === 'products' ?
+                                                            : values?.membershipType === 'products' ?
                                                                 <>
                                                                     <FormLayout.Group>
                                                                         <div className="product-search">
