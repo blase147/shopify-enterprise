@@ -4,6 +4,10 @@ $(document).on('turbolinks:load', function () {
     btn.addEventListener('click', (e) => {
       const btn = e.target;
       document.querySelector(btn.dataset.target).classList.remove('hidden');
+      let children = document.querySelector(btn.dataset.target).children;
+      for (let i = 0; i < children.length; i++) {
+        children[i].style.display = "block";
+      }
     })
   })
   document.querySelectorAll('[data-action="close"]').forEach(btn => {
