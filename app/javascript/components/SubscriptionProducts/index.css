@@ -1,0 +1,68 @@
+.selected-plan-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 30%;
+    border: 1px solid #00000014;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.selected-plan-container>img {
+    cursor: pointer;
+}
+
+.build-box-search {
+    display: flex;
+    align-items: center;
+    border: 1px solid #00000014;
+    padding: 5px;
+    border-radius: 8px;
+    max-width: 600px;
+}
+
+.build-box-search h3.Polaris-Subheading {
+    white-space: nowrap;
+}
+
+.search {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.build-box-search>* {
+    margin-inline: 5px;
+}
+
+.date-range-label {
+    margin-bottom: 4px;
+}
+
+.build-a-box-create .Polaris-Card__Header {
+    background: #000000;
+    border-radius: 5px 5px 0px 0px;
+    color: white;
+    padding-bottom: 10px;
+}
+
+.limit-section .product-stack>div {
+    margin-bottom: 26px;
+    margin-left: 22px;
+    margin-top: 10px;
+}
+
+.limit-section .building-box-collection>div {
+    margin-bottom: 26px;
+    margin-left: 22px;
+    margin-top: 10px;
+}
+
+.limit-section {
+    /* margin-left: 10px; */
+}
+
+.head-search+div {
+    width: 450px;
+}

@@ -14,6 +14,8 @@ module Types
     field :delete_customers, mutation: Mutations::DeleteCustomers
     field :add_ways_to_earn_points, mutation: Mutations::AddWaysToEarnPoints
     field :add_referral_reward, mutation: Mutations::AddReferralReward
+    field :add_subscription_product, mutation: Mutations::AddSubscriptionProduct
+
 
     field :add_campaign, mutation: Mutations::AddUpsellCampaignGroup
     field :update_campaign, mutation: Mutations::UpdateUpsellCampaignGroup

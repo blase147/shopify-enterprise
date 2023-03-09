@@ -58,6 +58,7 @@ import CreatePreorder from './PreOrder/CreatePreorder';
 import CreateTryBeforeYouBuy from './TryBeforeYouBuy/CreateTryBeforeYouBuy';
 import CreateMembership from './Memberships/CreateMembership';
 import Memberships from './Memberships';
+import CreateSubscriptionProduct from './SubscriptionProducts/CreateSubscriptionProduct';
 
 
 
@@ -151,6 +152,7 @@ export default function App(props) {
             <ApolloProvider client={client}>
               <Switch>
                 <AppLayout typePage="createCustomer" tabIndex="2" domain={props?.domain}>
+                  <Route exact path="/CreateSubscriptionProduct" component={CreateSubscriptionProduct} />
                   <Route exact path="/memberships" component={Memberships} />
                   <Route exact path="/createMemberships" component={CreateMembership} />
                   <Route exact path="/preOrders" component={PreOrders} />
