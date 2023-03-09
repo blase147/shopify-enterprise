@@ -19,6 +19,8 @@ html[lang="en"]
     link[rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css"]
     = stylesheet_link_tag "nav_style", :media => "all", 'data-turbolinks-track': 'reload'
     = javascript_pack_tag 'mixpanel', 'data-turbolinks-track': 'reload'
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
   body.chargezen class=page_class
     div.module-navbar.dashboardArea
       - unless controller_name == 'select_plan'
