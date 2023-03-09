@@ -106,22 +106,22 @@ $(document).ready(function () {
   });
 
 });
-$(document).on('turbolinks:load', function () {
-  document.querySelectorAll("button[data-target][data-toggle]").forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const btn = e.currentTarget;
 
-      document.querySelector(btn.dataset.target).classList.remove('hidden');
-      let children = document.querySelector(btn.dataset.target).children;
-      for (let i = 0; i < children.length; i++) {
-        children[i].style.display = "block";
-      }
-    })
-  })
-  document.querySelectorAll("div.close-modal").forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const btn = e.currentTarget;
-      btn.closest('.Polaris-Modal').classList.add('hidden')
-    })
+document.querySelectorAll("button[data-target][data-toggle]").forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    const btn = e.currentTarget;
+
+    document.querySelector(btn.dataset.target).classList.remove('hidden');
+    let children = document.querySelector(btn.dataset.target).children;
+    for (let i = 0; i < children.length; i++) {
+      children[i].style.display = "block";
+    }
   })
 })
+document.querySelectorAll("div.close-modal").forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    const btn = e.currentTarget;
+    btn.closest('.Polaris-Modal').classList.add('hidden')
+  })
+})
+
