@@ -6,6 +6,7 @@ module Types
         argument :description, String, required: false
         argument :_destroy, GraphQL::Types::Boolean, required: false
         argument :title, String, required: false
+        argument :variants, [Types::Input::VariantInputType], required: false
 
         argument :__typename , String, required: false
       end
