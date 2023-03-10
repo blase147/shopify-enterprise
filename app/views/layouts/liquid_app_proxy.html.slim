@@ -35,6 +35,7 @@ html
       - unless @skip_auth
         | {% else %}
         - if params[:token].present? && (("#{params[:token]}".strip ==  "#{@auth}"&.strip) || ("#{params[:token]}".strip ==  admin_auth_token()))
+          = render 'app_proxy/shared/tabs'
           .Polaris-Page
             .Polaris-Page__Content
               .Polaris-Layout
