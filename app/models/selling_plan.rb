@@ -7,6 +7,7 @@ class SellingPlan < ApplicationRecord
 
   after_save_commit :check_multiple_anchors
   has_one :membership
+  has_many :subscription_products
 
   def check_multiple_anchors
     if billing_dates && billing_dates.size > 1

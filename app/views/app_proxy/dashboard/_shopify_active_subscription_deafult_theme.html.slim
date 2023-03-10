@@ -40,7 +40,7 @@
           = render 'delay_order_modal', subscription: subscription.node, next_billing_date: next_billing_date, action_by: "customer"
           = render partial: 'edit_subscription_modal',locals: { subscription: subscription.node, line_item: edge.node, product_image: product.images.first&.src, product_id: product.id, setting: @setting, selling_plan_id: edge.node.selling_plan_id, selling_plan: selling_plan , contract_id: contract.id, contract: contract, action_by: "customer"}
           - if @setting.customer_allowed?('swap_product')
-            = render 'swap_subscription_modal', subscription: subscription.node, line_item: edge.node, action_by: "customer"
+            = render 'swap_subscription_modal', subscription: subscription.node, line_item: edge.node, action_by: "customer", selling_plan: selling_plan
           = render 'upgrade_subscription_modal', subscription: subscription.node, line_item: edge.node, selling_plan_id: edge.node.selling_plan_id, product: product, action_by: "customer"
           = render 'cancel_subscription_modal', subscription: subscription.node, line_item: edge.node, lines_count: subscription.node.lines.edges.size, action_by: "customer"
       - if @setting.customer_allowed?('upcoming_quantity')

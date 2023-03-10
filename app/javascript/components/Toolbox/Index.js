@@ -16,7 +16,7 @@ import WeeklyMenuList from '../weeklyMenu/index';
 import WeeklyMenu from '../weeklyMenu/weeklyMenuForm';
 import CustomerMigration from '../CustomerMigration';
 import StripeContractsList from '../StripeContracts/StripeContractsList';
-
+import SubscriptionProducts from '../SubscriptionProducts';
 const Index = () => {
 
   const [selectedSetting, setSelectedSetting] = useState('');
@@ -80,6 +80,12 @@ const Index = () => {
         title: "Stripe Contract",
         img: EmailImage,
         desc: "Create Stripe contracts for your customers."
+      },
+      {
+        key: "subscriptionProducts",
+        title: "Subscription Products",
+        img: EmailImage,
+        desc: "Create Subscription Products for your customers."
       }
       // {
       //     key: "",
@@ -153,7 +159,13 @@ const Index = () => {
                                 {
                                   <StripeContractsList handleBack={handleBackSetting} handleForm={handleEditPage} />
                                 }
-                              </> : ''
+                              </> :
+                              selectedSetting === 'subscriptionProducts' ?
+                                <>
+                                  {
+                                    <SubscriptionProducts handleBack={handleBackSetting} handleForm={handleEditPage} />
+                                  }
+                                </> : ''
                 }
               </Layout.Section>
             </Layout>

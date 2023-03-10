@@ -35,8 +35,7 @@ import {
 import SearchPlan from '../upsell/SearchPlan';
 import LoadingScreen from '../LoadingScreen';
 import PixelIcon from '../../images/PixelIcon';
-import SearchVariants from '../plans/SearchVariants';
-import SearchProduct from '../plans/SearchProduct';
+import SearchProduct from './SearchProduct';
 import Preview from '../plans/Preview';
 
 
@@ -84,7 +83,7 @@ const CreateSubscriptionProduct = () => {
     });
 
     const validationSchema = yup.object().shape({
-        sellingPlan: yup.array().required().label("Please select a SellingPlan.")
+        // sellingPlan: yup.array().required().label("Please select a SellingPlan.")
         // publicName: yup.string().required().label('Public name'),
         // selectorTitle: yup.string().required().label('Campaign selector title'),
         // upsellCampaigns: yup.array().of(
@@ -172,7 +171,7 @@ const CreateSubscriptionProduct = () => {
     const [updateBoxCampaign] = useMutation(UPDATE_BOX_CAMPAIGN);
 
     const CREATE_SUBSCRIPTION_PRODUCT = gql`
-    mutation ($input: AddMembershipInput!) {
+    mutation ($input: AddSubscriptionProductInput!) {
         addSubscriptionProduct(input: $input) {
             subscriptionProduct{
                 id
@@ -279,7 +278,7 @@ const CreateSubscriptionProduct = () => {
     const [allVarients, setAllVarients] = useState([]);
     const [sellingPlanType, setSellingPlanType] = useState("all");
 
-    console.log("allVarients", allVarients);
+    console.log("allSelectedPlans", allSelectedPlans);
     console.log("allProducts", allProducts);
     return (
         <Frame>
@@ -428,8 +427,11 @@ const CreateSubscriptionProduct = () => {
                                                         checked={
                                                             sellingPlanType === "all"
                                                         }
-                                                        onChange={(e) => {
+                                                        onChange={() => {
                                                             setSellingPlanType("all")
+                                                            setFieldValue(
+                                                                'selling_plan', []
+                                                            );
                                                         }}
                                                     />
                                                     <Checkbox
@@ -437,58 +439,70 @@ const CreateSubscriptionProduct = () => {
                                                         checked={
                                                             sellingPlanType === 'selling_plan'
                                                         }
-                                                        onChange={(e) => {
+                                                        onChange={() => {
                                                             setSellingPlanType("selling_plan")
                                                         }}
                                                     />
                                                 </FormLayout.Group>
                                                 {
                                                     sellingPlanType === 'selling_plan' && (
-                                                        <>
-                                                            <FormLayout.Group>
-                                                                <div className="build-box-search">
-                                                                    <TextContainer>
-                                                                        <Subheading>Subscription Plan</Subheading>
-                                                                    </TextContainer>
-                                                                    <Select
-                                                                        options={[{ label: 'is any', value: 'is_any' }]}
-                                                                        label=""
-                                                                        value={'is_any'}
-                                                                    />
 
-                                                                    <div className="search">
-                                                                        <SearchPlan
-                                                                            idForTextField={`serchPlan-${Math.random()}`}
-                                                                            value={values.sellingPlan}
-                                                                            setFieldValue={setFieldValue}
-                                                                            fieldName={`sellingPlan`}
-                                                                            allSelectedPlans={allSelectedPlans || []}
-                                                                            setAllSelectedPlans={setAllSelectedPlans}
-                                                                            error={
-                                                                                values?.sellingPlan &&
-                                                                                touched?.sellingPlan
-                                                                                    ?.sellingPlanId &&
-                                                                                errors?.sellingPlan
-                                                                                    ?.sellingPlanId
-                                                                            }
-                                                                        />
-                                                                    </div>
+                                                        <FormLayout.Group>
+                                                            <div className="build-box-search">
+                                                                <TextContainer>
+                                                                    <Subheading>Subscription Plan</Subheading>
+                                                                </TextContainer>
+                                                                <Select
+                                                                    options={[{ label: 'is any', value: 'is_any' }]}
+                                                                    label=""
+                                                                    value={'is_any'}
+                                                                />
+
+                                                                <div className="search">
+                                                                    <SearchPlan
+                                                                        idForTextField={`selling_plan-${Math.random()}`}
+                                                                        value={values.sellingPlan}
+                                                                        setFieldValue={setFieldValue}
+                                                                        fieldName={`sellingPlan`}
+                                                                        allSelectedPlans={allSelectedPlans || []}
+                                                                        setAllSelectedPlans={setAllSelectedPlans}
+                                                                        error={
+                                                                            values?.sellingPlan &&
+                                                                            touched?.sellingPlan
+                                                                                ?.sellingPlanId &&
+                                                                            errors?.sellingPlan
+                                                                                ?.sellingPlanId
+                                                                        }
+                                                                    />
                                                                 </div>
-                                                            </FormLayout.Group>
-                                                        </>
+                                                            </div>
+                                                        </FormLayout.Group>
+
                                                     )
                                                 }
                                                 <FormLayout.Group>
                                                     <div className="box-subscription-search">
                                                         <TextContainer>Select Products</TextContainer>
                                                         <SearchProduct
-                                                            selectedOptions={selectedProductOptions}
-                                                            setSelectedOptions={setSelectedProductOptions}
-                                                            selectedProducts={selectedProducts}
-                                                            setSelectedProducts={setSelectedProducts}
+                                                            value={values.productImages || [[]]}
+                                                            setFieldValue={setFieldValue}
+                                                            fieldName={`productImages`}
+                                                            allProducts={allProducts || [[]]}
+                                                            setAllProducts={setAllProducts}
+                                                            error={
+                                                                touched.productImages?.productId &&
+                                                                errors.productImages?.productId
+                                                            }
                                                         />
                                                     </div>
                                                 </FormLayout.Group>
+                                                <Preview
+                                                    isUpdate={false}
+                                                    allProducts={allProducts || [[]]}
+                                                    setAllProducts={setAllProducts}
+                                                    setUpdated={setUpdated}
+                                                />
+
                                                 <FormLayout.Group>
                                                     <Select
                                                         options={statusOptions}
@@ -497,6 +511,10 @@ const CreateSubscriptionProduct = () => {
                                                         error={touched.status && errors.status}
                                                         onChange={(e) => setFieldValue(`status`, e)}
                                                     />
+                                                </FormLayout.Group>
+
+                                                <FormLayout.Group>
+                                                    <Button onClick={() => handleSubmit()}>Save</Button>
                                                 </FormLayout.Group>
 
                                             </FormLayout>

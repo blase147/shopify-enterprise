@@ -223,17 +223,15 @@ const SubscriptionProducts = ({ shopifyDomain }) => {
     const [status, setStatus] = useState("active");
     const [searchQuery, setSearchQuery] = useState();
     // -------------------
-    const GET_MEMBERSHIPS = gql`
+    const GET_SUBSCRIPTION_PRODUCTS = gql`
     query($page: String) {
-        fetchMemberships(page: $page) {
-            memberships{
+        fetchSubscriptionProducts(page: $page) {
+            subscriptionProducts{
                 id
-                name
+                sellingPlan
                 status
-                tag
-                associatedItems            
+                products            
                 createdAt
-                activeMembers
             }
             totalPages
             totalCount
@@ -241,7 +239,7 @@ const SubscriptionProducts = ({ shopifyDomain }) => {
         }
     }
   `;
-    const { data, loading, error, refetch } = useQuery(GET_MEMBERSHIPS, {
+    const { data, loading, error, refetch } = useQuery(GET_SUBSCRIPTION_PRODUCTS, {
         fetchPolicy: 'no-cache',
         variables: {
             page: page.toString(),
@@ -268,7 +266,7 @@ const SubscriptionProducts = ({ shopifyDomain }) => {
     }
 
     useEffect(() => {
-        setTotalPages(data?.fetchMemberships?.memberships)
+        setTotalPages(data?.fetchSubscriptionProducts?.subscriptionProducts)
         if (+page < +totalPages) {
             setHasMore(true);
         }
@@ -331,12 +329,10 @@ const SubscriptionProducts = ({ shopifyDomain }) => {
         return rows?.map((row) => {
             return row?.id !== null ?
                 [
-                    row?.name,
                     row?.createdAt,
                     row?.status,
-                    row?.associatedItems,
-                    row?.tag,
-                    row?.activeMembers,
+                    row?.sellingPlan,
+                    row?.products,
                 ] : []
         });
     };
@@ -349,9 +345,9 @@ const SubscriptionProducts = ({ shopifyDomain }) => {
     // }, [selectedCustomers]);
 
     useEffect(() => {
-        if (data && data.fetchMemberships) {
-            let rowsData = formatRows(data.fetchMemberships?.memberships);
-            setCustomers(data.fetchMemberships?.memberships);
+        if (data && data.fetchSubscriptionProducts) {
+            let rowsData = formatRows(data.fetchSubscriptionProducts?.subscriptionProducts);
+            setCustomers(data.fetchSubscriptionProducts?.subscriptionProducts);
             // console.log('data: ', data);
         }
     }, [data]);
@@ -603,11 +599,11 @@ const SubscriptionProducts = ({ shopifyDomain }) => {
                     </>
                 )}
                 <Page
-                    title="Memberships"
+                    title="Subscription Products"
                     primaryAction={
                         <ButtonGroup>
-                            <Button onClick={() => history.push("/createMemberships")}>
-                                Create Membership
+                            <Button onClick={() => history.push("/CreateSubscriptionProduct")}>
+                                Create Subscription Product
                             </Button>
                             {/*<Button
                 onClick={() => {
@@ -636,7 +632,7 @@ const SubscriptionProducts = ({ shopifyDomain }) => {
                         title={
                             <div className="heading_title">
                                 <PixelIcon />
-                                Memberships
+                                Subscription Products
                             </div>}
                     >
                         <Card.Section>
@@ -684,11 +680,10 @@ const SubscriptionProducts = ({ shopifyDomain }) => {
                                         'text'
                                     ]}
                                     headings={[
-                                        'Name',
                                         'Date of creation',
                                         'Status',
-                                        'Associated SellingPlan/Product/Variant',
-                                        'Active Customers'
+                                        'Associated SellingPlan',
+                                        'Products'
                                     ]}
 
                                     rows={formatRows(customers)}
