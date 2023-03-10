@@ -1,32 +1,17 @@
 <div class="navBar">
-   <div class="logo_main">
-      <div class="logo"><img src="/packs/media/images/ChargeZenLogo-e76c22aa0853eb6258c410bdd22bdb1d.svg"></div>
-      <div class="collapsible_button">
-         <button class="Polaris-Button" type="button">
-            <span class="Polaris-Button__Content">
-               <span class="Polaris-Button__Text">
-                  <div class="arrow-icon-left">
-                     <svg width="11" height="16" viewBox="0 0 11 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7.93891 0.938995L0.878906 8L7.93891 15.061L10.0609 12.939L5.12091 8L10.0609 3.061L7.93891 0.938995Z" fill="#445BFF"></path>
-                     </svg>
-                  </div>
-               </span>
-            </span>
-         </button>
-      </div>
-   </div>
+   <div class="logo"><img src="/packs/media/images/ChargeZenLogo-e76c22aa0853eb6258c410bdd22bdb1d.svg"></div>
    <div class="sidBartabs">
       <nav class="Polaris-Navigation">
          <div class="Polaris-Navigation__PrimaryNavigation Polaris-Scrollable Polaris-Scrollable--vertical Polaris-Scrollable--verticalHasScrolling" data-polaris-scrollable="true">
             <ul class="Polaris-Navigation__Section">
                <li class="Polaris-Navigation__ListItem">
-                  <div class="Polaris-Navigation__ItemWrapper"><a data-polaris-unstyled="true" class="Polaris-Navigation__Item Polaris-Navigation__Item--disabled Polaris-Navigation--subNavigationActive" tabindex="-1" aria-disabled="true" aria-expanded="true" aria-controls="PolarisSecondaryNavigation1" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/"><span class="Polaris-Navigation__Text">RevenueOS</span></a></div>
+                  <div class="Polaris-Navigation__ItemWrapper"><a class="Polaris-Navigation__Item Polaris-Navigation__Item--disabled Polaris-Navigation--subNavigationActive" tabindex="-1" aria-disabled="true" aria-expanded="true" aria-controls="PolarisSecondaryNavigation1" href="" data-polaris-unstyled="true"><span class="Polaris-Navigation__Text">Main Menu</span></a></div>
                   <div class="Polaris-Navigation__SecondaryNavigation Polaris-Navigation--isExpanded Polaris-Navigation__SecondaryNavigation--noIcon">
                      <div id="PolarisSecondaryNavigation1" class="Polaris-Collapsible" aria-expanded="true" style="transition-duration: 0ms; transition-timing-function: linear; max-height: none; overflow: visible;">
                         <ul class="Polaris-Navigation__List">
                            <li class="Polaris-Navigation__ListItem">
                               <div class="Polaris-Navigation__ItemWrapper">
-                                 <a data-polaris-unstyled="true" class="Polaris-Navigation__Item Polaris-Navigation__Item--selected Polaris-Navigation--subNavigationActive" tabindex="0" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/">
+                                 <a class="Polaris-Navigation__Item" tabindex="0" href="/" data-polaris-unstyled="true">
                                     <div class="Polaris-Navigation__Icon">
                                        <span class="Polaris-Icon">
                                           <svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
@@ -38,18 +23,9 @@
                                  </a>
                               </div>
                            </li>
-                        </ul>
-                     </div>
-                  </div>
-               </li>
-               <li class="Polaris-Navigation__ListItem">
-                  <div class="Polaris-Navigation__ItemWrapper"><a data-polaris-unstyled="true" class="Polaris-Navigation__Item Polaris-Navigation__Item--disabled Polaris-Navigation--subNavigationActive" tabindex="-1" aria-disabled="true" aria-expanded="true" aria-controls="PolarisSecondaryNavigation4" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/"><span class="Polaris-Navigation__Text">Revenue Channels</span></a></div>
-                  <div class="Polaris-Navigation__SecondaryNavigation Polaris-Navigation--isExpanded Polaris-Navigation__SecondaryNavigation--noIcon">
-                     <div id="PolarisSecondaryNavigation4" class="Polaris-Collapsible" aria-expanded="true" style="transition-duration: 0ms; transition-timing-function: linear; max-height: none; overflow: visible;">
-                        <ul class="Polaris-Navigation__List">
                            <li class="Polaris-Navigation__ListItem">
                               <div class="Polaris-Navigation__ItemWrapper">
-                                 <a data-polaris-unstyled="true" class="Polaris-Navigation__Item" tabindex="0" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/subscription-plans">
+                                 <a class="Polaris-Navigation__Item" tabindex="0" href="/subscription-plans" data-polaris-unstyled="true">
                                     <div class="Polaris-Navigation__Icon">
                                        <span class="Polaris-Icon">
                                           <svg class="Polaris-Icon__Svg" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -63,98 +39,18 @@
                                  </a>
                               </div>
                            </li>
-                           <li class="Polaris-Navigation__ListItem">
-                              <div class="Polaris-Navigation__ItemWrapper">
-                                 <a data-polaris-unstyled="true" class="Polaris-Navigation__Item" tabindex="0" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/rebuy">
-                                    <div class="Polaris-Navigation__Icon">
-                                       <span class="Polaris-Icon">
-                                          <svg class="Polaris-Icon__Svg" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                             <path d="M8.89199 10.8499C8.70866 10.8416 8.52532 10.8333 8.33366 10.8333C6.31699 10.8333 4.43366 11.3916 2.82533 12.3499C2.09199 12.7833 1.66699 13.5999 1.66699 14.4583V15.8333C1.66699 16.2916 2.04199 16.6666 2.50033 16.6666H9.38366C8.79507 15.8269 8.43948 14.8463 8.35312 13.8246C8.26675 12.8028 8.45269 11.7764 8.89199 10.8499Z" fill="#5C5F62"></path>
-                                             <path d="M8.33333 9.99992C10.1743 9.99992 11.6667 8.50753 11.6667 6.66659C11.6667 4.82564 10.1743 3.33325 8.33333 3.33325C6.49238 3.33325 5 4.82564 5 6.66659C5 8.50753 6.49238 9.99992 8.33333 9.99992Z" fill="#5C5F62"></path>
-                                             <path d="M17.2914 13.3334C17.2914 13.15 17.2664 12.9834 17.2414 12.8084L17.9414 12.2C18.0914 12.0667 18.1247 11.85 18.0247 11.675L17.5331 10.825C17.486 10.7414 17.4108 10.677 17.3208 10.6435C17.2308 10.6099 17.1318 10.6093 17.0414 10.6417L16.1581 10.9417C15.8914 10.7167 15.5914 10.5417 15.2581 10.4167L15.0747 9.50838C15.0551 9.41448 15.0038 9.33016 14.9295 9.2695C14.8552 9.20883 14.7623 9.1755 14.6664 9.17505H13.6831C13.4831 9.17505 13.3164 9.31672 13.2747 9.50838L13.0914 10.4167C12.7581 10.5417 12.4581 10.7167 12.1914 10.9417L11.3081 10.6417C11.2176 10.6106 11.1191 10.6119 11.0294 10.6454C10.9398 10.6788 10.8645 10.7423 10.8164 10.825L10.3247 11.675C10.2247 11.85 10.2581 12.0667 10.4081 12.2L11.1081 12.8084C11.0831 12.9834 11.0581 13.15 11.0581 13.3334C11.0581 13.5167 11.0831 13.6834 11.1081 13.8584L10.4081 14.4667C10.2581 14.6 10.2247 14.8167 10.3247 14.9917L10.8164 15.8417C10.9164 16.0167 11.1247 16.0917 11.3081 16.025L12.1914 15.725C12.4581 15.95 12.7581 16.125 13.0914 16.25L13.2747 17.1584C13.3164 17.35 13.4831 17.4917 13.6831 17.4917H14.6664C14.8664 17.4917 15.0331 17.35 15.0747 17.1584L15.2581 16.25C15.5914 16.125 15.8914 15.95 16.1581 15.725L17.0414 16.025C17.2331 16.0917 17.4331 16.0084 17.5331 15.8417L18.0247 14.9917C18.1247 14.8167 18.0914 14.6 17.9414 14.4667L17.2414 13.8584C17.2664 13.6834 17.2914 13.5167 17.2914 13.3334ZM14.1664 15C13.2497 15 12.4997 14.25 12.4997 13.3334C12.4997 12.4167 13.2497 11.6667 14.1664 11.6667C15.0831 11.6667 15.8331 12.4167 15.8331 13.3334C15.8331 14.25 15.0831 15 14.1664 15Z" fill="#5C5F62"></path>
-                                          </svg>
-                                       </span>
-                                    </div>
-                                    <span class="Polaris-Navigation__Text">Rebuy cart</span>
-                                 </a>
-                              </div>
-                           </li>
-                           <li class="Polaris-Navigation__ListItem">
-                              <div class="Polaris-Navigation__ItemWrapper">
-                                 <a data-polaris-unstyled="true" class="Polaris-Navigation__Item" tabindex="0" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/preOrders">
-                                    <div class="Polaris-Navigation__Icon">
-                                       <span class="Polaris-Icon">
-                                          <svg class="Polaris-Icon__Svg" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                             <path d="M8.89199 10.8499C8.70866 10.8416 8.52532 10.8333 8.33366 10.8333C6.31699 10.8333 4.43366 11.3916 2.82533 12.3499C2.09199 12.7833 1.66699 13.5999 1.66699 14.4583V15.8333C1.66699 16.2916 2.04199 16.6666 2.50033 16.6666H9.38366C8.79507 15.8269 8.43948 14.8463 8.35312 13.8246C8.26675 12.8028 8.45269 11.7764 8.89199 10.8499Z" fill="#5C5F62"></path>
-                                             <path d="M8.33333 9.99992C10.1743 9.99992 11.6667 8.50753 11.6667 6.66659C11.6667 4.82564 10.1743 3.33325 8.33333 3.33325C6.49238 3.33325 5 4.82564 5 6.66659C5 8.50753 6.49238 9.99992 8.33333 9.99992Z" fill="#5C5F62"></path>
-                                             <path d="M17.2914 13.3334C17.2914 13.15 17.2664 12.9834 17.2414 12.8084L17.9414 12.2C18.0914 12.0667 18.1247 11.85 18.0247 11.675L17.5331 10.825C17.486 10.7414 17.4108 10.677 17.3208 10.6435C17.2308 10.6099 17.1318 10.6093 17.0414 10.6417L16.1581 10.9417C15.8914 10.7167 15.5914 10.5417 15.2581 10.4167L15.0747 9.50838C15.0551 9.41448 15.0038 9.33016 14.9295 9.2695C14.8552 9.20883 14.7623 9.1755 14.6664 9.17505H13.6831C13.4831 9.17505 13.3164 9.31672 13.2747 9.50838L13.0914 10.4167C12.7581 10.5417 12.4581 10.7167 12.1914 10.9417L11.3081 10.6417C11.2176 10.6106 11.1191 10.6119 11.0294 10.6454C10.9398 10.6788 10.8645 10.7423 10.8164 10.825L10.3247 11.675C10.2247 11.85 10.2581 12.0667 10.4081 12.2L11.1081 12.8084C11.0831 12.9834 11.0581 13.15 11.0581 13.3334C11.0581 13.5167 11.0831 13.6834 11.1081 13.8584L10.4081 14.4667C10.2581 14.6 10.2247 14.8167 10.3247 14.9917L10.8164 15.8417C10.9164 16.0167 11.1247 16.0917 11.3081 16.025L12.1914 15.725C12.4581 15.95 12.7581 16.125 13.0914 16.25L13.2747 17.1584C13.3164 17.35 13.4831 17.4917 13.6831 17.4917H14.6664C14.8664 17.4917 15.0331 17.35 15.0747 17.1584L15.2581 16.25C15.5914 16.125 15.8914 15.95 16.1581 15.725L17.0414 16.025C17.2331 16.0917 17.4331 16.0084 17.5331 15.8417L18.0247 14.9917C18.1247 14.8167 18.0914 14.6 17.9414 14.4667L17.2414 13.8584C17.2664 13.6834 17.2914 13.5167 17.2914 13.3334ZM14.1664 15C13.2497 15 12.4997 14.25 12.4997 13.3334C12.4997 12.4167 13.2497 11.6667 14.1664 11.6667C15.0831 11.6667 15.8331 12.4167 15.8331 13.3334C15.8331 14.25 15.0831 15 14.1664 15Z" fill="#5C5F62"></path>
-                                          </svg>
-                                       </span>
-                                    </div>
-                                    <span class="Polaris-Navigation__Text">Pre-orders</span>
-                                 </a>
-                              </div>
-                           </li>
-                           <li class="Polaris-Navigation__ListItem">
-                              <div class="Polaris-Navigation__ItemWrapper">
-                                 <a data-polaris-unstyled="true" class="Polaris-Navigation__Item" tabindex="0" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/tryBeforeYouBuy">
-                                    <div class="Polaris-Navigation__Icon">
-                                       <span class="Polaris-Icon">
-                                          <svg class="Polaris-Icon__Svg" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                             <path d="M8.89199 10.8499C8.70866 10.8416 8.52532 10.8333 8.33366 10.8333C6.31699 10.8333 4.43366 11.3916 2.82533 12.3499C2.09199 12.7833 1.66699 13.5999 1.66699 14.4583V15.8333C1.66699 16.2916 2.04199 16.6666 2.50033 16.6666H9.38366C8.79507 15.8269 8.43948 14.8463 8.35312 13.8246C8.26675 12.8028 8.45269 11.7764 8.89199 10.8499Z" fill="#5C5F62"></path>
-                                             <path d="M8.33333 9.99992C10.1743 9.99992 11.6667 8.50753 11.6667 6.66659C11.6667 4.82564 10.1743 3.33325 8.33333 3.33325C6.49238 3.33325 5 4.82564 5 6.66659C5 8.50753 6.49238 9.99992 8.33333 9.99992Z" fill="#5C5F62"></path>
-                                             <path d="M17.2914 13.3334C17.2914 13.15 17.2664 12.9834 17.2414 12.8084L17.9414 12.2C18.0914 12.0667 18.1247 11.85 18.0247 11.675L17.5331 10.825C17.486 10.7414 17.4108 10.677 17.3208 10.6435C17.2308 10.6099 17.1318 10.6093 17.0414 10.6417L16.1581 10.9417C15.8914 10.7167 15.5914 10.5417 15.2581 10.4167L15.0747 9.50838C15.0551 9.41448 15.0038 9.33016 14.9295 9.2695C14.8552 9.20883 14.7623 9.1755 14.6664 9.17505H13.6831C13.4831 9.17505 13.3164 9.31672 13.2747 9.50838L13.0914 10.4167C12.7581 10.5417 12.4581 10.7167 12.1914 10.9417L11.3081 10.6417C11.2176 10.6106 11.1191 10.6119 11.0294 10.6454C10.9398 10.6788 10.8645 10.7423 10.8164 10.825L10.3247 11.675C10.2247 11.85 10.2581 12.0667 10.4081 12.2L11.1081 12.8084C11.0831 12.9834 11.0581 13.15 11.0581 13.3334C11.0581 13.5167 11.0831 13.6834 11.1081 13.8584L10.4081 14.4667C10.2581 14.6 10.2247 14.8167 10.3247 14.9917L10.8164 15.8417C10.9164 16.0167 11.1247 16.0917 11.3081 16.025L12.1914 15.725C12.4581 15.95 12.7581 16.125 13.0914 16.25L13.2747 17.1584C13.3164 17.35 13.4831 17.4917 13.6831 17.4917H14.6664C14.8664 17.4917 15.0331 17.35 15.0747 17.1584L15.2581 16.25C15.5914 16.125 15.8914 15.95 16.1581 15.725L17.0414 16.025C17.2331 16.0917 17.4331 16.0084 17.5331 15.8417L18.0247 14.9917C18.1247 14.8167 18.0914 14.6 17.9414 14.4667L17.2414 13.8584C17.2664 13.6834 17.2914 13.5167 17.2914 13.3334ZM14.1664 15C13.2497 15 12.4997 14.25 12.4997 13.3334C12.4997 12.4167 13.2497 11.6667 14.1664 11.6667C15.0831 11.6667 15.8331 12.4167 15.8331 13.3334C15.8331 14.25 15.0831 15 14.1664 15Z" fill="#5C5F62"></path>
-                                          </svg>
-                                       </span>
-                                    </div>
-                                    <span class="Polaris-Navigation__Text">Try-before-you-buy</span>
-                                 </a>
-                              </div>
-                           </li>
-                           <li class="Polaris-Navigation__ListItem">
-                              <div class="Polaris-Navigation__ItemWrapper">
-                                 <a data-polaris-unstyled="true" class="Polaris-Navigation__Item" tabindex="0" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/stripeContractsList">
-                                    <div class="Polaris-Navigation__Icon">
-                                       <span class="Polaris-Icon">
-                                          <svg class="Polaris-Icon__Svg" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                             <path d="M8.89199 10.8499C8.70866 10.8416 8.52532 10.8333 8.33366 10.8333C6.31699 10.8333 4.43366 11.3916 2.82533 12.3499C2.09199 12.7833 1.66699 13.5999 1.66699 14.4583V15.8333C1.66699 16.2916 2.04199 16.6666 2.50033 16.6666H9.38366C8.79507 15.8269 8.43948 14.8463 8.35312 13.8246C8.26675 12.8028 8.45269 11.7764 8.89199 10.8499Z" fill="#5C5F62"></path>
-                                             <path d="M8.33333 9.99992C10.1743 9.99992 11.6667 8.50753 11.6667 6.66659C11.6667 4.82564 10.1743 3.33325 8.33333 3.33325C6.49238 3.33325 5 4.82564 5 6.66659C5 8.50753 6.49238 9.99992 8.33333 9.99992Z" fill="#5C5F62"></path>
-                                             <path d="M17.2914 13.3334C17.2914 13.15 17.2664 12.9834 17.2414 12.8084L17.9414 12.2C18.0914 12.0667 18.1247 11.85 18.0247 11.675L17.5331 10.825C17.486 10.7414 17.4108 10.677 17.3208 10.6435C17.2308 10.6099 17.1318 10.6093 17.0414 10.6417L16.1581 10.9417C15.8914 10.7167 15.5914 10.5417 15.2581 10.4167L15.0747 9.50838C15.0551 9.41448 15.0038 9.33016 14.9295 9.2695C14.8552 9.20883 14.7623 9.1755 14.6664 9.17505H13.6831C13.4831 9.17505 13.3164 9.31672 13.2747 9.50838L13.0914 10.4167C12.7581 10.5417 12.4581 10.7167 12.1914 10.9417L11.3081 10.6417C11.2176 10.6106 11.1191 10.6119 11.0294 10.6454C10.9398 10.6788 10.8645 10.7423 10.8164 10.825L10.3247 11.675C10.2247 11.85 10.2581 12.0667 10.4081 12.2L11.1081 12.8084C11.0831 12.9834 11.0581 13.15 11.0581 13.3334C11.0581 13.5167 11.0831 13.6834 11.1081 13.8584L10.4081 14.4667C10.2581 14.6 10.2247 14.8167 10.3247 14.9917L10.8164 15.8417C10.9164 16.0167 11.1247 16.0917 11.3081 16.025L12.1914 15.725C12.4581 15.95 12.7581 16.125 13.0914 16.25L13.2747 17.1584C13.3164 17.35 13.4831 17.4917 13.6831 17.4917H14.6664C14.8664 17.4917 15.0331 17.35 15.0747 17.1584L15.2581 16.25C15.5914 16.125 15.8914 15.95 16.1581 15.725L17.0414 16.025C17.2331 16.0917 17.4331 16.0084 17.5331 15.8417L18.0247 14.9917C18.1247 14.8167 18.0914 14.6 17.9414 14.4667L17.2414 13.8584C17.2664 13.6834 17.2914 13.5167 17.2914 13.3334ZM14.1664 15C13.2497 15 12.4997 14.25 12.4997 13.3334C12.4997 12.4167 13.2497 11.6667 14.1664 11.6667C15.0831 11.6667 15.8331 12.4167 15.8331 13.3334C15.8331 14.25 15.0831 15 14.1664 15Z" fill="#5C5F62"></path>
-                                          </svg>
-                                       </span>
-                                    </div>
-                                    <span class="Polaris-Navigation__Text">Contracts &amp; Invoices</span>
-                                 </a>
-                              </div>
-                           </li>
-                           <li class="Polaris-Navigation__ListItem">
-                              <div class="Polaris-Navigation__ItemWrapper">
-                                 <a data-polaris-unstyled="true" class="Polaris-Navigation__Item" tabindex="0" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/memberships">
-                                    <div class="Polaris-Navigation__Icon">
-                                       <span class="Polaris-Icon">
-                                          <svg class="Polaris-Icon__Svg" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                             <path d="M8.89199 10.8499C8.70866 10.8416 8.52532 10.8333 8.33366 10.8333C6.31699 10.8333 4.43366 11.3916 2.82533 12.3499C2.09199 12.7833 1.66699 13.5999 1.66699 14.4583V15.8333C1.66699 16.2916 2.04199 16.6666 2.50033 16.6666H9.38366C8.79507 15.8269 8.43948 14.8463 8.35312 13.8246C8.26675 12.8028 8.45269 11.7764 8.89199 10.8499Z" fill="#5C5F62"></path>
-                                             <path d="M8.33333 9.99992C10.1743 9.99992 11.6667 8.50753 11.6667 6.66659C11.6667 4.82564 10.1743 3.33325 8.33333 3.33325C6.49238 3.33325 5 4.82564 5 6.66659C5 8.50753 6.49238 9.99992 8.33333 9.99992Z" fill="#5C5F62"></path>
-                                             <path d="M17.2914 13.3334C17.2914 13.15 17.2664 12.9834 17.2414 12.8084L17.9414 12.2C18.0914 12.0667 18.1247 11.85 18.0247 11.675L17.5331 10.825C17.486 10.7414 17.4108 10.677 17.3208 10.6435C17.2308 10.6099 17.1318 10.6093 17.0414 10.6417L16.1581 10.9417C15.8914 10.7167 15.5914 10.5417 15.2581 10.4167L15.0747 9.50838C15.0551 9.41448 15.0038 9.33016 14.9295 9.2695C14.8552 9.20883 14.7623 9.1755 14.6664 9.17505H13.6831C13.4831 9.17505 13.3164 9.31672 13.2747 9.50838L13.0914 10.4167C12.7581 10.5417 12.4581 10.7167 12.1914 10.9417L11.3081 10.6417C11.2176 10.6106 11.1191 10.6119 11.0294 10.6454C10.9398 10.6788 10.8645 10.7423 10.8164 10.825L10.3247 11.675C10.2247 11.85 10.2581 12.0667 10.4081 12.2L11.1081 12.8084C11.0831 12.9834 11.0581 13.15 11.0581 13.3334C11.0581 13.5167 11.0831 13.6834 11.1081 13.8584L10.4081 14.4667C10.2581 14.6 10.2247 14.8167 10.3247 14.9917L10.8164 15.8417C10.9164 16.0167 11.1247 16.0917 11.3081 16.025L12.1914 15.725C12.4581 15.95 12.7581 16.125 13.0914 16.25L13.2747 17.1584C13.3164 17.35 13.4831 17.4917 13.6831 17.4917H14.6664C14.8664 17.4917 15.0331 17.35 15.0747 17.1584L15.2581 16.25C15.5914 16.125 15.8914 15.95 16.1581 15.725L17.0414 16.025C17.2331 16.0917 17.4331 16.0084 17.5331 15.8417L18.0247 14.9917C18.1247 14.8167 18.0914 14.6 17.9414 14.4667L17.2414 13.8584C17.2664 13.6834 17.2914 13.5167 17.2914 13.3334ZM14.1664 15C13.2497 15 12.4997 14.25 12.4997 13.3334C12.4997 12.4167 13.2497 11.6667 14.1664 11.6667C15.0831 11.6667 15.8331 12.4167 15.8331 13.3334C15.8331 14.25 15.0831 15 14.1664 15Z" fill="#5C5F62"></path>
-                                          </svg>
-                                       </span>
-                                    </div>
-                                    <span class="Polaris-Navigation__Text">Memberships</span>
-                                 </a>
-                              </div>
-                           </li>
                         </ul>
                      </div>
                   </div>
                </li>
                <li class="Polaris-Navigation__ListItem">
-                  <div class="Polaris-Navigation__ItemWrapper"><a data-polaris-unstyled="true" class="Polaris-Navigation__Item Polaris-Navigation__Item--disabled Polaris-Navigation--subNavigationActive" tabindex="-1" aria-disabled="true" aria-expanded="true" aria-controls="PolarisSecondaryNavigation12" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/"><span class="Polaris-Navigation__Text">Workspace</span></a></div>
+                  <div class="Polaris-Navigation__ItemWrapper"><a class="Polaris-Navigation__Item Polaris-Navigation__Item--disabled Polaris-Navigation--subNavigationActive" tabindex="-1" aria-disabled="true" aria-expanded="true" aria-controls="PolarisSecondaryNavigation5" href="" data-polaris-unstyled="true"><span class="Polaris-Navigation__Text">Workspace</span></a></div>
                   <div class="Polaris-Navigation__SecondaryNavigation Polaris-Navigation--isExpanded Polaris-Navigation__SecondaryNavigation--noIcon">
-                     <div id="PolarisSecondaryNavigation12" class="Polaris-Collapsible" aria-expanded="true" style="transition-duration: 0ms; transition-timing-function: linear; max-height: none; overflow: visible;">
+                     <div id="PolarisSecondaryNavigation5" class="Polaris-Collapsible" aria-expanded="true" style="transition-duration: 0ms; transition-timing-function: linear; max-height: none; overflow: visible;">
                         <ul class="Polaris-Navigation__List">
                            <li class="Polaris-Navigation__ListItem">
                               <div class="Polaris-Navigation__ItemWrapper">
-                                 <a data-polaris-unstyled="true" class="Polaris-Navigation__Item" tabindex="0" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/customers">
+                                 <a class="Polaris-Navigation__Item Polaris-Navigation__Item--selected Polaris-Navigation--subNavigationActive" tabindex="0" href="/customers" data-polaris-unstyled="true">
                                     <div class="Polaris-Navigation__Icon">
                                        <span class="Polaris-Icon">
                                           <svg class="Polaris-Icon__Svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -162,13 +58,13 @@
                                           </svg>
                                        </span>
                                     </div>
-                                    <span class="Polaris-Navigation__Text">Subscription Contracts</span>
+                                    <span class="Polaris-Navigation__Text">Subscription Orders</span>
                                  </a>
                               </div>
                            </li>
                            <li class="Polaris-Navigation__ListItem">
                               <div class="Polaris-Navigation__ItemWrapper">
-                                 <a data-polaris-unstyled="true" class="Polaris-Navigation__Item" tabindex="0" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/analytics">
+                                 <a class="Polaris-Navigation__Item" tabindex="0" href="/analytics" data-polaris-unstyled="true">
                                     <div class="Polaris-Navigation__Icon">
                                        <span class="Polaris-Icon">
                                           <svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
@@ -182,7 +78,7 @@
                            </li>
                            <li class="Polaris-Navigation__ListItem">
                               <div class="Polaris-Navigation__ItemWrapper">
-                                 <a data-polaris-unstyled="true" class="Polaris-Navigation__Item" tabindex="0" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/customer-model">
+                                 <a class="Polaris-Navigation__Item" tabindex="0" href="/customer-model" data-polaris-unstyled="true">
                                     <div class="Polaris-Navigation__Icon">
                                        <span class="Polaris-Icon">
                                           <svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
@@ -194,44 +90,32 @@
                                  </a>
                               </div>
                            </li>
-                           <li class="Polaris-Navigation__ListItem">
-                              <div class="Polaris-Navigation__ItemWrapper">
-                                 <a data-polaris-unstyled="true" class="Polaris-Navigation__Item Polaris-Navigation--subNavigationActive" tabindex="0" aria-expanded="true" aria-controls="PolarisSecondaryNavigation17" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/">
-                                    <div class="Polaris-Navigation__Icon">
-                                       <span class="Polaris-Icon">
-                                          <svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
-                                             <path fill-rule="evenodd" d="M5 4.5C5 3.763 5.69 3 6.77 3 7.818 3 9 3.87 9 5.333V6h-.846c-.805 0-1.656-.011-2.306-.25-.302-.112-.498-.253-.621-.413C5.112 5.187 5 4.94 5 4.5zM11.846 6H11v-.667C11 3.87 12.181 3 13.23 3 14.31 3 15 3.763 15 4.5c0 .44-.112.686-.227.837-.123.16-.319.3-.621.412-.65.24-1.5.251-2.306.251zM17 4.5c0 .558-.103 1.06-.306 1.5H18.5A1.5 1.5 0 0 1 20 7.5V10H0V7.5A1.5 1.5 0 0 1 1.5 6h1.806A3.547 3.547 0 0 1 3 4.5C3 2.47 4.783 1 6.77 1c1.165 0 2.398.546 3.23 1.529C10.832 1.546 12.065 1 13.23 1 15.218 1 17 2.47 17 4.5zM9 20v-8H1v6.5c0 .83.67 1.5 1.5 1.5H9zm2 0v-8h8v6.5c0 .83-.67 1.5-1.5 1.5H11z"></path>
-                                          </svg>
-                                       </span>
-                                    </div>
-                                    <span class="Polaris-Navigation__Text">Loyalty/Rewards</span>
-                                 </a>
-                              </div>
-                              <div class="Polaris-Navigation__SecondaryNavigation Polaris-Navigation--isExpanded">
-                                 <div id="PolarisSecondaryNavigation17" class="Polaris-Collapsible" aria-expanded="true" style="transition-duration: 0ms; transition-timing-function: linear; max-height: none; overflow: visible;">
-                                    <ul class="Polaris-Navigation__List">
-                                       <li class="Polaris-Navigation__ListItem">
-                                          <div class="Polaris-Navigation__ItemWrapper"><a data-polaris-unstyled="true" class="Polaris-Navigation__Item" tabindex="0" aria-disabled="false" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/waysToEarn"><span class="Polaris-Navigation__Text">Ways to Earn</span></a></div>
-                                       </li>
-                                       <li class="Polaris-Navigation__ListItem">
-                                          <div class="Polaris-Navigation__ItemWrapper"><a data-polaris-unstyled="true" class="Polaris-Navigation__Item" tabindex="0" aria-disabled="false" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/rewardsPage"><span class="Polaris-Navigation__Text">Rewards Page</span></a></div>
-                                       </li>
-                                    </ul>
-                                 </div>
-                              </div>
-                           </li>
                         </ul>
                      </div>
                   </div>
                </li>
                <li class="Polaris-Navigation__ListItem">
-                  <div class="Polaris-Navigation__ItemWrapper"><a data-polaris-unstyled="true" class="Polaris-Navigation__Item Polaris-Navigation__Item--disabled Polaris-Navigation--subNavigationActive" tabindex="-1" aria-disabled="true" aria-expanded="true" aria-controls="PolarisSecondaryNavigation21" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/"><span class="Polaris-Navigation__Text">General</span></a></div>
+                  <div class="Polaris-Navigation__ItemWrapper"><a class="Polaris-Navigation__Item Polaris-Navigation__Item--disabled Polaris-Navigation--subNavigationActive" tabindex="-1" aria-disabled="true" aria-expanded="true" aria-controls="PolarisSecondaryNavigation10" href="" data-polaris-unstyled="true"><span class="Polaris-Navigation__Text">General</span></a></div>
                   <div class="Polaris-Navigation__SecondaryNavigation Polaris-Navigation--isExpanded Polaris-Navigation__SecondaryNavigation--noIcon">
-                     <div id="PolarisSecondaryNavigation21" class="Polaris-Collapsible" aria-expanded="true" style="transition-duration: 0ms; transition-timing-function: linear; max-height: none; overflow: visible;">
+                     <div id="PolarisSecondaryNavigation10" class="Polaris-Collapsible" aria-expanded="true" style="transition-duration: 0ms; transition-timing-function: linear; max-height: none; overflow: visible;">
                         <ul class="Polaris-Navigation__List">
                            <li class="Polaris-Navigation__ListItem">
                               <div class="Polaris-Navigation__ItemWrapper">
-                                 <a data-polaris-unstyled="true" class="Polaris-Navigation__Item" tabindex="0" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/installation">
+                                 <a class="Polaris-Navigation__Item" tabindex="0" href="/manage-staff" data-polaris-unstyled="true">
+                                    <div class="Polaris-Navigation__Icon">
+                                       <span class="Polaris-Icon">
+                                          <svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
+                                             <path fill-rule="evenodd" d="M10 0c5.514 0 10 4.486 10 10s-4.486 10-10 10S0 15.514 0 10 4.486 0 10 0zm6.24 15a7.99 7.99 0 0 1-12.48 0 7.99 7.99 0 0 1 12.48 0zM10 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+                                          </svg>
+                                       </span>
+                                    </div>
+                                    <span class="Polaris-Navigation__Text">Manage Staff</span>
+                                 </a>
+                              </div>
+                           </li>
+                           <li class="Polaris-Navigation__ListItem">
+                              <div class="Polaris-Navigation__ItemWrapper">
+                                 <a class="Polaris-Navigation__Item" tabindex="0" href="/installation" data-polaris-unstyled="true">
                                     <div class="Polaris-Navigation__Icon">
                                        <span class="Polaris-Icon">
                                           <svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
@@ -245,7 +129,7 @@
                            </li>
                            <li class="Polaris-Navigation__ListItem">
                               <div class="Polaris-Navigation__ItemWrapper">
-                                 <a data-polaris-unstyled="true" class="Polaris-Navigation__Item" tabindex="0" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/tiazen">
+                                 <a class="Polaris-Navigation__Item" tabindex="0" href="/tiazen" data-polaris-unstyled="true">
                                     <div class="Polaris-Navigation__Icon">
                                        <span class="Polaris-Icon">
                                           <svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
@@ -259,7 +143,7 @@
                            </li>
                            <li class="Polaris-Navigation__ListItem">
                               <div class="Polaris-Navigation__ItemWrapper">
-                                 <a data-polaris-unstyled="true" class="Polaris-Navigation__Item" tabindex="0" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/toolbox">
+                                 <a class="Polaris-Navigation__Item" tabindex="0" href="/toolbox" data-polaris-unstyled="true">
                                     <div class="Polaris-Navigation__Icon">
                                        <span class="Polaris-Icon">
                                           <svg class="Polaris-Icon__Svg" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
@@ -273,7 +157,7 @@
                            </li>
                            <li class="Polaris-Navigation__ListItem">
                               <div class="Polaris-Navigation__ItemWrapper">
-                                 <a data-polaris-unstyled="true" class="Polaris-Navigation__Item" tabindex="0" href="/<%= current_shop.shopify_domain.gsub(".myshopify.com","")%>/app-settings">
+                                 <a class="Polaris-Navigation__Item" tabindex="0" href="/app-settings" data-polaris-unstyled="true">
                                     <div class="Polaris-Navigation__Icon">
                                        <span class="Polaris-Icon">
                                           <svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
@@ -285,6 +169,20 @@
                                  </a>
                               </div>
                            </li>
+                           <li class="Polaris-Navigation__ListItem">
+                              <div class="Polaris-Navigation__ItemWrapper">
+                                 <a class="Polaris-Navigation__Item" tabindex="0" href="/integrations" data-polaris-unstyled="true">
+                                    <div class="Polaris-Navigation__Icon">
+                                       <span class="Polaris-Icon">
+                                          <svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
+                                             <path d="M10 13a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm7.476-1.246c-1.394-.754-1.394-2.754 0-3.508a1 1 0 0 0 .376-1.404l-1.067-1.733a1 1 0 0 0-1.327-.355l-.447.243c-1.329.719-2.945-.244-2.945-1.755V3a1 1 0 0 0-1-1H8.934a1 1 0 0 0-1 1v.242c0 1.511-1.616 2.474-2.945 1.755l-.447-.243a1 1 0 0 0-1.327.355L2.148 6.842a1 1 0 0 0 .376 1.404c1.394.754 1.394 2.754 0 3.508a1 1 0 0 0-.376 1.404l1.067 1.733a1 1 0 0 0 1.327.355l.447-.243c1.329-.719 2.945.244 2.945 1.755V17a1 1 0 0 0 1 1h2.132a1 1 0 0 0 1-1v-.242c0-1.511 1.616-2.474 2.945-1.755l.447.243a1 1 0 0 0 1.327-.355l1.067-1.733a1 1 0 0 0-.376-1.404z"></path>
+                                          </svg>
+                                       </span>
+                                    </div>
+                                    <span class="Polaris-Navigation__Text">Integeration</span>
+                                 </a>
+                              </div>
+                           </li>
                         </ul>
                      </div>
                   </div>
@@ -293,5 +191,5 @@
          </div>
       </nav>
    </div>
-   <div class="logout_link"><a href="https://shopapp.chargezen.co / users / sign_out" class="adminLogoutLink" data-method="delete">Log Out</a></div>
+   <div class="logout_link"><a href="https://shopapp.chargezen.co/users/sign_out" class="adminLogoutLink" data-method="delete">Log Out</a></div>
 </div>
