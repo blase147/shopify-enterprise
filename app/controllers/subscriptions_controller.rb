@@ -33,6 +33,8 @@ class SubscriptionsController < AuthenticatedController
       @customer.api_data = SubscriptionContractService.new(id).run.to_h.deep_transform_keys { |key| key.underscore }
       @customer.save
     end
+    
+    @all_shops = current_user.user_shops.order(created_at: :asc).joins(:shop).pluck(:shopify_domain) rescue []
 
     @subscription = JSON.parse(@customer.api_data.to_json, object_class: OpenStruct)
     current_shop.connect

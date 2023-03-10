@@ -577,32 +577,7 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
     }
   }, [selectedTitleTab]);
 
-  const submitForm = async () => {
-    try {
-      //to save message body when on emailnotification detail page.
-      await exportHtml();
-    } catch (e) {
-      console.log("Not saving email notification");
-    }
-    handleSubmit();
-  }
-
   const emailEditorRef = useRef(null);
-
-  const exportHtml = async () => {
-    emailEditorRef.current.editor.exportHtml((data) => {
-      const { design, html } = data;
-      setFieldValue(
-        `emailNotifications[${index}].emailMessage`,
-        html
-      );
-      setFieldValue(
-        `emailNotifications[${index}].designJson`,
-        JSON.stringify(design)
-      );
-      setSubmitForm(true)
-    });
-  };
 
   return (
     <>
@@ -707,7 +682,7 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                         alignContentFlush={true}
                         message="Unsaved changes"
                         saveAction={{
-                          onAction: () => submitForm(),
+                          onAction: () => handleSubmit(),
                           loading: isSubmitting,
                           disabled: false,
                         }}
