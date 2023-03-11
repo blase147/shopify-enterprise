@@ -57,6 +57,7 @@ class ShopifyWebhooksController < ApplicationController
   end
 
   def order_fulfilled
+    shop = Shop.find_by(shopify_domain: shop_domain)
     preorder = WorldfarePreOrder.find_by(order_id: params[:id].to_s)
     preorder&.update(status: "fulfilled")
     RebuyService.new(shop.id).update_customer_order(params[:id])
