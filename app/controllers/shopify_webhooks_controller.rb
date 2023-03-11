@@ -61,7 +61,6 @@ class ShopifyWebhooksController < ApplicationController
     preorder = WorldfarePreOrder.find_by(order_id: params[:id].to_s)
     preorder&.update(status: "fulfilled")
     RebuyService.new(shop.id).update_customer_order(params[:id])
-    SendEmailService.new.send_order_fulfiled_email(preorder&.shopify_contract_id)
     head :no_content
   end
 
