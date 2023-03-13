@@ -17,8 +17,8 @@ class SubscriptionsController < AuthenticatedController
 
   def show
     id = params[:id]
-    if params[:local_id]
-      @customer = CustomerSubscriptionContract.find_by(id: params[:local_id])
+    if params[:token]
+      @customer = CustomerSubscriptionContract.find_by(token: params[:token])
     else
       @customer = CustomerSubscriptionContract.find_by_shopify_id(params[:id])
     end

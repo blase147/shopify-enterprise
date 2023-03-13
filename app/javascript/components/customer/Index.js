@@ -254,6 +254,7 @@ const Customers = ({ shopifyDomain }) => {
           apiSource
           deliveryDay
           deliveryDate
+          token
           additionalContacts {
             id
             firstName
@@ -382,7 +383,7 @@ const Customers = ({ shopifyDomain }) => {
             onClick={(e) => {
               e.preventDefault();
               setLoadingScreen(true);
-              window.location.replace(`/subscriptions/${row.shopifyId}?shop=${row.shopDomain}&local_id=${row.id}`);
+              window.location.replace(`/subscriptions/${row.shopifyId}/${row.token}?shop=${row.shopDomain}`);
             }}
           >{`${row.firstName} ${row.lastName}`}</a>,
           row.createdAt,
