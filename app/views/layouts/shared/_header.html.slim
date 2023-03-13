@@ -1,0 +1,41 @@
+.main_header
+  .header_main_div
+    .first_div
+      .search_div
+        div
+          .Polaris-Connected
+            .Polaris-Connected__Item.Polaris-Connected__Item--primary
+              .Polaris-TextField
+                input#PolarisTextField1.Polaris-TextField__Input[placeholder="Search..." autocomplete="off" aria-labelledby="PolarisTextField1Label" aria-invalid="false" value=""]
+                .Polaris-TextField__Backdrop
+        .search_icon
+          span.Polaris-Icon.Polaris-Icon--colorBase.Polaris-Icon--isColored
+            svg.Polaris-Icon__Svg[viewbox="0 0 20 20" focusable="false" aria-hidden="true"]
+              path[d="M2 8c0-3.309 2.691-6 6-6s6 2.691 6 6-2.691 6-6 6-6-2.691-6-6zm17.707 10.293l-5.395-5.396A7.946 7.946 0 0 0 16 8c0-4.411-3.589-8-8-8S0 3.589 0 8s3.589 8 8 8a7.954 7.954 0 0 0 4.897-1.688l5.396 5.395A.998.998 0 0 0 20 19a1 1 0 0 0-.293-.707z"]
+    .second_div
+      .status
+        span.online_symbol
+        | Onlines
+      .notification
+        button.Polaris-Button[type="button"]
+          a href="#{current_shop.gsub(".myshopify.com", "")}/notifications"
+            span.Polaris-Button__Content
+              span.Polaris-Button__Text
+                span.Polaris-Icon.Polaris-Icon--colorBase.Polaris-Icon--isColored
+                  svg.Polaris-Icon__Svg[viewbox="0 0 20 20" focusable="false" aria-hidden="true"]
+                    path[d="M10 0a1 1 0 0 1 1 1v2.032l-.001.021-.002.03A6.002 6.002 0 0 1 16 9c0 3.093.625 4.312 1.599 6.21l.034.068c.17.33-.07.722-.442.722H2.809a.496.496 0 0 1-.442-.722l.034-.068C3.375 13.312 4 12.093 4 9a6.002 6.002 0 0 1 5.003-5.918l-.002-.04A.835.835 0 0 1 9 3V1a1 1 0 0 1 1-1zm2 18a2 2 0 0 1-4 0h4z"]
+      .userDetailMain
+        .user_details
+          .avatar
+            h2
+            = "#{current_user.first_name&.humanize} #{current_user.last_name&.humanize}" 
+          .left_section
+            p.changeStoreDiv
+              div
+                = select_tag(:shop_selector, options_for_select(all_shops), {selected: current_shop.shopify_domain, class: "shop_selector_drop_down"} ) 
+
+javascript: 
+  $(".shop_selector_drop_down").on("change",function(){
+    let shop = $(this).find(":selected").text().replace('.myshopify.com', '');;
+    window.location.replace("/"+shop)
+  })

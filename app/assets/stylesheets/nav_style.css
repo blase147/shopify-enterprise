@@ -2,7 +2,7 @@
     font-family: 'Gilroy';
     font-style: normal;
     font-weight: normal;
-    src: url('/fonts/Gilroy-Regular.ttf') format('truetype');
+    src: url('../fonts/Gilroy-Regular.ttf') format('truetype');
 }
 
 .navBar {
@@ -11,7 +11,7 @@
     align-items: center;
     background: black !important;
     color: white;
-    font-family: 'Gilroy';
+    font-family: 'Avenir';
     font-style: normal;
     font-weight: 900;
     font-size: 14px;
@@ -297,6 +297,7 @@ body.chargezen {
 .header_main_div .header_main_div .first_div {
     display: flex;
     align-items: center;
+    gap: 30px;
 }
 
 .notification {
@@ -379,9 +380,8 @@ body.chargezen {
 }
 
 .main_header {
-    padding: 25px;
-    border-bottom: 1px solid #DADADA;
-
+    padding: 8px 0px;
+    border-bottom: 1px solid #c1c2c9a6 !important;
 }
 
 .header_main_div .search_icon path {
@@ -417,9 +417,92 @@ body.chargezen {
     margin: auto;
 }
 
-.navBar .logo img {
-    margin: auto;
+.avatar {
+    height: fit-content;
+    padding: -49px !important;
+    padding: 7px;
+}
+
+.avatar h2 {
+    padding: 0 !important;
+    font-size: 15px !important;
+    margin-bottom: -7px;
+}
+
+.notification {
+    border-right: 1px solid #DADADA;
+}
+
+.user_details:before {
+    display: none;
+}
+
+.header_serperator {
     width: 100%;
-    max-width: 220px;
-    margin-left: 1.6rem;
+    max-width: 100%;
+}
+
+.userDetailMain {
+    margin-right: -10px;
+    margin-left: 20px;
+}
+
+.customer_notificaions {
+    position: absolute;
+    width: 384px;
+    z-index: 1500;
+    margin-top: 30px;
+}
+
+.customer_activity_main_div {
+    margin-top: -7px;
+}
+
+.chargezen .main_header .second_div .notification .Polaris-Button {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+}
+
+.tabButtons .Polaris-ButtonGroup .Polaris-ButtonGroup__Item .Polaris-Button__Text {
+    font-size: 18px;
+    font-weight: 500;
+    color: #A9ABB0;
+    margin: 0;
+}
+
+.tabButtons .Polaris-ButtonGroup .Polaris-ButtonGroup__Item .Polaris-Button {
+    border: 0;
+    outline: none;
+    box-shadow: none;
+}
+
+.tabButtons .Polaris-ButtonGroup .Polaris-ButtonGroup__Item .Polaris-Button.Polaris-Button--primary {
+    background: #F5F7FB;
+}
+
+.tabButtons .Polaris-ButtonGroup .Polaris-ButtonGroup__Item .Polaris-Button.Polaris-Button--primary .Polaris-Button__Text {
+    font-weight: 800;
+    color: #017EFA;
+}
+
+.tabButtons .Polaris-ButtonGroup .Polaris-ButtonGroup__Item .Polaris-Button .Polaris-Button__Content {
+    margin: 0;
+    text-align: center;
+}
+
+.navBar .sidBartabs .Polaris-Navigation__Section {
+    margin-bottom: 20px;
+}
+
+.shop_selector_drop_down {
+    background-color: #fff;
+    border: 0.1rem solid #0000002e;
+    border-radius: 4px;
+    padding: 13px;
+    margin-bottom: 0;
+}
+
+#PolarisSecondaryNavigation21 {
+    margin-bottom: 60px;
 }

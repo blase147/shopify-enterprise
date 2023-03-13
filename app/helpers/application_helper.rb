@@ -23,8 +23,8 @@ module ApplicationHelper
     "/a/chargezen/subscriptions/#{params[:id]}/#{action}?customer=#{params[:customer]} #{query.present? ? "&#{query}" : ''}"
   end
 
-  def app_path path
-    "#{path}?hmac=#{session[:hmac]}&shop=#{session[:shop]}"
+  def app_path current_shop, path
+    "/#{current_shop&.shopify_domain&.gsub(".myshopify.com","")}#{path}"
   end
 
   def shopify_product_id(product_id)
