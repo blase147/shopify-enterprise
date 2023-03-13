@@ -33,13 +33,7 @@ const Nav = (props) => {
     const accessSettings = JSON.parse(localStorage.getItem("accessSettings"))
     setNavigation(accessSettings)
     console.log("toogleMenu", toogleMenu);
-  }, [window.location.pathname])
-
-
-  const handleLoyality = useCallback(() => {
-    alert("hdjhsjdh")
-    setLoyality(true)
-  }, [])
+  }, [window.location.href])
 
   const urlDomain = `/${props?.domain?.replace('.myshopify.com', '')}`;
 
@@ -73,33 +67,41 @@ const Nav = (props) => {
         selected: true,
         onClick: () => setToogleMenu({ ...toogleMenu, revenueChannels: !toogleMenu?.revenueChannels }),
         subNavigationItems: [
-          accessTabs?.manage_plan_access ? (
-            {
-              label: 'Subscription Plans',
-              icon: () => <MangeIcon />,
-              url: '/subscription-plans',
-              onClick: () => setActiveTab("mplan"),
-              selected: window.location.pathname == `${urlDomain}/subscription-plans` ? true : false,
-            }
-          ) : {},
+          {
+            url: `${window.location.pathname.replace(urlDomain, "")}?sub=true`,
+            label: 'Subscriptions & More',
+            icon: GiftCardMajor,
+            selected: (new URLSearchParams(location.search)).get('sub') == 'true' ? true : false,
+            subNavigationItems: [
+              accessTabs?.manage_plan_access ? (
+                {
+                  label: 'Subscription Plans',
+                  icon: () => <MangeIcon />,
+                  url: '/subscription-plans',
+                  onClick: () => setActiveTab("mplan"),
+                  selected: window.location.pathname == `${urlDomain}/subscription-plans` ? true : false,
+                }
+              ) : {}
+              ,
+              {
+                icon: MangeIcon,
+                label: 'Try-before-you-buy',
+                url: '/tryBeforeYouBuy',
+                selected: window.location.pathname == `${urlDomain}/tryBeforeYouBuy` ? true : false,
+              },
+              {
+                icon: MangeIcon,
+                label: 'Pre-orders',
+                url: '/preOrders',
+                selected: window.location.pathname == `${urlDomain}/preOrders` ? true : false,
+              }]
+          },
           {
             icon: MangeIcon,
             label: 'Rebuy cart',
             url: '/rebuy',
             onClick: () => setActiveTab("dash"),
-            selected: window.location.pathname == "/" ? true : false,
-          },
-          {
-            icon: MangeIcon,
-            label: 'Pre-orders',
-            url: '/preOrders',
-            selected: window.location.pathname == `${urlDomain}/preOrders` ? true : false,
-          },
-          {
-            icon: MangeIcon,
-            label: 'Try-before-you-buy',
-            url: '/tryBeforeYouBuy',
-            selected: window.location.pathname == `${urlDomain}/tryBeforeYouBuy` ? true : false,
+            selected: window.location.pathname == `${urlDomain}/rebuy` ? true : false,
           },
           {
             icon: MangeIcon,
@@ -157,8 +159,8 @@ const Nav = (props) => {
           {
             label: 'Loyalty/Rewards',
             icon: GiftCardMajor,
-            url: window.location.pathname,
-            selected: true,
+            url: `${window.location.pathname.replace(urlDomain, "")}?loyalty=true`,
+            selected: (new URLSearchParams(location.search)).get('loyalty') == 'true' ? true : false,
             subNavigationItems: [
               {
                 url: "/waysToEarn",

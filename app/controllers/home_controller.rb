@@ -10,7 +10,7 @@ class HomeController < ApplicationController
       session[:shop_id] = Shop.find_by(shopify_domain: current_shopify_domain)&.id
     end
     if ENV['APP_TYPE'] == 'public' && current_shop.recurring_charge_id.blank?
-       redirect_to select_plan_index_path
+       redirect_to select_plan_index_path({shop: current_shop.shopify_domain})
     else
       @shop_origin = current_shopify_domain
       @enable_password = current_shop&.setting&.enable_password

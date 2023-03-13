@@ -32,7 +32,7 @@
           .left_section
             p.changeStoreDiv
               div
-                = select_tag(:shop_selector, options_for_select(all_shops), {selected: current_shop.shopify_domain, class: "shop_selector_drop_down"} ) 
+                = select_tag(:shop_selector, options_for_select(all_shops || []), {selected: current_shop.shopify_domain, class: "shop_selector_drop_down"} ) 
 
 javascript: 
   $(".shop_selector_drop_down").on("change",function(){
