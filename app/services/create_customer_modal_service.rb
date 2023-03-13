@@ -19,7 +19,7 @@ class CreateCustomerModalService
             customer_modal.contracts = customer_modal.contracts.compact
             customer_modal.shop_id = shop_id
             customer_modal.save
-        rescue error
+        rescue StandardError => error
             p error&.to_json
         end
     end

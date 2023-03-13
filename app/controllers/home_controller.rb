@@ -9,15 +9,15 @@ class HomeController < ApplicationController
     unless session[:shop_id] # ensure cookie session as well
       session[:shop_id] = Shop.find_by(shopify_domain: current_shopify_domain)&.id
     end
-    #if ENV['APP_TYPE'] == 'public' && current_shop.recurring_charge_id.blank?
-     # redirect_to select_plan_index_path
-    #else
+    if ENV['APP_TYPE'] == 'public' && current_shop.recurring_charge_id.blank?
+       redirect_to select_plan_index_path
+    else
       @shop_origin = current_shopify_domain
       @enable_password = current_shop&.setting&.enable_password
       if current_user.present?
         @all_shops = current_user.user_shops.order(created_at: :asc).joins(:shop).pluck(:shopify_domain) rescue []
       end
-    # end
+     end
   end
 
   private

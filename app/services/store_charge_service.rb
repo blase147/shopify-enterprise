@@ -7,10 +7,10 @@ class StoreChargeService
   def create_recurring_charge(plan)
     recurring_application_charge = ShopifyAPI::RecurringApplicationCharge.new({name: "#{plan.titleize} Subscription Charge", capped_amount: 500000, terms: 'Subscription Item Purchased Charge'})
     recurring_application_charge.price = case plan
-    when 'freemium'
+    when 'starter'
       0
-    when 'platinum'
-      199
+    when 'pro'
+      133
     end
     recurring_application_charge.test = Rails.env.development?
     recurring_application_charge.return_url = "#{ENV['HOST']}subscription/charge"
@@ -26,9 +26,9 @@ class StoreChargeService
     if orders.present?
       order_price = orders.sum { |o| o.node.total_received_set.presentment_money.amount.to_f }
       price = if @shop.plan == 'freemium'
-          (0.97 / 100) * order_price
+          (1.25 / 100) * order_price
         elsif @shop.plan == 'platinum'
-          (0.79 / 100) * order_price
+          (0.97 / 100) * order_price
         end
       if price > 0.5
         usage_charge = ShopifyAPI::UsageCharge.new({ description: 'Subcription Charge', price: price })
