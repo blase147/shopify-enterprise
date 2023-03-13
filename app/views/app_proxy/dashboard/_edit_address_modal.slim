@@ -8,7 +8,7 @@
               .header
                 div
                   h2
-                    span Edit Address
+                    span #{t('customer.Edit Address')}
                 div.close aria-hidden="true" tabindex="-1" data-action='close' data-dismiss="modal"
                   svg fill="none" height="20" viewbox=("0 0 18 20") width="18" xmlns="http://www.w3.org/2000/svg"
                     path d=("M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z") fill="#DDDDDD" /
@@ -17,51 +17,51 @@
                 .modal-fields-wrapper
                   .group
                     p
-                      span #{@translation&.add_address_popup_first_name.present? ? @translation&.add_address_popup_first_name : 'FIRST NAME'}
+                      span #{t('customer.FIRST NAME')}
                       span.red *
                     = f.input :first_name, input_html: { value: @customer.first_name  }, label: false, required: true
                   .group
                     p
-                      span #{@translation&.add_address_popup_last_name.present? ? @translation&.add_address_popup_last_name : 'LAST NAME'}
+                      span #{t('customer.LAST NAME')}
                       span.red *
                     = f.input :last_name, input_html: { value: @customer.last_name  }, label: false, required: true
                   .group
                     p
-                      span #{@translation&.add_address_popup_address1.present? ? @translation&.add_address_popup_address1 : 'ADDRESS 1'}
+                      span #{t('customer.ADDRESS 1')}
                       span.red *
                     = f.input :address_1, label: false, input_html: { value: @customer.address_1 }, required: true
                   .group
-                    p #{@translation&.add_address_popup_address2.present? ? @translation&.add_address_popup_address2 : 'ADDRESS 2'}
+                    p #{t('customer.ADDRESS 2')}
                     = f.input :address_2, input_html: { value: @customer.address_2  }, label: false, required: false
                   .group
-                    p #{@translation&.add_address_popup_company.present? ? @translation&.add_address_popup_company : 'COMPANY'}
+                    p #{t('customer.COMPANY')}
                     = f.input :company, input_html: { value: @customer.company  }, label: false, required: false
                   .group
                     p
-                      span #{@translation&.add_address_popup_city.present? ? @translation&.add_address_popup_city : 'CITY'}
+                      span #{t('customer.CITY')}
                       span.red *
                     = f.input :city, label: false, input_html: { value: @customer.city  }, required: true
                   .group
                     p
-                      span #{@translation&.add_address_popup_country.present? ? @translation&.add_address_popup_country : 'COUNTRY'}
+                      span #{t('customer.COUNTRY')}
                       span.red *
                     = f.input :country, as: :select, collection: [['United States', 'United States']], label: false, required: true, selected: @customer.country
                   .group
                     p
-                      span #{@translation&.add_address_popup_zip.present? ? @translation&.add_address_popup_zip : 'ZIP/POSTAL CODE'}
+                      span #{t('customer.ZIP/POSTAL CODE')}
                       span.red *
                     = f.input :zip, label: false, input_html: { value: @customer.zip  }, required: true
                   .group
-                    p #{@translation&.add_address_popup_state.present? ? @translation&.add_address_popup_state : 'STATE/PROVINCE'}
+                    p #{t('customer.STATE/PROVINCE')}
                     = f.input :province, input_html: { value: @customer.province  }, label: false, required: false
                   .group
-                    p #{@translation&.add_address_popup_phone.present? ? @translation&.add_address_popup_phone : 'PHONE'}
+                    p #{t('customer.PHONE')}
                     = f.input :phone, input_html: { value: @customer.phone  }, label: false, required: false
 
           .Polaris-Modal-Footer
             button.Polaris-Button.mr-10[type="button" aria-hidden="true" tabindex="-1" data-action='close']
               | Cancel
 
-            = p_button text: @translation&.add_address_popup_update.present? ? @translation&.add_address_popup_update : 'Update', type: 'submit'
+            = p_button text: t('customer.Update'), type: 'submit'
 
   .Polaris-Backdrop

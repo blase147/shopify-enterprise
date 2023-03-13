@@ -16,7 +16,7 @@
           - if @setting.customer_allowed?('reactive_subscription')
             .grid-item
               = link_to action_subscription_contract_path(:resume, subscription.id, "stripe_subscription=true&token=#{params[:token]}"), class: 'btn_inside  reactivate_btn', method: :post, remote: true do
-                button.btn-yellow.action-btn.modal_btn type='submit' RE-ACTIVATE
+                button.btn-yellow.action-btn.modal_btn type='submit' #{t("customer.RE-ACTIVATE")}
         .quantity-wrapper
           form
             .quantity-field
@@ -28,11 +28,11 @@
                     path d=("M7.5 12L14.5 19L21.5 12") stroke="#000000" stroke-width="2" /
         .slide-down
           .item
-            p #{@translation&.cancelled_tab_start_date.present? ? @translation&.cancelled_tab_start_date : 'start date'}
+            p #{t('customer.cancelled_tab_start_date')}
             p
               = subscription.created_at.strftime("%a, %B %e")
           .item
-            p #{@translation&.cancelled_tab_quantity.present? ? @translation&.cancelled_tab_quantity : 'quantity'}
+            p #{t("customer.quantity")}
             p
               = subscription.import_data['quantity']
       - else
@@ -51,12 +51,12 @@
             - if @setting.customer_allowed?('reactive_subscription')
               .grid-item
                 div.reactivate_btn_div
-                  button.btn-yellow.action-btn.modal_btn.reactive_btn type='button' data-show="showOnReactivate_#{subscription.node.id[/\d+/]}" RE-ACTIVATE
+                  button.btn-yellow.action-btn.modal_btn.reactive_btn type='button' data-show="showOnReactivate_#{subscription.node.id[/\d+/]}" #{t("customer.RE-ACTIVATE")}
                 div.with_show_reactvate
                   div class="showOnReactivate_#{subscription.node.id[/\d+/]} hide"
-                    label class="choose_billing_date_label" for="resume_cancel_date" Choose Date to resume billing your card on file
+                    label class="choose_billing_date_label" for="resume_cancel_date" #{t("customer.Choose Date to resume billing your card on file")}
                     input type ="date" class="billing_date_resume#{subscription.node.id[/\d+/]}" id="resume_cancel_date" class="resume_subscription" min="#{(Date.today + 1.day)&.strftime("%Y-%m-%d")}"
-                    button type='button' class="submit_reactive_btn" data-subscription="#{subscription.node.id[/\d+/]}" Confirm
+                    button type='button' class="submit_reactive_btn" data-subscription="#{subscription.node.id[/\d+/]}" #{t("customer.Confirm")}
                     div.error_resume_message style="color: red;"
           .quantity-wrapper
             form
@@ -69,11 +69,11 @@
                       path d=("M7.5 12L14.5 19L21.5 12") stroke="#000000" stroke-width="2" /
           .slide-down
             .item
-              p #{@translation&.cancelled_tab_start_date.present? ? @translation&.cancelled_tab_start_date : 'start date'}
+              p #{t('customer.cancelled_tab_start_date')}
               p
                 = DateTime.parse(subscription.node.created_at).strftime("%a, %B %e")
             .item
-              p #{@translation&.cancelled_tab_quantity.present? ? @translation&.cancelled_tab_quantity : 'quantity'}
+              p #{t('customer.quantity')}
               p
                 = edge.node.quantity
     - @cancelled_line_items.each do |line_item|
@@ -95,7 +95,7 @@
           - if @setting.customer_allowed?('reactive_subscription')
             .grid-item
               = link_to action_subscription_contract_path(:add_product, subscription.node.id[/\d+/], "quantity=#{line_item.quantity}&line_item_id=#{line_item.id}&variant_id=#{line_item.variant_id[/\d+/]}&token=#{params[:token]}"), class: 'resume-btn btn_inside reactivate_btn', remote: true, method: :post do
-                button.btn-yellow.action-btn.modal_btn #{@translation&.cancelled_tab_reactivate_btn.present? ? @translation&.cancelled_tab_reactivate_btn : 'RE-ACTIVATE'}
+                button.btn-yellow.action-btn.modal_btn #{t("customer.RE-ACTIVATE")}
         .quantity-wrapper
           form
             .quantity-field
@@ -107,16 +107,16 @@
                     path d=("M7.5 12L14.5 19L21.5 12") stroke="#000000" stroke-width="2" /
         .slide-down
           .item
-            p #{@translation&.cancelled_tab_start_date.present? ? @translation&.cancelled_tab_start_date : 'start date'}
+            p #{t('customer.cancelled_tab_start_date')}
             p
               = DateTime.parse(subscription.node.created_at).strftime("%a, %B %e")
           .item
-            p #{@translation&.cancelled_tab_quantity.present? ? @translation&.cancelled_tab_quantity : 'quantity'}
+            p #{t('customer.quantity')}
             p
               = line_item.quantity
 - elsif ((params[:status].present? && params[:status] == 'cancelled'))
   div.notification-banner
-    p.Polaris-Heading No cancelled subscription have been found for your account
+    p.Polaris-Heading #{t('customer.No cancelled subscription have been found for your account')}
 
 javascript: 
   $(".reactive_btn").on("click",function(){

@@ -9,7 +9,7 @@
                 svg fill="none" height="20" viewbox=("0 0 18 20") width="18" xmlns="http://www.w3.org/2000/svg"
                   path d=("M0 19.824H2.212L8.484 10.864L14.756 19.824H17.052L9.688 9.408L16.408 0H14.196L8.568 8.064L2.856 0H0.672L7.448 9.408L0 19.824Z") fill="#212B36" /
               div
-                h2 Delay/Speedup your next shipment
+                h2 #{t('customer.Delay/Speedup your next shipment')}
             = simple_form_for :subscription, url: "#{action_subscription_contract_path(:update_subscription, subscription.id[/\d+/])}", method: :post, remote: true do |f|
               = f.input :id, as: :hidden, value: subscription.id
               .btn-wrapper
@@ -31,34 +31,34 @@
                       defs
                         clippath#clip0
                           rect fill="white" height="20" width="20" /
-                  span #{@translation&.delay_popup_choose_date.present? ? @translation&.delay_popup_choose_date : 'PICK ORDER DATE'}
+                  span #{t('customer.PICK ORDER DATE')}
               input.datepicker-delay type="text" id=("input-#{subscription.id[/\d+/]}") name="subscription[next_billing_date]"
               div.append-dp id=("append-dp-#{subscription.id[/\d+/]}")
                 .btn-wrapper.calender-btn
-                  button.back-dp type="button" BACK
-                  button type="submit" APPLY
+                  button.back-dp type="button" #{t('customer.BACK')}
+                  button type="submit" #{t('customer.Apply').upcase}
             .options-btn-wrapper
               = simple_form_for :subscription, url: "#{action_subscription_contract_path(:update_subscription, subscription.id[/\d+/])}", method: :post, remote: true do |f|
                 = f.input :id, as: :hidden, value: subscription.id
                 = f.input :next_billing_date, as: :hidden, input_html: { value: next_billing_date + 2.weeks }
                 .btn-wrapper
-                  button type="submit" #{@translation&.delay_popup_delay_two_weeks.present? ? @translation&.delay_popup_delay_two_weeks : 'DELAY FOR 2 WEEKS'}
+                  button type="submit" #{t('customer.DELAY FOR 2 WEEKS')}
 
               = simple_form_for :subscription, url: "#{action_subscription_contract_path(:update_subscription, subscription.id[/\d+/])}", method: :post, remote: true do |f|
                 = f.input :id, as: :hidden, value: subscription.id
                 = f.input :next_billing_date, as: :hidden, input_html: { value: next_billing_date + 1.month }
                 .btn-wrapper
-                  button type="submit" #{@translation&.delay_popup_delay_one_month.present? ? @translation&.delay_popup_delay_one_month : 'DELAY FOR 1 MONTHS'}
+                  button type="submit" #{t('customer.DELAY FOR 1 MONTHS')}
               = simple_form_for :subscription, url: "#{action_subscription_contract_path(:update_subscription, subscription.id[/\d+/])}", method: :post, remote: true do |f|
                 = f.input :id, as: :hidden, value: subscription.id
                 = f.input :next_billing_date, as: :hidden, input_html: { value: next_billing_date + 2.month }
                 .btn-wrapper
-                  button type="submit" #{@translation&.delay_popup_delay_two_month.present? ? @translation&.delay_popup_delay_two_month : 'DELAY FOR 2 MONTHS'}
+                  button type="submit" #{t('customer.DELAY FOR 2 MONTHS')}
               = simple_form_for :subscription, url: "#{action_subscription_contract_path(:update_subscription, subscription.id[/\d+/])}", method: :post, remote: true do |f|
                 = f.input :id, as: :hidden, value: subscription.id
                 = f.input :next_billing_date, as: :hidden, input_html: { value: next_billing_date + 3.month }
                 .btn-wrapper
-                  button type="submit" #{@translation&.delay_popup_delay_three_month.present? ? @translation&.delay_popup_delay_three_month : 'DELAY FOR 3 MONTHS'}
+                  button type="submit" #{t('customer.DELAY FOR 3 MONTHS')}
   .Polaris-Backdrop
 
           / .Polaris-Modal-Footer
