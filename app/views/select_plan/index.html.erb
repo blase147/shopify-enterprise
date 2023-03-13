@@ -11,7 +11,7 @@
                 <div class="Polaris-Header-Title__TitleAndSubtitleWrapper">
                   <div class="Polaris-Header-Title">
                     <h1 class="Polaris-DisplayText Polaris-DisplayText--sizeLarge"><span
-                        class="Polaris-TextStyle--variationStrong">Choose Plan</span></h1>
+                        class="Polaris-TextStyle--variationStrong">Select a Plan</span></h1>
                   </div>
                 </div>
               </div>
@@ -24,13 +24,13 @@
           <div class="Polaris-Layout__Section Polaris-Layout__Section--oneHalf">
             <div class="Polaris-Card">
               <div class="Polaris-Card__Header">
-                <h2 class="Polaris-Heading">Freemium</h2>
+                <h2 class="Polaris-Heading">Starter</h2>
               </div>
               <div class="Polaris-Card__Section">
 								<%= form_with url: select_plan_index_path, local: false do |form| %>
-									<p>$0/month + 0.97% subscriptions transaction fee.</p>
+									<p>1.25% of subscription & attributed revenue after subscription & attributed revenue exceeds $500/month</p>
 									<br>
-									<%= form.hidden_field :plan, value: 'freemium' %>
+									<%= form.hidden_field :plan, value: 'starter' %>
 									<button class="Polaris-Button Polaris-Button--primary" type="submit">
 										<span class="Polaris-Button__Content"><span class="Polaris-Button__Text">Select</span></span>
 									</button>
@@ -41,13 +41,13 @@
           <div class="Polaris-Layout__Section Polaris-Layout__Section--oneHalf">
             <div class="Polaris-Card">
               <div class="Polaris-Card__Header">
-                <h2 class="Polaris-Heading">Platinum</h2>
+                <h2 class="Polaris-Heading">Pro</h2>
               </div>
               <div class="Polaris-Card__Section">
 								<%= form_with url: select_plan_index_path, local: false do |form| %>
-									<p>$199/month + 0.79% subscriptions transaction fee.</p>
+									<p>$133/month + 1% of subscription & attributed revenue.</p>
 									<br>
-									<%= form.hidden_field :plan, value: 'platinum' %>
+									<%= form.hidden_field :plan, value: 'pro' %>
 									<button class="Polaris-Button Polaris-Button--primary" type="submit">
 										<span class="Polaris-Button__Content"><span class="Polaris-Button__Text">Select</span></span>
 									</button>
