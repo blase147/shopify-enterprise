@@ -11,10 +11,10 @@ class CallbackController < ActionController::Base
       current_shop.recurring_charge_status = 'active'
       current_shop.recurring_charge_id = params[:charge_id]
       price = @recurring_application_charge.price.to_f
-      current_shop.plan = if price == 199
-                            'platinum'
+      current_shop.plan = if price == 133
+                            'pro'
                           elsif price == 0
-                            'freemium'
+                            'starter'
                           end
       current_shop.save
       pending_recurring_charge.destroy
