@@ -16,6 +16,7 @@ class CustomerSubscriptionContract < ApplicationRecord
   has_many :sms_conversations, foreign_key: 'customer_id', dependent: :destroy
   # has_many :sms_logs, dependent: :destroy
   has_many :subscription_logs, foreign_key: 'customer_id', dependent: :destroy
+  validates :token, uniqueness: true, allow_nil: true
 
   # validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   # validates :email, presence: true
@@ -27,7 +28,12 @@ class CustomerSubscriptionContract < ApplicationRecord
   after_create :send_opt_in_sms, unless: -> { opt_in_sent }
   after_create :activation_email
   after_create :charge_store
+  before_commit :generate_token
   # default_scope { order(created_at: :asc) }
+
+  def generate_token
+    self.token = SecureRandom.urlsafe_base64(nil, false)
+  end
 
   def log_work
     begin

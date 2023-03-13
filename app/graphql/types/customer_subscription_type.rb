@@ -24,6 +24,7 @@ module Types
     field :api_resource_id, String, null: true
     field :api_source, String, null: true
     field :delivery_day, String, null: true
+    field :token, String, null: true
 
     field :created_at, String, null: true
     field :updated_at, String, null: true

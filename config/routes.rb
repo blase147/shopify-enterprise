@@ -170,7 +170,7 @@ Rails.application.routes.draw do
 
   post "/graphql_extension", to: "extension#execute"
 
-  resources :subscriptions do
+  resources :subscriptions, except: %i[show] do
     collection do
       post :update_subscription
       post :update_customer
@@ -199,6 +199,7 @@ Rails.application.routes.draw do
       post :remove_box_item
     end
   end
+  get "/subscriptions/:id/:token", to: "subscriptions#show"
 
   resources :debug_mode, only: [:index, :create]
 
