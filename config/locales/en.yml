@@ -1,33 +1,68 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   'true': 'foo'
-#
-# To learn more, please read the Rails Internationalization guide
-# available at https://guides.rubyonrails.org/i18n.html.
+# Additional translations at https://github.com/heartcombo/devise/wiki/I18n
 
 en:
-  hello: "Hello world"
+  customer:
+    My: "My"
+    Active: "Active"
+    Subscription: "SUBSCRIPTION"
+    Logout: "Logout"
+    Cancelled: "Cancelled"
+    Rewards: "Rewards"
+    Track Order: "Track Order"
+    Delivery: "Delivery"
+    Schedule: "Schedule"
+    Order: "Order"
+    History: "History"
+    Address: "Address"
+    Billing: "Billing"
+    Account: "Account"
+    Quantity: "Quantity"
+    Address: "Address"
+    Edit: "Edit"
+    Choice: "Choice"
+    Next: "Next"
+    Card: "Card"
+    Charge: "Charge"
+    Apply: "Apply"
+    Discount: "Discount"
+    Offer for you: "Hey there! There's is an offer for you!"
+    Add: "Add"
+    My Active Subscription: My Active Subscription
+    Next Card Charge: "Next Card Charge"
+    Apply Discount: "Apply Discount"
+    Edit Subscription: "Edit Subscription"
+    Delivery Schedule: "Delivery Schedule"
+    Delivery Address: "Delivery Address"
+    Cancel Anyway: "Cancel Anyway"
+    Keep Subscription: "Keep Subscription"
+    This is why I want to cancel: "This is why I want to cancel"
+    Start Date: "Start Date"
+    Est. Next Delivery: "Est. Next Delivery"
+    Last Card Charge: "Last Card Charge"
+    No subscription have been found for your account: "No subscription have been found for your account"
+    Add to box: "Add to box"
+    Change: "Change"
+    Clear all: "Clear all"
+    you cannot add more items: "you cannot add more items"
+    Confirm Meals: "Confirm Meals"
+    RE-ACTIVATE: "RE-ACTIVATE"
+    Choose Date to resume billing your card on file: "Choose Date to resume billing your card on file"
+    Confirm: "Confirm"
+    No cancelled subscription have been found for your account: "No cancelled subscription have been found for your account"
+    cancelled_tab_start_date: "start date"
+    cancelled_tab_quantity: "quantity"
+    Delay/Speedup your next shipment: "Delay/Speedup your next shipment"
+    PICK ORDER DATE: "PICK ORDER DATE"
+    BACK: "BACK"
+    FIRST NAME: "FIRST NAME"
+    LAST NAME: "LAST NAME"
+    ADDRESS 1: "ADDRESS 1"
+    ADDRESS 2: "ADDRESS 2"
+    COMPANY: "COMPANY"
+    CITY: "CITY"
+    COUNTRY: "COUNTRY"
+    ZIP/POSTAL CODE: "ZIP/POSTAL CODE"
+    STATE/PROVINCE: 'STATE/PROVINCE'
+    PHONE: "PHONE"
+    Submit: "Submit"
+    Update: "Update"

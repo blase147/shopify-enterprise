@@ -25,15 +25,16 @@
           p.text.active-text
             = edge.node.selling_plan_name
         .grid-item
-          h4 NEXT CARD CHARGE
+          h4 
+            = "#{t('customer.Next Card Charge')}"&.upcase
           p.text.right.active-text
             = next_billing_date.strftime("%a, %B %e")
           p.text.right.active-text
             = number_to_currency (edge.node.current_price.amount.to_f * edge.node.quantity)
         .grid-item
-          button.edit-subscription.action-btn style="font-size: 13px" class="showTimeLineButton" data-id="#{subscription.node.id[/\d+/]}" 'Choice'
-          button.edit-subscription.action-btn style="font-size: 13px" data-toggle="modal" data-target="#editSubscriptionModal-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" 'Delivery Schedule'
-          button.edit-subscription.action-btn style="font-size: 13px" data-toggle="modal" data-target="#editSubscriptionModal-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" 'Edit Subscription'
+          button.edit-subscription.action-btn style="font-size: 13px" class="showTimeLineButton" data-id="#{subscription.node.id[/\d+/]}" #{t('customer.Choice')}
+          button.edit-subscription.action-btn style="font-size: 13px" data-toggle="modal" data-target="#editSubscriptionModal-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" #{t('customer.Delivery Schedule')}
+          button.edit-subscription.action-btn style="font-size: 13px" data-toggle="modal" data-target="#editSubscriptionModal-#{edge.node.id.split("gid://shopify/SubscriptionLine/")[1]}" #{t('customer.Edit Subscription')}
           - if curvo_choices.present?
             - curvo_choices&.each do |curvo_choice|              
               = render "partials/timeline", subscription_id: subscription.node.id[/\d+/], curvo_choice: curvo_choice
@@ -48,7 +49,7 @@
           form action="#{action_subscription_contract_path(:update_quantity, subscription.node.id[/\d+/])}" method='post' data-remote=true enctype="multipart/form-data"
             .quantity-field
               div
-                span.label.active-text #{@translation&.home_tab_quantity.present? ? @translation&.home_tab_quantity : 'Quantity'}:
+                span.label.active-text #{t("customer.Quantity")}
                 span.btn-wrapper
                   button.minus-quantity type="button"
                     svg fill="none" height="8" viewbox=("0 0 7 2") width="8" xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +62,8 @@
                   input.prev-quantity type="hidden" value="#{edge.node.quantity}"/
                 span.update-quantity
                   input.hidden type="text" name="line_item_id" value="#{edge.node.id}"/
-                  button type="submit" APPLY
+                  button type="submit"
+                    = t('customer.Apply').upcase
               div
                 div.chevron
                   svg fill="none" height="30" viewbox=("0 0 30 30") width="30" xmlns="http://www.w3.org/2000/svg"
@@ -72,28 +74,28 @@
           form action="" method='post' data-remote=true enctype="multipart/form-data"
             .quantity-field
               div
-                span.label.active-text #{@translation&.home_tab_quantity.present? ? @translation&.home_tab_quantity : 'Quantity'}:
+                span.label.active-text #{t("customer.Quantity")}:
                 span.label.active-text= edge.node.quantity
       .slide-down
         .item
-          p #{@translation&.home_tab_start_date.present? ? @translation&.home_tab_start_date : 'start date'}
+          p #{t("customer.Start Date")}
           p
             = DateTime.parse(subscription.node.created_at).strftime("%a, %B %e")
         .item
-          p #{@translation&.home_tab_est_next_delivery.present? ? @translation&.home_tab_est_next_delivery : 'est. next delivery'}
+          p #{t("customer.Est. Next Delivery")}
           p
             = (DateTime.parse(subscription.node.next_billing_date) + 4.days).strftime("%a, %B %e")
         .item
-          p #{@translation&.home_tab_last_card_charge.present? ? @translation&.home_tab_last_card_charge : 'last card charge'}
+          p #{t("customer.Last Card Charge")}
           p -
         .item
-          p #{@translation&.home_tab_quantity.present? ? @translation&.home_tab_quantity : 'quantity'}
+          p #{t("customer.Quantity")}
           p
             = edge.node.quantity
     - if @setting.customer_allowed?('shiping_address')
       .delivery-address
         div
-          p.text.active-text #{@translation&.home_tab_delivery_address.present? ? @translation&.home_tab_delivery_address : 'DELIVERY ADDRESS'}
+          p.text.active-text #{t("customer.Delivery Address")&.upcase}
           h3.active-text
             = subscription.node.delivery_method.address.address1
           div.weekly-account
@@ -103,11 +105,11 @@
             - elsif @translation&.home_tab_apply_discount.present?
               span #{@translation&.home_tab_apply_discount}
             - else
-              'Apply Discount'
+              = "#{t('customer.Apply Discount')}"
             svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg"
               path d=("M14.5148 0.514771L13.6239 1.40567L17.5882 5.37004H0V6.62998H17.5882L13.6239 10.5943L14.5148 11.4852L20 5.99996L14.5148 0.514771Z") fill="black" /
         div
-          button data-toggle="modal" data-target="#deliveryEditModal" #{@translation&.home_tab_edit_btn.present? ? @translation&.home_tab_edit_btn : 'EDIT'}
+          button data-toggle="modal" data-target="#deliveryEditModal" #{t("customer.Edit").upcase}
       = render 'edit_delivery_address_modal', subscription: subscription.node
   - line_products = subscription.node.lines.edges.map{|edge| edge.node.product_id[/\d+/]}
   - campaigns = UpsellCampaign.joins(:upsell_campaign_group).where(upsell_campaign_groups: {status: :publish}).where("rule_customer = 't' AND rule_customer_value ->> 'sellingPlanId' = ?", selling_plan_id).select("product_offer AS product_offer, offer_title, button_text_accept, show_offer_title")
@@ -125,7 +127,7 @@
           - elsif @translation&.upsell_title.present?
             = @translation&.upsell_title
           - else
-            'Hey there! There's is an offer for you!'
+            = t('customer.Offer for you')
       .owl-carousel.owl-theme.account-carousel
         - upsell_products.each do |product|
           .preview-item
@@ -148,7 +150,7 @@
                       input name="variant_id" type="radio" value="#{variant.id}"
                     = "#{variant.title} (#{number_to_currency variant.price})"
               .btn-wrapper
-                - btn_text = campaigns.first.button_text_accept.present? ? campaigns.first.button_text_accept : (@translation&.home_tab_add_subscription.present? ? @translation&.home_tab_add_subscription : 'Add')
+                - btn_text = campaigns.first.button_text_accept.present? ? campaigns.first.button_text_accept : t("customer.Add")
                 button.btn-variant type="button"
                   = btn_text
               .btn-wrapper

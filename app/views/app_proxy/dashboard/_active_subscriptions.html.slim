@@ -10,4 +10,4 @@
         = render partial: 'app_proxy/dashboard/shopify_active_subscription', locals: {subscription: subscription, local_id: local_id}
 - elsif (params[:status].present? && params[:status] == 'active') || !params[:status].present?
   div.notification-banner
-    p.Polaris-Heading #{@translation&.home_tab_no_subscriptions_found.present? ? @translation&.home_tab_no_subscriptions_found : 'No subscription have been found for your account'}
+    p.Polaris-Heading #{t("customer.No subscription have been found for your account")}

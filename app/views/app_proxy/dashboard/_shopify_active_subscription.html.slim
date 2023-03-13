@@ -22,7 +22,8 @@
             p.text.active-text
               = edge.node.selling_plan_name
         .grid-item
-          h4 NEXT CARD CHARGE
+          h4
+            - "#{t("Next")&.upcase} #{t("Card")&.upcase} #{t("Charge")&.upcase}"
           p.text.right.active-text
             = next_billing_date.strftime("%a, %B %e")
           p.text.right.active-text
@@ -111,7 +112,7 @@
     - if @setting.customer_allowed?('shiping_address')
       .delivery-address
         div
-          p.text.active-text #{@translation&.home_tab_delivery_address.present? ? @translation&.home_tab_delivery_address : 'DELIVERY ADDRESS'}
+          p.text.active-text #{t("customer.Delivery Address").upcase}
           h3.active-text
             = subscription.node.delivery_method.address.address1
           div.weekly-account

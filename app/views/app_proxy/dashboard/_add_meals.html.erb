@@ -48,7 +48,7 @@
                       <button class="add_meal_btn plusValue add_to_current_week" data-mealtitle="<%=meal["title"]%>"  data-id="<%= meal["product_id"]&.split('/')&.last %>" data-imgurl="<%= meal["image"].present? ?  meal["image"] : asset_path( 'No-image-found.jpg' ) %>" data-quantityid="quantity_<%= meal["product_id"]&.split('/')&.last %>">
                       +
                       </button>
-                      <button class="add_meal_btn_2 plusValue add_to_current_week" data-mealtitle="<%=meal["title"]%>"  data-id="<%= meal["product_id"]&.split('/')&.last %>" data-imgurl="<%= meal["image"] %>" data-quantityid="quantity_<%= meal["product_id"]&.split('/')&.last %>">Add to box</button>
+                      <button class="add_meal_btn_2 plusValue add_to_current_week" data-mealtitle="<%=meal["title"]%>"  data-id="<%= meal["product_id"]&.split('/')&.last %>" data-imgurl="<%= meal["image"] %>" data-quantityid="quantity_<%= meal["product_id"]&.split('/')&.last %>"><%= t('customer.Add to box') %></button>
                   </div>
                 </div>
             </li>
@@ -72,7 +72,7 @@
                                 <div class="remaining_box"></div>
                               </div>
                               <select class="change_meal_plan hide">
-                                <option class="change_meal_option">Change</option>
+                                <option class="change_meal_option"><%= t("customer.Change") %></option>
                               </select>
                            </div>
                            <div class="product_number_out">
@@ -80,11 +80,11 @@
                                 <span class="selected_meals_number"><%= "#{selected_products&.count&.to_i}" %></span>
                                 <span class="total_meals"><%= "/#{total_meals}" %></span>
                               </span>
-                              <cart-remove-all class="clear_all_meals">Clear all</cart-remove-all>
+                              <cart-remove-all class="clear_all_meals"><%= t("customer.Clear all") %></cart-remove-all>
                            </div>
                            <div class="footer_icon"> + </div>
                         </div>
-                        <div class="meals_full_mssg hide">you cannot add more items</div>
+                        <div class="meals_full_mssg hide"><%= t("customer.you cannot add more items") %></div>
                      </div>
                   </div>
                   <div class="side">
@@ -117,7 +117,7 @@
             </div>
          </div>
          <div class="">
-            <button type="button" class="button button--primary button--full-width confirm-current-week-sub-btn disabled_button" onclick="submitAddMeals(event)" disabled="disabled">Confirm Meals</button>
+            <button type="button" class="button button--primary button--full-width confirm-current-week-sub-btn disabled_button" onclick="submitAddMeals(event)" disabled="disabled"><%= t("customer.Confirm Meals")%></button>
          </div>
       </div>
    </div>
