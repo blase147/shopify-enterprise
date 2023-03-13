@@ -18,7 +18,7 @@
         | Onlines
       .notification
         button.Polaris-Button[type="button"]
-          a href="#{current_shop.gsub(".myshopify.com", "")}/notifications"
+          a href="#{current_shop&.shopify_domain&.gsub(".myshopify.com", "")}/notifications"
             span.Polaris-Button__Content
               span.Polaris-Button__Text
                 span.Polaris-Icon.Polaris-Icon--colorBase.Polaris-Icon--isColored
