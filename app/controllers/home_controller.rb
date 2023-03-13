@@ -17,7 +17,7 @@ class HomeController < ApplicationController
       if current_user.present?
         @all_shops = current_user.user_shops.order(created_at: :asc).joins(:shop).pluck(:shopify_domain) rescue []
       end
-    # end
+     end
   end
 
   private
