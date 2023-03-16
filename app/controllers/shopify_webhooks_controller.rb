@@ -199,6 +199,7 @@ class ShopifyWebhooksController < ApplicationController
   def shop
     shop = Shop.find_by(shopify_domain: shop_domain) rescue nil
     shop.connect
+    return shop
   end
 
 end
