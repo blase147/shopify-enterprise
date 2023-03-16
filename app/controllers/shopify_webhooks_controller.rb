@@ -5,7 +5,6 @@ class ShopifyWebhooksController < ApplicationController
 
   def app_uninstalled
     if ENV['APP_TYPE'] == 'public'
-      shop = Shop.where(shopify_domain: params[:domain])&.last rescue nil
       if shop.present?
         shop.selling_plan_groups.each do |selling_plan_group|
           selling_plan_group.selling_plans.delete_all
@@ -16,12 +15,14 @@ class ShopifyWebhooksController < ApplicationController
       end
     end
     head :no_content
+  rescue Exception => ex
+    NewRelic::Agent.notice_error(ex)
+    head :no_content
   end
 
   def order_create
     begin
       box_product_ids = get_box_product_ids(params[:line_items])
-      shop = Shop.find_by(shopify_domain: shop_domain)
       shop.with_shopify_session do
         if box_product_ids
           order = ShopifyAPI::Order.new(id: params[:id])
@@ -40,7 +41,7 @@ class ShopifyWebhooksController < ApplicationController
       end
       RebuyService.new(shop.id).update_customer_order(params[:id])
     rescue => e
-      p e
+      NewRelic::Agent.notice_error(e)
     end
 
     head :no_content
@@ -49,23 +50,26 @@ class ShopifyWebhooksController < ApplicationController
   def order_cancelled
     preorder = WorldfarePreOrder.find_by(order_id: params[:id].to_s)
     preorder&.update(status: "canceled")
-    shop = Shop.find_by(shopify_domain: shop_domain)
     ShopifyOrderCancelWorker.perform_async(shop.id, params[:id])
     UpdateLoyalityPointsService.update_order_loyality_points(shop, params[:id])
     RebuyService.new(shop.id).update_customer_order(params[:id])
     head :no_content
+  rescue Exception => ex
+    NewRelic::Agent.notice_error(ex)
+    head :no_content
   end
 
   def order_fulfilled
-    shop = Shop.find_by(shopify_domain: shop_domain)
     preorder = WorldfarePreOrder.find_by(order_id: params[:id].to_s)
     preorder&.update(status: "fulfilled")
     RebuyService.new(shop.id).update_customer_order(params[:id])
     head :no_content
+  rescue Exception => ex
+    NewRelic::Agent.notice_error(ex)
+    head :no_content
   end
 
   def order_updated
-    shop = Shop.find_by(shopify_domain: shop_domain)
     if params[:financial_status] == "refunded"
       preorder = WorldfarePreOrder.find_by(order_id: params[:id])
       preorder&.update(status: "refunded")
@@ -76,22 +80,27 @@ class ShopifyWebhooksController < ApplicationController
       end
     end
     head :no_content
+  rescue Exception => ex
+    NewRelic::Agent.notice_error(ex)
+    head :no_content
   end
 
   def subscription_contract_create
     begin
-      shop = Shop.find_by(shopify_domain: shop_domain)
       ShopifyContractCreateWorker.perform_async(shop.id, params[:id], params[:order_id])
     rescue => error
-      puts "There is an error in subscription_contract_create:- #{error&.message}"
+      create_site_log
+      NewRelic::Agent.notice_error(error)
     end
     head :no_content
   end
 
   def subscription_contract_update
-    shop = Shop.find_by(shopify_domain: shop_domain)
     ShopifyContractUpdateWorker.perform_async(shop.id, params[:id])
 
+    head :no_content
+  rescue Exception => ex
+    NewRelic::Agent.notice_error(ex)
     head :no_content
   end
 
@@ -104,27 +113,31 @@ class ShopifyWebhooksController < ApplicationController
       SendEmailService.new.send_recurring_order_email(order_id, contract_id)
       AddProductsToOrderWorker.perform_async(order_id, contract_id)
     rescue => error
-      puts "There is an error in billing_attempt_success:- #{error&.message}"
+      NewRelic::Agent.notice_error(error)
     end
-
     head :no_content
   end
 
   def customer_create
-    shop = Shop.find_by(shopify_domain: shop_domain)
-    data = JSON.parse(params&.to_json, object_class: OpenStruct)
-    CreateCustomerModalService.create(shop.id,data)
+    CreateUpdateCustomerWebhookWorker.perform_async(shop.id, params&.to_json)
+    head :no_content
+  rescue Exception => ex
+    NewRelic::Agent.notice_error(ex)
     head :no_content
   end
 
   def customer_update
-    shop = Shop.find_by(shopify_domain: shop_domain)
-    data = JSON.parse(params&.to_json, object_class: OpenStruct) rescue nil
-    CreateCustomerModalService.create(shop.id,data)
+    CreateUpdateCustomerWebhookWorker.perform_async(shop.id, params&.to_json)
+    head :no_content
+  rescue Exception => ex
+    NewRelic::Agent.notice_error(ex)
     head :no_content
   end
 
   def customer_payment_method_create
+    head :no_content
+  rescue Exception => ex
+    NewRelic::Agent.notice_error(ex)
     head :no_content
   end
 
@@ -137,16 +150,24 @@ class ShopifyWebhooksController < ApplicationController
       CreateContractWithPaymentMethodRemoteWorker.perform_async(shop_domain,data.to_json) if data.present?
     end
     head :no_content
+  rescue Exception => ex
+    NewRelic::Agent.notice_error(ex)
+    head :no_content
   end
 
   def customer_payment_method_revoke
     head :no_content
+  rescue Exception => ex
+    NewRelic::Agent.notice_error(ex)
+    head :no_content
   end
 
   def bulk_operation_finish
-    shop = Shop.find_by(shopify_domain: shop_domain)
     shop.connect
-    ShpoifyBulkOperation.new.parse_bulk_operation(shop.id, params[:admin_graphql_api_id]) if params[:status]=="completed"
+    BulkOperationFinishWebhookWorker.perform_async(shop.id, params[:admin_graphql_api_id]) if params[:status]=="completed"
+  rescue Exception => ex
+    NewRelic::Agent.notice_error(ex)
+    head :no_content
   end
 
   private
@@ -156,8 +177,8 @@ class ShopifyWebhooksController < ApplicationController
       return ids.value if ids
     end
     nil
-  rescue
-    nil
+  rescue => e
+    NewRelic::Agent.notice_error(e)
   end
 
   def create_site_log
@@ -172,6 +193,11 @@ class ShopifyWebhooksController < ApplicationController
   rescue => e
     message = "#{e.message} from #{e.backtrace.first}"
     SiteLog.create(log_type: SiteLog::TYPES[:email_failure], message: message, params: params)
+    NewRelic::Agent.notice_error(e)
+  end
+
+  def shop
+    shop = Shop.find_by(shopify_domain: shop_domain) rescue nil
   end
 
 end
