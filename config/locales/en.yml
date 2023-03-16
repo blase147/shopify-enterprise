@@ -6,6 +6,7 @@ en:
     Active: "Active"
     Subscription: "SUBSCRIPTION"
     Logout: "Logout"
+    cancel: "Cancel"
     Cancelled: "Cancelled"
     Rewards: "Rewards"
     Track Order: "Track Order"
