@@ -7,6 +7,12 @@ en:
   selection_not_complete: "Selection is not complete"
   go_to_payment: "Go to Payment"
   This_is_why_I_want_to_cancel: "This is why I want to cancel"
+  shipping_settings:
+    title: "Shipping Settings"
+    primary_shipping_address_label: "Primary Shipping Address"
+    second_shipping_address_label: "Second Shipping Address"
+    cancel_button: "Cancel"
+    save_button: "Save"
   personal_settings:
     title: "Personal Settings"
     first_name_label: "First Name"
