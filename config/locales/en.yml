@@ -7,6 +7,12 @@ en:
   selection_not_complete: "Selection is not complete"
   go_to_payment: "Go to Payment"
   This_is_why_I_want_to_cancel: "This is why I want to cancel"
+  password_settings:
+    title: "Password Settings"
+    password_label: "Password"
+    password_confirmation_label: "Password Confirmation"
+    cancel_button: "Cancel"
+    save_button: "Save"
   customer:
     My: "My"
     Active: "Active"
