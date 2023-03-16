@@ -15,7 +15,7 @@
                   .Polaris-Header-Title__TitleAndSubtitleWrapper
                     .Polaris-Header-Title
                       h1.Polaris-DisplayText.Polaris-DisplayText--sizeLarge
-                        span.Polaris-TextStyle--variationStrong Shipping Settings
+                        span.Polaris-TextStyle--variationStrong = t('shipping_settings.title')
         .Polaris-Page__Content
           .Polaris-Layout
             .Polaris-Layout__AnnotatedSection
@@ -27,11 +27,11 @@
                         = hidden_field_tag :id, @customer.shopify_id
                         .Polaris-FormLayout
                           .Polaris-FormLayout__Item
-                            = p_text_field name: 'address_1', label: 'Primary Shipping Address', value:  @customer.address_1
+                            = p_text_field name: 'address_1', label: t('shipping_settings.primary_shipping_address_label'), value: @customer.address_1
                           .Polaris-FormLayout__Item
-                            = p_text_field name: 'address_2', label: 'Second Shipping Address', value:  @customer.address_2
+                            = p_text_field name: 'address_2', label: t('shipping_settings.second_shipping_address_label'), value: @customer.address_2
                           .Polaris-FormLayout__Item
                             button.Polaris-Button.mr-10[type="button" aria-hidden="true" tabindex="-1" data-action='close']
-                              | Cancel
+                              | = t('shipping_settings.cancel_button')
 
-                            = p_button text: 'Save', type: 'submit'
+                            = p_button text: t('shipping_settings.save_button'), type: 'submit'
