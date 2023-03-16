@@ -20,8 +20,10 @@ module Chargezen
     config.hosts << /.+/
     config.action_dispatch.default_headers.clear
 
-    config.i18n.available_locales = [:en]
+    config.i18n.available_locales = [:en, :fr, :es, :da, :nl, :ko, :pt, :de, :fi, :id, :it, :ja, :no, :pt-BR, :sv, :tr ]
     config.i18n.default_locale = :en
+    config.i18n.fallbacks = true
+
 
     config.eager_load_paths += [
       config.root.join('app', 'services')
