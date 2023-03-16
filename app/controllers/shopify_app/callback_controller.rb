@@ -25,7 +25,7 @@ module ShopifyApp
         if jwt_request?
           head(:ok)
         else
-          redirect_to("/")
+          redirect_to "/select_plan/#{shop_name&.gsub(".myshopify.com", "")}"
         end
       end
   

@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_setting
 
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :set_locale
 
   def current_setting
     return @current_setting if @current_setting&.present?
@@ -60,6 +61,15 @@ class ApplicationController < ActionController::Base
     @current_shop&.connect
     return @current_shop
   end
+
+  def set_locale
+    shop = Shop.find_by_shopify_domain(params[:shop]) rescue nil
+    shop_locale = shop&.language || I18n.default_locale
+
+    # Set the I18n locale to the shop's preference
+    I18n.locale = shop_locale
+  end
+
 
   protected
 
