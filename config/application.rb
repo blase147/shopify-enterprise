@@ -19,6 +19,9 @@ module Chargezen
     # the framework and any gems in your application.
     config.hosts << /.+/
     config.action_dispatch.default_headers.clear
+    
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
 
     config.i18n.available_locales = [:en]
     config.i18n.default_locale = :en

@@ -171,9 +171,9 @@ class ShopifyWebhooksController < ApplicationController
   end
 
   private
-  def get_box_product_ids(line_items)(line_items)
-    line_items.each do |item|
-      ids = item.properties.find{|p| p.name == "_box_product_ids"}
+  def get_box_product_ids(line_items)
+    line_items&.each do |item|
+      ids = item&.properties&.find{|p| p&.name == "_box_product_ids"}
       return ids.value if ids
     end
     nil
@@ -198,6 +198,7 @@ class ShopifyWebhooksController < ApplicationController
 
   def shop
     shop = Shop.find_by(shopify_domain: shop_domain) rescue nil
+    shop.connect
   end
 
 end

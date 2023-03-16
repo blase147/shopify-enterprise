@@ -213,7 +213,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :select_plan, only: [:index, :create]
+  resources :select_plan, only: [:create]
+  get "/select_plan/:shopify_domain", to: "select_plan#index"
 
   resources :email_images, only: [] do
     collection do 
@@ -249,6 +250,7 @@ Rails.application.routes.draw do
   post "/set_admin_password", to: 'user_admin#set_admin_password'
   get "/authenticateAdmin", to: 'user_admin#authenticate_admin'
   
+  get "/current_language", to: "language#current_language"
   # Stripe Contracts
   get "/fetchStripeCustomers/:shopify_domain/", to: "stripe_contracts#fetch_stripe_customers"
   post "/stripeContractCheckout", to: "stripe_contracts#stripe_checkout"
