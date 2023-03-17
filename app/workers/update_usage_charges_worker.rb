@@ -1,7 +1,7 @@
 class UpdateUsageChargesWorker
     include Sidekiq::Worker  
     sidekiq_options :retry => 3, :dead => false
-    def perform_async
+    def perform
         Shop&.all&.each do |shop|
             shop.connect
             charge_id = shop.recurring_charge_id
