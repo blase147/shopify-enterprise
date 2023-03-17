@@ -100,7 +100,7 @@
                                           .Polaris-Stack
                                             .Polaris-Stack__Item.Polaris-Stack__Item--fill
                                               h2.Polaris-Heading
-                                                = "#{product.title} (#{subscription.lines.edges.first.node.quantity} pack)"
+                                                = "#{product.title} (#{subscription.lines.edges.first.node.quantity} #{t('subscription.pack')})"
                                             .Polaris-Stack__Item
                                               h2.Polaris-Heading= number_to_currency price
 
