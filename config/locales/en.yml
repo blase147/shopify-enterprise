@@ -1,6 +1,14 @@
 # Additional translations at https://github.com/heartcombo/devise/wiki/I18n
 
 en:
+  my_address: 'MY ADDRESS'
+  edit_address: 'Edit'
+  phone: 'PHONE'
+  company: 'COMPANY'
+  address: 'ADDRESS'
+  your_subscription_has_only_one_billing_cycle_option: "Your subscription has only one billing cycle option."
+  subscription_to: "Subscription to:"
+  upgrade: "Upgrade"
   payment_card: 'Payment Card'
   name_on_card: 'Name on card'
   card_number: 'Card Number'
