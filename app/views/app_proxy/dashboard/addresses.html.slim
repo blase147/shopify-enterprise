@@ -18,21 +18,21 @@
                         - if @translation&.address_tab_my_address.present?
                           span.Polaris-TextStyle--variationStrong #{@translation&.address_tab_my_address}
                         - else
-                          span.Polaris-TextStyle--variationStrong MY&nbsp;
-                          span.Polaris-TextStyle--variationStrong style="color: #000000" ADDRESS
+                          span.Polaris-TextStyle--variationStrong=t('.my_address')
+                          
         
           .customer-address-details
             .header
               h2.subscription-text = "#{@customer.first_name.present? ? @customer.first_name : '-'} #{@customer.last_name.present? ? @customer.last_name : '-'}"
-              button.edit type="button" data-toggle="modal" data-target="#editAddressModal" #{@translation&.address_tab_add_address.present? ? @translation&.address_tab_add_address : 'Edit'}
+              button.edit type="button" data-toggle="modal" data-target="#editAddressModal" #{@translation&.address_tab_add_address.present? ? @translation&.address_tab_add_address : t('.edit_address')}
             .item
-              h3.address-heading #{@translation&.address_tab_phone.present? ? @translation&.address_tab_phone : 'PHONE'}
+              h3.address-heading #{@translation&.address_tab_phone.present? ? @translation&.address_tab_phone : t('.phone')}
               p.address-text = @customer.phone.present? ? @customer.phone : '-'
             .item
-              h3.address-heading #{@translation&.address_tab_company.present? ? @translation&.address_tab_company : 'COMPANY'}
+              h3.address-heading #{@translation&.address_tab_company.present? ? @translation&.address_tab_company : t('.company')}
               p.address-text = @customer.company.present? ? @customer.company : '-'
             .item
-              h3.address-heading #{@translation&.address_tab_address.present? ? @translation&.address_tab_address : 'ADDRESS'}
+              h3.address-heading #{@translation&.address_tab_address.present? ? @translation&.address_tab_address : t('.address')}
               p.address-text = @customer.address_1.present? ? @customer.address_1 : '-'
 
 = render 'edit_address_modal'
