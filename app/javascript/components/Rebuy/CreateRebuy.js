@@ -37,9 +37,10 @@ import SearchProduct from '../plans/SearchProduct';
 import SearchPlan from '../upsell/SearchPlan';
 import LoadingScreen from '../LoadingScreen';
 import PixelIcon from '../../images/PixelIcon';
+import TimePicker from 'react-time-picker';
 
 const CreateRebuy = () => {
-    var id;
+    const { id } = useParams();
     var handleClose = () => {
     }
     const options = [...Array(99).keys()].map((foo) => (foo + 1).toString());
@@ -69,10 +70,11 @@ const CreateRebuy = () => {
         status: 'active',
         productImages: [],
         collectionImages: [],
+        notificationTime: ""
     };
 
     const [formErrors, setFormErrors] = useState([]);
-    const [campaignData, setCampaignData] = useState(null);
+    const [rebuyMenuData, setrebuyMenuData] = useState(null);
     const [checkboxDisabled, setcheckboxDisabled] = useState(true);
 
     const [saveSuccess, setSaveSuccess] = useState(false);
@@ -111,72 +113,47 @@ const CreateRebuy = () => {
         // ),
     });
 
-    const GET_UPSELL_CAMPAIGN = gql`
+    const GET_REBUY_MENU = gql`
     query ($id: ID!) {
-      fetchBuildABoxCampaignGroup(id: $id) {
-        id
-        internalName
-        location
-        buildABoxCampaign {
-          id
-          startDate
-          endDate
-          displayName
-          boxQuantityLimit
-          rebuyType
-          triggers {
-            name
-          }
-          sellingPlans {
-            sellingPlanId
-            sellingPlanName
-          }
-          collectionImages {
-            collectionId
-            collectionTitle
-            _destroy
-            products {
-              productId
-              image
-              _destroy
+        fetchRebuyMenu(id: $id) {
+            id        
+            intervalType
+            intervalCount
+            status
+            rebuyType
+            collectionImages {
+                collectionId
+                collectionTitle
+                _destroy
+                products {
+                  productId
+                  image
+                  _destroy
+                }
             }
-          }
-          productImages {
-            productId
-            image
-            _destroy
-          }
+            productImages {
+                productId
+                image
+                _destroy
+            }
         }
-      }
     }
   `;
     // const { id } = useParams();
 
-    const [getUpsell, { data, loading, error }] = useLazyQuery(
-        GET_UPSELL_CAMPAIGN,
+    const [getRebuMenu, { data, loading, error }] = useLazyQuery(
+        GET_REBUY_MENU,
         {
-            variables: { id: id },
+            variables: { id: +id },
             fetchPolicy: 'no-cache',
         }
     );
 
     useEffect(() => {
         if (id) {
-            getUpsell();
+            getRebuMenu();
         }
     }, []);
-
-    const UPDATE_BOX_CAMPAIGN = gql`
-    mutation ($input: UpdateBuildABoxCampaignGroupInput!) {
-      updateBoxCampaign(input: $input) {
-        campaign {
-          id
-          internalName
-        }
-      }
-    }
-  `;
-    const [updateBoxCampaign] = useMutation(UPDATE_BOX_CAMPAIGN);
 
     const CREATE_REBUY_MENU = gql`
     mutation ($input: AddRebuyMenuInput!) {
@@ -189,6 +166,7 @@ const CreateRebuy = () => {
   `;
 
     const history = useHistory();
+
     const [CreateRebuyGQL] = useMutation(CREATE_REBUY_MENU);
 
     const formRef = useRef(null);
@@ -271,50 +249,48 @@ const CreateRebuy = () => {
         );
     };
 
-    // useEffect(() => {
-    //   if (data && data?.fetchBuildABoxCampaignGroup) {
-    //     data.fetchBuildABoxCampaignGroup.buildABoxCampaign.triggers =
-    //       data.fetchBuildABoxCampaignGroup.buildABoxCampaign.triggers[0]?.name; //Manipulate later
-    //     data.fetchBuildABoxCampaignGroup.buildABoxCampaign.endDate =
-    //       data.fetchBuildABoxCampaignGroup.buildABoxCampaign.endDate || '';
-    //     data.fetchBuildABoxCampaignGroup.buildABoxCampaign.startDate =
-    //       data.fetchBuildABoxCampaignGroup.buildABoxCampaign.startDate || '';
-    //     setCampaignData(data.fetchBuildABoxCampaignGroup);
-    //     setSelectedProducts(
-    //       data.fetchBuildABoxCampaignGroup.buildABoxCampaign.productImages
-    //     );
-    //     setSelectedProductOptions(() => {
-    //       const defaultOption = [];
-    //       data.fetchBuildABoxCampaignGroup.buildABoxCampaign.productImages?.map(
-    //         (image) =>
-    //           image._destroy == false && defaultOption.push(image.productId)
-    //       );
-    //       return defaultOption;
-    //     });
-    //     setSelectedCollections(
-    //       data.fetchBuildABoxCampaignGroup.buildABoxCampaign.collectionImages
-    //     );
-    //     setSelectedCollectionOptions(() => {
-    //       const defaultOption = [];
-    //       data.fetchBuildABoxCampaignGroup.buildABoxCampaign.collectionImages?.map(
-    //         (image) =>
-    //           image._destroy == false && defaultOption.push(image.collectionId)
-    //       );
-    //       return defaultOption;
-    //     });
-    //     setAllSelectedPlans(
-    //       data.fetchBuildABoxCampaignGroup.sellingPlans
-    //     );
-    //   }
-    // }, [data]);
+    useEffect(() => {
+        if (data && data?.fetchRebuyMenu) {
+            let rebuyData = data.fetchRebuyMenu
+            delete rebuyData['__typename'];
+            setrebuyMenuData(rebuyData);
+            setSelectedProducts(
+                data.fetchRebuyMenu.productImages
+            );
+            setSelectedProductOptions(() => {
+                const defaultOption = [];
+                data.fetchRebuyMenu.productImages?.map(
+                    (image) =>
+                        image._destroy == false && defaultOption.push(image.productId)
+                );
+                return defaultOption;
+            });
+            setrebuyType(
+                data.fetchRebuyMenu.rebuyType
+            )
+            setSelectedCollections(
+                data.fetchRebuyMenu.collectionImages
+            );
+            setSelectedCollectionOptions(() => {
+                const defaultOption = [];
+                data.fetchRebuyMenu.collectionImages?.map(
+                    (image) =>
+                        image._destroy == false && defaultOption.push(image.collectionId)
+                );
+                return defaultOption;
+            });
+        }
+    }, [data]);
 
     const [rebuyType, setrebuyType] = useState("")
     const [freerebuyType, setFreerebuyType] = useState("")
-
+    const [time, setTime] = useState('10:00');
+    const [offNotification, setOffNotification] = useState(true);
+    console.log("offNotification");
     return (
         <Frame>
             <Page
-                title="Create Rebuy"
+                title={id ? "Update Rebuy" : "Create Rebuy"}
                 breadcrumbs={[
                     {
                         content: 'Rebuy',
@@ -325,63 +301,49 @@ const CreateRebuy = () => {
                 {loading && id && (
                     <LoadingScreen />
                 )}
-                {(campaignData || !id) && (
+                {(rebuyMenuData || !id) && (
                     <Formik
                         validationSchema={validationSchema}
-                        initialValues={campaignData || initialValues}
+                        initialValues={rebuyMenuData || initialValues}
                         innerRef={formRef}
                         onSubmit={(values, { setSubmitting }) => {
                             const formData = { ...values };
                             formData.collectionImages = selectedCollections;
                             formData.productImages = selectedProducts;
                             formData.rebuyType = rebuyType;
+                            if (offNotification) {
+                                formData.notificationTime = null;
+                            } else {
+                                formData.notificationTime = time;
+                            }
                             // Manipulate later
                             // formData.upsellCampaigns[0].productOffer = allProducts;
                             if (id) {
-                                updateBoxCampaign({
-                                    variables: {
-                                        input: { params: formData },
-                                    },
-                                })
-                                    .then((resp) => {
-                                        const data = resp.data;
-                                        const errors = data.errors;
-                                        if (errors) {
-                                            setFormErrors(errors);
-                                            setSubmitting(false);
-                                        } else {
-                                            // setSaveSuccess(true);
-                                            handleClose();
-                                        }
-                                    })
-                                    .catch((error) => {
-                                        setSubmitting(false);
-                                        setFormErrors(error);
-                                    });
-                            } else {
-                                //const variables = formatUpsellCampaignGroup(values);
-                                CreateRebuyGQL({
-                                    variables: { input: { params: formData } },
-                                })
-                                    .then((resp) => {
-                                        const data = resp.data;
-                                        const errors = data.errors;
-                                        if (errors) {
-                                            setFormErrors(errors);
-                                            setSubmitting(false);
-                                        } else {
-                                            setSaveSuccess(true);
-                                            handleClose();
-                                            setTimeout(() => {
-                                                location.reload();
-                                            }, 500)
-                                        }
-                                    })
-                                    .catch((error) => {
-                                        setSubmitting(false);
-                                        setFormErrors(error);
-                                    });
+                                formData.id = +id
                             }
+                            //const variables = formatUpsellCampaignGroup(values);
+                            CreateRebuyGQL({
+                                variables: { input: { params: formData } },
+                            })
+                                .then((resp) => {
+                                    const data = resp.data;
+                                    const errors = data.errors;
+                                    if (errors) {
+                                        setFormErrors(errors);
+                                        setSubmitting(false);
+                                    } else {
+                                        setSaveSuccess(true);
+                                        handleClose();
+                                        setTimeout(() => {
+                                            location.reload();
+                                        }, 500)
+                                    }
+                                })
+                                .catch((error) => {
+                                    setSubmitting(false);
+                                    setFormErrors(error);
+                                });
+
                         }}
                     >
                         {({
@@ -489,6 +451,30 @@ const CreateRebuy = () => {
                                                     />
                                                 </FormLayout.Group>
                                                 <FormLayout.Group>
+                                                    <Checkbox
+                                                        label="Turn Off notification"
+                                                        checked={
+                                                            offNotification
+                                                        }
+                                                        onChange={() => {
+                                                            setOffNotification(!offNotification)
+                                                        }}
+                                                    />
+                                                </FormLayout.Group>
+                                                <FormLayout.Group>
+                                                    {(offNotification === false) && (
+                                                        <div>
+                                                            <TextContainer>Select Notification Time</TextContainer>
+                                                            <TimePicker
+                                                                onChange={setTime}
+                                                                value={time}
+                                                                amPmAriaLabel="Select AM /PM"
+                                                            />
+                                                            <p>Selected Time: {time}</p>
+                                                        </div>
+                                                    )}
+                                                </FormLayout.Group>
+                                                <FormLayout.Group>
                                                     <Select
                                                         options={satusOptions}
                                                         label="Status"
@@ -513,6 +499,7 @@ const CreateRebuy = () => {
                                                     <Subheading>Choose Rebuy Offer Mode</Subheading>
                                                 </TextContainer>
                                                 <div className="limit-section">
+
                                                     <FormLayout.Group>
                                                         <Checkbox
                                                             label="Auto( 5 most popular variant ids)"
@@ -663,6 +650,11 @@ const CreateRebuy = () => {
                                                             </div>
                                                         )}
                                                 </div>
+                                            </FormLayout>
+                                            <FormLayout>
+                                                <FormLayout.Group>
+                                                    <Button onClick={handleSubmit}>Save</Button>
+                                                </FormLayout.Group>
                                             </FormLayout>
                                         </Card.Section>
                                     </Card>

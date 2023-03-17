@@ -6,6 +6,7 @@ module Types
       argument :interval_count, String, required: false
       argument :rebuy_type, String, required: false
       argument :status, String, required: false
+      argument :notification_time, String, required: false
       argument :product_images, [Types::Input::ProductInputType], required: false
       argument :collection_images, [Types::Input::CollectionInputType], required: false
     end

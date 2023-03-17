@@ -333,9 +333,11 @@ const Rebuy = ({ shopifyDomain }) => {
       return row?.id !== null ?
         [
           row.createdAt,
-          <div className='frequency'>
-            {`${row?.intervalCount} ${row.intervalType}`}
-          </div>,
+          <a onClick={() => history.push("/createRebuy/" + row?.id)}>
+            <div className='frequency'>
+              {`${row?.intervalCount} ${row.intervalType}`}
+            </div>
+          </a>,
           row.status,
           row.rebuyOffersGenerated,
           row.rebuyOffersConversion,
