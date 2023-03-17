@@ -111,7 +111,7 @@
                                                 = "#{billing_policy.interval_count} #{billing_policy.interval}".titleize
                                             .Polaris-Stack__Item
                                               p
-                                                b Delivery Date:&nbsp;
+                                                b= t('subscription.delivery_date')
                                                 =  DateTime.parse(subscription.next_billing_date).strftime("%a, %B %e")
 
                                           br/
