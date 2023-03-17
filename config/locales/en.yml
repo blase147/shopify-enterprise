@@ -1,6 +1,10 @@
 # Additional translations at https://github.com/heartcombo/devise/wiki/I18n
 
 en:
+  select_style_options: "Select Style Options"
+  build_your_box: "Build Your Box"
+  selection_not_complete: "Selection is not complete"
+  confirm_selection: "CONFIRM SELECTION"
   my_address: 'MY ADDRESS'
   edit_address: 'Edit'
   phone: 'PHONE'
