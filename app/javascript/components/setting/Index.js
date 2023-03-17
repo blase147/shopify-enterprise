@@ -60,6 +60,7 @@ import EmailEditor from 'react-email-editor';
 
 import "./settings.scss"
 import PlanBilling from '../PlanBilling';
+import SetLanguage from './SetLanguage';
 
 const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
   // form data ########################################################
@@ -457,7 +458,13 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
       title: 'Set Timezone',
       img: SettingImage,
       desc: 'Manage the timezone of the app.',
+    }, {
+      key: 'language',
+      title: 'Set Language',
+      img: SettingImage,
+      desc: 'Manage the language of the app.',
     },
+
     ...(accessSettings?.manage_staff ? [
       {
         key: 'manage_staff',
@@ -780,6 +787,18 @@ const Settings = ({ passwordProtected, setPasswordProtected, domain }) => {
                                 ) : selectedSetting === 'timezone' ? (
                                   <div className="TimeZone">
                                     <SetTimezone
+                                      values={values}
+                                      touched={touched}
+                                      errors={errors}
+                                      setFieldValue={setFieldValue}
+                                      handleSubmit={handleSubmit}
+                                      handleBack={handleBackSetting}
+                                      setUpdateSetting={setUpdateSetting}
+                                    />
+                                  </div>
+                                ) : selectedSetting === 'language' ? (
+                                  <div className="Language">
+                                    <SetLanguage
                                       values={values}
                                       touched={touched}
                                       errors={errors}

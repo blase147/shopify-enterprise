@@ -35,6 +35,17 @@ class SettingsController < AuthenticatedController
     end
   end
 
+  def change_language
+    if params[:language].present?
+      current_shop.update(language: params[:language])
+      render json:{status: :ok}
+    end
+  end
+  
+  def current_language
+    render json:{ language: current_shop.language }
+  end
+
   private
   def stripe_key_params
     params.permit(:stripe_api_key, :stripe_publish_key)

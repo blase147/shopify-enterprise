@@ -28,5 +28,9 @@ module Types
     def rebuy_offers_conversion
       object.rebuys.count
     end
+
+    def rebuy_type
+      RebuyMenu.rebuy_types[object.rebuy_type]
+    end
   end
 end

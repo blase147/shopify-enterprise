@@ -14,13 +14,15 @@ import { MangeIcon, SubscriptionIcon, ToolboxIcon } from './CustomIcon';
 import ChargeZenLogo from "./../../images/ChargeZenLogo.svg";
 import CircleChevronMinor from "./../../images/VectorIcon";
 import useRouter from '../useRouterHook';
-
+import { I18n } from 'i18n-js';
 
 const Nav = (props) => {
   const {
     navCollapse,
     setNavCollapse,
-    selected
+    selected,
+    locale,
+    translations
   } = props;
   const history = useHistory();
   const router = useRouter();
@@ -29,20 +31,29 @@ const Nav = (props) => {
   const [loyality, setLoyality] = useState(false);
   const [toogleMenu, setToogleMenu] = useState({ revenueChannels: false })
 
+
+  useEffect(() => {
+    I18n.locale = locale;
+
+  }, [locale, translations]);
+
   useEffect(() => {
     const accessSettings = JSON.parse(localStorage.getItem("accessSettings"))
     setNavigation(accessSettings)
     console.log("toogleMenu", toogleMenu);
   }, [window.location.href])
 
+  console.log("local", translations);
   const urlDomain = `/${props?.domain?.replace('.myshopify.com', '')}`;
+
+  const i18n = new I18n(JSON.parse(translations));
 
   const setNavigation = (accessTabs) => {
     let navigation = [];
     if (accessTabs?.dashboard_access) {
       navigation.push({
         url: "",
-        label: 'RevenueOS',
+        label: i18n.t('reveueos'),
         disabled: true,
         selected: true,
         subNavigationItems: [

@@ -146,13 +146,25 @@ export default function App(props) {
       return <Link to={url} {...rest} />
     }
 
+    const withLocalization = (Component) => {
+      return (props) => {
+        return (
+          <Component
+            {...props}
+            locale={props?.locale}
+            translations={props?.translations}
+          />
+        );
+      };
+    };
+
     return (
       <BrowserRouter basename={`/${domain?.replace('.myshopify.com', '')}`} >
         <DomainContext.Provider value={{ domain }} >
           <AppProvider i18n={enTranslations} theme={{}} linkComponent={AdapterLink}>
             <ApolloProvider client={client}>
               <Switch>
-                <AppLayout typePage="createCustomer" tabIndex="2" domain={props?.domain}>
+                <AppLayout typePage="createCustomer" tabIndex="2" domain={props?.domain} locale={props?.locale} translations={props?.translations}>
                   <Route exact path="/SubscriptionProducts" component={SubscriptionProducts} />
                   <Route exact path="/CreateSubscriptionProduct" component={CreateSubscriptionProduct} />
                   <Route exact path="/memberships" component={Memberships} />
@@ -162,6 +174,7 @@ export default function App(props) {
                   <Route exact path="/createPreorder" component={CreatePreorder} />
                   <Route exact path="/tryBeforeYouBuy" component={TryBeforeYouBuy} />
                   <Route exact path="/createRebuy" component={CreateRebuy} />
+                  <Route exact path="/createRebuy/:id" component={CreateRebuy} />
                   <Route exact path="/rebuy" component={Rebuy} />
                   <Route exact path="/bundles" component={BundleMenus} />
                   <Route exact path="/createBundleMenu" component={CreateBundleMenu} />

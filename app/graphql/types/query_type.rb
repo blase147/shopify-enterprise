@@ -13,6 +13,7 @@
     field :fetch_stripe_contracts, resolver: Queries::FetchStripeContracts
     field :fetch_bundles, resolver: Queries::FetchBundles 
     field :fetch_rebuys, resolver: Queries::FetchRebuys
+    field :fetch_rebuy_menu, resolver: Queries::FetchRebuyMenu
     field :fetch_rebuy_menus, resolver: Queries::FetchRebuyMenus
     field :fetch_memberships, resolver: Queries::FetchMemberships
     field :fetch_subscription_products, resolver: Queries::FetchSubscriptionProducts

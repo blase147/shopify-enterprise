@@ -210,6 +210,8 @@ Rails.application.routes.draw do
       post :delivery_options
       get  :delivery_options, to: 'settings#get_delivery_option'
       post :update_timezone
+      post :change_language
+      get :current_language
     end
   end
 

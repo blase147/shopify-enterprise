@@ -6,8 +6,12 @@ module Mutations
     def resolve(params:)
       rebuy_menu_params = Hash params
       begin
-        rebuy_menu = current_shop.rebuy_menus.create!(rebuy_menu_params)
-
+        if rebuy_menu_params[:id].present?
+          rebuy_menu = current_shop.rebuy_menus.find(rebuy_menu_params[:id])
+          rebuy_menu.update(rebuy_menu_params)
+        else
+          rebuy_menu = current_shop.rebuy_menus.create!(rebuy_menu_params)
+        end
         CreateRebuyForAllCustomersWorker.perform_async(current_shop.id, rebuy_menu.id)
         
         { rebuy_menu: rebuy_menu }

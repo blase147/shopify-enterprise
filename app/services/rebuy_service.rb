@@ -44,6 +44,7 @@ class RebuyService
         shop = Shop.find(@shop_id)   
         shop.connect
         rebuy_menu = RebuyMenu.find(rebuy_menu_id)
+        customers_for_notification=[]
         shop.customer_modals&.each do |customer|
             customer_rebuys = customer.rebuys
             unless customer_rebuys.where(status: "open").count > 0
@@ -78,9 +79,17 @@ class RebuyService
                         customer_modal_id: customer.id,
                         rebuy_menu_id: rebuy_menu.id
                     )
-                    # sent = send_email_and_sms(customer.id, token) rescue nil
+                    customers_for_notification << {customer_id: customer.id, token: token}
                 end
             end
+        end
+
+        #Send Email Notifications
+        if rebuy_menu.notification_time.present?
+            current_time = Time.current.to_time.in_time_zone('Eastern Time (US & Canada)').change(offset: 0)
+            time_to_send = rebuy_menu.notification_time.to_time.change(offset: 0)
+            time_to_run = (time_to_send > current_time) ? (time_to_send -  current_time) : ((time_to_send + 1.days) - current_time )
+            SendRebuyEmailNotificationsWorker.perform_in(time_to_run.to_i.seconds, @shop_id, customers_for_notification.to_json)
         end
     end
 
@@ -122,16 +131,16 @@ class RebuyService
     end
 
     def send_email_and_sms(customer_id, token)
+        shop = Shop.find(@shop_id)
         url = "https://#{shop&.shopify_domain}/a/chargezen/rebuy/#{token}"
         customer = CustomerModal.find(customer_id)
-        shop = Shop.find(@shop_id)
         message_service = SmsService::MessageGenerateService.new(shop, customer)
         phone = customer.phone
         if phone.present?
             message = message_service.content("Rebuy",nil,url)
             sent = TwilioServices::SendSms.call(from: shop.phone, to: phone, message: message) rescue nil
         end
-        sent = SendEmailService.new.send_rebuy_email(customer, auth_token, current_shop.id)
+        sent = SendEmailService.new.send_rebuy_email(customer, token, shop.id)
     end
 
     def update_customer_order(order_id)
