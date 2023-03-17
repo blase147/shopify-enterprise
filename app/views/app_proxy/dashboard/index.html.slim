@@ -7,9 +7,9 @@
   - if @subscription_contracts.empty?
     div.content-wrapper
       div
-        p.Polaris-DisplayText.Polaris-DisplayText--sizeMedium YOUR SUBSCRIPTION
+        p.Polaris-DisplayText.Polaris-DisplayText--sizeMedium= t('your_subscription')
       div.notification-banner
-        p.Polaris-Heading #{@translation&.home_tab_no_subscriptions_found.present? ? @translation&.home_tab_no_subscriptions_found : 'No subscription have been found for your account'}
+        p.Polaris-Heading #{@translation&.home_tab_no_subscriptions_found.present? ? @translation&.home_tab_no_subscriptions_found : t('no_subscriptions_found')}
   - else
     div.content-wrapper
       - if !params[:status].present? || (params[:status].present? && params[:status] == 'active')
@@ -18,9 +18,9 @@
             - if @translation&.home_tab_active_subscriptions.present?
               span #{@translation&.home_tab_active_subscriptions}
             - else
-              span MY
+              span= t('my')
               span.active ACTIVE
-              span #{@subscription_contracts.count > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION'}
+              span #{@subscription_contracts.count > 1 ? t('subscriptions') : t('subscription')}
           - if get_auth_token(@customer&.email)&.present? && params[:token].present? 
             a href="/a/chargezen/password_less_login/log_out?email=#{@customer&.email}" data-method="delete"
               | Log Out
@@ -37,16 +37,16 @@
             - if @translation&.cancelled_tab_cancelled_subscriptions.present?
               span #{@translation&.cancelled_tab_cancelled_subscriptions}
             - else
-              span MY
+              span= t('my')
               span.canceled CANCELLED
-              span #{(@cancelled_subscriptions&.count + @cancelled_line_items&.count rescue 0) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION'}
+              span #{(@cancelled_subscriptions&.count + @cancelled_line_items&.count rescue 0) > 1 ? t('subscriptions') : t('subscription')}
         = render partial: 'cancelled_subscriptions'
       - if !params[:status].present? || (params[:status].present? && params[:status] == 'paused')
         div.display-text.cancel-text
           p
-            span MY
-            span.canceled PAUSED
-            span #{(@paused_subscriptions&.count) > 1 ? 'SUBSCRIPTIONS' : 'SUBSCRIPTION' rescue 'SUBSCRIPTION'} 
+            span= t('my') 
+            span.canceled= t('paused') 
+            span #{(@paused_subscriptions&.count) > 1 ? t('subscriptions') : t('subscription') rescue t('subscription')} 
         = render partial: 'paused_subscriptions'
 javascript:
   $('.owl-carousel').owlCarousel(
