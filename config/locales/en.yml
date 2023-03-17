@@ -1,12 +1,37 @@
 # Additional translations at https://github.com/heartcombo/devise/wiki/I18n
 
 en:
+  add_address_popup_first_name: "FIRST NAME"
+  add_address_popup_last_name: "LAST NAME"
+  add_address_popup_address1: "ADDRESS 1"
+  add_address_popup_address2: "ADDRESS 2"
+  add_address_popup_company: "COMPANY"
+  add_address_popup_city: "CITY"
+  add_address_popup_country: "COUNTRY"
+  add_address_popup_zip: "ZIP/POSTAL CODE"
+  add_address_popup_state: "STATE/PROVINCE"
+  add_address_popup_phone: "PHONE"
+  add_address_popup_cancel: "Cancel"
+  add_address_popup_update: "Update"
+  product_subtitle: "Original Citrus"
+  add_to_cart: "Add"
+  product_title: "Body Wash"
+  product_subtitle: "Original Citrus"
   select_style_options: "Select Style Options"
   build_your_box: "Build Your Box"
   select_number: "Select %{number}"
   selection_not_complete: "Selection is not complete"
   go_to_payment: "Go to Payment"
   This_is_why_I_want_to_cancel: "This is why I want to cancel"
+  hair:
+    title: "Hair"
+    body_wash: "Body Wash"
+    original_citrus: "Original Citrus"
+    reviews_count:
+      one: "1 review"
+      other: "%{count} reviews"
+  best_sellers:
+    title: "Best Sellers"
   curvo_bundle: "Curvo Bundle"
   add: "Add"
   size: "Size"
