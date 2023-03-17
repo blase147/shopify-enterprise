@@ -15,7 +15,7 @@
           - if @setting.customer_allowed?('reactive_subscription')
             .grid-item
               = link_to action_subscription_contract_path(:resume, subscription.id, "stripe_subscription=true&token=#{params[:token]}"), class: 'btn_inside reactivate_btn', method: :post, remote: true do
-                button.btn-yellow.action-btn.modal_btn type='button' = t('.reactivate')
+                button.btn-yellow.action-btn.modal_btn type='button' = t('reactivate')
         .quantity-wrapper
           form
             .quantity-field
@@ -27,11 +27,11 @@
                     path d=("M7.5 12L14.5 19L21.5 12") stroke="#000000" stroke-width="2" /
         .slide-down
           .item
-            p #{@translation&.cancelled_tab_start_date.present? ? @translation&.cancelled_tab_start_date : t('.start_date')}
+            p #{@translation&.cancelled_tab_start_date.present? ? @translation&.cancelled_tab_start_date : t('start_date')}
             p
               = subscription.created_at.strftime("%a, %B %e")
           .item
-            p #{@translation&.cancelled_tab_quantity.present? ? @translation&.cancelled_tab_quantity : t('.quantity')}
+            p #{@translation&.cancelled_tab_quantity.present? ? @translation&.cancelled_tab_quantity : t('quantity')}
             p
               = subscription.import_data['quantity']
       - else
@@ -69,11 +69,11 @@
                       path d=("M7.5 12L14.5 19L21.5 12") stroke="#000000" stroke-width="2" /
           .slide-down
             .item
-              p #{@translation&.cancelled_tab_start_date.present? ? @translation&.cancelled_tab_start_date : t('.start_date')}
+              p #{@translation&.cancelled_tab_start_date.present? ? @translation&.cancelled_tab_start_date : t('start_date')}
               p
                 = DateTime.parse(subscription.node.created_at).strftime("%a, %B %e")
             .item
-              p #{@translation&.cancelled_tab_quantity.present? ? @translation&.cancelled_tab_quantity : t('.quantity')}
+              p #{@translation&.cancelled_tab_quantity.present? ? @translation&.cancelled_tab_quantity : t('quantity')}
               p
                 = edge.node.quantity
 - elsif (params[:status].present? && params[:status] == 'paused')
