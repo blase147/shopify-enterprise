@@ -1,6 +1,39 @@
 # Additional translations at https://github.com/heartcombo/devise/wiki/I18n
 
 en:
+  payment_card: 'Payment Card'
+  name_on_card: 'Name on card'
+  card_number: 'Card Number'
+  exp_month: 'Exp. Month'
+  exp_year: 'Exp. Year'
+  cvv: 'CVV'
+  billing_address: 'Billing Address'
+  first_name: 'First Name'
+  last_name: 'Last Name'
+  address: 'Address'
+  city: 'City'
+  country: 'Country'
+  state: 'State'
+  zip: 'Zip'
+  update_card: 'Update Card'
+  swap_subscription_title: "Swap"
+  swap_subscription_to: "Subscription to:"
+  swap_subscription_button: "SWAP SUBSCRIPTION"
+  no_other_subscription_products_available: "No other subscription products available"
+  reactivate: 'RE-ACTIVATE'
+  start_date: 'start date'
+  quantity: 'quantity'
+  edit_subscription: 'Edit Subscription'
+  est_next_delivery: 'est. next delivery'
+  next_card_charge: 'NEXt card charge'
+  upgrade_subscription: 'UPGRADE SUBSCRIPTION'
+  pause_subscription: 'Pause Subscription'
+  swap_subscription: 'SWAP SUBSCRIPTION'
+  cancel_subscription: 'CANCEL SUBSCRIPTION'
+  cancel_later: 'Cancel Later'
+  cancel_at_selected_date: 'Cancel At The Selected Date'
+  pause_later: 'Pause Later'
+  pause_at_selected_date: 'Pause At The Selected Date'
   add_address_popup_first_name: "FIRST NAME"
   add_address_popup_last_name: "LAST NAME"
   add_address_popup_address1: "ADDRESS 1"
@@ -23,6 +56,14 @@ en:
   selection_not_complete: "Selection is not complete"
   go_to_payment: "Go to Payment"
   This_is_why_I_want_to_cancel: "This is why I want to cancel"
+  your_view_name:
+    edit_subscription: 'Edit Subscription'
+    est_next_delivery: 'est. next delivery'
+    next_card_charge: 'NEXt card charge'
+    upgrade_subscription: 'UPGRADE SUBSCRIPTION'
+    pause_subscription: 'Pause Subscription'
+    swap_subscription: 'SWAP SUBSCRIPTION'
+    cancel_subscription: 'CANCEL SUBSCRIPTION'
   hair:
     title: "Hair"
     body_wash: "Body Wash"
