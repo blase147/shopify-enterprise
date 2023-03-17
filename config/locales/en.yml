@@ -7,6 +7,40 @@ en:
   selection_not_complete: "Selection is not complete"
   go_to_payment: "Go to Payment"
   This_is_why_I_want_to_cancel: "This is why I want to cancel"
+  curvo_bundle: "Curvo Bundle"
+  add: "Add"
+  size: "Size"
+  please_select_size: "Please select a size."
+  please_select_color: "Please select a color."
+   build_your_own_bundle:
+    heading: "Build Your Own Bundle"
+    subheading: "Create your custom kit and stack free goods as you build your perfect bathroom."
+  one_time:
+    heading: "ONE TIME"
+  subscribe_and_save:
+    heading: "SUBSCRIBE & SAVE"
+    description: "SUBSCRIBE & SAVE 15% ON EVERY ORDER. SHIPS EVERY 45 DAYS, RESCHEDULE ANY TIME."
+  spend:
+    label: "SPEND"
+  unlock:
+    label: "UNLOCK"
+  free_shipping:
+    label: "FREE SHIPPING"
+  free_product:
+    label: "FREE PRODUCT"
+  free_dopp_kit:
+    label: "FREE DOPP KIT"
+  checkout:
+    label: "Checkout"
+  bundle_menu:
+    one_time: "ONE TIME"
+    subscribe_save: "SUBSCRIBE & SAVE"
+  checkout_section:
+    first_shipment: "First Shipment"
+    second_shipment: "Second Shipment"
+    third_shipment: "Third shipment"
+    fourth_shipment: "Fourth shipment"
+    checkout: "Checkout:"
   shipping_settings:
     title: "Shipping Settings"
     primary_shipping_address_label: "Primary Shipping Address"
