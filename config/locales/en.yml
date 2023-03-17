@@ -1,6 +1,30 @@
 # Additional translations at https://github.com/heartcombo/devise/wiki/I18n
 
 en:
+  settings:
+    my_account_details: "MY ACCOUNT DETAILS"
+    no_subscriptions_found: "No subscription have been found for your account"
+    first_name: "FIRST NAME"
+    last_name: "LAST NAME"
+    email: "EMAIL"
+    save: "SAVE"
+  billing_information:
+    my: 'MY'
+    billing: 'BILLING'
+    information: 'INFORMATION'
+    card_on_file: 'CARD ON FILE'
+    expires: 'Expires'
+    update_card: 'UPDATE CARD'
+    login_shopify_account: 'Login to your Shoppay account to edit card ending with'
+    edit: 'Edit'
+    phone: 'PHONE'
+    company: 'COMPANY'
+    address: 'ADDRESS'
+  order_history:
+    title: "Order History"
+  delivery_info:
+    line1: "Orders are typically delivered within 5-7 business days. In some cases deliveries may take longer due to extra safety precautions in our fulfillment center and carrier transportation delays."
+    line2: "If you need your subscription delivered by a specific date, we suggest adjusting your processing date accordingly."
   your_subscription: "YOUR SUBSCRIPTION"
   no_subscriptions_found: "No subscription have been found for your account"
   my: "MY"
