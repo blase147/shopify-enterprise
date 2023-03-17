@@ -51,7 +51,7 @@
             p = product.title
       .img-place-section
         .top-section
-          h4 = @box_campaign.display_name || "Build Your Box"
+          h4 = @box_campaign.display_name || t('build_your_box')
         .bottom-section
           .add-img-sec
             - if @selected_products.present?
@@ -78,8 +78,8 @@
                     .cros-plus.close-img
                       p x
                   p Select #{index+1}
-          p.error_message.hidden Selection is not complete
-          button.confirm_selection data-subscriptionId="#{@subscription_id}" CONFIRM SELECTION
+          p.error_message.hidden = t('selection_not_complete')
+          button.confirm_selection data-subscriptionId="#{@subscription_id}" = t('confirm_selection')
         span.box_limit.hidden = @box_campaign.box_quantity_limit
 
 - else
