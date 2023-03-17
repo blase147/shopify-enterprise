@@ -10,14 +10,14 @@
               div
                 h2
                   - if !selling_plan_group.present? || !(selling_plan_group&.selling_plans&.count > 1)
-                    span Your subscription has only one billing cycle option.
+                    span = t('your_subscription_has_only_one_billing_cycle_option')
                   - elsif @translation&.upgrade_subscription_popup_swap_subscription_to.present?
                     span #{@translation&.upgrade_subscription_popup_swap_subscription_to.gsub('{Product}', line_item.title)}
                   - else
-                    span Upgrade&nbsp;
+                    span = t('upgrade')
                     span.blue
                       = line_item.title
-                    span &nbspSubscription to:
+                    span = t('subscription_to')
               div.close aria-hidden="true" tabindex="-1" data-action='close' data-dismiss="modal"
                 svg fill="none" height="20" viewbox=("0 0 18 20") width="18" xmlns="http://www.w3.org/2000/svg"
                   path d=("M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z") fill="#DDDDDD" /

@@ -7,7 +7,7 @@
           .Polaris-Modal__Body.Polaris-Scrollable.Polaris-Scrollable--vertical.update-payment-card-modal data-polaris-scrollable="true"
             .header
               div
-                h2 Payment Card
+                h2= t('payment_card')
               div.close#close_update_modal aria-hidden="true" tabindex="-1" data-action='close' data-dismiss="modal"
                 svg fill="none" height="20" viewbox=("0 0 18 20") width="18" xmlns="http://www.w3.org/2000/svg"
                   path d=("M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z") fill="#DDDDDD" /
@@ -16,71 +16,71 @@
                 input name="payment_method_id" type="hidden" value="#{payment_method&.id}"
                 .field style = "display: block !important;"
                   div.heading_label
-                    label #{@translation&.update_payment_popup_card_name.present? ? @translation&.update_payment_popup_card_name : 'Name on card'}
+                    label #{@translation&.update_payment_popup_card_name.present? ? @translation&.update_payment_popup_card_name : t('name_on_card')}
                     span.red *
                   input name='name' type="text" placeholder="Name" required="required"/
                 .field style = "display: block !important;"
                   div.heading_label
-                    label #{@translation&.update_payment_popup_card_number.present? ? @translation&.update_payment_popup_card_number : 'Card Number'}
+                    label #{@translation&.update_payment_popup_card_number.present? ? @translation&.update_payment_popup_card_number : t('card_number')}
                     span.red *
                   input id="cc" name='card_number' maxlength="19" type="text" placeholder="1234 1234 1234 1234" required="required"/
                 .group
                   .field style = "display: block !important;"
                     div.heading_label
-                      label #{@translation&.update_payment_popup_exp_month.present? ? @translation&.update_payment_popup_exp_month : 'Exp. Month'}
+                      label #{@translation&.update_payment_popup_exp_month.present? ? @translation&.update_payment_popup_exp_month : t('exp_month')}
                       span.red *
                     input name='exp_month' maxlength="2" type="text" required="required"/
                   .field style = "display: block !important;"
                     div.heading_label
-                      label #{@translation&.update_payment_popup_exp_date.present? ? @translation&.update_payment_popup_exp_date : 'Exp. Year'}
+                      label #{@translation&.update_payment_popup_exp_date.present? ? @translation&.update_payment_popup_exp_date : t('exp_year')}
                       span.red *
                     input name='exp_year' maxlength="4" type="text" placeholder="" required="required"/
                 .field style = "display: block !important;"
                   div.heading_label
-                    label #{@translation&.update_payment_popup_cvv.present? ? @translation&.update_payment_popup_cvv : 'CVV'}
+                    label #{@translation&.update_payment_popup_cvv.present? ? @translation&.update_payment_popup_cvv : t('cvv')}
                     span.red *
                   input name='verification_value' maxlength="3" type="text" required="required"/
-                h3.billing_address_label Billing Address
+                h3.billing_address_label= t('billing_address')
                 .group
                   .field style = "display: block !important;"
                     div.heading_label
-                      label First Name
+                      label= t('first_name')
                       span.red *
                     input name='address_first_name' value="#{@customer.first_name}" type="text" required="required"/
                   .field style = "display: block !important;"
                     div.heading_label
-                      label Last Name
+                      label= t('last_name')
                       span.red *
                     input name='address_last_name' value="#{@customer.last_name}" type="text" required="required"/
                 .field style = "display: block !important;"
                   div.heading_label
-                    label Address
+                    label= t('address')
                     span.red *
                   input name='address'  value="#{billing_address&.address1}" type="text" required="required"/
                 .group
                   .field style = "display: block !important;"
                     div.heading_label
-                      label City
+                      label= t('city')
                       span.red *
                     input name='address_city' value="#{billing_address&.city}" type="text" required="required"/
                   .field style = "display: block !important;"
                     div.heading_label
-                      label Country
+                      label= t('country')
                       span.red *
                     input name='address_country' value="#{billing_address&.country}" type="text" required="required"/
                 .group
                   .field style = "display: block !important;"
                     div.heading_label
-                      label State
+                      label= t('state')
                       span.red *
                     input name='address_state' value="#{billing_address&.province}" type="text" required="required"/
                   .field style = "display: block !important;"
                     div.heading_label
-                      label Zip
+                      label= t('zip')
                       span.red *
                     input name='address_zip' value="#{billing_address&.zip}" type="text" required="required"/
                 .btn-wrapper
-                  button#update_card_details.update-card.btn-yellow type="button" #{@translation&.update_payment_popup_update_card.present? ? @translation&.update_payment_popup_update_card : 'Update Card'}
+                  button#update_card_details.update-card.btn-yellow type="button" #{@translation&.update_payment_popup_update_card.present? ? @translation&.update_payment_popup_update_card : t('update_card')}
 
 
   .Polaris-Backdrop

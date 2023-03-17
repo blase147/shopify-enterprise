@@ -54,7 +54,7 @@
                   button.btn-yellow.action-btn.modal_btn.reactive_btn type='button' data-show="showOnReactivate_#{subscription.node.id[/\d+/]}" #{t("customer.RE-ACTIVATE")}
                 div.with_show_reactvate
                   div class="showOnReactivate_#{subscription.node.id[/\d+/]} hide"
-                    label class="choose_billing_date_label" for="resume_cancel_date" #{t("customer.Choose Date to resume billing your card on file")}
+                    label class="choose_billing_date_label" for="resume_cancel_date" #{t("customer.Choose_Date_to_resume_billing")}
                     input type ="date" class="billing_date_resume#{subscription.node.id[/\d+/]}" id="resume_cancel_date" class="resume_subscription" min="#{(Date.today + 1.day)&.strftime("%Y-%m-%d")}"
                     button type='button' class="submit_reactive_btn" data-subscription="#{subscription.node.id[/\d+/]}" #{t("customer.Confirm")}
                     div.error_resume_message style="color: red;"
@@ -116,7 +116,7 @@
               = line_item.quantity
 - elsif ((params[:status].present? && params[:status] == 'cancelled'))
   div.notification-banner
-    p.Polaris-Heading #{t('customer.No cancelled subscription have been found for your account')}
+    p.Polaris-Heading #{t('customer.No_cancelled_subscription_found')}
 
 javascript: 
   $(".reactive_btn").on("click",function(){
@@ -136,7 +136,7 @@ javascript:
           }else{
             Swal.fire({
               icon: 'success',
-              title: "Success! Reloading Page",
+              title: "#{t('customer.Success_reloading_page')}",
               showConfirmButton: false
             })
             location.reload();

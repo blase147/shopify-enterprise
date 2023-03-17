@@ -10,10 +10,10 @@
                   - if @translation&.swap_subscription_popup_swap_subscription_to.present?
                     span #{@translation&.swap_subscription_popup_swap_subscription_to.gsub('{Product}', line_item.title)}
                   - else
-                    span Swap&nbsp;
+                    span= t('swap_subscription_title')
                     span.blue
                       = line_item.title
-                    span &nbsp;Subscription to:
+                    span= t('swap_subscription_to')
               div.close aria-hidden="true" tabindex="-1" data-action='close' data-dismiss="modal"
                 svg fill="none" height="20" viewbox=("0 0 18 20") width="18" xmlns="http://www.w3.org/2000/svg"
                   path d=("M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z") fill="#DDDDDD" /
@@ -47,9 +47,9 @@
                                   input name="variant_id#{index}_#{i}" type="hidden" value="#{variant.node.id}" id="input-#{index}"
                               .btn-wrapper
                                 button type="button" class="submit_swap_form" data-index="#{index}" data-productindex="#{i}" data-contract="-#{subscription.id[/\d+/]}"
-                                  | #{@translation&.swap_subscription_popup_swap_subscription_button.present? ? @translation&.swap_subscription_popup_swap_subscription_button : 'SWAP SUBSCRIPTION'}
+                                  | #{@translation&.swap_subscription_popup_swap_subscription_button.present? ? @translation&.swap_subscription_popup_swap_subscription_button : t('swap_subscription_button')}
             - else
-              p.Polaris-Heading No other subscription products available
+              p.Polaris-Heading= t('no_other_subscription_products_available')e
 
 
   .Polaris-Backdrop

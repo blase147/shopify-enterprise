@@ -72,7 +72,7 @@
                                 <div class="remaining_box"></div>
                               </div>
                               <select class="change_meal_plan hide">
-                                <option class="change_meal_option"><%= t("customer.Change") %></option>
+                                <option class="change_meal_option"><%= t("customer.change") %></option>
                               </select>
                            </div>
                            <div class="product_number_out">
@@ -80,11 +80,11 @@
                                 <span class="selected_meals_number"><%= "#{selected_products&.count&.to_i}" %></span>
                                 <span class="total_meals"><%= "/#{total_meals}" %></span>
                               </span>
-                              <cart-remove-all class="clear_all_meals"><%= t("customer.Clear all") %></cart-remove-all>
+                              <cart-remove-all class="clear_all_meals"><%= t("customer.clear_all") %></cart-remove-all>
                            </div>
                            <div class="footer_icon"> + </div>
                         </div>
-                        <div class="meals_full_mssg hide"><%= t("customer.you cannot add more items") %></div>
+                        <div class="meals_full_mssg hide"><%= t("customer.cannot_add_more_items") %></div>
                      </div>
                   </div>
                   <div class="side">
@@ -117,7 +117,7 @@
             </div>
          </div>
          <div class="">
-            <button type="button" class="button button--primary button--full-width confirm-current-week-sub-btn disabled_button" onclick="submitAddMeals(event)" disabled="disabled"><%= t("customer.Confirm Meals")%></button>
+            <button type="button" class="button button--primary button--full-width confirm-current-week-sub-btn disabled_button" onclick="submitAddMeals(event)" disabled="disabled"><%= t("customer.confirm_meals")%></button>
          </div>
       </div>
    </div>

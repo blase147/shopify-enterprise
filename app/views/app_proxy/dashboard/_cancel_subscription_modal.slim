@@ -17,7 +17,7 @@
               div.close aria-hidden="true" tabindex="-1" data-action='close' data-dismiss="modal"
                 svg fill="none" height="20" viewbox=("0 0 18 20") width="18" xmlns="http://www.w3.org/2000/svg"
                   path d=("M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z") fill="#DDDDDD" /
-            h3 #{t("This is why I want to cancel")}
+            h3 #{t("This_is_why_I_want_to_cancel")}
             = form_tag action_subscription_contract_path(:remove_line, subscription.id[/\d+/], "line_id=#{line_item.id}&line_name=#{line_item.title}&lines_count=#{lines_count}&quantity=#{line_item.quantity}&variant_id=#{line_item.variant_id}"), method: :post, :id => "form-#{line_item.id}", remote: true do
                 .variants-wrapper
                   - @customer.shop.setting.reasons_cancels.each_with_index do |reason, index|
@@ -32,9 +32,9 @@
                       br
                 .btn-wrapper
                   button.btn-cancel type="submit"
-                    span.cancel-text #{t("customer.Cancel Anyway").upcase}
+                    span.cancel-text #{t("customer.Cancel_Anyway").upcase}
                     span
-                    button.btn-keep type="button" aria-hidden="true" tabindex="-1" data-action='close' #{t('customer.Keep Subscription').upcase}
+                    button.btn-keep type="button" aria-hidden="true" tabindex="-1" data-action='close' #{t('customer.Keep_Subscription').upcase}
                     svg fill="none" height="12" viewbox=("0 0 20 12") width="20" xmlns="http://www.w3.org/2000/svg"
                       path d=("M14.5148 0.514648L13.6239 1.40555L17.5882 5.36991H0V6.62985H17.5882L13.6239 10.5942L14.5148 11.4851L20 5.99984L14.5148 0.514648Z") fill="white" /
 

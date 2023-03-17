@@ -3,25 +3,23 @@
     <div class="wrapper">
       <div class="container">
         <div class="content-box">
-          <h3 class="heading">Build Your Own Bundle</h3>
-          <span class="bundle-desc-s">
-          Create your custom kit and stack free goods as you build your perfect bathroom.</span>
-        </div>
+          <h3 class="heading"><%= t('build_your_own_bundle.heading') %></h3>
+          <span class="bundle-desc-s"><%= t('build_your_own_bundle.subheading') %></span>
       </div>
       <div class="container-s">
         <div class="content-box-s">
-          <h3 class="heading-s">ONE TIME</h3>
+          <h3 class="heading-s"><%= t('one_time.heading') %></h3>
           <div class="btn-s">
             <label class="switch-button-s">
             <input type="checkbox" class="slide_round"> 
             <span class="slider round"></span> 
             </label>
           </div>
-          <h3 class="heading-s">SUBSCRIBE &amp; SAVE</h3>
+          <h3 class="heading-s"><%= t('subscribe_and_save.heading') %></h3>
         </div>
         <div class="bundle-sub">
           <h3 class="subscribe-sec">
-            SUBSCRIBE &amp; SAVE 15% ON EVERY ORDER. SHIPS EVERY 45 DAYS, RESCHEDULE ANY TIME.
+            <%= t('subscribe_and_save.description') %>
           </h3>
         </div>
       </div>
@@ -40,28 +38,28 @@
               <div class="progress-bar" style="background: rgb(234, 40, 41); width: 0%;">
               </div>
               <ul class="first_list">
-                <li style="visibility:hidden;">SPEND:</li>
+                <li style="visibility:hidden;"><%= t('spend.label') %>:</li>
                 <li class="progress_right progress_right1">$<%= @bundle_menu.break_point_price_i %></li>
                 <li class="progress_right progress_right2">$<%= @bundle_menu.break_point_price_ii %></li>
                 <li class="progress_right progress_right3">$<%= @bundle_menu.break_point_price_iii %></li>
               </ul>
               <ul class="sec_list">
                 <li>
-                  <span>UNLOCK:</span>
+                  <span><%= t('unlock.label') %>:</span>
                 </li>
                 <li>
-                  <span>FREE SHIPPING</span>
+                  <span><%= t('free_shipping.label') %></span>
+                </li>
+               <li>
+                  <span><%= t('free_product.label') %></span>
                 </li>
                 <li>
-                  <span>FREE PRODUCT</span>
-                </li>
-                <li>
-                  <span>FREE DOPP KIT</span>
+                  <span><%= t('free_dopp_kit.label') %></span>
                 </li>
               </ul>
             </div>
             <div class="button-wrapper">
-              <a href="javascript:void(0)" class="button button--primary add_bundle_cart">Checkout: <span class="cart_price">$0.00</span></a>
+              <a href="javascript:void(0)" class="button button--primary add_bundle_cart"><%= t('checkout.label') %>: <span class="cart_price">$0.00</span></a>
               <span class="loader-button__loader">
                 <div class="spinner">
                   <svg focusable="false" width="24" height="24" class="icon icon--spinner" viewBox="25 25 50 50">
@@ -113,7 +111,7 @@
   <div class="wrapper">
     <div class="seller-sec-inr">
       <div class="section-title">
-        <h2>Best Sellers</h2>
+        <h2><%= t('best_sellers.title') %></h2>
       </div>
       <div class="seller-box-sec">
         <% @products&.each do |product| %>
@@ -170,7 +168,7 @@
   <div class="wrapper">
     <div class="seller-sec-inr">
       <div class="section-title">
-        <h2>Hair</h2>
+        <h2><%= t('hair.title') %></h2>
       </div>
       <div class="seller-box-sec">
         <div>
@@ -181,10 +179,10 @@
               </div>
               <div class="seller-box-bottom">
                 <div class="box-title" product_id="12548652354213">
-                  <h5>Body Wash</h5>
+                  <h5><%= t('hair.body_wash') %></h5>
                 </div>
                 <div class="box-subtitle">
-                  <h6>Original Citrus</h6>
+                  <h6><%= t('hair.original_citrus') %></h6>
                 </div>
                 <div class="review-two-col">
                   <div class="review-left">
@@ -208,13 +206,13 @@
                   </div>
                   <div class="review-right">
                     <div class="review-title">
-                      849 reviews
+                      <%= t('hair.reviews_count', count: 849) %>
                     </div>
                   </div>
                 </div>
                 <button is="loader-button" type="button" class="button button--outline button--text button--full AddToCart" product_id="12548652354213">
                   <span class="loader-button__text">
-                  Add <span class="dash">-</span> 
+                  <%= t('add_to_cart') %> <span class="dash">-</span> 
                   <span class="span_org_price hide_button">
                   <ins>$16</ins>
                   </span>
@@ -243,10 +241,10 @@
               </div>
               <div class="seller-box-bottom">
                 <div class="box-title" product_id="12548652354214">
-                  <h5>Body Wash</h5>
+                  <h5><%= t('product_title') %></h5>
                 </div>
                 <div class="box-subtitle">
-                  <h6>Original Citrus</h6>
+                  <h6><%= t('product_subtitle') %></h6>
                 </div>
                 <div class="review-two-col">
                   <div class="review-left">
@@ -270,7 +268,7 @@
                   </div>
                   <div class="review-right">
                     <div class="review-title">
-                      849 reviews
+                      <%= t('reviews', count: 849) %>
                     </div>
                   </div>
                 </div>

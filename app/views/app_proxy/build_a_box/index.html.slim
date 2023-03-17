@@ -1,6 +1,6 @@
 - if @box_campaign.present? && @box_campaign.box_subscription_type.present?
   .checkout-design-1
-    p Select Style Options
+    p = t('select_style_options')
     .new-desig-parent
       .img-sec-parent
         - @products.each do |product|
@@ -13,7 +13,7 @@
             p = product.title
       .img-place-section
         .top-section
-          h4 = @box_campaign.display_name || "Build Your Box"
+          h4 = @box_campaign.display_name || t('build_your_box')
         .bottom-section
           .add-img-sec
             - if @selected_products.present?
@@ -40,8 +40,8 @@
                     .cros-plus.close-img
                       p x
                   p Select #{index+1}
-          p.error_message.hidden Selection is not complete
-          button.go_to_payment_btn Go to Payment
+          p.error_message.hidden = t('selection_not_complete')
+          button.go_to_payment_btn = t('go_to_payment')
         span.box_limit.hidden = @box_campaign.box_quantity_limit
 
 - else

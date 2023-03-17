@@ -17,7 +17,7 @@
                   .Polaris-Header-Title__TitleAndSubtitleWrapper
                     .Polaris-Header-Title
                       h1.Polaris-DisplayText.Polaris-DisplayText--sizeLarge
-                        span.Polaris-TextStyle--variationStrong Personal Settings
+                        span.Polaris-TextStyle--variationStrong = t('personal_settings.title')
         .Polaris-Page__Content
           .Polaris-Layout
             .Polaris-Layout__AnnotatedSection
@@ -29,31 +29,32 @@
                         = hidden_field_tag :id, @customer.shopify_id
                         .Polaris-FormLayout
                           .Polaris-FormLayout__Item
-                            = p_text_field name: 'first_name', label: 'First Name', value:  @customer.try(:first_name)
+                            = p_text_field name: 'first_name', label: t('personal_settings.first_name_label'), value: @customer.try(:first_name)
                           .Polaris-FormLayout__Item
-                            = p_text_field name: 'last_name', label: 'Last Name', value:  @customer.try(:last_name)
+                            = p_text_field name: 'last_name', label: t('personal_settings.last_name_label'), value: @customer.try(:last_name)
                           .Polaris-FormLayout--grouped role="group"
                             .Polaris-FormLayout__Items
                               .Polaris-FormLayout__Item
-                                = p_text_field name: 'email', label: 'Email', value:  @customer.try(:email), type: "email"
+                                = p_text_field name: 'email', label: t('personal_settings.email_label'), value: @customer.try(:email), type: "email"
                               .Polaris-FormLayout__Item
-                                = p_text_field name: 'birthday', label: 'Date of Birth', icon: 'calendar', input_class: 'datepicker', value: birthday
+                                = p_text_field name: 'birthday', label: t('personal_settings.date_of_birth_label'), icon: 'calendar', input_class: 'datepicker', value: birthday
                           .Polaris-FormLayout--grouped role="group"
                             .Polaris-FormLayout__Items
                               .Polaris-FormLayout__Item
-                                = p_select name: 'gender', label: 'Gender', options: CustomerSubscriptionContract.genders.map { |key, value| [key.humanize, key] }, selected: @customer.try(:gender)
+                                = p_select name: 'gender', label: t('personal_settings.gender_label'), options: CustomerSubscriptionContract.genders.map { |key, value| [key.humanize, key] }, selected: @customer.try(:gender)
                               .Polaris-FormLayout__Item
-                                = p_text_field name: 'communication', label: 'Communication Preferences', value:  @customer.communication
+                                = p_text_field name: 'communication', label: t('personal_settings.communication_preferences_label'), value: @customer.communication
                           .Polaris-FormLayout--grouped role="group"
                             .Polaris-FormLayout__Items
                               .Polaris-FormLayout__Item
-                                = p_text_field name: 'avatar', label: 'Profile photo', type: "file"
+                                = p_text_field name: 'avatar', label: t('personal_settings.profile_photo_label'), type: "file"
                               .Polaris-FormLayout__Item
                                 span.Polaris-Thumbnail.avatar
                                   img alt=("Profile photo") src=avatar_url /
 
                           .Polaris-FormLayout__Item
                             button.Polaris-Button.mr-10[type="button" aria-hidden="true" tabindex="-1" data-action='close']
-                              | Cancel
+                              | = t('personal_settings.cancel_button')
 
-                            = p_button text: 'Save', type: 'submit'
+                            = p_button text: t('personal_settings.save_button'), type: 'submit'
+

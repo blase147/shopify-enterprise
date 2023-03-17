@@ -30,21 +30,21 @@
                             = icon_tag 'info'
                         .Polaris-Banner__ContentWrapper
                           #PolarisBanner8Heading.Polaris-Banner__Heading
-                            p.Polaris-Heading Your Subscriptions
+                            p.Polaris-Heading = t('subscription.your_subscriptions')
                           #PolarisBanner8Content.Polaris-Banner__Content
-                            p Within your subscriptions you can easily edit your flavours, change the delivery date, pause or even cancel your subscription
+                            p= t('subscription.your_subscriptions_description')
                             .Polaris-Banner__Actions
                               .Polaris-ButtonGroup
                                 .Polaris-ButtonGroup__Item
                                   .Polaris-Banner__PrimaryAction
                                     button.Polaris-Button.Polaris-Button--outline type="button"
                                       span.Polaris-Button__Content
-                                        span.Polaris-Button__Text No active subscription found
+                                        span.Polaris-Button__Text = t('subscription.no_active_subscription')
                                 .Polaris-ButtonGroup__Item
                                   .Polaris-Banner__PrimaryAction
                                     button.Polaris-Button.Polaris-Button--primary type="button"
                                       span.Polaris-Button__Content
-                                        span.Polaris-Button__Text Subcribe Now
+                                        span.Polaris-Button__Text = t('subscription.subscribe_now')
         - else
           .Polaris-Page__Content.mt-30
             .Polaris-Layout
@@ -58,12 +58,12 @@
                             = icon_tag 'package'
                         .Polaris-Banner__ContentWrapper
                           #PolarisBanner8Heading.Polaris-Banner__Heading
-                            p We have your order. Your Order will be dispatched shortly
+                            p= t('subscription.order_dispatched')
                     .Polaris-Card
                       .Polaris-Banner.Polaris-Banner--withinContentContainer
                         .Polaris-Banner__ContentWrapper
                           #PolarisBanner8Heading.Polaris-Banner__Heading
-                            p.Polaris-Heading Recommended for you
+                            p.Polaris-Heading = t('subscription.recommended_for_you')
                           #PolarisBanner8Content.Polaris-Banner__Content
                             .Polaris-Stack
                               .Polaris-Stck__Item
@@ -75,13 +75,13 @@
                               .Polaris-Stck__Item
                                 button.Polaris-Button.Polaris-Button--primary type="button"
                                   span.Polaris-Button__Content
-                                    span.Polaris-Button__Text Add Subscription
+                                    span.Polaris-Button__Text = t('subscription.add_subscription')
 
                     .Polaris-Card
                       .Polaris-Banner.Polaris-Banner--withinContentContainer
                         .Polaris-Banner__ContentWrapper
                             #PolarisBanner8Heading.Polaris-Banner__Heading
-                              h2 Your Subscriptions
+                              h2= t('subscription.subscription_title')
                               br/
                               - @subscription_contracts.each do |subscription|
                                 - subscription_id = subscription.id[/\d+/]
@@ -100,18 +100,18 @@
                                           .Polaris-Stack
                                             .Polaris-Stack__Item.Polaris-Stack__Item--fill
                                               h2.Polaris-Heading
-                                                = "#{product.title} (#{subscription.lines.edges.first.node.quantity} pack)"
+                                                = "#{product.title} (#{subscription.lines.edges.first.node.quantity} #{t('subscription.pack')})"
                                             .Polaris-Stack__Item
                                               h2.Polaris-Heading= number_to_currency price
 
                                           .Polaris-Stack
                                             .Polaris-Stack__Item.Polaris-Stack__Item--fill
                                               p
-                                                b Delivery Every:&nbsp;
+                                                b= t('subscription.delivery_every')
                                                 = "#{billing_policy.interval_count} #{billing_policy.interval}".titleize
                                             .Polaris-Stack__Item
                                               p
-                                                b Delivery Date:&nbsp;
+                                                b= t('subscription.delivery_date')
                                                 =  DateTime.parse(subscription.next_billing_date).strftime("%a, %B %e")
 
                                           br/
@@ -120,38 +120,38 @@
                                               .Polaris-Banner__PrimaryAction
                                                 a.Polaris-Button.Polaris-Button--primary href=proxy_path("subscriptions/#{subscription_id}?token=#{params[:token]}")
                                                   span.Polaris-Button__Content
-                                                    span.Polaris-Button__Text Edit Subscription
+                                                    span.Polaris-Button__Text = t('subscription.edit_subscription')
 
                     .Polaris-Card
                       .Polaris-Banner.Polaris-Banner--withinContentContainer
                         .Polaris-Banner__ContentWrapper
                           #PolarisBanner8Heading.Polaris-Banner__Heading
-                            p.Polaris-Heading Create a New Subscription
+                            p.Polaris-Heading = t('subscription.create_new_subscription')
                           #PolarisBanner8Content.Polaris-Banner__Content
                             .Polaris-Stack
                               .Polaris-Stack__Item.Polaris-Stack__Item--fill
-                                p Subscribe to a new product to receive it regularly
+                                p= t('subscription.subscribe_to_new_product')
                               .Polaris-Stack__Item
                                 .Polaris-Banner__Actions
                                   .Polaris-ButtonGroup__Item
                                     .Polaris-Banner__PrimaryAction
                                       button.Polaris-Button.Polaris-Button--primary type="button"
                                         span.Polaris-Button__Content
-                                          span.Polaris-Button__Text New Subscription
+                                          span.Polaris-Button__Text = t('subscription.new_subscription')
 
                     .Polaris-Card
                       .Polaris-Banner.Polaris-Banner--withinContentContainer
                         .Polaris-Banner__ContentWrapper
                           #PolarisBanner8Heading.Polaris-Banner__Heading
-                            p.Polaris-Heading Add One-time product
+                            p.Polaris-Heading = t('subscription.add_one_time_product')
                           #PolarisBanner8Content.Polaris-Banner__Content
                             .Polaris-Stack
                               .Polaris-Stack__Item.Polaris-Stack__Item--fill
-                                p Add a new product to your next delivery
+                                p= t('subscription.add_new_product_to_delivery')
                               .Polaris-Stack__Item
                                 .Polaris-Banner__Actions
                                   .Polaris-ButtonGroup__Item
                                     .Polaris-Banner__PrimaryAction
                                       button.Polaris-Button.Polaris-Button--primary type="button"
                                         span.Polaris-Button__Content
-                                          span.Polaris-Button__Text New One-time
+                                          span.Polaris-Button__Text = t('subscription.new_one_time')

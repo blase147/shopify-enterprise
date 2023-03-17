@@ -15,7 +15,7 @@
                   .Polaris-Header-Title__TitleAndSubtitleWrapper
                     .Polaris-Header-Title
                       h1.Polaris-DisplayText.Polaris-DisplayText--sizeLarge
-                        span.Polaris-TextStyle--variationStrong Order History
+                        span.Polaris-TextStyle--variationStrong= t('order_history.title')
         .Polaris-Page__Content
           .Polaris-Layout
             .Polaris-Layout__AnnotatedSection
@@ -28,5 +28,5 @@
                           = icon_tag 'info'
                       .Polaris-Banner__ContentWrapper
                         #PolarisBanner8Heading.Polaris-Banner__Heading
-                          p Orders are typically delivered within 5-7 business days. In some cases deliveries may take longer due to extra safety precautions in our fulfillment center and carrier transportation delays.
-                          p If you need your subscription delivered by a specific date, we suggest adjusting your processing date accordingly
+                          p= t('order_history.delivery_info.line1')
+                          p= t('order_history.delivery_info.line2') 

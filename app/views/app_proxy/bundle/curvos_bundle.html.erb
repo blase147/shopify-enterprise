@@ -13,14 +13,14 @@
       </div>
       <div class="container-s">
         <div class="content-box-s hidden">
-          <h3 class="heading-s">ONE TIME</h3>
+          <h3 class="heading-s"><%= t('bundle_menu.one_time') %></h3>
           <div class="btn-s">
             <label class="switch-button-s">
             <input type="checkbox" class="slide_round"> 
             <span class="slider round"></span> 
             </label>
           </div>
-          <h3 class="heading-s">SUBSCRIBE &amp; SAVE</h3>
+          <h3 class="heading-s"><%= t('bundle_menu.subscribe_save') %></h3>
         </div>
         <div class="bundle-sub">
           <h3 class="subscribe-sec">
@@ -51,21 +51,21 @@
               </ul>
               <ul class="sec_list">
                 <li>
-                  <span>First Shipment</span>
+                  <span><%= t('checkout_section.first_shipment') %></span>
                 </li>
                 <li>
-                  <span>Second Shipment</span>
+                  <span><%= t('checkout_section.second_shipment') %></span>
                 </li>
                 <li>
-                  <span>Third shipment</span>
+                  <span><%= t('checkout_section.third_shipment') %></span>
                 </li>
                 <li>
-                  <span>Fourth shipment</span>
+                  <span><%= t('checkout_section.fourth_shipment') %></span>
                 </li>
               </ul>
             </div>
             <div class="button-wrapper">
-              <button class="button button--primary add_bundle_cart" disabled onclick="check_out_button()">Checkout: <span class="cart_total_price">$0.00</span></button>
+              <button class="button button--primary add_bundle_cart" disabled onclick="check_out_button()"><%= t('checkout_section.checkout') %> <span class="cart_total_price">$0.00</span></button>
               <span class="loader-button__loader">
                 <div class="spinner">
                   <svg focusable="false" width="24" height="24" class="icon icon--spinner" viewBox="25 25 50 50">
@@ -98,7 +98,7 @@
   <div class="wrapper">
     <div class="seller-sec-inr">
       <div class="section-title">
-        <h2>Curvo Bundle</h2>
+        <h2><%= t('curvo_bundle') %></h2>
       </div>
       <div class="seller-box-sec owl-carousel" id="about-us">
         <% @products.each do |product|%>
@@ -147,7 +147,9 @@
                       <% end %>
                     </ul>
                     <div class="grid__item radio-wrapper product-form__item">
-                      <label class="single-option-radio__label" for="ProductSelect-option-1" data-option-name="Størrelse">Størrelse: <span class="variant-label-option-value show_selected_size<%= product.id %>"></span></label><fieldset class="single-option-radio inline-list" id="ProductSelect-option-1"><input type="radio" checked="checked" value="S" data-index="option2" name="option2" class="single-option-selector__radio js-single-option-selector" id="ProductSelect-option-template--16618485776635__main-storrelse-S">
+                      <label class="single-option-radio__label" for="ProductSelect-option-1" data-option-name="Størrelse">
+                            <%= t('size') %>: <span class="variant-label-option-value show_selected_size<%= product.id %>"></span>
+                      </label><fieldset class="single-option-radio inline-list" id="ProductSelect-option-1"><input type="radio" checked="checked" value="S" data-index="option2" name="option2" class="single-option-selector__radio js-single-option-selector" id="ProductSelect-option-template--16618485776635__main-storrelse-S">
                       <% variant_option2&.each do |option2| %>
                         <label class="select_size select_size_for_<%= product.id %> disabled" data-product="<%= product.id %>" data-size="<%= option2 %>" ><%= option2 %></label>
                       <%end %>                  
@@ -159,9 +161,10 @@
                         <h5><%= product.title %></h5>
                       </div>
                       <button is="loader-button" type="button" class="button button--outline button--text button--full AddToCart direct_add_to_cart" data-product="<%= product.id %>" data-variant="<%= product.variants.first.id %>" data-price="<%= product.variants.first.price %>" data-image="<%= product&.images&.first&.src %>" data-producttitle="<%= product.title %>" >
-                        <span class="loader-button__text" id="add_product_<%= product.id %>">
-                          Add
+                        <span class="loader-button__text add_cart_button" id="add_product_<%= product.id %>">
+                              <%= t('add') %>
                         </span>
+
                         <span class="loader-button__loader" hidden="">
                           <div class="spinner">
                             <svg focusable="false" width="24" height="24" class="icon icon--spinner" viewBox="25 25 50 50">
@@ -271,7 +274,7 @@ function check_out_button(){
       $(".size_select_message").html("")
       $(".color_select_message").html("")
     }else{
-      $(".size_select_message").html("Please select a size.")
+      $(".size_select_message").html("<%= t('please_select_size') %>");
       selectedProperty = {product: $(this).data("product"), color: $(this).data("color")}
     }
 
@@ -300,7 +303,7 @@ function check_out_button(){
       $(".size_select_message").html("")
       $(".color_select_message").html("")
     }else{
-      $(".color_select_message").html("Please select a color.")
+      $(".color_select_message").html("<%= t('please_select_color') %>");
       selectedProperty = {product: dataProduct, size: dataSize}
     }
     $(".show_selected_size"+dataProduct).html(dataSize);
