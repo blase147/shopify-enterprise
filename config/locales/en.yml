@@ -1,6 +1,32 @@
 # Additional translations at https://github.com/heartcombo/devise/wiki/I18n
 
 en:
+otp_form_modal:
+    label:
+      otp: "OTP"
+    placeholder:
+      enter_otp: "Enter OTP"
+    button:
+      login: "Login (check email or phone)"
+    sub_header:
+      chargezen_secured: "Chargezen Secured"
+    main_heading:
+      login_with_otp: "Login with OTP"
+subscription:
+    order_dispatched: "We have your order. Your order will be dispatched shortly."
+    recommended_for_you: "Recommended for you"
+    add_subscription: "Add Subscription"
+    subscription_title: "Subscription #"
+    pack: "pack"
+    delivery_every: "Delivery Every:"
+    delivery_date: "Delivery Date:"
+    edit_subscription: "Edit Subscription"
+    create_new_subscription: "Create a New Subscription"
+    subscribe_to_new_product: "Subscribe to a new product to receive it regularly"
+    new_subscription: "New Subscription"
+    add_one_time_product: "Add One-time product"
+    add_new_product_to_delivery: "Add a new product to your next delivery"
+    new_one_time: "New One-time"
   settings:
     my_account_details: "MY ACCOUNT DETAILS"
     no_subscriptions_found: "No subscription have been found for your account"
