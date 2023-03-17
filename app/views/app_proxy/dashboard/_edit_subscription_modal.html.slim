@@ -6,7 +6,7 @@
           .Polaris-Modal__Body.Polaris-Scrollable.Polaris-Scrollable--vertical.edit-subscription-modal data-polaris-scrollable="true"
             .header
               div
-                h2 Edit Subscription
+                h2 = t('.edit_subscription')
               div.close aria-hidden="true" tabindex="-1" data-action='close' data-dismiss="modal"
                 svg fill="none" height="20" viewbox=("0 0 18 20") width="18" xmlns="http://www.w3.org/2000/svg"
                   path d=("M0 19.9998H2.212L8.484 11.0398L14.756 19.9998H17.052L9.688 9.58378L16.408 0.175781H14.196L8.568 8.23978L2.856 0.175781H0.672L7.448 9.58378L0 19.9998Z") fill="#DDDDDD" /
@@ -21,47 +21,47 @@
                   = "#{number_to_currency line_item.current_price.amount} / #{subscription.billing_policy.interval_count} #{subscription.billing_policy.interval}"
               .delivery-charge
                 div
-                  h3 #{@translation&.edit_subscription_popup_est_next_delivery.present? ? @translation&.edit_subscription_popup_est_next_delivery : 'est. next delivery'}
+                  h3 #{@translation&.edit_subscription_popup_est_next_delivery.present? ? @translation&.edit_subscription_popup_est_next_delivery : t('.est_next_delivery')}
                   h4
                     - if subscription&.orders&.edges&.first&.node&.id.present?
                       = (expected_delivery_date(subscription&.id[/\d+/], subscription&.orders&.edges&.first&.node&.id[/\d+/] ))
                 div
-                  h3 #{@translation&.edit_subscription_popup_next_card_charge.present? ? @translation&.edit_subscription_popup_next_card_charge : 'NEXt card charge'}
+                  h3 #{@translation&.edit_subscription_popup_next_card_charge.present? ? @translation&.edit_subscription_popup_next_card_charge : t('.next_card_charge')}
                   h4
                     = DateTime.parse(subscription.next_billing_date).strftime("%a, %B %e")
               .btn-wrapper
                 - selling_plan_group = SellingPlanGroup.joins(:selling_plans).where(selling_plans: {shopify_id: selling_plan_id}).first
                 - previous_interval = subscription.billing_policy.interval.downcase
                 - disable_upgrade = selling_plan_group.blank? || selling_plan_group.selling_plans.count < 1
-                button.modal_btn class=('upgrade-subscription' + (disable_upgrade ? ' light' : '')) disabled=(disable_upgrade) type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#upgrade-#{line_item.id.split("gid://shopify/SubscriptionLine/")[1]}" #{@translation&.edit_subscription_popup_upgrade_subscription.present? ? @translation&.edit_subscription_popup_upgrade_subscription : 'UPGRADE SUBSCRIPTION'}
+                button.modal_btn class=('upgrade-subscription' + (disable_upgrade ? ' light' : '')) disabled=(disable_upgrade) type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#upgrade-#{line_item.id.split("gid://shopify/SubscriptionLine/")[1]}" #{@translation&.edit_subscription_popup_upgrade_subscription.present? ? @translation&.edit_subscription_popup_upgrade_subscription : t('.upgrade_subscription')}
 
-                button class="pause-subscription" data-path="/pause" data-contractid="#{subscription&.id[/\d+/] rescue nil }" Pause Subscription
+                button class="pause-subscription" data-path="/pause" data-contractid="#{subscription&.id[/\d+/] rescue nil }" = t('.pause_subscription'
 
                 - disable_swap = controller_name == 'dashboard' && !current_setting&.customer_allowed?('swap_product')
-                button.modal_btn class=('swap-subscription' + (disable_swap ? ' light' : '')) disabled=(disable_swap) type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#swap-#{line_item.id.split("gid://shopify/SubscriptionLine/")[1]}" #{@translation&.edit_subscription_popup_swap_subscription.present? ? @translation&.edit_subscription_popup_swap_subscription : 'SWAP SUBSCRIPTION'}
+                button.modal_btn class=('swap-subscription' + (disable_swap ? ' light' : '')) disabled=(disable_swap) type="button" aria-hidden="true" tabindex="-1" data-action='close' data-toggle="modal" data-target="#swap-#{line_item.id.split("gid://shopify/SubscriptionLine/")[1]}" #{@translation&.edit_subscription_popup_swap_subscription.present? ? @translation&.edit_subscription_popup_swap_subscription : t('.swap_subscription')}
                 // button.downgrade-subscription.light type="button" DOWNGRADE SUBSCRIPTION
                 //button.ask-questions.light type="button" #{@translation&.edit_subscription_popup_ask_a_question.present? ? @translation&.edit_subscription_popup_ask_a_question : 'ASK A QUESTION'}
                 - allow_cancel = false
                 - if selling_plan
                   - allow_cancel = ((DateTime.parse(subscription.created_at) + (selling_plan.min_fullfilment-1).send(selling_plan.interval_type.downcase.to_sym)) < Time.now) rescue false
                 - if (defined?(admin_action) && setting.admin_allowed?('subscription_cancellation')) || (!defined?(admin_action) && setting.customer_allowed?('subscription_cancellation') && allow_cancel)
-                  button.cancel-subscription-button data-id="#{subscription&.id[/\d+/] rescue nil }" data-line-id="#{ line_item&.id}" data-variant-id="#{line_item&.variant_id}" #{@translation&.edit_subscription_popup_ask_a_question.present? ? @translation&.edit_subscription_popup_ask_a_question : 'CANCEL SUBSCRIPTION'}
+                  button.cancel-subscription-button data-id="#{subscription&.id[/\d+/] rescue nil }" data-line-id="#{ line_item&.id}" data-variant-id="#{line_item&.variant_id}" #{@translation&.edit_subscription_popup_ask_a_question.present? ? @translation&.edit_subscription_popup_ask_a_question : t('.cancel_subscription')}
 
                 - if (defined?(admin_action) && setting.admin_allowed?('cancel_later')) || (!defined?(admin_action) && setting.customer_allowed?('cancel_later') && allow_cancel)  
                   button.Polaris-Button.cancel_later id = "cancel_later_#{product_id}" type="button" style="margin-right: 1rem;" data-id=product_id
-                    | Cancel Later
+                    | = t('.cancel_later')
                   input.hide.cancel_later_date type="date" id="cancel_later_date_#{product_id}" data-id=product_id
                   button.Polaris-Button.cancel_later_submit.hide id="cancel_later_submit_#{product_id}" type="button" style="margin-top: 16px; width: 100%" data-id = product_id data-contractid = contract.id
-                    | Cancel At The Selected Date
+                    | = t('.cancel_at_selected_date')
 
                   div.message_cancel_later style="font-size: 20px; margin: 10px; margin-top: 21px; display: none;"
 
                 - if (defined?(admin_action) && setting.admin_allowed?('pause_later')) || (!defined?(admin_action) && setting.customer_allowed?('pause_later') && allow_cancel)  
                   button.Polaris-Button.pause_later id = "pause_later_#{product_id}" type="button" style="margin-right: 1rem;" data-id=product_id
-                    | Pause Later
+                    | = t('.pause_later')
                   input.hide.pause_later_date type="date" id="pause_later_date_#{product_id}" data-id=product_id
                   button.Polaris-Button.pause_later_submit.hide id="pause_later_submit_#{product_id}" type="button" style="margin-top: 16px; width: 100%" data-id = product_id data-contractid = contract.id
-                    | Pause At The Selected Date
+                    | = t('.pause_at_selected_date')
 
                   div.message_pause_later style="font-size: 20px; margin: 10px; margin-top: 21px; display: none;"
                   
