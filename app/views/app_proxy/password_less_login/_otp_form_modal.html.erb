@@ -8,22 +8,22 @@
                 </svg>
             </div>
             <div class="sub_header_title">
-                Chargezen Secured
+                <%= t('otp_form_modal.sub_header.chargezen_secured') %>
             </div>
         </div>
         <div class="main_heading">
-            <h2 class="Polaris-Heading" style="font-weight: 400;line-height: 2.4rem; margin: 0;font-size: 32px!important; line-hieght: 50px!important">Login with OTP</h2>
+            <h2 class="Polaris-Heading" style="font-weight: 400;line-height: 2.4rem; margin: 0;font-size: 32px!important; line-hieght: 50px!important"><%= t('otp_form_modal.main_heading.login_with_otp') %></h2>
         </div>
     </div>
     <div class="Polaris-Card__Section">
             <div class="card_body">
                 <div class="label_div">
-                    <label for="email">OTP</label>
+                    <label for="email"><%= t('otp_form_modal.label.otp') %></label>
                 </div>
                 <div class="input">
                     <input type="number" class="otp" id="otp_field" placeholder="Enter OTP">
                 </div>
-                <input type="button" id="submit_otp"  value="Login (check email or phone)" />
+                <input type="button" id="submit_otp"  value="<%= t('otp_form_modal.placeholder.enter_otp') %>" />
             </div>
             <div id="error_message"></div>
     </div>
