@@ -1,7 +1,7 @@
 - if @box_campaign.present? && @box_campaign.box_subscription_type.present?
   .checkout-design-1
     div.box_items_selected.hidden = @customer.box_items
-    p Select Style Options
+    p = t('select_style_options')
     .new-desig-parent
       .img-sec-parent
         - @products.each do |product|
