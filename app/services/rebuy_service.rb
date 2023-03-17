@@ -78,7 +78,7 @@ class RebuyService
                         customer_modal_id: customer.id,
                         rebuy_menu_id: rebuy_menu.id
                     )
-                    sent = send_email_and_sms(customer.id, token) rescue nil
+                    # sent = send_email_and_sms(customer.id, token) rescue nil
                 end
             end
         end
@@ -110,7 +110,7 @@ class RebuyService
                 qualifed = qualifying_date >= Date.today ? true : false
                 if qualifed
                     begin
-                        qualified_products << order["line_items"].map{|item| {product: "gid://shopify/Product/#{item["product_id"]}", variant: "gid://shopify/ProductVariant/#{item["variant_id"]}"} if products.any?{|p| p[:variant] = "gid://shopify/ProductVariant/#{item["variant_id"]}"}}.first
+                        qualified_products << order["line_items"].map{|item| {product: "gid://shopify/Product/#{item["product_id"]}", variant: "gid://shopify/ProductVariant/#{item["variant_id"]}", created_at: order["created_at"].to_time} if products.any?{|p| p[:variant] = "gid://shopify/ProductVariant/#{item["variant_id"]}"}}.first
                     rescue
                         qualified_products << order["line_items"]["edges"].map{|item| {product: "#{item["node"]["product"]["id"]}", variant: "#{item["node"]["variant"]["id"]}", created_at: order["created_at"].to_time} if products.any?{|p| p[:variant] = "#{item["node"]["variant"]["id"]}"}}.first  
                     end
@@ -156,13 +156,14 @@ class RebuyService
 
         customer = CustomerModal.find(customer_id)
         qualified_products = []
-        customer.customer_orders.each do |order|
-            order = JSON.parse(order.api_data)
+        customer.customer_orders.each do |customer_order|
+            order = JSON.parse(customer_order.api_data)
             qualifying_date = order["created_at"].to_date.advance("#{interval_type.downcase}s": interval_count.to_i)
             qualifed = qualifying_date >= Date.today ? true : false
+            p "order_id=======#{customer_order.id}"
             if qualifed
                 begin
-                    qualified_products << order["line_items"].map{|item| {product: "gid://shopify/Product/#{item["product_id"]}", variant: "gid://shopify/ProductVariant/#{item["variant_id"]}"} if collection_products.any?{|p| p[:variant] = "gid://shopify/ProductVariant/#{item["variant_id"]}"}}.first
+                    qualified_products << order["line_items"].map{|item| {product: "gid://shopify/Product/#{item["product_id"]}", variant: "gid://shopify/ProductVariant/#{item["variant_id"]}",created_at: order["created_at"].to_time} if collection_products.any?{|p| p[:variant] = "gid://shopify/ProductVariant/#{item["variant_id"]}"}}.first
                 rescue
                     qualified_products << order["line_items"]["edges"].map{|item| {product: "#{item["node"]["product"]["id"]}", variant: "#{item["node"]["variant"]["id"]}", created_at: order["created_at"].to_time} if collection_products.any?{|p| p[:variant] = "#{item["node"]["variant"]["id"]}"}}.first
             
