@@ -283,7 +283,7 @@ const Nav = (props) => {
         {
           localStorage.getItem("currentuser") &&
           <>
-            <a href={`${window?.location?.origin} / users / sign_out`} className="adminLogoutLink" data-method="delete">Log Out</a>
+            <a href={`${window?.location?.origin} / users / sign_out`} className="adminLogoutLink" data-method="delete">{i18n.t('log_out')}</a>
           </>
         }
       </div>
