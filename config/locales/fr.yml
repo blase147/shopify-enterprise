@@ -1,39 +1,39 @@
 fr:
-reveueos: "revenueos"
-dashboard: "Tableau de bord"
-revenue_channels: "Canaux de revenu"
-subscriptions_and_more: "Abonnements & Plus"
-subscription_plans: "Plans d'abonnement"
-try_before_you_buy: "Essayer avant d'acheter"
-pre_orders: "Précommandes"
-rebuy_cart: "Panier de rachat"
-contracts_and_invoices: "Contrats & Factures"
-memberships: "Adhésions"
-workspace: "Espace de travail"
-subscription_contracts: "Contrats d'abonnement"
-analytics: "Analytiques"
-subscription_customers: "Clients abonnés"
-loyalty_rewards: "Fidélité/Récompenses"
-ways_to_earn: "Moyens de gagner"
-rewards_page: "Page des récompenses"
-general: "Général"
-installation: "Installation"
-tiazen: "Tiazen"
-toolbox: "Boîte à outils"
-settings: "Paramètres"
-log_out: "Se déconnecter"
-otp_form_modal:
-  label:
-    otp: "OTP"
-  placeholder:
-    enter_otp: "Saisir OTP"
-  button:
-    login: "Connexion (vérifier l'email ou le téléphone)"
-  sub_header:
-    chargezen_secured: "Chargezen sécurisé"
-  main_heading:
-    login_with_otp: "Se connecter avec OTP"
-  subscription:
+  reveueos: "revenueos"
+  dashboard: "Tableau de bord"
+  revenue_channels: "Canaux de revenu"
+  subscriptions_and_more: "Abonnements & Plus"
+  subscription_plans: "Plans d'abonnement"
+  try_before_you_buy: "Essayer avant d'acheter"
+  pre_orders: "Précommandes"
+  rebuy_cart: "Panier de rachat"
+  contracts_and_invoices: "Contrats & Factures"
+  memberships: "Adhésions"
+  workspace: "Espace de travail"
+  subscription_contracts: "Contrats d'abonnement"
+  analytics: "Analytiques"
+  subscription_customers: "Clients abonnés"
+  loyalty_rewards: "Fidélité/Récompenses"
+  ways_to_earn: "Moyens de gagner"
+  rewards_page: "Page des récompenses"
+  general: "Général"
+  installation: "Installation"
+  tiazen: "Tiazen"
+  toolbox: "Boîte à outils"
+  settings: "Paramètres"
+  log_out: "Se déconnecter"
+  otp_form_modal:
+    label:
+      otp: "OTP"
+    placeholder:
+      enter_otp: "Saisir OTP"
+    button:
+      login: "Connexion (vérifier l'email ou le téléphone)"
+    sub_header:
+      chargezen_secured: "Chargezen sécurisé"
+    main_heading:
+      login_with_otp: "Se connecter avec OTP"
+subscription:
     order_dispatched: "Nous avons votre commande. Votre commande sera expédiée sous peu."
     recommended_for_you: "Recommandé pour vous"
     add_subscription: "Ajouter un abonnement"
