@@ -1,288 +1,67 @@
+
 fr:
-  reveueos: "revenueos"
-  dashboard: "Tableau de bord"
-  revenue_channels: "Canaux de revenu"
-  subscriptions_and_more: "Abonnements & Plus"
-  subscription_plans: "Plans d'abonnement"
-  try_before_you_buy: "Essayer avant d'acheter"
-  pre_orders: "Précommandes"
-  rebuy_cart: "Panier de rachat"
-  contracts_and_invoices: "Contrats & Factures"
-  memberships: "Adhésions"
-  workspace: "Espace de travail"
-  subscription_contracts: "Contrats d'abonnement"
-  analytics: "Analytiques"
-  subscription_customers: "Clients abonnés"
-  loyalty_rewards: "Fidélité/Récompenses"
-  ways_to_earn: "Moyens de gagner"
-  rewards_page: "Page des récompenses"
-  general: "Général"
-  installation: "Installation"
-  tiazen: "Tiazen"
-  toolbox: "Boîte à outils"
-  settings: "Paramètres"
-  log_out: "Se déconnecter"
-  otp_form_modal:
-    label:
-      otp: "OTP"
-    placeholder:
-      enter_otp: "Saisir OTP"
-    button:
-      login: "Connexion (vérifier l'email ou le téléphone)"
-    sub_header:
-      chargezen_secured: "Chargezen sécurisé"
-    main_heading:
-      login_with_otp: "Se connecter avec OTP"
-subscription:
-    order_dispatched: "Nous avons votre commande. Votre commande sera expédiée sous peu."
-    recommended_for_you: "Recommandé pour vous"
-    add_subscription: "Ajouter un abonnement"
-    subscription_title: "Abonnement n°"
-    pack: "paquet"
-    delivery_every: "Livraison tous les:"
-    delivery_date: "Date de livraison"
-    edit_subscription: "Modifier l'abonnement"
-    create_new_subscription: "Créer un nouvel abonnement"
-    subscribe_to_new_product: "S'abonner à un nouveau produit pour le recevoir régulièrement"
-    new_subscription: "Nouvel abonnement"
-    add_one_time_product: "Ajouter un produit unique"
-    add_new_product_to_delivery: "Ajouter un nouveau produit à votre prochaine livraison"
-    new_one_time: "Nouveau ponctuel"
-  settings:
-    my_account_details: "MES INFORMATIONS DE COMPTE"
-    no_subscriptions_found: "Aucun abonnement n'a été trouvé pour votre compte"
-    first_name: "PRÉNOM"
-    last_name: "NOM"
-    email: "EMAIL"
-    save: "ENREGISTRER"
-  billing_information:
-    my: 'MON'
-    billing: 'FACTURATION'
-    information: 'INFORMATION'
-    card_on_file: 'CARTE ENREGISTRÉE'
-    expires: 'Expire'
-    update_card: 'METTRE À JOUR LA CARTE'
-    login_shopify_account: 'Connectez-vous à votre compte Shoppay pour modifier la carte se terminant par'
-    edit: 'Modifier'
-    phone: 'TÉLÉPHONE'
-    company: 'ENTREPRISE'
-    address: 'ADRESSE'
-  order_history:
-    title: "Historique des commandes"
-  delivery_info:
-    line1: "Les commandes sont généralement livrées dans un délai de 5 à 7 jours ouvrables. Dans certains cas, les livraisons peuvent prendre plus de temps en raison des précautions de sécurité supplémentaires dans notre centre de traitement et des retards de transport du transporteur."
-    line2: "Si vous avez besoin que votre abonnement soit livré à une date précise, nous vous suggérons d'ajuster votre date de traitement en conséquence."
-  your_subscription: "VOTRE ABONNEMENT"
-  no_subscriptions_found: "Aucun abonnement trouvé pour votre compte"
-  my: "MES"
-  active: "ACTIF"
-  cancelled: "ANNULÉ"
-  paused: "EN PAUSE"
-  subscription: "ABONNEMENT"
-  subscriptions: "ABONNEMENTS"
-  select_style_options: "Sélectionner les options de style"
-  build_your_box: "Créez votre boîte"
-  selection_not_complete: "La sélection n'est pas complète"
-  confirm_selection: "CONFIRMER LA SÉLECTION"
-  my_address: 'MON ADRESSE'
-  edit_address: 'Modifier'
-  phone: 'TÉLÉPHONE'
-  company: 'ENTREPRISE'
-  address: 'ADRESSE'
-  your_subscription_has_only_one_billing_cycle_option: "Votre abonnement n'a qu'une seule option de cycle de facturation."
-  subscription_to: "Abonnement à :"
-  upgrade: "Mettre à niveau"
-  payment_card: 'Carte de paiement'
-  name_on_card: 'Nom sur la carte'
-  card_number: 'Numéro de carte'
-  exp_month: 'Mois d’expiration'
-  exp_year: 'Année d’expiration'
-  cvv: 'CVV'
-  billing_address: 'Adresse de facturation'
-  first_name: 'Prénom'
-  last_name: 'Nom'
-  address: 'Adresse'
-  city: 'Ville'
-  country: 'Pays'
-  state: 'État'
-  zip: 'Code postal'
-  update_card: 'Mettre à jour la carte'
-  swap_subscription_title: "Échanger"
-  swap_subscription_to: "Abonnement à :"
-  swap_subscription_button: "ÉCHANGER L'ABONNEMENT"
-  no_other_subscription_products_available: "Aucun autre produit d'abonnement disponible"
-  reactivate: 'RÉ-ACTIVER'
-  start_date: 'date de début'
-  quantity: 'quantité'
-  edit_subscription: 'Modifier l’abonnement'
-  est_next_delivery: 'prochaine livraison estimée'
-  next_card_charge: 'prochaine charge sur carte'
-  upgrade_subscription: 'METTRE À NIVEAU L’ABONNEMENT'
-  pause_subscription: 'Mettre en pause l’abonnement'
-  swap_subscription: 'ÉCHANGER L’ABONNEMENT'
-  cancel_subscription: 'ANNULER L’ABONNEMENT'
-  cancel_later: 'Annuler plus tard'
-  cancel_at_selected_date: 'Annuler à la date sélectionnée'
-  pause_later: 'Mettre en pause plus tard'
-  pause_at_selected_date: 'Mettre en pause à la date'
-  add_address_popup_first_name: "PRÉNOM"
-  add_address_popup_last_name: "NOM"
-  add_address_popup_address1: "ADRESSE 1"
-  add_address_popup_address2: "ADRESSE 2"
-  add_address_popup_company: "ENTREPRISE"
-  add_address_popup_city: "VILLE"
-  add_address_popup_country: "PAYS"
-  add_address_popup_zip: "CODE POSTAL"
-  add_address_popup_state: "ÉTAT/PROVINCE"
-  add_address_popup_phone: "TÉLÉPHONE"
-  add_address_popup_cancel: "Annuler"
-  add_address_popup_update: "Mettre à jour"
-  product_subtitle: "Citrus Original"
-  add_to_cart: "Ajouter"
-  product_title: "Gel douche"
-  product_subtitle: "Citrus Original"
-  select_style_options: "Sélectionner les options de style"
-  build_your_box: "Créez votre boîte"
-  select_number: "Sélectionnez %{number}"
-  selection_not_complete: "La sélection n'est pas complète"
-  go_to_payment: "Aller au paiement"
-  This_is_why_I_want_to_cancel: "C'est pourquoi je veux annuler"
-  your_view_name:
-    edit_subscription: 'Modifier l’abonnement'
-    est_next_delivery: 'prochaine livraison estimée'
-    next_card_charge: 'prochaine charge sur carte'
-    upgrade_subscription: 'METTRE À NIVEAU L’ABONNEMENT'
-    pause_subscription: 'Mettre en pause l’abonnement'
-    swap_subscription: 'ÉCHANGER L’ABONNEMENT'
-    cancel_subscription: 'ANNULER L’ABONNEMENT'
-  hair:
-    title: "Cheveux"
-    body_wash: "Gel douche"
-    original_citrus: "Citrus Original"
-    reviews_count:
-      one: "1 avis"
-      other: "%{count} avis"
-  best_sellers:
-    title: "Meilleures ventes"
-  curvo_bundle: "Ensemble Curvo"
-  add: "Ajouter"
-  size: "Taille"
-  please_select_size: "Veuillez sélectionner une taille."
-  please_select_color: "Veuillez sélectionner une couleur."
-  build_your_own_bundle:
-    heading: "Créez votre propre ensemble"
-    subheading: "Créez votre kit personnalisé et empilez des produits gratuits en construisant la salle de bain parfaite."
-  one_time:
-    heading: "UNE FOIS"
-    subscribe_and_save:
-    heading: "ABONNEZ-VOUS & ÉCONOMISEZ"
-    description: "ABONNEZ-VOUS & ÉCONOMISEZ 15% SUR CHAQUE COMMANDE. EXPÉDITION TOUS LES 45 JOURS, REPORTEZ À TOUT MOMENT."
-  spend:
-    label: "DÉPENSER"
-  unlock:
-    label: "DÉBLOQUER"
-  free_shipping:
-    label: "LIVRAISON GRATUITE"
-  free_product:
-    label: "PRODUIT GRATUIT"
-  free_dopp_kit:
-    label: "TROUSSE DE TOILETTE GRATUITE"
-  checkout:
-    label: "Passer à la caisse"
-  bundle_menu:
-    one_time: "UNE FOIS"
-    subscribe_save: "ABONNEZ-VOUS & ÉCONOMISEZ"
-  checkout_section:
-    first_shipment: "Première expédition"
-    second_shipment: "Deuxième expédition"
-    third_shipment: "Troisième expédition"
-    fourth_shipment: "Quatrième expédition"
-    checkout: "Passer à la caisse:"
-shipping_settings:
-    title: "Paramètres d'expédition"
-    primary_shipping_address_label: "Adresse de livraison principale"
-    second_shipping_address_label: "Deuxième adresse de livraison"
-    cancel_button: "Annuler"
-    save_button: "Enregistrer"
-personal_settings:
-    title: "Paramètres personnels"
-    first_name_label: "Prénom"
-    last_name_label: "Nom"
-    email_label: "Email"
-    date_of_birth_label: "Date de naissance"
-    gender_label: "Genre"
-    communication_preferences_label: "Préférences de communication"
-    profile_photo_label: "Photo de profil"
-    cancel_button: "Annuler"
-    save_button: "Enregistrer"
-password_settings:
-    title: "Paramètres de mot de passe"
-    password_label: "Mot de passe"
-    password_confirmation_label: "Confirmation du mot de passe"
-    cancel_button: "Annuler"
-    save_button: "Enregistrer"
 customer:
-    My: "Mon"
-    Active: "Actif"
-    Subscription: "ABONNEMENT"
-    Logout: "Déconnexion"
-    Cancelled: "Annulé"
-    Rewards: "Récompenses"
-    Track Order: "Suivre Commande"
-    Delivery: "Livraison"
-    Schedule: "Programme"
-    Order: "Commande"
-    History: "Historique"
-    Address: "Adresse"
-    Billing: "Facturation"
-    Account: "Compte"
-    Quantity: "Quantité"
-    Address: "Adresse"
-    Edit: "Modifier"
-    Choice: "Choix"
-    Next: "Suivant"
-    Card: "Carte"
-    Charge: "Facturer"
-    Apply: "Appliquer"
-    Discount: "Réduction"
-    Offer for you: "Hey ! Il y a une offre pour vous !"
-    Add: "Ajouter"
-    My Active Subscription: Mon abonnement actif
-    Next Card Charge: "Prochain prélèvement"
-    Apply Discount: "Appliquer la réduction"
-    Edit Subscription: "Modifier l'abonnement"
-    Delivery Schedule: "Planning de livraison"
-    Delivery Address: "Adresse de livraison"
-    Cancel Anyway: "Annuler quand même"
-    Keep Subscription: "Garder l'abonnement"
-    This is why I want to cancel: "Voici pourquoi je veux annuler"
-    Start Date: "Date de début"
-    Est. Next Delivery: "Prochaine livraison estimée"
-    Last Card Charge: "Dernier prélèvement"
-    No subscription have been found for your account: "Aucun abonnement trouvé pour votre compte"
-    Add to box: "Ajouter à la boîte"
-    Change: "Changer"
-    Clear all: "Tout effacer"
-    you cannot add more items: "vous ne pouvez pas ajouter plus d'articles"
-    Confirm Meals: "Confirmer les repas"
-    RE-ACTIVATE: "RÉ-ACTIVER"
-    Choose Date to resume billing your card on file: "Choisissez la date pour reprendre la facturation de votre carte enregistrée"
-    Confirm: "Confirmer"
-    No cancelled subscription have been found for your account: "Aucun abonnement annulé trouvé pour votre compte"
-    cancelled_tab_start_date: "date de début"
-    cancelled_tab_quantity: "quantité"
-    Delay/Speedup your next shipment: "Retarder/Accélérer votre prochaine expédition"
-    PICK ORDER DATE: "CHOISIR LA DATE DE COMMANDE"
-    BACK: "RETOUR"
-    FIRST NAME: "PRÉNOM"
-    LAST NAME: "NOM"
-    ADDRESS 1: "ADRESSE 1"
-    ADDRESS 2: "ADRESSE 2"
-    COMPANY: "SOCIÉTÉ"
-    CITY: "VILLE"
-    COUNTRY: "PAYS"
-    ZIP/POSTAL CODE: "CODE POSTAL"
-    STATE/PROVINCE: "ÉTAT/PROVINCE"
-    PHONE: "TÉLÉPHONE"
-    Submit: "Envoyer"
-    Update: "Mettre à jour"
+My: "Mon"
+Active: "Actif"
+Subscription: "ABONNEMENT"
+Logout: "Déconnexion"
+Cancelled: "Annulé"
+Rewards: "Récompenses"
+Track Order: "Suivre Commande"
+Delivery: "Livraison"
+Schedule: "Programme"
+Order: "Commande"
+History: "Historique"
+Address: "Adresse"
+Billing: "Facturation"
+Account: "Compte"
+Quantity: "Quantité"
+Address: "Adresse"
+Edit: "Modifier"
+Choice: "Choix"
+Next: "Suivant"
+Card: "Carte"
+Charge: "Facturer"
+Apply: "Appliquer"
+Discount: "Réduction"
+Offer for you: "Hey ! Il y a une offre pour vous !"
+Add: "Ajouter"
+My Active Subscription: Mon abonnement actif
+Next Card Charge: "Prochain prélèvement"
+Apply Discount: "Appliquer la réduction"
+Edit Subscription: "Modifier l'abonnement"
+Delivery Schedule: "Planning de livraison"
+Delivery Address: "Adresse de livraison"
+Cancel Anyway: "Annuler quand même"
+Keep Subscription: "Garder l'abonnement"
+This is why I want to cancel: "Voici pourquoi je veux annuler"
+Start Date: "Date de début"
+Est. Next Delivery: "Prochaine livraison estimée"
+Last Card Charge: "Dernier prélèvement"
+No subscription have been found for your account: "Aucun abonnement trouvé pour votre compte"
+Add to box: "Ajouter à la boîte"
+Change: "Changer"
+Clear all: "Tout effacer"
+you cannot add more items: "vous ne pouvez pas ajouter plus d'articles"
+Confirm Meals: "Confirmer les repas"
+RE-ACTIVATE: "RÉ-ACTIVER"
+Choose Date to resume billing your card on file: "Choisissez la date pour reprendre la facturation de votre carte enregistrée"
+Confirm: "Confirmer"
+No cancelled subscription have been found for your account: "Aucun abonnement annulé trouvé pour votre compte"
+cancelled_tab_start_date: "date de début"
+cancelled_tab_quantity: "quantité"
+Delay/Speedup your next shipment: "Retarder/Accélérer votre prochaine expédition"
+PICK ORDER DATE: "CHOISIR LA DATE DE COMMANDE"
+BACK: "RETOUR"
+FIRST NAME: "PRÉNOM"
+LAST NAME: "NOM"
+ADDRESS 1: "ADRESSE 1"
+ADDRESS 2: "ADRESSE 2"
+COMPANY: "SOCIÉTÉ"
+CITY: "VILLE"
+COUNTRY: "PAYS"
+ZIP/POSTAL CODE: "CODE POSTAL"
+STATE/PROVINCE: "ÉTAT/PROVINCE"
+PHONE: "TÉLÉPHONE"
+Submit: "Envoyer"
+Update: "Mettre à jour"
