@@ -1,7 +1,6 @@
 # Additional translations at https://github.com/heartcombo/devise/wiki/I18n
 
 en:
-reveueos: "revenueos"
 otp_form_modal:
     label:
       otp: "OTP"
