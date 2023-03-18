@@ -1,234 +1,34 @@
 # Additional translations at https://github.com/heartcombo/devise/wiki/I18n
 
 en:
-reveueos: "revenueos"
-dashboard: "Dashboard"
-revenue_channels: "Revenue Channels"
-subscriptions_and_more: "Subscriptions & More"
-subscription_plans: "Subscription Plans"
-try_before_you_buy: "Try-before-you-buy"
-pre_orders: "Pre-orders"
-rebuy_cart: "Rebuy cart"
-contracts_and_invoices: "Contracts & Invoices"
-memberships: "Memberships"
-workspace: "Workspace"
-subscription_contracts: "Subscription Contracts"
-analytics: "Analytics"
-subscription_customers: "Subscription Customers"
-loyalty_rewards: "Loyalty/Rewards"
-ways_to_earn: "Ways to Earn"
-rewards_page: "Rewards Page"
-general: "General"
-installation: "Installation"
-tiazen: "Tiazen"
-toolbox: "Toolbox"
-settings: "Settings"
-log_out: "Log Out"
-otp_form_modal:
-    label:
-      otp: "OTP"
-    placeholder:
-      enter_otp: "Enter OTP"
-    button:
-      login: "Login (check email or phone)"
-    sub_header:
-      chargezen_secured: "Chargezen Secured"
-    main_heading:
-      login_with_otp: "Login with OTP"
-subscription:
-    order_dispatched: "We have your order. Your order will be dispatched shortly."
-    recommended_for_you: "Recommended for you"
-    add_subscription: "Add Subscription"
-    subscription_title: "Subscription #"
-    pack: "pack"
-    delivery_every: "Delivery Every:"
-    delivery_date: "Delivery Date:"
-    edit_subscription: "Edit Subscription"
-    create_new_subscription: "Create a New Subscription"
-    subscribe_to_new_product: "Subscribe to a new product to receive it regularly"
-    new_subscription: "New Subscription"
-    add_one_time_product: "Add One-time product"
-    add_new_product_to_delivery: "Add a new product to your next delivery"
-    new_one_time: "New One-time"
-  settings:
-    my_account_details: "MY ACCOUNT DETAILS"
-    no_subscriptions_found: "No subscription have been found for your account"
-    first_name: "FIRST NAME"
-    last_name: "LAST NAME"
-    email: "EMAIL"
-    save: "SAVE"
-  billing_information:
-    my: 'MY'
-    billing: 'BILLING'
-    information: 'INFORMATION'
-    card_on_file: 'CARD ON FILE'
-    expires: 'Expires'
-    update_card: 'UPDATE CARD'
-    login_shopify_account: 'Login to your Shoppay account to edit card ending with'
-    edit: 'Edit'
-    phone: 'PHONE'
-    company: 'COMPANY'
-    address: 'ADDRESS'
-  order_history:
-    title: "Order History"
-  delivery_info:
-    line1: "Orders are typically delivered within 5-7 business days. In some cases deliveries may take longer due to extra safety precautions in our fulfillment center and carrier transportation delays."
-    line2: "If you need your subscription delivered by a specific date, we suggest adjusting your processing date accordingly."
-  your_subscription: "YOUR SUBSCRIPTION"
-  no_subscriptions_found: "No subscription have been found for your account"
-  my: "MY"
-  active: "ACTIVE"
-  cancelled: "CANCELLED"
-  paused: "PAUSED"
-  subscription: "SUBSCRIPTION"
-  subscriptions: "SUBSCRIPTIONS"
-  select_style_options: "Select Style Options"
-  build_your_box: "Build Your Box"
-  selection_not_complete: "Selection is not complete"
-  confirm_selection: "CONFIRM SELECTION"
-  my_address: 'MY ADDRESS'
-  edit_address: 'Edit'
-  phone: 'PHONE'
-  company: 'COMPANY'
-  address: 'ADDRESS'
-  your_subscription_has_only_one_billing_cycle_option: "Your subscription has only one billing cycle option."
-  subscription_to: "Subscription to:"
-  upgrade: "Upgrade"
-  payment_card: 'Payment Card'
-  name_on_card: 'Name on card'
-  card_number: 'Card Number'
-  exp_month: 'Exp. Month'
-  exp_year: 'Exp. Year'
-  cvv: 'CVV'
-  billing_address: 'Billing Address'
-  first_name: 'First Name'
-  last_name: 'Last Name'
-  address: 'Address'
-  city: 'City'
-  country: 'Country'
-  state: 'State'
-  zip: 'Zip'
-  update_card: 'Update Card'
-  swap_subscription_title: "Swap"
-  swap_subscription_to: "Subscription to:"
-  swap_subscription_button: "SWAP SUBSCRIPTION"
-  no_other_subscription_products_available: "No other subscription products available"
-  reactivate: 'RE-ACTIVATE'
-  start_date: 'start date'
-  quantity: 'quantity'
-  edit_subscription: 'Edit Subscription'
-  est_next_delivery: 'est. next delivery'
-  next_card_charge: 'NEXt card charge'
-  upgrade_subscription: 'UPGRADE SUBSCRIPTION'
-  pause_subscription: 'Pause Subscription'
-  swap_subscription: 'SWAP SUBSCRIPTION'
-  cancel_subscription: 'CANCEL SUBSCRIPTION'
-  cancel_later: 'Cancel Later'
-  cancel_at_selected_date: 'Cancel At The Selected Date'
-  pause_later: 'Pause Later'
-  pause_at_selected_date: 'Pause At The Selected Date'
-  add_address_popup_first_name: "FIRST NAME"
-  add_address_popup_last_name: "LAST NAME"
-  add_address_popup_address1: "ADDRESS 1"
-  add_address_popup_address2: "ADDRESS 2"
-  add_address_popup_company: "COMPANY"
-  add_address_popup_city: "CITY"
-  add_address_popup_country: "COUNTRY"
-  add_address_popup_zip: "ZIP/POSTAL CODE"
-  add_address_popup_state: "STATE/PROVINCE"
-  add_address_popup_phone: "PHONE"
-  add_address_popup_cancel: "Cancel"
-  add_address_popup_update: "Update"
-  product_subtitle: "Original Citrus"
-  add_to_cart: "Add"
-  product_title: "Body Wash"
-  product_subtitle: "Original Citrus"
-  select_style_options: "Select Style Options"
-  build_your_box: "Build Your Box"
-  select_number: "Select %{number}"
-  selection_not_complete: "Selection is not complete"
-  go_to_payment: "Go to Payment"
-  This_is_why_I_want_to_cancel: "This is why I want to cancel"
-  your_view_name:
-    edit_subscription: 'Edit Subscription'
-    est_next_delivery: 'est. next delivery'
-    next_card_charge: 'NEXt card charge'
-    upgrade_subscription: 'UPGRADE SUBSCRIPTION'
-    pause_subscription: 'Pause Subscription'
-    swap_subscription: 'SWAP SUBSCRIPTION'
-    cancel_subscription: 'CANCEL SUBSCRIPTION'
-  hair:
-    title: "Hair"
-    body_wash: "Body Wash"
-    original_citrus: "Original Citrus"
-    reviews_count:
-      one: "1 review"
-      other: "%{count} reviews"
-  best_sellers:
-    title: "Best Sellers"
-  curvo_bundle: "Curvo Bundle"
-  add: "Add"
-  size: "Size"
-  please_select_size: "Please select a size."
-  please_select_color: "Please select a color."
-   build_your_own_bundle:
-    heading: "Build Your Own Bundle"
-    subheading: "Create your custom kit and stack free goods as you build your perfect bathroom."
-  one_time:
-    heading: "ONE TIME"
-  subscribe_and_save:
-    heading: "SUBSCRIBE & SAVE"
-    description: "SUBSCRIBE & SAVE 15% ON EVERY ORDER. SHIPS EVERY 45 DAYS, RESCHEDULE ANY TIME."
-  spend:
-    label: "SPEND"
-  unlock:
-    label: "UNLOCK"
-  free_shipping:
-    label: "FREE SHIPPING"
-  free_product:
-    label: "FREE PRODUCT"
-  free_dopp_kit:
-    label: "FREE DOPP KIT"
-  checkout:
-    label: "Checkout"
-  bundle_menu:
-    one_time: "ONE TIME"
-    subscribe_save: "SUBSCRIBE & SAVE"
-  checkout_section:
-    first_shipment: "First Shipment"
-    second_shipment: "Second Shipment"
-    third_shipment: "Third shipment"
-    fourth_shipment: "Fourth shipment"
-    checkout: "Checkout:"
-  shipping_settings:
-    title: "Shipping Settings"
-    primary_shipping_address_label: "Primary Shipping Address"
-    second_shipping_address_label: "Second Shipping Address"
-    cancel_button: "Cancel"
-    save_button: "Save"
-  personal_settings:
-    title: "Personal Settings"
-    first_name_label: "First Name"
-    last_name_label: "Last Name"
-    email_label: "Email"
-    date_of_birth_label: "Date of Birth"
-    gender_label: "Gender"
-    communication_preferences_label: "Communication Preferences"
-    profile_photo_label: "Profile photo"
-    cancel_button: "Cancel"
-    save_button: "Save"
-  password_settings:
-    title: "Password Settings"
-    password_label: "Password"
-    password_confirmation_label: "Password Confirmation"
-    cancel_button: "Cancel"
-    save_button: "Save"
+  reveueos: "revenueos"
+  dashboard: "Dashboard"
+  revenue_channels: "Revenue Channels"
+  subscriptions_and_more: "Subscriptions & More"
+  subscription_plans: "Subscription Plans"
+  try_before_you_buy: "Try-before-you-buy"
+  pre_orders: "Pre-orders"
+  rebuy_cart: "Rebuy cart"
+  contracts_and_invoices: "Contracts & Invoices"
+  memberships: "Memberships"
+  workspace: "Workspace"
+  subscription_contracts: "Subscription Contracts"
+  analytics: "Analytics"
+  subscription_customers: "Subscription Customers"
+  loyalty_rewards: "Loyalty/Rewards"
+  ways_to_earn: "Ways to Earn"
+  rewards_page: "Rewards Page"
+  general: "General"
+  installation: "Installation"
+  tiazen: "Tiazen"
+  toolbox: "Toolbox"
+  settings: "Settings"
+  log_out: "Log Out"
   customer:
     My: "My"
     Active: "Active"
     Subscription: "SUBSCRIPTION"
     Logout: "Logout"
-    cancel: "Cancel"
     Cancelled: "Cancelled"
     Rewards: "Rewards"
     Track Order: "Track Order"
@@ -256,22 +56,22 @@ subscription:
     Edit Subscription: "Edit Subscription"
     Delivery Schedule: "Delivery Schedule"
     Delivery Address: "Delivery Address"
-    Cancel_Anyway: "Cancel Anyway"
-    Keep_Subscription: "Keep Subscription"
+    Cancel Anyway: "Cancel Anyway"
+    Keep Subscription: "Keep Subscription"
+    This is why I want to cancel: "This is why I want to cancel"
     Start Date: "Start Date"
     Est. Next Delivery: "Est. Next Delivery"
     Last Card Charge: "Last Card Charge"
-    no_subscriptions_found: "No subscription have been found for your account"
-    add_to_box: "Add to box"
-    change: "Change"
-    clear_all: "Clear all"
-    cannot_add_more_items: "you cannot add more items"
-    confirm_meals: "Confirm Meals"
+    No subscription have been found for your account: "No subscription have been found for your account"
+    Add to box: "Add to box"
+    Change: "Change"
+    Clear all: "Clear all"
+    you cannot add more items: "you cannot add more items"
+    Confirm Meals: "Confirm Meals"
     RE-ACTIVATE: "RE-ACTIVATE"
-    Choose_Date_to_resume_billing: "Choose Date to resume billing your card on file"
+    Choose Date to resume billing your card on file: "Choose Date to resume billing your card on file"
     Confirm: "Confirm"
-    No_cancelled_subscription_found: "No cancelled subscription have been found for your account"
-    Success_reloading_page: "Success! Reloading Page"
+    No cancelled subscription have been found for your account: "No cancelled subscription have been found for your account"
     cancelled_tab_start_date: "start date"
     cancelled_tab_quantity: "quantity"
     Delay/Speedup your next shipment: "Delay/Speedup your next shipment"
