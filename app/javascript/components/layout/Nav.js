@@ -14,13 +14,15 @@ import { MangeIcon, SubscriptionIcon, ToolboxIcon } from './CustomIcon';
 import ChargeZenLogo from "./../../images/ChargeZenLogo.svg";
 import CircleChevronMinor from "./../../images/VectorIcon";
 import useRouter from '../useRouterHook';
-
+import { I18n } from 'i18n-js';
 
 const Nav = (props) => {
   const {
     navCollapse,
     setNavCollapse,
-    selected
+    selected,
+    locale,
+    translations
   } = props;
   const history = useHistory();
   const router = useRouter();
@@ -29,27 +31,36 @@ const Nav = (props) => {
   const [loyality, setLoyality] = useState(false);
   const [toogleMenu, setToogleMenu] = useState({ revenueChannels: false })
 
+
+  useEffect(() => {
+    I18n.locale = locale;
+
+  }, [locale, translations]);
+
   useEffect(() => {
     const accessSettings = JSON.parse(localStorage.getItem("accessSettings"))
     setNavigation(accessSettings)
     console.log("toogleMenu", toogleMenu);
   }, [window.location.href])
 
+  console.log("local", translations);
   const urlDomain = `/${props?.domain?.replace('.myshopify.com', '')}`;
+
+  const i18n = new I18n(JSON.parse(translations));
 
   const setNavigation = (accessTabs) => {
     let navigation = [];
     if (accessTabs?.dashboard_access) {
       navigation.push({
         url: "",
-        label: 'RevenueOS',
+        label: i18n.t('reveueos'),
         disabled: true,
         selected: true,
         subNavigationItems: [
           accessTabs?.dashboard_access ? (
             {
               icon: HomeMajor,
-              label: 'Dashboard',
+              label: i18n.t('dashboard'),
               url: '/',
               onClick: () => setActiveTab("dash"),
               selected: window.location.pathname == `${urlDomain}/` ? true : false,
@@ -62,20 +73,20 @@ const Nav = (props) => {
     if (accessTabs?.manage_plan_access) {
       navigation.push({
         url: "",
-        label: 'Revenue Channels',
+        label: i18n.t('revenue_channels'),
         disabled: true,
         selected: true,
         onClick: () => setToogleMenu({ ...toogleMenu, revenueChannels: !toogleMenu?.revenueChannels }),
         subNavigationItems: [
           {
             url: `${window.location.pathname.replace(urlDomain, "")}?sub=true`,
-            label: 'Subscriptions & More',
+            label: i18n.t('subscriptions_and_more'),
             icon: GiftCardMajor,
             selected: (new URLSearchParams(location.search)).get('sub') == 'true' ? true : false,
             subNavigationItems: [
               accessTabs?.manage_plan_access ? (
                 {
-                  label: 'Subscription Plans',
+                  label: i18n.t('subscription_plans'),
                   icon: () => <MangeIcon />,
                   url: '/subscription-plans',
                   onClick: () => setActiveTab("mplan"),
@@ -85,34 +96,34 @@ const Nav = (props) => {
               ,
               {
                 icon: MangeIcon,
-                label: 'Try-before-you-buy',
+                label: i18n.t('try_before_you_buy'),
                 url: '/tryBeforeYouBuy',
                 selected: window.location.pathname == `${urlDomain}/tryBeforeYouBuy` ? true : false,
               },
               {
                 icon: MangeIcon,
-                label: 'Pre-orders',
+                label: i18n.t('pre_orders'),
                 url: '/preOrders',
                 selected: window.location.pathname == `${urlDomain}/preOrders` ? true : false,
               }]
           },
           {
             icon: MangeIcon,
-            label: 'Rebuy cart',
+            label: i18n.t('rebuy_cart'),
             url: '/rebuy',
             onClick: () => setActiveTab("dash"),
             selected: window.location.pathname == `${urlDomain}/rebuy` ? true : false,
           },
           {
             icon: MangeIcon,
-            label: 'Contracts & Invoices',
+            label: i18n.t('contracts_and_invoices'),
             url: '/stripeContractsList',
             onClick: () => setActiveTab("dash"),
             selected: window.location.pathname == `${urlDomain}/stripeContractsList` ? true : false,
           },
           {
             icon: MangeIcon,
-            label: 'Memberships',
+            label: i18n.t('memberships'),
             url: '/memberships',
             onClick: () => setActiveTab("memberships"),
             selected: window.location.pathname == `${urlDomain}/memberships` ? true : false,
@@ -125,13 +136,13 @@ const Nav = (props) => {
     if (accessTabs?.subscription_orders_access || accessTabs?.analytics_access) {
       navigation.push({
         url: "",
-        label: 'Workspace',
+        label: i18n.t('workspace'),
         disabled: true,
         selected: true,
         subNavigationItems: [
           accessTabs?.subscription_orders_access ? (
             {
-              label: 'Subscription Contracts',
+              label: i18n.t('subscription_contracts'),
               icon: () => <SubscriptionIcon />,
               url: '/customers',
               onClick: () => setActiveTab("suborder"),
@@ -140,7 +151,7 @@ const Nav = (props) => {
           ) : {},
           accessTabs?.analytics_access ? (
             {
-              label: 'Analytics',
+              label: i18n.t('analytics'),
               icon: AnalyticsMajor,
               url: '/analytics',
               onClick: () => setActiveTab("analytics"),
@@ -149,7 +160,7 @@ const Nav = (props) => {
           ) : {},
           accessTabs?.customer_modal ? (
             {
-              label: 'Subscription Customers',
+              label: i18n.t('subscription_customers'),
               icon: CustomersMajor,
               url: '/customer-model',
               onClick: () => setActiveTab("customerModal"),
@@ -157,7 +168,7 @@ const Nav = (props) => {
             }
           ) : {},
           {
-            label: 'Loyalty/Rewards',
+            label: i18n.t('loyalty_rewards'),
             icon: GiftCardMajor,
             url: `${window.location.pathname.replace(urlDomain, "")}?loyalty=true`,
             selected: (new URLSearchParams(location.search)).get('loyalty') == 'true' ? true : false,
@@ -166,12 +177,12 @@ const Nav = (props) => {
                 url: "/waysToEarn",
                 disabled: false,
                 selected: window.location.pathname == `${urlDomain}/waysToEarn` ? true : false,
-                label: "Ways to Earn"
+                label: i18n.t('ways_to_earn')
               },
               {
                 url: "/rewardsPage",
                 disabled: false,
-                label: "Rewards Page",
+                label: i18n.t('rewards_page'),
                 selected: window.location.pathname == `${urlDomain}/rewardsPage` ? true : false,
               }
             ]
@@ -183,13 +194,13 @@ const Nav = (props) => {
     if (accessTabs?.installation_access || accessTabs?.tiazen_access || accessTabs?.toolbox_access || accessTabs?.settings_access) {
       navigation.push({
         url: "",
-        label: 'General',
+        label: i18n.t('general'),
         selected: true,
         disabled: true,
         subNavigationItems: [
           accessTabs?.installation_access ? (
             {
-              label: 'Installation',
+              label: i18n.t('installation'),
               icon: InstallMinor,
               url: '/installation',
               onClick: () => setActiveTab("inst"),
@@ -198,7 +209,7 @@ const Nav = (props) => {
           ) : {},
           accessTabs?.tiazen_access ? (
             {
-              label: 'Tiazen',
+              label: i18n.t('tiazen'),
               icon: HintMajor,
               url: '/tiazen',
               onClick: () => setActiveTab("tiazen"),
@@ -207,7 +218,7 @@ const Nav = (props) => {
           ) : {},
           accessTabs?.toolbox_access ? (
             {
-              label: "Toolbox",
+              label: i18n.t('toolbox'),
               icon: () => <ToolboxIcon />,
               url: '/toolbox',
               onClick: () => setActiveTab("tool"),
@@ -216,7 +227,7 @@ const Nav = (props) => {
           ) : {},
           accessTabs?.settings_access ? (
             {
-              label: "Settings",
+              label: i18n.t('settings'),
               icon: SettingsMinor,
               url: '/app-settings',
               onClick: () => setActiveTab("settings"),
