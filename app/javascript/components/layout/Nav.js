@@ -60,7 +60,7 @@ const Nav = (props) => {
           accessTabs?.dashboard_access ? (
             {
               icon: HomeMajor,
-              label: i18n.t('dashboard'),
+              label: 'Dashboard',
               url: '/',
               onClick: () => setActiveTab("dash"),
               selected: window.location.pathname == `${urlDomain}/` ? true : false,
@@ -73,20 +73,20 @@ const Nav = (props) => {
     if (accessTabs?.manage_plan_access) {
       navigation.push({
         url: "",
-        label: i18n.t('revenue_channels'),
+        label: 'Revenue Channels',
         disabled: true,
         selected: true,
         onClick: () => setToogleMenu({ ...toogleMenu, revenueChannels: !toogleMenu?.revenueChannels }),
         subNavigationItems: [
           {
             url: `${window.location.pathname.replace(urlDomain, "")}?sub=true`,
-            label: i18n.t('subscriptions_and_more'),
+            label: 'Subscriptions & More',
             icon: GiftCardMajor,
             selected: (new URLSearchParams(location.search)).get('sub') == 'true' ? true : false,
             subNavigationItems: [
               accessTabs?.manage_plan_access ? (
                 {
-                  label: i18n.t('subscription_plans'),
+                  label: 'Subscription Plans',
                   icon: () => <MangeIcon />,
                   url: '/subscription-plans',
                   onClick: () => setActiveTab("mplan"),
@@ -96,34 +96,34 @@ const Nav = (props) => {
               ,
               {
                 icon: MangeIcon,
-                label: i18n.t('try_before_you_buy'),
+                label: 'Try-before-you-buy',
                 url: '/tryBeforeYouBuy',
                 selected: window.location.pathname == `${urlDomain}/tryBeforeYouBuy` ? true : false,
               },
               {
                 icon: MangeIcon,
-                label: i18n.t('pre_orders'),
+                label: 'Pre-orders',
                 url: '/preOrders',
                 selected: window.location.pathname == `${urlDomain}/preOrders` ? true : false,
               }]
           },
           {
             icon: MangeIcon,
-            label: i18n.t('rebuy_cart'),
+            label: 'Rebuy cart',
             url: '/rebuy',
             onClick: () => setActiveTab("dash"),
             selected: window.location.pathname == `${urlDomain}/rebuy` ? true : false,
           },
           {
             icon: MangeIcon,
-            label: i18n.t('contracts_and_invoices'),
+            label: 'Contracts & Invoices',
             url: '/stripeContractsList',
             onClick: () => setActiveTab("dash"),
             selected: window.location.pathname == `${urlDomain}/stripeContractsList` ? true : false,
           },
           {
             icon: MangeIcon,
-            label: i18n.t('memberships'),
+            label: 'Memberships',
             url: '/memberships',
             onClick: () => setActiveTab("memberships"),
             selected: window.location.pathname == `${urlDomain}/memberships` ? true : false,
@@ -136,13 +136,13 @@ const Nav = (props) => {
     if (accessTabs?.subscription_orders_access || accessTabs?.analytics_access) {
       navigation.push({
         url: "",
-        label: i18n.t('workspace'),
+        label: 'Workspace',
         disabled: true,
         selected: true,
         subNavigationItems: [
           accessTabs?.subscription_orders_access ? (
             {
-              label: i18n.t('subscription_contracts'),
+              label: 'Subscription Contracts',
               icon: () => <SubscriptionIcon />,
               url: '/customers',
               onClick: () => setActiveTab("suborder"),
@@ -151,7 +151,7 @@ const Nav = (props) => {
           ) : {},
           accessTabs?.analytics_access ? (
             {
-              label: i18n.t('analytics'),
+              label: 'Analytics',
               icon: AnalyticsMajor,
               url: '/analytics',
               onClick: () => setActiveTab("analytics"),
@@ -160,7 +160,7 @@ const Nav = (props) => {
           ) : {},
           accessTabs?.customer_modal ? (
             {
-              label: i18n.t('subscription_customers'),
+              label: 'Subscription Customers',
               icon: CustomersMajor,
               url: '/customer-model',
               onClick: () => setActiveTab("customerModal"),
@@ -168,7 +168,7 @@ const Nav = (props) => {
             }
           ) : {},
           {
-            label: i18n.t('loyalty_rewards'),
+            label: 'Loyalty/Rewards',
             icon: GiftCardMajor,
             url: `${window.location.pathname.replace(urlDomain, "")}?loyalty=true`,
             selected: (new URLSearchParams(location.search)).get('loyalty') == 'true' ? true : false,
@@ -177,12 +177,12 @@ const Nav = (props) => {
                 url: "/waysToEarn",
                 disabled: false,
                 selected: window.location.pathname == `${urlDomain}/waysToEarn` ? true : false,
-                label: i18n.t('ways_to_earn')
+                label: "Ways to Earn"
               },
               {
                 url: "/rewardsPage",
                 disabled: false,
-                label: i18n.t('rewards_page'),
+                label: "Rewards Page",
                 selected: window.location.pathname == `${urlDomain}/rewardsPage` ? true : false,
               }
             ]
@@ -194,13 +194,13 @@ const Nav = (props) => {
     if (accessTabs?.installation_access || accessTabs?.tiazen_access || accessTabs?.toolbox_access || accessTabs?.settings_access) {
       navigation.push({
         url: "",
-        label: i18n.t('general'),
+        label: 'General',
         selected: true,
         disabled: true,
         subNavigationItems: [
           accessTabs?.installation_access ? (
             {
-              label: i18n.t('installation'),
+              label: 'Installation',
               icon: InstallMinor,
               url: '/installation',
               onClick: () => setActiveTab("inst"),
@@ -209,7 +209,7 @@ const Nav = (props) => {
           ) : {},
           accessTabs?.tiazen_access ? (
             {
-              label: i18n.t('tiazen'),
+              label: 'Tiazen',
               icon: HintMajor,
               url: '/tiazen',
               onClick: () => setActiveTab("tiazen"),
@@ -218,7 +218,7 @@ const Nav = (props) => {
           ) : {},
           accessTabs?.toolbox_access ? (
             {
-              label: i18n.t('toolbox'),
+              label: "Toolbox",
               icon: () => <ToolboxIcon />,
               url: '/toolbox',
               onClick: () => setActiveTab("tool"),
@@ -227,7 +227,7 @@ const Nav = (props) => {
           ) : {},
           accessTabs?.settings_access ? (
             {
-              label: i18n.t('settings'),
+              label: "Settings",
               icon: SettingsMinor,
               url: '/app-settings',
               onClick: () => setActiveTab("settings"),
@@ -283,7 +283,7 @@ const Nav = (props) => {
         {
           localStorage.getItem("currentuser") &&
           <>
-            <a href={`${window?.location?.origin} / users / sign_out`} className="adminLogoutLink" data-method="delete">{i18n.t('log_out')}</a>
+            <a href={`${window?.location?.origin} / users / sign_out`} className="adminLogoutLink" data-method="delete">Log Out</a>
           </>
         }
       </div>
